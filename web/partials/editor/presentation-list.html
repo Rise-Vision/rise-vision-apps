@@ -7,8 +7,9 @@
     <h1 class="app-header-title" id="title" translate>editor-app.list.title</h1>
   </div>
 
-  <div id="errorBox" ng-show="presentations.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-    <strong>{{presentations.errorMessage}}</strong> {{presentations.apiError}}
+  <div id="errorBox" ng-show="presentations.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
+    <p><strong>{{presentations.errorMessage}}</strong></p>
+    {{presentations.apiError}}
   </div> 
 
   <div ng-if="!(!presentations.loadingItems && presentations.items.list.length === 0 && search.query === undefined)">
@@ -25,7 +26,7 @@
       </div>
     </div>
 
-    <batch-operations list-object="presentations" list-operations="listOperations"></batch-operations>
+    <batch-operations list-object="presentations"></batch-operations>
 
     <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom"
       scrolling-list="presentations.load()" rv-spinner rv-spinner-key="presentation-list-loader" rv-spinner-start-active="1">
@@ -33,14 +34,18 @@
       <table id="presentationListTable" class="table">
         <thead class="table-header">
           <tr class="table-header__row u_clickable">
-            <th class="table-header__cell col-sm-8">
+            <th class="table-header__cell col-sm-6">
               <div class="flex-row">
                 <madero-checkbox ng-click="presentations.selectAll()" ng-value="search.selectAll"></madero-checkbox>
-                <div class="u_clickable" id="tableHeaderName" ng-click="presentations.sortBy('name')">
+                <div class="u_clickable u_ellipsis-lg" id="tableHeaderName" ng-click="presentations.sortBy('name')">
                   {{ 'editor-app.list.heading.name' | translate }}
                   <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
                 </div>
               </div>
+            </th>
+            <th id="tableHeaderSchedules" class="table-header__cell col-sm-2"  ng-click="presentations.sortBy('scheduleIds')">
+              Schedules
+              <i ng-if="search.sortBy === 'scheduleIds'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
             <th id="tableHeaderStatus" class="table-header__cell col-sm-2"  ng-click="presentations.sortBy('revisionStatusName')">
               {{'editor-app.list.heading.status'  | translate}}
@@ -61,6 +66,7 @@
                 <a class="madero-link u_ellipsis-lg" ui-sref="apps.editor.templates.edit({presentationId: presentation.id})" ng-if="isHtmlPresentation(presentation)"><strong>{{presentation.name}}</strong></a>
               </div>
             </td>
+            <td class="table-body__cell">{{!presentation.scheduleCount ? 'No Schedules' : (presentation.scheduleCount + (presentation.scheduleCount === 1 ? ' Schedule' : ' Schedules'))}}</td>
             <td class="table-body__cell"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></td>
             <td class="table-body__cell">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}} by {{presentation.changedBy | username}}</td>
           </tr>
@@ -80,6 +86,9 @@
       <div class="form-group my-4">
         <label translate>editor-app.list.empty</label>
       </div>
+      <button id="sharedTemplatesButton" ng-click="editorFactory.addFromSharedTemplateModal()" class="btn btn-default btn-toolbar-wide mb-2" translate>
+          editor-app.sharedTemplates.title
+        </button>
       <button id="presentationAddButton" class="btn btn-primary btn-toolbar-wide mb-2" ng-click="editorFactory.addPresentationModal()" translate>
         editor-app.list.actions.add
       </button>

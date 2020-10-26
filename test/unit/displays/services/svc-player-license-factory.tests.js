@@ -77,6 +77,7 @@ describe('Services: playerLicenseFactory', function() {
     expect(playerLicenseFactory.getProAvailableLicenseCount).to.be.a('function');
     expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.be.a('function');
     expect(playerLicenseFactory.areAllProLicensesUsed).to.be.a('function');
+    expect(playerLicenseFactory.licenseDisplaysByCompanyId).to.be.a('function');
   });
 
   describe('getUsedLicenseString:', function() {
@@ -84,21 +85,21 @@ describe('Services: playerLicenseFactory', function() {
       currentPlanFactory.currentPlan.playerProTotalLicenseCount = 0;
       currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 0;
 
-      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('0 Licensed Displays / 0 Licenses Available');
+      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('0 Licensed Displays / 0 Available Licenses');
     });
 
     it('should handle 1 case', function () {
       currentPlanFactory.currentPlan.playerProTotalLicenseCount = 2;
       currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 1;
 
-      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('1 Licensed Display / 1 License Available');
+      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('1 Licensed Display / 1 Available License');
     });
 
     it('should handle multiples case', function () {
       currentPlanFactory.currentPlan.playerProTotalLicenseCount = 4;
       currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 2;
 
-      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('2 Licensed Displays / 2 Licenses Available');
+      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('2 Licensed Displays / 2 Available Licenses');
     });
 
   });
@@ -367,7 +368,39 @@ describe('Services: playerLicenseFactory', function() {
     });
   });
 
+  describe('licenseDisplaysByCompanyId:', function() {
+    beforeEach(function() {
+      sinon.spy(playerLicenseFactory, 'toggleDisplayLicenseLocal');
+    });
+
+    it('should license displays', function(done) {
+      playerLicenseFactory.licenseDisplaysByCompanyId('companyId', ['displayId', 'displayId2']).then(function() {
+        
+        enableCompanyProduct.should.have.been.called;
+        playerLicenseFactory.toggleDisplayLicenseLocal.should.have.been.calledWith(true, 2);
+
+        done();
+      });      
+    });
+
+    it('should handle licensing failures', function(done) {
+      enableCompanyProduct.returns(Q.reject());
+
+      playerLicenseFactory.licenseDisplaysByCompanyId('companyId', ['displayId', 'displayId2']).catch(function() {
+        
+        enableCompanyProduct.should.have.been.called;
+        playerLicenseFactory.toggleDisplayLicenseLocal.should.not.have.been.called;
+
+        done();
+      });
+    });
+  });
+
   describe('confirmAndLicense:', function() {
+    beforeEach(function() {
+      sinon.stub(playerLicenseFactory, 'licenseDisplaysByCompanyId').returns(Q.resolve());
+    });
+
     it('should prompt users to assign licenses', function(done) {
       playerLicenseFactory.confirmAndLicense(['displayId']).then(function() {
         confirmModal.should.have.been.calledWith(
@@ -410,7 +443,7 @@ describe('Services: playerLicenseFactory', function() {
 
       playerLicenseFactory.confirmAndLicense(['displayId', 'displayId2']).then(function() {
         
-        enableCompanyProduct.should.have.been.called;
+        playerLicenseFactory.licenseDisplaysByCompanyId.should.have.been.called;
         expect(playerLicenseFactory.updatingLicense).to.be.false;
         expect(playerLicenseFactory.apiError).to.equal('');
 
@@ -420,11 +453,11 @@ describe('Services: playerLicenseFactory', function() {
 
     it('should handle licensing failures', function(done) {
       currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 2;
-      enableCompanyProduct.returns(Q.reject('apiError'));
+      playerLicenseFactory.licenseDisplaysByCompanyId.returns(Q.reject('apiError'));
 
       playerLicenseFactory.confirmAndLicense(['displayId', 'displayId2']).catch(function() {
         
-        enableCompanyProduct.should.have.been.called;
+        playerLicenseFactory.licenseDisplaysByCompanyId.should.have.been.called;
         expect(playerLicenseFactory.updatingLicense).to.be.false;       
         expect(playerLicenseFactory.apiError).to.equal('processedError');
 

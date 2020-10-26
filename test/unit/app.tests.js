@@ -287,7 +287,7 @@ describe('app:', function() {
     });
 
     it('should not show white background for other pages',function() {
-      $rootScope.$broadcast('$stateChangeSuccess', {name:'apps.editor.workspace'});
+      $rootScope.$broadcast('$stateChangeSuccess', {name:'apps.storage.home'});
       $rootScope.$digest();
       expect($rootScope.showWhiteBackground).to.be.false;
     });

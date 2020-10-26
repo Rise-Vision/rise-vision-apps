@@ -17,12 +17,6 @@ describe('service: playerProFactory:', function() {
           _restoreState: function(){}
       };
     });
-    $provide.factory('getLatestPlayerVersion', function() {
-      return function() {
-        return Q.resolve(latestPlayerVersion);
-      };
-    });
-
   }));
   var playerProFactory, $rootScope, $modal, trackerCalled;
   beforeEach(function(){
@@ -41,7 +35,6 @@ describe('service: playerProFactory:', function() {
     
     expect(playerProFactory.is3rdPartyPlayer).to.be.a('function');
     expect(playerProFactory.isElectronPlayer).to.be.a('function');
-    expect(playerProFactory.isOutdatedPlayer).to.be.a('function');
     expect(playerProFactory.isUnsupportedPlayer).to.be.a('function');
     expect(playerProFactory.isScreenshotCompatiblePlayer).to.be.a('function');
     expect(playerProFactory.isOfflinePlayCompatiblePayer).to.be.a('function');
@@ -86,32 +79,6 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayer', playerVersion: '3.6'})).to.be.false;
     expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayer', playerVersion: '2018.08.17.20.21'})).to.be.true;
     expect(playerProFactory.isChromeOSPlayer({playerName:'(Beta) RisePlayer', playerVersion: '2018.08.17.20.21'})).to.be.true;
-  });
-
-  describe('isOutdatedPlayer:', function() {
-    
-    it('should not be out of date for legacy', function(done){
-      setTimeout(function() {
-        expect(playerProFactory.isOutdatedPlayer({playerName:'Cenique', playerVersion: '2017.07.17.20.21'})).to.be.false;
-        expect(playerProFactory.isOutdatedPlayer({playerName:'RisePlayerPackagedApp', playerVersion: '2017.07.17.20.21'})).to.be.false;
-
-        expect(playerProFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.07.17.20.21'})).to.be.false;
-        expect(playerProFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.01.04.14.40'})).to.be.false;
-
-        done();
-      }, 10);
-    });
-
-    it('should be out of date after 3 months for Electron', function(done) {
-      setTimeout(function() {
-        expect(playerProFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.07.17.20.21'})).to.be.false;
-        expect(playerProFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.08.04.14.40'})).to.be.false;
-        expect(playerProFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.04.15.12.40'})).to.be.false;
-        expect(playerProFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.04.14.11.40'})).to.be.true;
-
-        done();
-      }, 10);      
-    });
   });
 
   it('isUnsupportedPlayer:',function(){

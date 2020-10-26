@@ -3,24 +3,27 @@
 angular.module('risevision.common.components.scrolling-list')
   .factory('BatchOperations', ['$q', '$timeout',
     function ($q, $timeout) {
-      return function () {
-        var svc = {};
-        svc.queueLimit = 5;
+      return function (operations) {
+        if (!operations) {
+          return {};
+        }
+
+        operations.queueLimit = operations.queueLimit || 5;
 
         var queue;
 
-        var _reset = function() {
+        var _reset = function () {
           queue = [];
-
-          svc.activeOperation = '';
-          svc.progress = 0;
-          svc.totalItemCount = 0;
-          svc.completedItemCount = 0;
+          operations.hasErrors = false;
+          operations.activeOperation = null;
+          operations.progress = 0;
+          operations.totalItemCount = 0;
+          operations.completedItemCount = 0;
         };
 
         _reset();
 
-        svc.batch = function (items, method, name) {
+        operations.batch = function (items, method, operation, args) {
           if (!items || !items.length || !method) {
             return $q.resolve();
           }
@@ -28,51 +31,59 @@ angular.module('risevision.common.components.scrolling-list')
           var cancelled = false;
           var deferred = $q.defer();
           var currItem = 0;
-          svc.activeOperation = name;
-          svc.totalItemCount += items.length;
+          operations.activeOperation = operation;
+          operations.totalItemCount += items.length;
 
-          var _pushItem = function() {
+          var _pushItem = function () {
             var item = items[currItem++];
 
             queue.push(item);
 
-            _executeOperation(item);
+            _executeOperation(item, args);
           };
 
-          var _executeOperation = function (item) {
-            method(item)
-              .finally(function() {
-                _.remove(queue, function(listItem) {
+          var _executeOperation = function (item, args) {
+            method(item, args)
+              .catch(function (e) {
+                operations.hasErrors = true;
+              })
+              .finally(function () {
+                _.remove(queue, function (listItem) {
                   return listItem === item;
                 });
 
-                svc.completedItemCount++;
-                svc.progress = Math.round(svc.completedItemCount / svc.totalItemCount * 100);
+                operations.completedItemCount++;
+                operations.progress = Math.round(operations.completedItemCount / operations.totalItemCount *
+                  100);
 
                 if (cancelled) {
                   return;
-                } else if (svc.totalItemCount === svc.completedItemCount) {
-                  deferred.resolve();
+                } else if (operations.totalItemCount === operations.completedItemCount) {
+                  if (operations.hasErrors) {
+                    deferred.reject();
+                  } else {
+                    deferred.resolve();
+                  }
 
                   $timeout(_reset, 2000);
-                } else if (queue.length < svc.queueLimit && currItem < items.length) {
+                } else if (queue.length < operations.queueLimit && currItem < items.length) {
                   _pushItem();
                 }
               });
           };
 
           var _loadBatch = function () {
-            while (queue.length < svc.queueLimit && currItem < items.length) {
+            while (queue.length < operations.queueLimit && currItem < items.length) {
               _pushItem();
             }
           };
 
-          svc.cancel = function () {
+          operations.cancel = function () {
             cancelled = true;
 
             _reset();
 
-            deferred.resolve();
+            deferred.reject('cancelled');
           };
 
           _loadBatch();
@@ -80,7 +91,7 @@ angular.module('risevision.common.components.scrolling-list')
           return deferred.promise;
         };
 
-        return svc;
+        return operations;
       };
     }
   ]);

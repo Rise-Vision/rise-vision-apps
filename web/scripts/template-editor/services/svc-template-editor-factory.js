@@ -229,7 +229,7 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.publish = function () {
-        return scheduleSelectorFactory.checkAssignedToSchedules().then(_publish);
+        return _publish().then(scheduleSelectorFactory.checkAssignedToSchedules);
       };
 
       var _publish = function () {
@@ -335,6 +335,7 @@ angular.module('risevision.template-editor.services')
 
       var _createFirstSchedule = function () {
         return createFirstSchedule(factory.presentation)
+          .then(scheduleSelectorFactory.loadSelectedSchedules)
           .catch(function (err) {
             return err === 'Already have Schedules' ? $q.resolve() : $q.reject(err);
           });

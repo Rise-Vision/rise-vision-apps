@@ -12,13 +12,13 @@
     </div>
   </div>
 
-  <div ng-show="displays.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-    <strong>{{displays.errorMessage}}</strong>
+  <div ng-show="displays.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
+    <p><strong>{{displays.errorMessage}}</strong></p>
     {{displays.apiError}}
   </div> 
 
-  <div id="errorBox" ng-show="displayStatusFactory.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-    <strong>{{displayStatusFactory.errorMessage}}</strong>
+  <div id="errorBox" ng-show="displayStatusFactory.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
+    <p><strong>{{displayStatusFactory.errorMessage}}</strong></p>
     {{displayStatusFactory.apiError}}
   </div> 
 
@@ -32,11 +32,13 @@
       </div>
     </div>
 
-    <div class="madero-style alert alert-warning u_margin-md-top" ng-show="search.query">
-      <strong translate>displays-app.list.searchNotification</strong>
+    <div class="border-container text-center u_margin-md-top" ng-show="search.query">
+      <div class="panel-body">
+        <span translate>displays-app.list.searchNotification</span>
+      </div>
     </div>
 
-    <batch-operations list-object="displays" list-operations="listOperations"></batch-operations>
+    <batch-operations list-object="displays"></batch-operations>
 
     <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom"
       scrolling-list="displays.load()" rv-spinner rv-spinner-key="displays-list-loader" rv-spinner-start-active="1">
@@ -53,25 +55,30 @@
                 </div>
               </div>
             </th>
-            <th class="table-header__cell col-xs-1" translate>
+            <th class="table-header__cell col-xs-1 u_clickable" ng-click="displays.sortBy('licensed')">
               Licensed
+              <i ng-if="search.sortBy === 'licensed'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
-            <th id="tableHeaderStatus" class="table-header__cell col-xs-1" translate>
-              displays-app.list.heading.status
+            <th id="tableHeaderStatus" class="table-header__cell col-xs-1 u_clickable" ng-click="displays.sortBy('onlineStatus')">
+              {{ 'displays-app.list.heading.status' | translate }}
+              <i ng-if="search.sortBy === 'onlineStatus'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
-            <th id="tableHeaderLastConnection" class="table-header__cell col-xs-2" translate>
-              displays-app.list.heading.lastConnection
+            <th id="tableHeaderLastConnection" class="table-header__cell col-xs-2 u_clickable" ng-click="displays.sortBy('lastActivityDate')">
+              {{ 'displays-app.list.heading.lastConnection' | translate }}
+              <i ng-if="search.sortBy === 'lastActivityDate'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
-            <th class="table-header__cell col-xs-2" translate>
-              displays-app.list.heading.schedule
+            <th class="table-header__cell col-xs-2 u_clickable" ng-click="displays.sortBy('scheduleName')">
+              {{ 'displays-app.list.heading.schedule' | translate }}
+              <i ng-if="search.sortBy === 'scheduleName'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
-            <th class="table-header__cell col-xs-2" translate>
+            <th class="table-header__cell col-xs-2 u_clickable" ng-click="displays.sortBy('changeDate')">
               Last Modified
+              <i ng-if="search.sortBy === 'changeDate'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
           </tr>
         </thead>
         <tbody class="table-body">
-          <tr class="table-body__row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
+          <tr class="table-body__row" ng-class="{ 'bg-lighter-gray' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
             <td class="table-body__cell">
               <div class="flex-row">
                 <madero-checkbox ng-click="displays.select(display)" ng-value="display.selected"></madero-checkbox>
@@ -89,23 +96,11 @@
               </div>
             </td>
             <td class="table-body__cell display-status">
-              <!-- Not Licensed and Installed -->
-              <span ng-if="displayFactory.showLicenseRequired(display) && !playerNotInstalled(display)">
+              <span ng-if="displayFactory.showLicenseRequired(display) && display.onlineStatus !== 'not_activated'">
                 License Required
               </span>
-              <!-- Licensed and Loading Status -->
-              <i ng-if="displayService.statusLoading && !displayFactory.showLicenseRequired(display)" class="fa fa-spinner fa-spin fa-fw"></i>
-              <!-- Licensed and Offline -->
-              <span class="text-danger" ng-if="!displayService.statusLoading && !displayFactory.showLicenseRequired(display) && playerOffline(display)">
-                Offline
-              </span>
-              <!-- Licensed and Online -->
-              <span class="text-success" ng-if="!displayService.statusLoading && !displayFactory.showLicenseRequired(display) && playerOnline(display)">
-                Online
-              </span>
-              <!-- Not Installed and finished Loading -->
-              <span ng-if="!displayService.statusLoading && playerNotInstalled(display)">
-                {{ 'displays-app.list.status.notActivated' | translate }}
+              <span ng-class="{'text-success': display.onlineStatus === 'online', 'text-danger': display.onlineStatus === 'offline'}" ng-if="!(displayFactory.showLicenseRequired(display) && display.onlineStatus !== 'not_activated')">
+                {{display.onlineStatus | status}}
               </span>
             </td>
             <td class="table-body__cell">
@@ -113,7 +108,7 @@
                 License Required
               </span>
               <span ng-if="!displayFactory.showLicenseRequired(display)">
-                {{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}
+                {{display.lastActivityDate | date:'d-MMM-yyyy h:mm a'}}
               </span>
             </td>
             <td class="table-body__cell display-schedule">

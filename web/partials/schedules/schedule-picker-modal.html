@@ -1,0 +1,27 @@
+<form>
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="dismiss()" data-dismiss="modal" aria-hidden="true">
+      <streamline-icon name="close" width="12" height="12"></streamline-icon>
+    </button>
+  </div>
+  <div class="modal-body" stop-event="touchend">
+    <h4>Assign Schedule</h4>
+
+    <preview-selector ng-model="selectedSchedule" additional-class="mb-2 mt-4" additional-tooltip-class="tooltip-sm"></preview-selector>
+
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <button class="btn btn-default w-100" ng-click="dismiss()">
+          <span>Cancel</span>
+        </button>
+      </div>
+      <div class="col-xs-6">
+        <button id="confirm-primary" class="btn btn-primary w-100" ng-click="assign()" ng-disabled="!selectedSchedule">
+          <span>Assign</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

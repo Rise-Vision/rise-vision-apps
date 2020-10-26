@@ -4,8 +4,9 @@
     <h1 class="app-header-title" id="title" translate>schedules-app.title</h1>
   </div>
 
-  <div id="errorBox" ng-show="schedules.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-    <strong>{{schedules.errorMessage}}</strong> {{schedules.apiError}}
+  <div id="errorBox" ng-show="schedules.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
+    <p><strong>{{schedules.errorMessage}}</strong></p>
+    {{schedules.apiError}}
   </div> 
 
   <div ng-if="!(!schedules.loadingItems && schedules.items.list.length === 0 && search.query === undefined)">
@@ -19,7 +20,7 @@
       </div>
     </div>
 
-    <batch-operations list-object="schedules" list-operations="listOperations"></batch-operations>
+    <batch-operations list-object="schedules"></batch-operations>
 
     <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom"
       scrolling-list="schedules.load()" rv-spinner rv-spinner-key="schedules-list-loader" rv-spinner-start-active="1">

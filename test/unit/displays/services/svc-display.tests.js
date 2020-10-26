@@ -252,6 +252,22 @@ describe('service: display:', function() {
                 def.reject("API Failed");
               }
               return def.promise;
+            },
+            export: function(obj) {
+              expect(obj).to.be.ok;
+
+              var def = Q.defer();
+              if (returnResult) {
+                def.resolve({
+                  result: {
+                    companyId: obj.companyId,
+                    export: true
+                  }
+                });
+              } else {
+                def.reject("API Failed");
+              }
+              return def.promise;
             }
           }
         });
@@ -296,19 +312,11 @@ describe('service: display:', function() {
         items = result.items;
         expect(result.items).to.have.length.above(0);
         setTimeout(function() {
-          $timeout.flush();
-          setTimeout(function() {
-            items.forEach(function(item) {
-              expect(item.onlineStatus).to.equal('online');
-              expect(item.lastConnectionTime.getTime()).to.equal(CONNECTION_TIME);
-            });
+          broadcastSpy.should.have.been.calledWith('displaysLoaded', items);
 
-            broadcastSpy.should.have.been.calledWith('displaysLoaded', items);
+          displayActivationTracker.should.have.been.calledWith(items);
 
-            displayActivationTracker.should.have.been.calledWith(items);
-
-            done();
-          });
+          done();
         });
       });
     });
@@ -687,7 +695,25 @@ describe('service: display:', function() {
 
     it('should handle request failures', function(done) {
       returnResult = false;
-      display.hasFreeDisplays().then(function() {
+      display.summary().then(function() {
+        done('it should have failed');
+      },function(){
+        done();
+      });
+    });
+  });
+
+  describe('export:', function() {
+    it('should request displays export for selected company', function(done) {
+      display.export().then(function(result) {
+        expect(result).to.deep.equal({export: true, companyId: 'TEST_COMP_ID'});
+        done();
+      });
+    });
+
+    it('should handle request failures', function(done) {
+      returnResult = false;
+      display.export().then(function() {
         done('it should have failed');
       },function(){
         done();

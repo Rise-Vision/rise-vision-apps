@@ -6,7 +6,7 @@
 
   var LoginPage = function() {
 
-    var loginPageContainer = element(by.css('.app-launcher-login'));
+    var loginPageContainer = element(by.css('.app-login'));
     var signInWithGoogleLink = element(by.id('sign-in-google-link'));
 
     this.getLoginPageContainer = function() {

@@ -33,9 +33,8 @@ angular.module('risevision.common.header', [
     'risevision.common.components.message-box',
     'risevision.common.components.confirm-modal',
     'risevision.common.components.svg',
-    'risevision.common.components.plans',
-    'risevision.common.components.purchase-flow',
-    'risevision.common.support'
+    'risevision.common.support',
+    'risevision.apps.plans.services'
   ])
 
   .factory('bindToScopeWithWatch', [

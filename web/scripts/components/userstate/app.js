@@ -58,7 +58,7 @@
 
         // Use $stateProvider to configure states.
         $stateProvider.state('common', {
-            template: '<div class="app-launcher" ui-view></div>'
+            template: '<div class="container app-login" ui-view></div>'
           })
 
           .state('common.auth', {

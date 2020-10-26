@@ -20,10 +20,16 @@ describe("service: BatchOperations:", function() {
     inject(function($injector){
       BatchOperations = $injector.get("BatchOperations");
       $timeout = $injector.get('$timeout');
-      batchOperations = new BatchOperations();
+      batchOperations = new BatchOperations({});
 
       batchOperations.queueLimit = 3;
     });
+  });
+
+  it("should return blank object if nothing is passed",function(){
+    batchOperations = new BatchOperations();
+    
+    expect(batchOperations).to.deep.equal({});
   });
 
   it("should exist",function(){
@@ -82,12 +88,13 @@ describe("service: BatchOperations:", function() {
     });
 
     it('should call the action for the first batch of items', function() {
-      batchOperations.batch(items, method, 'operationName');
+      var operationArgs  = 'args';
+      batchOperations.batch(items, method, 'operationName', operationArgs);
 
       method.should.have.been.calledThrice;
-      method.should.have.been.calledWith(items[0]);
-      method.should.have.been.calledWith(items[1]);
-      method.should.have.been.calledWith(items[2]);
+      method.should.have.been.calledWith(items[0], operationArgs);
+      method.should.have.been.calledWith(items[1], operationArgs);
+      method.should.have.been.calledWith(items[2], operationArgs);
     });
 
     it('should update the variables once the actions are performed', function(done) {
@@ -133,6 +140,7 @@ describe("service: BatchOperations:", function() {
         expect(batchOperations.progress).to.equal(100);
         expect(batchOperations.totalItemCount).to.equal(8);
         expect(batchOperations.completedItemCount).to.equal(8);
+        expect(batchOperations.hasErrors).to.be.false;
 
         done();
       });
@@ -175,6 +183,19 @@ describe("service: BatchOperations:", function() {
       }, 10);
     });
 
+    it('should reject if an operation fails', function(done) {
+      method.returns(Q.resolve());
+      method.onCall(1).returns(Q.reject());
+
+      batchOperations.batch(items, method, 'operationName').catch(function() {
+        expect(batchOperations.hasErrors).to.be.true;
+        expect(batchOperations.progress).to.equal(100);
+        expect(batchOperations.totalItemCount).to.equal(8);
+        expect(batchOperations.completedItemCount).to.equal(8);
+        done();
+      });
+    });
+
   });
 
   describe('cancel:', function() {
@@ -193,12 +214,13 @@ describe("service: BatchOperations:", function() {
       }, 10);
     });
 
-    it('should resolve and reset activeOperation on cancel', function(done) {
+    it('should reject and reset activeOperation on cancel', function(done) {
       method.onCall(0).returns(Q.resolve());
       method.onCall(1).returns(Q.resolve());
       method.onCall(2).returns(Q.resolve());
 
-      batchOperations.batch(items, method, 'operationName').then(function() {
+      batchOperations.batch(items, method, 'operationName').catch(function(reason) {
+        expect(reason).to.equal('cancelled');
         expect(method.callCount).to.equal(3);
 
         $timeout.verifyNoPendingTasks();

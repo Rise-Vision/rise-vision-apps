@@ -10,14 +10,14 @@ var SignUpPage = function() {
   var signInPage = new SignInPage();
   var url = homepage.getUrl() + 'signup';
 
-  var signUpPageContainer = element(by.css('.app-launcher-login'));
-  var signUpCTA = element(by.cssContainingText('h1', 'Get Started For Free'));
+  var signUpPageContainer = element(by.css('.app-login'));
+  var signUpCTA = element(by.cssContainingText('h4', 'Start your FREE 14-day trial'));
   var signInLink = element(by.id('sign-in-link'));
   var signUpGoogleLink = element(by.id('sign-up-google-link'));
   var usernameTextBox = element(by.id('username'));
   var passwordTextBox = element(by.id('password'));
   var signupButton = element(by.id('sign-up-button'));
-  var passwordMinLengthError = element(by.cssContainingText('.text-danger', 'Password needs to be 4 or more characters in length.'));
+  var passwordMinLengthError = element(by.cssContainingText('.text-danger', 'Password needs to be 8 or more characters in length.'));
   var passwordRequiredError = element(by.cssContainingText('.text-danger', 'Oops, don\'t leave this blank.'));
   var alreadyRegisteredError = element(by.id('already-registered-warning'));
   var passwordStrengthText = element(by.id('strengthText'));
