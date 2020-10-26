@@ -72,6 +72,7 @@ describe('service: scheduleSelectorFactory:', function() {
   it('should exist',function(){
     expect(scheduleSelectorFactory).to.be.ok;
 
+    expect(scheduleSelectorFactory.loadSelectedSchedules).to.be.a('function');  
     expect(scheduleSelectorFactory.getSchedulesComponent).to.be.a('function');    
     expect(scheduleSelectorFactory.load).to.be.a('function');
     expect(scheduleSelectorFactory.selectItem).to.be.a('function');
@@ -86,17 +87,20 @@ describe('service: scheduleSelectorFactory:', function() {
     expect(scheduleSelectorFactory.selectedCount).to.equal(0);
   });
 
-  describe('getSchedulesComponent:', function() {
-    it('should return the component object', function() {
-      expect(scheduleSelectorFactory.getSchedulesComponent(presentation)).to.deep.equal({
-        type: 'rise-schedules',
-        factory: scheduleSelectorFactory,
-        showNoSchedulesError: false
+  describe('loadSelectedSchedules:', function() {
+    it('should return a promise', function() {
+      expect(scheduleSelectorFactory.loadSelectedSchedules().then).to.be.a('function');
+    });
+
+    it('should resolve if no Presentation is present', function(done) {
+      scheduleSelectorFactory.loadSelectedSchedules().then(function() {
+        done();
       });
     });
 
     it('should load selected schedules', function(done) {
-      var component = scheduleSelectorFactory.getSchedulesComponent(presentation);
+      scheduleSelectorFactory.presentation = presentation;
+      scheduleSelectorFactory.loadSelectedSchedules();
 
       expect(scheduleSelectorFactory.hasSelectedSchedules).to.be.true;
       expect(scheduleSelectorFactory.selectedSchedules).to.deep.equal([]);
@@ -118,10 +122,37 @@ describe('service: scheduleSelectorFactory:', function() {
 
     });
 
+    it('should update variables if no selected schedules are found', function(done) {
+      scheduleSelectorFactory.presentation = presentation;
+      schedule.list.returns(Q.resolve([]));
+
+      scheduleSelectorFactory.loadSelectedSchedules();
+
+      expect(scheduleSelectorFactory.hasSelectedSchedules).to.be.true;
+      expect(scheduleSelectorFactory.selectedSchedules).to.deep.equal([]);
+      expect(scheduleSelectorFactory.loadingSchedules).to.be.true;
+
+      schedule.list.should.have.been.calledWith({
+        sortBy: 'name',
+        filter: 'presentationIds:~\"' + scheduleSelectorFactory.presentation.id + '\"'
+      });
+      
+      setTimeout(function() {
+        expect(scheduleSelectorFactory.selectedSchedules).to.deep.equal([]);
+        expect(scheduleSelectorFactory.hasSelectedSchedules).to.be.false;
+
+        expect(scheduleSelectorFactory.loadingSchedules).to.be.false;
+
+        done();
+      }, 10);
+
+    });
+
     it('should handle failure to get selected schedules',function(done){
+      scheduleSelectorFactory.presentation = presentation;
       schedule.list.returns(Q.reject({result: {error: { message: 'ERROR; could not load schedules'}}}));
 
-      var component = scheduleSelectorFactory.getSchedulesComponent(presentation);
+      scheduleSelectorFactory.loadSelectedSchedules(presentation);
 
       setTimeout(function() {
         expect(scheduleSelectorFactory.errorMessage).to.be.ok;
@@ -132,6 +163,31 @@ describe('service: scheduleSelectorFactory:', function() {
 
         done();
       }, 10);
+    });
+
+  });
+
+  describe('getSchedulesComponent:', function() {
+    beforeEach(function() {
+      sinon.stub(scheduleSelectorFactory, 'loadSelectedSchedules');
+    });
+
+    it('should return the component object', function() {
+      expect(scheduleSelectorFactory.getSchedulesComponent(presentation)).to.deep.equal({
+        type: 'rise-schedules',
+        factory: scheduleSelectorFactory,
+        showNoSchedulesError: false
+      });
+    });
+
+    it('should load selected schedules', function() {
+      scheduleSelectorFactory.showNoSchedulesError = true;
+
+      scheduleSelectorFactory.getSchedulesComponent(presentation);
+
+      scheduleSelectorFactory.loadSelectedSchedules.should.have.been.called;
+
+      expect(scheduleSelectorFactory.presentation).to.equal(presentation);
     });
 
   });

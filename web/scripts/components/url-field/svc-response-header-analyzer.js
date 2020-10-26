@@ -9,37 +9,42 @@ angular.module('risevision.widget.common.url-field.response-header-analyzer', []
       factory.validate = function (url) {
         var deferred = $q.defer();
 
-        factory.getOptions(url).then(function (options) {
-          if (options.indexOf('frame-ancestors') > -1) {
-            deferred.reject('frame-ancestors');
-          } else if (options.indexOf('X-Frame-Options') > -1) {
-            deferred.reject('X-Frame-Options');
-          } else {
+        _requestHead(url)
+          .then(function (response) {
+            if (response && response.headers()) {
+              $log.debug('URL headers:', response.headers());
+
+              var contentType = response.headers('content-type');
+              if (contentType && !_isAcceptedContentType(contentType)) {
+                deferred.reject('content-type');
+                return;
+              }
+
+              var options = _extractOptionsFrom(response);
+              if (options.indexOf('frame-ancestors') > -1) {
+                deferred.reject('frame-ancestors');
+                return;
+              } else if (options.indexOf('X-Frame-Options') > -1) {
+                deferred.reject('X-Frame-Options');
+                return;
+              }
+            }
             deferred.resolve(true);
-          }
-        }).catch(function () {
-          deferred.reject('Could not reach URL.');
-        });
+          }).catch(function (response) {
+            $log.debug('Webpage request failed with status code ' + response.status + ': ' + response.statusText);
+            deferred.reject('not-reachable');
+          });
         return deferred.promise;
       };
 
-      factory.getOptions = function (url) {
+      var _requestHead = function (url) {
         return $http({
-          method: 'GET',
+          method: 'HEAD',
           url: 'https://proxy.risevision.com/' + url
-        }).then(function (response) {
-          if (!response) {
-            return [];
-          }
-          $log.debug(response.headers());
-          return response.headers() ? extractOptionsFrom(response) : [];
-        }, function (response) {
-          $log.debug('Webpage request failed with status code ' + response.status + ': ' + response.statusText);
-          return [];
         });
       };
 
-      function extractOptionsFrom(response) {
+      var _extractOptionsFrom = function (response) {
         var header;
         var options = [];
         header = response.headers('X-Frame-Options');
@@ -51,7 +56,11 @@ angular.module('risevision.widget.common.url-field.response-header-analyzer', []
           options.push('frame-ancestors');
         }
         return options;
-      }
+      };
+
+      var _isAcceptedContentType = function (contentType) {
+        return contentType && contentType.match('(image\/|video\/|text\/|audio\/).*');
+      };
 
       return factory;
     }

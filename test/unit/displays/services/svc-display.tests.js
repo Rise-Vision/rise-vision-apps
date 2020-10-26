@@ -252,6 +252,22 @@ describe('service: display:', function() {
                 def.reject("API Failed");
               }
               return def.promise;
+            },
+            export: function(obj) {
+              expect(obj).to.be.ok;
+
+              var def = Q.defer();
+              if (returnResult) {
+                def.resolve({
+                  result: {
+                    companyId: obj.companyId,
+                    export: true
+                  }
+                });
+              } else {
+                def.reject("API Failed");
+              }
+              return def.promise;
             }
           }
         });
@@ -679,7 +695,25 @@ describe('service: display:', function() {
 
     it('should handle request failures', function(done) {
       returnResult = false;
-      display.hasFreeDisplays().then(function() {
+      display.summary().then(function() {
+        done('it should have failed');
+      },function(){
+        done();
+      });
+    });
+  });
+
+  describe('export:', function() {
+    it('should request displays export for selected company', function(done) {
+      display.export().then(function(result) {
+        expect(result).to.deep.equal({export: true, companyId: 'TEST_COMP_ID'});
+        done();
+      });
+    });
+
+    it('should handle request failures', function(done) {
+      returnResult = false;
+      display.export().then(function() {
         done('it should have failed');
       },function(){
         done();

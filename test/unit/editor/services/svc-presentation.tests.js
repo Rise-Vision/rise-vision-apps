@@ -33,158 +33,145 @@ describe('service: presentation:', function() {
     });
 
     $provide.service('coreAPILoader',function () {
-      return function(){
-        var deferred = Q.defer();
-                
-        deferred.resolve({
-          presentation: {
-            list: function(obj){
-              expect(obj).to.be.ok;
-              
-              searchString = obj.search;
-              sortString = obj.sort;
-
-              var def = Q.defer();
-              if (returnList) {
-                def.resolve({
-                  result : {
-                    nextPageToken : 1,
-                    items : [{}]
-                  }
-                });
-              } else {
-                def.reject("API Failed");
-              }
-              return def.promise;
-            },
-            get: function(obj){
-              expect(obj).to.be.ok;
-              
-              var def = Q.defer();
-              if (obj.id) {
-                def.resolve({
-                  result: {
-                    item: {
-                      "id": "presentation1",
-                      "companyId": "TEST_COMP_ID",
-                      "name": "Test Presentation",
-                      "creationDate": "2012-04-02T14:19:36.000Z"
-                    }
-                  }
-                });
-              } else {
-                def.reject("API Failed");
-              }
-              return def.promise;
-            },
-            add: function(obj) {
-              expect(obj).to.be.ok;
-              expect(obj.companyId).to.equal('TEST_COMP_ID');
-              expect(obj).to.have.property("data");
-              
-              var def = Q.defer();
-              if (obj.data.name) {
-                expect(obj.data).to.have.property("name");
-                expect(obj.data).to.not.have.property("id");
-                
-                obj.data.id = "presentation1"
-                
-                def.resolve({
-                  result: {
-                    item: obj.data
-                  }
-                });
-              } else {
-                def.reject("API Failed");
-              }
-              return def.promise;
-            },
-            patch: function(obj) {
-              expect(obj).to.be.ok;
-              expect(obj.id).to.equal('presentation1');
-              expect(obj.data).to.be.ok;
-              
-              var def = Q.defer();
-              if (obj.data.name) {
-                expect(obj.data).to.have.property("name");
-                
-                def.resolve({
-                  result: {
-                    item: obj.data
-                  }
-                });
-              } else {
-                def.reject("API Failed");
-              }
-              return def.promise;
-            },
-            delete: function(obj) {
-              expect(obj).to.be.ok;
-
-              var def = Q.defer();
-              if (obj.id) {
-                def.resolve({
-                  item: {}
-                });
-              } else {
-                def.reject("API Failed");
-              }
-              return def.promise;
-            },
-            publish: function(obj) {
-              expect(obj).to.be.ok;
-
-              var def = Q.defer();
-              if (obj.id) {
-                def.resolve({
-                  item: "Published."
-                });
-              } else {
-                def.reject("API Failed");
-              }
-              return def.promise;
-            },
-            restore: function(obj) {
-              expect(obj).to.be.ok;
-
-              var def = Q.defer();
-              if (obj.id) {
-                def.resolve({
-                  result: {
-                    item: {
-                      id: obj.id,
-                      companyId: "TEST_COMP_ID",
-                      name: "Test Presentation",
-                      publish: 0 
-                    }  
-                  }                  
-                });
-              } else {
-                def.reject("API Failed");
-              }
-              return def.promise;
-            }
-          }
-        });
-        return deferred.promise;
-      };
+      return sinon.stub().returns(Q.resolve(coreApi));
     });
 
   }));
-  var presentation, returnList, searchString, sortString, isRiseAdmin;
+  var presentation, coreApi, returnList, searchString, sortString, isRiseAdmin;
   beforeEach(function(){
     returnList = true;
     searchString = '';
     sortString='';
     isRiseAdmin = false;
-    
+
+    coreApi = {
+      presentation: {
+        list: function(obj){
+          expect(obj).to.be.ok;
+          
+          searchString = obj.search;
+          sortString = obj.sort;
+
+          var def = Q.defer();
+          if (returnList) {
+            def.resolve({
+              result : {
+                nextPageToken : 1,
+                items : [{}]
+              }
+            });
+          } else {
+            def.reject("API Failed");
+          }
+          return def.promise;
+        },
+        get: function(obj){
+          expect(obj).to.be.ok;
+          
+          var def = Q.defer();
+          if (obj.id) {
+            def.resolve({
+              result: {
+                item: {
+                  "id": "presentation1",
+                  "companyId": "TEST_COMP_ID",
+                  "name": "Test Presentation",
+                  "creationDate": "2012-04-02T14:19:36.000Z"
+                }
+              }
+            });
+          } else {
+            def.reject("API Failed");
+          }
+          return def.promise;
+        },
+        add: function(obj) {
+          expect(obj).to.be.ok;
+          expect(obj.companyId).to.equal('TEST_COMP_ID');
+          expect(obj).to.have.property("data");
+          
+          var def = Q.defer();
+          if (obj.data.name) {
+            expect(obj.data).to.have.property("name");
+            expect(obj.data).to.not.have.property("id");
+            
+            obj.data.id = "presentation1"
+            
+            def.resolve({
+              result: {
+                item: obj.data
+              }
+            });
+          } else {
+            def.reject("API Failed");
+          }
+          return def.promise;
+        },
+        patch: function(obj) {
+          expect(obj).to.be.ok;
+          expect(obj.id).to.equal('presentation1');
+          expect(obj.data).to.be.ok;
+          
+          var def = Q.defer();
+          if (obj.data.name) {
+            expect(obj.data).to.have.property("name");
+            
+            def.resolve({
+              result: {
+                item: obj.data
+              }
+            });
+          } else {
+            def.reject("API Failed");
+          }
+          return def.promise;
+        },
+        delete: sinon.stub().returns(Q.resolve({
+          item: {}
+        })),
+        publish: function(obj) {
+          expect(obj).to.be.ok;
+
+          var def = Q.defer();
+          if (obj.id) {
+            def.resolve({
+              item: "Published."
+            });
+          } else {
+            def.reject("API Failed");
+          }
+          return def.promise;
+        },
+        restore: function(obj) {
+          expect(obj).to.be.ok;
+
+          var def = Q.defer();
+          if (obj.id) {
+            def.resolve({
+              result: {
+                item: {
+                  id: obj.id,
+                  companyId: "TEST_COMP_ID",
+                  name: "Test Presentation",
+                  publish: 0 
+                }  
+              }                  
+            });
+          } else {
+            def.reject("API Failed");
+          }
+          return def.promise;
+        }
+      }
+    };
+
     inject(function($injector){
       presentation = $injector.get('presentation');
     });
   });
 
   it('should exist',function(){
-    expect(presentation).to.be.truely;
+    expect(presentation).to.be.ok;
     expect(presentation.list).to.be.a('function');
     expect(presentation.get).to.be.a('function');
   });
@@ -193,7 +180,7 @@ describe('service: presentation:', function() {
     it('should return a list of presentations',function(done){
       presentation.list({})
       .then(function(result){
-        expect(result).to.be.truely;
+        expect(result).to.be.ok;
         expect(result.items).to.be.an.array;
         expect(result.items).to.have.length.above(0);
         done();
@@ -270,8 +257,8 @@ describe('service: presentation:', function() {
     it('should return a presentation',function(done){
       presentation.get('presentation1')
       .then(function(result){
-        expect(result).to.be.truely;
-        expect(result.item).to.be.truely;
+        expect(result).to.be.ok;
+        expect(result.item).to.be.ok;
         expect(result.item).to.have.property("name");
         
         done();
@@ -300,8 +287,8 @@ describe('service: presentation:', function() {
     it('should add a presentation',function(done){
       presentation.add(presentationObject)
       .then(function(result){
-        expect(result).to.be.truely;
-        expect(result.item).to.be.truely;
+        expect(result).to.be.ok;
+        expect(result.item).to.be.ok;
         expect(result.item).to.have.property("name");
         expect(result.item).to.have.property("id");
         expect(result.item.id).to.equal("presentation1");
@@ -318,8 +305,8 @@ describe('service: presentation:', function() {
 
       presentation.add(presentationObject)
       .then(function(result){
-        expect(result).to.be.truely;
-        expect(result.item).to.be.truely;
+        expect(result).to.be.ok;
+        expect(result.item).to.be.ok;
         expect(result.item).to.have.property("isStoreProduct");
         expect(result.item.isStoreProduct).to.be.true;
         
@@ -335,8 +322,8 @@ describe('service: presentation:', function() {
 
       presentation.add(presentationObject)
       .then(function(result){
-        expect(result).to.be.truely;
-        expect(result.item).to.be.truely;
+        expect(result).to.be.ok;
+        expect(result.item).to.be.ok;
         expect(result.item).to.have.property("isStoreProduct");
         expect(result.item.isStoreProduct).to.be.false;
         
@@ -352,8 +339,8 @@ describe('service: presentation:', function() {
       
       presentation.add(presentationObject)
       .then(function(result){
-        expect(result).to.be.truely;
-        expect(result.item).to.be.truely;
+        expect(result).to.be.ok;
+        expect(result.item).to.be.ok;
         expect(result.item).to.not.have.property("isStoreProduct");
         
         done();
@@ -384,8 +371,8 @@ describe('service: presentation:', function() {
     it('should update a presentation',function(done){
       presentation.update(presentationObject.id, presentationObject)
       .then(function(result){
-        expect(result).to.be.truely;
-        expect(result.item).to.be.truely;
+        expect(result).to.be.ok;
+        expect(result.item).to.be.ok;
         
         done();
       })
@@ -399,8 +386,8 @@ describe('service: presentation:', function() {
 
       presentation.update(presentationObject.id, presentationObject)
       .then(function(result){
-        expect(result).to.be.truely;
-        expect(result.item).to.be.truely;
+        expect(result).to.be.ok;
+        expect(result.item).to.be.ok;
         expect(result.item).to.have.property("isStoreProduct");
         expect(result.item.isStoreProduct).to.be.true;
         
@@ -416,8 +403,8 @@ describe('service: presentation:', function() {
 
       presentation.update(presentationObject.id, presentationObject)
       .then(function(result){
-        expect(result).to.be.truely;
-        expect(result.item).to.be.truely;
+        expect(result).to.be.ok;
+        expect(result.item).to.be.ok;
         expect(result.item).to.have.property("isStoreProduct");
         expect(result.item.isStoreProduct).to.be.false;
         
@@ -432,8 +419,8 @@ describe('service: presentation:', function() {
       
       presentation.update(presentationObject.id, presentationObject)
       .then(function(result){
-        expect(result).to.be.truely;
-        expect(result.item).to.be.truely;
+        expect(result).to.be.ok;
+        expect(result.item).to.be.ok;
         expect(result.item).to.not.have.property("isStoreProduct");
         
         done();
@@ -445,8 +432,8 @@ describe('service: presentation:', function() {
     it('should remove extra properties',function(done){
       presentation.update(presentationObject.id, presentationObject)
       .then(function(result){
-        expect(result).to.be.truely;
-        expect(result.item).to.be.truely;
+        expect(result).to.be.ok;
+        expect(result.item).to.be.ok;
         expect(result.item).to.not.have.property("connected");
         
         done();
@@ -468,11 +455,32 @@ describe('service: presentation:', function() {
   });
 
   describe('delete:',function(){
-    it('should delete a presentation',function(done){
+    it('should call the delete API and delete the presentation',function(done){
       presentation.delete('presentation1')
         .then(function(result){
-          expect(result).to.be.truely;
-          expect(result.item).to.be.truely;
+          expect(result).to.be.ok;
+          expect(result.item).to.be.ok;
+
+          coreApi.presentation.delete.should.have.been.calledWith({
+            id: 'presentation1',
+            force: undefined
+          });
+
+          done();
+        })
+        .then(null,done);
+    });
+
+    it('should attach force delete parameter',function(done){
+      presentation.delete('presentation1', true)
+        .then(function(result){
+          expect(result).to.be.ok;
+          expect(result.item).to.be.ok;
+
+          coreApi.presentation.delete.should.have.been.calledWith({
+            id: 'presentation1',
+            force: true
+          });
 
           done();
         })
@@ -480,6 +488,8 @@ describe('service: presentation:', function() {
     });
 
     it("should handle failure to delete presentation",function(done){
+      coreApi.presentation.delete.returns(Q.reject('API Failed'));
+
       presentation.delete()
         .then(function(result) {
           done(result);
@@ -496,8 +506,8 @@ describe('service: presentation:', function() {
     it('should publish a presentation',function(done){
       presentation.publish('presentation1')
         .then(function(result){
-          expect(result).to.be.truely;
-          expect(result.item).to.be.truely;
+          expect(result).to.be.ok;
+          expect(result.item).to.be.ok;
           expect(result.item).to.equal("Published.");
           done();
         })
@@ -521,8 +531,8 @@ describe('service: presentation:', function() {
     it('should restore a presentation',function(done){
       presentation.restore('presentation1')
         .then(function(result){
-          expect(result).to.be.truely;
-          expect(result.item).to.be.truely;
+          expect(result).to.be.ok;
+          expect(result.item).to.be.ok;
           expect(result.item).to.have.property("name");
           expect(result.item).to.have.property("publish");
           expect(result.item).to.have.property("id");

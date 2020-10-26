@@ -16,7 +16,18 @@ angular.module('risevision.editor.controllers')
         filter: PRESENTATION_SEARCH.filter
       };
 
-      $scope.presentations = new ScrollingListService(presentation.list, $scope.search);
+      $scope.listOperations = {
+        name: 'Presentation',
+        operations: [{
+          name: 'Delete',
+          actionCall: function(presentation) {
+            return editorFactory.deletePresentationByObject(presentation, true);
+          },
+          requireRole: 'cp'
+        }]
+      };
+      $scope.presentations = new ScrollingListService(presentation.list, $scope.search, $scope.listOperations);
+
       $scope.editorFactory = editorFactory;
       $scope.templateEditorFactory = templateEditorFactory;
       $scope.isHtmlPresentation = presentationUtils.isHtmlPresentation;

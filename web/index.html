@@ -51,7 +51,7 @@
   <link rel="stylesheet" type="text/css" href="pricing-component.css">
   <!-- endbuild -->
 </head>
-<body ng-class="{'white-bg': showWhiteBackground}">
+<body ng-class="{'gray-bg': !showWhiteBackground}">
   <!-- Common Header -->
   <common-header nav-options="navOptions" nav-selected="navSelected" ng-controller="AppCtrl"></common-header>
 
@@ -226,12 +226,17 @@
   <script src="scripts/components/search-filter/dtv-search-filter.js"></script>
 
   <script src="scripts/components/scrolling-list/app.js"></script>
-  <script src="scripts/components/scrolling-list/dtv-scroll-event.js"></script>
-  <script src="scripts/components/scrolling-list/dtv-scrolling-list.js"></script>
-  <script src="scripts/components/scrolling-list/svc-get-error.js"></script>
-  <script src="scripts/components/scrolling-list/svc-process-error-code.js"></script>
-  <script src="scripts/components/scrolling-list/svc-batch-operations.js"></script>
-  <script src="scripts/components/scrolling-list/svc-scrolling-list-service.js"></script>
+
+  <script src="scripts/components/scrolling-list/directives/dtv-scroll-event.js"></script>
+  <script src="scripts/components/scrolling-list/directives/dtv-scrolling-list.js"></script>
+  <script src="scripts/components/scrolling-list/directives/dtv-batch-operations.js"></script>
+
+  <script src="scripts/components/scrolling-list/controllers/ctr-bulk-delete-modal.js"></script>
+
+  <script src="scripts/components/scrolling-list/services/svc-get-error.js"></script>
+  <script src="scripts/components/scrolling-list/services/svc-process-error-code.js"></script>
+  <script src="scripts/components/scrolling-list/services/svc-batch-operations.js"></script>
+  <script src="scripts/components/scrolling-list/services/svc-scrolling-list-service.js"></script>
 
   <script src="scripts/components/stop-event/dtv-stop-event.js"></script>
 
@@ -239,37 +244,6 @@
   <script src="scripts/components/message-box/svc-message-box.js"></script>
 
   <script src="scripts/components/svg-icon/dtv-svg-icon.js"></script>
-
-  <script src="scripts/components/plans/app.js"></script>
-  <script src="scripts/components/plans/ctr-plans-modal.js"></script>
-  <script src="scripts/components/plans/dtv-rv-on.js"></script>
-  <script src="scripts/components/plans/svc-currency.js"></script>
-  <script src="scripts/components/plans/svc-current-plan-factory.js"></script>
-  <script src="scripts/components/plans/svc-plans-factory.js"></script>
-
-  <script src="scripts/components/purchase-flow/app.js"></script>
-  <script src="scripts/components/purchase-flow/controllers/ctr-purchase-modal.js"></script>
-  <script src="scripts/components/purchase-flow/controllers/ctr-tax-exemption-modal.js"></script>
-  <script src="scripts/components/purchase-flow/directives/dtv-address-form.js"></script>
-  <script src="scripts/components/purchase-flow/directives/dtv-billing-address.js"></script>
-  <script src="scripts/components/purchase-flow/directives/dtv-checkout-success.js"></script>
-  <script src="scripts/components/purchase-flow/directives/dtv-payment-methods.js"></script>
-  <script src="scripts/components/purchase-flow/directives/dtv-province-validator.js"></script>
-  <script src="scripts/components/purchase-flow/directives/dtv-review-purchase.js"></script>
-  <script src="scripts/components/purchase-flow/directives/dtv-review-subscription.js"></script>
-  <script src="scripts/components/purchase-flow/directives/dtv-shipping-address.js"></script>
-  <script src="scripts/components/purchase-flow/directives/dtv-suggest-general-delivery.js"></script>
-  <script src="scripts/components/purchase-flow/directives/dtv-year-selector.js"></script>
-  <script src="scripts/components/purchase-flow/filters/ftr-card-last-four.js"></script>
-  <script src="scripts/components/purchase-flow/filters/ftr-country-name.js"></script>
-  <script src="scripts/components/purchase-flow/filters/ftr-padded-month.js"></script>
-  <script src="scripts/components/purchase-flow/services/svc-address-factory.js"></script>
-  <script src="scripts/components/purchase-flow/services/svc-address.js"></script>
-  <script src="scripts/components/purchase-flow/services/svc-contact.js"></script>
-  <script src="scripts/components/purchase-flow/services/svc-purchase-factory.js"></script>
-  <script src="scripts/components/purchase-flow/services/svc-stripe-loader.js"></script>
-  <script src="scripts/components/purchase-flow/services/svc-stripe.js"></script>
-  <script src="scripts/components/purchase-flow/services/svc-tax-exemption-factory.js"></script>
 
   <!-- apps components -->
   <script src="scripts/components/search-filter/dtv-search-filter.js"></script>
@@ -325,7 +299,7 @@
   <!-- common -->
   <script src="scripts/common/app.js"></script>
   <script src="scripts/common/controllers/ctr-app.js"></script>
-  <script src="scripts/common/controllers/ctr-bulk-delete-modal.js"></script>
+  <script src="scripts/common/controllers/ctr-bulk-edit-modal.js"></script>
 
   <script src="scripts/common/directives/dtv-page-title.js"></script>
   <script src="scripts/common/directives/dtv-rv-sortable.js"></script>
@@ -335,7 +309,6 @@
   <script src="scripts/common/directives/dtv-yes-no-toggle.js"></script>
   <script src="scripts/common/directives/dtv-madero-checkbox.js"></script>
   <script src="scripts/common/directives/dtv-weekly-templates.js"></script>
-  <script src="scripts/common/directives/dtv-batch-operations.js"></script>
 
   <script src="scripts/common/services/svc-cached-request.js"></script>
   <script src="scripts/common/services/svc-gadgets-api.js"></script>
@@ -346,6 +319,39 @@
   <script src="scripts/billing/app.js"></script>
   <script src="scripts/billing/controllers/ctr-billing.js"></script>
   <script src="scripts/billing/services/svc-billing.js"></script>
+
+  <!-- plans -->
+  <script src="scripts/plans/app.js"></script>
+  <script src="scripts/plans/controllers/ctr-plans-modal.js"></script>
+  <script src="scripts/plans/directives/dtv-rv-on.js"></script>
+  <script src="scripts/plans/services/svc-currency.js"></script>
+  <script src="scripts/plans/services/svc-current-plan-factory.js"></script>
+  <script src="scripts/plans/services/svc-plans-factory.js"></script>
+
+  <!-- purchase -->
+  <script src="scripts/purchase/app.js"></script>
+  <script src="scripts/purchase/controllers/ctr-purchase-modal.js"></script>
+  <script src="scripts/purchase/controllers/ctr-tax-exemption-modal.js"></script>
+  <script src="scripts/purchase/directives/dtv-address-form.js"></script>
+  <script src="scripts/purchase/directives/dtv-billing-address.js"></script>
+  <script src="scripts/purchase/directives/dtv-checkout-success.js"></script>
+  <script src="scripts/purchase/directives/dtv-payment-methods.js"></script>
+  <script src="scripts/purchase/directives/dtv-province-validator.js"></script>
+  <script src="scripts/purchase/directives/dtv-review-purchase.js"></script>
+  <script src="scripts/purchase/directives/dtv-review-subscription.js"></script>
+  <script src="scripts/purchase/directives/dtv-shipping-address.js"></script>
+  <script src="scripts/purchase/directives/dtv-suggest-general-delivery.js"></script>
+  <script src="scripts/purchase/directives/dtv-year-selector.js"></script>
+  <script src="scripts/purchase/filters/ftr-card-last-four.js"></script>
+  <script src="scripts/purchase/filters/ftr-country-name.js"></script>
+  <script src="scripts/purchase/filters/ftr-padded-month.js"></script>
+  <script src="scripts/purchase/services/svc-address-factory.js"></script>
+  <script src="scripts/purchase/services/svc-address.js"></script>
+  <script src="scripts/purchase/services/svc-contact.js"></script>
+  <script src="scripts/purchase/services/svc-purchase-factory.js"></script>
+  <script src="scripts/purchase/services/svc-stripe-loader.js"></script>
+  <script src="scripts/purchase/services/svc-stripe.js"></script>
+  <script src="scripts/purchase/services/svc-tax-exemption-factory.js"></script>
 
   <!-- schedules -->
   <script src="scripts/schedules/app.js"></script>
@@ -364,6 +370,7 @@
   <script src="scripts/schedules/controllers/ctr-schedules-list.js"></script>
   <script src="scripts/schedules/controllers/ctr-schedule-details.js"></script>
   <script src="scripts/schedules/controllers/ctr-schedule-add.js"></script>
+  <script src="scripts/schedules/controllers/ctr-schedule-picker-modal.js"></script>
   <script src="scripts/schedules/controllers/ctr-playlist-item-modal.js"></script>
   <script src="scripts/schedules/controllers/ctr-shared-schedule-popover.js"></script>
 
@@ -371,6 +378,7 @@
   <script src="scripts/displays/app.js"></script>
   <script src="scripts/displays/services/svc-display.js"></script>
   <script src="scripts/displays/services/svc-display-factory.js"></script>
+  <script src="scripts/displays/services/svc-display-list-operations.js"></script>
   <script src="scripts/displays/services/svc-display-status-factory.js"></script>
   <script src="scripts/displays/services/svc-display-activation-tracker.js"></script>
   <script src="scripts/displays/services/svc-display-summary-factory.js"></script>
@@ -385,7 +393,6 @@
   <script src="scripts/displays/services/svc-alerts-factory.js"></script>
   <script src="vendor/primus/Primus.js"></script>
   <script src="scripts/displays/services/svc-primus.js"></script>
-  <script src="scripts/displays/services/svc-player.js"></script>
 
   <script src="scripts/displays/filters/ftr-status.js"></script>
   <script src="scripts/displays/filters/ftr-resolution.js"></script>
@@ -401,6 +408,7 @@
   <script src="scripts/displays/controllers/ctr-display-details.js"></script>
   <script src="scripts/displays/controllers/ctr-display-add.js"></script>
   <script src="scripts/displays/controllers/ctr-alerts.js"></script>
+  <script src="scripts/displays/controllers/ctr-bulk-display-control-modal.js"></script>
   <script src="scripts/displays/controllers/ctr-display-control-modal.js"></script>
 
   <!-- editor -->

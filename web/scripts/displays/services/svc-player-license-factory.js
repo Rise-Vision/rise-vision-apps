@@ -79,20 +79,24 @@ angular.module('risevision.displays.services')
           });
       };
 
-      var _licenseDisplays = function (displayIds) {
-        factory.apiError = '';
-        factory.updatingLicense = true;
-
+      factory.licenseDisplaysByCompanyId = function (companyId, displayIds) {
         var apiParams = {};
         for (var i = 0; i < displayIds.length; i++) {
           var displayId = displayIds[i];
           apiParams[displayId] = true;
         }
 
-        return enableCompanyProduct(userState.getSelectedCompanyId(), PLAYER_PRO_PRODUCT_CODE, apiParams)
+        return enableCompanyProduct(companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
           .then(function () {
             factory.toggleDisplayLicenseLocal(true, displayIds.length);
-          })
+          });
+      };
+
+      var _licenseDisplays = function (displayIds) {
+        factory.apiError = '';
+        factory.updatingLicense = true;
+
+        return factory.licenseDisplaysByCompanyId(userState.getSelectedCompanyId(), displayIds)
           .catch(function (e) {
             factory.apiError = processErrorCode(e);
             $log.error(factory.apiError, e);

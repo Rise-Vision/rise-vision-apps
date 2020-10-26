@@ -4,8 +4,9 @@
     <h1 class="app-header-title" id="title" translate>schedules-app.title</h1>
   </div>
 
-  <div id="errorBox" ng-show="apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-    <strong>{{errorMessage}}</strong> {{apiError}}
+  <div id="errorBox" ng-show="schedules.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
+    <p><strong>{{schedules.errorMessage}}</strong></p>
+    {{schedules.apiError}}
   </div> 
 
   <div ng-if="!(!schedules.loadingItems && schedules.items.list.length === 0 && search.query === undefined)">
@@ -19,17 +20,32 @@
       </div>
     </div>
 
+    <batch-operations list-object="schedules"></batch-operations>
+
     <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom"
       scrolling-list="schedules.load()" rv-spinner rv-spinner-key="schedules-list-loader" rv-spinner-start-active="1">
 
       <table id="schedulesListTable" class="table">
         <thead class="table-header">
           <tr class="table-header__row u_clickable">
-            <th id="tableHeaderName" class="table-header__cell col-sm-9" ng-click="schedules.sortBy('name')">
-              {{ 'schedules-app.list.heading.name' | translate }}
-              <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+            <th class="table-header__cell col-sm-3">
+              <div class="flex-row">
+                <madero-checkbox ng-click="schedules.selectAll()" ng-value="search.selectAll"></madero-checkbox>
+                <div class="u_clickable" id="tableHeaderName" ng-click="schedules.sortBy('name')">
+                  {{ 'schedules-app.list.heading.name' | translate }}
+                  <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+                </div>
+              </div>
             </th>
-            <th id="tableHeaderChangeDate" class="table-header__cell col-sm-3 hidden-xs" ng-click="schedules.sortBy('changeDate')">
+            <th id="tableHeaderTimeline" class="table-header__cell col-sm-3" ng-click="schedules.sortBy('timeline')">
+              Timeline
+              <i ng-if="search.sortBy === 'timeline'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+            </th>
+            <th id="tableHeaderDistribution" class="table-header__cell col-sm-3" ng-click="schedules.sortBy('distributionSummary')">
+              Distribution
+              <i ng-if="search.sortBy === 'distributionSummary'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+            </th>
+            <th id="tableHeaderChangeDate" class="table-header__cell col-sm-3" ng-click="schedules.sortBy('changeDate')">
               {{ 'schedules-app.list.heading.changeDate' | translate }}
               <i ng-if="search.sortBy === 'changeDate'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
@@ -37,12 +53,21 @@
         </thead>
         <tbody class="table-body">
           <tr class="table-body__row" ng-repeat="schedule in schedules.items.list">
-            <td class="table-body__cell"><a class="madero-link" ui-sref="apps.schedules.details({scheduleId: schedule.id})"><strong>{{schedule.name}}</strong></a></td>
-            <td class="table-body__cell hidden-xs">{{schedule.changeDate | date:'d-MMM-yyyy h:mm a'}} by {{schedule.changedBy | username}}</td>
+            <td class="table-body__cell">
+              <div class="flex-row">
+                <madero-checkbox ng-click="schedules.select(schedule)" ng-value="schedule.selected"></madero-checkbox>
+                <a class="madero-link u_ellipsis-md" ui-sref="apps.schedules.details({scheduleId: schedule.id})">
+                  <strong>{{schedule.name}}</strong>
+                </a>
+              </div>
+            </td>
+            <td class="table-body__cell u_ellipsis-lg">{{schedule.timeline}}</td>
+            <td class="table-body__cell">{{schedule.distributionSummary}}</td>
+            <td class="table-body__cell u_ellipsis-md">{{schedule.changeDate | date:'d-MMM-yyyy h:mm a'}} by {{schedule.changedBy | username}}</td>
           </tr>
           <!-- If no search results -->
           <tr class="table-body__row" ng-show="schedules.items.list.length === 0 && search.query !== undefined">
-            <td colspan="3" class="table-body__cell text-center"><span translate>schedules-app.list.no-results</span></td>
+            <td colspan="4" class="table-body__cell text-center"><span translate>schedules-app.list.no-results</span></td>
           </tr>
         </tbody>
       </table>

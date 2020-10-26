@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('displaysList', ['$scope', '$rootScope', 'userState', 'display',
+  .controller('displaysList', ['$scope', '$rootScope', '$q', 'userState', 'display',
     'ScrollingListService', '$loading', '$filter', 'displayFactory', 'playerLicenseFactory',
-    'displayStatusFactory', '$modal', 'displaySummaryFactory',
-    function ($scope, $rootScope, userState, display, ScrollingListService, $loading,
-      $filter, displayFactory, playerLicenseFactory, displayStatusFactory, $modal, displaySummaryFactory) {
+    'displayStatusFactory', '$modal', 'displaySummaryFactory', 'DisplayListOperations',
+    function ($scope, $rootScope, $q, userState, display, ScrollingListService, $loading,
+      $filter, displayFactory, playerLicenseFactory, displayStatusFactory, $modal, displaySummaryFactory,
+      DisplayListOperations) {
       $scope.search = {
         sortBy: 'name',
         count: $scope.listLimit,
@@ -13,15 +14,8 @@ angular.module('risevision.displays.controllers')
         name: 'Displays'
       };
 
-      $scope.displays = new ScrollingListService(display.list, $scope.search);
-      $scope.listOperations = {
-        name: 'Display',
-        operations: [{
-          name: 'Delete',
-          actionCall: displayFactory.deleteDisplayByObject,
-          requireRole: 'da'
-        }]
-      };
+      $scope.listOperations = new DisplayListOperations();
+      $scope.displays = new ScrollingListService(display.list, $scope.search, $scope.listOperations);
 
       $scope.selectedCompayId = userState.getSelectedCompanyId();
       $scope.displayFactory = displayFactory;
@@ -30,7 +24,8 @@ angular.module('risevision.displays.controllers')
       $scope.displayStatusFactory = displayStatusFactory;
       $scope.displaySummaryFactory = displaySummaryFactory;
 
-      displaySummaryFactory.loadSummary();
+      // Temporary disable Summary until issue https://github.com/Rise-Vision/core/issues/810 is fixed
+      // displaySummaryFactory.loadSummary();
 
       $scope.filterConfig = {
         placeholder: $filter('translate')(

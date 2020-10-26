@@ -44,15 +44,7 @@ describe('service: editorFactory:', function() {
           }
           return deferred.promise;
         },
-        delete: function(presentationId) {
-          var deferred = Q.defer();
-          if(updatePresentation){
-            deferred.resolve(presentationId);
-          }else{
-            deferred.reject({result: {error: { message: 'ERROR; could not delete presentation'}}});
-          }
-          return deferred.promise;
-        },
+        delete: sinon.stub().returns(Q.resolve()),
         publish: function(presentationId) {
           var deferred = Q.defer();
           if(updatePresentation){
@@ -160,7 +152,7 @@ describe('service: editorFactory:', function() {
       return messageBoxStub;
     });
   }));
-  var editorFactory, presentationTracker, updatePresentation, currentState, $state, stateParams,
+  var editorFactory, presentationService, presentationTracker, updatePresentation, currentState, $state, stateParams,
     presentationParser, distributionParser, $window, $modal, processErrorCode, createFirstSchedule, userAuthFactory,
     $rootScope, storeProduct, showLegacyWarning;
   beforeEach(function(){
@@ -169,6 +161,7 @@ describe('service: editorFactory:', function() {
 
     inject(function($injector){
       editorFactory = $injector.get('editorFactory');
+      presentationService = $injector.get('presentation');
       presentationParser = $injector.get('presentationParser');
       distributionParser = $injector.get('distributionParser')
       $window = $injector.get('$window');
@@ -199,6 +192,7 @@ describe('service: editorFactory:', function() {
     expect(editorFactory.getPresentation).to.be.a('function');
     expect(editorFactory.addPresentation).to.be.a('function');
     expect(editorFactory.updatePresentation).to.be.a('function');
+    expect(editorFactory.deletePresentationByObject).to.be.a('function');
     expect(editorFactory.deletePresentation).to.be.a('function');
     expect(editorFactory.isRevised).to.be.a('function');
     expect(editorFactory.copyPresentation).to.be.a('function');
@@ -554,9 +548,52 @@ describe('service: editorFactory:', function() {
 
   });
 
-  describe('deletePresentation: ',function(){
+  describe('deletePresentationByObject: ',function(){
     it('should delete the presentation',function(done){
-      updatePresentation = true;
+      editorFactory.deletePresentationByObject({
+        id: 'presentationId',
+      }).then(function(){
+        presentationService.delete.should.have.been.calledWith('presentationId');
+
+        expect(presentationTracker).to.have.been.calledWith('Presentation Deleted');
+
+        done();
+      }, function() {
+        done('error');
+      });
+    });
+
+    it('should force delete the presentation',function(done){
+      editorFactory.deletePresentationByObject({
+        id: 'presentationId',
+      }, true).then(function(){
+        presentationService.delete.should.have.been.calledWith('presentationId', true);
+
+        done();
+      }, function() {
+        done('error');
+      });
+    });
+    
+    it('should show an error if fails to delete the presentation',function(done){
+      presentationService.delete.returns(Q.reject());
+      
+      editorFactory.deletePresentationByObject({
+        id: 'presentationId'
+      }).then(function(){
+        done('error');
+      }, function() {
+        done();
+      });
+    });
+  });
+
+  describe('deletePresentation: ',function(){
+    beforeEach(function() {
+      sandbox.stub(editorFactory, 'deletePresentationByObject').returns(Q.resolve());
+    });
+
+    it('should delete the presentation',function(done){
       var broadcastSpy = sinon.spy($rootScope,'$broadcast');
 
       editorFactory.deletePresentation();
@@ -567,7 +604,6 @@ describe('service: editorFactory:', function() {
         expect(editorFactory.loadingPresentation).to.be.false;
         expect(editorFactory.errorMessage).to.not.be.ok;
         expect(editorFactory.apiError).to.not.be.ok;
-        expect(presentationTracker).to.have.been.calledWith('Presentation Deleted');
         expect(currentState).to.equal('apps.editor.list');
         broadcastSpy.should.have.been.calledWith('presentationDeleted');
         done();
@@ -575,7 +611,7 @@ describe('service: editorFactory:', function() {
     });
 
     it('should show an error if fails to delete the presentation',function(done){
-      updatePresentation = false;
+      editorFactory.deletePresentationByObject.returns(Q.reject());
 
       editorFactory.deletePresentation();
 

@@ -259,17 +259,21 @@ angular.module('risevision.editor.services')
         }
       };
 
+      factory.deletePresentationByObject = function (presentationObject, forceDelete) {
+        return presentation.delete(presentationObject.id, forceDelete)
+          .then(function () {
+            presentationTracker('Presentation Deleted', presentationObject.id, presentationObject.name);
+          });
+      };
+
       factory.deletePresentation = function () {
         _clearMessages();
 
         //show loading spinner
         factory.loadingPresentation = true;
 
-        presentation.delete(factory.presentation.id)
+        factory.deletePresentationByObject(factory.presentation)
           .then(function () {
-            presentationTracker('Presentation Deleted',
-              factory.presentation.id, factory.presentation.name);
-
             $rootScope.$broadcast('presentationDeleted');
 
             factory.presentation = {};

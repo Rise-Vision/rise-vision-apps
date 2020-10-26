@@ -6,6 +6,9 @@ angular.module('risevision.displays.directives')
       return {
         restrict: 'E',
         replace: true,
+        scope: {
+          display: '=?'
+        },
         templateUrl: 'partials/displays/display-address.html',
         link: function ($scope) {
           $scope.countries = COUNTRIES;

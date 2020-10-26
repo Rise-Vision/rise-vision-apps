@@ -11,7 +11,8 @@ angular.module('risevision.schedules.directives')
           ngModel: '=',
           onSelect: '&',
           label: '@?',
-          additionalClass: '@?'
+          additionalClass: '@?',
+          additionalTooltipClass: '@?'
         },
         link: function ($scope, element, attrs, ctrl) {
           var selected;

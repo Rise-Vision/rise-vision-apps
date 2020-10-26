@@ -41,6 +41,10 @@ angular.module('risevision.displays.services')
       service.updateConfiguration = function (config) {
         var display = displayFactory.display;
 
+        return service.updateConfigurationByObject(display, config);
+      };
+
+      service.updateConfigurationByObject = function (display, config) {
         return displayService.uploadControlFile(display.id, config);
       };
 

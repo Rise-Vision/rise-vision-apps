@@ -7,28 +7,13 @@ angular.module('risevision.displays.services')
   .value('DISPLAY_CONTROL_PLAYER_VERSION', '2018.01.15.16.31')
   .value('CHROMEOS_PLAYER_VERSION', '2018.07.20.10229')
   .value('CHROMEOS_SCREENSHOT_PLAYER_VERSION', '2018.08.17.8388')
-  .factory('playerProFactory', ['userState', 'parsePlayerDate', 'getLatestPlayerVersion',
-    'PLAYER_VERSION_DATE_REGEX',
+  .factory('playerProFactory', ['userState', 'PLAYER_VERSION_DATE_REGEX',
     'SCREENSHOT_PLAYER_VERSION', 'OFFLINE_PLAY_PLAYER_VERSION', 'DISPLAY_CONTROL_PLAYER_VERSION',
     'CHROMEOS_PLAYER_VERSION', 'CHROMEOS_SCREENSHOT_PLAYER_VERSION',
-    function (userState, parsePlayerDate, getLatestPlayerVersion,
-      PLAYER_VERSION_DATE_REGEX,
+    function (userState, PLAYER_VERSION_DATE_REGEX,
       SCREENSHOT_PLAYER_VERSION, OFFLINE_PLAY_PLAYER_VERSION, DISPLAY_CONTROL_PLAYER_VERSION,
       CHROMEOS_PLAYER_VERSION, CHROMEOS_SCREENSHOT_PLAYER_VERSION) {
       var factory = {};
-      var _latestPlayerVersion;
-
-      var _loadPlayerVersion = function () {
-        getLatestPlayerVersion()
-          .then(function (date) {
-            _latestPlayerVersion = date;
-          })
-          .catch(function (err) {
-            console.log('Error retrieving Player Version', err);
-          });
-      };
-
-      _loadPlayerVersion();
 
       var _compareVersion = function (minimumVersion, currentVersion) {
         return PLAYER_VERSION_DATE_REGEX.test(currentVersion) && currentVersion >= minimumVersion;
@@ -68,17 +53,6 @@ angular.module('risevision.displays.services')
         var newDisplay = !(display && display.playerName && display.playerVersion);
         return !!(!newDisplay && !factory.isElectronPlayer(display) &&
           !factory.isChromeOSPlayer(display)) || factory.is3rdPartyPlayer(display);
-      };
-
-      factory.isOutdatedPlayer = function (display) {
-        var displayPlayerVersion = display && parsePlayerDate(display.playerVersion);
-        var minimumVersion = _latestPlayerVersion &&
-          new Date(_latestPlayerVersion).setMonth(_latestPlayerVersion.getMonth() - 3);
-        var upToDate = displayPlayerVersion && minimumVersion && displayPlayerVersion >= minimumVersion;
-
-        return !factory.isUnsupportedPlayer(display) &&
-          !factory.isChromeOSPlayer(display) &&
-          (!factory.isElectronPlayer(display) || !upToDate);
       };
 
       factory.isScreenshotCompatiblePlayer = function (display) {

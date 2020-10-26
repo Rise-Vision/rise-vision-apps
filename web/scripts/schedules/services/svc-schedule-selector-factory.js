@@ -28,7 +28,11 @@ angular.module('risevision.schedules.services')
         factory.selectedCount = 0;
       };
 
-      var _loadSelectedSchedules = function () {
+      factory.loadSelectedSchedules = function () {
+        if (!factory.presentation) {
+          return $q.resolve();
+        }
+
         var search = {
           sortBy: 'name',
           filter: 'presentationIds:~\"' + factory.presentation.id + '\"'
@@ -39,7 +43,7 @@ angular.module('risevision.schedules.services')
         factory.selectedSchedules = [];
         factory.loadingSchedules = true;
 
-        schedule.list(search)
+        return schedule.list(search)
           .then(function (result) {
             factory.selectedSchedules = result.items ? result.items : [];
 
@@ -59,7 +63,8 @@ angular.module('risevision.schedules.services')
       factory.getSchedulesComponent = function (currentPresentation) {
         factory.presentation = currentPresentation;
         schedulesComponent.showNoSchedulesError = false;
-        _loadSelectedSchedules();
+
+        factory.loadSelectedSchedules();
 
         return schedulesComponent;
       };
@@ -155,7 +160,7 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedules = true;
 
         return $q.all([_updateSelectedSchedules(), _updateUnselectedSchedules()])
-          .then(_loadSelectedSchedules);
+          .then(factory.loadSelectedSchedules);
       };
 
       factory.addSchedule = function () {
@@ -171,8 +176,6 @@ angular.module('risevision.schedules.services')
           } else {
             return $q.resolve();
           }
-        }).catch(function () {
-          return $q.reject();
         });
       };
 

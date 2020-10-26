@@ -1,0 +1,27 @@
+<form id="bulkEditForm" name="bulkEditForm" class="bulk-edit-modal" ng-submit="save()">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="dismiss()" data-dismiss="modal" aria-hidden="true">
+      <streamline-icon name="close" width="12" height="12"></streamline-icon>
+    </button>
+  </div>
+
+  <div class="modal-body mb-2" stop-event="touchend">
+    <h4 class="mb-4">{{title}}</h4>
+    <div class="align-left" ng-include="partial"></div>
+  </div>
+
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <button type="button" class="btn btn-default w-100" ng-click="cancel()">
+          Cancel
+        </button>
+      </div>
+      <div class="col-xs-6">
+        <button type="submit" id="saveBulkEditForm" class="btn btn-primary w-100" ng-disabled="bulkEditForm.$invalid">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

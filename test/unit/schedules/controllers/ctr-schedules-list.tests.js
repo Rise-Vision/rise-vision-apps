@@ -6,17 +6,21 @@ describe('controller: schedules list', function() {
   beforeEach(module(function ($provide) {
     $provide.service('schedule',function(){
       return {
-        list: function() {}
+        list: 'listService'
       }
     });
 
     $provide.service('ScrollingListService', function() {
-      return function() {
-        return {
-          search: {},
-          loadingItems: false,
-          doSearch: function() {}
-        };
+      return sinon.stub().returns({
+        search: {},
+        loadingItems: false,
+        doSearch: function() {}
+      });
+    });
+
+    $provide.service('scheduleFactory', function() {
+      return {
+        deleteScheduleByObject: 'deleteScheduleByObject'
       };
     });
 
@@ -33,13 +37,14 @@ describe('controller: schedules list', function() {
       };
     });
   }));
-  var $scope, $loading,$loadingStartSpy, $loadingStopSpy;
+  var $scope, $loading,$loadingStartSpy, $loadingStopSpy, ScrollingListService;
   beforeEach(function(){
 
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $scope.listLimit = 5;
       $loading = $injector.get('$loading');
+      ScrollingListService = $injector.get('ScrollingListService');
       $controller('schedulesList', {
         $scope : $scope,
         schedule:$injector.get('schedule'),
@@ -64,6 +69,19 @@ describe('controller: schedules list', function() {
     expect($scope.search.count).to.equal(5);
   });
   
+  it('listOperations:', function() {
+    expect($scope.listOperations).to.be.ok;
+    expect($scope.listOperations.name).to.equal('Schedule');
+    expect($scope.listOperations.operations).to.have.length(1);
+    expect($scope.listOperations.operations[0].name).to.equal('Delete');
+    expect($scope.listOperations.operations[0].actionCall).to.equal('deleteScheduleByObject');
+    expect($scope.listOperations.operations[0].requireRole).to.equal('cp');
+  });
+
+  it('should init list service', function() {
+    ScrollingListService.should.have.been.calledWith('listService', $scope.search, $scope.listOperations);
+  });
+
   describe('$loading: ', function() {
     it('should stop spinner', function() {
       $loading.stop.should.have.been.calledWith('schedules-list-loader');

@@ -232,7 +232,7 @@
         </div>
       </div>
 
-      <display-address></display-address>
+      <display-address display="factory.display"></display-address>
 
       <div class="list-group-item flex-row form-group mb-0">
         <div class="row-entry">
@@ -269,9 +269,6 @@
           <span class="mr-auto">
             <div ng-show="factory.display.playerName">{{factory.display.playerName}}</div>
             <div ng-show="factory.display.playerVersion">{{factory.display.playerVersion}}</div>
-            <div ng-show="factory.display.playerVersion && playerProFactory.isOutdatedPlayer(factory.display)" translate>
-              displays-app.fields.player.version.notCurrent
-            </div>
           </span>
         </div>
       </div>
@@ -333,7 +330,7 @@
     <div class="row border-bottom pt-3 mx-0 mb-4">
       <div class="col-sm-12 px-0 form-inline">
         <label class="mr-auto pt-3" ng-show="!userState.hasRole('cp')">Schedule: {{factory.display.scheduleName}}</label>
-        <preview-selector ng-model="selectedSchedule" on-select="scheduleSelected()" additional-class="mr-auto mb-0 pt-3" ng-show="userState.hasRole('cp')"></preview-selector>
+        <preview-selector ng-model="selectedSchedule" label="Schedule:" on-select="scheduleSelected()" additional-class="mr-auto mb-0 pt-3" ng-show="userState.hasRole('cp')"></preview-selector>
 
         <span class="pull-right button-toolbar pt-3 u_padding-20-bottom">
           <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar hidden-md" ui-sref="apps.schedules.details({ scheduleId: selectedSchedule.id, cid: selectedSchedule.companyId })">Edit Schedule</a>

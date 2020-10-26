@@ -18,16 +18,16 @@ describe('controller: displays list', function() {
       }
     });
     $provide.service('ScrollingListService', function() {
-      return function() {
-        return {
-          search: {},
-          loadingItems: false,
-          doSearch: function() {}
-        };
-      };
+      return sinon.stub().returns({
+        search: {},
+        loadingItems: false,
+        doSearch: function() {}
+      });
     });
     $provide.service('display', function() {
-      return {};
+      return {
+        list: 'listService'
+      };
     });
 
     $provide.service('$loading',function(){
@@ -56,8 +56,15 @@ describe('controller: displays list', function() {
         loadSummary: sandbox.stub()
       };
     });
+    $provide.service('DisplayListOperations', function() {
+      return function() {
+        return {
+          operations: 'operations'
+        };
+      };
+    });
   }));
-  var $scope, $loading, $filter, $window, displaySummaryFactory;
+  var $scope, $loading, $filter, $window, displaySummaryFactory, ScrollingListService;
   beforeEach(function(){
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
@@ -65,6 +72,7 @@ describe('controller: displays list', function() {
       $filter = $injector.get('$filter');
       $loading = $injector.get('$loading');
       displaySummaryFactory = $injector.get('displaySummaryFactory');
+      ScrollingListService = $injector.get('ScrollingListService');
       $window = $injector.get('$window');
       $controller('displaysList', {
         $scope : $scope,
@@ -91,15 +99,13 @@ describe('controller: displays list', function() {
     expect($scope.displayFactory).to.be.ok;
     expect($scope.playerLicenseFactory).to.be.ok;
     expect($scope.displaySummaryFactory).to.be.ok;
+    expect($scope.listOperations).to.deep.equal({
+      operations: 'operations'
+    });
   });
 
-  it('listOperations:', function() {
-    expect($scope.listOperations).to.be.ok;
-    expect($scope.listOperations.name).to.equal('Display');
-    expect($scope.listOperations.operations).to.have.length(1);
-    expect($scope.listOperations.operations[0].name).to.equal('Delete');
-    expect($scope.listOperations.operations[0].actionCall).to.equal('deleteDisplayByObject');
-    expect($scope.listOperations.operations[0].requireRole).to.equal('da');
+  it('should init list service', function() {
+    ScrollingListService.should.have.been.calledWith('listService', $scope.search, $scope.listOperations);
   });
 
   it('should init the scope objects',function(){
@@ -108,7 +114,7 @@ describe('controller: displays list', function() {
     expect($scope.search).to.have.property('reverse');
     expect($scope.search.count).to.equal(5);
 
-    displaySummaryFactory.loadSummary.should.have.been.caled;
+    // displaySummaryFactory.loadSummary.should.have.been.caled;
   });
 
   describe('$loading: ', function() {

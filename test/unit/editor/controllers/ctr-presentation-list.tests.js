@@ -7,18 +7,19 @@ describe('controller: Presentation List', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('ScrollingListService', function() {
-      return function() {
-        return {
-          search: {},
-          loadingItems: false
-        };
-      };
+      return sinon.stub().returns({
+        search: {},
+        loadingItems: false
+      });
     });
     $provide.service('presentation', function() {
-      return {};
+      return {
+        list: 'listService'
+      };
     });
     $provide.service('editorFactory', function() {
       return {
+        deletePresentationByObject: sinon.stub().returns('delete')
       };
     });
     $provide.service('templateEditorFactory', function() {
@@ -44,17 +45,18 @@ describe('controller: Presentation List', function() {
       filter: 'search filter'
     });
   }));
-  var $scope, $loading;
+  var $scope, $loading, editorFactory, ScrollingListService;
   beforeEach(function(){
 
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $scope.listLimit = 5;
       $loading = $injector.get('$loading');
+      editorFactory = $injector.get('editorFactory');
+      ScrollingListService = $injector.get('ScrollingListService');
       $controller('PresentationListController', {
         $scope : $scope,
         ScrollingListService: $injector.get('ScrollingListService'),
-
         $loading: $loading
       });
       $scope.$digest();
@@ -76,6 +78,30 @@ describe('controller: Presentation List', function() {
     expect($scope.search).to.have.property('reverse');
     expect($scope.search).to.have.property('filter');
     expect($scope.search.count).to.equal(5);
+  });
+
+  describe('listOperations:', function() {
+    it('should initialize', function() {
+      expect($scope.listOperations).to.be.ok;
+      expect($scope.listOperations.name).to.equal('Presentation');
+      expect($scope.listOperations.operations).to.have.length(1);
+      expect($scope.listOperations.operations[0].name).to.equal('Delete');
+      expect($scope.listOperations.operations[0].actionCall).to.be.a('function');
+      expect($scope.listOperations.operations[0].requireRole).to.equal('cp');
+    });
+
+    describe('delete:', function(done) {
+      it('should delete presentation on actionCall', function() {
+        expect($scope.listOperations.operations[0].actionCall('presentationObject')).to.equal('delete');
+
+        editorFactory.deletePresentationByObject.should.have.been.calledWith('presentationObject', true);
+      });
+    });
+
+  });
+
+  it('should init list service', function() {
+    ScrollingListService.should.have.been.calledWith('listService', $scope.search, $scope.listOperations);
   });
 
   describe('$loading: ', function() {

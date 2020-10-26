@@ -136,11 +136,12 @@ angular.module('risevision.editor.services')
 
           return deferred.promise;
         },
-        delete: function (presentationId) {
+        delete: function (presentationId, forceDelete) {
           var deferred = $q.defer();
 
           var obj = {
-            'id': presentationId
+            'id': presentationId,
+            'force': forceDelete
           };
 
           $log.debug('delete presentation called with', presentationId);
