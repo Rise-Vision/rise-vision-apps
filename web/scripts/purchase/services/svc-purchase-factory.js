@@ -51,7 +51,7 @@
           purchaseFlowTracker.trackProductAdded(factory.purchase.plan);
         };
 
-        factory.showPurchaseModal = function (plan, isMonthly) {
+        factory.purchasePlan = function (plan, isMonthly) {
           _init(plan, isMonthly);
 
           $state.go('apps.purchase.home');
