@@ -140,13 +140,7 @@ describe('controller: displays list', function() {
     $scope.$apply();
     searchSpy.should.have.been.called;
   });
-
-  it('should return correct statuses', function () {
-    expect($scope.playerNotInstalled()).to.be.true;
-    expect($scope.playerOnline({ onlineStatus: 'online' })).to.be.true;
-    expect($scope.playerOffline({ playerVersion: 'version' })).to.be.true;
-  });
-
+  
   describe('getDisplayType: ', function() {
     it('should return standard', function() {
       expect($scope.getDisplayType({})).to.equal('standard');

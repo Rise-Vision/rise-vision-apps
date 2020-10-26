@@ -59,11 +59,13 @@
               Licensed
               <i ng-if="search.sortBy === 'licensed'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
-            <th id="tableHeaderStatus" class="table-header__cell col-xs-1" translate>
-              displays-app.list.heading.status
+            <th id="tableHeaderStatus" class="table-header__cell col-xs-1 u_clickable" ng-click="displays.sortBy('onlineStatus')">
+              {{ 'displays-app.list.heading.status' | translate }}
+              <i ng-if="search.sortBy === 'onlineStatus'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
-            <th id="tableHeaderLastConnection" class="table-header__cell col-xs-2" translate>
-              displays-app.list.heading.lastConnection
+            <th id="tableHeaderLastConnection" class="table-header__cell col-xs-2 u_clickable" ng-click="displays.sortBy('lastActivityDate')">
+              {{ 'displays-app.list.heading.lastConnection' | translate }}
+              <i ng-if="search.sortBy === 'lastActivityDate'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
             <th class="table-header__cell col-xs-2 u_clickable" ng-click="displays.sortBy('scheduleName')">
               {{ 'displays-app.list.heading.schedule' | translate }}
@@ -94,23 +96,11 @@
               </div>
             </td>
             <td class="table-body__cell display-status">
-              <!-- Not Licensed and Installed -->
-              <span ng-if="displayFactory.showLicenseRequired(display) && !playerNotInstalled(display)">
+              <span ng-if="displayFactory.showLicenseRequired(display) && display.onlineStatus !== 'not_activated'">
                 License Required
               </span>
-              <!-- Licensed and Loading Status -->
-              <i ng-if="displayService.statusLoading && !displayFactory.showLicenseRequired(display)" class="fa fa-spinner fa-spin fa-fw"></i>
-              <!-- Licensed and Offline -->
-              <span class="text-danger" ng-if="!displayService.statusLoading && !displayFactory.showLicenseRequired(display) && playerOffline(display)">
-                Offline
-              </span>
-              <!-- Licensed and Online -->
-              <span class="text-success" ng-if="!displayService.statusLoading && !displayFactory.showLicenseRequired(display) && playerOnline(display)">
-                Online
-              </span>
-              <!-- Not Installed and finished Loading -->
-              <span ng-if="!displayService.statusLoading && playerNotInstalled(display)">
-                {{ 'displays-app.list.status.notActivated' | translate }}
+              <span ng-class="{'text-success': display.onlineStatus === 'online', 'text-danger': display.onlineStatus === 'offline'}" ng-if="!(displayFactory.showLicenseRequired(display) && display.onlineStatus !== 'not_activated')">
+                {{display.onlineStatus | status}}
               </span>
             </td>
             <td class="table-body__cell">
@@ -118,7 +108,7 @@
                 License Required
               </span>
               <span ng-if="!displayFactory.showLicenseRequired(display)">
-                {{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}
+                {{display.lastActivityDate | date:'d-MMM-yyyy h:mm a'}}
               </span>
             </td>
             <td class="table-body__cell display-schedule">

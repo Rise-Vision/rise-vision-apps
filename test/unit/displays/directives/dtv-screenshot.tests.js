@@ -1,7 +1,6 @@
 'use strict';
 describe('directive: screenshot', function() {
   beforeEach(module('risevision.displays.directives'));
-  beforeEach(module('risevision.displays.filters'));
 
   beforeEach(module(function ($provide) {
     $provide.service('display', function() {

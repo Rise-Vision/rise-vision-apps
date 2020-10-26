@@ -312,19 +312,11 @@ describe('service: display:', function() {
         items = result.items;
         expect(result.items).to.have.length.above(0);
         setTimeout(function() {
-          $timeout.flush();
-          setTimeout(function() {
-            items.forEach(function(item) {
-              expect(item.onlineStatus).to.equal('online');
-              expect(item.lastConnectionTime.getTime()).to.equal(CONNECTION_TIME);
-            });
+          broadcastSpy.should.have.been.calledWith('displaysLoaded', items);
 
-            broadcastSpy.should.have.been.calledWith('displaysLoaded', items);
+          displayActivationTracker.should.have.been.calledWith(items);
 
-            displayActivationTracker.should.have.been.calledWith(items);
-
-            done();
-          });
+          done();
         });
       });
     });
