@@ -24,8 +24,7 @@ angular.module('risevision.displays.controllers')
       $scope.displayStatusFactory = displayStatusFactory;
       $scope.displaySummaryFactory = displaySummaryFactory;
 
-      // Temporary disable Summary until issue https://github.com/Rise-Vision/core/issues/810 is fixed
-      // displaySummaryFactory.loadSummary();
+      displaySummaryFactory.loadSummary();
 
       $scope.filterConfig = {
         placeholder: $filter('translate')(
@@ -48,18 +47,6 @@ angular.module('risevision.displays.controllers')
       $rootScope.$on('risevision.company.planStarted', function () {
         $scope.displays.doSearch();
       });
-
-      $scope.playerNotInstalled = function (display) {
-        return $filter('status')(display) === 'notinstalled';
-      };
-
-      $scope.playerOnline = function (display) {
-        return $filter('status')(display) === 'online';
-      };
-
-      $scope.playerOffline = function (display) {
-        return $filter('status')(display) === 'offline';
-      };
 
       $scope.getDisplayType = function (display) {
         if (display && display.playerProAuthorized) {
