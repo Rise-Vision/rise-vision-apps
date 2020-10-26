@@ -62,61 +62,44 @@ angular.module('risevision.apps.purchase')
         }
       };
 
-      var _updateCompanySettings = function (company, isShipping) {
-        if (isShipping) {
-          // update Selected company saved in userState
-          var shipToCopyNoFollow = userState.getCopyOfSelectedCompany(true);
-          angular.extend(shipToCopyNoFollow, company);
+      var _updateCompanySettings = function (company) {
+        // update Selected company saved in userState
+        var selectedCompany = userState.getCopyOfSelectedCompany(true);
+        angular.extend(selectedCompany, company);
 
-          // this will fire 'risevision.company.updated' event
-          userState.updateCompanySettings(shipToCopyNoFollow);
-        }
-        // only proceed if currently selected BillTo company is the User company
-        else if (company.id === userState.getUserCompanyId()) {
-          // update User company saved in userState
-          var billToCopyNoFollow = userState.getCopyOfUserCompany(true);
-          angular.extend(billToCopyNoFollow, company);
-
-          // this will fire 'risevision.company.updated' event
-          userState.updateCompanySettings(billToCopyNoFollow);
-        }
+        // this will fire 'risevision.company.updated' event
+        userState.updateCompanySettings(selectedCompany);
       };
 
-      factory.updateAddress = function (addressObject, contact, isShipping) {
+      factory.updateAddress = function (addressObject, contact) {
         var deferred = $q.defer();
-        var currentAddress = isShipping ? addressService.copyAddressFromShipTo(userState
-            .getCopyOfSelectedCompany()) :
-          userState.getCopyOfUserCompany();
+        var currentAddress = userState.getCopyOfSelectedCompany();
 
         var addressFields = {};
         var requiresUpdate = false;
 
-        if (!isShipping) {
-          var billingContactEmails = currentAddress.billingContactEmails || [];
-          var email = contact && contact.email;
+        var billingContactEmails = currentAddress.billingContactEmails || [];
+        var email = contact && contact.email;
 
-          if (email && billingContactEmails.indexOf(email) === -1) {
-            billingContactEmails.unshift(email);
+        if (email && billingContactEmails.indexOf(email) === -1) {
+          billingContactEmails.unshift(email);
 
-            addressFields.billingContactEmails = billingContactEmails;
+          addressFields.billingContactEmails = billingContactEmails;
 
-            requiresUpdate = true;
-          }
+          requiresUpdate = true;
         }
 
         if (addressObject && !addressService.addressesAreIdentical(addressObject, currentAddress) ||
           requiresUpdate) {
-          if (isShipping) {
-            addressService.copyAddressToShipTo(addressObject, addressFields);
-          } else {
-            addressService.copyAddress(addressObject, addressFields);
-          }
+          addressService.copyAddress(addressObject, addressFields);
+          // Update shipping address for consistency
+          addressService.copyAddressToShipTo(addressObject, addressFields);
 
           $log.info('Company Fields changed. Saving...');
 
           updateCompany(addressFields.id, addressFields)
             .then(function () {
-              _updateCompanySettings(addressFields, isShipping);
+              _updateCompanySettings(addressFields);
 
               $log.info('Company Fields saved.');
 

@@ -13,14 +13,13 @@
   <div id="purchase-modal" class="modal-body checkout-modal" stop-event="touchend">
 
     <billing-address ng-if="currentStep === 0"></billing-address>
-    <shipping-address ng-if="currentStep === 1"></shipping-address>
-    <payment-methods ng-if="currentStep === 2"></payment-methods>
-    <review-purchase ng-if="currentStep === 3"></review-purchase>
-    <checkout-success ng-if="currentStep === 4"></checkout-success>
+    <payment-methods ng-if="currentStep === 1"></payment-methods>
+    <review-purchase ng-if="currentStep === 2"></review-purchase>
+    <checkout-success ng-if="currentStep === 3"></checkout-success>
 
   </div> <!-- //Modal Body -->
 
-  <div id="security-branding" class="modal-footer text-center" ng-show="currentStep > 2 && currentStep < 5">
+  <div id="security-branding" class="modal-footer text-center" ng-show="currentStep > 1 && currentStep < 4">
     <span class="text-muted">
       <i class="fa fa-lock icon-left"></i>
       Secure Checkout from ChargeBee and <img alt="powered by Stripe" height="16" src="https://s3.amazonaws.com/Rise-Images/UI/powered_by_stripe.svg">

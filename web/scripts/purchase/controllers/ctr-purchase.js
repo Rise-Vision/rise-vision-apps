@@ -7,21 +7,17 @@ angular.module('risevision.apps.purchase')
     index: 0,
     formName: 'billingAddressForm'
   }, {
-    name: 'Shipping Address',
-    index: 1,
-    formName: 'shippingAddressForm'
-  }, {
     name: 'Payment Method',
-    index: 2,
+    index: 1,
     formName: 'paymentMethodsForm'
   }, {
     name: 'Purchase Review',
-    index: 3
+    index: 2
   }])
 
   .controller('PurchaseCtrl', ['$scope', '$state', '$loading', 'purchaseFactory', 'addressFactory', 
-  'plansFactory', 'PURCHASE_STEPS',
-    function ($scope, $state, $loading, purchaseFactory, addressFactory, plansFactory, PURCHASE_STEPS) {
+  'PURCHASE_STEPS',
+    function ($scope, $state, $loading, purchaseFactory, addressFactory, PURCHASE_STEPS) {
 
       $scope.form = {};
       $scope.factory = purchaseFactory;
@@ -46,7 +42,7 @@ angular.module('risevision.apps.purchase')
         return !form || form.$valid;
       };
 
-      $scope.validateAddress = function (addressObject, contactObject, isShipping) {
+      $scope.validateAddress = function (addressObject, contactObject) {
         if (!_isFormValid()) {
           return;
         }
@@ -59,7 +55,7 @@ angular.module('risevision.apps.purchase')
 
             if (!addressObject.validationError) {
               addressFactory.updateContact(contactObject);
-              addressFactory.updateAddress(addressObject, contactObject, isShipping);
+              addressFactory.updateAddress(addressObject, contactObject);
 
               $scope.setNextStep();
             }
@@ -99,8 +95,8 @@ angular.module('risevision.apps.purchase')
           return;
         }
 
-        if (($scope.finalStep && $scope.currentStep < 2) || $scope.currentStep === 2) {
-          $scope.currentStep = 3;
+        if (($scope.finalStep && $scope.currentStep < 1) || $scope.currentStep === 1) {
+          $scope.currentStep = 2;
 
           $scope.finalStep = true;
 
@@ -115,7 +111,7 @@ angular.module('risevision.apps.purchase')
         if ($scope.currentStep > 0) {
           $scope.currentStep--;
         } else {
-          plansFactory.showPlansModal();
+          $state.go('apps.plans.home');
         }
       };
 
@@ -123,7 +119,7 @@ angular.module('risevision.apps.purchase')
         purchaseFactory.purchase.checkoutError = null;
 
         if (index === -1) {
-          plansFactory.showPlansModal();
+          $state.go('apps.plans.home');
         }
 
         $scope.currentStep = index;
@@ -143,10 +139,6 @@ angular.module('risevision.apps.purchase')
             }
           });
         }
-      };
-
-      $scope.dismiss = function () {
-        $state.go('apps.home');
       };
 
     }

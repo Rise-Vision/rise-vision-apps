@@ -91,37 +91,6 @@
         
       });
 
-      describe("shipping address: ", function() {
-        it("should show shipping address form", function() {
-          helper.waitForSpinner();
-          helper.wait(purchaseFlowModalPage.getShippingAddressPage(), 'Purchase flow Shipping');
-
-          expect(purchaseFlowModalPage.getShippingAddressPage().isDisplayed()).to.eventually.be.true;
-          expect(purchaseFlowModalPage.getCompanyNameField().isDisplayed()).to.eventually.be.true;
-        });
-
-        it("should fill out shipping address", function() {
-          browser.sleep(1000);
-          purchaseFlowModalPage.getStreet().clear();
-          purchaseFlowModalPage.getCity().clear();
-          purchaseFlowModalPage.getPC().clear();
-          purchaseFlowModalPage.getCompanyNameField().sendKeys('same');
-          purchaseFlowModalPage.getStreet().sendKeys('2967 Dundas St. W #632');
-          purchaseFlowModalPage.getCity().sendKeys('Toronto');
-          purchaseFlowModalPage.getCountry().sendKeys('Can');
-          purchaseFlowModalPage.getProv().sendKeys('O');
-          purchaseFlowModalPage.getPC().sendKeys('M6P 1Z2');
-        });
-
-        it("should submit shipping address", function() {
-          browser.sleep(1000);
-          helper.clickWhenClickable(purchaseFlowModalPage.getContinueButton(), 'Submit Shipping Address');
-          helper.waitForSpinner();
-          helper.waitDisappear(purchaseFlowModalPage.getShippingAddressPage(), 'Purchase flow Shipping');
-        });
-        
-      });
-
       describe("payment form: ", function() {
         it("should show payment form and default to credit card", function() {
           helper.waitForSpinner();

@@ -13,7 +13,6 @@ var PurchaseFlowModalPage = function() {
   var subscribeNowButton = element(by.cssContainingText('#trial-plan-banner a', 'Subscribe Now'));
 
   var billingAddressPage = element(by.id('checkout-billing-address'));
-  var shippingAddressPage = element(by.id('checkout-shipping-address'));
 
   var emailField = element(by.id('contact-email'));
   var companyNameField = element(by.id('address-form-companyName'));
@@ -85,10 +84,6 @@ var PurchaseFlowModalPage = function() {
 
   this.getBillingAddressPage = function() {
     return billingAddressPage;
-  };
-
-  this.getShippingAddressPage = function() {
-    return shippingAddressPage;
   };
 
   this.getEmailField = function() {

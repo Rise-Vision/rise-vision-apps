@@ -223,6 +223,22 @@
           userState.updateCompanySettings(selectedCompany);
         };
 
+        _factory.initVolumePlan = function (licenses) {
+          var plan = _.find(PLANS_LIST, {
+            type: 'volume'
+          });
+          var selectedCompany = userState.getCopyOfSelectedCompany(true);
+          var usedLicenses = selectedCompany.playerProTotalLicenseCount - 
+            selectedCompany.playerProAvailableLicenseCount;
+
+          selectedCompany.planProductCode = plan.productCode;
+          selectedCompany.planSubscriptionStatus = 'Subscribed';
+          selectedCompany.playerProTotalLicenseCount = licenses;
+          selectedCompany.playerProAvailableLicenseCount = licenses - usedLicenses;
+
+          userState.updateCompanySettings(selectedCompany);
+        };
+
         return _factory;
       }
     ]);

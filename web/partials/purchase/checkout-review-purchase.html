@@ -29,7 +29,7 @@
     <div class="col-md-6 u_margin-sm-top">
       <h4 class="u_margin-sm-bottom">
         Payment Method
-        <button aria-label="Edit Payment Method" class="btn btn-default btn-xs" ng-click="setCurrentStep(2)" tabindex="1">Edit</button>
+        <button aria-label="Edit Payment Method" class="btn btn-default btn-xs" ng-click="setCurrentStep(1)" tabindex="1">Edit</button>
       </h4>
       <div ng-show="purchase.paymentMethods.paymentMethod === 'card'">
         <span class="font-weight-bold">{{purchase.paymentMethods.selectedCard.cardType}}</span>
@@ -61,20 +61,6 @@
         </span>
         {{purchase.billingAddress.city}}, <span ng-show="purchase.billingAddress.province">{{purchase.billingAddress.province}},</span> {{purchase.billingAddress.postalCode}}<br> 
         {{purchase.billingAddress.country | countryName}}
-    </div>
-    <div class="col-md-6 u_margin-sm-top">
-      <h4 class="u_margin-sm-bottom">
-        Shipping Address
-        <button aria-label="Edit Shipping Address" class="btn btn-default btn-xs" ng-click="setCurrentStep(1)" tabindex="1">Edit</button>
-      </h4>
-        {{purchase.shippingAddress.name}}<br>
-        {{purchase.shippingAddress.street}}<br> 
-        <span ng-show="purchase.shippingAddress.unit">
-          {{purchase.shippingAddress.unit}}
-          <br>
-        </span>
-        {{purchase.shippingAddress.city}}, <span ng-show="purchase.shippingAddress.province">{{purchase.shippingAddress.province}},</span> {{purchase.shippingAddress.postalCode}}<br> 
-        {{purchase.shippingAddress.country | countryName}}
     </div>
   </div>
   <br/>

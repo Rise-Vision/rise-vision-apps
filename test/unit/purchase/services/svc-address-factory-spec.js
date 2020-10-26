@@ -43,9 +43,7 @@ describe("Services: address factory", function() {
     });
     $provide.service("userState",function() {
       return userState = {
-        getCopyOfUserCompany: sinon.stub().returns({}),
         getCopyOfSelectedCompany: sinon.stub().returns({}),
-        getUserCompanyId: sinon.stub().returns("id"),
         updateCompanySettings: sinon.spy(),
         updateUserProfile: sinon.spy(),
         getUsername: function() {
@@ -225,11 +223,10 @@ describe("Services: address factory", function() {
         postalCode: "dummy code"
       };
 
-      userState.getCopyOfUserCompany.returns(angular.copy(address));
-      userState.getCopyOfSelectedCompany.returns(addressService.copyAddressToShipTo(address));
+      userState.getCopyOfSelectedCompany.returns(angular.copy(address));
     });
 
-    describe("Billing Address: ", function() {
+    describe("Address: ", function() {
       it("should not update if address is not given", function(done) {
         addressFactory.updateAddress()
           .then(function() {
@@ -250,38 +247,22 @@ describe("Services: address factory", function() {
           .then(null, done);
       });
 
-      it("should update if address requires update", function(done) {
+      it("should update if address requires update, and also populate shipping address", function(done) {
         var updatedAddress = angular.copy(address);
         updatedAddress.name = "updated Name";
 
         addressFactory.updateAddress(updatedAddress)
           .then(function() {
+            addressService.copyAddressToShipTo(updatedAddress, updatedAddress);
+
             updateCompany.should.have.been.calledWith("id", updatedAddress);
 
-            userState.getCopyOfUserCompany.should.have.been.calledTwice;
-            expect(userState.getCopyOfUserCompany.getCall(0).args[0]).to.be.undefined;
-            expect(userState.getCopyOfUserCompany.getCall(1).args[0]).to.be.true;
+            userState.getCopyOfSelectedCompany.should.have.been.calledTwice;
+            expect(userState.getCopyOfSelectedCompany.getCall(0).args[0]).to.be.undefined;
+            expect(userState.getCopyOfSelectedCompany.getCall(1).args[0]).to.be.true;
 
             userState.updateCompanySettings.should.have.been.calledWith(sinon.match.object);
             expect(userState.updateCompanySettings.getCall(0).args[0]).to.deep.equal(updatedAddress);
-
-            done();
-          })
-          .then(null, done);
-      });
-
-      it("should not update company settings if ids don't match", function(done) {
-        userState.getUserCompanyId.returns("other id");
-        var updatedAddress = angular.copy(address);
-        updatedAddress.name = "updated Name";
-
-        addressFactory.updateAddress(updatedAddress)
-          .then(function() {
-            updateCompany.should.have.been.calledWith("id", updatedAddress);
-
-            userState.getCopyOfUserCompany.should.have.been.calledOnce;
-
-            userState.updateCompanySettings.should.not.have.been.called;
 
             done();
           })
@@ -298,7 +279,7 @@ describe("Services: address factory", function() {
           .then(null, function() {
             updateCompany.should.have.been.called;
 
-            userState.getCopyOfUserCompany.should.have.been.calledOnce;
+            userState.getCopyOfSelectedCompany.should.have.been.calledOnce;
 
             userState.updateCompanySettings.should.not.have.been.called;
 
@@ -314,7 +295,7 @@ describe("Services: address factory", function() {
         var updatedAddress = angular.copy(address);
 
         address.billingContactEmails = ["contactEmail", "otherEmail"];
-        userState.getCopyOfUserCompany.returns(angular.copy(address));
+        userState.getCopyOfSelectedCompany.returns(angular.copy(address));
 
         addressFactory.updateAddress(updatedAddress, {
           email: "contactEmail"
@@ -331,7 +312,7 @@ describe("Services: address factory", function() {
         var updatedAddress = angular.copy(address);
 
         address.billingContactEmails = ["email1", "email2"];
-        userState.getCopyOfUserCompany.returns(angular.copy(address));
+        userState.getCopyOfSelectedCompany.returns(angular.copy(address));
 
         addressFactory.updateAddress(updatedAddress, {
           email: "contactEmail"
@@ -368,53 +349,6 @@ describe("Services: address factory", function() {
             expect(userState.updateCompanySettings.getCall(0).args[0].billingContactEmails).to.be.ok;
             expect(userState.updateCompanySettings.getCall(0).args[0].billingContactEmails).to.have.length(1);
             expect(userState.updateCompanySettings.getCall(0).args[0].billingContactEmails[0]).to.equal("contactEmail");
-
-            done();
-          })
-          .then(null, done);
-      });
-
-      it("should ignore contact email for the shipping company", function(done) {
-        var updatedAddress = angular.copy(address);
-
-        addressFactory.updateAddress(updatedAddress, {
-          email: "contactEmail"
-        }, true)
-          .then(function() {
-            updateCompany.should.not.have.been.called;
-
-            done();
-          })
-          .then(null, done);
-      });
-
-    });
-
-    describe("Shipping Address: ", function() {
-      it("should not update if address is not changed", function(done) {
-        addressFactory.updateAddress(address, null, true)
-          .then(function() {
-            updateCompany.should.not.have.been.called;
-
-            done();
-          })
-          .then(null, done);
-      });
-
-      it("should update if address requires update", function(done) {
-        var updatedAddress = angular.copy(address);
-        updatedAddress.name = "updated Name";
-
-        addressFactory.updateAddress(updatedAddress, null, true)
-          .then(function() {
-            updateCompany.should.have.been.calledWith("id", addressService.copyAddressToShipTo(updatedAddress));
-
-            userState.getCopyOfSelectedCompany.should.have.been.calledTwice;
-            expect(userState.getCopyOfSelectedCompany.getCall(0).args[0]).to.be.undefined;
-            expect(userState.getCopyOfSelectedCompany.getCall(1).args[0]).to.be.true;
-
-            userState.updateCompanySettings.should.have.been.calledWith(sinon.match.object);
-            expect(userState.updateCompanySettings.getCall(0).args[0]).to.deep.equal(addressService.copyAddressToShipTo(updatedAddress));
 
             done();
           })
