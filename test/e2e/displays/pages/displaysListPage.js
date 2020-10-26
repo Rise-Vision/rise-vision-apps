@@ -22,6 +22,10 @@ var DisplaysListPage = function() {
   var tableHeaderStatus = element(by.id('tableHeaderStatus'));
   var displayItems = element.all(by.repeater('display in displays.items.list'));
   var displaysLoader = element(by.xpath('//div[@spinner-key="displays-list-loader"]'));
+  var bulkActionsDropdown = element(by.id('listActionsButton'));
+  var restartPlayerBulkAction = element.all(by.css('.multi-actions-panel .btn-dropdown')).first();
+  var restartPlayerConfirmButton = element(by.id('confirm-primary'));
+  var bulkActionsProgressBar = element(by.css('.multi-actions-progress-panel'));
 
   this.searchDisplay = function(displayName) {
     helper.wait(searchFilterField, 'Search Filter Field');
@@ -119,6 +123,26 @@ var DisplaysListPage = function() {
 
   this.getFirstRowStatus = function() {
     return displayItems.first().element(by.css('.display-status'));
+  };
+
+  this.getFirstRowCheckbox = function() {
+    return displayItems.first().element(by.css('.madero-checkbox'));
+  };
+
+  this.getBulkActionsDropdown = function() {
+    return bulkActionsDropdown;
+  };
+
+  this.getRestartPlayerBulkAction = function() {
+    return restartPlayerBulkAction;
+  };
+
+  this.getRestartPlayerConfirmButton = function() {
+    return restartPlayerConfirmButton;
+  };
+
+  this.getBulkActionsProgressBar = function() {
+    return bulkActionsProgressBar;
   };
 };
 
