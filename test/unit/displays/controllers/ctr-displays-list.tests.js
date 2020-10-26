@@ -114,7 +114,7 @@ describe('controller: displays list', function() {
     expect($scope.search).to.have.property('reverse');
     expect($scope.search.count).to.equal(5);
 
-    // displaySummaryFactory.loadSummary.should.have.been.caled;
+    displaySummaryFactory.loadSummary.should.have.been.caled;
   });
 
   describe('$loading: ', function() {
