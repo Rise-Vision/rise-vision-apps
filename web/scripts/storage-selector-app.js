@@ -1,4 +1,9 @@
 'use strict';
+
+angular.module('risevision.apps', []);
+angular.module('risevision.apps.services', []);
+angular.module('risevision.apps.controllers', []);
+
 angular.module('risevision.apps.storage.storage-selector', [
     'ui.router',
     'ngTouch',
@@ -12,6 +17,7 @@ angular.module('risevision.apps.storage.storage-selector', [
     'risevision.common.components.confirm-modal',
     'risevision.common.components.logging',
     'risevision.common.components.svg',
+    'risevision.apps',
     'risevision.apps.plans',
     'risevision.common.i18n',
     'risevision.apps.partials',
@@ -91,10 +97,6 @@ angular.module('risevision.apps.storage.storage-selector', [
       });
     }
   ]);
-
-angular.module('risevision.apps.services', []);
-angular.module('risevision.apps.controllers', []);
-
 
 angular.module('risevision.storage.services', [
   'risevision.common.components.userstate'
