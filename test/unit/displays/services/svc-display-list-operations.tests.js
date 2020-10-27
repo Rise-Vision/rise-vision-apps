@@ -755,11 +755,11 @@ describe('Reboot Media Player:', function() {
     var operation;
 
     beforeEach(function() {
-      operation = _getOperationByName('Export');
+      operation = _getOperationByName('Export All');
     })
 
     it('should exist:', function() {
-      expect(operation.name).to.equal('Export');
+      expect(operation.name).to.equal('Export All');
       expect(operation.actionCall).to.equal('export');
       expect(operation.beforeBatchAction).to.be.a('function');
       expect(operation.groupBy).to.equal(true);
