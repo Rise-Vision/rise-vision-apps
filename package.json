@@ -52,9 +52,9 @@
     "rollup-plugin-node-resolve": "^5.0.3",
     "rollup-plugin-terser": "^5.3.0",
     "run-sequence": "^1.1.1",
-    "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git#chore/update-dependencies",
+    "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git",
     "terser": "^4.0.0",
-    "widget-tester": "git://github.com/Rise-Vision/widget-tester.git#chore/update-dependencies"
+    "widget-tester": "git://github.com/Rise-Vision/widget-tester.git"
   },
   "repository": {
     "type": "git",
