@@ -6,5 +6,6 @@
 	<span ng-if="ngModelCtrl.responseHeaderValidatorError === 'content-type'">Invalid content type. Please provide a webpage, image, audio or video URL.</span>
 	<span ng-if="ngModelCtrl.responseHeaderValidatorError !== 'content-type' && ngModelCtrl.responseHeaderValidatorError !== 'not-reachable'">The owner of the Web Page at the URL provided does not allow the page to be embedded within an iFrame. If possible, please contact the Web Page owner to discuss ( <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/X-Frame-Options">X-Frame-Options</a> / <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors">Content-Security-Policy</a>).</span>
 </p>
+<p ng-message="httpUrl" class="text-danger">Please use secure URLs (HTTPs). Insecure URLs (HTTP) aren't supported.</p>
 <p ng-message="fileType" class="text-danger">{{ngModelCtrl.customErrorMessage}}</p>
 <p ng-message-default class="text-danger">Invalid field.</p>
