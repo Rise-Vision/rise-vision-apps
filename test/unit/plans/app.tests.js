@@ -23,7 +23,7 @@ describe('app:', function() {
       });
 
       $provide.service('messageBox', function() {
-        return messageBoxStub = sinon.stub();
+        return messageBoxStub = sinon.stub().returns(Q.reject());
       });
 
     });
@@ -77,7 +77,8 @@ describe('app:', function() {
           'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
         );
 
-        expect($state.go).to.have.been.calledWith('apps.home');
+        // $state.current.name exists; should not redirect to home
+        expect($state.go).to.not.have.been.calledWith('apps.home');
         expect($state.go).to.not.have.been.calledWith('apps.billing.home', {edit: 'subscriptionId'});
         done();
       },10);
