@@ -1,4 +1,9 @@
 'use strict';
+
+angular.module('risevision.apps', []);
+angular.module('risevision.apps.services', []);
+angular.module('risevision.apps.controllers', []);
+
 angular.module('risevision.apps.storage.storage-selector', [
     'ui.router',
     'ngTouch',
@@ -91,10 +96,6 @@ angular.module('risevision.apps.storage.storage-selector', [
       });
     }
   ]);
-
-angular.module('risevision.apps.services', []);
-angular.module('risevision.apps.controllers', []);
-
 
 angular.module('risevision.storage.services', [
   'risevision.common.components.userstate'

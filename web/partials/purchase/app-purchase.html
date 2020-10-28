@@ -1,10 +1,8 @@
-<div rv-spinner rv-spinner-key="purchase-modal" rv-spinner-start-active="1">
-  <div class="modal-header">
-    <button type="button" class="close" ng-click="dismiss()" aria-label="close" tabindex="2" ng-hide="currentStep === 5">
-      <i class="fa fa-times"></i>
-    </button>
-    <h3 class="modal-title" translate>Checkout</h3>
-  </div>
+<div class="container u_margin-md-top">
+
+  <h2 class="u_margin-md-bottom">Checkout</h2>
+
+  <div rv-spinner rv-spinner-key="purchase-modal" rv-spinner-start-active="1"></div>
 
   <div class="steps">
     <div ng-repeat="step in PURCHASE_STEPS" class="step-item" ng-class="{ active: currentStep === step.index, complete: currentStep > step.index }">

@@ -80,15 +80,6 @@ angular.module('risevision.apps', [
           ]
         })
 
-        .state('apps.plans', {
-          url: '/plans?cid',
-          controller: ['$location', '$state',
-            function ($location, $state) {
-              $location.replace();
-              $state.go('apps.home');
-            }
-          ]
-        })
         .state('apps.users', {
           abstract: true,
           url: '?cid',
@@ -108,9 +99,17 @@ angular.module('risevision.apps', [
           url: '/signup',
           controller: ['$location', '$state', 'canAccessApps',
             function ($location, $state, canAccessApps) {
-              canAccessApps(true).then(function () {
+              // jshint camelcase:false
+              var showProduct = $location.search().show_product;
+              // jshint camelcase:true
+
+              return canAccessApps(true).then(function () {
                 $location.replace();
-                $state.go('apps.home');
+                if (showProduct) {
+                  $state.go('apps.plans.home');
+                } else {
+                  $state.go('apps.home');
+                }
               });
             }
           ]
@@ -191,26 +190,17 @@ angular.module('risevision.apps', [
           $state.go($state.current, null, {
             reload: true
           });
+        } else if ($state.current.name === 'apps.plans.home' ||
+          $state.current.name === 'apps.purchase.home') {
+          $state.go('apps.home');
         }
       });
     }
   ])
-  .run(['$rootScope', '$location', '$modal', 'canAccessApps', 'userState', 'plansFactory',
-    function ($rootScope, $location, $modal, canAccessApps, userState, plansFactory) {
+  .run(['$rootScope', '$modal', 'canAccessApps', 'userState',
+    function ($rootScope, $modal, canAccessApps, userState) {
       $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-        // jshint camelcase:false
-        var showProduct = $location.search().show_product;
-        // jshint camelcase:true
-
-        if (toState.name === 'apps.plans' || (toState.name === 'common.auth.signup' && showProduct)) {
-          canAccessApps(toState.name === 'common.auth.signup').then(function () {
-            plansFactory.showPurchaseOptions();
-          });
-
-          if (fromState.name) {
-            event.preventDefault();
-          }
-        } else if (toState.name === 'apps.users.add') {
+        if (toState.name === 'apps.users.add') {
           canAccessApps().then(function () {
             $modal.open({
               templateUrl: 'partials/common-header/user-settings-modal.html',

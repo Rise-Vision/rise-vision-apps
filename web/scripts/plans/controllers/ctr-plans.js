@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('risevision.apps.plans')
-  .controller('PlansModalCtrl', [
-    '$scope', '$modalInstance', 'currentPlanFactory', 'userState', 'purchaseFactory',
+  .controller('PlansCtrl', ['$scope', 'currentPlanFactory', 'userState', 'purchaseFactory',
     'PLANS_LIST', 'CHARGEBEE_PLANS_USE_PROD',
-    function ($scope, $modalInstance, currentPlanFactory, userState, purchaseFactory,
+    function ($scope, currentPlanFactory, userState, purchaseFactory,
       PLANS_LIST, CHARGEBEE_PLANS_USE_PROD) {
 
       var volumePlan = _.find(PLANS_LIST, {
@@ -36,11 +35,6 @@ angular.module('risevision.apps.plans')
         return !$scope.isFree(plan) && (!$scope.isStarter(plan) || !$scope.isMonthly);
       };
 
-      $scope.showPurchaseModal = function (plan, isMonthly) {
-        purchaseFactory.showPurchaseModal(plan, isMonthly)
-          .then($scope.dismiss);
-      };
-
       $scope.isChargebee = function () {
         return userState.isSelectedCompanyChargebee();
       };
@@ -53,7 +47,7 @@ angular.module('risevision.apps.plans')
           component.displayCount > 0;
       };
 
-      $scope.dismissAndShowPurchaseModal = function () {
+      $scope.purchasePlan = function () {
         var component = document.querySelector('pricing-component');
 
         var displays = component.displayCount;
@@ -66,8 +60,7 @@ angular.module('risevision.apps.plans')
           return;
         }
 
-        $modalInstance.dismiss('cancel');
-        $scope.showPurchaseModal({
+        purchaseFactory.purchasePlan({
           name: plan,
           productId: volumePlan.productId,
           productCode: volumePlan.productCode,
@@ -79,10 +72,6 @@ angular.module('risevision.apps.plans')
             billAmount: component.priceTotal
           }
         }, component.period === 'monthly');
-      };
-
-      $scope.dismiss = function () {
-        $modalInstance.dismiss('cancel');
       };
 
       $scope.init = function () {

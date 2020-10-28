@@ -12,6 +12,11 @@ describe("Services: purchase factory", function() {
         })
       };
     });
+    $provide.service("$state", function() {
+      return {
+        go: sinon.spy()
+      };
+    });
     $provide.service("userState", function() {
       return userState = {
         getCopyOfUserCompany: sinon.stub().returns({
@@ -87,13 +92,14 @@ describe("Services: purchase factory", function() {
 
   }));
 
-  var $rootScope, $modal, $timeout, clock, purchaseFactory, userState, stripeService, storeService, purchaseFlowTracker, validate, RPP_ADDON_ID;
+  var $rootScope, $modal, $state, $timeout, clock, purchaseFactory, userState, stripeService, storeService, purchaseFlowTracker, validate, RPP_ADDON_ID;
 
   beforeEach(function() {
     inject(function($injector) {
       RPP_ADDON_ID = $injector.get("RPP_ADDON_ID");
       $rootScope = $injector.get("$rootScope");
       $modal = $injector.get("$modal");
+      $state = $injector.get("$state");
       $timeout = $injector.get("$timeout");
       purchaseFactory = $injector.get("purchaseFactory");
     });
@@ -101,7 +107,7 @@ describe("Services: purchase factory", function() {
 
   it("should exist", function() {
     expect(purchaseFactory).to.be.ok;
-    expect(purchaseFactory.showPurchaseModal).to.be.a("function");
+    expect(purchaseFactory.purchasePlan).to.be.a("function");
     expect(purchaseFactory.showTaxExemptionModal).to.be.a("function");
     expect(purchaseFactory.validatePaymentMethod).to.be.a("function");
     expect(purchaseFactory.getEstimate).to.be.a("function");
@@ -112,7 +118,7 @@ describe("Services: purchase factory", function() {
     expect(purchaseFactory.loading).to.be.false;
   });
 
-  describe("showPurchaseModal: ", function() {
+  describe("purchasePlan: ", function() {
     beforeEach(function() {
       clock = sinon.useFakeTimers();
     });
@@ -122,25 +128,15 @@ describe("Services: purchase factory", function() {
     });
 
     it("should show purchase modal", function() {
-      purchaseFactory.showPurchaseModal({});
+      purchaseFactory.purchasePlan({});
 
-      expect($modal.open).to.have.been.called;
-      expect($modal.open).to.have.been.calledWith({
-        template: sinon.match.any,
-        controller: "PurchaseModalCtrl",
-        size: "md",
-        backdrop: "static"
-      });
+      expect($state.go).to.have.been.calledWith('apps.purchase.home');
       expect(purchaseFlowTracker.trackProductAdded).to.have.been.called;
-    });
-
-    it("should return modal result", function() {
-      expect(purchaseFactory.showPurchaseModal({})).to.be.an("object");
     });
 
     it("should initialize selected plan, attach addresses and clean contact info", function() {
       var plan = { name: "PlanA"};
-      purchaseFactory.showPurchaseModal(plan, true);
+      purchaseFactory.purchasePlan(plan, true);
       
       expect(purchaseFactory.purchase).to.be.ok;
 
@@ -176,7 +172,7 @@ describe("Services: purchase factory", function() {
 
     it("should initialize payment methods", function() {
       var plan = { name: "PlanA"};
-      purchaseFactory.showPurchaseModal(plan, true);
+      purchaseFactory.purchasePlan(plan, true);
       
       expect(purchaseFactory.purchase).to.be.ok;
       expect(purchaseFactory.purchase.paymentMethods).to.be.ok;
@@ -198,7 +194,7 @@ describe("Services: purchase factory", function() {
     it("should initialize invoice due date 30 days from now", function() {
       var newDate = new Date();
       var plan = { name: "PlanA"};
-      purchaseFactory.showPurchaseModal(plan, true);
+      purchaseFactory.purchasePlan(plan, true);
 
       expect(purchaseFactory.purchase.paymentMethods.invoiceDate).to.be.ok;
       expect(purchaseFactory.purchase.paymentMethods.invoiceDate).to.be.a("date");

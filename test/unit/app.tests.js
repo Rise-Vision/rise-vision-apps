@@ -38,34 +38,6 @@ describe('app:', function() {
 
   var $state, canAccessApps, plansFactory, userState, $rootScope, $location, $modal;
 
-  describe('state apps.plans:',function(){
-    it('should register state',function(){
-      var state = $state.get('apps.plans');
-      expect(state).to.be.ok;
-      expect(state.url).to.equal('/plans?cid');
-      expect(state.controller).to.be.ok;
-    });
-
-    it('should redirect to home',function(done){
-      var $location = {
-        search: function() { 
-          return {};
-        },
-        replace: sinon.spy()
-      };
-      sinon.spy($state,'go');
-      
-      $state.get('apps.plans').controller[2]($location, $state);
-      setTimeout(function() {
-        $location.replace.should.have.been.called;
-        $state.go.should.have.been.calledWith('apps.home');
-
-        done();
-      }, 10);
-    });
-
-  });
-
   describe('state apps.users.add:',function(){
     it('should register parent',function(){
       var state = $state.get('apps.users');
@@ -103,53 +75,6 @@ describe('app:', function() {
   });
 
   describe('onboarding links', function() {
-    it('should show purchase options for apps.plans', function(done) {
-      $state.go('apps.plans');
-      $rootScope.$digest();
-
-      setTimeout(function() {
-        canAccessApps.should.have.been.calledWith(false);
-
-        expect(plansFactory.showPurchaseOptions).to.have.been.called;
-        expect($modal.open).to.not.have.been.called;
-
-        done();
-      }, 10);
-
-    });
-
-    it('should show purchase options for /signup?show_product=true', function(done) {
-      sinon.stub($location, 'search').returns({
-        show_product: true
-      });
-      $state.go('common.auth.signup');
-      $rootScope.$digest();
-
-      setTimeout(function() {
-        canAccessApps.should.have.been.calledWith(true);
-
-        expect(plansFactory.showPurchaseOptions).to.have.been.called;
-        expect($modal.open).to.not.have.been.called;
-
-        done();
-      }, 10);
-
-    });
-
-    it('should not show purchase options for /signup without show_product', function(done) {
-      $state.go('common.auth.signup');
-      $rootScope.$digest();
-
-      setTimeout(function() {
-        canAccessApps.should.not.have.been.called;
-
-        expect(plansFactory.showPurchaseOptions).to.not.have.been.called;
-        expect($modal.open).to.not.have.been.called;
-
-        done();
-      }, 10);
-    });
-
     it('should check next state and show add user modal', function(done) {
       sinon.stub(userState, 'getSelectedCompanyId').returns('selectedCompanyId');
 
@@ -170,7 +95,6 @@ describe('app:', function() {
         done();
       }, 10);
     });
-
 
   });
 
@@ -204,14 +128,35 @@ describe('app:', function() {
       expect(state.controller).to.be.ok;
     });
 
-    it('should redirect to home',function(done){
+    it('should show purchase options for /signup?show_product=true', function(done) {
       var $location = {
+        search: sinon.stub().returns({
+          show_product: true
+        }),
         replace: sinon.spy()
       };
       sinon.spy($state,'go');
-      
       $state.get('common.auth.signup').controller[3]($location, $state, canAccessApps);
+      $rootScope.$digest();
 
+      canAccessApps.should.have.been.calledWith(true);
+
+      setTimeout(function() {
+        $location.replace.should.have.been.called;
+        expect($state.go).to.have.been.calledWith('apps.plans.home');
+
+        done();
+      }, 10);
+
+    });
+
+    it('should redirect to home', function(done){
+      var $location = {
+        search: sinon.stub().returns({}),
+        replace: sinon.spy()
+      };
+      sinon.spy($state,'go');
+      $state.get('common.auth.signup').controller[3]($location, $state, canAccessApps);
       $rootScope.$digest();
 
       canAccessApps.should.have.been.calledWith(true);

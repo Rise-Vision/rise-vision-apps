@@ -3,17 +3,16 @@
 describe("controller: purchase modal", function() {
   beforeEach(module("risevision.apps.purchase"));
   beforeEach(module(function ($provide) {
-    $provide.service("$modalInstance", function() {
-      return {
-        dismiss : sinon.stub(),
-        close: sinon.stub()
-      };
-    });
     $provide.service("$loading", function() {
       return {
         start: sinon.stub(),
         stop: sinon.stub()
       };
+    });
+    $provide.service("$state", function() {
+      return {
+        go: sinon.spy()
+      }
     });
     $provide.service("addressFactory", function() {
       return addressFactory = {
@@ -77,7 +76,7 @@ describe("controller: purchase modal", function() {
     });
   }));
 
-  var sandbox, $scope, $modalInstance, $loading, validate, purchaseFactory, stripeService, storeService, addressFactory;
+  var sandbox, $scope, $state, $loading, validate, purchaseFactory, stripeService, storeService, addressFactory;
 
   beforeEach(function() {
     validate = true;
@@ -85,12 +84,11 @@ describe("controller: purchase modal", function() {
 
     inject(function($injector, $rootScope, $controller) {
       $scope = $rootScope.$new();
-      $modalInstance = $injector.get("$modalInstance");
+      $state = $injector.get("$state");
       $loading = $injector.get("$loading");
 
-      $controller("PurchaseModalCtrl", {
+      $controller("PurchaseCtrl", {
         $scope: $scope,
-        $modalInstance: $modalInstance,
         $loading: $loading,
       });
 
@@ -365,24 +363,24 @@ describe("controller: purchase modal", function() {
     expect(purchaseFactory.purchase.checkoutError).to.not.be.ok;
   });
 
-  describe("dismiss: ", function() {
+  describe("close: ", function() {
     it("should close modal", function() {
       $scope.close();
 
-      $modalInstance.close.should.have.been.called;      
+      $state.go.should.have.been.calledWith('apps.home');
     });
 
     it("should wait until Company is reloaded before closing modal", function() {
       purchaseFactory.purchase.reloadingCompany = true;
       $scope.close();
 
-      $modalInstance.close.should.not.have.been.called;
+      $state.go.should.not.have.been.called;
       expect(purchaseFactory.loading).to.be.true;
 
       purchaseFactory.purchase.reloadingCompany = false;
       $scope.$digest();
 
-      $modalInstance.close.should.have.been.called;
+      $state.go.should.have.been.calledWith('apps.home');
       expect(purchaseFactory.loading).to.be.false;
     });
 
@@ -391,7 +389,7 @@ describe("controller: purchase modal", function() {
   it("dismiss: ", function() {
     $scope.dismiss();
 
-    $modalInstance.dismiss.should.have.been.called;
+    $state.go.should.have.been.calledWith('apps.home');
   });
 
 });
