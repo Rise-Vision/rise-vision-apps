@@ -4,7 +4,7 @@
 
   <form id="form.paymentMethodsForm" role="form" name="form.paymentMethodsForm" novalidate>
     <div class="flex-row mb-4" ng-show="!purchase.plan.isMonthly">
-      <div class="btn-group btn-group-justified" ng-click="paymentMethods.paymentMethod = (paymentMethods.paymentMethod === 'card' ? 'invoice' : 'card')">
+      <div id="payment-method-select" class="btn-group btn-group-justified" ng-click="paymentMethods.paymentMethod = (paymentMethods.paymentMethod === 'card' ? 'invoice' : 'card')">
         <button type="button" class="btn"
           ng-class="{'btn-toggle-blue-off' : paymentMethods.paymentMethod !== 'card', 'btn-toggle-blue-on' : paymentMethods.paymentMethod === 'card'}">
           Pay With Credit Card
