@@ -1,6 +1,5 @@
-<div class="container u_margin-md-top">
-
-  <h2 id="pricingComponentTitle" class="u_margin-md-bottom" translate>common-header.plans.pricing-component-title</h2>
+<!-- Step 0 -->
+<div id="checkout-pricing-picker"> 
 
   <div id="pricingComponentContainer">
     <pricing-component
@@ -9,6 +8,7 @@
       rv-on="display-count-changed:refreshButton">
     </pricing-component>
 
-    <button type="button" ng-disabled="!pricingAtLeastOneDisplay" ng-click="purchasePlan()" id="subscribeButton">I Want To Subscribe</button>
+    <button type="button" ng-disabled="!pricingAtLeastOneDisplay" class="btn btn-primary btn-block btn-hg font-weight-bold" ng-click="purchasePlan()">I Want To Subscribe</button>
   </div>
+
 </div>

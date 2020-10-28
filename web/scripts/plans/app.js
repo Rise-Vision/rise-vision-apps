@@ -21,11 +21,7 @@
 
           .state('apps.plans.home', {
             url: '/plans',
-            templateProvider: ['$templateCache', function ($templateCache) {
-              return $templateCache.get('partials/plans/app-plans.html');
-            }],
-            controller: 'PlansCtrl',
-            resolve: {
+             resolve: {
               canAccessApps: ['$q', '$state', 'canAccessApps', 'currentPlanFactory', 'messageBox',
                 function ($q, $state, canAccessApps, currentPlanFactory, messageBox) {
                   return canAccessApps()
@@ -52,6 +48,8 @@
                             edit: currentPlanFactory.currentPlan.subscriptionId
                           });
                         }
+                      } else {
+                        $state.go('apps.purchase.home');
                       }
                     });
                 }

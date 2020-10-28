@@ -17,19 +17,19 @@
         factory.loading = false;
 
         var _init = function (plan, isMonthly) {
-          factory.purchase = {};
+          factory.purchase = factory.purchase || {};
 
           factory.purchase.couponCode = '';
           factory.purchase.plan = angular.copy(plan);
           factory.purchase.plan.additionalDisplayLicenses = parseInt(plan.additionalDisplayLicenses) || 0;
           factory.purchase.plan.isMonthly = isMonthly;
 
-          factory.purchase.billingAddress = addressService.copyAddress(userState.getCopyOfUserCompany());
-          factory.purchase.shippingAddress = addressService.copyAddressFromShipTo(userState
+          factory.purchase.billingAddress = factory.purchase.billingAddress || addressService.copyAddress(userState.getCopyOfUserCompany());
+          factory.purchase.shippingAddress = factory.purchase.shippingAddress || addressService.copyAddressFromShipTo(userState
             .getCopyOfSelectedCompany());
 
           factory.purchase.contact = contactService.copyContactObj(userState.getCopyOfProfile());
-          factory.purchase.paymentMethods = {
+          factory.purchase.paymentMethods = factory.purchase.paymentMethods || {
             paymentMethod: 'card',
             existingCreditCards: [],
             newCreditCard: {

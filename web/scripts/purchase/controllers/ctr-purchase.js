@@ -3,20 +3,23 @@
 angular.module('risevision.apps.purchase')
 
   .value('PURCHASE_STEPS', [{
+    name: 'Subscription Details',
+    index: 0
+  }, {
     name: 'Billing Address',
-    index: 0,
+    index: 1,
     formName: 'billingAddressForm'
   }, {
     name: 'Shipping Address',
-    index: 1,
+    index: 2,
     formName: 'shippingAddressForm'
   }, {
     name: 'Payment Method',
-    index: 2,
+    index: 3,
     formName: 'paymentMethodsForm'
   }, {
     name: 'Purchase Review',
-    index: 3
+    index: 4
   }])
 
   .controller('PurchaseCtrl', ['$scope', '$state', '$loading', 'purchaseFactory', 'addressFactory', 
@@ -99,8 +102,8 @@ angular.module('risevision.apps.purchase')
           return;
         }
 
-        if (($scope.finalStep && $scope.currentStep < 2) || $scope.currentStep === 2) {
-          $scope.currentStep = 3;
+        if (($scope.finalStep && $scope.currentStep < 3) || $scope.currentStep === 3) {
+          $scope.currentStep = 4;
 
           $scope.finalStep = true;
 

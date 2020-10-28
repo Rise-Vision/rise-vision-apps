@@ -1,10 +1,12 @@
 <div class="container u_margin-md-top">
 
-  <h2 class="u_margin-md-bottom">Checkout</h2>
+  <h2 class="u_margin-md-bottom">Subscribe</h2>
+
+  <hr/>
 
   <div rv-spinner rv-spinner-key="purchase-modal" rv-spinner-start-active="1"></div>
 
-  <div class="steps">
+  <div class="steps" ng-if="currentStep !== 0">
     <div ng-repeat="step in PURCHASE_STEPS" class="step-item" ng-class="{ active: currentStep === step.index, complete: currentStep > step.index }">
       <span>{{step.name}}</span>
     </div>
@@ -12,11 +14,12 @@
 
   <div id="purchase-modal" class="modal-body checkout-modal" stop-event="touchend">
 
-    <billing-address ng-if="currentStep === 0"></billing-address>
-    <shipping-address ng-if="currentStep === 1"></shipping-address>
-    <payment-methods ng-if="currentStep === 2"></payment-methods>
-    <review-purchase ng-if="currentStep === 3"></review-purchase>
-    <checkout-success ng-if="currentStep === 4"></checkout-success>
+    <plan-picker ng-if="currentStep === 0"></plan-picker>
+    <billing-address ng-if="currentStep === 1"></billing-address>
+    <shipping-address ng-if="currentStep === 2"></shipping-address>
+    <payment-methods ng-if="currentStep === 3"></payment-methods>
+    <review-purchase ng-if="currentStep === 4"></review-purchase>
+    <checkout-success ng-if="currentStep === 5"></checkout-success>
 
   </div> <!-- //Modal Body -->
 
