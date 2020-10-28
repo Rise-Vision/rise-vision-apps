@@ -265,7 +265,7 @@ angular.module('risevision.displays.services')
               requireRole: 'da'
             },
             {
-              name: 'Export',
+              name: 'Export All',
               beforeBatchAction: _confirmExport,
               actionCall: display.export,
               groupBy: true //group all
