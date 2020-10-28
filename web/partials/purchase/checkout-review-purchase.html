@@ -1,6 +1,8 @@
 <!-- Step 5 -->
 <div id="checkout-review-purchase">
-  <div id="errorBox" class="alert alert-danger" role="alert" ng-show="purchase.estimate.estimateError">
+  <h4 class="u_margin-md-bottom">Review Purchase</h4>
+
+  <div id="errorBox" class="madero-style alert alert-danger u_margin-md-top" role="alert" ng-show="purchase.estimate.estimateError">
     <div class="row">
       <div class="col-xs-9">
         <p>
@@ -13,9 +15,6 @@
         </a>
       </div>
     </div>
-  </div>
-  <div id="errorBox" class="alert alert-danger" role="alert" ng-show="purchase.checkoutError">
-    <strong>Payment Error</strong> {{purchase.checkoutError}}
   </div>
 
   <div class="row">
@@ -112,12 +111,14 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-xs-8 col-xs-offset-2 u_margin-md-bottom">
-      <button id="payButton" class="btn btn-primary btn-hg btn-block" ng-click="completePayment()" tabindex="1" aria-label="Complete Payment">
-        <span id="payLabel" ng-if="purchase.paymentMethods.paymentMethod === 'card'">Pay ${{purchase.estimate.total | number:2}} Now</span>
-        <span id="invoiceLabel" ng-if="purchase.paymentMethods.paymentMethod === 'invoice'">Invoice Me ${{purchase.estimate.total | number:2}} Now</span>
-      </button>
-    </div>
+  <div id="errorBox" class="madero-style alert alert-danger u_margin-md-top" role="alert" ng-show="purchase.checkoutError">
+    <strong>Payment Error</strong> {{purchase.checkoutError}}
+  </div>
+
+  <div class="button-row text-right mt-5">
+    <button id="payButton" class="btn btn-primary btn-toolbar-wide" ng-click="completePayment()" tabindex="1" aria-label="Complete Payment">
+      <span id="payLabel" ng-if="purchase.paymentMethods.paymentMethod === 'card'">Pay ${{purchase.estimate.total | number:2}} Now</span>
+      <span id="invoiceLabel" ng-if="purchase.paymentMethods.paymentMethod === 'invoice'">Invoice Me ${{purchase.estimate.total | number:2}} Now</span>
+    </button>
   </div>
 </div>

@@ -1,38 +1,41 @@
 <!-- Step 2 -->
 <div id="checkout-billing-address" class="address-editor">
-  <form id="form.billingAddressForm" role="form" class="u_margin-md-top" name="form.billingAddressForm" autocomplete="on" novalidate>
-    <div class="alert alert-danger" ng-show="form.billingAddressForm.$submitted && form.billingAddressForm.$invalid">
-      Please complete the missing information below.
-    </div>
-    <div id="errorBox" class="alert alert-danger" role="alert" ng-show="billingAddress.validationError">
-      <strong>Address Validation Error</strong> {{billingAddress.validationError}}
-      <suggest-general-delivery address-object="billingAddress"></suggest-general-delivery>
-    </div>
+  <h4 class="u_margin-md-bottom">Company Billing Details</h4>
 
+  <form id="form.billingAddressForm" role="form" name="form.billingAddressForm" autocomplete="on" novalidate>
     <div class="row">
       <div class="col-md-6">
         <div class="form-group" ng-class="{ 'has-error': (form.billingAddressForm.firstName.$dirty || form.billingAddressForm.$submitted) && form.billingAddressForm.firstName.$invalid }">
-          <label for="contact-firstName" class="control-label">First Name *</label>
+          <label for="contact-firstName" class="control-label">First Name: *</label>
           <input id="contact-firstName" type="text" class="form-control" name="firstName" ng-model="contact.firstName" autocomplete="given-name" aria-required="true" tabindex="1" required>
+          <p class="text-danger" ng-show="(form.billingAddressForm.firstName.$dirty || form.billingAddressForm.$submitted) && form.billingAddressForm.firstName.$invalid">
+            Choose a First Name.
+          </p>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group" ng-class="{ 'has-error': (form.billingAddressForm.lastName.$dirty || form.billingAddressForm.$submitted) && form.billingAddressForm.lastName.$invalid }">
-          <label for="contact-lastName" class="control-label">Last Name *</label>
+          <label for="contact-lastName" class="control-label">Last Name: *</label>
           <input id="contact-lastName" type="text" class="form-control" name="lastName" ng-model="contact.lastName" autocomplete="family-name" aria-required="true" tabindex="1" required>
+          <p class="text-danger" ng-show="(form.billingAddressForm.lastName.$dirty || form.billingAddressForm.$submitted) && form.billingAddressForm.lastName.$invalid">
+            Choose a Last Name.
+          </p>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-md-6">
         <div class="form-group" ng-class="{ 'has-error': (form.billingAddressForm.email.$dirty || form.billingAddressForm.$submitted) && form.billingAddressForm.email.$invalid }">
-          <label for="contact-email" class="control-label">Email *</label>
+          <label for="contact-email" class="control-label">Billing Email: *</label>
           <input id="contact-email" type="email" class="form-control" name="email" ng-model="contact.email" autocomplete="email" aria-required="true" tabindex="1" required>
+          <p class="text-danger" ng-show="(form.billingAddressForm.email.$dirty || form.billingAddressForm.$submitted) && form.billingAddressForm.email.$invalid">
+            Choose a Billing Email.
+          </p>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <label for="contact-phone" class="control-label">Telephone</label>
+          <label for="contact-phone" class="control-label">Phone:</label>
           <input id="contact-phone" name="tel" type="tel" class="form-control" ng-model="contact.telephone" autocomplete="tel" tabindex="1">
         </div>
       </div>
@@ -40,12 +43,14 @@
 
     <address-form form-object="form.billingAddressForm" address-object="billingAddress"></address-form>
 
-    <hr>          
-    <div class="row">
-      <div class="col-xs-12">
-        <button id="backButton" type="button" class="btn btn-default pull-left" ng-click="setPreviousStep()" ng-hide="finalStep" aria-label="Go back to Subscription Details" translate tabindex="2">common.back</button>
-        <button id="continueButton" aria-label="Continue to Shipping Address" type="submit" form="form.billingAddressForm" class="btn btn-primary pull-right" ng-click="validateAddress(billingAddress, contact, false)" translate tabindex="1">common.continue</button>
-      </div>
+    <div id="errorBox" class="madero-style alert alert-danger u_margin-md-top" role="alert" ng-show="billingAddress.validationError">
+      <strong>Address Validation Error</strong> {{billingAddress.validationError}}
+      <suggest-general-delivery address-object="billingAddress"></suggest-general-delivery>
+    </div>
+
+    <div class="button-row text-right mt-5">
+      <button id="backButton" type="button" class="btn btn-default btn-toolbar pull-left" ng-click="setPreviousStep()" ng-hide="finalStep" aria-label="Go back to Subscription Details" translate tabindex="2">common.back</button>
+      <button id="continueButton" aria-label="Continue to Payment Method" type="submit" form="form.billingAddressForm" class="btn btn-primary btn-toolbar" ng-click="validateAddress(billingAddress, contact, false)" translate tabindex="1">common.continue</button>
     </div>
   </form>
 </div>

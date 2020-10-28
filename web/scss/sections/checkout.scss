@@ -1,3 +1,36 @@
+.purchase-app {
+  .btn-group-justified {
+    @extend .mb-0;
+
+    width: 400px;
+
+    button {
+      width: 200px;
+      font-weight: normal;
+    }
+
+    streamline-icon {
+      @extend .ml-3;
+    }
+  }
+
+  // Temporary for the review purchase page
+  .btn.btn-xs {
+    min-height: auto;
+    padding: 2px 12px;
+  }
+
+  #checkout-success {
+    @extend .mx-auto;
+
+    width: 744px;
+  }
+}
+
+
+
+// OLD CHECKOUT FLOW - REMOVE
+
 .subscription-summary {
   display: flex;
   flex-direction: row;
