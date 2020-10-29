@@ -1,14 +1,58 @@
 <!-- Step 0 -->
-<div id="checkout-pricing-picker"> 
+<div id="checkout-plan-picker">
 
-  <div id="pricingComponentContainer">
-    <pricing-component
-      ng-attr-apply-discount="{{pricingComponentDiscount ? '' : undefined}}"
-      ng-attr-prod-env="{{useProductionChargebeeData ? '' : undefined}}"
-      rv-on="display-count-changed:refreshButton">
-    </pricing-component>
+  <form role="form" name="pricingForm" ng-submit="purchasePlan()">
 
-    <button type="button" ng-disabled="!pricingAtLeastOneDisplay" class="btn btn-primary btn-block btn-hg font-weight-bold" ng-click="purchasePlan()">I Want To Subscribe</button>
-  </div>
+    <div class="panel panel-default text-center">
+      <h5>How many Displays do you want?</h5>
+      <input type="number" name="displayCount" ng-model="displayCount" min="1" ng-pattern="/^[0-9]+$/" required/>
+      
+      <div class="row">
+        <div class="col-xs-12">
+          <rzslider rz-slider-model="displayCount" rz-slider-options="sliderOptions"></rzslider>
+        </div>
+      </div>
+      <p>For each display, you need to buy one display license.</p>
+    </div>
 
+    <div class="panel panel-default text-center madero-style">
+      <div class="madero-style btn-group-checkbox">
+        <div class="btn-group">
+          <button type="button" class="btn" ng-class="{'btn-toggle-blue-off' : !periodMonthly, 'btn-toggle-blue-on' : periodMonthly}" ng-click="periodMonthly = true">
+            Pay Monthly
+            <streamline-icon name="checkmark" ng-show="periodMonthly"></streamline-icon>
+          </button>
+          <button type="button" class="btn" ng-class="{'btn-toggle-blue-off' : periodMonthly, 'btn-toggle-blue-on' : !periodMonthly}" ng-click="periodMonthly = false">
+            Pay Annually (save 10%)
+            <streamline-icon name="checkmark" ng-show="!periodMonthly"></streamline-icon>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <input type="checkbox" ng-model="applyEducationDiscount" disabled="disabled" /> I'm a school (save 10%).
+      </div>
+     
+      <div class="pricing-calculator">
+        <span ng-if="displayCount">{{displayCount}}</span> Display licenses
+        <br/>
+        x 
+        <span ng-if="pricePerDisplay === basePricePerDisplay">${{basePricePerDisplay | number : 0}}</span>      
+        <span ng-if="pricePerDisplay !== basePricePerDisplay">
+          <del>${{basePricePerDisplay | number : 0}}</del>
+          <span class="text-success">${{pricePerDisplay | number: 2}}</span>
+        </span>
+        Per display license, per month
+        <hr/>
+        ${{totalPrice | number : 0}} 
+
+        <span ng-if="periodMonthly">Billed monthly</span>
+        <span ng-if="!periodMonthly">Billed annually</span>
+        <span ng-if="yearlySavings" class="text-success">- save ${{yearlySavings | number : 0}}!</span>
+      </div>
+
+    </div>
+   
+    <button type="submit" class="btn btn-primary btn-block btn-hg font-weight-bold" ng-disabled="pricingForm.$invalid">I Want To Subscribe</button>
+  </form>
 </div>
