@@ -68,14 +68,6 @@
           });
         };
 
-        factory.initializeStripeElements = function (types) {
-          stripeService.prepareNewElementsGroup();
-
-          return $q.all(types.map(function (type) {
-            return stripeService.createElement(type);
-          }));
-        };
-
         factory.authenticate3ds = function (intentSecret) {
           return stripeService.authenticate3ds(intentSecret)
             .then(function (result) {
