@@ -31,9 +31,9 @@
         <button aria-label="Edit Payment Method" class="btn btn-default btn-xs" ng-click="setCurrentStep(1)" tabindex="1">Edit</button>
       </h4>
       <div ng-show="purchase.paymentMethods.paymentMethod === 'card'">
-        <span class="font-weight-bold">{{purchase.paymentMethods.selectedCard.cardType}}</span>
-        <br>{{purchase.paymentMethods.selectedCard.last4 | cardLastFour}}
-        <br>Exp: {{purchase.paymentMethods.selectedCard.expMonth | paddedMonth}}/{{purchase.paymentMethods.selectedCard.expYear}}
+        <span class="font-weight-bold u_capitalize">{{purchase.paymentMethods.paymentMethodResponse.paymentMethod.card.brand}}</span>
+        <br>{{purchase.paymentMethods.paymentMethodResponse.paymentMethod.card.last4 | cardLastFour}}
+        <br>Exp: {{purchase.paymentMethods.paymentMethodResponse.paymentMethod.card.exp_month | paddedMonth}}/{{purchase.paymentMethods.paymentMethodResponse.paymentMethod.card.exp_year}}
       </div>
       <div ng-show="purchase.paymentMethods.paymentMethod === 'invoice'">
         <span class="font-weight-bold">Paying by Invoice</span>

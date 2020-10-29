@@ -5,9 +5,6 @@ describe("directive: payment methods", function() {
 
   beforeEach(module(function ($provide) {
     $provide.value("purchaseFactory", {
-      initializeStripeElements: sinon.spy(function() {
-        return Q.resolve([]);
-      }),
       purchase: {
         paymentMethods: "paymentMethods",
         contact: {
@@ -15,6 +12,13 @@ describe("directive: payment methods", function() {
         }
       }
     });
+
+    $provide.value("stripeService", {
+      initializeStripeElements: sinon.spy(function() {
+        return Q.resolve([]);
+      })
+    });
+
   }));
 
   var $scope, element;

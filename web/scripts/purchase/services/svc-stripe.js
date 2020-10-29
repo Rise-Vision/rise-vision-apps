@@ -31,5 +31,14 @@ angular.module('risevision.apps.purchase')
           return stripeClient.handleCardAction(secret);
         });
       };
+      
+      this.initializeStripeElements = function (types, options) {
+        var that = this;
+        this.prepareNewElementsGroup();
+
+        return $q.all(types.map(function (type) {
+          return that.createElement(type, options);
+        }));
+      };
     }
   ]);

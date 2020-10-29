@@ -46,23 +46,32 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardNumber.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardNumber.$invalid }">
+            <div class="form-group" ng-class="{ 'has-error': stripeElementError('new-card-number') }">
               <label for="new-card-number" class="control-label">Card Number: *</label>
-              <div id="new-card-number"></div>
+              <div class="form-control" id="new-card-number"></div>
+              <p class="text-danger" ng-show="stripeElementError('new-card-number')">
+                Choose a Card Number.
+              </p>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-4">
-            <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardExpiryMonth.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardExpiryMonth.$invalid }">
+            <div class="form-group" ng-class="{ 'has-error': stripeElementError('new-card-expiry') }">
               <label for="new-card-expiry" class="control-label">Expiration Date: *</label>
-              <div id="new-card-expiry"></div>
+              <div class="form-control" id="new-card-expiry"></div>
+              <p class="text-danger" ng-show="stripeElementError('new-card-expiry')">
+                Choose an Expiration Date Month and Year.
+              </p>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardCvc.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardCvc.$invalid }">
+            <div class="form-group" ng-class="{ 'has-error': stripeElementError('new-card-cvc') }">
               <label for="new-card-cvc" class="control-label">Security Code: *</label>
-              <div id="new-card-cvc"></div>
+              <div class="form-control" id="new-card-cvc"></div>
+              <p class="text-danger" ng-show="stripeElementError('new-card-cvc')">
+                Choose a Security Code.
+              </p>
             </div>
           </div>
         </div>
