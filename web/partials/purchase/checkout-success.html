@@ -1,22 +1,17 @@
 <div id="checkout-success">
-  <h3 class="text-center u_margin-md-top" ng-if="purchase.paymentMethods.paymentMethod === 'card'">Payment Successful</h3>
-  <h3 class="text-center u_margin-md-top" ng-if="purchase.paymentMethods.paymentMethod === 'invoice'">Invoice Generated</h3>
-  <div class="text-center u_padding-md">
-    <img src="https://s3.amazonaws.com/Rise-Images/Icons/online.svg" width="72px" alt="Payment Successful">
-    <br/><br/>
-    <p ng-if="purchase.paymentMethods.paymentMethod === 'card'">
-      Your payment to Rise Vision was successful. You can keep track of your billing information in the <a ui-sref="apps.billing.home">Billing</a> section of your account.
-    </p>
-    <p ng-if="purchase.paymentMethods.paymentMethod === 'invoice'">
-      An invoice for payment has been sent to <span class="font-weight-bold">{{purchase.contact.email}}</span>. Payment is due by {{purchase.paymentMethods.invoiceDate | date: 'd-MMM-yyyy'}}.
-      <span class="hidden"> You can view this invoice <a href="#">here</a>.</span>
-    </p>
-    <br/>
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-xs-12 text-center">
-      <button id="doneButton" class="btn btn-default" ng-click="close()" aria-label="Done" tabindex="1">Done</button>
-    </div>
+  <h4 class="u_margin-md-bottom">A great big thank you!</h4>
+  <p class="u_margin-md-bottom">
+    We’ve sent a confirmation email to <b>{{purchase.contact.email}}</b>.
+  </p>
+  <p>
+    <b>Details:</b><br />
+    You’ve purchased a subscription to <b>{{purchase.plan.displays}} display licenses</b>.<br />
+    You will be 
+    <span ng-show="purchase.paymentMethods.paymentMethod === 'invoice'">invoiced</span>
+    <span ng-show="purchase.paymentMethods.paymentMethod === 'card'">charged</span>
+    <b>${{purchase.estimate.total | number:2}}</b>.
+  </p>
+  <div class="button-row mt-5">
+    <button id="doneButton" class="btn btn-primary btn-block" ng-click="close()" aria-label="Done" tabindex="1">Continue</button>
   </div>
 </div>

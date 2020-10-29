@@ -28,9 +28,9 @@ angular.module('risevision.apps.purchase')
 
       $scope.$watch('factory.loading', function (loading) {
         if (loading) {
-          $loading.start('purchase-modal');
+          $loading.start('purchase-loader');
         } else {
-          $loading.stop('purchase-modal');
+          $loading.stop('purchase-loader');
         }
       });
 

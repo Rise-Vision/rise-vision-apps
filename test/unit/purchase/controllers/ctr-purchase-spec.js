@@ -118,7 +118,7 @@ describe("controller: purchase modal", function() {
       purchaseFactory.loading = true;
       $scope.$digest();
 
-      $loading.start.should.have.been.calledWith("purchase-modal");
+      $loading.start.should.have.been.calledWith("purchase-loader");
 
       purchaseFactory.loading = false;
       $scope.$digest();

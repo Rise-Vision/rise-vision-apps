@@ -3,7 +3,7 @@
 var helper = require('rv-common-e2e').helper;
 var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
 
-var PurchaseFlowModalPage = function() {
+var PurchaseFlowPage = function() {
   var _this = this;
   var commonHeaderPage = new CommonHeaderPage();
   var planBanner = element(by.css('#plan-banner div.alert:not(.ng-hide)'));
@@ -27,9 +27,8 @@ var PurchaseFlowModalPage = function() {
   var generateInvoiceForm = element(by.id('generateInvoice'));
 
   var paymentMethod = element(by.id('payment-method-select'));
-  var paymentMethodSelected = paymentMethod.element(by.css('option:checked'));
-  var paymentMethodInvoiceMe = paymentMethod.element(by.cssContainingText('option', 'Invoice Me'));
-  var paymentMethodCreditCard = paymentMethod.element(by.cssContainingText('option', 'Credit Card'));
+  var paymentMethodInvoiceMe = paymentMethod.element(by.cssContainingText('button', 'Credit Card'));
+  var paymentMethodCreditCard = paymentMethod.element(by.cssContainingText('button', 'Invoice'));
 
   var cardName = element(by.id('new-card-name'));
   var cardNumber = element(by.id('new-card-number'));
@@ -131,7 +130,7 @@ var PurchaseFlowModalPage = function() {
   };
 
   this.getPaymentMethodSelected = function() {
-    return paymentMethodSelected;
+    return paymentMethod.element(by.css('button.btn-toggle-blue-on'));
   };
 
   this.getPaymentMethodInvoiceMe = function() {
@@ -180,4 +179,4 @@ var PurchaseFlowModalPage = function() {
 
 };
 
-module.exports = PurchaseFlowModalPage;
+module.exports = PurchaseFlowPage;

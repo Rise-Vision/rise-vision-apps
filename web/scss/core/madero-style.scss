@@ -1,5 +1,11 @@
 .madero-style {
 
+  select.form-control.has-placeholder {
+    &.ng-empty {
+      color: $madero-gray;      
+    }
+  }
+
   // dropdown selector button
   .btn-select {
     text-align: left;
