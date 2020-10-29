@@ -19,7 +19,6 @@ angular.module('risevision.apps.purchase')
       };
       
       this.initializeStripeElements = function (types, options) {
-        var _stripeClient;
         return stripeLoader()
           .then(function (stripeClient) {
             return stripeClient.elements();
