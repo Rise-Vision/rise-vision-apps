@@ -61,7 +61,9 @@ angular.module('risevision.apps.purchase')
                     el.on('change', function(event) {
                       var element = document.querySelector(stripeElementSelectors[idx]);
 
-                      element.classList.add('dirty');
+                      if (element) {                        
+                        element.classList.add('dirty');
+                      }
 
                       $scope.$digest();
                     });
