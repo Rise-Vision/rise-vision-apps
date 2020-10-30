@@ -19,6 +19,7 @@ angular.module('risevision.apps.storage.storage-selector', [
     'risevision.common.components.svg',
     'risevision.apps.plans',
     'risevision.common.i18n',
+    'risevision.common.header',
     'risevision.apps.partials',
     'risevision.apps.config',
     'risevision.apps.services',
@@ -49,14 +50,6 @@ angular.module('risevision.apps.storage.storage-selector', [
           url: '?cid',
           abstract: true,
           template: '<div class="storage-app" ui-view></div>'
-        })
-
-        .state('common.auth.unregistered', {
-          templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get(
-              'partials/common/signup.html');
-          }],
-          url: '/unregistered/:state'
         })
 
         .state('apps.storage.home', {

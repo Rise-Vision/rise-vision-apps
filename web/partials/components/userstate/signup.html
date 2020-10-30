@@ -1,0 +1,85 @@
+<h1>One last step!</h1>
+
+<div class="border-container mx-auto">
+  <div class="panel-body">
+
+    <div rv-spinner rv-spinner-key="registration-modal" rv-spinner-start-active="0">
+      <h4>Help us personalize your experience.</h4>
+
+      <div id="registration-modal" stop-event="touchend">
+
+        <form id="forms.registrationForm" novalidate role="form" name="forms.registrationForm" autocomplete="on">
+          <div class="row u_margin-md-top">
+            <div class="col-xs-12">
+              <!-- First Name -->
+              <div class="form-group" ng-class="{ 'has-error' : forms.registrationForm.firstName.$invalid && !forms.registrationForm.firstName.$pristine }">
+                <label for="firstName">First Name: *</label>
+                <input type="text" class="form-control firstName" name="firstName" id="firstName" autocomplete="fname" aria-required="true" tabindex="1" ng-model="profile.firstName" autofocus required>
+                <p ng-show="forms.registrationForm.firstName.$invalid && !forms.registrationForm.firstName.$pristine"
+                  class="help-block validation-error-message-first-name">Enter a First Name.</p>
+              </div>
+
+              <!-- Last Name -->
+              <div class="form-group" ng-class="{ 'has-error' : forms.registrationForm.lastName.$invalid && !forms.registrationForm.lastName.$pristine }">
+                <label for="lastName">Last Name: *</label>
+                <input type="text" class="form-control lastName" name="lastName" id="lastName" autocomplete="lname" aria-required="true" tabindex="1" ng-model="profile.lastName" required>
+                <p ng-show="forms.registrationForm.lastName.$invalid && !forms.registrationForm.lastName.$pristine"
+                  class="help-block validation-error-message-last-name">Enter a Last Name.</p>
+              </div>
+
+              <!-- Organization -->
+              <div class="form-group" ng-class="{'has-error': forms.registrationForm.companyName.$invalid && !forms.registrationForm.companyName.$pristine}" ng-show="newUser">
+                <label for="companyName">Organization: *</label>
+                <input type="text" class="form-control companyName" name="companyName" id="companyName" tabindex="1" aria-required="true" ng-model="company.name" ng-required="newUser">
+                <p ng-show="forms.registrationForm.companyName.$invalid && !forms.registrationForm.companyName.$pristine"
+                  class="help-block validation-error-message-company-name">Enter an Organization.</p>
+              </div>
+
+              <!-- Industry -->
+              <div class="form-group" ng-class="{'has-error': forms.registrationForm.companyIndustry.$invalid && !forms.registrationForm.companyIndustry.$pristine}" ng-show="newUser">
+                <label for="companyIndustry">Tell us your Industry to help us make your displays look great: *</label>
+                <select class="form-control selectpicker companyIndustry" name="companyIndustry" id="companyIndustry" tabindex="1" aria-required="true" ng-model="company.companyIndustry" ng-required="newUser">
+                  <option value="" ng-show="false">&lt; Select Industry &gt;</option>
+                  <option class="companyIndustryOption"
+                    ng-repeat="industry in DROPDOWN_INDUSTRY_FIELDS | orderBy:industry[0]" value="{{industry[1]}}">{{industry[0]}}
+                  </option>
+                </select>
+                <p ng-show="forms.registrationForm.companyIndustry.$invalid && !forms.registrationForm.companyIndustry.$pristine"
+                  class="help-block validation-error-message-company-industry">Select an industry.</p>
+              </div>
+
+              <!-- Terms of Service and Privacy -->
+              <div class="form-group">
+                <div class="checkbox" ng-class="{ 'has-error' : forms.registrationForm.accepted.$invalid && !userForm.accepted.$pristine }">
+                  <label for="accepted">
+                    <input type="checkbox" id="accepted" name="accepted" class="accept-terms-checkbox" ng-model="profile.accepted" tabindex="1" required />
+                    <span>
+                       I accept the
+                       <a class="madero-link" href="https://help.risevision.com/hc/en-us/articles/360000924446-Terms-of-Service" target="_blank" tabindex="1">Terms of Service</a>
+                       and
+                       <a class="madero-link" href="https://help.risevision.com/hc/en-us/articles/360000915023-Privacy-Policy" target="_blank" tabindex="1">Privacy Policy</a>. *
+                    </span
+                  </label>
+                  <p class="help-block validation-error-message-accepted" ng-show="forms.registrationForm.accepted.$invalid && !forms.registrationForm.accepted.$pristine">
+                    You must accept the Terms and Conditions.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+
+      <button id="createAccount" type="submit" aria-label="Create Account" tabindex="1" form="forms.registrationForm" class="btn btn-primary btn-hg btn-block registration-save-button" ng-click="save()" ng-disabled="registering">
+        Create Account
+      </button>
+
+    </div>
+
+  </div>
+</div><!--panel-->	
+<div class="align-center u_margin-md-top">
+  <a class="madero-link" id="sign-out-link" href="" ng-controller="SignOutButtonCtrl" ng-click="logout()" translate>common.signOut</a>
+</div>

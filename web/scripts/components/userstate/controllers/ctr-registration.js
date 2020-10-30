@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('risevision.common.header')
-  .controller('RegistrationModalCtrl', [
-    '$q', '$scope', '$rootScope', '$modalInstance',
+angular.module('risevision.common.components.userstate')
+  .controller('RegistrationCtrl', [
+    '$q', '$scope', '$rootScope',
     '$loading', 'addAccount', '$exceptionHandler',
-    'userState', 'pick', 'uiFlowManager', 'messageBox', 'humanReadableError',
+    'userState', 'pick', 'messageBox', 'humanReadableError',
     'agreeToTermsAndUpdateUser', 'account', 'analyticsFactory',
     'bigQueryLogging', 'updateCompany', 'plansFactory',
     'COMPANY_INDUSTRY_FIELDS', 'urlStateService', 'hubspot',
-    function ($q, $scope, $rootScope, $modalInstance, $loading, addAccount,
-      $exceptionHandler, userState, pick, uiFlowManager, messageBox, humanReadableError,
+    function ($q, $scope, $rootScope, $loading, addAccount,
+      $exceptionHandler, userState, pick, messageBox, humanReadableError,
       agreeToTermsAndUpdateUser, account, analyticsFactory, bigQueryLogging,
       updateCompany, plansFactory, COMPANY_INDUSTRY_FIELDS, urlStateService, hubspot) {
 
@@ -29,25 +29,6 @@ angular.module('risevision.common.header')
         copyOfProfile.termsAcceptanceDate !== null;
       // Automatically subscribe users on registration
       $scope.profile.mailSyncEnabled = true;
-
-      // check status, load spinner, or close dialog if registration is complete
-      var watch = $scope.$watch(
-        function () {
-          return uiFlowManager.isStatusUndetermined();
-        },
-        function (undetermined) {
-          if (undetermined === true) {
-            //start the spinner
-            $loading.start('registration-modal');
-          } else if (undetermined === false) {
-            if (uiFlowManager.getStatus() === 'registrationComplete') {
-              $modalInstance.close('success');
-              //stop the watch
-              watch();
-            }
-            $loading.stop('registration-modal');
-          }
-        });
 
       $scope.save = function () {
         $scope.forms.registrationForm.accepted.$pristine = false;
@@ -94,7 +75,6 @@ angular.module('risevision.common.header')
 
                   $rootScope.$broadcast('risevision.user.authorized');
 
-                  $modalInstance.close('success');
                   $loading.stop('registration-modal');
                 });
             })
