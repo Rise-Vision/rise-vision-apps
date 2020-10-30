@@ -220,7 +220,7 @@
       "schedule": "Schedule",
       "status": "Status"
     },
-    "no-results": "Your search didn't return any results",
+    "no-results": "Your search didn't return any results.",
     "noDisplays": "No Displays",
     "player": {
       "cta": {

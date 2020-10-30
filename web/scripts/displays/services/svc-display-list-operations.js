@@ -164,7 +164,7 @@ angular.module('risevision.displays.services')
         var _confirmDisplayUpdate = function (selectedItems, title, partial, baseModel) {
           return _checkLicenses(selectedItems).then(function () {
             return $modal.open({
-              templateUrl: 'partials/common/bulk-edit-modal.html',
+              templateUrl: 'partials/components/scrolling-list/bulk-edit-modal.html',
               controller: 'BulkEditModalCtrl',
               windowClass: 'madero-style centered-modal',
               size: 'md',

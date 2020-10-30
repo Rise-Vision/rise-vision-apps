@@ -1,10 +1,11 @@
-<div class="flex-row multi-actions-panel u_padding-20 u_margin-md-top" ng-show="listObject.getSelected().length > 0 && !listObject.batchOperations.activeOperation">
+<div class="flex-row multi-actions-panel u_padding-20-horizontal py-2 u_margin-md-top" ng-show="listObject.getSelected().length > 0 && !listObject.batchOperations.activeOperation">
   <div class="flex-row button-toolbar-md-folded w-100">
     <div class="col-sm-5 pl-0">
       <strong>{{listObject.getSelected().length}}</strong>
       <span class="text-gray">
         {{listObject.batchOperations.name}}<span ng-show="listObject.getSelected().length > 1">s</span> selected. 
         <span ng-hide="listObject.search.selectAll"><a class="madero-link u_clickable" ng-click="listObject.selectAll()"> Select all</a>.</span>
+        <span ng-show="listObject.search.selectAll"><a class="madero-link u_clickable" ng-click="listObject.deselectAll()"> Select none</a>.</span>
       </span>
     </div>
     <div class="col-sm-7 pl-0">
