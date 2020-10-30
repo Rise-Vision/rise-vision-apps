@@ -247,7 +247,6 @@ describe("Services: purchase factory", function() {
       .then(null, function() {
         done("error");
       });
-
     });
 
     describe("existing card: ", function() {
@@ -341,14 +340,16 @@ describe("Services: purchase factory", function() {
         assert.equal(stripeService.createPaymentMethod.getCall(0).args[2].billing_details.address.city, "test-billing-city");
       });
 
-      it("should resolve if token is received", function(done) {
-        purchaseFactory.validatePaymentMethod()
-        .then(function() {
+      it("should start and stop spinner", function(done) {
+        purchaseFactory.validatePaymentMethod();
+
+        expect(purchaseFactory.loading).to.be.true;
+
+        setTimeout(function() {
+          expect(purchaseFactory.loading).to.be.false;
+
           done();
-        })
-        .then(null,function() {
-          done("error");
-        });
+        }, 10);
       });
 
     });

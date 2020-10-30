@@ -71,14 +71,9 @@ angular.module('risevision.apps.purchase')
           return;
         }
 
-        purchaseFactory.loading = true;
-
         purchaseFactory.validatePaymentMethod(element)
           .then($scope.preparePayment)
-          .then($scope.setNextStep)
-          .finally(function () {
-            purchaseFactory.loading = false;
-          });
+          .then($scope.setNextStep);
       };
 
       $scope.preparePayment = function () {
