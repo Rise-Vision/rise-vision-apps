@@ -73,17 +73,13 @@ angular.module('risevision.common.header', [
                   // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/which
                   var leftButton = 1;
                   if (e.which === leftButton) {
-                    $modalStack.getTop().key.dismiss();
+                    var modalContent = modal.querySelector('.modal-content');
+
+                    if (!modalContent.contains(e.target)) {
+                      $modalStack.getTop().key.dismiss();
+                    }
                   }
                 });
-
-                // Sometimes there are other elements with the .modal class that don't have .modal-content
-                var modalContent = modal.querySelector('.modal-content');
-                if (modalContent) {
-                  modalContent.addEventListener('mousedown', function (e) {
-                    e.stopPropagation();
-                  });
-                }
               }
             });
 
