@@ -9,12 +9,11 @@ angular.module('risevision.widget.common.url-field.http-validator', [
         require: 'ngModel',
         restrict: 'A',
         link: function (scope, elem, attr, ngModelCtrl) {
-          ngModelCtrl.warnings = ngModelCtrl.warnings || {};
           var validator = function (value) {
             if (insecureUrl(value)) {
-              ngModelCtrl.warnings.httpUrl = true;
+              ngModelCtrl.$setValidity('httpUrl', false);
             } else {
-              ngModelCtrl.warnings.httpUrl = false;
+              ngModelCtrl.$setValidity('httpUrl', true);
             }
 
             return value;
