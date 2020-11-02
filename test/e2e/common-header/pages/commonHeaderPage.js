@@ -154,7 +154,10 @@
       if (subCompanyName) {
         var name = skipSuffix ? subCompanyName : this.addStageSuffix(subCompanyName).split('-').join('');
         selectSubcompanyModalFilter.sendKeys(name);
-        helper.wait(selectSubcompanyModalLoader, "Load Companies");
+        helper.wait(selectSubcompanyModalLoader, "Load Companies")
+        .catch(function(err) {
+          console.log('Load Companies never appeared; assume it already disappeared.', err);
+        });
         helper.waitDisappear(selectSubcompanyModalLoader, "Load Companies");
       }
     }
