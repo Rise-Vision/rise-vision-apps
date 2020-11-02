@@ -35,7 +35,7 @@
       "changeDate": "Last Modified",
       "name": "Name"
     },
-    "no-results": "Your search didn't return any results",
+    "no-results": "Your search didn't return any results.",
     "noSchedules": "No Schedules",
     "viewAll": "View All Schedules"
   },

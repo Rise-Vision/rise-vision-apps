@@ -45,7 +45,7 @@
       "name": "Name",
       "status": "Status"
     },
-    "no-results": "Your search didn't return any results",
+    "no-results": "Your search didn't return any results.",
     "noPresentations": "No Presentations",
     "title": "Presentations",
     "viewAll": "View All Presentations"

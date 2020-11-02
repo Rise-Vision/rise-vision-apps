@@ -34,7 +34,7 @@ describe('directive: batch-operations', function() {
 
     $compile = _$compile_;
     $rootScope = _$rootScope_;
-    $templateCache.put('partials/common/batch-operations.html', '<p>mock</p>');
+    $templateCache.put('partials/components/scrolling-list/batch-operations.html', '<p>mock</p>');
 
     $rootScope.listObject = {
       getSelected: sinon.stub().returns('selectedItems')
@@ -138,7 +138,7 @@ describe('directive: batch-operations', function() {
           $scope.listObject.batchOperations.operations[0].beforeBatchAction();
 
           $modal.open.should.have.been.calledWithMatch({
-            templateUrl: 'partials/common/bulk-delete-confirmation-modal.html',
+            templateUrl: 'partials/components/scrolling-list/bulk-delete-confirmation-modal.html',
             controller: 'BulkDeleteModalCtrl',
             windowClass: 'madero-style centered-modal',
             size: 'sm'

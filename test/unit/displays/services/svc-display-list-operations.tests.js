@@ -445,7 +445,7 @@ describe('Reboot Media Player:', function() {
       it('should prompt for monitoring details', function(done) {
         operation.beforeBatchAction(selected).then(function() {
           $modal.open.should.have.been.calledWithMatch({
-            templateUrl: 'partials/common/bulk-edit-modal.html',
+            templateUrl: 'partials/components/scrolling-list/bulk-edit-modal.html',
             controller: 'BulkEditModalCtrl',
             windowClass: 'madero-style centered-modal',
             size: 'md',
@@ -489,7 +489,7 @@ describe('Reboot Media Player:', function() {
           licenseOperation.onClick.should.have.been.calledWith(true);
 
           $modal.open.should.have.been.calledWithMatch({
-            templateUrl: 'partials/common/bulk-edit-modal.html',
+            templateUrl: 'partials/components/scrolling-list/bulk-edit-modal.html',
             controller: 'BulkEditModalCtrl'
           });
 
@@ -532,7 +532,7 @@ describe('Reboot Media Player:', function() {
       it('should prompt for reboot time details', function(done) {
         operation.beforeBatchAction(selected).then(function() {
           $modal.open.should.have.been.calledWithMatch({
-            templateUrl: 'partials/common/bulk-edit-modal.html',
+            templateUrl: 'partials/components/scrolling-list/bulk-edit-modal.html',
             controller: 'BulkEditModalCtrl',
             windowClass: 'madero-style centered-modal',
             size: 'md',
@@ -575,7 +575,7 @@ describe('Reboot Media Player:', function() {
           licenseOperation.onClick.should.have.been.calledWith(true);
 
           $modal.open.should.have.been.calledWithMatch({
-            templateUrl: 'partials/common/bulk-edit-modal.html',
+            templateUrl: 'partials/components/scrolling-list/bulk-edit-modal.html',
             controller: 'BulkEditModalCtrl'
           });
 
@@ -617,7 +617,7 @@ describe('Reboot Media Player:', function() {
       it('should prompt for address details', function(done) {
         operation.beforeBatchAction(selected).then(function() {
           $modal.open.should.have.been.calledWithMatch({
-            templateUrl: 'partials/common/bulk-edit-modal.html',
+            templateUrl: 'partials/components/scrolling-list/bulk-edit-modal.html',
             controller: 'BulkEditModalCtrl',
             windowClass: 'madero-style centered-modal',
             size: 'md',
@@ -667,7 +667,7 @@ describe('Reboot Media Player:', function() {
           licenseOperation.onClick.should.have.been.calledWith(true);
 
           $modal.open.should.have.been.calledWithMatch({
-            templateUrl: 'partials/common/bulk-edit-modal.html',
+            templateUrl: 'partials/components/scrolling-list/bulk-edit-modal.html',
             controller: 'BulkEditModalCtrl'
           });
 
