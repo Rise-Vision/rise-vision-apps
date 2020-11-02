@@ -122,15 +122,12 @@ describe('service: editorFactory:', function() {
         removeEventListenerVisibilityAPI : function() {}
       };
     });
-    $provide.service('$modal',function(){
+    $provide.service('$modal', function() {
       return {
-        open: function() {
-          return {
-            result: Q.resolve({rvaEntityId: 'id1'})
-          }
-        }
-      };
+        open: sinon.stub().returns({result: Q.resolve({rvaEntityId: 'id1'})})
+      }
     });
+
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
     });
@@ -188,6 +185,7 @@ describe('service: editorFactory:', function() {
     expect(editorFactory.savingPresentation).to.be.false;
     expect(editorFactory.apiError).to.not.be.truely;
 
+    expect(editorFactory.openPresentationProperties).to.be.a('function');
     expect(editorFactory.newPresentation).to.be.a('function');
     expect(editorFactory.getPresentation).to.be.a('function');
     expect(editorFactory.addPresentation).to.be.a('function');
@@ -208,6 +206,15 @@ describe('service: editorFactory:', function() {
     expect(editorFactory.presentationId).to.not.be.ok;
   });
 
+  it('openPresentationProperties:', function() {
+    editorFactory.openPresentationProperties();
+
+    $modal.open.should.have.been.calledWithMatch({
+      templateUrl: 'partials/editor/presentation-properties-modal.html',
+      size: 'md',
+      controller: 'PresentationPropertiesModalController'
+    });
+  });
 
   it('newPresentation: should reset the presentation',function(){
     editorFactory.presentation.id = 'presentationId';
@@ -335,8 +342,6 @@ describe('service: editorFactory:', function() {
 
     it('should create first Schedule when adding first presentation',function(done){
       updatePresentation = true;
-
-      var $modalOpenSpy = sinon.spy($modal, 'open');
 
       editorFactory.addPresentation();
 
@@ -811,12 +816,10 @@ describe('service: editorFactory:', function() {
   });
 
   it('addFromSharedTemplateModal: ', function(done) {
-    var $modalOpenSpy = sinon.spy($modal, 'open');
-
     editorFactory.addFromSharedTemplateModal();
     expect(presentationTracker).to.have.been.calledWith("Add Presentation from Shared Template");
 
-    $modalOpenSpy.should.have.been.calledWith({
+    $modal.open.should.have.been.calledWith({
       templateUrl: 'partials/editor/shared-templates-modal.html',
       size: 'md',
       controller: 'SharedTemplatesModalController'
