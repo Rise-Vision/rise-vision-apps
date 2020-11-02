@@ -107,6 +107,8 @@
           } else if (paymentMethods.paymentMethod === 'card') {
             var jsonData = _getOrderAsJson();
 
+            factory.loading = true;
+
             storeService.preparePurchase(jsonData)
               .then(function (response) {
                 if (response.error) {
@@ -124,6 +126,9 @@
               .catch(function (error) {
                 factory.purchase.checkoutError = error.message || 'Something went wrong, please retry';
                 deferred.reject(error);
+              })
+              .finally(function() {
+                factory.loading = false;
               });
           }
           return deferred.promise;
@@ -159,6 +164,8 @@
                 }
               };
 
+              factory.loading = true;
+
               stripeService.createPaymentMethod('card', element, details)
                 .then(function (response) {
                   if (response.error) {
@@ -167,6 +174,9 @@
                     paymentMethods.paymentMethodResponse = response;
                     deferred.resolve();
                   }
+                })
+                .finally(function() {
+                  factory.loading = false;
                 });
             }
           }
