@@ -1,3 +1,60 @@
+.purchase-app {
+  .btn-group-justified {
+    @extend .mb-0;
+
+    width: 400px;
+
+    button {
+      width: 200px;
+      font-weight: normal;
+    }
+
+    @media(max-width: $screen-xs-max) {
+      width: 100%;
+
+      button {
+        width: 100%;
+      }
+
+      .btn:first-child {
+        border-top-right-radius: 4px !important;
+        border-bottom-left-radius: 0;
+      }
+
+      .btn:last-child {
+        margin-left: 0;
+        margin-top: -1px;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 4px;
+      }
+    }
+
+    streamline-icon {
+      @extend .ml-3;
+    }
+  }
+
+  // Temporary for the review purchase page
+  .btn.btn-xs {
+    min-height: auto;
+    padding: 2px 12px;
+  }
+
+  .StripeElement {
+    padding: 11px 12px;
+  }
+
+  #checkout-success {
+    @extend .mx-auto;
+
+    width: 744px;
+  }
+}
+
+
+
+// OLD CHECKOUT FLOW - REMOVE
+
 .subscription-summary {
   display: flex;
   flex-direction: row;

@@ -27,11 +27,6 @@ describe("controller: purchase modal", function() {
         updateAddress: sinon.stub()
       };
     });
-    $provide.service("plansFactory", function() {
-      return {
-        showPlansModal: sinon.stub()
-      };
-    });
     $provide.service("storeService", function() {
       return storeService = {
         preparePurchase: sinon.spy(function() {
@@ -116,7 +111,6 @@ describe("controller: purchase modal", function() {
     expect($scope.setCurrentStep).to.be.a("function");
 
     expect($scope.close).to.be.a("function");
-    expect($scope.dismiss).to.be.a("function");
   });
 
   describe("$loading spinner: ", function() {
@@ -124,7 +118,7 @@ describe("controller: purchase modal", function() {
       purchaseFactory.loading = true;
       $scope.$digest();
 
-      $loading.start.should.have.been.calledWith("purchase-modal");
+      $loading.start.should.have.been.calledWith("purchase-loader");
 
       purchaseFactory.loading = false;
       $scope.$digest();
@@ -153,11 +147,11 @@ describe("controller: purchase modal", function() {
     });
 
     it("should validate and proceed to next step", function(done) {
-      $scope.validateAddress({}, "contact", "shipping");
+      $scope.validateAddress({}, "contact");
 
       setTimeout(function() {
         addressFactory.updateContact.should.have.been.calledWith("contact");
-        addressFactory.updateAddress.should.have.been.calledWith({}, "contact", "shipping");
+        addressFactory.updateAddress.should.have.been.calledWith({}, "contact");
         $scope.setNextStep.should.have.been.called;
 
         done();
@@ -291,23 +285,23 @@ describe("controller: purchase modal", function() {
       expect($scope.currentStep).to.equal(1);
     });
 
-    it("should proceed to the 3rd step and get estimate", function() {
-      $scope.setCurrentStep(2);
+    it("should proceed to the 2nd step and get estimate", function() {
+      $scope.setCurrentStep(1);
 
       $scope.setNextStep();
 
-      expect($scope.currentStep).to.equal(3);
+      expect($scope.currentStep).to.equal(2);
       expect($scope.finalStep).to.be.true;
 
       purchaseFactory.getEstimate.should.have.been.called;
     });
 
-    it("should always set 3rd step and get estimate if form was completed once", function(done) {
-      $scope.setCurrentStep(2);
+    it("should always set 2nd step and get estimate if form was completed once", function(done) {
+      $scope.setCurrentStep(1);
 
       $scope.setNextStep();
 
-      expect($scope.currentStep).to.equal(3);
+      expect($scope.currentStep).to.equal(2);
       expect($scope.finalStep).to.be.true;
 
       purchaseFactory.getEstimate.should.have.been.called;
@@ -319,19 +313,19 @@ describe("controller: purchase modal", function() {
 
         purchaseFactory.getEstimate.should.have.been.calledTwice;
 
-        expect($scope.currentStep).to.equal(3);
+        expect($scope.currentStep).to.equal(2);
         expect($scope.finalStep).to.be.true;
 
         done();
       }, 10);
     });
 
-    it("should proceed past 3rd step", function() {
-      $scope.setCurrentStep(3);
+    it("should proceed past 2nd step", function() {
+      $scope.setCurrentStep(2);
 
       $scope.setNextStep();
 
-      expect($scope.currentStep).to.equal(4);
+      expect($scope.currentStep).to.equal(3);
     });
 
   });
@@ -384,12 +378,6 @@ describe("controller: purchase modal", function() {
       expect(purchaseFactory.loading).to.be.false;
     });
 
-  });
-
-  it("dismiss: ", function() {
-    $scope.dismiss();
-
-    $state.go.should.have.been.calledWith('apps.home');
   });
 
 });

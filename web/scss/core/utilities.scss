@@ -345,6 +345,14 @@ All utilities have a prefix u_ added to them
   cursor: default !important;
 }
 
+.u_uppercase {
+  text-transform: uppercase;
+}
+
+.u_capitalize {
+  text-transform: capitalize;
+}
+
 .u_highlighted {
   background: #FFFFE0;
   text-transform: uppercase;

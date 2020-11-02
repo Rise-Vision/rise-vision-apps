@@ -19,15 +19,9 @@ describe("Services: purchase factory", function() {
     });
     $provide.service("userState", function() {
       return userState = {
-        getCopyOfUserCompany: sinon.stub().returns({
-          id: "id",
-          street: "billingStreet",
-          junkProperty: "junkValue"
-        }),
         getCopyOfSelectedCompany: sinon.stub().returns({
           id: "id",
-          street: "wrongStreet",
-          shipToStreet: "shippingStreet"
+          street: "billingStreet",
         }),
         getCopyOfProfile: sinon.stub().returns({
           username: "username",
@@ -149,16 +143,6 @@ describe("Services: purchase factory", function() {
         id: "id",
         name: undefined,
         street: "billingStreet",
-        unit: undefined,
-        city: undefined,
-        country: undefined,
-        postalCode: undefined,
-        province: undefined
-      });
-      expect(purchaseFactory.purchase.shippingAddress).to.deep.equal({
-        id: "id",
-        name: undefined,
-        street: "shippingStreet",
         unit: undefined,
         city: undefined,
         country: undefined,
@@ -364,7 +348,6 @@ describe("Services: purchase factory", function() {
         billingAddress: {
           id: "id"
         },
-        shippingAddress: "shippingAddress",
         plan: {
           displays: 5,
           isMonthly: true,
@@ -398,20 +381,20 @@ describe("Services: purchase factory", function() {
       expect(purchaseFactory.getEstimate().then).to.be.a("function");
 
       storeService.calculateTaxes.should.have.been.called;
-      storeService.calculateTaxes.should.have.been.calledWith("id", sinon.match.string, sinon.match.number, sinon.match.string, 3, "shippingAddress");
+      storeService.calculateTaxes.should.have.been.calledWith("id", sinon.match.string, sinon.match.number, sinon.match.string, 3, purchaseFactory.purchase.billingAddress);
     });
 
     it("should call set correct currency & billing period values", function() {
       purchaseFactory.getEstimate();
 
-      storeService.calculateTaxes.should.have.been.calledWith("id", "productCode-" + "usd" + "01m", 5, RPP_ADDON_ID + "-" + "usd" + "01m" + "pro", 3, "shippingAddress");
+      storeService.calculateTaxes.should.have.been.calledWith("id", "productCode-" + "usd" + "01m", 5, RPP_ADDON_ID + "-" + "usd" + "01m" + "pro", 3, purchaseFactory.purchase.billingAddress);
 
       purchaseFactory.purchase.billingAddress.country = "CA";
       purchaseFactory.purchase.plan.isMonthly = false;
 
       purchaseFactory.getEstimate();
 
-      storeService.calculateTaxes.should.have.been.calledWith("id", "productCode-" + "cad" + "01y", 5, RPP_ADDON_ID + "-" + "cad" + "01y" + "pro", 3, "shippingAddress");
+      storeService.calculateTaxes.should.have.been.calledWith("id", "productCode-" + "cad" + "01y", 5, RPP_ADDON_ID + "-" + "cad" + "01y" + "pro", 3, purchaseFactory.purchase.billingAddress);
     });
 
     it("should populate estimate object if call succeeds", function(done) {
@@ -488,11 +471,6 @@ describe("Services: purchase factory", function() {
           street: "billingStreet",
           country: "CA"
         },
-        shippingAddress: {
-          id: "id",
-          street: "shippingStreet",
-          junkProperty: "junkValue"
-        },
         plan: {
           name: "myPlan",
           isMonthly: true,
@@ -554,7 +532,8 @@ describe("Services: purchase factory", function() {
         },
         shipTo: {
           id: "id",
-          street: "shippingStreet"
+          street: "billingStreet",
+          country: "CA"
         },
         items: [{
           id: "productCode-cad01m",

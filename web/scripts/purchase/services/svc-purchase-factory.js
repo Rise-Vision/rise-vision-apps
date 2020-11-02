@@ -24,9 +24,7 @@
           factory.purchase.plan.additionalDisplayLicenses = parseInt(plan.additionalDisplayLicenses) || 0;
           factory.purchase.plan.isMonthly = isMonthly;
 
-          factory.purchase.billingAddress = addressService.copyAddress(userState.getCopyOfUserCompany());
-          factory.purchase.shippingAddress = addressService.copyAddressFromShipTo(userState
-            .getCopyOfSelectedCompany());
+          factory.purchase.billingAddress = addressService.copyAddress(userState.getCopyOfSelectedCompany());
 
           factory.purchase.contact = contactService.copyContactObj(userState.getCopyOfProfile());
           factory.purchase.paymentMethods = {
@@ -68,14 +66,6 @@
           return modalInstance.result.then(function (result) {
             factory.purchase.taxExemptionSent = result;
           });
-        };
-
-        factory.initializeStripeElements = function (types) {
-          stripeService.prepareNewElementsGroup();
-
-          return $q.all(types.map(function (type) {
-            return stripeService.createElement(type);
-          }));
         };
 
         factory.authenticate3ds = function (intentSecret) {
@@ -222,7 +212,7 @@
           return storeService.calculateTaxes(factory.purchase.billingAddress.id, _getChargebeePlanId(),
               factory.purchase.plan.displays,
               _getChargebeeAddonId(),
-              factory.purchase.plan.additionalDisplayLicenses, factory.purchase.shippingAddress, factory.purchase
+              factory.purchase.plan.additionalDisplayLicenses, factory.purchase.billingAddress, factory.purchase
               .couponCode)
             .then(function (result) {
               var estimate = factory.purchase.estimate;
@@ -266,7 +256,7 @@
 
           var obj = {
             billTo: addressService.copyAddress(factory.purchase.billingAddress),
-            shipTo: addressService.copyAddress(factory.purchase.shippingAddress),
+            shipTo: addressService.copyAddress(factory.purchase.billingAddress),
             couponCode: factory.purchase.couponCode,
             items: newItems,
             purchaseOrderNumber: paymentMethods.purchaseOrderNumber,

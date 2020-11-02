@@ -1,26 +1,17 @@
-<div class="container u_margin-md-top">
-
-  <h2 class="u_margin-md-bottom">Checkout</h2>
-
-  <div rv-spinner rv-spinner-key="purchase-modal" rv-spinner-start-active="1"></div>
-
-  <div class="steps">
-    <div ng-repeat="step in PURCHASE_STEPS" class="step-item" ng-class="{ active: currentStep === step.index, complete: currentStep > step.index }">
-      <span>{{step.name}}</span>
-    </div>
+<div class="madero-style">
+  <div class="app-header u_padding-20-vertical mb-5 border-bottom">
+    <!-- App Title -->
+    <h1 class="app-header-title">Subscribe</h1>
   </div>
 
-  <div id="purchase-modal" class="modal-body checkout-modal" stop-event="touchend">
+  <div rv-spinner rv-spinner-key="purchase-loader" rv-spinner-start-active="1"></div>
 
-    <billing-address ng-if="currentStep === 0"></billing-address>
-    <shipping-address ng-if="currentStep === 1"></shipping-address>
-    <payment-methods ng-if="currentStep === 2"></payment-methods>
-    <review-purchase ng-if="currentStep === 3"></review-purchase>
-    <checkout-success ng-if="currentStep === 4"></checkout-success>
+  <billing-address ng-if="currentStep === 0"></billing-address>
+  <payment-methods ng-if="currentStep === 1"></payment-methods>
+  <review-purchase ng-if="currentStep === 2"></review-purchase>
+  <checkout-success ng-if="currentStep === 3"></checkout-success>
 
-  </div> <!-- //Modal Body -->
-
-  <div id="security-branding" class="modal-footer text-center" ng-show="currentStep > 2 && currentStep < 5">
+  <div id="security-branding" class="text-center my-5 pt-5 border-top" ng-show="currentStep < 4">
     <span class="text-muted">
       <i class="fa fa-lock icon-left"></i>
       Secure Checkout from ChargeBee and <img alt="powered by Stripe" height="16" src="https://s3.amazonaws.com/Rise-Images/UI/powered_by_stripe.svg">
