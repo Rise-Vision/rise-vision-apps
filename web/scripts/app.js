@@ -125,14 +125,6 @@ angular.module('risevision.apps', [
               });
             }
           ]
-        })
-
-        .state('common.auth.unregistered', {
-          templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get(
-              'partials/common/signup.html');
-          }],
-          url: '/unregistered/:state'
         });
 
     }

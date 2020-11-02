@@ -23,7 +23,9 @@
       'risevision.common.components.password-input',
       'risevision.common.components.scrolling-list',
       'risevision.common.config',
-      'risevision.common.gapi', 'LocalStorageModule',
+      'risevision.common.gapi',
+      'risevision.common.account',
+      'LocalStorageModule',
       'risevision.core.company',
       'risevision.core.util', 'risevision.core.userprofile'
     ])
@@ -109,6 +111,33 @@
             params: {
               isSignUp: true,
               joinAccount: true
+            }
+          })
+
+          .state('common.auth.unregistered', {
+            templateProvider: ['$templateCache', function ($templateCache) {
+              return $templateCache.get('partials/components/userstate/signup.html');
+            }],
+            url: '/unregistered/:state',
+            controller: 'RegistrationCtrl',
+            resolve: {
+              account: ['userState', 'getUserProfile', 'getAccount',
+                function (userState, getUserProfile, getAccount) {
+                  return getUserProfile(userState.getUsername())
+                    .then(null, function (resp) {
+                      if (resp && resp.message ===
+                        'User has not yet accepted the Terms of Service'
+                      ) {
+                        return getAccount();
+                      } else {
+                        return null;
+                      }
+                    })
+                    .catch(function () {
+                      return null;
+                    });
+                }
+              ]
             }
           })
 
