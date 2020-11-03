@@ -93,7 +93,7 @@
               <span translate>displays-app.details.rpp-loading</span> <i class="fa fa-spinner fa-spin fa-fw"></i>
             </span>
 
-            <yes-no-toggle ng-model="factory.display.playerProAuthorized" ng-change="toggleProAuthorized()" ng-disabled="updatingRPP || !playerLicenseFactory.isProToggleEnabled()" ng-hide="updatingRPP"></yes-no-toggle>
+            <yes-no-toggle ng-model="factory.display.playerProAuthorized" ng-change="toggleProAuthorized()" ng-disabled="updatingRPP || !playerLicenseFactory.isProToggleEnabled(factory.display)" ng-hide="updatingRPP"></yes-no-toggle> 
           </div>
         </div>
         <div class="text-danger mt-2" ng-show="errorUpdatingRPP">
