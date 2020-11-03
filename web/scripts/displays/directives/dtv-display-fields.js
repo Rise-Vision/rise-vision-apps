@@ -39,10 +39,14 @@ angular.module('risevision.displays.directives')
             apiParams[displayFactory.display.id] = playerProAuthorized;
 
             enableCompanyProduct(displayFactory.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
-              .then(function () {
-                _updateDisplayLicenseLocal();
-
-                playerLicenseFactory.toggleDisplayLicenseLocal(displayFactory.display.playerProAuthorized);
+              .then(function (resp) {
+                var resultDisplays = resp && resp.item && resp.item.displays;
+                if(resultDisplays && resultDisplays[displayFactory.display.id] === apiParams[displayFactory.display.id]) {
+                  _updateDisplayLicenseLocal();
+                  playerLicenseFactory.toggleDisplayLicenseLocal(displayFactory.display.playerProAuthorized);
+                } else {
+                  throw new Error('License could not be updated. Please try again.');
+                }
               })
               .catch(function (err) {
                 $scope.errorUpdatingRPP = processErrorCode(err);
