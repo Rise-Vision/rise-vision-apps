@@ -44,6 +44,47 @@
     padding: 11px 12px;
   }
 
+  .purchase-sideways-panels {
+    @extend .stack-md-sideways-panels;
+
+    margin-left: 0px;
+    margin-right: 0px;
+
+    >:first-child {
+    }
+
+    >:last-child {
+      @extend .mx-auto;
+
+      max-width: 363px;
+    }
+
+    @media (min-width: $screen-md) {
+      >:first-child {
+        width: 100% !important;
+      }
+
+      >:last-child {
+        @extend .mx-lg-0;
+        @extend .ml-lg-5;
+
+        width: 363px;
+        min-width: 363px;
+      }
+    }
+  }
+
+  .purchase-summary {
+    @extend .p-4;
+
+    background-color: $lighter-gray;
+  }
+
+  .purchase-total {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
   #checkout-success {
     @extend .mx-auto;
 
