@@ -28,7 +28,7 @@
       <span class="pull-right">${{purchase.estimate.subTotal}}</span>
     </p>
     <p class="mb-0">
-      <span>$8 per display license, per month.</span>
+      <span>${{(purchase.estimate.subTotal / purchase.plan.displays / (purchase.plan.isMonthly ? 1 : 12)) | number:2}} per display license, per month.</span>
       <span class="pull-right">
         <a aria-label="Edit Subscription Details" class="madero-link u_clickable" ng-click="setCurrentStep(-1)" tabindex="1">Edit</a>
       </span>
@@ -79,7 +79,7 @@
 
   <div class="py-4">
     <p class="mb-0">
-      <span class="font-weight-bold">Total cost per month:</span>
+      <span class="font-weight-bold">Total cost per {{purchase.plan.isMonthly ? 'month' : 'year'}}:</span>
       <span class="pull-right"><span class="u_margin-right text-subtle">{{purchase.estimate.currency | uppercase}}</span><span class="purchase-total">${{purchase.estimate.total | number:2}}</span></span>
     </p>    
   </div>
