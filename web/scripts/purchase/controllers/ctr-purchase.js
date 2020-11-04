@@ -85,8 +85,8 @@ angular.module('risevision.apps.purchase')
           return;
         }
 
-        if (($scope.finalStep && $scope.currentStep < 2) || $scope.currentStep === 1) {
-          $scope.currentStep = 3;
+        if (($scope.finalStep && $scope.currentStep < 1) || $scope.currentStep === 1) {
+          $scope.currentStep = 2;
 
           $scope.finalStep = true;
         } else {
