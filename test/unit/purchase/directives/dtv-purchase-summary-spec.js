@@ -14,6 +14,9 @@ describe("directive: purchase summary", function() {
     $provide.value("userState", {
       getCopyOfSelectedCompany: function() {
         return "selectedCompany";
+      },
+      isSubcompanySelected: function() {
+        return "isSelected";
       }
     });
   }));
@@ -34,6 +37,7 @@ describe("directive: purchase summary", function() {
   it("should exist", function() {
     expect($scope.purchase).to.be.an("object");
     expect($scope.selectedCompany).to.equal("selectedCompany");
+    expect($scope.isSubcompanySelected).to.equal("isSelected");
 
     expect($scope.getAdditionalDisplaysPrice).to.be.a("function");
   });
