@@ -95,7 +95,7 @@
 
             factory.loading = true;
 
-            storeService.preparePurchase(jsonData)
+            return storeService.preparePurchase(jsonData)
               .then(function (response) {
                 if (response.error) {
                   factory.purchase.checkoutError = response.error;
@@ -103,7 +103,7 @@
                 } else {
                   paymentMethods.intentResponse = response;
                   if (response.authenticationRequired) {
-                    return $q.resolve(factory.authenticate3ds(response.intentSecret));
+                    return factory.authenticate3ds(response.intentSecret);
                   } else {
                     return $q.resolve();
                   }
