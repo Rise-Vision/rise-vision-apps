@@ -24,9 +24,7 @@
           factory.purchase.plan.additionalDisplayLicenses = parseInt(plan.additionalDisplayLicenses) || 0;
           factory.purchase.plan.isMonthly = isMonthly;
 
-          factory.purchase.billingAddress = factory.purchase.billingAddress || addressService.copyAddress(userState.getCopyOfUserCompany());
-          factory.purchase.shippingAddress = factory.purchase.shippingAddress || addressService.copyAddressFromShipTo(userState
-            .getCopyOfSelectedCompany());
+          factory.purchase.billingAddress = factory.purchase.billingAddress || addressService.copyAddress(userState.getCopyOfSelectedCompany());
 
           factory.purchase.contact = contactService.copyContactObj(userState.getCopyOfProfile());
           factory.purchase.paymentMethods = factory.purchase.paymentMethods || {
@@ -61,6 +59,7 @@
           var modalInstance = $modal.open({
             template: $templateCache.get('partials/purchase/tax-exemption.html'),
             controller: 'TaxExemptionModalCtrl',
+            windowClass: 'madero-style',
             size: 'md',
             backdrop: 'static'
           });
@@ -70,77 +69,67 @@
           });
         };
 
-        factory.initializeStripeElements = function (types) {
-          stripeService.prepareNewElementsGroup();
-
-          return $q.all(types.map(function (type) {
-            return stripeService.createElement(type);
-          }));
-        };
-
         factory.authenticate3ds = function (intentSecret) {
           return stripeService.authenticate3ds(intentSecret)
             .then(function (result) {
               if (result.error) {
                 factory.purchase.checkoutError = result.error;
-                return $q(function (res, rej) {
-                  rej(result.error);
-                });
+                return $q.reject(result.error);
               }
             })
             .catch(function (error) {
               console.log(error);
               factory.purchase.checkoutError =
                 'Something went wrong, please retry or contact support@risevision.com';
-              return $q(function (res, rej) {
-                rej(error);
-              });
+              return $q.reject(error);
             });
         };
 
         factory.preparePaymentIntent = function () {
           var paymentMethods = factory.purchase.paymentMethods;
-          var deferred = $q.defer();
 
           if (paymentMethods.paymentMethod === 'invoice') {
-            deferred.resolve();
+            return $q.resolve();
           } else if (paymentMethods.paymentMethod === 'card') {
             var jsonData = _getOrderAsJson();
 
-            storeService.preparePurchase(jsonData)
+            factory.loading = true;
+
+            return storeService.preparePurchase(jsonData)
               .then(function (response) {
                 if (response.error) {
                   factory.purchase.checkoutError = response.error;
-                  deferred.reject(response.error);
+                  return $q.reject(response.error);
                 } else {
                   paymentMethods.intentResponse = response;
                   if (response.authenticationRequired) {
-                    deferred.resolve(factory.authenticate3ds(response.intentSecret));
+                    return factory.authenticate3ds(response.intentSecret);
                   } else {
-                    deferred.resolve();
+                    return $q.resolve();
                   }
                 }
               })
               .catch(function (error) {
                 factory.purchase.checkoutError = error.message || 'Something went wrong, please retry';
-                deferred.reject(error);
+                return $q.reject(error);
+              })
+              .finally(function() {
+                factory.loading = false;
               });
           }
-          return deferred.promise;
         };
 
         factory.validatePaymentMethod = function (element) {
           var paymentMethods = factory.purchase.paymentMethods;
-          var deferred = $q.defer();
 
           factory.purchase.checkoutError = null;
 
           if (paymentMethods.paymentMethod === 'invoice') {
             // TODO: Check Invoice credit (?)
-            deferred.resolve();
+            return $q.resolve();
           } else if (paymentMethods.paymentMethod === 'card') {
             if (!paymentMethods.selectedCard.isNew) {
-              deferred.resolve();
+              return $q.resolve();
             } else {
               var address = paymentMethods.newCreditCard && paymentMethods.newCreditCard.address;
               if (paymentMethods.newCreditCard && paymentMethods.newCreditCard.useBillingAddress) {
@@ -159,18 +148,22 @@
                 }
               };
 
-              stripeService.createPaymentMethod('card', element, details)
+              factory.loading = true;
+
+              return stripeService.createPaymentMethod('card', element, details)
                 .then(function (response) {
                   if (response.error) {
-                    deferred.reject(response.error);
+                    return $q.reject(response.error);
                   } else {
                     paymentMethods.paymentMethodResponse = response;
-                    deferred.resolve();
+                    return $q.resolve();
                   }
+                })
+                .finally(function() {
+                  factory.loading = false;
                 });
             }
           }
-          return deferred.promise;
         };
 
         var _getBillingPeriod = function () {
@@ -203,20 +196,17 @@
         };
 
         factory.getEstimate = function () {
-          factory.purchase.estimate = {
-            currency: _getCurrency()
-          };
-
           factory.loading = true;
 
           return storeService.calculateTaxes(factory.purchase.billingAddress.id, _getChargebeePlanId(),
               factory.purchase.plan.displays,
               _getChargebeeAddonId(),
-              factory.purchase.plan.additionalDisplayLicenses, factory.purchase.shippingAddress, factory.purchase
+              factory.purchase.plan.additionalDisplayLicenses, factory.purchase.billingAddress, factory.purchase
               .couponCode)
             .then(function (result) {
-              var estimate = factory.purchase.estimate;
+              var estimate = {};
 
+              estimate.currency = _getCurrency();
               estimate.taxesCalculated = true;
               estimate.taxes = result.taxes || [];
               estimate.total = result.total;
@@ -224,6 +214,8 @@
               estimate.couponAmount = result.couponAmount;
               estimate.totalTax = result.totalTax;
               estimate.shippingTotal = result.shippingTotal;
+
+              factory.purchase.estimate = estimate;
 
               purchaseFlowTracker.trackPlaceOrderClicked(_getTrackingProperties());
             })
@@ -256,7 +248,7 @@
 
           var obj = {
             billTo: addressService.copyAddress(factory.purchase.billingAddress),
-            shipTo: addressService.copyAddress(factory.purchase.shippingAddress),
+            shipTo: addressService.copyAddress(factory.purchase.billingAddress),
             couponCode: factory.purchase.couponCode,
             items: newItems,
             purchaseOrderNumber: paymentMethods.purchaseOrderNumber,

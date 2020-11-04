@@ -8,7 +8,7 @@ angular.module('risevision.common.components.scrolling-list')
         scope: {
           listObject: '='
         },
-        templateUrl: 'partials/common/batch-operations.html',
+        templateUrl: 'partials/components/scrolling-list/batch-operations.html',
         link: function ($scope) {
           var _filterByRole = function () {
             _.remove($scope.listObject.batchOperations.operations, function (operation) {
@@ -25,7 +25,7 @@ angular.module('risevision.common.components.scrolling-list')
               if (operation.isDelete) {
                 operation.beforeBatchAction = function () {
                   return $modal.open({
-                    templateUrl: 'partials/common/bulk-delete-confirmation-modal.html',
+                    templateUrl: 'partials/components/scrolling-list/bulk-delete-confirmation-modal.html',
                     controller: 'BulkDeleteModalCtrl',
                     windowClass: 'madero-style centered-modal',
                     size: 'sm',

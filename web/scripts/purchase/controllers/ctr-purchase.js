@@ -10,21 +10,17 @@ angular.module('risevision.apps.purchase')
     index: 1,
     formName: 'billingAddressForm'
   }, {
-    name: 'Shipping Address',
-    index: 2,
-    formName: 'shippingAddressForm'
-  }, {
     name: 'Payment Method',
-    index: 3,
+    index: 2,
     formName: 'paymentMethodsForm'
   }, {
     name: 'Purchase Review',
-    index: 4
+    index: 3
   }])
 
   .controller('PurchaseCtrl', ['$scope', '$state', '$loading', 'purchaseFactory', 'addressFactory', 
-  'plansFactory', 'PURCHASE_STEPS',
-    function ($scope, $state, $loading, purchaseFactory, addressFactory, plansFactory, PURCHASE_STEPS) {
+  'PURCHASE_STEPS',
+    function ($scope, $state, $loading, purchaseFactory, addressFactory, PURCHASE_STEPS) {
 
       $scope.form = {};
       $scope.factory = purchaseFactory;
@@ -35,9 +31,9 @@ angular.module('risevision.apps.purchase')
 
       $scope.$watch('factory.loading', function (loading) {
         if (loading) {
-          $loading.start('purchase-modal');
+          $loading.start('purchase-loader');
         } else {
-          $loading.stop('purchase-modal');
+          $loading.stop('purchase-loader');
         }
       });
 
@@ -49,7 +45,7 @@ angular.module('risevision.apps.purchase')
         return !form || form.$valid;
       };
 
-      $scope.validateAddress = function (addressObject, contactObject, isShipping) {
+      $scope.validateAddress = function (addressObject, contactObject) {
         if (!_isFormValid()) {
           return;
         }
@@ -62,34 +58,21 @@ angular.module('risevision.apps.purchase')
 
             if (!addressObject.validationError) {
               addressFactory.updateContact(contactObject);
-              addressFactory.updateAddress(addressObject, contactObject, isShipping);
+              addressFactory.updateAddress(addressObject, contactObject);
 
               $scope.setNextStep();
             }
           });
       };
 
-      $scope.validatePaymentMethod = function (element) {
+      $scope.completePayment = function (element) {
         if (!_isFormValid()) {
           return;
         }
 
-        purchaseFactory.loading = true;
-
         purchaseFactory.validatePaymentMethod(element)
-          .then($scope.preparePayment)
-          .then($scope.setNextStep)
-          .finally(function () {
-            purchaseFactory.loading = false;
-          });
-      };
-
-      $scope.preparePayment = function () {
-        return purchaseFactory.preparePaymentIntent();
-      };
-
-      $scope.completePayment = function () {
-        purchaseFactory.completePayment()
+          .then(purchaseFactory.preparePaymentIntent)
+          .then(purchaseFactory.completePayment)
           .then(function () {
             if (!purchaseFactory.purchase.checkoutError) {
               $scope.setNextStep();
@@ -102,12 +85,10 @@ angular.module('risevision.apps.purchase')
           return;
         }
 
-        if (($scope.finalStep && $scope.currentStep < 3) || $scope.currentStep === 3) {
-          $scope.currentStep = 4;
+        if (($scope.finalStep && $scope.currentStep < 2) || $scope.currentStep === 1) {
+          $scope.currentStep = 3;
 
           $scope.finalStep = true;
-
-          purchaseFactory.getEstimate();
         } else {
           $scope.currentStep++;
         }
@@ -118,7 +99,7 @@ angular.module('risevision.apps.purchase')
         if ($scope.currentStep > 0) {
           $scope.currentStep--;
         } else {
-          plansFactory.showPlansModal();
+          $state.go('apps.plans.home');
         }
       };
 
@@ -126,7 +107,7 @@ angular.module('risevision.apps.purchase')
         purchaseFactory.purchase.checkoutError = null;
 
         if (index === -1) {
-          plansFactory.showPlansModal();
+          $state.go('apps.plans.home');
         }
 
         $scope.currentStep = index;
@@ -146,10 +127,6 @@ angular.module('risevision.apps.purchase')
             }
           });
         }
-      };
-
-      $scope.dismiss = function () {
-        $state.go('apps.home');
       };
 
     }

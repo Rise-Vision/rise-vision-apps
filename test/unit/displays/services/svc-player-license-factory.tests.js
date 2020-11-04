@@ -44,7 +44,14 @@ describe('Services: playerLicenseFactory', function() {
       return confirmModal = sandbox.stub().returns(Q.resolve());
     });
     $provide.factory('enableCompanyProduct', function() {
-      return enableCompanyProduct = sandbox.stub().returns(Q.resolve());
+      return enableCompanyProduct = sandbox.stub().returns(Q.resolve({ 
+        item: {
+          displays: {
+            'displayId': true,
+            'displayId2': true
+          }
+        }
+      }));
     });
     $provide.factory('processErrorCode', function() {
       return sandbox.stub().returns('processedError');
@@ -378,6 +385,25 @@ describe('Services: playerLicenseFactory', function() {
         
         enableCompanyProduct.should.have.been.called;
         playerLicenseFactory.toggleDisplayLicenseLocal.should.have.been.calledWith(true, 2);
+
+        done();
+      });      
+    });
+
+    it('should handle partial success - displays assigned but not all licensed', function(done) {
+      enableCompanyProduct.returns(Q.resolve({ 
+        item: {
+          displays: {
+            'displayId': true,
+            'displayId2': false
+          }
+        }
+      }));
+
+      playerLicenseFactory.licenseDisplaysByCompanyId('companyId', ['displayId', 'displayId2']).catch(function() {
+        
+        enableCompanyProduct.should.have.been.called;
+        playerLicenseFactory.toggleDisplayLicenseLocal.should.have.been.calledWith(true, 1);
 
         done();
       });      

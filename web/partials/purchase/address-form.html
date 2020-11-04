@@ -1,17 +1,23 @@
 <div class="form-group" ng-if="hideCompanyName !== true" ng-class="{ 'has-error': isFieldInvalid('companyName') }">
-  <label for="address-form-companyName" class="control-label">Company Name *</label>
+  <label for="address-form-companyName" class="control-label">Company Name: *</label>
   <input id="address-form-companyName" name="companyName" type="text" class="form-control" ng-model="addressObject.name" autocomplete="organization" aria-required="true" tabindex="1" required>
+  <p class="text-danger" ng-show="isFieldInvalid('companyName')">
+    Choose a Company Name.
+  </p>
 </div>
 <div class="row">
   <div class="col-md-6">
     <div class="form-group" ng-class="{ 'has-error': isFieldInvalid('street') }">
-      <label for="address-form-streetAddress" class="control-label">Street Address *</label>
+      <label for="address-form-streetAddress" class="control-label">Street Address: *</label>
       <input id="address-form-streetAddress" name="street" type="text" class="form-control" ng-model="addressObject.street" autocomplete="address-line1" pattern=".{0,50}" aria-required="true" tabindex="1" required>
+      <p class="text-danger" ng-show="isFieldInvalid('street')">
+        Choose a Street Address.
+      </p>
     </div>
   </div>
   <div class="col-md-6">
     <div class="form-group">
-      <label for="address-form-unit" class="control-label">Unit</label>
+      <label for="address-form-unit" class="control-label">Unit:</label>
       <input id="address-form-unit" type="text" name="unit" class="form-control" ng-model="addressObject.unit" autocomplete="address-line2" aria-required="true" tabindex="1" pattern=".{0,100}">
     </div>
   </div>
@@ -19,44 +25,61 @@
 <div class="row">
   <div class="col-md-6">
     <div class="form-group" ng-class="{ 'has-error': isFieldInvalid('city') }">
-      <label for="address-form-city" class="control-label">City *</label>
+      <label for="address-form-city" class="control-label">City: *</label>
       <input id="address-form-city" name="city" type="text" class="form-control" ng-model="addressObject.city" autocomplete="address-level2" aria-required="true" tabindex="1" required>
+      <p class="text-danger" ng-show="isFieldInvalid('city')">
+        Choose a City.
+      </p>
     </div>
   </div>
   <div class="col-md-6">
     <div class="form-group" ng-class="{ 'has-error': isFieldInvalid('country') }">
-      <label for="address-form-country" class="control-label">Country *</label>
-      <select id="address-form-country" name="country" autocomplete="country" class="form-control"
-        ng-model="addressObject.country" ng-options="c.code as c.name for c in countries" empty-select-parser aria-required="true" tabindex="1" required>
-        <option ng-show="false" value="">&lt; Select Country &gt;</option>
+      <label for="address-form-country" class="control-label">Country: *</label>
+      <select id="address-form-country" name="country" autocomplete="country" class="form-control has-placeholder"
+        ng-model="addressObject.country" empty-select-parser aria-required="true" tabindex="1" required>
+        <option ng-show="false" value="">Choose your country ...</option>
+        <option ng-repeat="c in countries" value="{{c.code}}">{{c.name}}</option>
       </select>
+      <p class="text-danger" ng-show="isFieldInvalid('country')">
+        Choose a Country.
+      </p>
     </div>
   </div>
 </div>
 <div class="row">
   <div class="col-md-6">
     <div class="form-group" ng-class="{ 'has-error': isFieldInvalid('province') }">
-      <label class="control-label">State/Province/Region <span ng-hide="addressObject.country !== 'US' && addressObject.country !== 'CA'">*</span></label>
+      <label class="control-label">State/Province/Region: <span ng-hide="addressObject.country !== 'US' && addressObject.country !== 'CA'">*</span></label>
 
-      <label for="province" class="hidden">Enter Province or Region</label>
-      <input name="province" type="text" class="form-control" ng-model="addressObject.province" autocomplete="address-level1" ng-show="addressObject.country !== 'US' && addressObject.country !== 'CA'" province-validator="addressObject.country" tabindex="1">
+      <input name="province" type="text" class="form-control" ng-model="addressObject.province" autocomplete="address-level1" placeholder="Enter your state/province/region ..."
+        ng-show="addressObject.country !== 'US' && addressObject.country !== 'CA'" province-validator="addressObject.country" tabindex="1">
 
-      <label for="province-selector" class="hidden">Select Province (Canada)</label>
-      <select name="province-selector" class="form-control selectpicker" ng-model="addressObject.province" ng-options="c[1] as c[0] for c in regionsCA" autocomplete="address-level1" ng-show="addressObject.country === 'CA'" empty-select-parser tabindex="1">
-        <option ng-show="false" value="">&lt; Select Province &gt;</option>
+      <select name="province-selector" class="form-control has-placeholder" ng-model="addressObject.province" autocomplete="address-level1" ng-show="addressObject.country === 'CA'" empty-select-parser tabindex="1">
+        <option ng-show="false" value="">Choose your province ...</option>
+        <option ng-repeat="c in regionsCA" value="{{c[1]}}">{{c[0]}}</option>
       </select>
 
-      <label for="state-selector" class="hidden">Select State (United States)</label>
-      <select name="state-selector" class="form-control selectpicker" ng-model="addressObject.province" ng-options="c[1] as c[0] for c in regionsUS" autocomplete="address-level1" ng-show="addressObject.country === 'US'" empty-select-parser tabindex="1">
-        <option ng-show="false" value="">&lt; Select State &gt;</option>
+      <select name="state-selector" class="form-control has-placeholder" ng-model="addressObject.province" autocomplete="address-level1" ng-show="addressObject.country === 'US'" empty-select-parser tabindex="1">
+        <option ng-show="false" value="">Choose your state ...</option>
+        <option ng-repeat="c in regionsUS" value="{{c[1]}}">{{c[0]}}</option>
       </select>
+
+      <p class="text-danger" ng-show="isFieldInvalid('province') && addressObject.country === 'CA'">
+        Choose a Province.
+      </p>
+      <p class="text-danger" ng-show="isFieldInvalid('province') && addressObject.country === 'US'">
+        Choose a State.
+      </p>
 
     </div>
   </div>
   <div class="col-md-6">
     <div class="form-group" ng-class="{ 'has-error': isFieldInvalid('postalCode') }">
-      <label for="address-form-postalCode" class="control-label">ZIP/Postal Code *</label>
+      <label for="address-form-postalCode" class="control-label">ZIP/Postal Code: *</label>
       <input id="address-form-postalCode" name="postalCode" type="text" class="form-control" ng-model="addressObject.postalCode" autocomplete="postal-code" pattern=".{0,11}" aria-required="true" tabindex="1" required>
+      <p class="text-danger" ng-show="isFieldInvalid('postalCode')">
+        Choose a ZIP/Postal Code.
+      </p>
     </div>
   </div>
 </div>

@@ -19,15 +19,9 @@ describe("Services: purchase factory", function() {
     });
     $provide.service("userState", function() {
       return userState = {
-        getCopyOfUserCompany: sinon.stub().returns({
-          id: "id",
-          street: "billingStreet",
-          junkProperty: "junkValue"
-        }),
         getCopyOfSelectedCompany: sinon.stub().returns({
           id: "id",
-          street: "wrongStreet",
-          shipToStreet: "shippingStreet"
+          street: "billingStreet",
         }),
         getCopyOfProfile: sinon.stub().returns({
           username: "username",
@@ -155,16 +149,6 @@ describe("Services: purchase factory", function() {
         postalCode: undefined,
         province: undefined
       });
-      expect(purchaseFactory.purchase.shippingAddress).to.deep.equal({
-        id: "id",
-        name: undefined,
-        street: "shippingStreet",
-        unit: undefined,
-        city: undefined,
-        country: undefined,
-        postalCode: undefined,
-        province: undefined
-      });
       expect(purchaseFactory.purchase.contact).to.be.an("object");
       expect(purchaseFactory.purchase.contact).to.have.property("username");
       expect(purchaseFactory.purchase.contact).to.not.have.property("uselessProperty");
@@ -214,6 +198,7 @@ describe("Services: purchase factory", function() {
       expect($modal.open).to.have.been.calledWith({
         template: sinon.match.any,
         controller: "TaxExemptionModalCtrl",
+        windowClass: 'madero-style',
         size: "md",
         backdrop: "static"
       });
@@ -247,7 +232,6 @@ describe("Services: purchase factory", function() {
       .then(null, function() {
         done("error");
       });
-
     });
 
     describe("existing card: ", function() {
@@ -341,14 +325,16 @@ describe("Services: purchase factory", function() {
         assert.equal(stripeService.createPaymentMethod.getCall(0).args[2].billing_details.address.city, "test-billing-city");
       });
 
-      it("should resolve if token is received", function(done) {
-        purchaseFactory.validatePaymentMethod()
-        .then(function() {
+      it("should start and stop spinner", function(done) {
+        purchaseFactory.validatePaymentMethod();
+
+        expect(purchaseFactory.loading).to.be.true;
+
+        setTimeout(function() {
+          expect(purchaseFactory.loading).to.be.false;
+
           done();
-        })
-        .then(null,function() {
-          done("error");
-        });
+        }, 10);
       });
 
     });
@@ -363,7 +349,6 @@ describe("Services: purchase factory", function() {
         billingAddress: {
           id: "id"
         },
-        shippingAddress: "shippingAddress",
         plan: {
           displays: 5,
           isMonthly: true,
@@ -379,38 +364,24 @@ describe("Services: purchase factory", function() {
       };
     });
 
-    it("should initialize estimate object based on currency", function() {
-      purchaseFactory.getEstimate();
-
-      expect(purchaseFactory.purchase.estimate).to.be.ok;
-      expect(purchaseFactory.purchase.estimate).to.be.an("object");
-      expect(purchaseFactory.purchase.estimate.currency).to.equal("usd");
-
-      purchaseFactory.purchase.billingAddress.country = "CA";
-
-      purchaseFactory.getEstimate();
-
-      expect(purchaseFactory.purchase.estimate.currency).to.equal("cad");
-    });
-
     it("should call calculateTaxes api and return a promise", function() {
       expect(purchaseFactory.getEstimate().then).to.be.a("function");
 
       storeService.calculateTaxes.should.have.been.called;
-      storeService.calculateTaxes.should.have.been.calledWith("id", sinon.match.string, sinon.match.number, sinon.match.string, 3, "shippingAddress");
+      storeService.calculateTaxes.should.have.been.calledWith("id", sinon.match.string, sinon.match.number, sinon.match.string, 3, purchaseFactory.purchase.billingAddress);
     });
 
     it("should call set correct currency & billing period values", function() {
       purchaseFactory.getEstimate();
 
-      storeService.calculateTaxes.should.have.been.calledWith("id", "productCode-" + "usd" + "01m", 5, RPP_ADDON_ID + "-" + "usd" + "01m" + "pro", 3, "shippingAddress");
+      storeService.calculateTaxes.should.have.been.calledWith("id", "productCode-" + "usd" + "01m", 5, RPP_ADDON_ID + "-" + "usd" + "01m" + "pro", 3, purchaseFactory.purchase.billingAddress);
 
       purchaseFactory.purchase.billingAddress.country = "CA";
       purchaseFactory.purchase.plan.isMonthly = false;
 
       purchaseFactory.getEstimate();
 
-      storeService.calculateTaxes.should.have.been.calledWith("id", "productCode-" + "cad" + "01y", 5, RPP_ADDON_ID + "-" + "cad" + "01y" + "pro", 3, "shippingAddress");
+      storeService.calculateTaxes.should.have.been.calledWith("id", "productCode-" + "cad" + "01y", 5, RPP_ADDON_ID + "-" + "cad" + "01y" + "pro", 3, purchaseFactory.purchase.billingAddress);
     });
 
     it("should populate estimate object if call succeeds", function(done) {
@@ -449,12 +420,65 @@ describe("Services: purchase factory", function() {
       });
     });
 
+    it("should set estimate currency to CAD", function(done) {
+      purchaseFactory.purchase.billingAddress.country = "CA";
+
+      purchaseFactory.purchase.plan.name = "myPlan";
+      purchaseFactory.purchase.plan.displays = 3;
+      purchaseFactory.purchase.paymentMethods = {paymentMethod: "card"};
+
+      purchaseFactory.getEstimate()
+      .then(function() {
+        expect(purchaseFactory.purchase.estimate.currency).to.equal("cad");
+
+        done();
+      })
+      .then(null,function(e) {
+        console.error(e);
+        done("error");
+      });
+    });
+
     it("should show estimate error if call fails", function(done) {
+      purchaseFactory.purchase.estimate = {};
       validate = false;
 
       purchaseFactory.getEstimate()
       .then(function() {
         expect(purchaseFactory.purchase.estimate.estimateError).to.equal("An unexpected error has occurred. Please try again.");
+      
+        done();
+      })
+      .then(null,function() {
+        done("error");
+      });
+    });
+
+    it("should clear previous estimate on success", function(done) {
+      purchaseFactory.purchase.estimate = {
+        price: 'previousEstimate'
+      };
+
+      purchaseFactory.getEstimate()
+      .then(function() {
+        expect(purchaseFactory.purchase.estimate.price).to.not.be.ok;
+      
+        done();
+      })
+      .then(null,function() {
+        done("error");
+      });
+    });
+
+    it("should not clear previous estimate on error", function(done) {
+      purchaseFactory.purchase.estimate = {
+        price: 'previousEstimate'
+      };
+      validate = false;
+
+      purchaseFactory.getEstimate()
+      .then(function() {
+        expect(purchaseFactory.purchase.estimate.price).to.equal("previousEstimate");
       
         done();
       })
@@ -486,11 +510,6 @@ describe("Services: purchase factory", function() {
           id: "id",
           street: "billingStreet",
           country: "CA"
-        },
-        shippingAddress: {
-          id: "id",
-          street: "shippingStreet",
-          junkProperty: "junkValue"
         },
         plan: {
           name: "myPlan",
@@ -553,7 +572,8 @@ describe("Services: purchase factory", function() {
         },
         shipTo: {
           id: "id",
-          street: "shippingStreet"
+          street: "billingStreet",
+          country: "CA"
         },
         items: [{
           id: "productCode-cad01m",

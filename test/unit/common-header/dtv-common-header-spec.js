@@ -32,10 +32,8 @@ describe("directive: common header", function() {
     $modalStack = $injector.get("$modalStack");
     modalElements = [{
       addEventListener: sandbox.spy(),
-      querySelector: sandbox.spy(function() {
-        return modalContent = {
-          addEventListener: sandbox.spy()
-        };
+      querySelector: sandbox.stub().returns(modalContent = {
+        contains: sandbox.stub().returns(false)
       })
     }];
 
@@ -72,68 +70,76 @@ describe("directive: common header", function() {
 
       $modalStack.getTop.should.have.been.called;
       modalElements[0].addEventListener.should.have.been.calledWith("mousedown", sinon.match.func);
-      modalElements[0].querySelector.should.have.been.calledWith(".modal-content");
-
-      modalContent.addEventListener.should.have.been.called;
-      modalContent.addEventListener.should.have.been.calledWith("mousedown", sinon.match.func);
 
       expect(modalTop.value.backdrop).to.equal("static");
     });
-  });
 
-  it("should not attach events for static modals", function () {
-    modalTop.value.backdrop = "static";
-    initCommonHeader();
-
-    $modalStack.getTop.should.have.been.called;
-    modalElements[0].addEventListener.should.not.have.been.called;
-    modalElements[0].querySelector.should.not.have.been.called;
-
-    expect(modalTop.value.backdrop).to.equal("static");
-  });
-
-  describe("event handlers", function() {
-    beforeEach(function() {
+    it("should not attach events for static modals", function () {
+      modalTop.value.backdrop = "static";
       initCommonHeader();
+
+      $modalStack.getTop.should.have.been.called;
+      modalElements[0].addEventListener.should.not.have.been.called;
+
+      expect(modalTop.value.backdrop).to.equal("static");
     });
 
-    it("should close modal on click", function() {
-      var eventHandler = modalElements[0].addEventListener.getCall(0).args[1];
-      var event = {
-        which: 1
-      };
-      modalTop.key = {
-        dismiss: sandbox.stub()
-      };
+    describe("event handlers", function() {
+      beforeEach(function() {
+        initCommonHeader();
+      });
 
-      eventHandler(event);
+      it("should close modal on click", function() {
+        var eventHandler = modalElements[0].addEventListener.getCall(0).args[1];
+        var event = {
+          which: 1,
+          target: 'eventTarget'
+        };
+        modalTop.key = {
+          dismiss: sandbox.stub()
+        };
 
-      modalTop.key.dismiss.should.have.been.called;
-    });
+        eventHandler(event);
 
-    it("should ignore other events on the element", function() {
-      var eventHandler = modalElements[0].addEventListener.getCall(0).args[1];
-      var event = {
-        which: 2
-      };
-      modalTop.key = {
-        dismiss: sandbox.stub()
-      };
+        modalElements[0].querySelector.should.have.been.calledWith(".modal-content");
 
-      eventHandler(event);
+        modalContent.contains.should.have.been.calledWith('eventTarget');
 
-      modalTop.key.dismiss.should.not.have.been.called;
-    });
+        modalTop.key.dismiss.should.have.been.called;
+      });
 
-    it("should stop event propagation for modal-content", function() {
-      var eventHandler = modalContent.addEventListener.getCall(0).args[1];
-      var event = {
-        stopPropagation: sandbox.stub()
-      };
+      it("should ignore other events on the element", function() {
+        var eventHandler = modalElements[0].addEventListener.getCall(0).args[1];
+        var event = {
+          which: 2
+        };
+        modalTop.key = {
+          dismiss: sandbox.stub()
+        };
 
-      eventHandler(event);
+        eventHandler(event);
 
-      event.stopPropagation.should.have.been.called;
+        modalTop.key.dismiss.should.not.have.been.called;
+      });
+
+      it("should ignore events within .modal-content", function() {
+        var eventHandler = modalElements[0].addEventListener.getCall(0).args[1];
+        var event = {
+          which: 1
+        };
+        modalTop.key = {
+          dismiss: sandbox.stub()
+        };
+
+        modalContent.contains.returns(true);
+
+        eventHandler(event);
+
+        modalContent.contains.should.have.been.called;
+
+        modalTop.key.dismiss.should.not.have.been.called;
+      });
     });
   });
+
 });

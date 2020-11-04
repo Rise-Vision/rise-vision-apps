@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.common.components.scrolling-list')
-  .factory('BatchOperations', ['$q', '$timeout',
-    function ($q, $timeout) {
+  .factory('BatchOperations', ['$q', '$timeout', 'batchOperationsTracker',
+    function ($q, $timeout, batchOperationsTracker) {
       return function (operations) {
         if (!operations) {
           return {};
@@ -27,6 +27,8 @@ angular.module('risevision.common.components.scrolling-list')
           if (!items || !items.length || !method) {
             return $q.resolve();
           }
+
+          batchOperationsTracker('Batch Operation Started', operation, items);
 
           var cancelled = false;
           var deferred = $q.defer();
@@ -88,7 +90,16 @@ angular.module('risevision.common.components.scrolling-list')
 
           _loadBatch();
 
-          return deferred.promise;
+          return deferred.promise
+            .then(function() {
+              batchOperationsTracker('Batch Operation Succeeded', operation, items);
+            })
+            .catch(function(err) {
+              batchOperationsTracker('Batch Operation Failed', operation, items, {
+                failureReason: err || ''
+              });
+              return $q.reject(err);
+            });
         };
 
         return operations;

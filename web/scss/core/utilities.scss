@@ -189,6 +189,11 @@ All utilities have a prefix u_ added to them
   padding-bottom: 20px;
 }
 
+.u_padding-20-horizontal {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .u_padding-20-bottom {
   padding-bottom: 20px;
 }
@@ -338,6 +343,14 @@ All utilities have a prefix u_ added to them
 
 .u_cursor_disabled {
   cursor: default !important;
+}
+
+.u_uppercase {
+  text-transform: uppercase;
+}
+
+.u_capitalize {
+  text-transform: capitalize;
 }
 
 .u_highlighted {

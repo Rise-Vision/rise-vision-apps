@@ -3,19 +3,9 @@
 /*jshint -W030 */
 /*global sinon*/
 
-describe("controller: registration modal", function() {
-  beforeEach(module("risevision.common.header"));
-  beforeEach(module(function ($provide, $translateProvider) {
-    $provide.service("$modalInstance",function(){
-      return {
-        _closed: false,
-        close: function(reason) {
-          expect(reason).to.equal("success");          
-          this._closed = true;
-        }
-      };
-    });
-  
+describe("controller: registration", function() {
+  beforeEach(module("risevision.common.components.userstate"));
+  beforeEach(module(function ($provide) {
     $provide.service("userState", function(){
       return {
         getCopyOfProfile : function(){
@@ -105,9 +95,7 @@ describe("controller: registration modal", function() {
 
     $provide.factory("customLoader", function ($q) {
       return function () {
-        var deferred = $q.defer();
-        deferred.resolve({});
-        return deferred.promise;
+        return Q.resolve({});
       };
     });
 
@@ -121,10 +109,9 @@ describe("controller: registration modal", function() {
       };
     });
 
-    $translateProvider.useLoader("customLoader");
-        
+    $provide.value('COMPANY_INDUSTRY_FIELDS', []);
   }));
-  var $scope, userProfile, userState, $modalInstance, newUser;
+  var $scope, userProfile, userState, newUser;
   var registerUser, account, analyticsFactory, bqCalled,
     updateCompanyCalled, plansFactory, hubspot;
   
@@ -141,13 +128,11 @@ describe("controller: registration modal", function() {
     
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
-      $modalInstance = $injector.get("$modalInstance");
       analyticsFactory = $injector.get("analyticsFactory");
       userState = $injector.get("userState");
       hubspot = $injector.get('hubspot');
-      $controller("RegistrationModalCtrl", {
+      $controller("RegistrationCtrl", {
         $scope : $scope,
-        $modalInstance: $modalInstance,
         $cookies: $injector.get("$cookies"),
         userState : userState,
         updateCompany: $injector.get("updateCompany"),
@@ -217,7 +202,6 @@ describe("controller: registration modal", function() {
         expect(bqCalled).to.equal("User Registered");
         hubspot.loadAs.should.have.been.calledWith('e@mail.com');
         expect($scope.registering).to.be.false;
-        expect($modalInstance._closed).to.be.true;
 
         expect(profileSpy.called).to.be.true;
 
@@ -238,7 +222,6 @@ describe("controller: registration modal", function() {
         expect(bqCalled).to.not.be.ok;
         hubspot.loadAs.should.not.have.been.called;
         expect($scope.registering).to.be.false;
-        expect($modalInstance._closed).to.be.false;
 
         expect(profileSpy.called).to.be.true;
 
@@ -279,7 +262,6 @@ describe("controller: registration modal", function() {
         expect(bqCalled).to.equal("User Registered");
         hubspot.loadAs.should.have.been.calledWith('e@mail.com');
         expect($scope.registering).to.be.false;
-        expect($modalInstance._closed).to.be.true;
 
         expect(profileSpy.called).to.be.true;
 
@@ -299,7 +281,6 @@ describe("controller: registration modal", function() {
         expect(bqCalled).to.not.be.ok;
         hubspot.loadAs.should.not.have.been.called;
         expect($scope.registering).to.be.false;
-        expect($modalInstance._closed).to.be.false;
 
         expect(profileSpy.called).to.be.true;
 

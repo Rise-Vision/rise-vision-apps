@@ -4,9 +4,13 @@ describe("service: BatchOperations:", function() {
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
 
+    $provide.service("batchOperationsTracker", function() {
+      return sinon.stub();
+    });
+
   }));
 
-  var batchOperations, BatchOperations, method, items, $timeout;
+  var batchOperations, BatchOperations, method, items, $timeout, batchOperationsTracker;
   beforeEach(function(){
     items = [];
     for (var i = 1; i <= 8; i++) {
@@ -20,6 +24,7 @@ describe("service: BatchOperations:", function() {
     inject(function($injector){
       BatchOperations = $injector.get("BatchOperations");
       $timeout = $injector.get('$timeout');
+      batchOperationsTracker = $injector.get('batchOperationsTracker');
       batchOperations = new BatchOperations({});
 
       batchOperations.queueLimit = 3;
@@ -85,6 +90,7 @@ describe("service: BatchOperations:", function() {
       expect(batchOperations.progress).to.equal(0);
       expect(batchOperations.totalItemCount).to.equal(8);
       expect(batchOperations.completedItemCount).to.equal(0);
+      expect(batchOperationsTracker).to.have.been.calledWith('Batch Operation Started', 'operationName', items);
     });
 
     it('should call the action for the first batch of items', function() {
@@ -111,6 +117,7 @@ describe("service: BatchOperations:", function() {
         expect(batchOperations.progress).to.equal(38);
         expect(batchOperations.totalItemCount).to.equal(8);
         expect(batchOperations.completedItemCount).to.equal(3);
+        expect(batchOperationsTracker).to.have.been.calledWith('Batch Operation Started', 'operationName', items);
 
         done();
       }, 10);
@@ -141,6 +148,8 @@ describe("service: BatchOperations:", function() {
         expect(batchOperations.totalItemCount).to.equal(8);
         expect(batchOperations.completedItemCount).to.equal(8);
         expect(batchOperations.hasErrors).to.be.false;
+
+        expect(batchOperationsTracker).to.have.been.calledWith('Batch Operation Succeeded', 'operationName', items);
 
         done();
       });
@@ -192,6 +201,8 @@ describe("service: BatchOperations:", function() {
         expect(batchOperations.progress).to.equal(100);
         expect(batchOperations.totalItemCount).to.equal(8);
         expect(batchOperations.completedItemCount).to.equal(8);
+
+        expect(batchOperationsTracker).to.have.been.calledWith('Batch Operation Failed', 'operationName', items, {failureReason: ''});
         done();
       });
     });
@@ -205,10 +216,14 @@ describe("service: BatchOperations:", function() {
       method.onCall(2).returns(Q.resolve());
 
       batchOperations.batch(items, method, 'operationName');
+      
+      expect(batchOperationsTracker).to.have.been.calledWith('Batch Operation Started', 'operationName', items);
+
       batchOperations.cancel();
 
       setTimeout(function() {
         expect(method.callCount).to.equal(3);
+        expect(batchOperationsTracker).to.have.been.calledWith('Batch Operation Failed', 'operationName', items, {failureReason: 'cancelled'});
 
         done();
       }, 10);

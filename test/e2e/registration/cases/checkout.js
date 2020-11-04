@@ -8,7 +8,7 @@
   var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
   var HomePage = require('./../../common/pages/homepage.js');
   var SignInPage = require('./../../common/pages/signInPage.js');
-  var PurchaseFlowModalPage = require('./../pages/purchaseFlowModalPage.js');
+  var PurchaseFlowPage = require('./../pages/purchaseFlowPage.js');
   var PricingComponentModalPage = require('./../pages/pricingComponentModalPage.js');
   var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
 
@@ -18,7 +18,7 @@
       var commonHeaderPage, 
         homepage, 
         signInPage,
-        purchaseFlowModalPage,
+        purchaseFlowPage,
         pricingComponentModalPage,
         presentationListPage;
                 
@@ -26,7 +26,7 @@
         commonHeaderPage = new CommonHeaderPage();
         homepage = new HomePage();
         signInPage = new SignInPage();
-        purchaseFlowModalPage = new PurchaseFlowModalPage();
+        purchaseFlowPage = new PurchaseFlowPage();
         pricingComponentModalPage = new PricingComponentModalPage();
         presentationListPage = new PresentationListPage();
 
@@ -41,12 +41,12 @@
         });
 
         it("should show Subscribe button", function() {
-          expect(purchaseFlowModalPage.getPlanSubscribeLink().isDisplayed()).to.eventually.be.true;
+          expect(purchaseFlowPage.getPlanSubscribeLink().isDisplayed()).to.eventually.be.true;
         });
 
         it("should open plans modal", function() {
 
-          helper.clickWhenClickable(purchaseFlowModalPage.getPlanSubscribeLink(), 'Subscribe Button');
+          helper.clickWhenClickable(purchaseFlowPage.getPlanSubscribeLink(), 'Subscribe Button');
 
           helper.wait(pricingComponentModalPage.getSubscribeButton(), 'Pricing Component Modal');
 
@@ -58,66 +58,35 @@
           
           helper.waitDisappear(pricingComponentModalPage.getSubscribeButton(), 'Subscribe Button Disappear');
 
-          expect(purchaseFlowModalPage.getContinueButton().isDisplayed()).to.eventually.be.true;        
+          expect(purchaseFlowPage.getContinueButton().isDisplayed()).to.eventually.be.true;        
         });        
       });
 
       describe("billing address: ", function() {
         it("should show billing address form", function() {
           helper.waitForSpinner();
-          helper.wait(purchaseFlowModalPage.getBillingAddressPage(), 'Purchase flow Billing');
+          helper.wait(purchaseFlowPage.getBillingAddressPage(), 'Purchase flow Billing');
 
-          expect(purchaseFlowModalPage.getBillingAddressPage().isDisplayed()).to.eventually.be.true;
-          expect(purchaseFlowModalPage.getEmailField().isDisplayed()).to.eventually.be.true;
+          expect(purchaseFlowPage.getBillingAddressPage().isDisplayed()).to.eventually.be.true;
+          expect(purchaseFlowPage.getEmailField().isDisplayed()).to.eventually.be.true;
         });
 
         it("should fill out billing address", function() {
-          purchaseFlowModalPage.getStreet().clear();
-          purchaseFlowModalPage.getCity().clear();
-          purchaseFlowModalPage.getPC().clear();
-          purchaseFlowModalPage.getStreet().sendKeys('2967 Dundas St. W #632');
-          purchaseFlowModalPage.getCity().sendKeys('Toronto');
-          purchaseFlowModalPage.getCountry().sendKeys('Can');
-          purchaseFlowModalPage.getProv().sendKeys('O');
-          purchaseFlowModalPage.getPC().sendKeys('M6P 1Z2');
+          purchaseFlowPage.getStreet().clear();
+          purchaseFlowPage.getCity().clear();
+          purchaseFlowPage.getPC().clear();
+          purchaseFlowPage.getStreet().sendKeys('2967 Dundas St. W #632');
+          purchaseFlowPage.getCity().sendKeys('Toronto');
+          purchaseFlowPage.getCountry().sendKeys('Can');
+          purchaseFlowPage.getProv().sendKeys('O');
+          purchaseFlowPage.getPC().sendKeys('M6P 1Z2');
         });
 
         it("should submit billing address", function() {
           browser.sleep(1000);
-          helper.clickWhenClickable(purchaseFlowModalPage.getContinueButton(), 'Submit Billing Address');
+          helper.clickWhenClickable(purchaseFlowPage.getContinueButton(), 'Submit Billing Address');
           helper.waitForSpinner();
-          helper.waitDisappear(purchaseFlowModalPage.getBillingAddressPage(), 'Purchase flow Billing');
-        });
-        
-      });
-
-      describe("shipping address: ", function() {
-        it("should show shipping address form", function() {
-          helper.waitForSpinner();
-          helper.wait(purchaseFlowModalPage.getShippingAddressPage(), 'Purchase flow Shipping');
-
-          expect(purchaseFlowModalPage.getShippingAddressPage().isDisplayed()).to.eventually.be.true;
-          expect(purchaseFlowModalPage.getCompanyNameField().isDisplayed()).to.eventually.be.true;
-        });
-
-        it("should fill out shipping address", function() {
-          browser.sleep(1000);
-          purchaseFlowModalPage.getStreet().clear();
-          purchaseFlowModalPage.getCity().clear();
-          purchaseFlowModalPage.getPC().clear();
-          purchaseFlowModalPage.getCompanyNameField().sendKeys('same');
-          purchaseFlowModalPage.getStreet().sendKeys('2967 Dundas St. W #632');
-          purchaseFlowModalPage.getCity().sendKeys('Toronto');
-          purchaseFlowModalPage.getCountry().sendKeys('Can');
-          purchaseFlowModalPage.getProv().sendKeys('O');
-          purchaseFlowModalPage.getPC().sendKeys('M6P 1Z2');
-        });
-
-        it("should submit shipping address", function() {
-          browser.sleep(1000);
-          helper.clickWhenClickable(purchaseFlowModalPage.getContinueButton(), 'Submit Shipping Address');
-          helper.waitForSpinner();
-          helper.waitDisappear(purchaseFlowModalPage.getShippingAddressPage(), 'Purchase flow Shipping');
+          helper.waitDisappear(purchaseFlowPage.getBillingAddressPage(), 'Purchase flow Billing');
         });
         
       });
@@ -125,91 +94,82 @@
       describe("payment form: ", function() {
         it("should show payment form and default to credit card", function() {
           helper.waitForSpinner();
-          helper.wait(purchaseFlowModalPage.getPaymentMethodsPage(), 'Payment Methods Page');
+          helper.wait(purchaseFlowPage.getPaymentMethodsPage(), 'Payment Methods Page');
 
-          expect(purchaseFlowModalPage.getPaymentMethodsPage().isDisplayed()).to.eventually.be.true;
+          expect(purchaseFlowPage.getPaymentMethodsPage().isDisplayed()).to.eventually.be.true;
         });
 
         it("should show credit card form by default", function() {
-          expect(purchaseFlowModalPage.getNewCreditCardForm().isDisplayed()).to.eventually.be.true;
-          expect(purchaseFlowModalPage.getCardName().isDisplayed()).to.eventually.be.true;
+          expect(purchaseFlowPage.getNewCreditCardForm().isDisplayed()).to.eventually.be.true;
+          expect(purchaseFlowPage.getCardName().isDisplayed()).to.eventually.be.true;
 
-          expect(purchaseFlowModalPage.getPaymentMethodSelected().getText()).to.eventually.equal('Credit Card');
+          expect(purchaseFlowPage.getPaymentMethodSelected().getText()).to.eventually.contain('Credit Card');
         });
 
         it("should switch to invoice me form", function() {
-          purchaseFlowModalPage.getPaymentMethodInvoiceMe().click();
+          purchaseFlowPage.getPaymentMethodInvoiceMe().click();
 
-          expect(purchaseFlowModalPage.getPaymentMethodSelected().getText()).to.eventually.equal('Invoice Me');
+          expect(purchaseFlowPage.getPaymentMethodSelected().getText()).to.eventually.contain('Invoice Me');
 
-          expect(purchaseFlowModalPage.getGenerateInvoiceForm().isDisplayed()).to.eventually.be.true;
+          expect(purchaseFlowPage.getGenerateInvoiceForm().isDisplayed()).to.eventually.be.true;
 
           console.log('Purchase using Invoice Me');
         });
 
         xit("should purchase using credit card", function() {
-          purchaseFlowModalPage.getPaymentMethodCreditCard().click();
+          purchaseFlowPage.getPaymentMethodCreditCard().click();
 
-          expect(purchaseFlowModalPage.getPaymentMethodSelected().getText()).to.eventually.equal('Credit Card');
+          expect(purchaseFlowPage.getPaymentMethodSelected().getText()).to.eventually.equal('Credit Card');
 
-          expect(purchaseFlowModalPage.getNewCreditCardForm().isDisplayed()).to.eventually.be.true;
+          expect(purchaseFlowPage.getNewCreditCardForm().isDisplayed()).to.eventually.be.true;
 
           console.log('Purchase using Credit Card');
-          purchaseFlowModalPage.getCardName().sendKeys('AAA');
-          purchaseFlowModalPage.getCardNumber().sendKeys('4242424242424242');
-          purchaseFlowModalPage.getCardExpMon().sendKeys('0');
-          purchaseFlowModalPage.getCardExpYr().sendKeys('222');
-          purchaseFlowModalPage.getCardCVS().sendKeys('222');          
+          purchaseFlowPage.getCardName().sendKeys('AAA');
+          purchaseFlowPage.getCardNumber().sendKeys('4242424242424242');
+          purchaseFlowPage.getCardExpMon().sendKeys('0');
+          purchaseFlowPage.getCardExpYr().sendKeys('222');
+          purchaseFlowPage.getCardCVS().sendKeys('222');          
         });
 
-        it("should submit payment form", function() {
-          browser.sleep(1000);
-          helper.clickWhenClickable(purchaseFlowModalPage.getContinueButton(), 'Purchase flow Payment');
-          helper.waitForSpinner();
-          helper.waitDisappear(purchaseFlowModalPage.getPaymentMethodsPage(), 'Payment Methods Page');
-        });
       });
 
       describe("purchase: ", function() {
         it("should purchase",function() {
-          helper.waitForSpinner();
-          helper.wait(purchaseFlowModalPage.getReviewPurchasePage(), 'Review Purchase Page');
-
-          expect(purchaseFlowModalPage.getReviewPurchasePage().isDisplayed()).to.eventually.be.true;
+          expect(purchaseFlowPage.getReviewPurchasePage().isDisplayed()).to.eventually.be.true;
 
           // Wait for other responses to complete and update Chargebee address for the Company
           browser.sleep(10000);
 
-          expect(purchaseFlowModalPage.getPayButton().isDisplayed()).to.eventually.be.true;
+          expect(purchaseFlowPage.getPayButton().isDisplayed()).to.eventually.be.true;
 
-          helper.clickWhenClickable(purchaseFlowModalPage.getPayButton(), 'Purchase flow Pay Button');
+          helper.clickWhenClickable(purchaseFlowPage.getPayButton(), 'Purchase flow Pay Button');
 
           helper.waitForSpinner();
-          helper.waitDisappear(purchaseFlowModalPage.getReviewPurchasePage(), 'Review Purchase Page');
+          helper.waitDisappear(purchaseFlowPage.getReviewPurchasePage(), 'Review Purchase Page');
 
         });
 
         it("should show checkout success page", function() {
           helper.waitForSpinner();
-          helper.wait(purchaseFlowModalPage.getCheckoutSuccessPage(), 'Checkout Success Page');
+          helper.wait(purchaseFlowPage.getCheckoutSuccessPage(), 'Checkout Success Page');
 
-          expect(purchaseFlowModalPage.getCheckoutSuccessPage().isDisplayed()).to.eventually.be.true;
-          expect(purchaseFlowModalPage.getCheckoutDoneButton().isDisplayed()).to.eventually.be.true;
+          expect(purchaseFlowPage.getCheckoutSuccessPage().isDisplayed()).to.eventually.be.true;
+          expect(purchaseFlowPage.getCheckoutDoneButton().isDisplayed()).to.eventually.be.true;
 
-          helper.clickWhenClickable(purchaseFlowModalPage.getCheckoutDoneButton(), 'Checkout Done Button');
+          helper.clickWhenClickable(purchaseFlowPage.getCheckoutDoneButton(), 'Checkout Done Button');
           
           helper.waitForSpinner();
-          helper.waitDisappear(purchaseFlowModalPage.getCheckoutSuccessPage(), 'Checkout Success Page');
+          helper.waitDisappear(purchaseFlowPage.getCheckoutSuccessPage(), 'Checkout Success Page');
 
           console.log('Purchase complete');
         });
 
         it("should close purchase flow and hide plan bar", function() {
-          purchaseFlowModalPage.waitForPlanUpdate();
+          purchaseFlowPage.waitForPlanUpdate();
         });
 
         it("should no longer show the subscribe link", function() {
-          expect(purchaseFlowModalPage.getPlanSubscribeLink().isPresent()).to.eventually.be.false;
+          expect(purchaseFlowPage.getPlanSubscribeLink().isPresent()).to.eventually.be.false;
         });
 
       });

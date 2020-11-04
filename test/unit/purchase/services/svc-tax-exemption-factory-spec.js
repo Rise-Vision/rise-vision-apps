@@ -11,6 +11,11 @@ describe("Services: tax exemption factory", function() {
         uploadTaxExemptionCertificate: sinon.stub().returns(Q.resolve("url"))
       };
     });
+    $provide.service("userState", function() {
+      return {
+        getSelectedCompanyId: sinon.stub().returns('selectedCompany')
+      };
+    });
 
   }));
 
@@ -48,7 +53,7 @@ describe("Services: tax exemption factory", function() {
       taxExemptionFactory.submitCertificate().then(function () {
         expect(taxExemptionFactory.taxExemptionError).to.not.be.ok;
         expect(storeService.uploadTaxExemptionCertificate).to.have.been.called;
-        expect(storeService.addTaxExemption).to.have.been.called;
+        expect(storeService.addTaxExemption).to.have.been.calledWith('selectedCompany', taxExemptionFactory.taxExemption, 'url');
 
         done();
       });

@@ -1288,10 +1288,13 @@ $short-phone-height: 570px;
       color: inherit;
     }
     .form-control {
-      border-color: #d9534f;
+      border-color: $danger;
     }
     .overlay-icon {
-      fill: #d9534f;
+      fill: $danger;
+    }
+    p.text-danger {
+      margin-top: 5px;
     }
   }
 
