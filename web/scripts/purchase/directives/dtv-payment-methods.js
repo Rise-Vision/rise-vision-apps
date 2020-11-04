@@ -45,31 +45,27 @@ angular.module('risevision.apps.purchase')
 
           $scope.purchase = purchaseFactory.purchase;
 
-          $scope.$watch('paymentMethods.paymentMethod', function() {
-            if ($scope.paymentMethods.paymentMethod === 'card') {
-              stripeService.initializeStripeElements(stripeElements, elementOptions)
-                .then(function (elements) {
-                  elements.forEach(function (el, idx) {
-                    $scope[stripeElements[idx]] = el;
-                    el.mount(stripeElementSelectors[idx]);
+          stripeService.initializeStripeElements(stripeElements, elementOptions)
+            .then(function (elements) {
+              elements.forEach(function (el, idx) {
+                $scope[stripeElements[idx]] = el;
+                el.mount(stripeElementSelectors[idx]);
 
-                    el.on('blur', function() {
-                      $scope.$digest();
-                    });
-
-                    el.on('change', function(event) {
-                      var element = document.querySelector(stripeElementSelectors[idx]);
-
-                      if (element) {                        
-                        element.classList.add('dirty');
-                      }
-
-                      $scope.$digest();
-                    });
-                  });
+                el.on('blur', function() {
+                  $scope.$digest();
                 });
-            }
-          });
+
+                el.on('change', function(event) {
+                  var element = document.querySelector(stripeElementSelectors[idx]);
+
+                  if (element) {                        
+                    element.classList.add('dirty');
+                  }
+
+                  $scope.$digest();
+                });
+              });
+            });
 
           $scope.getCardDescription = function (card) {
             return '***-' + card.last4 + ', ' + card.cardType + (card.isDefault ? ' (default)' : '');

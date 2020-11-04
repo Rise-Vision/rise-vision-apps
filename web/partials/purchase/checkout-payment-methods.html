@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <div id="credit-card-form" ng-if="paymentMethods.paymentMethod === 'card'">
+      <div id="credit-card-form" ng-show="paymentMethods.paymentMethod === 'card'">
         <!-- Alpha Release - Select New Card by default -->
         <div class="row" ng-if="false">
           <div class="col-md-12">
@@ -33,7 +33,7 @@
         </div>
 
         <!-- NEW CREDIT CARD -->
-        <div id="new-credit-card-form" ng-if="paymentMethods.selectedCard.isNew">
+        <div id="new-credit-card-form" ng-show="paymentMethods.selectedCard.isNew">
           <div class="row">
             <div class="col-md-12">
               <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardholderName.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardholderName.$invalid }">
@@ -140,7 +140,7 @@
       </div>
 
       <!-- //GENERATE INVOICE FORM -->
-      <div id="generateInvoice" ng-if="paymentMethods.paymentMethod === 'invoice'">
+      <div id="generateInvoice" ng-show="paymentMethods.paymentMethod === 'invoice'">
         <p>Please enter a purchase order number if applicable. Your invoice will be sent to 
           <b>{{contactEmail}}</b> with net 30 day terms. Invoice is payable by check, wire transfer, or credit card.</p>
 
