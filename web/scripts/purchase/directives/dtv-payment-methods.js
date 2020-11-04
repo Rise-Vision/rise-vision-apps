@@ -44,7 +44,6 @@ angular.module('risevision.apps.purchase')
           $scope.contactEmail = purchaseFactory.purchase.contact.email;
 
           $scope.purchase = purchaseFactory.purchase;
-          $scope.showTaxExemptionModal = purchaseFactory.showTaxExemptionModal;
 
           $scope.$watch('paymentMethods.paymentMethod', function() {
             if ($scope.paymentMethods.paymentMethod === 'card') {

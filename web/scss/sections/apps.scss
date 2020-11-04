@@ -97,13 +97,12 @@
 	}
 
   .feature-sideways-panels {
+    @extend .stack-md-sideways-panels;
     @extend .mx-auto;
 
     max-width:736px;
     margin-left: 0px;
     margin-right: 0px;
-    display: flex;
-    flex-flow: column;
 
     >:first-child {
       @extend .mx-auto;
@@ -112,9 +111,6 @@
     }
 
     @media (min-width: $screen-md) {
-      display: flex;
-      flex-flow: row;
-
       >:first-child {
         @extend .mx-lg-0;
         @extend .mr-lg-5;

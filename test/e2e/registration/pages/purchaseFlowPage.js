@@ -36,7 +36,7 @@ var PurchaseFlowPage = function() {
   var cardExpYr = element(by.id('new-card-expiry-year'));
   var cardCVC = element(by.id('new-card-cvc'));
 
-  var reviewPurchasePage = element(by.id('checkout-review-purchase'));
+  var reviewPurchasePage = element(by.id('checkout-purchase-summary'));
   var payButton = element(by.id('payButton'));
 
   var checkoutSuccessPage = element(by.id('checkout-success'));

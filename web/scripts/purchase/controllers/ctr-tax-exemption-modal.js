@@ -9,10 +9,6 @@ angular.module('risevision.apps.purchase')
 
       taxExemptionFactory.init();
 
-      // $scope.countries = COUNTRIES;
-      // $scope.regionsCA = REGIONS_CA;
-      // $scope.regionsUS = REGIONS_US;
-
       $scope.$watch('factory.loading', function (loading) {
         if (loading) {
           $loading.start('tax-exemption-modal');
@@ -49,22 +45,6 @@ angular.module('risevision.apps.purchase')
           taxExemptionFactory.taxExemption.file = element.files[0];
         });
       };
-
-      $scope.clearFile = function () {
-        taxExemptionFactory.taxExemption.file = null;
-        document.querySelector('#inputExemption').value = '';
-      };
-
-      // $scope.openDatepicker = function ($event) {
-      //   $event.preventDefault();
-      //   $event.stopPropagation();
-      // 
-      //   $scope.datepicker = true;
-      // };
-
-      // $scope.countryFilter = function (country) {
-      //   return country.code === 'CA' || country.code === 'US';
-      // };
 
       $scope.isFieldInvalid = function (fieldName) {
         var form = $scope.form.taxExemptionForm;

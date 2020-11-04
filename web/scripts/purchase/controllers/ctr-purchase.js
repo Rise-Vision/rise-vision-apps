@@ -62,22 +62,14 @@ angular.module('risevision.apps.purchase')
           });
       };
 
-      $scope.validatePaymentMethod = function (element) {
+      $scope.completePayment = function (element) {
         if (!_isFormValid()) {
           return;
         }
 
         purchaseFactory.validatePaymentMethod(element)
-          .then($scope.preparePayment)
-          .then($scope.setNextStep);
-      };
-
-      $scope.preparePayment = function () {
-        return purchaseFactory.preparePaymentIntent();
-      };
-
-      $scope.completePayment = function () {
-        purchaseFactory.completePayment()
+          .then(purchaseFactory.preparePaymentIntent)
+          .then(purchaseFactory.completePayment)
           .then(function () {
             if (!purchaseFactory.purchase.checkoutError) {
               $scope.setNextStep();
@@ -94,8 +86,6 @@ angular.module('risevision.apps.purchase')
           $scope.currentStep = 2;
 
           $scope.finalStep = true;
-
-          purchaseFactory.getEstimate();
         } else {
           $scope.currentStep++;
         }

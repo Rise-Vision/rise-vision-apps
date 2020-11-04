@@ -1,14 +1,17 @@
 'use strict';
 
 angular.module('risevision.apps.purchase')
-  .directive('reviewPurchase', ['$templateCache', 'userState', 'purchaseFactory',
+  .directive('purchaseSummary', ['$templateCache', 'userState', 'purchaseFactory',
     function ($templateCache, userState, purchaseFactory) {
       return {
         restrict: 'E',
-        template: $templateCache.get('partials/purchase/checkout-review-purchase.html'),
+        template: $templateCache.get('partials/purchase/checkout-purchase-summary.html'),
         link: function ($scope) {
           $scope.purchase = purchaseFactory.purchase;
           $scope.selectedCompany = userState.getCopyOfSelectedCompany();
+          $scope.isSubcompanySelected = userState.isSubcompanySelected();
+
+          purchaseFactory.getEstimate();
 
           $scope.getAdditionalDisplaysPrice = function () {
             var plan = $scope.purchase.plan;
@@ -17,6 +20,17 @@ angular.module('risevision.apps.purchase')
             } else {
               return (plan.additionalDisplayLicenses * plan.yearly.priceDisplayYear);
             }
+          };
+
+          $scope.applyCouponCode = function () {
+            if ($scope.purchase.couponCode) {
+              purchaseFactory.getEstimate();
+            }
+          };
+
+          $scope.clearCouponCode = function () {
+            $scope.purchase.couponCode = null;
+            $scope.addCoupon = false;
           };
 
           $scope.showTaxExemptionModal = function () {

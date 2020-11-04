@@ -131,19 +131,10 @@
           purchaseFlowPage.getCardCVS().sendKeys('222');          
         });
 
-        it("should submit payment form", function() {
-          browser.sleep(1000);
-          helper.clickWhenClickable(purchaseFlowPage.getContinueButton(), 'Purchase flow Payment');
-          helper.waitForSpinner();
-          helper.waitDisappear(purchaseFlowPage.getPaymentMethodsPage(), 'Payment Methods Page');
-        });
       });
 
       describe("purchase: ", function() {
         it("should purchase",function() {
-          helper.waitForSpinner();
-          helper.wait(purchaseFlowPage.getReviewPurchasePage(), 'Review Purchase Page');
-
           expect(purchaseFlowPage.getReviewPurchasePage().isDisplayed()).to.eventually.be.true;
 
           // Wait for other responses to complete and update Chargebee address for the Company

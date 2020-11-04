@@ -1,6 +1,6 @@
 "use strict";
 
-describe("directive: review purchase", function() {
+describe("directive: purchase summary", function() {
   beforeEach(module("risevision.apps.purchase"));
 
   beforeEach(module(function ($provide) {
@@ -14,6 +14,9 @@ describe("directive: review purchase", function() {
     $provide.value("userState", {
       getCopyOfSelectedCompany: function() {
         return "selectedCompany";
+      },
+      isSubcompanySelected: function() {
+        return "isSelected";
       }
     });
   }));
@@ -21,10 +24,10 @@ describe("directive: review purchase", function() {
   var $scope, element, purchaseFactory;
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
-    $templateCache.put("partials/purchase/checkout-review-purchase.html", "<p>mock</p>");
+    $templateCache.put("partials/purchase/checkout-purchase-summary.html", "<p>mock</p>");
     $scope = $rootScope.$new();
 
-    element = $compile("<review-purchase></review-purchase>")($scope);
+    element = $compile("<purchase-summary></purchase-summary>")($scope);
   }));
 
   it("should replace the element with the appropriate content", function() {
@@ -34,6 +37,7 @@ describe("directive: review purchase", function() {
   it("should exist", function() {
     expect($scope.purchase).to.be.an("object");
     expect($scope.selectedCompany).to.equal("selectedCompany");
+    expect($scope.isSubcompanySelected).to.equal("isSelected");
 
     expect($scope.getAdditionalDisplaysPrice).to.be.a("function");
   });
@@ -76,7 +80,7 @@ describe("directive: review purchase", function() {
       $scope.showTaxExemptionModal();
 
       setTimeout(function() {
-        purchaseFactory.getEstimate.should.have.been.called;
+        purchaseFactory.getEstimate.should.have.been.calledTwice;
 
         done();        
       }, 10);
@@ -87,7 +91,7 @@ describe("directive: review purchase", function() {
       $scope.showTaxExemptionModal();
 
       setTimeout(function() {
-        purchaseFactory.getEstimate.should.not.have.been.called;
+        purchaseFactory.getEstimate.should.have.been.calledOnce;
 
         done();        
       }, 10);

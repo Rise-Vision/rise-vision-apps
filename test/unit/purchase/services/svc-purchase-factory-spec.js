@@ -198,6 +198,7 @@ describe("Services: purchase factory", function() {
       expect($modal.open).to.have.been.calledWith({
         template: sinon.match.any,
         controller: "TaxExemptionModalCtrl",
+        windowClass: 'madero-style',
         size: "md",
         backdrop: "static"
       });
@@ -363,20 +364,6 @@ describe("Services: purchase factory", function() {
       };
     });
 
-    it("should initialize estimate object based on currency", function() {
-      purchaseFactory.getEstimate();
-
-      expect(purchaseFactory.purchase.estimate).to.be.ok;
-      expect(purchaseFactory.purchase.estimate).to.be.an("object");
-      expect(purchaseFactory.purchase.estimate.currency).to.equal("usd");
-
-      purchaseFactory.purchase.billingAddress.country = "CA";
-
-      purchaseFactory.getEstimate();
-
-      expect(purchaseFactory.purchase.estimate.currency).to.equal("cad");
-    });
-
     it("should call calculateTaxes api and return a promise", function() {
       expect(purchaseFactory.getEstimate().then).to.be.a("function");
 
@@ -433,12 +420,65 @@ describe("Services: purchase factory", function() {
       });
     });
 
+    it("should set estimate currency to CAD", function(done) {
+      purchaseFactory.purchase.billingAddress.country = "CA";
+
+      purchaseFactory.purchase.plan.name = "myPlan";
+      purchaseFactory.purchase.plan.displays = 3;
+      purchaseFactory.purchase.paymentMethods = {paymentMethod: "card"};
+
+      purchaseFactory.getEstimate()
+      .then(function() {
+        expect(purchaseFactory.purchase.estimate.currency).to.equal("cad");
+
+        done();
+      })
+      .then(null,function(e) {
+        console.error(e);
+        done("error");
+      });
+    });
+
     it("should show estimate error if call fails", function(done) {
+      purchaseFactory.purchase.estimate = {};
       validate = false;
 
       purchaseFactory.getEstimate()
       .then(function() {
         expect(purchaseFactory.purchase.estimate.estimateError).to.equal("An unexpected error has occurred. Please try again.");
+      
+        done();
+      })
+      .then(null,function() {
+        done("error");
+      });
+    });
+
+    it("should clear previous estimate on success", function(done) {
+      purchaseFactory.purchase.estimate = {
+        price: 'previousEstimate'
+      };
+
+      purchaseFactory.getEstimate()
+      .then(function() {
+        expect(purchaseFactory.purchase.estimate.price).to.not.be.ok;
+      
+        done();
+      })
+      .then(null,function() {
+        done("error");
+      });
+    });
+
+    it("should not clear previous estimate on error", function(done) {
+      purchaseFactory.purchase.estimate = {
+        price: 'previousEstimate'
+      };
+      validate = false;
+
+      purchaseFactory.getEstimate()
+      .then(function() {
+        expect(purchaseFactory.purchase.estimate.price).to.equal("previousEstimate");
       
         done();
       })
