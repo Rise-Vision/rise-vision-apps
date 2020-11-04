@@ -2,8 +2,8 @@
 
   'use strict';
   angular.module('risevision.apps.purchase')
-    .factory('taxExemptionFactory', ['storeService',
-      function (storeService) {
+    .factory('taxExemptionFactory', ['storeService', 'userState',
+      function (storeService, userState) {
         var factory = {};
 
         // Stop spinner - workaround for spinner not rendering
@@ -19,7 +19,7 @@
 
           return storeService.uploadTaxExemptionCertificate(factory.taxExemption.file)
             .then(function (blobKey) {
-              return storeService.addTaxExemption(factory.taxExemption, blobKey);
+              return storeService.addTaxExemption(userState.getSelectedCompanyId(), factory.taxExemption, blobKey);
             }).catch(function (error) {
               factory.taxExemptionError = error.message ||
                 'An error ocurred while submitting your tax exemption. Please try again.';
