@@ -145,12 +145,13 @@
               });
             return deferred.promise;
           },
-          addTaxExemption: function (taxExemption, blobKey) {
+          addTaxExemption: function (companyId, taxExemption, blobKey) {
             var deferred = $q.defer();
             // var expiryDateString = $filter('date')(taxExemption.expiryDate, 'yyyy-MM-dd');
 
             storeAPILoader().then(function (storeAPI) {
               var obj = {
+                'companyId': companyId,
                 // 'country': taxExemption.country,
                 // 'state': taxExemption.province,
                 'blobKey': blobKey,

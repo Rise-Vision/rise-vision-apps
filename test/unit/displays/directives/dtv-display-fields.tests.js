@@ -180,7 +180,9 @@ describe('directive: display fields', function() {
 
     it('should activate Pro status', function (done) {
       playerLicenseFactory.isProAvailable.returns(true);
-      enableCompanyProduct.returns(Q.resolve());
+      var enableResp = {item:{displays:{}}};
+      enableResp.item.displays[displayId] = true;
+      enableCompanyProduct.returns(Q.resolve(enableResp));
 
       // The mocked value of playerProAuthorized AFTER ng-change
       displayFactory.display = {
@@ -205,7 +207,9 @@ describe('directive: display fields', function() {
 
     it('should deactivate Pro status', function (done) {
       playerLicenseFactory.isProAvailable.returns(true);
-      enableCompanyProduct.returns(Q.resolve());
+      var enableResp = {item:{displays:{}}};
+      enableResp.item.displays[displayId] = false;
+      enableCompanyProduct.returns(Q.resolve(enableResp));
 
       // The mocked value of playerProAuthorized AFTER ng-change
       displayFactory.display = {
@@ -232,7 +236,34 @@ describe('directive: display fields', function() {
       }, 0);
     });
 
-    it('should fail to activate Pro status', function (done) {
+    it('should fail and not update count if display was assigned but not licensed', function (done) {
+      playerLicenseFactory.isProAvailable.returns(true);
+      var enableResp = {item:{displays:{}}};
+      enableResp.item.displays[displayId] = false;
+      enableCompanyProduct.returns(Q.resolve(enableResp));
+
+      // The mocked value of playerProAuthorized AFTER ng-change
+      displayFactory.display = {
+        id: displayId,
+        playerProAssigned: false,
+        playerProAuthorized: true
+      };
+      company.playerProAvailableLicenseCount = 1;
+      $scope.toggleProAuthorized();
+
+      setTimeout(function () {
+        expect(enableCompanyProduct).to.have.been.called;
+
+        expect(displayFactory.display.playerProAssigned).to.be.false;
+        expect(displayFactory.display.playerProAuthorized).to.be.false;
+
+        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.not.have.been.called;
+        expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
+        done();        
+      }, 0);
+    });
+
+    it('should fail to activate Pro status on error', function (done) {
       playerLicenseFactory.isProAvailable.returns(true);
       enableCompanyProduct.returns(Q.reject('Licensing error'));
 

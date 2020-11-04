@@ -87,8 +87,21 @@ angular.module('risevision.displays.services')
         }
 
         return enableCompanyProduct(companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
-          .then(function () {
-            factory.toggleDisplayLicenseLocal(true, displayIds.length);
+          .then(function (resp) {
+            var resultDisplays = resp && resp.item && resp.item.displays;
+            var licensedCount = 0;
+            for (var i = 0; i < displayIds.length; i++) {
+              var displayId = displayIds[i];
+              if (resultDisplays && resultDisplays[displayId] === true) {
+                licensedCount++;
+              }
+            }
+
+            factory.toggleDisplayLicenseLocal(true, licensedCount);
+            
+            if (licensedCount !== displayIds.length) {
+              throw new Error('License could not be updated. Please try again.');
+            }
           });
       };
 
