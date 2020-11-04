@@ -9,6 +9,7 @@ angular.module('risevision.apps.purchase')
         link: function ($scope) {
           $scope.purchase = purchaseFactory.purchase;
           $scope.selectedCompany = userState.getCopyOfSelectedCompany();
+          $scope.isSubcompanySelected = userState.isSubcompanySelected();
 
           purchaseFactory.getEstimate();
 
@@ -25,6 +26,11 @@ angular.module('risevision.apps.purchase')
             if ($scope.purchase.couponCode) {
               purchaseFactory.getEstimate();
             }
+          };
+
+          $scope.clearCouponCode = function () {
+            $scope.purchase.couponCode = null;
+            $scope.addCoupon = false;
           };
 
           $scope.showTaxExemptionModal = function () {

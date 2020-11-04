@@ -51,7 +51,6 @@ describe("controller: tax exemption modal", function() {
 
     expect($scope.submit).to.be.a("function");
 
-    expect($scope.clearFile).to.be.a("function");
     expect($scope.selectFile).to.be.a("function");
     expect($scope.setFile).to.be.a("function");
 

@@ -3,21 +3,11 @@
   <h4 class="u_margin-md-bottom mt-0">Subscription Details</h4>
 
   <div id="errorBox" class="madero-style alert alert-danger u_margin-md-top" role="alert" ng-show="purchase.estimate.estimateError">
-    <div class="row">
-      <div class="col-xs-9">
-        <p>
-          <strong>Tax Estimate Error</strong> {{purchase.estimate.estimateError}}
-        </p>
-      </div>
-      <div class="col-xs-3">
-        <a class="btn btn-default btn-block" href="#" ng-click="factory.getEstimate()">
-          Retry
-        </a>
-      </div>
-    </div>
+    <strong>Tax Estimate Error</strong> {{purchase.estimate.estimateError}}
+    <a aria-label="Retry Estimate" class="madero-link u_clickable" ng-click="factory.getEstimate()">Retry</a>
   </div>
 
-  <p>
+  <p ng-show="isSubcompanySelected">
     <b>Purchasing for: {{selectedCompany.name}}</b><br>
     {{selectedCompany.id}}
   </p>
@@ -46,7 +36,7 @@
         <div class="form-group">
           <label for="coupon-code" class="control-label">Coupon Code:</label>
           <span class="pull-right">
-            <a aria-label="Cancel Coupon Code" class="madero-link u_clickable" ng-click="addCoupon = false" tabindex="1">Cancel</a>
+            <a aria-label="Cancel Coupon Code" class="madero-link u_clickable" ng-click="clearCouponCode()" tabindex="1">Cancel</a>
           </span>
           <div class="flex-row">
             <input id="coupon-code" aria-required="false" type="text" class="form-control mr-3" name="couponCode" ng-model="purchase.couponCode">
@@ -55,10 +45,6 @@
         </div>
       </div>
     </div>
-    <p class="mb-0" ng-show="purchase.estimate.couponAmount > 0">
-      <span class="font-weight-bold">Promotions and discounts:</span>
-      <span class="pull-right">-${{purchase.estimate.couponAmount}}</span>
-    </p>
   </div>
   <div ng-show="purchase.estimate.couponAmount > 0">
     <p class="mb-0">
@@ -84,12 +70,13 @@
     </p>    
   </div>
 
-  <div class="row">
-    <div class="col-xs-12 text-center u_margin-sm-bottom">
-      <a id="showTaxExemption" href="#" aria-label="Are you Tax Exempt?" ng-click="showTaxExemptionModal()" ng-show="purchase.estimate.totalTax > 0 && !purchase.taxExemptionSent" translate>Are you Tax Exempt?</a>
-      <h5 ng-show="purchase.taxExemptionSent">Tax Exemption Submitted</h5>
-    </div>
-  </div>
+  <p class="mb-4" ng-show="purchase.estimate.totalTax > 0">
+    &nbsp;
+    <span class="pull-right">
+      <a id="showTaxExemption" aria-label="Are you Tax Exempt?" class="madero-link u_clickable" ng-click="showTaxExemptionModal()" ng-show="!purchase.taxExemptionSent">Are you Tax Exempt?</a>
+      <span ng-show="purchase.taxExemptionSent">Tax Exemption Submitted</span>
+    </span>
+  </p>
 
   <div id="errorBox" class="madero-style alert alert-danger u_margin-md-top" role="alert" ng-show="purchase.checkoutError">
     <strong>Payment Error</strong> {{purchase.checkoutError}}

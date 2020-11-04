@@ -59,6 +59,7 @@
           var modalInstance = $modal.open({
             template: $templateCache.get('partials/purchase/tax-exemption.html'),
             controller: 'TaxExemptionModalCtrl',
+            windowClass: 'madero-style',
             size: 'md',
             backdrop: 'static'
           });
@@ -73,27 +74,22 @@
             .then(function (result) {
               if (result.error) {
                 factory.purchase.checkoutError = result.error;
-                return $q(function (res, rej) {
-                  rej(result.error);
-                });
+                return $q.reject(result.error);
               }
             })
             .catch(function (error) {
               console.log(error);
               factory.purchase.checkoutError =
                 'Something went wrong, please retry or contact support@risevision.com';
-              return $q(function (res, rej) {
-                rej(error);
-              });
+              return $q.reject(error);
             });
         };
 
         factory.preparePaymentIntent = function () {
           var paymentMethods = factory.purchase.paymentMethods;
-          var deferred = $q.defer();
 
           if (paymentMethods.paymentMethod === 'invoice') {
-            deferred.resolve();
+            return $q.resolve();
           } else if (paymentMethods.paymentMethod === 'card') {
             var jsonData = _getOrderAsJson();
 
@@ -103,39 +99,37 @@
               .then(function (response) {
                 if (response.error) {
                   factory.purchase.checkoutError = response.error;
-                  deferred.reject(response.error);
+                  return $q.reject(response.error);
                 } else {
                   paymentMethods.intentResponse = response;
                   if (response.authenticationRequired) {
-                    deferred.resolve(factory.authenticate3ds(response.intentSecret));
+                    return $q.resolve(factory.authenticate3ds(response.intentSecret));
                   } else {
-                    deferred.resolve();
+                    return $q.resolve();
                   }
                 }
               })
               .catch(function (error) {
                 factory.purchase.checkoutError = error.message || 'Something went wrong, please retry';
-                deferred.reject(error);
+                return $q.reject(error);
               })
               .finally(function() {
                 factory.loading = false;
               });
           }
-          return deferred.promise;
         };
 
         factory.validatePaymentMethod = function (element) {
           var paymentMethods = factory.purchase.paymentMethods;
-          var deferred = $q.defer();
 
           factory.purchase.checkoutError = null;
 
           if (paymentMethods.paymentMethod === 'invoice') {
             // TODO: Check Invoice credit (?)
-            deferred.resolve();
+            return $q.resolve();
           } else if (paymentMethods.paymentMethod === 'card') {
             if (!paymentMethods.selectedCard.isNew) {
-              deferred.resolve();
+              return $q.resolve();
             } else {
               var address = paymentMethods.newCreditCard && paymentMethods.newCreditCard.address;
               if (paymentMethods.newCreditCard && paymentMethods.newCreditCard.useBillingAddress) {
@@ -156,13 +150,13 @@
 
               factory.loading = true;
 
-              stripeService.createPaymentMethod('card', element, details)
+              return stripeService.createPaymentMethod('card', element, details)
                 .then(function (response) {
                   if (response.error) {
-                    deferred.reject(response.error);
+                    return $q.reject(response.error);
                   } else {
                     paymentMethods.paymentMethodResponse = response;
-                    deferred.resolve();
+                    return $q.resolve();
                   }
                 })
                 .finally(function() {
@@ -170,7 +164,6 @@
                 });
             }
           }
-          return deferred.promise;
         };
 
         var _getBillingPeriod = function () {
@@ -203,10 +196,6 @@
         };
 
         factory.getEstimate = function () {
-          factory.purchase.estimate = {
-            currency: _getCurrency()
-          };
-
           factory.loading = true;
 
           return storeService.calculateTaxes(factory.purchase.billingAddress.id, _getChargebeePlanId(),
@@ -215,8 +204,9 @@
               factory.purchase.plan.additionalDisplayLicenses, factory.purchase.billingAddress, factory.purchase
               .couponCode)
             .then(function (result) {
-              var estimate = factory.purchase.estimate;
+              var estimate = {};
 
+              estimate.currency = _getCurrency();
               estimate.taxesCalculated = true;
               estimate.taxes = result.taxes || [];
               estimate.total = result.total;
@@ -224,6 +214,8 @@
               estimate.couponAmount = result.couponAmount;
               estimate.totalTax = result.totalTax;
               estimate.shippingTotal = result.shippingTotal;
+
+              factory.purchase.estimate = estimate;
 
               purchaseFlowTracker.trackPlaceOrderClicked(_getTrackingProperties());
             })
