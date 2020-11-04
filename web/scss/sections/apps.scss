@@ -134,8 +134,10 @@
     & > .panel-body {
       padding: 30px;
     }
-  }
+  }  
+}
 
+.brandscript-clients {
   ul.features-checklist > li {
     @extend .flex-row;
 

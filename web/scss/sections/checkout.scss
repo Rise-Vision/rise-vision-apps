@@ -1,3 +1,39 @@
+.checkout-plan-picker {
+
+  .display-count-input {
+    @extend .form-control;
+    
+    width: 75px;    
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    display: inline;
+  }
+
+  .education-discount {
+    .madero-checkbox {
+      display: inline-block;
+    }
+  }
+
+  .pricing-calculator {
+    .number {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .checkmark {
+      svg {
+        fill: $madero-green;
+        margin-top: 5px;
+        height: 19px;
+        width: 23px;
+      }
+    }
+  }
+
+}
+
 .subscription-summary {
   display: flex;
   flex-direction: row;
