@@ -33,6 +33,7 @@ rv-spinner-start-active="1">
           type="email" required name="username"
           class="form-control"
           ng-model="user.username"
+          email-validator
           />
           <p ng-show="forms.userSettingsForm.username.$invalid && (!forms.userSettingsForm.username.$pristine || forms.userSettingsForm.$submitted)"
             class="help-block validation-error-message-email">User name must be a valid email address.</p>
@@ -132,6 +133,7 @@ rv-spinner-start-active="1">
           type="email" required name="email"
           class="form-control"
           ng-model="user.email"
+          email-validator
           />
           <p ng-show="forms.userSettingsForm.email.$invalid && (!forms.userSettingsForm.email.$pristine || forms.userSettingsForm.$submitted)"
             class="help-block validation-error-message-email">A valid email address is required.</p>

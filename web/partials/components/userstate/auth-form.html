@@ -67,7 +67,7 @@
 
     <div class="form-group" ng-class="{'has-error': (forms.loginForm.$submitted && forms.loginForm.username.$invalid)}" show-errors>
       <label class="control-label">Work Email:</label>
-      <input type="email" class="form-control" placeholder="example@email.com" id="username" name="username" ng-model="credentials.username" required focus-me="true" autocomplete="email">
+      <input type="email" class="form-control" placeholder="example@email.com" id="username" name="username" ng-model="credentials.username" required focus-me="true" autocomplete="email" email-validator>
       <p class="text-danger" ng-show="forms.loginForm.$submitted && forms.loginForm.username.$invalid">
         Please enter an Email
       </p>

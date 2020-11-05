@@ -4,15 +4,15 @@
   </p>
 
   <ng-form id="emailForm" role="form" name="emailForm" novalidate>
-    <div class="form-group" ng-class="{'has-error': !emailForm.email.$pristine && emailInvalid}" show-errors>
+    <div class="form-group" ng-class="{'has-error': !emailForm.email.$pristine && emailForm.email.$invalid}" show-errors>
       <div class="sideways-panels">
-        <input type="text" class="form-control w-75 mr-3" placeholder="example@email.com"
-          id="email" name="email" ng-model="email">
+        <input type="email" class="form-control w-75 mr-3" placeholder="example@email.com"
+          id="email" name="email" ng-model="email" email-validator>
 
-        <button class="btn btn-default w-25" type="button" ng-click="sendEmail()" ng-disabled="emailInvalid || displayEmail.sendingEmail" translate="common.send"></button>
+        <button class="btn btn-default w-25" type="button" ng-click="sendEmail()" ng-disabled="emailForm.email.$invalid || displayEmail.sendingEmail" translate="common.send"></button>
       </div>
 
-      <p class="text-danger text-left" ng-show="!emailForm.email.$pristine && emailInvalid" translate>
+      <p class="text-danger text-left" ng-show="!emailForm.email.$pristine && emailForm.email.$invalid" translate>
         Please enter a valid email address.
       </p>
 
