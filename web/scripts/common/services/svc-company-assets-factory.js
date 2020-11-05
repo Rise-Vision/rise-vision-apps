@@ -112,7 +112,7 @@ angular.module('risevision.apps.services')
         activeDisplayCompleted = false;
 
         displays.forEach(function (display) {
-          if (display.playerVersion || display.lastConnectionTime ||
+          if (display.playerVersion || display.lastActivityDate ||
             display.onlineStatus === 'online') {
             activeDisplayCompleted = true;
           }

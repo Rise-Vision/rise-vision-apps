@@ -17,11 +17,6 @@
     {{displays.apiError}}
   </div> 
 
-  <div id="errorBox" ng-show="displayStatusFactory.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
-    <p><strong>{{displayStatusFactory.errorMessage}}</strong></p>
-    {{displayStatusFactory.apiError}}
-  </div> 
-
   <div ng-if="!(!displays.loadingItems && displays.items.list.length === 0 && search.query === undefined)">
     <div class="flex-row button-toolbar-md-folded">
       <search-filter class="w-100" filter-config="filterConfig" search="search" do-search="displays.doSearch" icon-set="madero"></search-filter>

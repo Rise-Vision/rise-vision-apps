@@ -65,7 +65,7 @@ describe('service: display activation tracker', function() {
     });
 
     displayActivationTracker([{
-      lastConnectionTime: new Date('2020-08-21T15:19:02.716Z')
+      lastActivityDate: new Date('2020-08-21T15:19:02.716Z')
     }]);
 
     userState.isSubcompanySelected.should.have.been.called;
@@ -76,7 +76,7 @@ describe('service: display activation tracker', function() {
   });
 
   describe('displays list:', function() {
-    it('should not track if lastConnectionTime is not available',function(){
+    it('should not track if lastActivityDate is not available',function(){
       displayActivationTracker([{
         id: 'displayId1',
         name: 'displayName1'
@@ -92,19 +92,19 @@ describe('service: display activation tracker', function() {
       displayTracker.should.not.have.been.called;
     });
 
-    it('should track earliest lastConnectionTime',function(){
+    it('should track earliest lastActivityDate',function(){
       displayActivationTracker([{
         id: 'displayId1',
         name: 'displayName1',
-        lastConnectionTime: new Date('2019-08-21T15:19:02.716Z')
+        lastActivityDate: new Date('2019-08-21T15:19:02.716Z')
       },{
         id: 'displayId2',
         name: 'displayName2',
-        lastConnectionTime: new Date('2020-08-21T15:19:02.716Z')
+        lastActivityDate: new Date('2020-08-21T15:19:02.716Z')
       },{
         id: 'displayId3',
         name: 'displayName3',
-        lastConnectionTime: new Date('2017-08-21T15:19:02.716Z')
+        lastActivityDate: new Date('2017-08-21T15:19:02.716Z')
       }]);
 
       analyticsFactory.identify.should.have.been.calledWith('username', {
@@ -121,7 +121,7 @@ describe('service: display activation tracker', function() {
     displayActivationTracker([{
       id: 'displayId',
       name: 'displayName',
-      lastConnectionTime: new Date('2020-08-21T15:19:02.716Z')
+      lastActivityDate: new Date('2020-08-21T15:19:02.716Z')
     }]);
 
     analyticsFactory.identify.should.have.been.calledWith('username', {
@@ -137,7 +137,7 @@ describe('service: display activation tracker', function() {
     displayActivationTracker([{
       id: 'displayId',
       name: 'displayName',
-      lastConnectionTime: new Date('2020-08-21T15:19:02.716Z')
+      lastActivityDate: new Date('2020-08-21T15:19:02.716Z')
     }]);
 
     setTimeout(function() {

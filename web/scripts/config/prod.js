@@ -34,8 +34,6 @@
       'https://storage-dot-rvaserver2.appspot.com/_ah/api')
     .value('MESSAGING_PRIMUS_URL',
       'https://services.risevision.com/messaging/primus?displayId=apps&machineId=1')
-    .value('MESSAGING_PRESENCE_URL',
-      'https://services.risevision.com/messaging/presence')
     .value('APPS_URL', '')
     .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services.risevision.com/oauthtokenprovider/')
     .value('TWITTER_SERVICE_URL',

@@ -6,29 +6,6 @@ describe('service: display:', function() {
   beforeEach(module('risevision.displays.services'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
-    $provide.factory('displayStatusFactory', function($q) {
-      return {
-        getDisplayStatus: function(ids) {
-          var deferred = $q.defer();
-
-          $timeout(function() {
-            var statuses = ids.map(function(id) {
-              var o = {};
-
-              if(id !== 'display1') {
-                o[id] = true;
-                o.lastConnectionTime = CONNECTION_TIME;
-              }
-
-              return o;
-            });
-            deferred.resolve(statuses);
-          });
-
-          return deferred.promise;
-        }
-      }
-    });
     $provide.factory('screenshotRequester', function($q) {
       return function(ids) {
         return screenshotRequesterMock($q);
@@ -275,17 +252,16 @@ describe('service: display:', function() {
       };
     });
   }));
-  var display, returnResult, searchString, sortString, $timeout, $rootScope, displayActivationTracker;
+  var display, returnResult, searchString, sortString, $rootScope, displayActivationTracker;
   beforeEach(function(){
     returnResult = true;
     searchString = '';
     sortString='';
 
-    inject(function($injector, _$timeout_){
+    inject(function($injector){
       display = $injector.get('display');
       displayActivationTracker = $injector.get('displayActivationTracker');
       $rootScope = $injector.get('$rootScope');
-      $timeout = _$timeout_;
     });
   });
 
@@ -387,17 +363,15 @@ describe('service: display:', function() {
         item = result.item;
         expect(result.item).to.be.ok;
         expect(result.item).to.have.property("name");
-        $timeout.flush();
-        setTimeout(function() {
-          expect(item.onlineStatus).to.equal('online');
-          expect(item.lastConnectionTime.getTime()).to.not.equal(CONNECTION_TIME);
 
-          broadcastSpy.should.have.been.calledWith('displaysLoaded', [item]);
+        expect(item.onlineStatus).to.equal('online');
+        expect(item.lastActivityDate.getTime()).to.not.equal(CONNECTION_TIME);
 
-          displayActivationTracker.should.have.been.calledWith([item]);
+        broadcastSpy.should.have.been.calledWith('displaysLoaded', [item]);
 
-          done();
-        });
+        displayActivationTracker.should.have.been.calledWith([item]);
+
+        done();
       })
       .then(null,done);
     });

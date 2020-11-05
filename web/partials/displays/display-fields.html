@@ -124,7 +124,7 @@
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.lastConnection</label>
           <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
           <span class="mr-auto" ng-if="!factory.showLicenseRequired()">
-            {{factory.display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}
+            {{factory.display.lastActivityDate | date:'d-MMM-yyyy h:mm a'}}
           </span>
         </div>
       </div>
