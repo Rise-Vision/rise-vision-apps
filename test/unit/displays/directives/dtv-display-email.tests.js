@@ -78,30 +78,9 @@ describe('directive: display email', function() {
     });
   });
 
-  describe('validation:', function() {
-    it('empty email is invalid', function() {
-      $scope.email = '';
-      $scope.$digest();
-      expect($scope.emailInvalid).to.be.true;
-    });
-
-    it('test for invalid emails', function() {
-      $scope.email = 'invalid';
-      $scope.$digest();
-      expect($scope.emailInvalid).to.be.true;
-    });
-
-    it('test for valid emails', function() {
-      $scope.email = 'example@email.com';
-      $scope.$digest();
-      expect($scope.emailInvalid).to.be.false;
-    });
-
-  });
-
   describe('sendEmail:',function(){
     it('should not send if email is invalid',function(){
-      $scope.emailInvalid = true;
+      $scope.emailForm.$invalid = true;
 
       $scope.sendEmail();
 
@@ -110,7 +89,6 @@ describe('directive: display email', function() {
 
     it('should send instructions to another email address',function(done){
       $scope.email = 'another@email.com';
-      $scope.emailInvalid = false;
 
       $scope.sendEmail();
 

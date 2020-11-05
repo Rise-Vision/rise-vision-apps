@@ -27,7 +27,7 @@
       <div class="col-md-6">
         <div class="form-group" ng-class="{ 'has-error': (form.billingAddressForm.email.$dirty || form.billingAddressForm.$submitted) && form.billingAddressForm.email.$invalid }">
           <label for="contact-email" class="control-label">Billing Email: *</label>
-          <input id="contact-email" type="email" class="form-control" name="email" ng-model="contact.email" autocomplete="email" aria-required="true" tabindex="1" required>
+          <input id="contact-email" type="email" class="form-control" name="email" ng-model="contact.email" autocomplete="email" aria-required="true" tabindex="1" required email-validator>
           <p class="text-danger" ng-show="(form.billingAddressForm.email.$dirty || form.billingAddressForm.$submitted) && form.billingAddressForm.email.$invalid">
             Choose a Billing Email.
           </p>
