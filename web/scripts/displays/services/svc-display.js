@@ -17,10 +17,10 @@
       'postalCode'
     ])
     .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
-      'userState', 'displayStatusFactory', 'screenshotRequester', 'pick', 'displayActivationTracker',
+      'userState', 'screenshotRequester', 'pick', 'displayActivationTracker',
       'DISPLAY_WRITABLE_FIELDS', 'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
       function ($rootScope, $q, $log, coreAPILoader, userState,
-        displayStatusFactory, screenshotRequester, pick, displayActivationTracker,
+        screenshotRequester, pick, displayActivationTracker,
         DISPLAY_WRITABLE_FIELDS, DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
 
         var companiesStatus = {};
@@ -34,32 +34,6 @@
           query = query.substring(3);
 
           return query.trim();
-        };
-
-        var _mergeConnectionStatuses = function (items, statuses) {
-          items.forEach(function (item) {
-            item.lastConnectionTime = item.lastActivityDate;
-          });
-
-          statuses.forEach(function (s) {
-            for (var i = 0; i < items.length; i++) {
-              var item = items[i];
-
-              if (s[item.id] !== undefined) {
-                _mergeConnectionStatus(item, s);
-                break;
-              }
-            }
-          });
-        };
-
-        var _mergeConnectionStatus = function (item, lookup) {
-          if (lookup[item.id] === true) {
-            item.onlineStatus = 'online';
-          }
-
-          item.lastConnectionTime = !isNaN(lookup.lastConnectionTime) ? new Date(
-            lookup.lastConnectionTime) : (item.lastActivityDate || '');
         };
 
         var service = {
@@ -85,9 +59,8 @@
               .then(function(resp) {
                 var result = resp.result;
 
-                //backwards compatibility with lastConnectionTime field
                 angular.forEach(result.items, function (item) {
-                  item.lastConnectionTime = item.onlineStatus === true ? Date.now() : (item.lastActivityDate ? new Date(item.lastActivityDate) : '');
+                  item.lastActivityDate = item.onlineStatus === true ? Date.now() : (item.lastActivityDate ? new Date(item.lastActivityDate) : '');
                 });
 
                 $rootScope.$broadcast('displaysLoaded', result.items);
@@ -114,22 +87,16 @@
               })
               .then(function (resp) {
                 $log.debug('get display resp', resp);
-                deferred.resolve(resp.result);
 
                 var item = resp.result.item;
                 if (item) {
-                  service.statusLoading = true;
+                  item.lastActivityDate = item.onlineStatus === true ? Date.now() : (item.lastActivityDate ? new Date(item.lastActivityDate) : '');
 
-                  displayStatusFactory.getDisplayStatus([item.id]).then(function (statuses) {
-                    _mergeConnectionStatus(item, statuses[0]);
-
-                    $rootScope.$broadcast('displaysLoaded', [item]);
-                  }).finally(function () {
-                    displayActivationTracker([item]);
-
-                    service.statusLoading = false;
-                  });
+                  $rootScope.$broadcast('displaysLoaded', [item]);
+                  displayActivationTracker([item]);
                 }
+
+                deferred.resolve(resp.result);
               })
               .then(null, function (e) {
                 console.error('Failed to get display.', e);
