@@ -224,8 +224,8 @@ angular.module('risevision.apps.purchase')
           },
 
           post: function ($scope) {
-            $scope.displayCount = 5;
-            $scope.periodMonthly = false;
+            $scope.displayCount = purchaseFactory.purchase.plan.displays;
+            $scope.periodMonthly = purchaseFactory.purchase.plan.isMonthly;
             $scope.applyEducationDiscount = userState.isEducationCustomer();
 
             $scope.$watchGroup(['displayCount', 'periodMonthly'], function () {
@@ -246,32 +246,11 @@ angular.module('risevision.apps.purchase')
                 .displayCount * 12) - $scope.totalPrice;
             });
 
-            $scope.purchasePlan = function () {
-              var volumePlan = _.find(PLANS_LIST, {
-                type: 'volume'
-              });
-              var displays = $scope.displayCount;
-              var period = !$scope.isMonthly ? 'Yearly' : 'Monthly';
-              var s = displays > 1 ? 's' : '';
-              var plan = '' + displays + ' Display License' + s + ' (' + period + ')';
-
-              if (displays === 0 || displays === '0') {
+            $scope.updatePlan = function () {
+              if ($scope.displayCount === 0 || $scope.displayCount === '0') {
                 return;
               }
-
-              purchaseFactory.purchasePlan({
-                name: plan,
-                productId: volumePlan.productId,
-                productCode: volumePlan.productCode,
-                displays: displays,
-                yearly: {
-                  billAmount: $scope.totalSavings
-                },
-                monthly: {
-                  billAmount: $scope.totalSavings
-                }
-              }, $scope.periodMonthly);
-
+              purchaseFactory.updatePlan($scope.displayCount, $scope.periodMonthly, $scope.totalPrice);
               $scope.setNextStep();
             };
 
