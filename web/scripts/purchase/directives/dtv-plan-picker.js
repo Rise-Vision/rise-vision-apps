@@ -205,8 +205,8 @@ angular.module('risevision.apps.purchase')
       }
     }
   }])
-  .directive('planPicker', ['$templateCache', 'currentPlanFactory', 'userState', 'purchaseFactory', 'PRICING_DATA',
-    function ($templateCache, currentPlanFactory, userState, purchaseFactory, PRICING_DATA) {
+  .directive('planPicker', ['$templateCache', 'userState', 'purchaseFactory', 'PRICING_DATA',
+    function ($templateCache, userState, purchaseFactory, PRICING_DATA) {
       return {
         restrict: 'E',
         template: $templateCache.get('partials/purchase/checkout-plan-picker.html'),
@@ -254,11 +254,11 @@ angular.module('risevision.apps.purchase')
             var _getTierPrice = function (isMonthly) {
               var period = isMonthly? 'month' : 'year';
 
-              var matchedPlan = PRICING_DATA.find(function (plan) {
+              var matchedPlan = _.find(PRICING_DATA,function (plan) {
                 return plan.period === 1 && plan.period_unit === period && plan.currency_code === 'USD';
               });
 
-              var priceInCents = matchedPlan.tiers.find(function (tier) {
+              var priceInCents = _.find(matchedPlan.tiers, function (tier) {
                 var upperPrice = tier.ending_unit ? tier.ending_unit : Number.MAX_SAFE_INTEGER;
                 return tier.starting_unit <= $scope.displayCount && upperPrice >= $scope.displayCount;
               }).price;
