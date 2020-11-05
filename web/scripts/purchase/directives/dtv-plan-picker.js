@@ -205,10 +205,8 @@ angular.module('risevision.apps.purchase')
       }
     }
   }])
-  .directive('planPicker', ['$templateCache', 'currentPlanFactory', 'userState', 'purchaseFactory',
-    'PLANS_LIST', 'CHARGEBEE_PLANS_USE_PROD', 'PRICING_DATA',
-    function ($templateCache, currentPlanFactory, userState, purchaseFactory,
-      PLANS_LIST, CHARGEBEE_PLANS_USE_PROD, PRICING_DATA) {
+  .directive('planPicker', ['$templateCache', 'currentPlanFactory', 'userState', 'purchaseFactory', 'PRICING_DATA',
+    function ($templateCache, currentPlanFactory, userState, purchaseFactory, PRICING_DATA) {
       return {
         restrict: 'E',
         template: $templateCache.get('partials/purchase/checkout-plan-picker.html'),
