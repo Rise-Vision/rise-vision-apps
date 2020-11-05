@@ -211,17 +211,16 @@ angular.module('risevision.apps.purchase')
         restrict: 'E',
         template: $templateCache.get('partials/purchase/checkout-plan-picker.html'),
         link: {
+          //workaround for https://github.com/angular-slider/angularjs-slider/issues/267
           pre: function ($scope) {
-            //workaround for https://github.com/angular-slider/angularjs-slider/issues/267
             $scope.sliderOptions = {
+              disableAnimation: true,
               hideLimitLabels: true,
               hidePointerLabels: true,
               floor: 1,
               ceil: 100
             };
-          },
 
-          post: function ($scope) {
             $scope.displayCount = purchaseFactory.purchase.plan.displays;
             $scope.periodMonthly = purchaseFactory.purchase.plan.isMonthly;
             $scope.applyEducationDiscount = userState.isEducationCustomer();
