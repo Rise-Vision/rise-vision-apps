@@ -1,4 +1,6 @@
 'use strict';
+var https = require('https');
+var url = require('url');
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../../common/pages/homepage.js');
 var SignInPage = require('./../../common/pages/signInPage.js');
@@ -155,7 +157,42 @@ var DisplayManageScenarios = function() {
 
         expect(downloadPlayerModalPage.getTitle().getText()).to.eventually.equal('Install Rise Player');
         
-        expect(downloadPlayerModalPage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
+        expect(downloadPlayerModalPage.getDownloadWindows32Link().isDisplayed()).to.eventually.be.true;
+      });
+
+      it('should provide HTTPS download links to prevent browsers block',function() {
+        expect(downloadPlayerModalPage.getDownloadWindows32Link().getAttribute('href')).to.eventually.match(/^https:/);
+        expect(downloadPlayerModalPage.getDownloadWindows64Link().getAttribute('href')).to.eventually.match(/^https:/);
+
+        expect(downloadPlayerModalPage.getDownloadUbuntu32Link().getAttribute('href')).to.eventually.match(/^https:/);
+        expect(downloadPlayerModalPage.getDownloadUbuntu64Link().getAttribute('href')).to.eventually.match(/^https:/);
+
+        expect(downloadPlayerModalPage.getDownloadRaspberryLink().getAttribute('href')).to.eventually.match(/^https:/);
+      });
+
+      it('should provide working download links',function() {
+        downloadPlayerModalPage.getDownloadWindows32Link().getAttribute('href').then(function(href) {
+          var httpHeadRequest = function() {
+            var defer = protractor.promise.defer();
+            const options = {
+              hostname: url.parse(href).hostname,
+              port: 443,
+              path: url.parse(href).path,
+              method: 'HEAD',
+            }
+            https.request(options, function(response) {
+              defer.fulfill(response.statusCode);
+            }).on('error', function(e) {
+              defer.reject('Request failed: ' + e.message);
+            }).end();
+            return defer.promise;
+          };
+
+          protractor.promise.controlFlow().execute(httpHeadRequest).then(function (statusCode) {
+              expect(statusCode).to.equal(200);
+          });
+        });
+
       });
 
       it('should close modal',function() {
