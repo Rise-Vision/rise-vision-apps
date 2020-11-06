@@ -11,10 +11,6 @@ var usemin      = require("gulp-usemin");
 var minifyCss   = require('gulp-minify-css');
 var minifyHtml  = require('gulp-minify-html');
 var ngHtml2Js   = require("gulp-ng-html2js");
-var rollup      = require("rollup");
-var resolve     = require("rollup-plugin-node-resolve");
-var babel       = require("rollup-plugin-babel");
-var terser      = require("rollup-plugin-terser").terser;
 var concat      = require("gulp-concat");
 var gutil       = require("gulp-util");
 var rename      = require('gulp-rename');
@@ -153,7 +149,6 @@ gulp.task('bower-clean-install', ['bower-rm', 'bower-install']);
  */
 gulp.task('watch', function () {
   gulp.watch(partialsHTMLFiles, ['html2js']);
-  gulp.watch(['./web/pricing-component.mjs'], ['pricing']);
   gulp.watch(['./web/tmp/partials.js', './web/scripts/**/*.js', './web/tmp/css/*.css', './web/index.html'], ['browser-sync-reload']);
   gulp.watch(unitTestFiles, ['test:unit']);
 });
@@ -246,33 +241,6 @@ gulp.task("html-selector", function () {
 
 gulp.task("html", ["lint", "html-index", "html-selector"]);
 
-gulp.task('pricing', function() {
-  return rollup.rollup({
-    input: ['web/pricing-component.mjs'],
-    plugins: [
-      resolve(),
-      babel({
-        "presets": [
-          [
-            "@babel/preset-env",
-            {
-              "targets": "> 1%, not dead, not ie 11",
-              "modules": false
-            }
-          ]
-        ]
-      }),
-      terser()
-    ]
-  })
-  .then(bundle=>{
-    return bundle.write({
-      file: 'web/pricing-component.js',
-      format: 'iife'
-    });
-  });
-});
-
 gulp.task("jpgcompressor", function() {
   return gulp.src("node_modules/compressorjs/dist/compressor.min.js")
     .pipe(gulp.dest("web/vendor/compressor"));
@@ -316,7 +284,7 @@ gulp.task("vendor", function () {
 });
 
 gulp.task("static-html", function() {
-  return gulp.src(['./web/loading-preview.html', './web/pricing-component.js', './web/pricing-component.css'])
+  return gulp.src(['./web/loading-preview.html'])
     .pipe(gulp.dest('dist/'));
 })
 
@@ -330,7 +298,7 @@ gulp.task("config", function() {
 });
 
 gulp.task('build-pieces', function (cb) {
-  runSequence(["clean"], ['config', 'i18n-build', 'css-build', 'pricing', 'html2js', 'tus', 'jpgcompressor'], cb);
+  runSequence(["clean"], ['config', 'i18n-build', 'css-build', 'html2js', 'tus', 'jpgcompressor'], cb);
 });
 
 gulp.task('build', function (cb) {
