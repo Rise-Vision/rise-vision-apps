@@ -9,7 +9,6 @@ var helper = require('rv-common-e2e').helper;
 var PresentationPropertiesModalPage = require('./../pages/presentationPropertiesModalPage.js');
 var StoreProductsModalPage = require('./../pages/storeProductsModalPage.js');
 var ProductDetailsModalPage = require('./../pages/productDetailsModalPage.js');
-var PricingComponentModalPage = require('./../../registration/pages/pricingComponentModalPage.js');
 
 var TemplateAddScenarios = function() {
 
@@ -23,7 +22,6 @@ var TemplateAddScenarios = function() {
     var presentationPropertiesModalPage;
     var storeProductsModalPage;
     var productDetailsModalPage;
-    var pricingComponentModalPage;
 
     function loadEditor() {
       homepage.getEditor();
@@ -52,7 +50,6 @@ var TemplateAddScenarios = function() {
       presentationPropertiesModalPage = new PresentationPropertiesModalPage();
       storeProductsModalPage = new StoreProductsModalPage();
       productDetailsModalPage = new ProductDetailsModalPage();
-      pricingComponentModalPage = new PricingComponentModalPage();
 
       loadEditor();
       selectSubCompany();

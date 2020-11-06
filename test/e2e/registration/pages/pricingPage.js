@@ -1,5 +1,5 @@
 'use strict';
-var PricingComponentModalPage = function() {
+var PricingPage = function() {
   var subscribeButton = element(by.id('subscribeButton'));
 
   this.getSubscribeButton = function() {
@@ -7,4 +7,4 @@ var PricingComponentModalPage = function() {
   };
 };
 
-module.exports = PricingComponentModalPage;
+module.exports = PricingPage;
