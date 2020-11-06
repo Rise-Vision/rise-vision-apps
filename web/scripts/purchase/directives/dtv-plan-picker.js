@@ -205,27 +205,24 @@ angular.module('risevision.apps.purchase')
       }
     }
   }])
-  .directive('planPicker', ['$templateCache', 'currentPlanFactory', 'userState', 'purchaseFactory',
-    'PLANS_LIST', 'CHARGEBEE_PLANS_USE_PROD', 'PRICING_DATA',
-    function ($templateCache, currentPlanFactory, userState, purchaseFactory,
-      PLANS_LIST, CHARGEBEE_PLANS_USE_PROD, PRICING_DATA) {
+  .directive('planPicker', ['$templateCache', 'userState', 'purchaseFactory', 'PRICING_DATA',
+    function ($templateCache, userState, purchaseFactory, PRICING_DATA) {
       return {
         restrict: 'E',
         template: $templateCache.get('partials/purchase/checkout-plan-picker.html'),
         link: {
+          //workaround for https://github.com/angular-slider/angularjs-slider/issues/267
           pre: function ($scope) {
-            //workaround for https://github.com/angular-slider/angularjs-slider/issues/267
             $scope.sliderOptions = {
+              disableAnimation: true,
               hideLimitLabels: true,
               hidePointerLabels: true,
               floor: 1,
               ceil: 100
             };
-          },
 
-          post: function ($scope) {
-            $scope.displayCount = 5;
-            $scope.periodMonthly = false;
+            $scope.displayCount = purchaseFactory.purchase.plan.displays;
+            $scope.periodMonthly = purchaseFactory.purchase.plan.isMonthly;
             $scope.applyEducationDiscount = userState.isEducationCustomer();
 
             $scope.$watchGroup(['displayCount', 'periodMonthly'], function () {
@@ -246,43 +243,22 @@ angular.module('risevision.apps.purchase')
                 .displayCount * 12) - $scope.totalPrice;
             });
 
-            $scope.purchasePlan = function () {
-              var volumePlan = _.find(PLANS_LIST, {
-                type: 'volume'
-              });
-              var displays = $scope.displayCount;
-              var period = !$scope.isMonthly ? 'Yearly' : 'Monthly';
-              var s = displays > 1 ? 's' : '';
-              var plan = '' + displays + ' Display License' + s + ' (' + period + ')';
-
-              if (displays === 0 || displays === '0') {
+            $scope.updatePlan = function () {
+              if ($scope.displayCount === 0 || $scope.displayCount === '0') {
                 return;
               }
-
-              purchaseFactory.purchasePlan({
-                name: plan,
-                productId: volumePlan.productId,
-                productCode: volumePlan.productCode,
-                displays: displays,
-                yearly: {
-                  billAmount: $scope.totalSavings
-                },
-                monthly: {
-                  billAmount: $scope.totalSavings
-                }
-              }, $scope.periodMonthly);
-
+              purchaseFactory.updatePlan($scope.displayCount, $scope.periodMonthly, $scope.totalPrice);
               $scope.setNextStep();
             };
 
             var _getTierPrice = function (isMonthly) {
               var period = isMonthly? 'month' : 'year';
 
-              var matchedPlan = PRICING_DATA.find(function (plan) {
+              var matchedPlan = _.find(PRICING_DATA,function (plan) {
                 return plan.period === 1 && plan.period_unit === period && plan.currency_code === 'USD';
               });
 
-              var priceInCents = matchedPlan.tiers.find(function (tier) {
+              var priceInCents = _.find(matchedPlan.tiers, function (tier) {
                 var upperPrice = tier.ending_unit ? tier.ending_unit : Number.MAX_SAFE_INTEGER;
                 return tier.starting_unit <= $scope.displayCount && upperPrice >= $scope.displayCount;
               }).price;

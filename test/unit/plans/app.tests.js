@@ -45,7 +45,6 @@ describe('app:', function() {
       var state = $state.get('apps.plans.home');
       expect(state).to.be.ok;
       expect(state.url).to.equal('/plans');
-      expect(state.controller).to.equal('PlansCtrl');
     });
 
     it('should go to billing page/edit subscription if company has a plan and manages it', function(done) {
@@ -102,7 +101,7 @@ describe('app:', function() {
       },10);
     });
 
-    it('should stay on the Plans page if company is not subscribed to a plan', function(done) {
+    it('should go to Purchase page if company is not subscribed to a plan', function(done) {
       currentPlanFactory.isSubscribed.returns(false);
 
       $state.go('apps.plans.home');
@@ -110,7 +109,10 @@ describe('app:', function() {
 
       setTimeout(function(){
         expect(messageBoxStub).to.not.have.been.called;
-        $state.go.should.have.been.calledOnce;
+
+        $state.go.should.have.been.calledTwice;
+
+        $state.go.should.have.been.calledWith('apps.purchase.home');
 
         done();
       },10);

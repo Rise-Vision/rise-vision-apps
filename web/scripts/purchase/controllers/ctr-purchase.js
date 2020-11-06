@@ -25,6 +25,8 @@ angular.module('risevision.apps.purchase')
       $scope.form = {};
       $scope.factory = purchaseFactory;
 
+      purchaseFactory.init();
+
       $scope.PURCHASE_STEPS = PURCHASE_STEPS;
       $scope.currentStep = 0;
       $scope.finalStep = false;
