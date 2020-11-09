@@ -7,7 +7,7 @@ var PresentationsListPage = require('./../pages/presentationListPage.js');
 var WorkspacePage = require('./../pages/workspacePage.js');
 var PlaceholderPlaylistPage = require('./../pages/placeholderPlaylistPage.js');
 var StoreProductsModalPage = require('./../pages/storeProductsModalPage.js');
-var PricingComponentModalPage = require('./../../registration/pages/pricingComponentModalPage.js');
+var PricingPage = require('./../../registration/pages/pricingPage.js');
 var PresentationItemModalPage = require('./../pages/presentationItemModalPage.js');
 var PresentationModalPage = require('./../../schedules/pages/presentationModalPage.js');
 var TwitterSettingsPage = require('./../pages/twitterSettingsPage.js');
@@ -26,7 +26,7 @@ var ProfessionalWidgetsScenarios = function() {
     var workspacePage;
     var placeholderPlaylistPage;
     var storeProductsModalPage;
-    var pricingComponentModalPage;
+    var pricingPage;
     var presentationItemModalPage;
     var presentationModalPage;
     var twitterSettingsPage;
@@ -44,7 +44,7 @@ var ProfessionalWidgetsScenarios = function() {
       workspacePage = new WorkspacePage();
       placeholderPlaylistPage = new PlaceholderPlaylistPage();
       storeProductsModalPage = new StoreProductsModalPage();
-      pricingComponentModalPage = new PricingComponentModalPage();
+      pricingPage = new PricingPage();
       presentationItemModalPage = new PresentationItemModalPage();
       presentationModalPage = new PresentationModalPage();
       twitterSettingsPage = new TwitterSettingsPage();
@@ -104,13 +104,13 @@ var ProfessionalWidgetsScenarios = function() {
       it('should show Plans Modal', function() {
         storeProductsModalPage.getUnlockButton().get(0).click();
 
-        helper.wait(pricingComponentModalPage.getSubscribeButton(), 'Subscribe Button');
+        helper.wait(pricingPage.getSubscribeButton(), 'Subscribe Button');
       });
 
       it('should start a Trial',function(){
-        pricingComponentModalPage.getSubscribeButton().click();
+        pricingPage.getSubscribeButton().click();
 
-        helper.waitDisappear(pricingComponentModalPage.getSubscribeButton(), 'Subscribe Button Disappear');
+        helper.waitDisappear(pricingPage.getSubscribeButton(), 'Subscribe Button Disappear');
       });
 
       it('should unlock Professional Widgets', function() {
