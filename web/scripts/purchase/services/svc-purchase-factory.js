@@ -237,6 +237,7 @@
               estimate.taxes = result.taxes || [];
               estimate.total = result.total;
               estimate.subTotal = result.subTotal;
+              estimate.coupons = result.coupons || [];
               estimate.couponAmount = result.couponAmount;
               estimate.totalTax = result.totalTax;
               estimate.shippingTotal = result.shippingTotal;

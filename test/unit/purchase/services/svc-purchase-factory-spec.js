@@ -430,6 +430,7 @@ describe("Services: purchase factory", function() {
           taxes: [],
           total: "total",
           subTotal: "subTotal",
+          coupons: [],
           couponAmount: "couponAmount",
           totalTax: "totalTax",
           shippingTotal: "shippingTotal",

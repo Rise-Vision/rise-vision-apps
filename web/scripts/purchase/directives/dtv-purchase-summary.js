@@ -24,13 +24,22 @@ angular.module('risevision.apps.purchase')
 
           $scope.applyCouponCode = function () {
             if ($scope.purchase.couponCode) {
-              purchaseFactory.getEstimate();
+              purchaseFactory.getEstimate()
+                .then(function() {
+                  if (!purchaseFactory.purchase.estimate.estimateError) {
+                    $scope.addCoupon = false;                    
+                  }
+                });
             }
           };
 
           $scope.clearCouponCode = function () {
             $scope.purchase.couponCode = null;
             $scope.addCoupon = false;
+
+            if (purchaseFactory.purchase.estimate.estimateError) {
+              purchaseFactory.getEstimate();
+            }
           };
 
           $scope.showTaxExemptionModal = function () {
