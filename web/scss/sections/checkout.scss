@@ -92,6 +92,20 @@
 
     width: 744px;
   }
+
+  .purchase-footer {
+    text-align: center;
+
+    .title {
+       font-weight: bold;
+
+       svg {
+        fill: $madero-gray;
+        vertical-align: middle;
+        margin-left: 5px;
+       }
+    }
+  }
 }
 
 .checkout-plan-picker {
@@ -148,7 +162,6 @@
       }
     }
   }
-
 }
 
 

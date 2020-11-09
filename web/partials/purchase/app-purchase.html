@@ -11,11 +11,30 @@
   <payment-methods ng-if="currentStep === 2"></payment-methods>
   <checkout-success ng-if="currentStep === 3"></checkout-success>
 
-  <div id="security-branding" class="text-center my-5 pt-5 border-top" ng-show="currentStep < 4">
-    <span class="text-muted">
-      <i class="fa fa-lock icon-left"></i>
-      Secure Checkout from ChargeBee and <img alt="powered by Stripe" height="16" src="https://s3.amazonaws.com/Rise-Images/UI/powered_by_stripe.svg">
-    </span>
+  <div class="row mt-5 pt-5 border-top purchase-footer">
+    <div class="col-md-4 mb-5">
+      <div class="title mb-4">
+        <streamline-icon name="lock" width="20" height="20"></streamline-icon>
+        Secure checkout powered by:
+      </div>
+      <img class="" src="../images/checkout/chargebee-logo.png" alt="Chargebee" height="35" />
+      <span class="text-muted text-sm mx-3">and</span>
+      <img class="" src="../images/checkout/stripe-logo.png" alt="Stripe" height="35" />
+    </div>
+
+    <div class="col-md-4 mb-5">
+      <div class="title mb-4">We accept:</div>
+      <img class="" src="../images/checkout/credit-card-icons.png" alt="Visa, American Express, Discover, Mastercard" height="30" />
+    </div>
+
+    <div class="col-md-4 mb-5">
+      <div class="title mb-3"> 
+        <streamline-icon name="help" width="20" height="20"></streamline-icon>
+        Need help with something?
+      </div>
+      <p class="mb-2"><a class="madero-link" href="https://help.risevision.com/hc/en-us/articles/360041149991-Payment-instructions-and-common-questions-" target="_blank">Common Billing & Payment Questions</a></p>
+      <p><a class="madero-link" href="#" ng-click="helpWidgetFactory.showHelpWidget()">Contact Us</a></p>
+    </div>
   </div>
 
 </div>
