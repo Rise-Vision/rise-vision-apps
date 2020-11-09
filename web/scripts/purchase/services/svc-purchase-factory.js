@@ -149,6 +149,7 @@
           var paymentMethods = factory.purchase.paymentMethods;
 
           factory.purchase.checkoutError = null;
+          paymentMethods.tokenError = null;
 
           if (paymentMethods.paymentMethod === 'invoice') {
             // TODO: Check Invoice credit (?)
@@ -179,9 +180,12 @@
               return stripeService.createPaymentMethod('card', element, details)
                 .then(function (response) {
                   if (response.error) {
+                    paymentMethods.tokenError = response.error.message;
+
                     return $q.reject(response.error);
                   } else {
                     paymentMethods.paymentMethodResponse = response;
+
                     return $q.resolve();
                   }
                 })
