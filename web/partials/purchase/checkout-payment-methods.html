@@ -184,8 +184,10 @@
 
 <div class="button-row text-right mt-5">
   <button id="backButton" type="button" aria-label="Go back to Billing Address" class="btn btn-default btn-toolbar pull-left" ng-click="setPreviousStep()" translate>common.back</button>
-  <button id="payButton" type="submit" class="btn btn-primary btn-toolbar-wide" form="form.paymentMethodsForm" ng-click="completePayment(cardNumber)" tabindex="1" aria-label="Complete Payment">
-    <span id="payLabel" ng-if="purchase.paymentMethods.paymentMethod === 'card'">Pay ${{purchase.estimate.total | number:2}} Now</span>
-    <span id="invoiceLabel" ng-if="purchase.paymentMethods.paymentMethod === 'invoice'">Invoice Me ${{purchase.estimate.total | number:2}} Now</span>
+  <button id="payButton" type="submit" class="btn btn-primary btn-toolbar-wide" form="form.paymentMethodsForm" ng-click="completeCardPayment(cardNumber)" tabindex="1" aria-label="Complete Payment" ng-if="purchase.paymentMethods.paymentMethod === 'card'">
+    <span id="payLabel">Pay ${{purchase.estimate.total | number:2}} Now</span>
+  </button>
+  <button id="invoiceButton" type="submit" class="btn btn-primary btn-toolbar-wide" form="form.paymentMethodsForm" ng-click="completePayment()" tabindex="1" aria-label="Complete Payment" ng-if="purchase.paymentMethods.paymentMethod === 'invoice'">
+    <span id="invoiceLabel">Invoice Me ${{purchase.estimate.total | number:2}} Now</span>
   </button>
 </div>
