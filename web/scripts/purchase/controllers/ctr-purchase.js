@@ -87,10 +87,7 @@ angular.module('risevision.apps.purchase')
       };
 
       $scope.setNextStep = function () {
-        if (!_isFormValid()) {
-          return;
-        }
-
+        // Note: Ensure to check if the form is valid before calling
         if (($scope.finalStep && $scope.currentStep < 1) || $scope.currentStep === 1) {
           $scope.currentStep = 2;
 
@@ -104,17 +101,11 @@ angular.module('risevision.apps.purchase')
       $scope.setPreviousStep = function () {
         if ($scope.currentStep > 0) {
           $scope.currentStep--;
-        } else {
-          $state.go('apps.plans.home');
         }
       };
 
       $scope.setCurrentStep = function (index) {
         purchaseFactory.purchase.checkoutError = null;
-
-        if (index === -1) {
-          $state.go('apps.plans.home');
-        }
 
         $scope.currentStep = index;
       };

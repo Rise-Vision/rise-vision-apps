@@ -128,6 +128,26 @@ describe("controller: purchase", function() {
       }, 10);
     });
 
+    it("should increment step if other forms are invalid", function(done) {
+      $scope.form.billingAddressForm = {
+        $valid: true
+      };
+
+      $scope.form.reviewSubscriptionForm = {
+        $valid: false
+      };
+
+      $scope.validateAddress({});
+
+      addressFactory.validateAddress.should.have.been.called;
+
+      setTimeout(function() {
+        $scope.setNextStep.should.have.been.called;
+
+        done();
+      }, 10);
+    });
+
     it("should validate and proceed to next step", function(done) {
       $scope.validateAddress({}, "contact");
 
@@ -287,32 +307,6 @@ describe("controller: purchase", function() {
 
   describe("setNextStep: ", function() {
     it("should increment step", function() {
-      $scope.setNextStep();
-
-      expect($scope.currentStep).to.equal(1);
-    });
-
-    it("should not increment step if the corresponding form is invalid", function() {
-      $scope.setCurrentStep(1);
-
-      $scope.form.billingAddressForm = {
-        $valid: false
-      };
-
-      $scope.setNextStep();
-
-      expect($scope.currentStep).to.equal(1);
-    });
-
-    it("should increment step if other forms are invalid", function() {
-      $scope.form.billingAddressForm = {
-        $valid: true
-      };
-
-      $scope.form.reviewSubscriptionForm = {
-        $valid: false
-      };
-
       $scope.setNextStep();
 
       expect($scope.currentStep).to.equal(1);
