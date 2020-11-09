@@ -6,9 +6,10 @@
 
   <div rv-spinner rv-spinner-key="purchase-loader" rv-spinner-start-active="1"></div>
 
-  <billing-address ng-if="currentStep === 0"></billing-address>
-  <payment-methods ng-if="currentStep === 1"></payment-methods>
-  <checkout-success ng-if="currentStep === 2"></checkout-success>
+  <plan-picker ng-if="currentStep === 0"></plan-picker>
+  <billing-address ng-if="currentStep === 1"></billing-address>
+  <payment-methods ng-if="currentStep === 2"></payment-methods>
+  <checkout-success ng-if="currentStep === 3"></checkout-success>
 
   <div id="security-branding" class="text-center my-5 pt-5 border-top" ng-show="currentStep < 4">
     <span class="text-muted">

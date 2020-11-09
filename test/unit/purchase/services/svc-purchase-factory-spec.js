@@ -4,6 +4,17 @@
 describe("Services: purchase factory", function() {
   beforeEach(module("risevision.apps.purchase"));
   beforeEach(module(function ($provide) {
+    $provide.value("PLANS_LIST", [{
+      type: 'volume',
+      productId: 'productId',
+      productCode: 'productCode',
+      yearly: {
+        billAmount: 'yearlyBillAmount'
+      },
+      monthly: {
+        billAmount: 'monthlyBillAmount'
+      }
+    }]);
     $provide.service("$q", function() {return Q;});
     $provide.service("$modal", function() {
       return {
@@ -101,7 +112,8 @@ describe("Services: purchase factory", function() {
 
   it("should exist", function() {
     expect(purchaseFactory).to.be.ok;
-    expect(purchaseFactory.purchasePlan).to.be.a("function");
+    expect(purchaseFactory.init).to.be.a("function");
+    expect(purchaseFactory.updatePlan).to.be.a("function");
     expect(purchaseFactory.showTaxExemptionModal).to.be.a("function");
     expect(purchaseFactory.validatePaymentMethod).to.be.a("function");
     expect(purchaseFactory.getEstimate).to.be.a("function");
@@ -112,7 +124,7 @@ describe("Services: purchase factory", function() {
     expect(purchaseFactory.loading).to.be.false;
   });
 
-  describe("purchasePlan: ", function() {
+  describe("init: ", function() {
     beforeEach(function() {
       clock = sinon.useFakeTimers();
     });
@@ -121,23 +133,15 @@ describe("Services: purchase factory", function() {
       clock.restore();
     });
 
-    it("should show purchase modal", function() {
-      purchaseFactory.purchasePlan({});
-
-      expect($state.go).to.have.been.calledWith('apps.purchase.home');
-      expect(purchaseFlowTracker.trackProductAdded).to.have.been.called;
-    });
-
-    it("should initialize selected plan, attach addresses and clean contact info", function() {
-      var plan = { name: "PlanA"};
-      purchaseFactory.purchasePlan(plan, true);
+    it("should initialize default volume plan, attach addresses and clean contact info", function() {
+      purchaseFactory.init();
       
       expect(purchaseFactory.purchase).to.be.ok;
 
       expect(purchaseFactory.purchase.plan).to.be.ok;
-      expect(purchaseFactory.purchase.plan.name).to.equal("PlanA");
-      expect(purchaseFactory.purchase.plan.isMonthly).to.be.true;
-      expect(purchaseFactory.purchase.plan).to.not.equal(plan);        
+      expect(purchaseFactory.purchase.plan.name).to.equal("5 Display Licenses (Yearly)");
+      expect(purchaseFactory.purchase.plan.displays).to.equal(5)
+      expect(purchaseFactory.purchase.plan.isMonthly).to.be.false;
 
       expect(purchaseFactory.purchase.billingAddress).to.deep.equal({
         id: "id",
@@ -155,8 +159,7 @@ describe("Services: purchase factory", function() {
     });
 
     it("should initialize payment methods", function() {
-      var plan = { name: "PlanA"};
-      purchaseFactory.purchasePlan(plan, true);
+      purchaseFactory.init();
       
       expect(purchaseFactory.purchase).to.be.ok;
       expect(purchaseFactory.purchase.paymentMethods).to.be.ok;
@@ -177,12 +180,42 @@ describe("Services: purchase factory", function() {
 
     it("should initialize invoice due date 30 days from now", function() {
       var newDate = new Date();
-      var plan = { name: "PlanA"};
-      purchaseFactory.purchasePlan(plan, true);
+
+      purchaseFactory.init();
 
       expect(purchaseFactory.purchase.paymentMethods.invoiceDate).to.be.ok;
       expect(purchaseFactory.purchase.paymentMethods.invoiceDate).to.be.a("date");
       expect(purchaseFactory.purchase.paymentMethods.invoiceDate - newDate).to.equal(30 * 24 * 60 * 60 * 1000);
+    });
+  });
+
+  describe("updatePlan:", function() {
+    it("should update plan with new details", function() {
+      purchaseFactory.init();
+
+      purchaseFactory.updatePlan(2,false,242);
+
+      expect(purchaseFactory.purchase.plan).to.be.ok;
+      expect(purchaseFactory.purchase.plan.name).to.equal("2 Display Licenses (Yearly)");
+      expect(purchaseFactory.purchase.plan.displays).to.equal(2)
+      expect(purchaseFactory.purchase.plan.isMonthly).to.be.false;
+      expect(purchaseFactory.purchase.plan.yearly.billAmount).to.equal(242);
+
+      purchaseFlowTracker.trackProductAdded.should.have.been.calledWith(purchaseFactory.purchase.plan);
+    });
+
+    it("should update monthly plan with new details", function() {
+      purchaseFactory.init();
+
+      purchaseFactory.updatePlan(1,true,11);
+
+      expect(purchaseFactory.purchase.plan).to.be.ok;
+      expect(purchaseFactory.purchase.plan.name).to.equal("1 Display License (Monthly)");
+      expect(purchaseFactory.purchase.plan.displays).to.equal(1)
+      expect(purchaseFactory.purchase.plan.isMonthly).to.be.true;
+      expect(purchaseFactory.purchase.plan.monthly.billAmount).to.equal(11);
+
+      purchaseFlowTracker.trackProductAdded.should.have.been.calledWith(purchaseFactory.purchase.plan);
     });
   });
 

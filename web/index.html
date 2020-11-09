@@ -48,7 +48,6 @@
   <link rel="stylesheet" type="text/css" href="bower_components/ng-tags-input/ng-tags-input.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/ng-tags-input/ng-tags-input.bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/angularjs-slider/dist/rzslider.css"/>
-  <link rel="stylesheet" type="text/css" href="pricing-component.css">
   <!-- endbuild -->
 </head>
 <body ng-class="{'gray-bg': !showWhiteBackground}">
@@ -58,8 +57,6 @@
   <div ui-view></div>
 
   <!-- build:js js/website.min.js -->
-  <script src="/pricing-component.js"></script>
-
   <!-- common-header dependencies -->
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/angular/angular.js"></script>
@@ -324,7 +321,6 @@
 
   <!-- plans -->
   <script src="scripts/plans/app.js"></script>
-  <script src="scripts/plans/controllers/ctr-plans.js"></script>
   <script src="scripts/plans/directives/dtv-rv-on.js"></script>
   <script src="scripts/plans/services/svc-currency.js"></script>
   <script src="scripts/plans/services/svc-current-plan-factory.js"></script>
@@ -338,9 +334,9 @@
   <script src="scripts/purchase/directives/dtv-billing-address.js"></script>
   <script src="scripts/purchase/directives/dtv-checkout-success.js"></script>
   <script src="scripts/purchase/directives/dtv-payment-methods.js"></script>
+  <script src="scripts/purchase/directives/dtv-plan-picker.js"></script>
   <script src="scripts/purchase/directives/dtv-province-validator.js"></script>
   <script src="scripts/purchase/directives/dtv-purchase-summary.js"></script>
-  <script src="scripts/purchase/directives/dtv-review-subscription.js"></script>
   <script src="scripts/purchase/directives/dtv-suggest-general-delivery.js"></script>
   <script src="scripts/purchase/directives/dtv-year-selector.js"></script>
   <script src="scripts/purchase/filters/ftr-card-last-four.js"></script>
@@ -591,6 +587,5 @@
   <!-- external libraries -->
   <script src="https://js.chargebee.com/v2/chargebee.js" async></script>
   <script src="https://js.stripe.com/v3/" async></script>
-  <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.2.10/webcomponents-loader.js" async></script>
 </body>
 </html>

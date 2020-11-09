@@ -34,7 +34,8 @@ describe("controller: purchase", function() {
         initializeStripeElements: sandbox.stub().returns(Q.resolve()),
         getEstimate: sandbox.stub().returns(Q.resolve()),
         completePayment: sandbox.stub().returns(Q.resolve()),
-        purchase: {}
+        purchase: {},
+        init: sandbox.stub()
       };
     });
   }));
@@ -79,6 +80,8 @@ describe("controller: purchase", function() {
     expect($scope.setCurrentStep).to.be.a("function");
 
     expect($scope.close).to.be.a("function");
+
+    purchaseFactory.init.should.have.been.called;
   });
 
   describe("$loading spinner: ", function() {
@@ -98,6 +101,7 @@ describe("controller: purchase", function() {
   describe("validateAddress: ", function() {
     beforeEach(function() {
       sandbox.spy($scope, "setNextStep");
+      $scope.setCurrentStep(1);
     });
 
     it("should not validate if the corresponding form is invalid", function(done) {
@@ -142,6 +146,7 @@ describe("controller: purchase", function() {
   describe("completePayment: ", function() {
     beforeEach(function() {
       sandbox.spy($scope, "setNextStep");
+      $scope.setCurrentStep(1);
     });
 
     it("should not validate if the corresponding form is invalid", function(done) {
@@ -274,13 +279,15 @@ describe("controller: purchase", function() {
     });
 
     it("should not increment step if the corresponding form is invalid", function() {
+      $scope.setCurrentStep(1);
+
       $scope.form.billingAddressForm = {
         $invalid: true
       };
 
       $scope.setNextStep();
 
-      expect($scope.currentStep).to.equal(0);
+      expect($scope.currentStep).to.equal(1);
     });
 
     it("should increment step if other forms are invalid", function() {

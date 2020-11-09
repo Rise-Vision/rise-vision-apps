@@ -9,7 +9,7 @@
   var HomePage = require('./../../common/pages/homepage.js');
   var SignInPage = require('./../../common/pages/signInPage.js');
   var PurchaseFlowPage = require('./../pages/purchaseFlowPage.js');
-  var PricingComponentModalPage = require('./../pages/pricingComponentModalPage.js');
+  var PricingPage = require('./../pages/pricingPage.js');
   var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
 
   var Checkout = function() {
@@ -19,7 +19,7 @@
         homepage, 
         signInPage,
         purchaseFlowPage,
-        pricingComponentModalPage,
+        pricingPage,
         presentationListPage;
                 
       before(function (){
@@ -27,7 +27,7 @@
         homepage = new HomePage();
         signInPage = new SignInPage();
         purchaseFlowPage = new PurchaseFlowPage();
-        pricingComponentModalPage = new PricingComponentModalPage();
+        pricingPage = new PricingPage();
         presentationListPage = new PresentationListPage();
 
         homepage.get();
@@ -44,22 +44,22 @@
           expect(purchaseFlowPage.getPlanSubscribeLink().isDisplayed()).to.eventually.be.true;
         });
 
-        it("should open plans modal", function() {
+        it("should open plans page", function() {
 
           helper.clickWhenClickable(purchaseFlowPage.getPlanSubscribeLink(), 'Subscribe Button');
 
-          helper.wait(pricingComponentModalPage.getSubscribeButton(), 'Pricing Component Modal');
+          helper.wait(pricingPage.getSubscribeButton(), 'Pricing Component Modal');
 
-          expect(pricingComponentModalPage.getSubscribeButton().isDisplayed()).to.eventually.be.true;
+          expect(pricingPage.getSubscribeButton().isDisplayed()).to.eventually.be.true;
         });
 
-        it("should open checkout modal", function() {
-          helper.clickWhenClickable(pricingComponentModalPage.getSubscribeButton(), 'Subscribe Button');
+        it("should open checkout page", function() {
+          helper.clickWhenClickable(pricingPage.getSubscribeButton(), 'Subscribe Button');
           
-          helper.waitDisappear(pricingComponentModalPage.getSubscribeButton(), 'Subscribe Button Disappear');
+          helper.waitDisappear(pricingPage.getSubscribeButton(), 'Subscribe Button Disappear');
 
           expect(purchaseFlowPage.getContinueButton().isDisplayed()).to.eventually.be.true;        
-        });        
+        });
       });
 
       describe("billing address: ", function() {

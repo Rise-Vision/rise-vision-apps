@@ -3,16 +3,19 @@
 angular.module('risevision.apps.purchase')
 
   .value('PURCHASE_STEPS', [{
+    name: 'Subscription Details',
+    index: 0
+  }, {
     name: 'Billing Address',
-    index: 0,
+    index: 1,
     formName: 'billingAddressForm'
   }, {
     name: 'Payment Method',
-    index: 1,
+    index: 2,
     formName: 'paymentMethodsForm'
   }, {
     name: 'Purchase Review',
-    index: 2
+    index: 3
   }])
 
   .controller('PurchaseCtrl', ['$scope', '$state', '$loading', 'purchaseFactory', 'addressFactory', 
@@ -21,6 +24,8 @@ angular.module('risevision.apps.purchase')
 
       $scope.form = {};
       $scope.factory = purchaseFactory;
+
+      purchaseFactory.init();
 
       $scope.PURCHASE_STEPS = PURCHASE_STEPS;
       $scope.currentStep = 0;
