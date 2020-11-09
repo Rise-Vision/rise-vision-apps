@@ -75,16 +75,9 @@ describe("Services: purchase factory", function() {
     });
 
     $provide.service("stripeService", function() {
-      var failMode = false;
-      return stripeService = {
-        shouldFail: function(mode) {failMode = mode;},
-        createPaymentMethod: sinon.spy(function() {
-          console.log("Stripe Service: createPaymentMethod mock will " + (failMode ? "fail" : "pass"));
-          return Q.resolve(failMode ? {error: {}} : {});
-        }),
-        authenticate3ds: sinon.spy(function() {
-          return Q.resolve();
-        })
+      return {
+        createPaymentMethod: sinon.stub().returns(Q.resolve({})),
+        authenticate3ds: sinon.stub().returns(Q.resolve())
       };
     });
     $provide.service("purchaseFlowTracker", function() {
@@ -106,6 +99,7 @@ describe("Services: purchase factory", function() {
       $modal = $injector.get("$modal");
       $state = $injector.get("$state");
       $timeout = $injector.get("$timeout");
+      stripeService = $injector.get("stripeService");
       purchaseFactory = $injector.get("purchaseFactory");
     });
   });
@@ -267,6 +261,21 @@ describe("Services: purchase factory", function() {
       });
     });
 
+    it("should clear errors", function() {
+      purchaseFactory.purchase = {
+        checkoutError: "checkoutError",
+        paymentMethods: {
+          paymentMethod: "invoice",
+          tokenError: "tokenError"
+        }
+      };
+
+      purchaseFactory.validatePaymentMethod();
+
+      expect(purchaseFactory.purchase.checkoutError).to.not.be.ok;
+      expect(purchaseFactory.purchase.paymentMethods.tokenError).to.not.be.ok;
+    });
+
     describe("existing card: ", function() {
       var card;
       beforeEach(function() {
@@ -284,7 +293,6 @@ describe("Services: purchase factory", function() {
       it("should validate card and proceed to next step", function(done) {
         purchaseFactory.validatePaymentMethod()
         .then(function() {
-          stripeService.shouldFail(false);
           stripeService.createPaymentMethod.should.have.been.called;
 
           done();
@@ -295,7 +303,7 @@ describe("Services: purchase factory", function() {
       });
 
       it("should validate and not proceed if there are errors", function(done) {
-        stripeService.shouldFail(true);
+        stripeService.createPaymentMethod.returns(Q.resolve({error: {}}));
 
         purchaseFactory.validatePaymentMethod()
         .then(function () {
@@ -336,11 +344,13 @@ describe("Services: purchase factory", function() {
       });
 
       it("should validate and not proceed if there are errors", function(done) {
-        stripeService.shouldFail(true);
+        stripeService.createPaymentMethod.returns(Q.resolve({error: {message: "tokenError"}}));
 
         purchaseFactory.validatePaymentMethod()
         .then(null, function() {
           stripeService.createPaymentMethod.should.have.been.called;
+
+          expect(purchaseFactory.purchase.paymentMethods.tokenError).to.equal("tokenError");
 
           done();
         })
