@@ -11,19 +11,12 @@
   "author": "rodrigopavezi <rodrigopavezi@gmail.com>",
   "license": "GNU",
   "dependencies": {
-    "@polymer/polymer": "^3.2.0",
     "@shopify/draggable": "1.0.0-beta.8",
     "bower": "^1.5.3",
     "compressorjs": "^1.0.6",
-    "pricing-data-component": "github:Rise-Vision/pricing-data-component",
-    "pricing-grid-component": "github:Rise-Vision/pricing-grid-component",
-    "pricing-selector-component": "github:Rise-Vision/pricing-selector-component",
-    "pricing-summary-component": "github:Rise-Vision/pricing-summary-component",
     "tus-js-client": "^2.0.0-1"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
     "browser-sync": "^2.7.13",
     "colors": "^0.6.2",
     "connect-modrewrite": "^0.10.2",
@@ -47,13 +40,8 @@
     "gulp-util": "^3.0.8",
     "jshint": "^2.10.3",
     "jshint-stylish": "^2.0.1",
-    "rollup": "^1.15.6",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-node-resolve": "^5.0.3",
-    "rollup-plugin-terser": "^5.3.0",
     "run-sequence": "^1.1.1",
     "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git",
-    "terser": "^4.0.0",
     "widget-tester": "git://github.com/Rise-Vision/widget-tester.git"
   },
   "repository": {

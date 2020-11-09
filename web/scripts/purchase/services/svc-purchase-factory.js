@@ -8,21 +8,37 @@
     .constant('RPP_ADDON_ID', 'c4b368be86245bf9501baaa6e0b00df9719869fd')
     .factory('purchaseFactory', ['$rootScope', '$q', '$log', '$state', '$modal', '$templateCache', '$timeout',
       'userState', 'storeService', 'stripeService', 'addressService', 'contactService', 'purchaseFlowTracker',
-      'RPP_ADDON_ID',
+      'RPP_ADDON_ID', 'PLANS_LIST',
       function ($rootScope, $q, $log, $state, $modal, $templateCache, $timeout, userState,
-        storeService, stripeService, addressService, contactService, purchaseFlowTracker, RPP_ADDON_ID) {
+        storeService, stripeService, addressService, contactService, purchaseFlowTracker, RPP_ADDON_ID, PLANS_LIST) {
         var factory = {};
 
         // Stop spinner - workaround for spinner not rendering
         factory.loading = false;
 
-        var _init = function (plan, isMonthly) {
-          factory.purchase = {};
+        factory.init = function () {
+          var volumePlan = _.find(PLANS_LIST, {
+            type: 'volume'
+          });
 
+          var plan = {
+            name: '5 Display Licenses (Yearly)',
+            productId: volumePlan.productId,
+            productCode: volumePlan.productCode,
+            displays: 5,
+            isMonthly: false,
+            additionalDisplayLicenses: 0,
+            yearly: {
+              billAmount: volumePlan.yearly.billAmount
+            },
+            monthly: {
+              billAmount: volumePlan.monthly.billAmount
+            }
+          };
+
+          factory.purchase = {};
+          factory.purchase.plan = plan;
           factory.purchase.couponCode = '';
-          factory.purchase.plan = angular.copy(plan);
-          factory.purchase.plan.additionalDisplayLicenses = parseInt(plan.additionalDisplayLicenses) || 0;
-          factory.purchase.plan.isMonthly = isMonthly;
 
           factory.purchase.billingAddress = addressService.copyAddress(userState.getCopyOfSelectedCompany());
 
@@ -46,13 +62,23 @@
           factory.purchase.paymentMethods.selectedCard = factory.purchase.paymentMethods.newCreditCard;
           factory.purchase.estimate = {};
 
-          purchaseFlowTracker.trackProductAdded(factory.purchase.plan);
         };
 
-        factory.purchasePlan = function (plan, isMonthly) {
-          _init(plan, isMonthly);
+        factory.updatePlan = function (displays, isMonthly, total) {
+          var period = !isMonthly ? 'Yearly' : 'Monthly';
+          var s = displays > 1 ? 's' : '';
+          var planName = '' + displays + ' Display License' + s + ' (' + period + ')';
 
-          $state.go('apps.purchase.home');
+          factory.purchase.plan.name = planName;
+          factory.purchase.plan.displays = displays;
+          factory.purchase.plan.isMonthly = isMonthly;
+          if (isMonthly) {
+            factory.purchase.plan.monthly.billAmount = total;         
+          } else {
+            factory.purchase.plan.yearly.billAmount = total;
+          }
+
+          purchaseFlowTracker.trackProductAdded(factory.purchase.plan);
         };
 
         factory.showTaxExemptionModal = function () {

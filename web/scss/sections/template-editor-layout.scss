@@ -896,6 +896,10 @@ $short-phone-height: 570px;
     font-size: 16px;
   }
 
+  .text-xl {
+    font-size: 18px;
+  }
+
   label {
     margin-bottom: 5px;
     font-size: 14px;
@@ -935,6 +939,11 @@ $short-phone-height: 570px;
     color: $madero-green;
     border-color: $madero-green;
     padding: 5px 12px;
+
+    &.btn-hg {
+      padding: 9px 12px;
+      margin-top: 4px;      
+    }
 
     &[disabled] {
       opacity: 1;
