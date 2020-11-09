@@ -96,6 +96,21 @@
 
 .checkout-plan-picker {
 
+  .brandscript-panel {
+    width: 320px;
+    min-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media (min-width: $screen-md) {
+      margin-right: 60px;
+    }
+  }
+
+  .rzslider {
+    margin-top: 30px;
+  }
+
   .display-count-input {
     @extend .form-control;
     
@@ -105,6 +120,12 @@
     text-align: center;
     display: inline;
   }
+
+  .btn-group-period {
+    .btn {
+      font-weight: normal;
+    }
+  } 
 
   .education-discount {
     .madero-checkbox {
