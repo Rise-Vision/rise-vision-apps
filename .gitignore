@@ -3,7 +3,6 @@
 *.iml
 node_modules
 web/bower_components
-web/pricing-component.js
 reports
 *.log
 dist

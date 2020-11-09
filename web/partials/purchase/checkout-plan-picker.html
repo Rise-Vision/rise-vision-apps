@@ -1,20 +1,20 @@
 <!-- Step 0 -->
 <div class="checkout-plan-picker">
 
-  <div class="row">
-    <div class="col-md-4 mb-5 madero-style">
+  <div class="stack-md-sideways-panels">
+    <div class="brandscript-panel madero-style mb-5">
       <p class="text-xl u_margin-lg-bottom font-weight-bold">Ready to join 9,000 organizations and start communicating better?</p>
-      <div ng-include="'partials/components/userstate/brandscript-clients.html'"></div>
+      <div ng-include="'partials/components/userstate/brandscript-clients.html'"></div>        
     </div>
 
-    <div class="col-md-8">
+    <div class="">
       <form role="form" name="pricingForm" ng-submit="updatePlan()" class="madero-style">
 
         <div class="border-container text-center p-5 u_margin-md-bottom">
           <p class="text-xl font-weight-bold">How many displays do you want?</p>
           <input class="display-count-input mt-3" type="number" name="displayCount" ng-model="displayCount" min="1" ng-pattern="/^[0-9]+$/" required/>
-          <div class="row mt-3">
-            <div class="col-xs-12">
+          <div class="row">
+            <div class="col-md-offset-1 col-md-10">
               <rzslider rz-slider-model="displayCount" rz-slider-options="sliderOptions"></rzslider>
             </div>
           </div>
@@ -25,7 +25,7 @@
           <div class="row">
             <div class="col-sm-offset-1 col-sm-10">
               <div class="hidden-xs">
-                <div class="btn-group btn-group-justified">
+                <div class="btn-group btn-group-justified btn-group-period">
                   <button type="button" class="btn w-50" ng-class="{'btn-toggle-blue-off' : !periodMonthly, 'btn-toggle-blue-on' : periodMonthly}" ng-click="periodMonthly = true">
                     Pay Monthly
                     <streamline-icon name="checkmark" ng-show="periodMonthly"></streamline-icon>
@@ -37,7 +37,7 @@
                 </div>
               </div>
               <div class="visible-xs">
-                <div class="btn-group-vertical w-100">
+                <div class="btn-group-vertical w-100 btn-group-period">
                   <button type="button" class="btn" ng-class="{'btn-toggle-blue-off' : !periodMonthly, 'btn-toggle-blue-on' : periodMonthly}" ng-click="periodMonthly = true">
                     Pay Monthly
                     <streamline-icon name="checkmark" ng-show="periodMonthly"></streamline-icon>
@@ -49,12 +49,12 @@
                 </div>
               </div>
 
-              <div class="education-discount mt-3">
+              <div ng-if="applyEducationDiscount" class="education-discount mt-3">
                 <madero-checkbox ng-value="applyEducationDiscount"></madero-checkbox>
                 <span class="mr-3">I'm a school (save 10%).</span>
               </div>
              
-              <div class="pricing-calculator text-left text-lg mt-4">
+              <div class="pricing-calculator text-left text-lg u_margin-md-top">
                 <div class="row">
                   <div class="col-xs-offset-1 col-xs-11">
                     <span class="number" ng-if="displayCount">{{displayCount}}</span> Display licenses              
