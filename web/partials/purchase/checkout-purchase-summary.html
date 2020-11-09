@@ -24,35 +24,33 @@
       </span>
     </p>
   </div>
-  <div ng-hide="purchase.plan.isMonthly || purchase.estimate.couponAmount > 0">
-    <p class="mb-4" ng-show="!addCoupon">
-      &nbsp;
-      <span class="pull-right">
-        <a aria-label="Edit Subscription Details" class="madero-link u_clickable" ng-click="addCoupon = true" tabindex="1">Add A Coupon Code</a>
-      </span>
-    </p>    
-    <div class="row" ng-show="addCoupon">
-      <div class="col-md-12">
-        <div class="form-group">
-          <label for="coupon-code" class="control-label">Coupon Code:</label>
-          <span class="pull-right">
-            <a aria-label="Cancel Coupon Code" class="madero-link u_clickable" ng-click="clearCouponCode()" tabindex="1">Cancel</a>
-          </span>
-          <div class="flex-row">
-            <input id="coupon-code" aria-required="false" type="text" class="form-control mr-3" name="couponCode" ng-model="purchase.couponCode">
-            <button id="apply-coupon-code" type="button" aria-label="Apply Coupon Code" class="btn btn-default" ng-click="applyCouponCode()">Apply</button>
-          </div>
+
+  <p class="mb-4" ng-show="!addCoupon && !purchase.couponCode">
+    &nbsp;
+    <span class="pull-right">
+      <a aria-label="Edit Subscription Details" class="madero-link u_clickable" ng-click="addCoupon = true" tabindex="1">Add A Coupon Code</a>
+    </span>
+  </p>    
+  <div class="row" ng-show="addCoupon">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="coupon-code" class="control-label">Coupon Code:</label>
+        <span class="pull-right">
+          <a aria-label="Cancel Coupon Code" class="madero-link u_clickable" ng-click="clearCouponCode()" tabindex="1">Cancel</a>
+        </span>
+        <div class="flex-row">
+          <input id="coupon-code" aria-required="false" type="text" class="form-control mr-3" name="couponCode" ng-model="purchase.couponCode">
+          <button id="apply-coupon-code" type="button" aria-label="Apply Coupon Code" class="btn btn-default" ng-click="applyCouponCode()">Apply</button>
         </div>
       </div>
     </div>
   </div>
-  <div ng-show="purchase.estimate.couponAmount > 0">
-    <p class="mb-0">
-      <span class="font-weight-bold">Promotions and discounts:</span>
-      <span class="pull-right">-${{purchase.estimate.couponAmount}}</span>
-    </p>
-  </div>
+
   <div class="border-bottom pb-4">
+    <p class="mb-0" ng-repeat="coupon in purchase.estimate.coupons">
+      <span class="font-weight-bold">{{coupon.couponName}}:</span>
+      <span class="pull-right">-${{coupon.couponAmount | number:2}}</span>
+    </p>
     <p class="mb-0" ng-repeat="tax in purchase.estimate.taxes">
       <span>{{tax.taxName}}:</span>
       <span class="pull-right">${{tax.taxAmount | number:2}}</span>

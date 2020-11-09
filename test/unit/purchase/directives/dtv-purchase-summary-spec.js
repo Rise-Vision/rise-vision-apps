@@ -4,12 +4,13 @@ describe("directive: purchase summary", function() {
   beforeEach(module("risevision.apps.purchase"));
 
   beforeEach(module(function ($provide) {
-    $provide.value("purchaseFactory", purchaseFactory = {
+    $provide.value("purchaseFactory", {
       purchase: {
-        plan: {}
+        plan: {},
+        estimate: {}
       },
       showTaxExemptionModal: sinon.stub().returns(Q.resolve()),
-      getEstimate: sinon.stub()
+      getEstimate: sinon.stub().returns(Q.resolve())
     });
     $provide.value("userState", {
       getCopyOfSelectedCompany: function() {
@@ -23,7 +24,9 @@ describe("directive: purchase summary", function() {
 
   var $scope, element, purchaseFactory;
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    purchaseFactory = $injector.get("purchaseFactory");
+
     $templateCache.put("partials/purchase/checkout-purchase-summary.html", "<p>mock</p>");
     $scope = $rootScope.$new();
 
@@ -40,6 +43,13 @@ describe("directive: purchase summary", function() {
     expect($scope.isSubcompanySelected).to.equal("isSelected");
 
     expect($scope.getAdditionalDisplaysPrice).to.be.a("function");
+    expect($scope.applyCouponCode).to.be.a("function");
+    expect($scope.clearCouponCode).to.be.a("function");
+    expect($scope.showTaxExemptionModal).to.be.a("function");
+  });
+
+  it("should load estimate", function() {
+    purchaseFactory.getEstimate.should.have.been.called;
   });
 
   describe("getAdditionalDisplaysPrice: ", function() {
@@ -65,6 +75,71 @@ describe("directive: purchase summary", function() {
       };
 
       expect($scope.getAdditionalDisplaysPrice()).to.equal(200);
+    });
+  });
+
+  describe("applyCouponCode: ", function() {
+    it("should not get estimate if coupon code is blank", function() {
+      $scope.applyCouponCode();
+
+      purchaseFactory.getEstimate.should.have.been.calledOnce;
+    });
+
+    it("should get estimate", function() {
+      $scope.purchase.couponCode = "someCoupon";
+
+      $scope.applyCouponCode();
+
+      purchaseFactory.getEstimate.should.have.been.calledTwice;
+    });
+
+    it("should hide coupon form if an error is not returned", function(done) {
+      $scope.addCoupon = true;
+      $scope.purchase.couponCode = "someCoupon";
+
+      $scope.applyCouponCode();
+
+      setTimeout(function() {
+        expect($scope.addCoupon).to.be.false;
+
+        done();
+      });
+    });
+
+    it("should not hide coupon form on error", function(done) {
+      $scope.addCoupon = true;
+      $scope.purchase.couponCode = "someCoupon";
+      $scope.purchase.estimate.estimateError = "someError";
+
+      $scope.applyCouponCode();
+
+      setTimeout(function() {
+        expect($scope.addCoupon).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe("clearCouponCode: ", function() {
+    it("should clear coupon code and hide form", function() {
+      $scope.addCoupon = true;
+      $scope.purchase.couponCode = "someCoupon";
+
+      $scope.clearCouponCode();
+
+      expect($scope.addCoupon).to.be.false;
+      expect($scope.purchase.couponCode).to.not.be.ok;
+
+      purchaseFactory.getEstimate.should.have.been.calledOnce;
+    });
+
+    it("should refresh estimate on estimate error", function() {
+      $scope.purchase.estimate.estimateError = "someError";
+
+      $scope.clearCouponCode();
+
+      purchaseFactory.getEstimate.should.have.been.calledTwice;
     });
   });
 
