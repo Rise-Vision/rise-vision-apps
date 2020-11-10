@@ -101,7 +101,7 @@ angular.module('risevision.apps.purchase')
         if ($scope.currentStep > 0) {
           $scope.currentStep--;
         } else {
-          $state.go('apps.plans.home');
+          $state.go('apps.purchase.plans');
         }
       };
 
@@ -109,7 +109,7 @@ angular.module('risevision.apps.purchase')
         purchaseFactory.purchase.checkoutError = null;
 
         if (index === -1) {
-          $state.go('apps.plans.home');
+          $state.go('apps.purchase.plans');
         }
 
         $scope.currentStep = index;

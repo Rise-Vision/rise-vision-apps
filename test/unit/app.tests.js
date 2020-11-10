@@ -143,7 +143,7 @@ describe('app:', function() {
 
       setTimeout(function() {
         $location.replace.should.have.been.called;
-        expect($state.go).to.have.been.calledWith('apps.plans.home');
+        expect($state.go).to.have.been.calledWith('apps.purchase.plans');
 
         done();
       }, 10);

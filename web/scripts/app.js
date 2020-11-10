@@ -106,7 +106,7 @@ angular.module('risevision.apps', [
               return canAccessApps(true).then(function () {
                 $location.replace();
                 if (showProduct) {
-                  $state.go('apps.plans.home');
+                  $state.go('apps.purchase.plans');
                 } else {
                   $state.go('apps.home');
                 }
@@ -182,7 +182,7 @@ angular.module('risevision.apps', [
           $state.go($state.current, null, {
             reload: true
           });
-        } else if ($state.current.name === 'apps.plans.home' ||
+        } else if ($state.current.name === 'apps.purchase.plans' ||
           $state.current.name === 'apps.purchase.home') {
           $state.go('apps.home');
         }
