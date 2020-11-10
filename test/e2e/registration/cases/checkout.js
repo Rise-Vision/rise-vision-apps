@@ -69,6 +69,8 @@
 
           expect(purchaseFlowPage.getBillingAddressPage().isDisplayed()).to.eventually.be.true;
           expect(purchaseFlowPage.getEmailField().isDisplayed()).to.eventually.be.true;
+
+          expect(purchaseFlowPage.getReviewEstimatePage().isDisplayed()).to.eventually.be.true;
         });
 
         it("should fill out billing address", function() {
@@ -104,6 +106,8 @@
           expect(purchaseFlowPage.getCardName().isDisplayed()).to.eventually.be.true;
 
           expect(purchaseFlowPage.getPaymentMethodSelected().getText()).to.eventually.contain('Credit Card');
+
+          expect(purchaseFlowPage.getPayButton().isDisplayed()).to.eventually.be.true;
         });
 
         it("should switch to invoice me form", function() {
@@ -112,6 +116,8 @@
           expect(purchaseFlowPage.getPaymentMethodSelected().getText()).to.eventually.contain('Invoice Me');
 
           expect(purchaseFlowPage.getGenerateInvoiceForm().isDisplayed()).to.eventually.be.true;
+
+          expect(purchaseFlowPage.getInvoiceButton().isDisplayed()).to.eventually.be.true;
 
           console.log('Purchase using Invoice Me');
         });
@@ -137,12 +143,9 @@
         it("should purchase",function() {
           expect(purchaseFlowPage.getReviewPurchasePage().isDisplayed()).to.eventually.be.true;
 
-          // Wait for other responses to complete and update Chargebee address for the Company
-          browser.sleep(10000);
+          browser.sleep(1000);
 
-          expect(purchaseFlowPage.getPayButton().isDisplayed()).to.eventually.be.true;
-
-          helper.clickWhenClickable(purchaseFlowPage.getPayButton(), 'Purchase flow Pay Button');
+          helper.clickWhenClickable(purchaseFlowPage.getInvoiceButton(), 'Purchase flow Invoice Button');
 
           helper.waitForSpinner();
           helper.waitDisappear(purchaseFlowPage.getReviewPurchasePage(), 'Review Purchase Page');
