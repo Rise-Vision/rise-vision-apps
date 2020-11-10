@@ -42,6 +42,11 @@ angular.module('risevision.apps.directives')
             case 'apps.home':
               return 'Home';
 
+            case 'apps.purchase':
+            case 'apps.purchase.plans':
+            case 'apps.purchase.home':
+              return 'Subscribe';
+
             case 'apps.billing':
             case 'apps.billing.home':
               return 'Billing';
