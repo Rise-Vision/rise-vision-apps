@@ -81,6 +81,10 @@ describe('directive: page title', function() {
     checkState('apps', 'Home');
     checkState('apps.home', 'Home');
 
+    checkState('apps.purchase', 'Subscribe');
+    checkState('apps.purchase.plans', 'Subscribe');
+    checkState('apps.purchase.home', 'Subscribe');
+
     checkState('apps.billing', 'Billing');
     checkState('apps.billing.home', 'Billing');
 
