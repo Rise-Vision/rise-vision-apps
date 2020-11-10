@@ -6,10 +6,10 @@
 
   <div rv-spinner rv-spinner-key="purchase-loader" rv-spinner-start-active="1"></div>
 
-  <plan-picker ng-if="currentStep === 0"></plan-picker>
-  <billing-address ng-if="currentStep === 1"></billing-address>
-  <payment-methods ng-if="currentStep === 2"></payment-methods>
-  <checkout-success ng-if="currentStep === 3"></checkout-success>
+  <plan-picker ng-show="currentStep === 0"></plan-picker>
+  <billing-address ng-show="currentStep === 1"></billing-address>
+  <payment-methods ng-show="currentStep === 2"></payment-methods>
+  <checkout-success ng-show="currentStep === 3"></checkout-success>
 
   <div class="row mt-5 pt-5 border-top purchase-footer">
     <div class="col-md-4 mb-5">

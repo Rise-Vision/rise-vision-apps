@@ -15,14 +15,14 @@ describe("controller: purchase", function() {
       }
     });
     $provide.service("addressFactory", function() {
-      return addressFactory = {
-        validateAddress: function(addressObject) {
+      return {
+        validateAddress: sinon.spy(function(addressObject) {
           if (!validate) {
             addressObject.validationError = true;
           }
 
           return Q.resolve();
-        },
+        }),
         updateContact: sandbox.stub(),
         updateAddress: sandbox.stub()
       };
@@ -54,6 +54,7 @@ describe("controller: purchase", function() {
       $scope = $rootScope.$new();
       $state = $injector.get("$state");
       $loading = $injector.get("$loading");
+      addressFactory = $injector.get("addressFactory");
       purchaseFactory = $injector.get('purchaseFactory');
       helpWidgetFactory = $injector.get('helpWidgetFactory');
 
@@ -81,6 +82,7 @@ describe("controller: purchase", function() {
 
     expect($scope.validateAddress).to.be.a("function");
     expect($scope.completePayment).to.be.a("function");
+    expect($scope.completeCardPayment).to.be.a("function");
     expect($scope.setNextStep).to.be.a("function");
     expect($scope.setPreviousStep).to.be.a("function");
     expect($scope.setCurrentStep).to.be.a("function");
@@ -112,10 +114,12 @@ describe("controller: purchase", function() {
 
     it("should not validate if the corresponding form is invalid", function(done) {
       $scope.form.billingAddressForm = {
-        $invalid: true
+        $valid: false
       };
 
       $scope.validateAddress({});
+
+      addressFactory.validateAddress.should.not.have.been.called;
 
       setTimeout(function() {
         $scope.setNextStep.should.not.have.been.called;
@@ -124,8 +128,30 @@ describe("controller: purchase", function() {
       }, 10);
     });
 
+    it("should increment step if other forms are invalid", function(done) {
+      $scope.form.billingAddressForm = {
+        $valid: true
+      };
+
+      $scope.form.reviewSubscriptionForm = {
+        $valid: false
+      };
+
+      $scope.validateAddress({});
+
+      addressFactory.validateAddress.should.have.been.called;
+
+      setTimeout(function() {
+        $scope.setNextStep.should.have.been.called;
+
+        done();
+      }, 10);
+    });
+
     it("should validate and proceed to next step", function(done) {
       $scope.validateAddress({}, "contact");
+
+      addressFactory.validateAddress.should.have.been.called;
 
       setTimeout(function() {
         addressFactory.updateContact.should.have.been.calledWith("contact");
@@ -140,6 +166,8 @@ describe("controller: purchase", function() {
       validate = false;
       $scope.validateAddress({});
 
+      addressFactory.validateAddress.should.have.been.called;
+
       setTimeout(function() {
         $scope.setNextStep.should.not.have.been.called;
 
@@ -149,23 +177,67 @@ describe("controller: purchase", function() {
 
   });
 
-  describe("completePayment: ", function() {
+  describe('completePayment:', function() {
     beforeEach(function() {
       sandbox.spy($scope, "setNextStep");
       $scope.setCurrentStep(1);
     });
 
-    it("should not validate if the corresponding form is invalid", function(done) {
+    it("should complete payment even if the corresponding form is invalid", function() {
       $scope.form.billingAddressForm = {
-        $invalid: true
+        $valid: false
       };
 
-      $scope.completePayment({});
+      $scope.completePayment();
+
+      purchaseFactory.completePayment.should.have.been.called;
+    });
+
+    it("should complete payment and proceed", function(done) {
+      $scope.completePayment();
+
+      setTimeout(function() {
+        purchaseFactory.completePayment.should.have.been.called;
+
+        $scope.setNextStep.should.have.been.called;
+
+        done();
+      }, 10);
+    });
+
+    it("should not proceed if there are errors", function(done) {
+      purchaseFactory.completePayment.returns(Q.reject());
+
+      $scope.completePayment();
+
+      setTimeout(function() {
+        purchaseFactory.completePayment.should.have.been.called;
+
+        $scope.setNextStep.should.not.have.been.called;
+
+        done();
+      }, 10);
+    });
+
+  });
+
+  describe("completeCardPayment: ", function() {
+    beforeEach(function() {
+      sandbox.spy($scope, "completePayment");
+      $scope.setCurrentStep(1);
+    });
+
+    it("should not validate if the corresponding form is invalid", function(done) {
+      $scope.form.billingAddressForm = {
+        $valid: false
+      };
+
+      $scope.completeCardPayment({});
 
       purchaseFactory.validatePaymentMethod.should.not.have.been.called;
 
       setTimeout(function() {
-        $scope.setNextStep.should.not.have.been.called;
+        $scope.completePayment.should.not.have.been.called;
 
         done();
       }, 10);
@@ -173,14 +245,14 @@ describe("controller: purchase", function() {
 
     describe('validatePaymentMethod:', function() {
       it("should validate and proceed", function(done) {
-        $scope.completePayment('cardElement');
+        $scope.completeCardPayment('cardElement');
 
         purchaseFactory.validatePaymentMethod.should.have.been.calledWith('cardElement');
 
         setTimeout(function() {
           purchaseFactory.preparePaymentIntent.should.have.been.called;
 
-          $scope.setNextStep.should.have.been.called;
+          $scope.completePayment.should.have.been.called;
 
           done();
         }, 10);
@@ -189,14 +261,14 @@ describe("controller: purchase", function() {
       it("should not proceed if there are errors", function(done) {
         purchaseFactory.validatePaymentMethod.returns(Q.reject());
 
-        $scope.completePayment();
+        $scope.completeCardPayment();
 
         purchaseFactory.validatePaymentMethod.should.have.been.called;
 
         setTimeout(function() {
           purchaseFactory.preparePaymentIntent.should.not.have.been.called;
 
-          $scope.setNextStep.should.not.have.been.called;
+          $scope.completePayment.should.not.have.been.called;
 
           done();
         }, 10);
@@ -206,13 +278,11 @@ describe("controller: purchase", function() {
 
     describe('preparePaymentIntent:', function() {
       it("should prepare intent and proceed", function(done) {
-        $scope.completePayment('cardElement');
+        $scope.completeCardPayment('cardElement');
 
         setTimeout(function() {
           purchaseFactory.preparePaymentIntent.should.have.been.called;
           purchaseFactory.completePayment.should.have.been.called;
-
-          $scope.setNextStep.should.have.been.called;
 
           done();
         }, 10);
@@ -221,90 +291,62 @@ describe("controller: purchase", function() {
       it("should not proceed if there are errors", function(done) {
         purchaseFactory.preparePaymentIntent.returns(Q.reject());
 
-        $scope.completePayment();
+        $scope.completeCardPayment();
 
         setTimeout(function() {
           purchaseFactory.preparePaymentIntent.should.have.been.called;
           purchaseFactory.completePayment.should.not.have.been.called;
 
-          $scope.setNextStep.should.not.have.been.called;
-
           done();
         }, 10);
       });
 
-    });
-    
-    describe('completePayment:', function() {
-      it("should complete payment and proceed", function(done) {
-        $scope.completePayment('cardElement');
-
-        setTimeout(function() {
-          purchaseFactory.completePayment.should.have.been.called;
-
-          $scope.setNextStep.should.have.been.called;
-
-          done();
-        }, 10);
-      });
-
-      it("should not proceed if there are errors", function(done) {
-        purchaseFactory.completePayment.returns(Q.reject());
-
-        $scope.completePayment();
-
-        setTimeout(function() {
-          purchaseFactory.completePayment.should.have.been.called;
-
-          $scope.setNextStep.should.not.have.been.called;
-
-          done();
-        }, 10);
-      });
-
-    });
-
-    it("should not proceed if there are errors", function(done) {
-      purchaseFactory.purchase.checkoutError = "error";
-      $scope.completePayment({});
-
-      setTimeout(function() {
-        $scope.setNextStep.should.not.have.been.called;
-
-        done();
-      }, 10);
     });
 
   });
 
-  describe("setNextStep: ", function() {
-    it("should increment step", function() {
-      $scope.setNextStep();
+  describe("_refreshEstimate:", function() {
+    it('should not refresh the estimate on step 0', function() {
+      $scope.setCurrentStep(0);
 
-      expect($scope.currentStep).to.equal(1);
+      purchaseFactory.getEstimate.should.not.have.been.called;
     });
 
-    it("should not increment step if the corresponding form is invalid", function() {
+    it('should refresh the estimate on step 1', function() {
       $scope.setCurrentStep(1);
 
-      $scope.form.billingAddressForm = {
-        $invalid: true
-      };
-
-      $scope.setNextStep();
-
-      expect($scope.currentStep).to.equal(1);
+      purchaseFactory.getEstimate.should.have.been.called;
     });
 
-    it("should increment step if other forms are invalid", function() {
-      $scope.form.billingAddressForm = {
-        $valid: true
-      };
+    it('should refresh the estimate on step 2', function() {
+      $scope.setCurrentStep(2);
 
-      $scope.form.reviewSubscriptionForm = {
-        $invalid: true
-      };
+      purchaseFactory.getEstimate.should.have.been.called;
+    });
 
+    it('should not refresh the estimate on step 3', function() {
+      $scope.setCurrentStep(3);
+
+      purchaseFactory.getEstimate.should.not.have.been.called;
+    });
+
+    it('should refresh the estimate on setNextStep', function() {
+      $scope.setCurrentStep(0);
+      $scope.setNextStep();
+
+      purchaseFactory.getEstimate.should.have.been.called;
+    });
+
+    it('should not refresh the estimate on setPreviousStep', function() {
+      $scope.setCurrentStep(3);
+      $scope.setPreviousStep();
+
+      purchaseFactory.getEstimate.should.not.have.been.called;
+    });
+  });
+
+  describe("setNextStep: ", function() {
+    it("should increment step", function() {
       $scope.setNextStep();
 
       expect($scope.currentStep).to.equal(1);

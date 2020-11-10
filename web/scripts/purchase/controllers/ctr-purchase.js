@@ -67,14 +67,8 @@ angular.module('risevision.apps.purchase')
           });
       };
 
-      $scope.completePayment = function (element) {
-        if (!_isFormValid()) {
-          return;
-        }
-
-        purchaseFactory.validatePaymentMethod(element)
-          .then(purchaseFactory.preparePaymentIntent)
-          .then(purchaseFactory.completePayment)
+      $scope.completePayment = function () {
+        return purchaseFactory.completePayment()
           .then(function () {
             if (!purchaseFactory.purchase.checkoutError) {
               $scope.setNextStep();
@@ -82,11 +76,24 @@ angular.module('risevision.apps.purchase')
           });
       };
 
-      $scope.setNextStep = function () {
+      $scope.completeCardPayment = function (element) {
         if (!_isFormValid()) {
           return;
         }
 
+        purchaseFactory.validatePaymentMethod(element)
+          .then(purchaseFactory.preparePaymentIntent)
+          .then($scope.completePayment);
+      };
+
+      var _refreshEstimate = function() {
+        if ($scope.currentStep === 1 || $scope.currentStep === 2) {
+          purchaseFactory.getEstimate();
+        }
+      };
+
+      $scope.setNextStep = function () {
+        // Note: Ensure to check if the form is valid before calling
         if (($scope.finalStep && $scope.currentStep < 1) || $scope.currentStep === 1) {
           $scope.currentStep = 2;
 
@@ -95,24 +102,21 @@ angular.module('risevision.apps.purchase')
           $scope.currentStep++;
         }
 
+        _refreshEstimate();
       };
 
       $scope.setPreviousStep = function () {
         if ($scope.currentStep > 0) {
           $scope.currentStep--;
-        } else {
-          $state.go('apps.plans.home');
         }
       };
 
       $scope.setCurrentStep = function (index) {
         purchaseFactory.purchase.checkoutError = null;
 
-        if (index === -1) {
-          $state.go('apps.plans.home');
-        }
-
         $scope.currentStep = index;
+
+        _refreshEstimate();
       };
 
       $scope.close = function () {
