@@ -160,12 +160,12 @@
       proLicenseCount: 0
     }])
     .factory('plansFactory', ['$modal', 'userState', 'PLANS_LIST', 'analyticsFactory',
-      '$state', 'confirmModal', '$location',
-      function ($modal, userState, PLANS_LIST, analyticsFactory, $state, confirmModal, $location) {
+      '$state', 'confirmModal',
+      function ($modal, userState, PLANS_LIST, analyticsFactory, $state, confirmModal) {
         var _factory = {};
 
         _factory.showPlansModal = function () {
-          $state.go('apps.plans.home', { redirectTo: $location.path() });
+          $state.go('apps.purchase.plans');
         };
 
         _factory.showPurchaseOptions = function () {

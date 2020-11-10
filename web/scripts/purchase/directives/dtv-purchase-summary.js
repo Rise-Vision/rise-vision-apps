@@ -11,8 +11,6 @@ angular.module('risevision.apps.purchase')
           $scope.selectedCompany = userState.getCopyOfSelectedCompany();
           $scope.isSubcompanySelected = userState.isSubcompanySelected();
 
-          purchaseFactory.getEstimate();
-
           $scope.getAdditionalDisplaysPrice = function () {
             var plan = $scope.purchase.plan;
             if (plan.isMonthly) {

@@ -36,8 +36,10 @@ var PurchaseFlowPage = function() {
   var cardExpYr = element(by.id('new-card-expiry-year'));
   var cardCVC = element(by.id('new-card-cvc'));
 
+  var reviewEstimatePage = element(by.id('checkout-estimate-summary'));
   var reviewPurchasePage = element(by.id('checkout-purchase-summary'));
   var payButton = element(by.id('payButton'));
+  var invoiceButton = element(by.id('invoiceButton'));
 
   var checkoutSuccessPage = element(by.id('checkout-success'));
   var checkoutDoneButton = element(by.id('doneButton'));
@@ -161,12 +163,20 @@ var PurchaseFlowPage = function() {
     return cardExpYr;
   }
 
+  this.getReviewEstimatePage = function() {
+    return reviewEstimatePage;
+  };
+
   this.getReviewPurchasePage = function() {
     return reviewPurchasePage;
   };
 
   this.getPayButton = function() {
     return payButton;
+  };
+
+  this.getInvoiceButton = function() {
+    return invoiceButton;
   };
 
   this.getCheckoutSuccessPage = function() {

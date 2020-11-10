@@ -35,11 +35,6 @@ describe("Services: plans factory", function() {
     $provide.factory('confirmModal', function() {
        return confirmModalStub = sinon.stub().returns(Q.resolve());
     });
-    $provide.service("$location", function() {
-      return {
-        path: sinon.stub().returns("/path")
-      };
-    });
   }));
 
   var sandbox, $modal, userState, plansFactory, analyticsFactory, $state,
@@ -72,20 +67,16 @@ describe("Services: plans factory", function() {
     expect(plansFactory.initVolumePlanTrial).to.be.a('function');
   });
 
-  describe("showPlansModal: ", function() {
-    it("should show plans home and provide path to redirect back on finish", function() {
+  it("showPlansModal: ", function() {
+    plansFactory.showPlansModal();
 
-      plansFactory.showPlansModal();
-
-      $state.go.should.have.been.calledWith("apps.plans.home", { redirectTo: "/path"});
-
-    });
+    $state.go.should.have.been.calledWith('apps.purchase.plans');
   });
 
   it("showPurchaseOptions: ", function() {
     plansFactory.showPurchaseOptions();
 
-    $state.go.should.have.been.calledWith('apps.plans.home');
+    $state.go.should.have.been.calledWith('apps.purchase.plans');
   });
 
   describe("confirmAndPurchase:", function(){
@@ -178,7 +169,7 @@ describe("Services: plans factory", function() {
       plansFactory.showUnlockThisFeatureModal();
 
       setTimeout(function(){
-        $state.go.should.have.been.calledWith('apps.plans.home');
+        $state.go.should.have.been.calledWith('apps.purchase.plans');
 
         done();
       },10);

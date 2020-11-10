@@ -40,15 +40,35 @@ describe('app:', function() {
 
   var $state, canAccessApps, currentPlanFactory, userState, $rootScope, messageBoxStub;
 
-  describe('state apps.plans.home:',function(){
+  describe('state apps.purchase.plans:',function(){
     it('should register state',function(){
-      var state = $state.get('apps.plans.home');
+      var state = $state.get('apps.purchase.plans');
       expect(state).to.be.ok;
-      expect(state.url).to.equal('/plans?redirectTo');
+      expect(state.url).to.equal('/plans');
+      expect(state.controller).to.be.ok;
+    });
+
+    it('should navigate the purchase page',function(done){
+      $state.get('apps.purchase.plans').controller[1]($state);
+      setTimeout(function() {
+        $state.go.should.have.been.calledWith('apps.purchase.home');
+
+        done();
+      }, 10);
+    });
+
+  });
+
+
+  describe('state apps.purchase.home:',function(){
+    it('should register state',function(){
+      var state = $state.get('apps.purchase.home');
+      expect(state).to.be.ok;
+      expect(state.url).to.equal('/purchase');
     });
 
     it('should go to billing page/edit subscription if company has a plan and manages it', function(done) {
-      $state.go('apps.plans.home');
+      $state.go('apps.purchase.home');
       $rootScope.$digest();
 
       canAccessApps.should.have.been.called;
@@ -62,9 +82,9 @@ describe('app:', function() {
     });
 
     it('should show a message if company has a plan but it is managed by a parent company', function(done) {
-      currentPlanFactory.currentPlan.isPurchasedByParent = true
+      currentPlanFactory.currentPlan.isPurchasedByParent = true;
 
-      $state.go('apps.plans.home');
+      $state.go('apps.purchase.home');
       $rootScope.$digest();
 
       canAccessApps.should.have.been.called;
@@ -87,7 +107,7 @@ describe('app:', function() {
       currentPlanFactory.currentPlan.isPurchasedByParent = true      
       currentPlanFactory.currentPlan.parentPlanContactEmail = 'test@email.com';
 
-      $state.go('apps.plans.home');
+      $state.go('apps.purchase.home');
       $rootScope.$digest();
 
       setTimeout(function(){
@@ -104,15 +124,13 @@ describe('app:', function() {
     it('should go to Purchase page if company is not subscribed to a plan', function(done) {
       currentPlanFactory.isSubscribed.returns(false);
 
-      $state.go('apps.plans.home');
+      $state.go('apps.purchase.home');
       $rootScope.$digest();
 
       setTimeout(function(){
         expect(messageBoxStub).to.not.have.been.called;
 
-        $state.go.should.have.been.calledTwice;
-
-        $state.go.should.have.been.calledWith('apps.purchase.home');
+        $state.go.should.have.been.calledOnce;
 
         done();
       },10);

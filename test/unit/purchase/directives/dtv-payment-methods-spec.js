@@ -53,27 +53,12 @@ describe("directive: payment methods", function() {
   });
 
   describe('initializeStripeElements:', function() {
-    beforeEach(function() {
-      $scope.paymentMethods = {};
+    beforeEach(function(done) {
+      setTimeout(function() {
+        done();
+      }, 10);
     });
-
-    it('should not call initialize', function() {
-      stripeService.initializeStripeElements.should.not.have.been.called;
-    });
-
-    it('should not initialize for invoice', function() {
-      $scope.paymentMethods.paymentMethod = 'invoice';
-
-      $scope.$digest();
-
-      stripeService.initializeStripeElements.should.not.have.been.called;
-    });
-
-    it('should initialize for card', function() {
-      $scope.paymentMethods.paymentMethod = 'card';
-
-      $scope.$digest();
-
+    it('should initialize', function() {
       stripeService.initializeStripeElements.should.have.been.calledWith([
         'cardNumber',
         'cardExpiry',
@@ -81,86 +66,47 @@ describe("directive: payment methods", function() {
       ], sinon.match.object);
     });
 
-    it('should initialize elements and add them to the scope', function(done) {
-      $scope.paymentMethods.paymentMethod = 'card';
-
-      $scope.$digest();
-
-      setTimeout(function() {
-        expect($scope['cardNumber']).to.be.an('object');
-        expect($scope['cardExpiry']).to.be.an('object');
-        expect($scope['cardCvc']).to.be.an('object');
-
-        done();
-      }, 10);
+    it('should initialize elements and add them to the scope', function() {
+      expect($scope['cardNumber']).to.be.an('object');
+      expect($scope['cardExpiry']).to.be.an('object');
+      expect($scope['cardCvc']).to.be.an('object');
     });
 
-    it('should initialize handlers', function(done) {
-      $scope.paymentMethods.paymentMethod = 'card';
+    it('should initialize handlers', function() {
+      $scope['cardNumber'].mount.should.have.been.calledWith('#new-card-number');
 
-      $scope.$digest();
-
-      setTimeout(function() {
-        $scope['cardNumber'].mount.should.have.been.calledWith('#new-card-number');
-
-        $scope['cardNumber'].on.should.have.been.calledTwice;
-        $scope['cardNumber'].on.should.have.been.calledWith('blur', sinon.match.func);
-        $scope['cardNumber'].on.should.have.been.calledWith('change', sinon.match.func);
-
-        done();
-      }, 10);
+      $scope['cardNumber'].on.should.have.been.calledTwice;
+      $scope['cardNumber'].on.should.have.been.calledWith('blur', sinon.match.func);
+      $scope['cardNumber'].on.should.have.been.calledWith('change', sinon.match.func);
     });
 
-    it('should $digest on blur', function(done) {
-      $scope.paymentMethods.paymentMethod = 'card';
+    it('should $digest on blur', function() {
+      sinon.spy($scope, '$digest');
 
-      $scope.$digest();
+      $scope['cardNumber'].on.getCall(0).args[1]();
 
-      setTimeout(function() {
-        sinon.spy($scope, '$digest');
-
-        $scope['cardNumber'].on.getCall(0).args[1]();
-
-        $scope.$digest.should.have.been.called;
-
-        done();
-      }, 10);
+      $scope.$digest.should.have.been.called;
     });
 
-    it('should add dirty class and $digest on change', function(done) {
-      $scope.paymentMethods.paymentMethod = 'card';
+    it('should add dirty class and $digest on change', function() {
+      var cardElement = angular.element('<div id="new-card-number"/>').appendTo('body');
 
-      $scope.$digest();
+      sinon.spy($scope, '$digest');
 
-      setTimeout(function() {
-        var cardElement = angular.element('<div id="new-card-number"/>').appendTo('body');
+      $scope['cardNumber'].on.getCall(1).args[1]();
 
-        sinon.spy($scope, '$digest');
+      expect(cardElement[0].className).to.contain('dirty');
+      $scope.$digest.should.have.been.called;
 
-        $scope['cardNumber'].on.getCall(1).args[1]();
-
-        expect(cardElement[0].className).to.contain('dirty');
-        $scope.$digest.should.have.been.called;
-
-        element.remove();
-        done();
-      }, 10);
+      element.remove();
     });
 
-    it('should handle failure to get element', function(done) {
-      $scope.paymentMethods.paymentMethod = 'card';
+    it('should handle failure to get element', function() {
+      sinon.spy($scope, '$digest');
 
-      $scope.$digest();
+      $scope['cardNumber'].on.getCall(1).args[1]();
 
-      setTimeout(function() {
-        sinon.spy($scope, '$digest');
-
-        $scope['cardNumber'].on.getCall(1).args[1]();
-
-        $scope.$digest.should.have.been.called;
-
-        done();
-      }, 10);
+      $scope.$digest.should.have.been.called;
     });
 
   });
