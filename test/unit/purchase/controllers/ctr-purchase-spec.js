@@ -41,10 +41,14 @@ describe("controller: purchase", function() {
     $provide.service("helpWidgetFactory", function() {
       return {};
     });
-    
+    $provide.service("$location", function() {
+      return {
+        path: sandbox.stub().returns("/purchase")
+      };
+    });    
   }));
 
-  var sandbox, $scope, $state, $loading, validate, purchaseFactory, addressFactory, helpWidgetFactory;
+  var sandbox, $scope, $state, $loading, validate, purchaseFactory, addressFactory, helpWidgetFactory, $location, redirectTo;
 
   beforeEach(function() {
     validate = true;
@@ -55,12 +59,15 @@ describe("controller: purchase", function() {
       $state = $injector.get("$state");
       $loading = $injector.get("$loading");
       addressFactory = $injector.get("addressFactory");
-      purchaseFactory = $injector.get('purchaseFactory');
-      helpWidgetFactory = $injector.get('helpWidgetFactory');
+      purchaseFactory = $injector.get("purchaseFactory");
+      helpWidgetFactory = $injector.get("helpWidgetFactory");
+      $location = $injector.get("$location");
+      redirectTo =  '/displays/list'
 
       $controller("PurchaseCtrl", {
         $scope: $scope,
         $loading: $loading,
+        redirectTo: redirectTo
       });
 
       $scope.$digest();
@@ -419,23 +426,23 @@ describe("controller: purchase", function() {
   });
 
   describe("close: ", function() {
-    it("should close modal", function() {
+    it("should close modal and redirect to provided path", function() {
       $scope.close();
 
-      $state.go.should.have.been.calledWith('apps.home');
+      $location.path.should.have.been.calledWith(redirectTo);
     });
 
     it("should wait until Company is reloaded before closing modal", function() {
       purchaseFactory.purchase.reloadingCompany = true;
       $scope.close();
 
-      $state.go.should.not.have.been.called;
+      $location.path.should.not.have.been.calledWith(redirectTo);
       expect(purchaseFactory.loading).to.be.true;
 
       purchaseFactory.purchase.reloadingCompany = false;
       $scope.$digest();
 
-      $state.go.should.have.been.calledWith('apps.home');
+      $location.path.should.have.been.calledWith(redirectTo);
       expect(purchaseFactory.loading).to.be.false;
     });
 

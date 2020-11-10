@@ -33,12 +33,13 @@ describe('app:', function() {
       canAccessApps = $injector.get('canAccessApps');
       currentPlanFactory = $injector.get('currentPlanFactory');
       $rootScope = $injector.get('$rootScope');
+      $location = $injector.get('$location');
 
       sinon.spy($state, 'go');
     });
   });
 
-  var $state, canAccessApps, currentPlanFactory, userState, $rootScope, messageBoxStub;
+  var $state, canAccessApps, currentPlanFactory, userState, $rootScope, messageBoxStub, $location;
 
   describe('state apps.purchase.plans:',function(){
     it('should register state',function(){
@@ -134,6 +135,20 @@ describe('app:', function() {
 
         done();
       },10);
+    });
+
+    it('should resolve redirectTo as previous path', function() {
+      sinon.stub($location, 'path').returns('/displays/list');
+
+      var redirectTo = $state.get('apps.purchase.home').resolve.redirectTo[1]($location);      
+      expect(redirectTo).to.equal('/displays/list');
+    });
+
+    it('should resolve redirectTo as Apps home if previous path is purchase', function() {
+      sinon.stub($location, 'path').returns('/purchase');
+
+      var redirectTo = $state.get('apps.purchase.home').resolve.redirectTo[1]($location);      
+      expect(redirectTo).to.equal('/');
     });
 
   });
