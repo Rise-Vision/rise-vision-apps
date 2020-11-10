@@ -13,7 +13,7 @@ angular.module('risevision.apps')
         })
 
         .state('apps.purchase.home', {
-          url: '/purchase',
+          url: '/purchase?redirectTo',
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/purchase/app-purchase.html');
           }],

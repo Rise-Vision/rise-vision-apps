@@ -20,10 +20,10 @@
           })
 
           .state('apps.plans.home', {
-            url: '/plans',
+            url: '/plans?redirectTo',
              resolve: {
-              canAccessApps: ['$q', '$state', 'canAccessApps', 'currentPlanFactory', 'messageBox',
-                function ($q, $state, canAccessApps, currentPlanFactory, messageBox) {
+              canAccessApps: ['$q', '$state', 'canAccessApps', 'currentPlanFactory', 'messageBox', '$stateParams',
+                function ($q, $state, canAccessApps, currentPlanFactory, messageBox, $stateParams) {
                   return canAccessApps()
                     .then(function() {
                       if (currentPlanFactory.isSubscribed() && !currentPlanFactory.isParentPlan()) {
@@ -49,7 +49,7 @@
                           });
                         }
                       } else {
-                        $state.go('apps.purchase.home');
+                        $state.go('apps.purchase.home', { redirectTo: $stateParams.redirectTo });
                       }
                     });
                 }

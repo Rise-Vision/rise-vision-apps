@@ -35,6 +35,11 @@ describe("Services: plans factory", function() {
     $provide.factory('confirmModal', function() {
        return confirmModalStub = sinon.stub().returns(Q.resolve());
     });
+    $provide.service("$location", function() {
+      return {
+        path: sinon.stub().returns("/path")
+      };
+    });
   }));
 
   var sandbox, $modal, userState, plansFactory, analyticsFactory, $state,
@@ -67,10 +72,14 @@ describe("Services: plans factory", function() {
     expect(plansFactory.initVolumePlanTrial).to.be.a('function');
   });
 
-  it("showPlansModal: ", function() {
-    plansFactory.showPlansModal();
+  describe("showPlansModal: ", function() {
+    it("should show plans home and provide path to redirect back on finish", function() {
 
-    $state.go.should.have.been.calledWith('apps.plans.home');
+      plansFactory.showPlansModal();
+
+      $state.go.should.have.been.calledWith("apps.plans.home", { redirectTo: "/path"});
+
+    });
   });
 
   it("showPurchaseOptions: ", function() {

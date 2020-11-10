@@ -44,7 +44,7 @@ describe('app:', function() {
     it('should register state',function(){
       var state = $state.get('apps.plans.home');
       expect(state).to.be.ok;
-      expect(state.url).to.equal('/plans');
+      expect(state.url).to.equal('/plans?redirectTo');
     });
 
     it('should go to billing page/edit subscription if company has a plan and manages it', function(done) {
@@ -113,6 +113,24 @@ describe('app:', function() {
         $state.go.should.have.been.calledTwice;
 
         $state.go.should.have.been.calledWith('apps.purchase.home');
+
+        done();
+      },10);
+    });
+
+    it('should provide redirectTo to purchase if present', function(done) {
+      var redirectTo = '/displays/list';
+      currentPlanFactory.isSubscribed.returns(false);
+
+      $state.go('apps.plans.home', {redirectTo: redirectTo});
+      $rootScope.$digest();
+
+      setTimeout(function(){
+        expect(messageBoxStub).to.not.have.been.called;
+
+        $state.go.should.have.been.calledTwice;
+
+        $state.go.should.have.been.calledWith('apps.purchase.home', {redirectTo: redirectTo});
 
         done();
       },10);
