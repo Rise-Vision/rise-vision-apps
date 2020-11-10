@@ -165,7 +165,7 @@
         var _factory = {};
 
         _factory.showPlansModal = function () {
-          $state.go('apps.purchase.plans');
+          $state.go('apps.purchase.home');
         };
 
         _factory.showPurchaseOptions = function () {

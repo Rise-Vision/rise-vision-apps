@@ -70,13 +70,13 @@ describe("Services: plans factory", function() {
   it("showPlansModal: ", function() {
     plansFactory.showPlansModal();
 
-    $state.go.should.have.been.calledWith('apps.purchase.plans');
+    $state.go.should.have.been.calledWith('apps.purchase.home');
   });
 
   it("showPurchaseOptions: ", function() {
     plansFactory.showPurchaseOptions();
 
-    $state.go.should.have.been.calledWith('apps.purchase.plans');
+    $state.go.should.have.been.calledWith('apps.purchase.home');
   });
 
   describe("confirmAndPurchase:", function(){
@@ -169,7 +169,7 @@ describe("Services: plans factory", function() {
       plansFactory.showUnlockThisFeatureModal();
 
       setTimeout(function(){
-        $state.go.should.have.been.calledWith('apps.purchase.plans');
+        $state.go.should.have.been.calledWith('apps.purchase.home');
 
         done();
       },10);

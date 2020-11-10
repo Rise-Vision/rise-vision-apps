@@ -19,8 +19,8 @@ angular.module('risevision.apps.purchase')
   }])
 
   .controller('PurchaseCtrl', ['$scope', '$state', '$loading', 'purchaseFactory', 'addressFactory', 
-  'PURCHASE_STEPS', 'helpWidgetFactory', '$stateParams', '$location',
-    function ($scope, $state, $loading, purchaseFactory, addressFactory, PURCHASE_STEPS, helpWidgetFactory, $stateParams, $location) {
+  'PURCHASE_STEPS', 'helpWidgetFactory', '$location', 'redirectTo',
+    function ($scope, $state, $loading, purchaseFactory, addressFactory, PURCHASE_STEPS, helpWidgetFactory, $location, redirectTo) {
       $scope.helpWidgetFactory = helpWidgetFactory;
       $scope.form = {};
       $scope.factory = purchaseFactory;
@@ -120,8 +120,6 @@ angular.module('risevision.apps.purchase')
       };
 
       $scope.close = function () {
-        var redirectTo = $stateParams.redirectTo !== $location.path() ? $stateParams.redirectTo : '/';
-
         if (!purchaseFactory.purchase.reloadingCompany) {
           $location.path(redirectTo);
         } else {

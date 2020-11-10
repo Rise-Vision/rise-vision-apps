@@ -33,12 +33,13 @@ describe('app:', function() {
       canAccessApps = $injector.get('canAccessApps');
       currentPlanFactory = $injector.get('currentPlanFactory');
       $rootScope = $injector.get('$rootScope');
+      $location = $injector.get('$location');
 
       sinon.spy($state, 'go');
     });
   });
 
-  var $state, canAccessApps, currentPlanFactory, userState, $rootScope, messageBoxStub;
+  var $state, canAccessApps, currentPlanFactory, userState, $rootScope, messageBoxStub, $location;
 
   describe('state apps.purchase.plans:',function(){
     it('should register state',function(){
@@ -136,22 +137,18 @@ describe('app:', function() {
       },10);
     });
 
-    it('should provide redirectTo to purchase if present', function(done) {
-      var redirectTo = '/displays/list';
-      currentPlanFactory.isSubscribed.returns(false);
+    it('should resolve redirectTo as previous path', function() {
+      sinon.stub($location, 'path').returns('/displays/list');
 
-      $state.go('apps.plans.home', {redirectTo: redirectTo});
-      $rootScope.$digest();
+      var redirectTo = $state.get('apps.purchase.home').resolve.redirectTo[1]($location);      
+      expect(redirectTo).to.equal('/displays/list');
+    });
 
-      setTimeout(function(){
-        expect(messageBoxStub).to.not.have.been.called;
+    it('should resolve redirectTo as Apps home if previous path is purchase', function() {
+      sinon.stub($location, 'path').returns('/purchase');
 
-        $state.go.should.have.been.calledTwice;
-
-        $state.go.should.have.been.calledWith('apps.purchase.home', {redirectTo: redirectTo});
-
-        done();
-      },10);
+      var redirectTo = $state.get('apps.purchase.home').resolve.redirectTo[1]($location);      
+      expect(redirectTo).to.equal('/');
     });
 
   });

@@ -22,7 +22,7 @@ angular.module('risevision.apps')
         })
 
         .state('apps.purchase.home', {
-          url: '/purchase?redirectTo',
+          url: '/purchase',
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/purchase/app-purchase.html');
           }],
@@ -57,7 +57,12 @@ angular.module('risevision.apps')
                    }
                  });
              }
-           ]
+           ],
+           redirectTo: ['$location',
+            function ($location) {
+              return $location.path() !== '/purchase' ? $location.path() : '/';
+            }
+          ]
          }
         });
     }
