@@ -86,6 +86,12 @@ angular.module('risevision.apps.purchase')
           .then($scope.completePayment);
       };
 
+      var _refreshEstimate = function() {
+        if ($scope.currentStep === 1 || $scope.currentStep === 2) {
+          purchaseFactory.getEstimate();
+        }
+      };
+
       $scope.setNextStep = function () {
         // Note: Ensure to check if the form is valid before calling
         if (($scope.finalStep && $scope.currentStep < 1) || $scope.currentStep === 1) {
@@ -96,6 +102,7 @@ angular.module('risevision.apps.purchase')
           $scope.currentStep++;
         }
 
+        _refreshEstimate();
       };
 
       $scope.setPreviousStep = function () {
@@ -108,6 +115,8 @@ angular.module('risevision.apps.purchase')
         purchaseFactory.purchase.checkoutError = null;
 
         $scope.currentStep = index;
+
+        _refreshEstimate();
       };
 
       $scope.close = function () {

@@ -305,6 +305,46 @@ describe("controller: purchase", function() {
 
   });
 
+  describe("_refreshEstimate:", function() {
+    it('should not refresh the estimate on step 0', function() {
+      $scope.setCurrentStep(0);
+
+      purchaseFactory.getEstimate.should.not.have.been.called;
+    });
+
+    it('should refresh the estimate on step 1', function() {
+      $scope.setCurrentStep(1);
+
+      purchaseFactory.getEstimate.should.have.been.called;
+    });
+
+    it('should refresh the estimate on step 2', function() {
+      $scope.setCurrentStep(2);
+
+      purchaseFactory.getEstimate.should.have.been.called;
+    });
+
+    it('should not refresh the estimate on step 3', function() {
+      $scope.setCurrentStep(3);
+
+      purchaseFactory.getEstimate.should.not.have.been.called;
+    });
+
+    it('should refresh the estimate on setNextStep', function() {
+      $scope.setCurrentStep(0);
+      $scope.setNextStep();
+
+      purchaseFactory.getEstimate.should.have.been.called;
+    });
+
+    it('should not refresh the estimate on setPreviousStep', function() {
+      $scope.setCurrentStep(3);
+      $scope.setPreviousStep();
+
+      purchaseFactory.getEstimate.should.not.have.been.called;
+    });
+  });
+
   describe("setNextStep: ", function() {
     it("should increment step", function() {
       $scope.setNextStep();

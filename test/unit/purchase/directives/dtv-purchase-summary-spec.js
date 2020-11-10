@@ -48,10 +48,6 @@ describe("directive: purchase summary", function() {
     expect($scope.showTaxExemptionModal).to.be.a("function");
   });
 
-  it("should load estimate", function() {
-    purchaseFactory.getEstimate.should.have.been.called;
-  });
-
   describe("getAdditionalDisplaysPrice: ", function() {
     it("should return monthly price based on license number", function() {
       $scope.purchase.plan = {
@@ -82,7 +78,7 @@ describe("directive: purchase summary", function() {
     it("should not get estimate if coupon code is blank", function() {
       $scope.applyCouponCode();
 
-      purchaseFactory.getEstimate.should.have.been.calledOnce;
+      purchaseFactory.getEstimate.should.not.have.been.called;
     });
 
     it("should get estimate", function() {
@@ -90,7 +86,7 @@ describe("directive: purchase summary", function() {
 
       $scope.applyCouponCode();
 
-      purchaseFactory.getEstimate.should.have.been.calledTwice;
+      purchaseFactory.getEstimate.should.have.been.calledOnce;
     });
 
     it("should hide coupon form if an error is not returned", function(done) {
@@ -131,7 +127,7 @@ describe("directive: purchase summary", function() {
       expect($scope.addCoupon).to.be.false;
       expect($scope.purchase.couponCode).to.not.be.ok;
 
-      purchaseFactory.getEstimate.should.have.been.calledOnce;
+      purchaseFactory.getEstimate.should.not.have.been.called;
     });
 
     it("should refresh estimate on estimate error", function() {
@@ -139,7 +135,7 @@ describe("directive: purchase summary", function() {
 
       $scope.clearCouponCode();
 
-      purchaseFactory.getEstimate.should.have.been.calledTwice;
+      purchaseFactory.getEstimate.should.have.been.calledOnce;
     });
   });
 
@@ -155,7 +151,7 @@ describe("directive: purchase summary", function() {
       $scope.showTaxExemptionModal();
 
       setTimeout(function() {
-        purchaseFactory.getEstimate.should.have.been.calledTwice;
+        purchaseFactory.getEstimate.should.have.been.calledOnce;
 
         done();        
       }, 10);
@@ -166,7 +162,7 @@ describe("directive: purchase summary", function() {
       $scope.showTaxExemptionModal();
 
       setTimeout(function() {
-        purchaseFactory.getEstimate.should.have.been.calledOnce;
+        purchaseFactory.getEstimate.should.not.have.been.called;
 
         done();        
       }, 10);
