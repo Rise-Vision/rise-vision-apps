@@ -9,7 +9,6 @@ describe("directive: purchase summary", function() {
         plan: {},
         estimate: {}
       },
-      showTaxExemptionModal: sinon.stub().returns(Q.resolve()),
       getEstimate: sinon.stub().returns(Q.resolve())
     });
     $provide.value("userState", {
@@ -45,7 +44,6 @@ describe("directive: purchase summary", function() {
     expect($scope.getAdditionalDisplaysPrice).to.be.a("function");
     expect($scope.applyCouponCode).to.be.a("function");
     expect($scope.clearCouponCode).to.be.a("function");
-    expect($scope.showTaxExemptionModal).to.be.a("function");
   });
 
   describe("getAdditionalDisplaysPrice: ", function() {
@@ -136,36 +134,6 @@ describe("directive: purchase summary", function() {
       $scope.clearCouponCode();
 
       purchaseFactory.getEstimate.should.have.been.calledOnce;
-    });
-  });
-
-  describe("showTaxExemptionModal: ", function() {
-    it("should open tax exemption modal", function() {
-      $scope.showTaxExemptionModal();
-
-      purchaseFactory.showTaxExemptionModal.should.have.been.called;
-    });
-
-    it("should refresh estimate if tax exemption was submitted", function(done) {
-      $scope.purchase.taxExemptionSent = true;
-      $scope.showTaxExemptionModal();
-
-      setTimeout(function() {
-        purchaseFactory.getEstimate.should.have.been.calledOnce;
-
-        done();        
-      }, 10);
-    });
-
-    it("should open tax exemption modal", function(done) {
-      $scope.purchase.taxExemptionSent = false;
-      $scope.showTaxExemptionModal();
-
-      setTimeout(function() {
-        purchaseFactory.getEstimate.should.not.have.been.called;
-
-        done();        
-      }, 10);
     });
   });
 

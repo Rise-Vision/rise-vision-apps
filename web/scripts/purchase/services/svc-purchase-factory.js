@@ -6,10 +6,10 @@
 
   angular.module('risevision.apps.purchase')
     .constant('RPP_ADDON_ID', 'c4b368be86245bf9501baaa6e0b00df9719869fd')
-    .factory('purchaseFactory', ['$rootScope', '$q', '$log', '$state', '$modal', '$templateCache', '$timeout',
+    .factory('purchaseFactory', ['$rootScope', '$q', '$log', '$state', '$timeout',
       'userState', 'storeService', 'stripeService', 'addressService', 'contactService', 'purchaseFlowTracker',
       'RPP_ADDON_ID', 'PLANS_LIST',
-      function ($rootScope, $q, $log, $state, $modal, $templateCache, $timeout, userState,
+      function ($rootScope, $q, $log, $state, $timeout, userState,
         storeService, stripeService, addressService, contactService, purchaseFlowTracker, RPP_ADDON_ID, PLANS_LIST) {
         var factory = {};
 
@@ -53,6 +53,7 @@
               billingAddress: factory.purchase.billingAddress
             }
           };
+          factory.purchase.taxExemption = {};
 
           var invoiceDate = new Date();
           invoiceDate.setDate(invoiceDate.getDate() + 30);
@@ -81,18 +82,27 @@
           purchaseFlowTracker.trackProductAdded(factory.purchase.plan);
         };
 
-        factory.showTaxExemptionModal = function () {
-          var modalInstance = $modal.open({
-            template: $templateCache.get('partials/purchase/tax-exemption.html'),
-            controller: 'TaxExemptionModalCtrl',
-            windowClass: 'madero-style',
-            size: 'md',
-            backdrop: 'static'
-          });
+        factory.submitTaxExemption = function () {
+          var taxExemption = factory.purchase.taxExemption;
+          taxExemption.error = null;
 
-          return modalInstance.result.then(function (result) {
-            factory.purchase.taxExemptionSent = result;
-          });
+          factory.loading = true;
+
+          return storeService.uploadTaxExemptionCertificate(taxExemption.file)
+            .then(function (blobKey) {
+              return storeService.addTaxExemption(userState.getSelectedCompanyId(), taxExemption, blobKey);
+            })
+            .then(function() {
+              taxExemption.sent = true;
+
+              factory.getEstimate();
+            })
+            .catch(function (error) {
+              factory.loading = false;
+
+              taxExemption.error = error.message || 'Something went wrong. Please try again.';
+            });
+
         };
 
         factory.authenticate3ds = function (intentSecret) {
