@@ -1,54 +1,43 @@
-<div rv-spinner rv-spinner-key="tax-exemption-modal" rv-spinner-start-active="1">
-  <div class="modal-header">
-    <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-hidden="true">
-      <streamline-icon name="close" width="12" height="12"></streamline-icon>
-    </button>
-  </div>
-  <div class="modal-body" stop-event="touchend">
-    <h4 class="text-center">Add Tax Exemption</h4>
+<p class="mt-3" ng-show="factory.purchase.estimate.totalTax > 0 || taxExemption.checked">
+  &nbsp;
+  <span class="pull-right flex-row">
+    <madero-checkbox ng-click="applyTaxExemption()" ng-value="taxExemption.checked"></madero-checkbox>
+    <span class="mr-3">I'm tax exempt.</span>
+  </span>
+</p>
 
-    <form id="form.taxExemptionForm" role="form" name="form.taxExemptionForm" class="u_margin-md-top" novalidate>
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="form-group" ng-class="{ 'has-error': isFieldInvalid('number') }">
-            <label for="number" class="control-label">Tax Exemption Number: *</label>
-            <input name="number" id="number" type="text" class="form-control" ng-model="factory.taxExemption.number" tabindex="1" maxlength="25" required>
-            <span class="text-danger" ng-show="isFieldInvalid('number')">
-              Choose a Tax Exemption Number.
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="form-group" ng-class="{ 'has-error': isFieldInvalid('fileName') }">
-            <label for="fileName" class="control-label">Tax Exemption Document (Image or PDF only): *</label>
-            <input id="inputExemption" type="file" accept="application/pdf,image/*" onchange="angular.element(this).scope().setFile(this)" style="display:none">
-            <div class="flex-row">
-              <input name="fileName" id="fileName" class="form-control mr-3" type="text" readonly="readonly" ng-model="factory.taxExemption.file.name" required>
-              <button name="selectFile" id="selectFile" type="button" ng-click="selectFile()" tabindex="1" class="btn btn-default">Attach File</button>
-            </div>
-            <span class="text-danger" ng-show="isFieldInvalid('fileName')">
-              Choose a Tax Exemption Document.
-            </span>
-          </div>
-        </div>
-      </div>
-    </form>
-
-    <div class="madero-style alert alert-danger u_margin-md-top" ng-show="factory.taxExemptionError">
-      {{factory.taxExemptionError}}
-    </div>
-  </div>
-
-  <div class="modal-footer">
+<div ng-show="taxExemption.checked && !taxExemption.sent">
+  <form id="form.taxExemptionForm" role="form" name="form.taxExemptionForm" class="u_margin-md-top" novalidate>
     <div class="row">
       <div class="col-xs-12">
-        <button type="button" ng-click="close()" aria-label="Cancel Tax Exemption" tabindex="2" class="btn btn-default pull-left" translate>common.cancel</button>
-        <button id="submitButton" type="submit" form="form.taxExemptionForm" ng-click="submit()" aria-label="Submit Tax Exemption" tabindex="1" class="btn btn-primary pull-right">Submit Tax Exemption</button>
+        <div class="form-group" ng-class="{ 'has-error': isFieldInvalid('number') }">
+          <label for="number" class="control-label">Tax Exemption Number: *</label>
+          <input name="number" id="number" type="text" class="form-control" ng-model="taxExemption.number" tabindex="1" maxlength="25" required>
+          <span class="text-danger" ng-show="isFieldInvalid('number')">
+            Choose a Tax Exemption Number.
+          </span>
+        </div>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group mb-0">
+          <label for="fileName" class="control-label">Tax Exemption Document (Image or PDF only): *</label>
+          <input id="inputExemption" type="file" accept="application/pdf,image/*" onchange="angular.element(this).scope().setFile(this)" style="display:none">
+          <div class="flex-row" ng-show="taxExemption.file.name">
+            <div class="u_ellipsis">{{taxExemption.file.name}}</div>
+            <div class="ml-auto"><a aria-label="Remove Tax Exemption File" class="madero-link u_clickable text-danger text-sm font-weight-bold" ng-click="removeFile()" tabindex="1">Remove</a></div>
+          </div>
+          <button name="selectFile" id="selectFile" type="button" ng-click="selectFile()" aria-label="Attach Tax Exemption File" tabindex="1" class="btn btn-default btn-block" ng-show="!taxExemption.file.name">Attach File</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="madero-style alert alert-danger u_margin-md-top" ng-show="taxExemption.error">
+    {{taxExemption.error}}
   </div>
 
+  <button id="submitButton" type="submit" form="form.taxExemptionForm" ng-click="submit()" aria-label="Submit Tax Exemption" tabindex="1" class="btn btn-default btn-block u_margin-md-top" ng-show="taxExemption.file.name">Submit Tax Exemption</button>
 </div>

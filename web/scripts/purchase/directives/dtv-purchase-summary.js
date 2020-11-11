@@ -40,16 +40,6 @@ angular.module('risevision.apps.purchase')
             }
           };
 
-          $scope.showTaxExemptionModal = function () {
-            purchaseFactory.showTaxExemptionModal()
-              .then(function () {
-                if (purchaseFactory.purchase.taxExemptionSent) {
-                  purchaseFactory.getEstimate();
-                }
-
-              });
-          };
-
         }
       };
     }

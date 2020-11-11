@@ -67,13 +67,5 @@
       <span class="pull-right"><span class="u_margin-right text-subtle">{{purchase.estimate.currency | uppercase}}</span><span class="purchase-total">${{purchase.estimate.total | number:2}}</span></span>
     </p>    
   </div>
-
-  <p class="mb-4" ng-show="purchase.estimate.totalTax > 0">
-    &nbsp;
-    <span class="pull-right">
-      <a id="showTaxExemption" aria-label="Are you Tax Exempt?" class="madero-link u_clickable" ng-click="showTaxExemptionModal()" ng-show="!purchase.taxExemptionSent">Are you Tax Exempt?</a>
-      <span ng-show="purchase.taxExemptionSent">Tax Exemption Submitted</span>
-    </span>
-  </p>
-
 </div>
+<tax-exemption></tax-exemption>
