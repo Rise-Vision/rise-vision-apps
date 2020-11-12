@@ -55,9 +55,9 @@
               </div>
              
               <div class="pricing-calculator text-left text-lg u_margin-md-top">
-                <div class="row">
-                  <div class="col-xs-offset-1 col-xs-11">
-                    <span class="number" ng-if="displayCount">{{displayCount}}</span> Display licenses              
+                <div class="row pb-2">
+                  <div class="col-xs-offset-1 col-xs-11 pl-4">
+                    <span class="number mr-2" ng-if="displayCount">{{displayCount}} </span>Display licenses              
                   </div>
                 </div>
 
@@ -65,9 +65,9 @@
                   <div class="col-xs-1">
                     <span class="number">x</span> 
                   </div>
-                  <div class="col-xs-11">
-                    <span class="number" ng-if="pricePerDisplay === basePricePerDisplay">${{basePricePerDisplay | number : 0}}</span>      
-                    <span class="number" ng-if="pricePerDisplay !== basePricePerDisplay">
+                  <div class="col-xs-11 pl-4">
+                    <span class="number mr-2" ng-if="pricePerDisplay === basePricePerDisplay">${{basePricePerDisplay | number : 0}}</span>      
+                    <span class="number mr-2" ng-if="pricePerDisplay !== basePricePerDisplay">
                       <del>${{basePricePerDisplay | number : 0}}</del>
                       <span class="text-success">${{pricePerDisplay | number: 2}}</span>
                     </span>
@@ -75,13 +75,13 @@
                   </div>
                 </div>
 
-                <div class="row">
+                <div class="row pt-2">
                   <div class="col-xs-1">
                     <streamline-icon class="checkmark" name="checkmark"></streamline-icon>
                   </div>
 
-                  <div class="col-xs-11">
-                    <span class="number">${{totalPrice | number : 0}}</span>
+                  <div class="col-xs-11 pl-4">
+                    <span class="number mr-2">${{totalPrice | number : 0}} </span>
                     <span ng-if="periodMonthly">Billed monthly</span>
                     <span ng-if="!periodMonthly">Billed annually</span>
                     <span ng-if="yearlySavings" class="text-success">- save ${{yearlySavings | number : 0}}!</span>
@@ -94,8 +94,8 @@
         </div>
        
         <div class="button-toolbar flex-row">
-          <a href="https://www.risevision.com/pricing" target="_blank" class="btn btn-default btn-block btn-hg font-weight-bold">Send Me A Quote</a>
-          <button type="submit" id="subscribeButton" class="btn btn-primary btn-block btn-hg font-weight-bold" ng-disabled="pricingForm.$invalid">Subscribe</button>
+          <a href="https://www.risevision.com/pricing" target="_blank" class="btn btn-default btn-block btn-hg">Send Me A Quote</a>
+          <button type="submit" id="subscribeButton" class="btn btn-primary btn-block btn-hg" ng-disabled="pricingForm.$invalid">Subscribe</button>
         </div>
       </form>
     </div>
