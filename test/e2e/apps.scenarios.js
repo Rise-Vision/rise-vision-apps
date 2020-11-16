@@ -1,10 +1,6 @@
-require('./schedules/schedules.cases.js');
-require('./displays/displays.cases.js');
-require('./editor/editor.cases.js');
-require('./storage/storage.cases.js');
-require('./common/common.cases.js');
+require('./apps-sections.cases.js');
+require('./apps-sections2.cases.js');
 require('./template-editor/template-editor.cases');
 require('./template-editor/template-editor2.cases');
 require('./template-editor/template-editor3.cases');
-require('./common-header/common-header.cases');
 require('./registration/registration.cases');
