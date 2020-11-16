@@ -62,6 +62,24 @@ describe("service: BatchOperations:", function() {
     expect(batchOperations.completedItemCount).to.equal(0);
   });
 
+  it("should reset old values",function(){
+    batchOperations = new BatchOperations({
+      hasErrors: true,
+      error: 'error',
+      activeOperation: 'test',
+      progress: 50,
+      totalItemCount: 5,
+      completedItemCount: 2
+    });
+
+    expect(batchOperations.hasErrors).to.not.be.ok;
+    expect(batchOperations.error).to.not.be.ok;
+    expect(batchOperations.activeOperation).to.not.be.ok;
+    expect(batchOperations.progress).to.equal(0);
+    expect(batchOperations.totalItemCount).to.equal(0);
+    expect(batchOperations.completedItemCount).to.equal(0);
+  });
+
   describe('batch:', function() {
     it('should return a promise', function() {
       expect(batchOperations.batch().then).to.be.a('function');

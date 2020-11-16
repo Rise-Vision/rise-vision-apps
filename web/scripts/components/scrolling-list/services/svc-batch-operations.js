@@ -15,6 +15,7 @@ angular.module('risevision.common.components.scrolling-list')
         var _reset = function () {
           queue = [];
           operations.hasErrors = false;
+          operations.error = null;
           operations.activeOperation = null;
           operations.progress = 0;
           operations.totalItemCount = 0;
