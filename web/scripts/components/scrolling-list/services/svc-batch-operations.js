@@ -46,8 +46,9 @@ angular.module('risevision.common.components.scrolling-list')
 
           var _executeOperation = function (item, args) {
             method(item, args)
-              .catch(function (e) {
+              .catch(function (err) {
                 operations.hasErrors = true;
+                operations.error = operations.error || err;
               })
               .finally(function () {
                 _.remove(queue, function (listItem) {
@@ -98,7 +99,7 @@ angular.module('risevision.common.components.scrolling-list')
               batchOperationsTracker('Batch Operation Failed', operation, items, {
                 failureReason: err || ''
               });
-              return $q.reject(err);
+              return $q.reject(err || operations.error);
             });
         };
 

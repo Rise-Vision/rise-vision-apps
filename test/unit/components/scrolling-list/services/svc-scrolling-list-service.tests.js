@@ -695,6 +695,53 @@ describe("service: ScrollingListService:", function() {
         }, 10);
       });
 
+      describe('showActionError:', function() {
+        it('should overwrite api error', function(done) {
+          var deferred = Q.defer();
+          listOperations.operations[1].showActionError = sinon.stub().returns(true);
+
+          scrollingListService.batchOperations.batch.returns(Q.reject('batchError'));
+
+          listOperations.operations[1].onClick();
+
+          scrollingListService.errorMessage = 'existingMessage';
+          scrollingListService.apiError = 'existingError';
+
+          setTimeout(function() {
+            processErrorCode.should.have.been.calledWith('Items', 'license', 'batchError');
+
+            listOperations.operations[1].showActionError.should.have.been.called;
+
+            expect(scrollingListService.errorMessage).to.equal('existingMessage');
+            expect(scrollingListService.apiError).to.equal('error');
+
+            done();
+          }, 10);
+        });
+
+        it('should keep api error', function(done) {
+          var deferred = Q.defer();
+          listOperations.operations[1].showActionError = sinon.stub().returns(false);
+
+          scrollingListService.batchOperations.batch.returns(Q.reject('batchError'));
+
+          listOperations.operations[1].onClick();
+
+          scrollingListService.errorMessage = 'existingMessage';
+          scrollingListService.apiError = 'existingError';
+
+          setTimeout(function() {
+            listOperations.operations[1].showActionError.should.have.been.called;
+
+            expect(scrollingListService.errorMessage).to.equal('existingMessage');
+            expect(scrollingListService.apiError).to.equal('existingError');
+
+            done();
+          }, 10);
+        });
+
+      });
+
     });
 
     describe('refresh:', function() {
