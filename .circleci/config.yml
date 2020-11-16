@@ -81,48 +81,24 @@ jobs:
           path: ~/rise-vision-apps/reports
       - store_artifacts:
           path: ~/rise-vision-apps/reports
-  e2e_schedules:
+  e2e_apps_sections:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE
     steps:
       - run_e2e_cases:
-          casesfile: "test/e2e/schedules/schedules.cases.js"
-  e2e_common:
+          casesfile: "test/e2e/apps-sections.cases.js"
+  e2e_apps_sections2:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE
     steps:
       - run_e2e_cases:
-          casesfile: "test/e2e/common/common.cases.js"
-  e2e_common_header:
-    working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
-    steps:
-      - run_e2e_cases:
-          casesfile: "test/e2e/common-header/common-header.cases.js"
+          casesfile: "test/e2e/apps-sections2.cases.js"
   e2e_registration:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/registration/registration.cases.js"
-  e2e_editor:
-    working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
-    steps:
-      - run_e2e_cases:
-          casesfile: "test/e2e/editor/editor.cases.js"
-  e2e_displays:
-    working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
-    steps:
-      - run_e2e_cases:
-          casesfile: "test/e2e/displays/displays.cases.js"
-  e2e_storage:
-    working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
-    steps:
-      - run_e2e_cases:
-          casesfile: "test/e2e/storage/storage.cases.js"
   e2e_template_editor:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE
@@ -229,43 +205,19 @@ workflows:
           filters:
             branches:
               ignore: /(stage).*/
-      - e2e_schedules:
+      - e2e_apps_sections:
           requires:
             - test_unit
           filters:
             branches:
               ignore: /(stage).*/
-      - e2e_common:
-          requires:
-            - test_unit
-          filters:
-            branches:
-              ignore: /(stage).*/
-      - e2e_common_header:
+      - e2e_apps_sections2:
           requires:
             - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_registration:
-          requires:
-            - test_unit
-          filters:
-            branches:
-              ignore: /(stage).*/
-      - e2e_editor:
-          requires:
-            - test_unit
-          filters:
-            branches:
-              ignore: /(stage).*/
-      - e2e_displays:
-          requires:
-            - test_unit
-          filters:
-            branches:
-              ignore: /(stage).*/
-      - e2e_storage:
           requires:
             - test_unit
           filters:
@@ -291,13 +243,9 @@ workflows:
               ignore: /(stage).*/
       - test_e2e:
           requires:
-            - e2e_schedules
-            - e2e_common
-            - e2e_common_header
+            - e2e_apps_sections
+            - e2e_apps_sections2
             - e2e_registration
-            - e2e_editor
-            - e2e_displays
-            - e2e_storage
             - e2e_template_editor
             - e2e_template_editor2
             - e2e_template_editor3
