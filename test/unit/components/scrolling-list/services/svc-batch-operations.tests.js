@@ -45,7 +45,18 @@ describe("service: BatchOperations:", function() {
 
   it("should init the service objects",function(){
     expect(batchOperations.activeOperation).to.not.be.ok;
-    expect(batchOperations.queueLimit).to.be.greaterThan(0);
+    expect(batchOperations.queueLimit).to.equal(3);
+    expect(batchOperations.progress).to.equal(0);
+    expect(batchOperations.totalItemCount).to.equal(0);
+    expect(batchOperations.completedItemCount).to.equal(0);
+  });
+
+  it("should init with default values",function(){
+    batchOperations = new BatchOperations({});
+    
+    expect(batchOperations.queueLimit).to.equal(1);
+
+    expect(batchOperations.activeOperation).to.not.be.ok;
     expect(batchOperations.progress).to.equal(0);
     expect(batchOperations.totalItemCount).to.equal(0);
     expect(batchOperations.completedItemCount).to.equal(0);

@@ -8,7 +8,7 @@ angular.module('risevision.common.components.scrolling-list')
           return {};
         }
 
-        operations.queueLimit = operations.queueLimit || 5;
+        operations.queueLimit = operations.queueLimit || 1;
 
         var queue;
 
