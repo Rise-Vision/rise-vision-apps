@@ -1,14 +1,11 @@
 'use strict';
 
 angular.module('risevision.apps.billing.controllers')
-  .value('PAST_INVOICES_PATH', 'account/view/invoicesHistory?cid=companyId')
-  .value('UNPAID_INVOICES_PATH', 'account/view/invoicesDue?cid=companyId')
-  .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$window', '$timeout',
+  .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$timeout',
     'ScrollingListService', 'userState', 'currentPlanFactory', 'ChargebeeFactory', 'billing',
-    'STORE_URL', 'PAST_INVOICES_PATH', 'UNPAID_INVOICES_PATH', 'PLANS_LIST', 'companySettingsFactory',
-    function ($rootScope, $scope, $loading, $window, $timeout, ScrollingListService, userState,
-      currentPlanFactory, ChargebeeFactory, billing, STORE_URL, PAST_INVOICES_PATH, UNPAID_INVOICES_PATH,
-      PLANS_LIST, companySettingsFactory) {
+    'PLANS_LIST', 'companySettingsFactory',
+    function ($rootScope, $scope, $loading, $timeout, ScrollingListService, userState,
+      currentPlanFactory, ChargebeeFactory, billing, PLANS_LIST, companySettingsFactory) {
 
       $scope.search = {
         count: $scope.listLimit,
@@ -47,16 +44,6 @@ angular.module('risevision.apps.billing.controllers')
         var creationDate = (($scope.company && $scope.company.creationDate) ?
           (new Date($scope.company.creationDate)) : (new Date()));
         return creationDate < new Date('Sep 1, 2018');
-      };
-
-      $scope.viewPastInvoicesStore = function () {
-        $window.open(STORE_URL + PAST_INVOICES_PATH.replace('companyId', userState.getSelectedCompanyId()),
-          '_blank');
-      };
-
-      $scope.viewUnpaidInvoicesStore = function () {
-        $window.open(STORE_URL + UNPAID_INVOICES_PATH.replace('companyId', userState.getSelectedCompanyId()),
-          '_blank');
       };
 
       var _loadUnpaidInvoices = function () {
