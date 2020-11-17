@@ -72,12 +72,12 @@ describe('directive: url field', function() {
       expect($scope.showSkipValidation()).to.be.true;
     });
 
-    it('should show if invalid & dirty', function() {
+    it('should not show if invalid & dirty', function() {
       var controller = element.controller('ngModel');
       controller.$setDirty(true);
       controller.$setValidity('', false);    
 
-      expect($scope.showSkipValidation()).to.be.true;
+      expect($scope.showSkipValidation()).to.be.false;
     });
 
     describe('unskippable errors (hide checkbox):', function() {
@@ -85,25 +85,26 @@ describe('directive: url field', function() {
         $scope.forcedValid = true;
       });
 
-      it('should allow skipping validation for other errors', function(){
+      it('should not allow skipping validation for other errors', function(){
         var controller = element.controller('ngModel');
         controller.$error = {'myError':true};    
+
+        expect($scope.showSkipValidation()).to.be.false;
+      });
+
+      it('should allow skipping validation for pattern errors', function(){
+        var controller = element.controller('ngModel');
+        controller.$error = {'pattern':true};    
 
         expect($scope.showSkipValidation()).to.be.true;
       });
 
-      it('should not allow skipping validation for required errors', function(){
+      it('should allow skipping validation responseHeaderValidator->not-reachable errors', function(){
         var controller = element.controller('ngModel');
-        controller.$error = {'required':true};    
+        controller.$error = {'responseHeaderValidator':true};
+        controller.responseHeaderValidatorError = 'not-reachable';
 
-        expect($scope.showSkipValidation()).to.be.false;
-      });
-
-      it('should not allow skipping validation for noPreviewUrl errors', function(){
-        var controller = element.controller('ngModel');
-        controller.$error = {'noPreviewUrl':true};    
-
-        expect($scope.showSkipValidation()).to.be.false;
+        expect($scope.showSkipValidation()).to.be.true;
       });
     });
 

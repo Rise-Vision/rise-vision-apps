@@ -10,7 +10,8 @@
       'userState', 'storeService', 'stripeService', 'addressService', 'contactService', 'purchaseFlowTracker',
       'RPP_ADDON_ID', 'PLANS_LIST',
       function ($rootScope, $q, $log, $state, $timeout, userState,
-        storeService, stripeService, addressService, contactService, purchaseFlowTracker, RPP_ADDON_ID, PLANS_LIST) {
+        storeService, stripeService, addressService, contactService, purchaseFlowTracker, RPP_ADDON_ID, PLANS_LIST
+        ) {
         var factory = {};
 
         // Stop spinner - workaround for spinner not rendering
@@ -74,7 +75,7 @@
           factory.purchase.plan.displays = displays;
           factory.purchase.plan.isMonthly = isMonthly;
           if (isMonthly) {
-            factory.purchase.plan.monthly.billAmount = total;         
+            factory.purchase.plan.monthly.billAmount = total;
           } else {
             factory.purchase.plan.yearly.billAmount = total;
           }
@@ -92,7 +93,7 @@
             .then(function (blobKey) {
               return storeService.addTaxExemption(userState.getSelectedCompanyId(), taxExemption, blobKey);
             })
-            .then(function() {
+            .then(function () {
               taxExemption.sent = true;
 
               factory.getEstimate();
@@ -149,7 +150,7 @@
                 factory.purchase.checkoutError = error.message || 'Something went wrong, please retry';
                 return $q.reject(error);
               })
-              .finally(function() {
+              .finally(function () {
                 factory.loading = false;
               });
           }
@@ -199,7 +200,7 @@
                     return $q.resolve();
                   }
                 })
-                .finally(function() {
+                .finally(function () {
                   factory.loading = false;
                 });
             }

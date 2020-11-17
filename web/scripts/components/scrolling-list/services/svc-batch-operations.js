@@ -93,10 +93,10 @@ angular.module('risevision.common.components.scrolling-list')
           _loadBatch();
 
           return deferred.promise
-            .then(function() {
+            .then(function () {
               batchOperationsTracker('Batch Operation Succeeded', operation, items);
             })
-            .catch(function(err) {
+            .catch(function (err) {
               batchOperationsTracker('Batch Operation Failed', operation, items, {
                 failureReason: err || ''
               });

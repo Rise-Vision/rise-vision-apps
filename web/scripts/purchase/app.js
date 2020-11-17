@@ -28,42 +28,43 @@ angular.module('risevision.apps')
           }],
           controller: 'PurchaseCtrl',
           resolve: {
-           canAccessApps: ['$q', '$state', 'canAccessApps', 'currentPlanFactory', 'messageBox',
-             function ($q, $state, canAccessApps, currentPlanFactory, messageBox) {
-               return canAccessApps()
-                 .then(function() {
-                   if (currentPlanFactory.isSubscribed() && !currentPlanFactory.isParentPlan()) {
-                     if (currentPlanFactory.currentPlan.isPurchasedByParent) {
-                       var contactInfo = currentPlanFactory.currentPlan.parentPlanContactEmail ? ' at ' +
-                         currentPlanFactory.currentPlan.parentPlanContactEmail : '';
+            canAccessApps: ['$q', '$state', 'canAccessApps', 'currentPlanFactory', 'messageBox',
+              function ($q, $state, canAccessApps, currentPlanFactory, messageBox) {
+                return canAccessApps()
+                  .then(function () {
+                    if (currentPlanFactory.isSubscribed() && !currentPlanFactory.isParentPlan()) {
+                      if (currentPlanFactory.currentPlan.isPurchasedByParent) {
+                        var contactInfo = currentPlanFactory.currentPlan.parentPlanContactEmail ? ' at ' +
+                          currentPlanFactory.currentPlan.parentPlanContactEmail : '';
 
-                       return messageBox(
-                         'You can\'t edit your current plan.',
-                         'Your plan is managed by your parent company. Please contact your account administrator' +
-                         contactInfo + ' for additional licenses.',
-                         'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
-                       ).finally(function() {
-                         if (!$state.current.name) {
-                           $state.go('apps.home');
-                         } else {
-                           return $q.reject();
-                         }
-                       });
-                     } else {
-                       $state.go('apps.billing.home', {
-                         edit: currentPlanFactory.currentPlan.subscriptionId
-                       });
-                     }
-                   }
-                 });
-             }
-           ],
-           redirectTo: ['$location',
-            function ($location) {
-              return $location.path() !== '/purchase' ? $location.path() : '/';
-            }
-          ]
-         }
+                        return messageBox(
+                          'You can\'t edit your current plan.',
+                          'Your plan is managed by your parent company. Please contact your account administrator' +
+                          contactInfo + ' for additional licenses.',
+                          'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html',
+                          'sm'
+                        ).finally(function () {
+                          if (!$state.current.name) {
+                            $state.go('apps.home');
+                          } else {
+                            return $q.reject();
+                          }
+                        });
+                      } else {
+                        $state.go('apps.billing.home', {
+                          edit: currentPlanFactory.currentPlan.subscriptionId
+                        });
+                      }
+                    }
+                  });
+              }
+            ],
+            redirectTo: ['$location',
+              function ($location) {
+                return $location.path() !== '/purchase' ? $location.path() : '/';
+              }
+            ]
+          }
         });
     }
   ]);

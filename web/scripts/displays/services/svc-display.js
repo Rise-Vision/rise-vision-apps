@@ -56,18 +56,19 @@
             coreAPILoader().then(function (coreApi) {
                 return coreApi.display.list(obj);
               })
-              .then(function(resp) {
+              .then(function (resp) {
                 var result = resp.result;
 
                 angular.forEach(result.items, function (item) {
-                  item.lastActivityDate = item.onlineStatus === true ? Date.now() : (item.lastActivityDate ? new Date(item.lastActivityDate) : '');
+                  item.lastActivityDate = item.onlineStatus === true ? Date.now() : (item
+                    .lastActivityDate ? new Date(item.lastActivityDate) : '');
                 });
 
                 $rootScope.$broadcast('displaysLoaded', result.items);
                 displayActivationTracker(result.items);
                 deferred.resolve(result);
               })
-              .catch(function(e) {
+              .catch(function (e) {
                 console.error('Failed to get list of displays.', e);
                 deferred.reject(e);
               });
@@ -90,7 +91,8 @@
 
                 var item = resp.result.item;
                 if (item) {
-                  item.lastActivityDate = item.onlineStatus === true ? Date.now() : (item.lastActivityDate ? new Date(item.lastActivityDate) : '');
+                  item.lastActivityDate = item.onlineStatus === true ? Date.now() : (item.lastActivityDate ?
+                    new Date(item.lastActivityDate) : '');
 
                   $rootScope.$broadcast('displaysLoaded', [item]);
                   displayActivationTracker([item]);

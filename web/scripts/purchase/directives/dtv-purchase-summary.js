@@ -23,9 +23,9 @@ angular.module('risevision.apps.purchase')
           $scope.applyCouponCode = function () {
             if ($scope.purchase.couponCode) {
               purchaseFactory.getEstimate()
-                .then(function() {
+                .then(function () {
                   if (!purchaseFactory.purchase.estimate.estimateError) {
-                    $scope.addCoupon = false;                    
+                    $scope.addCoupon = false;
                   }
                 });
             }

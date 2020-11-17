@@ -17,7 +17,7 @@ angular.module('risevision.apps.purchase')
           return stripeClient.handleCardAction(secret);
         });
       };
-      
+
       this.initializeStripeElements = function (types, options) {
         return stripeLoader()
           .then(function (stripeClient) {
