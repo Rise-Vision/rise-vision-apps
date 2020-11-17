@@ -20,10 +20,10 @@ angular.module('risevision.editor.controllers')
         name: 'Presentation',
         operations: [{
           name: 'Delete',
-          actionCall: function(presentation) {
+          actionCall: function (presentation) {
             return editorFactory.deletePresentationByObject(presentation, true);
           },
-          showActionError: function(err) {
+          showActionError: function (err) {
             if (err && err.status === 409) {
               return true;
             }

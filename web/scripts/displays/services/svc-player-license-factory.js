@@ -98,7 +98,7 @@ angular.module('risevision.displays.services')
             }
 
             factory.toggleDisplayLicenseLocal(true, licensedCount);
-            
+
             if (licensedCount !== displayIds.length) {
               throw new Error('License could not be updated. Please try again.');
             }

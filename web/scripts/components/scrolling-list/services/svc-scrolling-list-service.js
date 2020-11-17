@@ -205,7 +205,7 @@ angular.module('risevision.common.components.scrolling-list')
                 // reload list
                 factory.doSearch();
               }
-            }).catch(function(err) {
+            }).catch(function (err) {
               if (operation.showActionError && operation.showActionError(err)) {
                 factory.apiError = processErrorCode(factory.search.name, operation.name.toLowerCase(), err);
               }

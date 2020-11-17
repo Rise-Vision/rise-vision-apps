@@ -51,14 +51,14 @@ angular.module('risevision.apps.purchase')
                 $scope[stripeElements[idx]] = el;
                 el.mount(stripeElementSelectors[idx]);
 
-                el.on('blur', function() {
+                el.on('blur', function () {
                   $scope.$digest();
                 });
 
-                el.on('change', function(event) {
+                el.on('change', function (event) {
                   var element = document.querySelector(stripeElementSelectors[idx]);
 
-                  if (element) {                        
+                  if (element) {
                     element.classList.add('dirty');
                   }
 
@@ -77,7 +77,7 @@ angular.module('risevision.apps.purchase')
             if (!element) {
               return false;
             } else if ($scope.form.paymentMethodsForm.$submitted || element.className.indexOf('dirty') !== -1) {
-              return element.className.indexOf('StripeElement--invalid') !== -1 || 
+              return element.className.indexOf('StripeElement--invalid') !== -1 ||
                 element.className.indexOf('StripeElement--empty') !== -1;
             }
           };

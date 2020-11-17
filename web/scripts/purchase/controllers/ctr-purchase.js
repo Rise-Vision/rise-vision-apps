@@ -18,9 +18,10 @@ angular.module('risevision.apps.purchase')
     index: 3
   }])
 
-  .controller('PurchaseCtrl', ['$scope', '$state', '$loading', 'purchaseFactory', 'addressFactory', 
-  'PURCHASE_STEPS', 'helpWidgetFactory', '$location', 'redirectTo',
-    function ($scope, $state, $loading, purchaseFactory, addressFactory, PURCHASE_STEPS, helpWidgetFactory, $location, redirectTo) {
+  .controller('PurchaseCtrl', ['$scope', '$state', '$loading', 'purchaseFactory', 'addressFactory',
+    'PURCHASE_STEPS', 'helpWidgetFactory', '$location', 'redirectTo',
+    function ($scope, $state, $loading, purchaseFactory, addressFactory, PURCHASE_STEPS, helpWidgetFactory, $location,
+      redirectTo) {
       $scope.helpWidgetFactory = helpWidgetFactory;
       $scope.form = {};
       $scope.factory = purchaseFactory;
@@ -86,7 +87,7 @@ angular.module('risevision.apps.purchase')
           .then($scope.completePayment);
       };
 
-      var _refreshEstimate = function() {
+      var _refreshEstimate = function () {
         if ($scope.currentStep === 1 || $scope.currentStep === 2) {
           purchaseFactory.getEstimate();
         }

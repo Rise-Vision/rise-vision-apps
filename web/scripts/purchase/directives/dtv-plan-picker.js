@@ -252,9 +252,9 @@ angular.module('risevision.apps.purchase')
             };
 
             var _getTierPrice = function (isMonthly) {
-              var period = isMonthly? 'month' : 'year';
+              var period = isMonthly ? 'month' : 'year';
 
-              var matchedPlan = _.find(PRICING_DATA,function (plan) {
+              var matchedPlan = _.find(PRICING_DATA, function (plan) {
                 return plan.period === 1 && plan.period_unit === period && plan.currency_code === 'USD';
               });
 

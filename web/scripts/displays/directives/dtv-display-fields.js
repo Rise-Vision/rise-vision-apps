@@ -41,7 +41,8 @@ angular.module('risevision.displays.directives')
             enableCompanyProduct(displayFactory.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
               .then(function (resp) {
                 var resultDisplays = resp && resp.item && resp.item.displays;
-                if(resultDisplays && resultDisplays[displayFactory.display.id] === apiParams[displayFactory.display.id]) {
+                if (resultDisplays && resultDisplays[displayFactory.display.id] === apiParams[displayFactory
+                    .display.id]) {
                   _updateDisplayLicenseLocal();
                   playerLicenseFactory.toggleDisplayLicenseLocal(displayFactory.display.playerProAuthorized);
                 } else {
