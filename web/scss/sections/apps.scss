@@ -1,5 +1,16 @@
 // Billing Page container
 .billing-app {
+  .border-container {
+    & > .panel-body {
+      @extend .u_padding-20;
+    }
+
+    &.scrollable-list {
+      .table>tbody>tr>td, .table>thead>tr>th {
+        @extend .u_padding-20;
+      }
+    }
+  }
 
 }
 
