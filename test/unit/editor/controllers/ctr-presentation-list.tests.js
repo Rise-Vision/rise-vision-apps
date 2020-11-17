@@ -96,6 +96,18 @@ describe('controller: Presentation List', function() {
 
         editorFactory.deletePresentationByObject.should.have.been.calledWith('presentationObject', true);
       });
+
+      describe('showActionError:', function() {
+        it('should show for 409 errors', function() {
+          expect($scope.listOperations.operations[0].showActionError({status: 409})).to.be.true;
+        });
+
+        it('should not show for other errors', function() {
+          expect($scope.listOperations.operations[0].showActionError()).to.be.false;
+          expect($scope.listOperations.operations[0].showActionError({status: 400})).to.be.false;
+        });
+      });
+
     });
 
   });

@@ -62,6 +62,24 @@ describe("service: BatchOperations:", function() {
     expect(batchOperations.completedItemCount).to.equal(0);
   });
 
+  it("should reset old values",function(){
+    batchOperations = new BatchOperations({
+      hasErrors: true,
+      error: 'error',
+      activeOperation: 'test',
+      progress: 50,
+      totalItemCount: 5,
+      completedItemCount: 2
+    });
+
+    expect(batchOperations.hasErrors).to.not.be.ok;
+    expect(batchOperations.error).to.not.be.ok;
+    expect(batchOperations.activeOperation).to.not.be.ok;
+    expect(batchOperations.progress).to.equal(0);
+    expect(batchOperations.totalItemCount).to.equal(0);
+    expect(batchOperations.completedItemCount).to.equal(0);
+  });
+
   describe('batch:', function() {
     it('should return a promise', function() {
       expect(batchOperations.batch().then).to.be.a('function');
@@ -205,9 +223,29 @@ describe("service: BatchOperations:", function() {
 
     it('should reject if an operation fails', function(done) {
       method.returns(Q.resolve());
-      method.onCall(1).returns(Q.reject());
+      method.onCall(1).returns(Q.reject('reason1'));
 
-      batchOperations.batch(items, method, 'operationName').catch(function() {
+      batchOperations.batch(items, method, 'operationName').catch(function(reason) {
+        expect(reason).to.equal('reason1');
+
+        expect(batchOperations.hasErrors).to.be.true;
+        expect(batchOperations.progress).to.equal(100);
+        expect(batchOperations.totalItemCount).to.equal(8);
+        expect(batchOperations.completedItemCount).to.equal(8);
+
+        expect(batchOperationsTracker).to.have.been.calledWith('Batch Operation Failed', 'operationName', items, {failureReason: ''});
+        done();
+      });
+    });
+
+    it('should reject with the first failure', function(done) {
+      method.returns(Q.resolve());
+      method.onCall(1).returns(Q.reject('reason1'));
+      method.onCall(2).returns(Q.reject('reason2'));
+
+      batchOperations.batch(items, method, 'operationName').catch(function(reason) {
+        expect(reason).to.equal('reason1');
+
         expect(batchOperations.hasErrors).to.be.true;
         expect(batchOperations.progress).to.equal(100);
         expect(batchOperations.totalItemCount).to.equal(8);

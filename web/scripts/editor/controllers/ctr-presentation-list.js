@@ -23,6 +23,12 @@ angular.module('risevision.editor.controllers')
           actionCall: function(presentation) {
             return editorFactory.deletePresentationByObject(presentation, true);
           },
+          showActionError: function(err) {
+            if (err && err.status === 409) {
+              return true;
+            }
+            return false;
+          },
           requireRole: 'cp'
         }]
       };
