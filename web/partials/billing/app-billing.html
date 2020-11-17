@@ -1,23 +1,36 @@
-<div id="appLauncherContainer">
-  <div class="container u_margin-md-top">
+<div class="madero-style">
+  <div class="app-header u_padding-20-vertical mb-5 border-bottom">
+    <!-- App Title -->
+    <h1 class="app-header-title">Account & Billing</h1>
+  </div>
 
-    <h2 class="u_margin-md-bottom">Account & Billing</h2>
+  <div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Invoices</h3>
+    <div class="form-group mt-5 mb-4">
+      <label>Billing Settings</label>
+    </div>
+
+    <div class="border-container" require-role="ua">
+      <div class="list-group-item">
+        <div class="flex-row form-group mb-0">
+          <div class="row-entry">
+            <label class="control-label pull-left mb-0">Billing Email:</label>
+            <div class="mx-5">
+              <span ng-show="company.billingContactEmails">{{company.billingContactEmails.join(', ')}}</span>
+              <span ng-show="!company.billingContactEmails">Not set. Please enter a billing email.</span>
+            </div>
+
+            <span class="ml-auto">
+              <a class="madero-link u_clickable" ng-click="companySettingsFactory.openCompanySettings()">Edit</a>
+            </span>
+          </div>
+        </div>
       </div>
-      <div class="panel-body">
-        <h4 style="display:none">Unpaid Invoices</h4>
-        <a style="display:none" href="#">View Unpaid Invoices</a>
-        <h4>Invoice History</h4>
-        <ul class="list-unstyled">
-          <li><a href="#" ng-click="viewPastInvoices()">View Past Invoices</a></li>
-          <li><a href="#" ng-click="viewPastInvoicesStore()" ng-show="checkCreationDate()">View Past Invoices (Prior to September 2018)</a></li>
-          <li><a href="#" ng-click="viewUnpaidInvoicesStore()" ng-show="hasUnpaidInvoices">View Unpaid Invoices (Prior to September 2018)</a></li>
-        </ul>
-      </div>
-    </div><!--panel-->
+    </div>
+
+    <div class="form-group mt-5 mb-4">
+      <label>Subscriptions</label>
+    </div>
 
     <div id="errorBox" ng-show="subscriptions.apiError" class="alert alert-danger" role="alert">
       <strong>{{subscriptions.errorMessage}}</strong> {{subscriptions.apiError}}
@@ -31,73 +44,80 @@
       <span ng-hide="chargebeeFactory.apiError === 403">{{chargebeeFactory.apiError}}</span>
     </div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Subscriptions</h3>
-      </div>
-      <div class="panel-body"
-          scrolling-list="subscriptions.load()"
-          rv-spinner rv-spinner-key="subscriptions-list-loader"
-          rv-spinner-start-active="1">
+    <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom"
+      scrolling-list="subscriptions.load()"
+      rv-spinner rv-spinner-key="subscriptions-list-loader"
+      rv-spinner-start-active="1">
 
-        <div class="table-responsive">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Subscription ID</th>
-              <th>Subscription</th>
-              <th>Ship To</th>
-              <!-- <th>Total</th> -->
-              <th colspan="2">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-show="subscriptions.items.list.length === 0">
-              <td colspan="6" class="text-center">
-                <span>You haven't Subscribed to any Products yet.</span>
-              </td>
-            </tr>
+      <table id="subscriptionsListTable" class="table">
+        <thead class="table-header">
+          <tr class="table-header__row">
+            <th class="table-header__cell col-xs-4">
+              Subscription ID
+            </th>
+            <th class="table-header__cell col-xs-4">Subscription</th>
+            <th class="table-header__cell col-xs-4">Ship To</th>
+            <!-- <th class="table-header__cell col-xs-4">Price</th> -->
+            <th class="table-header__cell col-xs-4">Status</th>
+          </tr>
+        </thead>
+        <tbody class="table-body">
+          <tr class="table-body__row" ng-repeat="subs in subscriptions.items.list">
+            <td class="table-body__cell">
+              {{subs.subscriptionId}}
+            </td>
+            <td class="table-body__cell font-weight-bold">
+              {{getSubscriptionDesc(subs)}}
+            </td>
+            <td class="table-body__cell">
+              {{subs.shipToName}}
+            </td>
+            <!-- <td>${{getSubscriptionPrice(subs) | number:2}}</td> -->
+            <td class="table-body__cell">
+              <span class="label" ng-class="{ 'label-success': isActive(subs), 'label-warning': isSuspended(subs) || isCancelled(subs) }">
+                {{subs.status}}
+              </span>
+            </td>
+            <td class="table-body__cell">
+              <a class="madero-link u_clickable" ng-click="editSubscription(subs)" ng-if="subs.billToId === company.id">Edit</a>
+              <span ng-if="subs.billToId !== company.id">Managed by Parent</span>
+            </td>
+          </tr>
 
-            <tr ng-repeat="subs in subscriptions.items.list" ng-hide="subs.quantity < 1">
-              <td>{{subs.subscriptionId}}</td>
-              <td class="font-weight-bold">{{getSubscriptionDesc(subs)}}</td>
-              <td>{{subs.shipToName}}</td>
-              <!-- <td>${{getSubscriptionPrice(subs) | number:2}}</td> -->
-              <td>
-                <span class="label" ng-class="{ 'label-success': isActive(subs), 'label-warning': isSuspended(subs) || isCancelled(subs) }">
-                  {{subs.status}}
-                </span>
-              </td>
-              <td>
-                <a href="#" ng-click="editSubscription(subs)" ng-if="subs.billToId === company.id">Edit</a>
-                <span ng-if="subs.billToId !== company.id">Managed by Parent</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        </div>
+          <tr ng-show="subscriptions.items.list.length === 0">
+            <td colspan="6" class="text-center"><span translate>You haven't Subscribed to any Products yet.</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <div class="form-group mt-5 mb-4">
+      <label>Billing History</label>
+    </div>
+
+    <div class="border-container">
+      <div class="list-group-item">
+        <a class="madero-link u_clickable" ng-click="viewPastInvoices()">View Past Invoices</a>
+        <a class="madero-link u_clickable" ng-click="viewPastInvoicesStore()" ng-show="checkCreationDate()">View Past Invoices (Prior to September 2018)</a>
+        <a class="madero-link u_clickable" ng-click="viewUnpaidInvoicesStore()" ng-show="hasUnpaidInvoices">View Unpaid Invoices (Prior to September 2018)</a>
       </div>
     </div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Payment Methods</h3>
-      </div>
-      <div class="panel-body">
-        <a href="#" ng-click="editPaymentMethods()">Edit Payment Methods</a>
-      </div>
-    </div><!--panel-->
+    <div class="form-group mt-5 mb-4">
+      <label>Payment Methods</label>
+    </div>
 
-    <div class="panel panel-default" require-role="ua">
-      <div class="panel-heading">
-        <h3 class="panel-title">Account Information</h3>
-      </div>
-      <div class="panel-body">
-        <p class="font-weight-bold">Billing Notifications Email</p>
-        <span class="text-muted u_margin-right" ng-show="company.billingContactEmails">{{company.billingContactEmails.join(', ')}}</span>
-        <span class="text-muted u_margin-right" ng-show="!company.billingContactEmails">Not set. Please enter a billing email.</span>
-        <a href="#" ng-click="companySettingsFactory.openCompanySettings()">Edit</a>
+    <div class="border-container">
+      <div class="list-group-item">
+        <a class="madero-link u_clickable" ng-click="editPaymentMethods()">Edit Payment Methods</a>
       </div>
     </div>
+
+    <div class="u_margin-lg text-center">
+      <label>Need help with something?</label>
+      <p><a class="madero-link" href="https://help.risevision.com/hc/en-us/articles/360041149991-Payment-instructions-and-common-questions-" target="_blank">Common Billing & Payment Questions</a></p>
+    </div>
+
   </div><!--container-->
 </div><!--appLauncherContainer-->

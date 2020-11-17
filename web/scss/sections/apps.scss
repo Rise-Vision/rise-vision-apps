@@ -1,55 +1,6 @@
-// Billing Page container (despite name)
-#appLauncherContainer {
-	h3 {
-		margin-top: 0;
-		line-height: 30px;
-		display: block;
-		a {
-			color: #444;
-			&:hover {
-				color: $rise-blue;
-			}
-		}
-	}
-	.scrollable-list {
-		@extend .panel;
-		padding: 0;
-		height: auto;
-	}
-	.list {
-		height: calc(100vh - 290px);
-		margin-top: 1px;
-		&.help-active {
-			height: calc(100vh - 977px);
-		}
-		@media (max-width: $screen-sm) {
-			height: auto;
-		}
-		.list-item {
-			border-bottom: 1px solid #f2f2f2;
-			padding: 4px 12px;
-			h4 {
-				font-weight: 500;
-				font-size: 14px;
-				color: #555;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-				overflow: hidden;
-				width: 260px;
-				@media (max-width: $screen-md){
-					width: 180px;
-				}
-			}
-			&:last-child {
-				border-bottom: none;
-			}
-			&:hover {
-				h4 {
-					color: $rise-blue;
-				}
-			}
-		}
-	}
+// Billing Page container
+.billing-app {
+
 }
 
 
