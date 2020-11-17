@@ -43,7 +43,7 @@
               var unskippable = false;
 
               angular.forEach(scope.ngModelCtrl.$error, function (value, name) {
-                if (name === 'required' || name === 'noPreviewUrl') {
+                if (name !== 'pattern' && !(name === 'responseHeaderValidator' && scope.ngModelCtrl.responseHeaderValidatorError === 'not-reachable')) {
                   unskippable = true;
                 }
               });
