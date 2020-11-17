@@ -11,7 +11,7 @@
     </div>
 
     <div class="border-container" require-role="ua">
-      <div class="list-group-item">
+      <div class="panel-body">
         <div class="flex-row form-group mb-0">
           <div class="row-entry">
             <label class="control-label pull-left mb-0">Billing Email:</label>
@@ -32,11 +32,12 @@
       <label>Subscriptions</label>
     </div>
 
-    <div id="errorBox" ng-show="subscriptions.apiError" class="alert alert-danger" role="alert">
-      <strong>{{subscriptions.errorMessage}}</strong> {{subscriptions.apiError}}
+    <div id="errorBox" ng-show="subscriptions.apiError" class="madero-style alert alert-danger" role="alert">
+      <p><strong>{{subscriptions.errorMessage}}</strong></p>
+      {{subscriptions.apiError}}
     </div>
 
-    <div id="errorBoxChargebee" ng-show="chargebeeFactory.apiError" class="alert alert-danger" role="alert">
+    <div id="errorBoxChargebee" ng-show="chargebeeFactory.apiError" class="madero-style alert alert-danger" role="alert">
       <span ng-show="chargebeeFactory.apiError === 403">
         <span ng-show="currentPlan.parentPlanContactEmail" translate translate-values="{ parentPlanContactEmail: currentPlan.parentPlanContactEmail }">account-and-billing.errors.403-contact-email</span>
         <span ng-hide="currentPlan.parentPlanContactEmail" translate>account-and-billing.errors.403-no-contact-email</span>
@@ -107,7 +108,7 @@
     </div>
 
     <div class="border-container">
-      <div class="list-group-item">
+      <div class="panel-body">
         <a class="madero-link u_clickable" ng-click="editPaymentMethods()">Edit Payment Methods</a>
       </div>
     </div>
