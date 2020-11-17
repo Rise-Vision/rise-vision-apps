@@ -14,8 +14,10 @@
             var fn = $parse(attr.scrollingList);
 
             scope.handleScroll = function (event, isEndEvent) {
+              var elContainsTarget = element[0].contains(event.target);
+
               // $log.debug(event.target.scrollTop + ' / ' + event.target.scrollHeight + ' / ' + isEndEvent);
-              if (isEndEvent) {
+              if (elContainsTarget && isEndEvent) {
                 if (event.target.scrollTop &&
                   (event.target.scrollHeight - event.target.clientHeight -
                     event.target.scrollTop) < 20) {
