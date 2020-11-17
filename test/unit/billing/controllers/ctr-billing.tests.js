@@ -1,20 +1,11 @@
 'use strict';
 describe('controller: BillingCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $rootScope, $scope, $window, $loading, $timeout, listServiceInstance;
+  var $rootScope, $scope, $loading, $timeout, listServiceInstance;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
   beforeEach(module(function ($provide) {
-    $provide.value('STORE_URL', 'https://store.risevision.com/');
-    $provide.value('PAST_INVOICES_PATH', 'account/view/invoicesHistory?cid=companyId');
-    $provide.value('UNPAID_INVOICES_PATH', 'account/view/invoicesDue?cid=companyId');
-    $provide.value('PLAYER_PRO_PRODUCT_CODE', 'pppc');
-    $provide.service('$window', function () {
-      return {
-        open: sandbox.stub()
-      };
-    });
     $provide.service('$loading', function () {
       return {
         startGlobal: sandbox.stub(),
@@ -69,7 +60,6 @@ describe('controller: BillingCtrl', function () {
 
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
-    $window = $injector.get('$window');
     $loading = $injector.get('$loading');
     $timeout = $injector.get('$timeout');
 
@@ -87,8 +77,6 @@ describe('controller: BillingCtrl', function () {
     expect($scope).to.be.ok;
     expect($scope.companySettingsFactory).to.be.ok;
     expect($scope.viewPastInvoices).to.be.a.function;
-    expect($scope.viewPastInvoicesStore).to.be.a.function;
-    expect($scope.viewUnpaidInvoicesStore).to.be.a.function;
     expect($scope.editPaymentMethods).to.be.a.function;
     expect($scope.editSubscription).to.be.a.function;
   });
@@ -98,18 +86,6 @@ describe('controller: BillingCtrl', function () {
       $scope.viewPastInvoices();
       expect($scope.chargebeeFactory.openBillingHistory).to.be.calledOnce;
       expect($scope.chargebeeFactory.openBillingHistory.getCall(0).args[0]).to.equal('testId');
-    });
-
-    it('should show Past Store invoices', function () {
-      $scope.viewPastInvoicesStore();
-      expect($window.open).to.be.calledOnce;
-      expect($window.open.getCall(0).args[0]).to.equal('https://store.risevision.com/account/view/invoicesHistory?cid=testId');
-    });
-
-    it('should show Unpaid Store invoices', function () {
-      $scope.viewUnpaidInvoicesStore();
-      expect($window.open).to.be.calledOnce;
-      expect($window.open.getCall(0).args[0]).to.equal('https://store.risevision.com/account/view/invoicesDue?cid=testId');
     });
 
   });
