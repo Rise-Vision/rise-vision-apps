@@ -1,5 +1,14 @@
 // Billing Page container
 .billing-app {
+
+  a.btn-pay-now {
+    line-height: 18px;
+    min-height: auto;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    width: 105px;
+  }
+
   .border-container {
     & > .panel-body {
       @extend .u_padding-20;
