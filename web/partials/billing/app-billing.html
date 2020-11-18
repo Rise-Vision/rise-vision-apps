@@ -124,8 +124,8 @@
                 <img src="../images/icon-download.svg" width="20" height="20">
               </a>
             </td>
-            <td class="table-body__cell">
-              <a class="madero-link u_clickable" ng-if="invoice.status !== 'PAID'" ng-href="{{invoice.chargebeePayNowUrl}}" target="_blank">Pay Now</a>
+            <td class="table-body__cell py-0">
+              <a class="btn btn-default btn-pay-now" ng-if="invoice.status !== 'PAID'" ng-href="{{invoice.chargebeePayNowUrl}}" target="_blank">Pay Now</a>
             </td>
           </tr>
 
