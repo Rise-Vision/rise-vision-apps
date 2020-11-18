@@ -161,18 +161,6 @@ angular.module('risevision.store.services')
             });
         };
 
-        factory.openBillingHistory = function (companyId) {
-          _getChargebeePortal(companyId)
-            .then(function (portal) {
-              portal.open(_chargebeeCallbacks, {
-                sectionType: $window.Chargebee.getPortalSections().BILLING_HISTORY
-              });
-            })
-            .catch(function (err) {
-              _handleChargebeePortalError(err, companyId);
-            });
-        };
-
         factory.openPaymentSources = function (companyId) {
           _getChargebeePortal(companyId)
             .then(function (portal) {

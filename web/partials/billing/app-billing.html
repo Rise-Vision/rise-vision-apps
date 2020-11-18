@@ -4,7 +4,7 @@
     <h1 class="app-header-title">Account & Billing</h1>
   </div>
 
-  <div>
+  <div rv-spinner rv-spinner-key="billing-loader" rv-spinner-start-active="1">
 
     <div class="form-group mt-5 mb-4">
       <label>Billing Settings</label>
@@ -45,40 +45,31 @@
       <span ng-hide="chargebeeFactory.apiError === 403">{{chargebeeFactory.apiError}}</span>
     </div>
 
-    <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom"
-      scrolling-list="subscriptions.load()"
-      rv-spinner rv-spinner-key="subscriptions-list-loader"
-      rv-spinner-start-active="1">
+    <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom" scrolling-list="subscriptions.load()">
 
       <table id="subscriptionsListTable" class="table">
         <thead class="table-header">
           <tr class="table-header__row">
-            <th class="table-header__cell col-xs-4">
-              Subscription ID
-            </th>
             <th class="table-header__cell col-xs-4">Subscription</th>
+            <th class="table-header__cell col-xs-4">Status</th>
             <th class="table-header__cell col-xs-4">Ship To</th>
             <!-- <th class="table-header__cell col-xs-4">Price</th> -->
-            <th class="table-header__cell col-xs-4">Status</th>
           </tr>
         </thead>
         <tbody class="table-body">
           <tr class="table-body__row" ng-repeat="subs in subscriptions.items.list">
-            <td class="table-body__cell">
-              {{subs.subscriptionId}}
-            </td>
             <td class="table-body__cell font-weight-bold">
               {{getSubscriptionDesc(subs)}}
+            </td>
+            <td class="table-body__cell">
+              <span ng-class="{ 'text-success': isActive(subs), 'text-danger': isSuspended(subs) || isCancelled(subs) }">
+                {{subs.status}}
+              </span>
             </td>
             <td class="table-body__cell">
               {{subs.shipToName}}
             </td>
             <!-- <td>${{getSubscriptionPrice(subs) | number:2}}</td> -->
-            <td class="table-body__cell">
-              <span class="label" ng-class="{ 'label-success': isActive(subs), 'label-warning': isSuspended(subs) || isCancelled(subs) }">
-                {{subs.status}}
-              </span>
-            </td>
             <td class="table-body__cell">
               <a class="madero-link u_clickable" ng-click="editSubscription(subs)" ng-if="subs.billToId === company.id">Edit</a>
               <span ng-if="subs.billToId !== company.id">Managed by Parent</span>
@@ -97,10 +88,53 @@
       <label>Billing History</label>
     </div>
 
-    <div class="border-container">
-      <div class="list-group-item">
-        <a class="madero-link u_clickable" ng-click="viewPastInvoices()">View Past Invoices</a>
-      </div>
+    <div id="errorBox" ng-show="invoices.apiError" class="madero-style alert alert-danger" role="alert">
+      <p><strong>{{invoices.errorMessage}}</strong></p>
+      {{invoices.apiError}}
+    </div>
+
+    <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom" scrolling-list="invoices.load()">
+
+      <table id="invoicesListTable" class="table">
+        <thead class="table-header">
+          <tr class="table-header__row">
+            <th class="table-header__cell col-xs-1">Status</th>
+            <th class="table-header__cell col-xs-1">Date</th>
+            <th class="table-header__cell col-xs-2">Description</th>
+            <th class="table-header__cell col-xs-5">Amount</th>
+            <th class="table-header__cell col-xs-2">Invoice</th>
+            <th class="table-header__cell col-xs-1">&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody class="table-body">
+          <tr class="table-body__row" ng-repeat="invoice in invoices.items.list">
+            <td class="table-body__cell">
+              <streamline-icon class="status unpaid" name="exclamation" width="5" height="15" ng-show="invoice.status !== 'PAID'"></streamline-icon>
+              <streamline-icon class="status paid" name="checkmark" width="17" height="14" ng-show="invoice.status === 'PAID'"></streamline-icon>
+            </td>
+            <td class="table-body__cell">{{invoice.dueDate | date:'d-MMM-yyyy'}}</td>
+            <td class="table-body__cell font-weight-bold">
+              Invoice #{{invoice.invoiceNumber}}
+            </td>
+            <td class="table-body__cell">
+              ${{invoice.total | number:2}}
+            </td>
+            <td class="table-body__cell">
+              <a class="madero-link u_clickable">
+                <img src="../images/icon-download.svg" width="20" height="20">
+              </a>
+            </td>
+            <td class="table-body__cell">
+              <a class="madero-link u_clickable" ng-if="invoice.status !== 'PAID'" ng-href="{{invoice.chargebeePayNowUrl}}" target="_blank">Pay Now</a>
+            </td>
+          </tr>
+
+          <tr ng-show="invoices.items.list.length === 0 && uninvoices.items.list.length === 0">
+            <td colspan="6" class="text-center"><span translate>You do not have any invoices yet.</span></td>
+          </tr>
+        </tbody>
+      </table>
+
     </div>
 
     <div class="form-group mt-5 mb-4">

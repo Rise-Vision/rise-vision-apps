@@ -12,6 +12,17 @@
     }
   }
 
+  .status {
+    &.paid svg {
+      fill: $madero-green;
+    }
+    &.unpaid svg {
+      @extend .ml-2;
+
+      fill: $danger;
+    }
+  }
+
 }
 
 
