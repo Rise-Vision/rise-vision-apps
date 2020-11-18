@@ -7,17 +7,15 @@ angular.module('risevision.apps.billing.controllers')
     function ($rootScope, $scope, $loading, $timeout, ScrollingListService, userState,
       currentPlanFactory, ChargebeeFactory, billing, PLANS_LIST, companySettingsFactory) {
 
-      $scope.search = {
-        count: $scope.listLimit,
-        sortBy: 'status',
-        reverse: false,
-        name: 'Subscriptions'
-      };
-
       $scope.company = userState.getCopyOfSelectedCompany();
       $scope.currentPlan = currentPlanFactory.currentPlan;
       $scope.chargebeeFactory = new ChargebeeFactory();
-      $scope.subscriptions = new ScrollingListService(billing.getSubscriptions, $scope.search);
+
+      $scope.subscriptions = new ScrollingListService(billing.getSubscriptions, {
+        sortBy: 'status',
+        reverse: false,
+        name: 'Subscriptions'
+      });
       $scope.invoices = new ScrollingListService(billing.getInvoices, {
         name: 'Invoices'
       });
@@ -33,6 +31,14 @@ angular.module('risevision.apps.billing.controllers')
           $loading.stop('billing-loader');
         }
       });
+
+      var _reloadSubscriptions = function () {
+        $loading.start('billing-loader');
+
+        $timeout(function () {
+          $scope.subscriptions.doSearch();
+        }, 10000);
+      };
 
       $rootScope.$on('chargebee.subscriptionChanged', _reloadSubscriptions);
       $rootScope.$on('chargebee.subscriptionCancelled', _reloadSubscriptions);
@@ -88,14 +94,6 @@ angular.module('risevision.apps.billing.controllers')
 
       $scope.isSuspended = function (subscription) {
         return subscription.status === 'Suspended';
-      };
-
-      var _reloadSubscriptions = function() {
-        $loading.start('billing-loader');
-
-        $timeout(function () {
-          $scope.subscriptions.doSearch();
-        }, 10000);
       };
 
       var _getPeriod = function(subscription) {

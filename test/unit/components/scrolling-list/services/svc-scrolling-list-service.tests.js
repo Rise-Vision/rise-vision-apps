@@ -139,6 +139,38 @@ describe("service: ScrollingListService:", function() {
         },10);
       });
 
+      it("should update cursor",function(done){
+        scrollingListService.search.selectAll = true;
+
+        result = {
+          items: [21],
+          cursor: 'updatedCursor'
+        };
+        scrollingListService.load();
+
+        setTimeout(function(){
+          expect(scrollingListService.items.cursor).to.equal('updatedCursor');
+
+          done();
+        },10);
+      });
+
+      it("should use nextPageToken if cursor is not available",function(done){
+        scrollingListService.search.selectAll = true;
+
+        result = {
+          items: [21],
+          nextPageToken: 'nextPageToken'
+        };
+        scrollingListService.load();
+
+        setTimeout(function(){
+          expect(scrollingListService.items.cursor).to.equal('nextPageToken');
+
+          done();
+        },10);
+      });
+
       it("should not re-load if there are no more items",function(done){
         result = {
           items: [41]
