@@ -30,20 +30,22 @@ describe('service: billing:', function() {
               }
             }
           },
-          invoice: {
-            listUnpaid: function() {
-              if (!failedResponse) {
-                return Q.resolve({
-                  result: {
-                    nextPageToken: 1,
-                    items: [{ invoiceId: 'inv1' }]
-                  }
-                });
+          integrations: {
+            invoice: {
+              list: function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: {
+                      nextPageToken: 1,
+                      items: [{ invoiceId: 'inv1' }]
+                    }
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
               }
-              else {
-                return Q.reject('API Failed');
-              }
-            }
+            }  
           }
         });
       };
@@ -59,7 +61,7 @@ describe('service: billing:', function() {
   it('should exist',function() {
     expect(billing).to.be.ok;
     expect(billing.getSubscriptions).to.be.a.function;
-    expect(billing.getUnpaidInvoices).to.be.a.function;
+    expect(billing.getInvoices).to.be.a.function;
   });
 
   describe('getSubscriptions:', function() {
@@ -89,11 +91,11 @@ describe('service: billing:', function() {
     });
   });
 
-  describe('getUnpaidInvoices:', function() {
+  describe('getInvoices:', function() {
     it('should return a list of invoices', function(done) {
       failedResponse = false;
 
-      billing.getUnpaidInvoices({})
+      billing.getInvoices({})
       .then(function(result) {
         expect(result).to.be.ok;
         expect(result.items).to.be.ok;
@@ -105,7 +107,7 @@ describe('service: billing:', function() {
     it('should handle failure to get list correctly', function(done) {
       failedResponse = true;
 
-      billing.getUnpaidInvoices({})
+      billing.getInvoices({})
       .then(function(invoices) {
         done(invoices);
       })

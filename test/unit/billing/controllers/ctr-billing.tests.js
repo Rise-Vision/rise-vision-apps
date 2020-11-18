@@ -1,15 +1,14 @@
 'use strict';
 describe('controller: BillingCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $rootScope, $scope, $loading, $timeout, listServiceInstance;
+  var $rootScope, $scope, $loading, $timeout, ScrollingListService, listServiceInstance;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
   beforeEach(module(function ($provide) {
     $provide.service('$loading', function () {
       return {
-        startGlobal: sandbox.stub(),
-        stopGlobal: sandbox.stub(),
+        start: sandbox.stub(),
         stop: sandbox.stub()
       };
     });
@@ -19,9 +18,7 @@ describe('controller: BillingCtrl', function () {
       };
     });   
     $provide.service('ScrollingListService', function () {
-      return function () {
-        return listServiceInstance;
-      };
+      return sinon.stub().returns(listServiceInstance);
     });
     $provide.service('userState', function () {
       return {
@@ -39,7 +36,6 @@ describe('controller: BillingCtrl', function () {
     $provide.service('ChargebeeFactory', function () {
       return function() {
         return {
-          openBillingHistory: sandbox.stub(),
           openPaymentSources: sandbox.stub(),
           openSubscriptionDetails: sandbox.stub()
         };
@@ -47,8 +43,8 @@ describe('controller: BillingCtrl', function () {
     });
     $provide.service('billing', function () {
       return {
-        getSubscriptions: sandbox.stub(),
-        getUnpaidInvoices: sandbox.stub()
+        getSubscriptions: 'getSubscriptions',
+        getInvoices: 'getInvoices'
       };
     });
   }));
@@ -62,6 +58,7 @@ describe('controller: BillingCtrl', function () {
     $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
     $timeout = $injector.get('$timeout');
+    ScrollingListService = $injector.get('ScrollingListService');
 
     $controller('BillingCtrl', {
       $scope: $scope
@@ -76,91 +73,39 @@ describe('controller: BillingCtrl', function () {
   it('should exist',function () {
     expect($scope).to.be.ok;
     expect($scope.companySettingsFactory).to.be.ok;
-    expect($scope.viewPastInvoices).to.be.a.function;
     expect($scope.editPaymentMethods).to.be.a.function;
     expect($scope.editSubscription).to.be.a.function;
+
+    expect($scope.subscriptions).to.be.ok;
+    expect($scope.invoices).to.be.ok;
+  });
+  
+  it('should init list service', function() {
+    ScrollingListService.should.have.been.calledTwice;
+    ScrollingListService.should.have.been.calledWith('getSubscriptions', {
+      sortBy: 'status',
+      reverse: false,
+      name: 'Subscriptions'
+    });
+    ScrollingListService.should.have.been.calledWith('getInvoices', {
+      name: 'Invoices'
+    });
   });
 
-  describe('past invoices', function () {
-    it('should show Chargebee invoices', function () {
-      $scope.viewPastInvoices();
-      expect($scope.chargebeeFactory.openBillingHistory).to.be.calledOnce;
-      expect($scope.chargebeeFactory.openBillingHistory.getCall(0).args[0]).to.equal('testId');
+  describe('$loading: ', function() {
+    it('should stop spinner', function() {
+      $loading.stop.should.have.been.calledWith('billing-loader');
     });
 
-  });
-
-  describe('checkCreationDate: ', function() {
-    it('should return false if creation date is null', function() {
-      expect($scope.checkCreationDate()).to.be.false;
-    });
-
-    it('should return false if company was created after the launch date', function() {
-      $scope.company.creationDate = 'Sep 25, 2018';
-
-      expect($scope.checkCreationDate()).to.be.false;
-    });
-
-    it('should return true if company has not completed onboarding', function() {
-      $scope.company.creationDate = 'Aug 25, 2015';
-
-      expect($scope.checkCreationDate()).to.be.true;
-    });
-
-  });
-
-  describe('hasUnpaidInvoices: ', function() {
-    it('should default to false', function() {
-      expect($scope.invoices).to.be.an('object');
-
-      expect($scope.hasUnpaidInvoices).to.be.false;
-    });
-
-    it('should be true if there are invoices', function() {
-      $scope.invoices = {
-        items: {
-          list: [
-            {id: 'invoice1'}
-          ]
-        },
-        loadingItems: false
-      };
-
+    it('should start spinner', function(done) {
+      $scope.subscriptions.loadingItems = true;
       $scope.$digest();
+      setTimeout(function() {
+        $loading.start.should.have.been.calledWith('billing-loader');
 
-      expect($scope.hasUnpaidInvoices).to.be.true;
+        done();
+      }, 10);
     });
-
-    it('should be true if there are no invoices', function() {
-      $scope.invoices = {
-        items: {
-          list: []
-        },
-        loadingItems: false
-      };
-
-      $scope.$digest();
-
-      expect($scope.hasUnpaidInvoices).to.be.false;
-    });
-
-    it('should remove watcher', function() {
-      expect($scope.$$watchers).to.have.length(2);
-
-      $scope.invoices = {
-        items: {
-          list: []
-        },
-        loadingItems: false
-      };
-
-      $scope.$digest();
-
-      expect($scope.$$watchers).to.have.length(1);
-
-      expect($scope.hasUnpaidInvoices).to.be.false;
-    });
-
   });
 
   describe('payment methods', function () {
@@ -191,14 +136,14 @@ describe('controller: BillingCtrl', function () {
     it('should reload Subscriptions when Subscription is updated on Customer Portal', function () {
       $rootScope.$emit('chargebee.subscriptionChanged');
       $timeout.flush();
-      expect($loading.startGlobal).to.be.calledOnce;
-      expect($loading.stopGlobal).to.be.calledOnce;
+
+      expect($loading.start).to.be.calledOnce;
       expect(listServiceInstance.doSearch).to.be.calledOnce;
     });
 
     it('should reload Subscriptions when Subscription is started', function () {
       $rootScope.$emit('risevision.company.planStarted');
-      $rootScope.$digest();
+
       expect(listServiceInstance.doSearch).to.be.calledOnce;
     });
 
