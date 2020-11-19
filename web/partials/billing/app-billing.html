@@ -111,25 +111,25 @@
           </tr>
         </thead>
         <tbody class="table-body">
-          <tr class="table-body__row" ng-repeat="invoice in invoices.items.list">
+          <tr class="table-body__row" ng-repeat="item in invoices.items.list">
             <td class="table-body__cell">
-              <streamline-icon class="status unpaid" name="exclamation" width="5" height="15" ng-show="invoice.status !== 'PAID'"></streamline-icon>
-              <streamline-icon class="status paid" name="checkmark" width="17" height="14" ng-show="invoice.status === 'PAID'"></streamline-icon>
+              <streamline-icon class="status unpaid" name="exclamation" width="5" height="15" ng-show="item.invoice.status !== 'paid'"></streamline-icon>
+              <streamline-icon class="status paid" name="checkmark" width="17" height="14" ng-show="item.invoice.status === 'paid'"></streamline-icon>
             </td>
-            <td class="table-body__cell">{{invoice.dueDate | date:'d-MMM-yyyy'}}</td>
+            <td class="table-body__cell">{{item.invoice.date * 1000 | date:'d-MMM-yyyy'}}</td>
             <td class="table-body__cell font-weight-bold">
-              Invoice #{{invoice.invoiceNumber}}
+              Invoice #{{item.invoice.id}}
             </td>
             <td class="table-body__cell">
-              ${{invoice.total | number:2}}
+              ${{item.invoice.total / 100 | number:2}}
             </td>
             <td class="table-body__cell">
-              <a class="madero-link u_clickable" ng-click="billingFactory.downloadInvoice(invoice.invoiceId)">
+              <a class="madero-link u_clickable" ng-click="billingFactory.downloadInvoice(item.invoice.id)">
                 <img src="../images/icon-download.svg" width="20" height="20">
               </a>
             </td>
             <td class="table-body__cell py-0">
-              <a class="btn btn-default btn-pay-now" ng-if="invoice.status !== 'PAID'" ng-href="{{invoice.chargebeePayNowUrl}}" target="_blank">Pay Now</a>
+              <a class="btn btn-default btn-pay-now" ng-if="item.invoice.status !== 'paid'" ng-href="{{item.invoice.chargebeePayNowUrl}}" target="_blank">Pay Now</a>
             </td>
           </tr>
 
