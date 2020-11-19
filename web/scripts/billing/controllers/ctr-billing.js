@@ -51,8 +51,8 @@ angular.module('risevision.apps.billing.controllers')
         $scope.chargebeeFactory.openPaymentSources(userState.getSelectedCompanyId());
       };
 
-      $scope.getInvoicePdf = function (invoiceId) {
-        billingFactory.getInvoicePdf(invoiceId);
+      $scope.downloadInvoice = function (invoiceId) {
+        billingFactory.downloadInvoice(invoiceId);
       };
 
       $scope.editSubscription = function (subscription) {
