@@ -44,6 +44,16 @@ describe('service: billing:', function() {
                 else {
                   return Q.reject('API Failed');
                 }
+              },
+              getPdf: function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: 'invoicePdf'
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
               }
             }  
           }
@@ -62,6 +72,7 @@ describe('service: billing:', function() {
     expect(billing).to.be.ok;
     expect(billing.getSubscriptions).to.be.a.function;
     expect(billing.getInvoices).to.be.a.function;
+    expect(billing.getInvoicePdf).to.be.a.function;
   });
 
   describe('getSubscriptions:', function() {
@@ -110,6 +121,32 @@ describe('service: billing:', function() {
       billing.getInvoices({})
       .then(function(invoices) {
         done(invoices);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+
+  describe('getInvoicePdf:', function() {
+    it('should return the invoice pdf', function(done) {
+      failedResponse = false;
+
+      billing.getInvoicePdf('invoiceId')
+      .then(function(result) {
+        expect(result).to.be.ok;
+        expect(result).to.equal('invoicePdf');
+        done();
+      });
+    });
+
+    it('should handle failure to get pdf correctly', function(done) {
+      failedResponse = true;
+
+      billing.getInvoicePdf('invoiceId')
+      .then(function(result) {
+        done(result);
       })
       .then(null, function(error) {
         expect(error).to.deep.equal('API Failed');
