@@ -34,7 +34,7 @@ angular.module('risevision.editor.services')
       imageAlt: 'add google spreadsheet',
       gadgetType: 'Widget',
       id: 'b172714a-d753-475e-bb38-281f2aff594c',
-      url: 'https://s3.amazonaws.com/widget-google-spreadsheet/2.0.0/dist/widget.html'
+      url: 'https://widgets.risevision.com/widget-google-spreadsheet/2.0.0/dist/widget.html'
     },
     {
       env: 'PROD',
@@ -43,7 +43,7 @@ angular.module('risevision.editor.services')
       imageAlt: 'add google spreadsheet',
       gadgetType: 'Widget',
       id: '3132a345-9246-49df-854f-16455b833abf',
-      url: 'https://s3.amazonaws.com/widget-google-spreadsheet/2.0.0/dist/widget.html'
+      url: 'https://widgets.risevision.com/widget-google-spreadsheet/2.0.0/dist/widget.html'
     },
     {
       env: 'TEST',
@@ -52,7 +52,7 @@ angular.module('risevision.editor.services')
       imageAlt: 'add google calendar',
       gadgetType: 'Widget',
       id: '570012a1-54cc-4926-acb6-f9873588eddf',
-      url: 'https://s3.amazonaws.com/widget-google-calendar/0.1.0/dist/widget.html'
+      url: 'https://widgets.risevision.com/widget-google-calendar/0.1.0/dist/widget.html'
     },
     {
       env: 'PROD',
@@ -61,7 +61,7 @@ angular.module('risevision.editor.services')
       imageAlt: 'add google calendar',
       gadgetType: 'Widget',
       id: 'e2223213-cdaa-44be-b9d3-7a01211f63f7',
-      url: 'https://s3.amazonaws.com/widget-google-calendar/0.1.0/dist/widget.html'
+      url: 'https://widgets.risevision.com/widget-google-calendar/0.1.0/dist/widget.html'
     },
     {
       env: 'TEST',
@@ -70,7 +70,7 @@ angular.module('risevision.editor.services')
       imageAlt: 'add web page',
       gadgetType: 'Widget',
       id: '5e9499c8-c877-4791-95b9-9ae4835030e4',
-      url: 'http://s3.amazonaws.com/widget-web-page/1.0.0/dist/widget.html'
+      url: 'http://widgets.risevision.com/widget-web-page/1.0.0/dist/widget.html'
     },
     {
       env: 'PROD',
@@ -79,6 +79,6 @@ angular.module('risevision.editor.services')
       imageAlt: 'add web page',
       gadgetType: 'Widget',
       id: 'df887785-3614-4f05-86c7-fce07b8745dc',
-      url: 'http://s3.amazonaws.com/widget-web-page/1.0.0/dist/widget.html'
+      url: 'http://widgets.risevision.com/widget-web-page/1.0.0/dist/widget.html'
     }
   ]);
