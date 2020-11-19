@@ -3,62 +3,50 @@
 angular.module('risevision.apps.billing.controllers')
   .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$timeout',
     'ScrollingListService', 'userState', 'currentPlanFactory', 'ChargebeeFactory', 'billing',
-    'PLANS_LIST', 'companySettingsFactory',
+    'BillingFactory', 'PLANS_LIST', 'companySettingsFactory',
     function ($rootScope, $scope, $loading, $timeout, ScrollingListService, userState,
-      currentPlanFactory, ChargebeeFactory, billing, PLANS_LIST, companySettingsFactory) {
-
-      $scope.search = {
-        count: $scope.listLimit,
-        sortBy: 'status',
-        reverse: false,
-        name: 'Subscriptions'
-      };
+      currentPlanFactory, ChargebeeFactory, billing, BillingFactory, PLANS_LIST, 
+      companySettingsFactory) {
 
       $scope.company = userState.getCopyOfSelectedCompany();
       $scope.currentPlan = currentPlanFactory.currentPlan;
       $scope.chargebeeFactory = new ChargebeeFactory();
-      $scope.subscriptions = new ScrollingListService(billing.getSubscriptions, $scope.search);
+      $scope.billingFactory = new BillingFactory();
+
+      $scope.subscriptions = new ScrollingListService(billing.getSubscriptions, {
+        sortBy: 'status',
+        reverse: false,
+        name: 'Subscriptions'
+      });
+      $scope.invoices = new ScrollingListService(billing.getInvoices, {
+        name: 'Invoices'
+      });
       $scope.companySettingsFactory = companySettingsFactory;
 
-      $scope.hasUnpaidInvoices = false;
-
-      $scope.$watch('subscriptions.loadingItems', function (loading) {
-        if (loading) {
-          $loading.start('subscriptions-list-loader');
+      $scope.$watchGroup([
+        'subscriptions.loadingItems',
+        'invoices.loadingItems'
+      ], function (newValues) {
+        if (newValues[0] || newValues[1]) {
+          $loading.start('billing-loader');
         } else {
-          $loading.stop('subscriptions-list-loader');
+          $loading.stop('billing-loader');
         }
       });
+
+      var _reloadSubscriptions = function () {
+        $loading.start('billing-loader');
+
+        $timeout(function () {
+          $scope.subscriptions.doSearch();
+        }, 10000);
+      };
 
       $rootScope.$on('chargebee.subscriptionChanged', _reloadSubscriptions);
       $rootScope.$on('chargebee.subscriptionCancelled', _reloadSubscriptions);
       $rootScope.$on('risevision.company.planStarted', function () {
         $scope.subscriptions.doSearch();
       });
-
-      $scope.viewPastInvoices = function () {
-        $scope.chargebeeFactory.openBillingHistory(userState.getSelectedCompanyId());
-      };
-
-      $scope.checkCreationDate = function () {
-        var creationDate = (($scope.company && $scope.company.creationDate) ?
-          (new Date($scope.company.creationDate)) : (new Date()));
-        return creationDate < new Date('Sep 1, 2018');
-      };
-
-      var _loadUnpaidInvoices = function () {
-        $scope.invoices = new ScrollingListService(billing.getUnpaidInvoices);
-
-        var $watch = $scope.$watch('invoices.loadingItems', function (loading) {
-          if (loading === false) {
-            $scope.hasUnpaidInvoices = $scope.invoices.items.list.length > 0;
-
-            $watch();
-          }
-        });
-      };
-
-      _loadUnpaidInvoices();
 
       $scope.editPaymentMethods = function () {
         $scope.chargebeeFactory.openPaymentSources(userState.getSelectedCompanyId());
@@ -110,29 +98,18 @@ angular.module('risevision.apps.billing.controllers')
         return subscription.status === 'Suspended';
       };
 
-      function _reloadSubscriptions() {
-        $timeout(function () {
-          $loading.startGlobal('subscriptions-changed-loader');
-        });
-
-        $timeout(function () {
-          $loading.stopGlobal('subscriptions-changed-loader');
-          $scope.subscriptions.doSearch();
-        }, 10000);
-      }
-
-      function _getPeriod(subscription) {
+      var _getPeriod = function(subscription) {
         if (subscription.billingPeriod > 1) {
           return (subscription.billingPeriod + ' ' + (subscription.unit.toLowerCase().indexOf('per month') >= 0 ?
             'Month' : 'Year'));
         } else {
           return subscription.unit.toLowerCase().indexOf('per month') >= 0 ? 'Monthly' : 'Yearly';
         }
-      }
+      };
 
-      function _isPerDisplay(subscription) {
+      var _isPerDisplay = function(subscription) {
         return subscription.unit.toLowerCase().indexOf('per display') >= 0 ? true : false;
-      }
+      };
 
     }
   ]);

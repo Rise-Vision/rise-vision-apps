@@ -40,7 +40,7 @@
     .table-body {
         .table-body__row {
             &:hover {
-                a {
+                a:not(.btn) {
                     color: $rise-blue;
                 }
             }

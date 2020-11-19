@@ -1,7 +1,7 @@
 'use strict';
 /*jshint camelcase: false */
 
-angular.module('risevision.store.services')
+angular.module('risevision.apps.billing.services')
   .factory('getChargebeeInstance', ['$q', '$window', '$loading', 'storeService', 'userState',
     'CHARGEBEE_TEST_SITE', 'CHARGEBEE_PROD_SITE',
     function ($q, $window, $loading, storeService, userState, CHARGEBEE_TEST_SITE, CHARGEBEE_PROD_SITE) {
@@ -154,18 +154,6 @@ angular.module('risevision.store.services')
             .then(function (portal) {
               portal.open(_chargebeeCallbacks, {
                 sectionType: $window.Chargebee.getPortalSections().ADDRESS
-              });
-            })
-            .catch(function (err) {
-              _handleChargebeePortalError(err, companyId);
-            });
-        };
-
-        factory.openBillingHistory = function (companyId) {
-          _getChargebeePortal(companyId)
-            .then(function (portal) {
-              portal.open(_chargebeeCallbacks, {
-                sectionType: $window.Chargebee.getPortalSections().BILLING_HISTORY
               });
             })
             .catch(function (err) {

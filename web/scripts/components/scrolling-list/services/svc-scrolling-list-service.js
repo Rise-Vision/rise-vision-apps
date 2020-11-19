@@ -40,7 +40,7 @@ angular.module('risevision.common.components.scrolling-list')
 
             listService(factory.search, factory.items.cursor)
               .then(function (result) {
-                factory.items.add(result.items ? result.items : [], result.cursor);
+                factory.items.add(result.items ? result.items : [], result.cursor || result.nextPageToken);
 
                 factory.search.selectAll = false;
               })

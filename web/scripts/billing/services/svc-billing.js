@@ -31,25 +31,50 @@ angular.module('risevision.apps.billing.services')
 
           return deferred.promise;
         },
-        getUnpaidInvoices: function () {
+        getInvoices: function (search, cursor) {
           var deferred = $q.defer();
           var params = {
             'companyId': userState.getSelectedCompanyId(),
-            'search': 'NOT origin:Chargebee',
+            'cursor': cursor,
+            'count': search.count
           };
 
-          $log.debug('Store invoice.listUnpaid called with', params);
+          $log.debug('Store integerations.invoice.list called with', params);
 
           storeAPILoader().then(function (storeApi) {
-              return storeApi.invoice.listUnpaid(params);
+              return storeApi.integrations.invoice.list(params);
             })
             .then(function (resp) {
-              $log.debug('invoice.listUnpaid resp', resp);
+              $log.debug('integerations.invoice.list resp', resp);
 
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              console.error('Failed to get company\'s unpaid invoices.', e);
+              console.error('Failed to get company\'s invoices.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+        getInvoicePdf: function (invoiceId) {
+          var deferred = $q.defer();
+          var params = {
+            'companyId': userState.getSelectedCompanyId(),
+            'invoiceId': invoiceId
+          };
+
+          $log.debug('Store integerations.invoice.getPdf called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.invoice.getPdf(params);
+            })
+            .then(function (resp) {
+              $log.debug('integerations.invoice.getPdf resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to get invoice PDF.', e);
               deferred.reject(e);
             });
 

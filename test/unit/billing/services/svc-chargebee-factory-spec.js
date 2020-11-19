@@ -4,7 +4,7 @@ describe("Services: ChargebeeFactory", function() {
   var sandbox = sinon.sandbox.create();
   var clock, $rootScope, $window, $loading, userState, storeService, plansFactory, currentPlanFactory, chargebeePortal;
 
-  beforeEach(module("risevision.store.services"));
+  beforeEach(module("risevision.apps.billing.services"));
 
   beforeEach(module(function ($provide) {
     $provide.value("CHARGEBEE_TEST_SITE", "risevision-test");
@@ -75,7 +75,6 @@ describe("Services: ChargebeeFactory", function() {
           return {
             ACCOUNT_DETAILS: "ACCOUNT_DETAILS",
             ADDRESS: "ADDRESS",
-            BILLING_HISTORY: "BILLING_HISTORY",
             PAYMENT_SOURCES: "PAYMENT_SOURCES",
             SUBSCRIPTION_DETAILS: "SUBSCRIPTION_DETAILS",
             EDIT_SUBSCRIPTION: "EDIT_SUBSCRIPTION"
@@ -265,17 +264,6 @@ describe("Services: ChargebeeFactory", function() {
       });
     });
 
-    it("should open Address section", function(done) {
-      chargebeeFactoryInstance.openBillingHistory("companyId1");
-
-      setTimeout(function () {
-        expect(chargebeePortal.open).to.have.been.calledOnce;
-        expect(chargebeePortal.open.getCall(0).args[1].sectionType).to.equal(chargebeeSections.BILLING_HISTORY);
-        expect(plansFactory.apiError).to.not.be.ok;
-        done();
-      });
-    });
-
     it("should open Payment Sources section", function(done) {
       chargebeeFactoryInstance.openPaymentSources("companyId1");
 
@@ -345,16 +333,6 @@ describe("Services: ChargebeeFactory", function() {
 
       it("should open Store Account instead of Customer Portal Address", function(done) {
         chargebeeFactoryInstance.openAddress("companyId1");
-
-        setTimeout(function () {
-          expect(chargebeePortal.open).to.not.have.been.called;
-          expect(plansFactory.showPlansModal).to.have.been.calledOnce;
-          done();
-        });
-      });
-
-      it("should open Store Account instead of Customer Billing History", function(done) {
-        chargebeeFactoryInstance.openBillingHistory("companyId1");
 
         setTimeout(function () {
           expect(chargebeePortal.open).to.not.have.been.called;
