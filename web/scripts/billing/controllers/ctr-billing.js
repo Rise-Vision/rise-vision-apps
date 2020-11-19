@@ -3,13 +3,15 @@
 angular.module('risevision.apps.billing.controllers')
   .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$timeout',
     'ScrollingListService', 'userState', 'currentPlanFactory', 'ChargebeeFactory', 'billing',
-    'PLANS_LIST', 'companySettingsFactory',
+    'BillingFactory', 'PLANS_LIST', 'companySettingsFactory',
     function ($rootScope, $scope, $loading, $timeout, ScrollingListService, userState,
-      currentPlanFactory, ChargebeeFactory, billing, PLANS_LIST, companySettingsFactory) {
+      currentPlanFactory, ChargebeeFactory, billing, BillingFactory, PLANS_LIST, 
+      companySettingsFactory) {
 
       $scope.company = userState.getCopyOfSelectedCompany();
       $scope.currentPlan = currentPlanFactory.currentPlan;
       $scope.chargebeeFactory = new ChargebeeFactory();
+      $scope.billingFactory = new BillingFactory();
 
       $scope.subscriptions = new ScrollingListService(billing.getSubscriptions, {
         sortBy: 'status',

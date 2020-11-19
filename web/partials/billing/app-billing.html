@@ -93,6 +93,10 @@
       {{invoices.apiError}}
     </div>
 
+    <div id="errorBox" ng-show="billingFactory.apiError" class="madero-style alert alert-danger" role="alert">
+      <strong>{{billingFactory.apiError}}</strong>
+    </div>
+
     <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom" scrolling-list="invoices.load()">
 
       <table id="invoicesListTable" class="table">
@@ -120,7 +124,7 @@
               ${{invoice.total | number:2}}
             </td>
             <td class="table-body__cell">
-              <a class="madero-link u_clickable">
+              <a class="madero-link u_clickable" ng-click="billingFactory.downloadInvoice(invoice.invoiceId)">
                 <img src="../images/icon-download.svg" width="20" height="20">
               </a>
             </td>
