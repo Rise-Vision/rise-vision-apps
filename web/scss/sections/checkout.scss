@@ -93,18 +93,19 @@
     width: 744px;
   }
 
-  .purchase-footer {
-    text-align: center;
+}
 
-    .title {
-       font-weight: bold;
+.purchase-footer {
+  text-align: center;
 
-       svg {
-        fill: $madero-gray;
-        vertical-align: middle;
-        margin-left: 5px;
-       }
-    }
+  .title {
+     font-weight: bold;
+
+     svg {
+      fill: $madero-gray;
+      vertical-align: middle;
+      margin-left: 5px;
+     }
   }
 }
 
