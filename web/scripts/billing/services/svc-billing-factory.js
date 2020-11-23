@@ -9,6 +9,7 @@ angular.module('risevision.apps.billing.services')
         factory.loading = false;
 
         factory.apiError = '';
+        factory.invoice = null;
       };
 
       factory.init = function() {
