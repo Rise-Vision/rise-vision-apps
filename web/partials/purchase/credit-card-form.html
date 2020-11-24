@@ -1,0 +1,120 @@
+<div id="credit-card-form">
+  <!-- Alpha Release - Select New Card by default -->
+  <div class="row" ng-if="false">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="credit-card-select" class="hidden">Add New Credit Card</label>
+        <select id="credit-card-select" class="form-control selectpicker" ng-model="paymentMethods.selectedCard" ng-options="c as getCardDescription(c) for c in paymentMethods.existingCreditCards track by c.id">
+          <option value="">Add New Credit Card</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW CREDIT CARD -->
+  <div id="new-credit-card-form" ng-show="paymentMethods.selectedCard.isNew">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group" ng-class="{ 'has-error': (formObject.cardholderName.$dirty || formObject.$submitted) && formObject.cardholderName.$invalid }">
+          <label for="new-card-name" class="control-label">Cardholder Name: *</label>
+          <input id="new-card-name" aria-required="true" type="text" class="form-control" name="cardholderName" data-stripe="name" ng-model="paymentMethods.newCreditCard.name" autocomplete="cc-name" required>
+          <p class="text-danger" ng-show="(formObject.cardholderName.$dirty || formObject.$submitted) && formObject.cardholderName.$invalid">
+            Choose a Cardholder Name.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group" ng-class="{ 'has-error': stripeElementError('new-card-number') }">
+          <label for="new-card-number" class="control-label">Card Number: *</label>
+          <div class="form-control" id="new-card-number"></div>
+          <p class="text-danger" ng-show="stripeElementError('new-card-number')">
+            Choose a Card Number.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group" ng-class="{ 'has-error': stripeElementError('new-card-expiry') }">
+          <label for="new-card-expiry" class="control-label">Expiration Date: *</label>
+          <div class="form-control" id="new-card-expiry"></div>
+          <p class="text-danger" ng-show="stripeElementError('new-card-expiry')">
+            Choose an Expiration Date Month and Year.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group" ng-class="{ 'has-error': stripeElementError('new-card-cvc') }">
+          <label for="new-card-cvc" class="control-label">Security Code: *</label>
+          <div class="form-control" id="new-card-cvc"></div>
+          <p class="text-danger" ng-show="stripeElementError('new-card-cvc')">
+            Choose a Security Code.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="toggleMatchBillingAddress" class="control-label mb-0">Cardholder Billing Address: *</label>
+          <div class="flex-row">
+            <madero-checkbox id="toggleMatchBillingAddress" ng-model="paymentMethods.newCreditCard.useBillingAddress"></madero-checkbox>
+            <span class="mr-3">Use Company Billing Address</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW CC ADDRESS -->
+    <div id="new-card-address">
+
+      <address-form form-object="formObject" address-object="paymentMethods.newCreditCard.address" hide-company-name="true" ng-if="!paymentMethods.newCreditCard.useBillingAddress"></address-form>
+
+    </div>
+    <!--  END NEW CC ADDRESS -->
+  </div>
+  <!-- END NEW CC -->
+
+  <!-- EXISTING CREDIT CARD -->
+  <div id="existing-credit-card-form" ng-if="!paymentMethods.selectedCard.isNew">
+    <div id="errorBox" class="alert alert-danger" role="alert" ng-show="paymentMethods.selectedCard.validationErrors.length">
+      <strong>Card Validation Error</strong> {{paymentMethods.selectedCard.validationErrors[0]}}
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="existing-card-name" class="control-label">Cardholder Name</label>
+          <input id="existing-card-name" type="text" class="form-control" placeholder="{{paymentMethods.selectedCard.name}}" disabled="disabled">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="existing-card-number" class="control-label">Card Number</label>
+          <input id="existing-card-number" type="text" class="form-control" placeholder="{{paymentMethods.selectedCard.last4 | cardLastFour}}" disabled="disabled" />
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="existing-card-expiry-month" class="control-label">Expiry Month</label>
+          <input id="existing-card-expiry-month" type="text" class="form-control masked"  placeholder="{{paymentMethods.selectedCard.expMonth | paddedMonth}}" disabled="disabled" />
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="existing-card-expiry-year" class="control-label">Expiry Year</label>
+          <input id="existing-card-expiry-year" type="text" class="form-control masked"  placeholder="{{paymentMethods.selectedCard.expYear}}" disabled="disabled"/>
+        </div>
+      </div>          
+    </div>
+  </div>
+  <!-- END EXISTING CC -->
+  
+</div>

@@ -215,6 +215,50 @@ angular.module('risevision.editor.services')
         });
       };
 
+      factory.rewriteS3Urls = function (url) {
+        var search = [
+          new RegExp('https?://s3.amazonaws.com/widget-', 'g'),
+          new RegExp('https?://data-feed.digichief.com/risevision/weather/WeatherWidget.html', 'gi'),
+          new RegExp('https?://account.testinseconds.com/WeatherWidget/widget.html', 'gi'),
+          new RegExp('https://account.testinseconds.com/TextMarquee/widget.html', 'gi'),
+          new RegExp('https://account.testinseconds.com/TrafficMapWidget/widget.html', 'gi'),
+          new RegExp('http://www.scottsdigitalsignage.com/widget/youtube-widget/demo/index.html', 'gi'),
+          new RegExp('https://data-feed.digichief.com/risevision/NewsRadar/NewsRadarWidget.html', 'gi'),
+          new RegExp('https://account.testinseconds.com/ImageGalleryWidget/widget.html', 'gi'),
+          new RegExp('http://data-feed.digichief.com/risevision/News/NewsWidget.html', 'gi'),
+          new RegExp('https://rep.smartplayds.com/plugin/facebook-widget/widget.html', 'gi'),
+          new RegExp('https://account.testinseconds.com/CountUpWidget/widget.html', 'gi'),
+          new RegExp('https://account.testinseconds.com/CountdownWidget/widget.html', 'gi'),
+          new RegExp('http://data-feed.digichief.com/risevision/Sports/SportsWidget.html', 'gi'),
+          new RegExp('http://scottsdigitalsignage.com/widget/vimeo-widget/demo/index.html', 'gi')
+        ];
+
+        var replace = [
+          'https://widgets.risevision.com/widget-',
+          'https://widgets.risevision.com/widget-digichief-weather/WeatherWidget.html',
+          'https://widgets.risevision.com/widget-computer-aid-weather/widget.html',
+          'https://widgets.risevision.com/widget-computer-aid-marquee/widget.html',
+          'https://widgets.risevision.com/widget-computer-aid-traffic/widget.html',
+          'https://widgets.risevision.com/widget-youtube/demo/index.html',
+          'https://widgets.risevision.com/widget-newsradar/NewsRadarWidget.html',
+          'https://widgets.risevision.com/widget-computer-aid-gallery/widget.html',
+          'https://widgets.risevision.com/widget-news/NewsWidget.html',
+          'https://widgets.risevision.com/widget-facebook/widget.html',
+          'https://widgets.risevision.com/widget-computer-aid-count-up/widget.html',
+          'https://widgets.risevision.com/widget-computer-aid-count-down/widget.html',
+          'https://widgets.risevision.com/widget-sports/SportsWidget.html',
+          'https://widgets.risevision.com/widget-vimeo/demo/index.html'
+        ];
+
+        if (url) {
+          angular.forEach(search, function (regex, i) {
+            url = url.replace(regex, replace[i]);
+          });
+        }
+
+        return url;
+      };
+
       return factory;
     }
   ]);

@@ -66,19 +66,19 @@ angular.module('risevision.editor.services')
     {
       env: 'TEST',
       name: 'Web Page',
-      imageUrl: 'http://s3.amazonaws.com/Store-Products/Rise-Vision/widget_webpage_image.png',
+      imageUrl: 'https://s3.amazonaws.com/Store-Products/Rise-Vision/widget_webpage_image.png',
       imageAlt: 'add web page',
       gadgetType: 'Widget',
       id: '5e9499c8-c877-4791-95b9-9ae4835030e4',
-      url: 'http://widgets.risevision.com/widget-web-page/1.0.0/dist/widget.html'
+      url: 'https://widgets.risevision.com/widget-web-page/1.0.0/dist/widget.html'
     },
     {
       env: 'PROD',
       name: 'Web Page',
-      imageUrl: 'http://s3.amazonaws.com/Store-Products/Rise-Vision/widget_webpage_image.png',
+      imageUrl: 'https://s3.amazonaws.com/Store-Products/Rise-Vision/widget_webpage_image.png',
       imageAlt: 'add web page',
       gadgetType: 'Widget',
       id: 'df887785-3614-4f05-86c7-fce07b8745dc',
-      url: 'http://widgets.risevision.com/widget-web-page/1.0.0/dist/widget.html'
+      url: 'https://widgets.risevision.com/widget-web-page/1.0.0/dist/widget.html'
     }
   ]);
