@@ -74,7 +74,7 @@ var SharedTemplatesScenarios = function() {
         oldWindowHandle = handles[0];
         newWindowHandle = handles[1];
         browser.switchTo().window(newWindowHandle).then(function () {
-          expect(browser.driver.getCurrentUrl()).to.eventually.contain('http://viewer-test.risevision.com/?type=presentation&id=ebbb1b89-166e-41fb-9adb-d0052132b0df');
+          expect(browser.driver.getCurrentUrl()).to.eventually.contain('https://viewer-test.risevision.com/?type=presentation&id=ebbb1b89-166e-41fb-9adb-d0052132b0df');
 
           browser.driver.close();
           browser.switchTo().window(oldWindowHandle);
