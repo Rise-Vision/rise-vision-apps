@@ -7,26 +7,45 @@
     <button id="downloadButton" type="button" class="btn btn-default btn-toolbar mr-2" ng-click="billingFactory.downloadInvoice(billingFactory.invoice.id)">
       Download
     </button>
-    <button id="payNowButton" type="button" class="btn btn-primary btn-toolbar">
+    <button id="payNowButton" type="button" class="btn btn-primary btn-toolbar" ng-click="showPaymentForm = true" ng-disabled="showPaymentForm" ng-hide="billingFactory.invoice.status === 'paid'">
       Pay Now
     </button>
   </div>
 
   <div rv-spinner rv-spinner-key="invoice-loader" rv-spinner-start-active="1">
+
     <div id="errorBox" ng-show="billingFactory.apiError" class="madero-style alert alert-danger" role="alert">
       <strong>{{billingFactory.apiError}}</strong>
     </div>
 
-    <div class="border-container u_margin-md-top u_margin-md-bottom">
+    <div class="border-container u_margin-md-top u_margin-md-bottom" ng-show="showPaymentForm && billingFactory.invoice.status !== 'paid'">
       <div class="panel-body">
-        <div class="app-header mb-3">
-          <!-- App Title -->
-          <h1 class="app-header-title">Invoice #{{billingFactory.invoice.id}}</h1>
+
+        <form id="form.paymentMethodsForm" role="form" name="form.paymentMethodsForm" novalidate>
+
+          <credit-card-form form-object="form.paymentMethodsForm"></credit-card-form>
+
+        </form>
+
+        <div class="text-right mt-5">
+          <button id="cancelButton" type="button" aria-label="Cancel" class="btn btn-default btn-toolbar pull-left" ng-click="showPaymentForm = false" translate>Cancel</button>
+          <button id="payButton" type="submit" class="btn btn-primary btn-toolbar-wide" form="form.paymentMethodsForm" ng-click="completeCardPayment()" tabindex="1" aria-label="Complete Payment">
+            <span id="payLabel">Pay ${{billingFactory.invoice.amount_due / 100 | number:2}} Now</span>
+          </button>
         </div>
 
+      </div>
+    </div>
+
+    <div class="border-container u_margin-md-top u_margin-md-bottom">
+      <div class="panel-body">
         <div class="pb-5 mb-5 border-bottom">
           <div class="row">
             <div class="col-sm-12 col-md-6 pb-4 pb-lg-0">
+              <div class="app-header mb-3">
+                <!-- App Title -->
+                <h1 class="app-header-title">Invoice #{{billingFactory.invoice.id}}</h1>
+              </div>
               <label>Billed To:</label><br>
               <span ng-show="billingFactory.invoice.billing_address.first_name || billingFactory.invoice.billing_address.last_name">
                 {{billingFactory.invoice.billing_address.first_name}} {{billingFactory.invoice.billing_address.last_name}}<br>
@@ -48,6 +67,11 @@
             </div>
 
             <div class="col-sm-12 col-md-6">
+              <div class="app-header mb-3" ng-show="billingFactory.invoice.status === 'paid'">
+                <!-- App Title -->
+                <h1 class="app-header-title text-success">Paid</h1>
+              </div>
+
               <div class="row">
                 <div class="col-md-4">
                   <label class="mb-0">Invoice Date:</label>
@@ -128,6 +152,12 @@
                 <label class="mb-0 pull-left">Total:</label>
                 <label class="mb-0">
                   ${{billingFactory.invoice.total / 100 | number:2}}
+                </label>
+              </div>
+              <div class="text-right mt-3" ng-show="billingFactory.invoice.amount_paid">
+                <label class="mb-0 pull-left">Payment:</label>
+                <label class="mb-0">
+                  ${{billingFactory.invoice.amount_paid / 100 | number:2}}
                 </label>
               </div>
               <div class="text-right mt-3">

@@ -42,10 +42,6 @@
     padding: 2px 12px;
   }
 
-  .StripeElement {
-    padding: 11px 12px;
-  }
-
   .purchase-sideways-panels {
     @extend .stack-md-sideways-panels;
 
@@ -93,6 +89,10 @@
     width: 744px;
   }
 
+}
+
+.StripeElement {
+  padding: 11px 12px;
 }
 
 .purchase-footer {
