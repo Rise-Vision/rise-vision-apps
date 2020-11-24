@@ -1,6 +1,6 @@
 'use strict';
 describe('directive: share-schedule-button', function() {
-  var $scope, $rootScope, element, $timeout, innerElementStub, currentPlanFactory, plansFactory,
+  var $scope, $rootScope, element, $timeout, innerElementStub, currentPlanFactory, plansFactory, outsideClickHandler,
     sandbox = sinon.sandbox.create();
 
 
@@ -16,6 +16,12 @@ describe('directive: share-schedule-button', function() {
         showUnlockThisFeatureModal: sinon.stub()
       };
     });
+    $provide.service('outsideClickHandler', function() {
+      return {
+        bind: sinon.stub(),
+        unbind: sinon.stub()
+      };
+    });
   }));
 
   beforeEach(inject(function($compile, $templateCache, $injector){
@@ -24,6 +30,7 @@ describe('directive: share-schedule-button', function() {
     $timeout = $injector.get('$timeout');
     currentPlanFactory = $injector.get('currentPlanFactory');
     plansFactory = $injector.get('plansFactory');
+    outsideClickHandler = $injector.get('outsideClickHandler');
 
     innerElementStub = {
       trigger: sandbox.stub(),
@@ -61,14 +68,15 @@ describe('directive: share-schedule-button', function() {
   });
 
   describe('toggleTooltip:', function() {
-    it('should open tooltip', function() {
+    it('should open tooltip and register outsideClickHandler', function() {
       $scope.toggleTooltip();
       $timeout.flush();
 
       innerElementStub.trigger.should.have.been.calledWith('show');
+      outsideClickHandler.bind.should.have.been.calledWith('share-schedule', '#share-schedule-button, #share-schedule-popover', $scope.toggleTooltip);
     });
 
-    it('should close tooltip if open', function() {
+    it('should close tooltip if open and unregister outsideClickHandler', function() {
       //open
       $scope.toggleTooltip();
       $timeout.flush();
@@ -79,6 +87,7 @@ describe('directive: share-schedule-button', function() {
       $timeout.flush();
 
       innerElementStub.trigger.should.have.been.calledWith('hide');
+      outsideClickHandler.unbind.should.have.been.called;
     });
 
     it('should show Unlock This Feature modal if user is not subscribed to a plan', function() {

@@ -1,7 +1,7 @@
 'use strict';
 
 describe('directive: schedule-selector', function() {
-  var $scope, $rootScope, element, $loading, $timeout, innerElementStub, scheduleSelectorFactory,
+  var $scope, $rootScope, element, $loading, $timeout, innerElementStub, scheduleSelectorFactory, outsideClickHandler,
     sandbox = sinon.sandbox.create();
 
 
@@ -20,14 +20,21 @@ describe('directive: schedule-selector', function() {
         stop: sinon.stub()
       };
     });
+    $provide.service('outsideClickHandler', function() {
+      return {
+        bind: sinon.stub(),
+        unbind: sinon.stub()
+      };
+    });
   }));
 
   beforeEach(inject(function($compile, $templateCache, $injector){
-    $templateCache.put('partials/schedules/schedule-selector.html', '<div id="share-schedule-button"></div>');
+    $templateCache.put('partials/schedules/schedule-selector.html', '<div id="schedule-selector-button"></div>');
     $rootScope = $injector.get('$rootScope');
     $timeout = $injector.get('$timeout');
     $loading = $injector.get('$loading');
     scheduleSelectorFactory = $injector.get('scheduleSelectorFactory');
+    outsideClickHandler = $injector.get('outsideClickHandler');
 
     innerElementStub = {
       trigger: sandbox.stub()
@@ -36,7 +43,7 @@ describe('directive: schedule-selector', function() {
 
     $scope = $rootScope.$new();
 
-    element = $compile('<schedule-selector show-tooltip="share-schedule-button"></schedule-selector>')($scope);
+    element = $compile('<schedule-selector></schedule-selector>')($scope);
 
     $rootScope.$digest();
     $scope = element.isolateScope();   
@@ -55,7 +62,7 @@ describe('directive: schedule-selector', function() {
   });
 
   it('should compile', function() {
-    expect(element[0].outerHTML).to.equal('<schedule-selector show-tooltip="showTooltip" class="ng-scope ng-isolate-scope"><div id="tooltipButton"></div></schedule-selector>');
+    expect(element[0].outerHTML).to.equal('<schedule-selector class="ng-scope ng-isolate-scope"><div id="schedule-selector-button"></div></schedule-selector>');
   });
 
   describe('spinner:', function() {
@@ -95,16 +102,17 @@ describe('directive: schedule-selector', function() {
   });
 
   describe('toggleTooltip:', function() {
-    it('should open tooltip and load', function() {
+    it('should open tooltip, register outsideClickHandler and load', function() {
       $scope.toggleTooltip();
       $scope.$digest();
       $timeout.flush();
 
       $scope.factory.load.should.have.been.called;
       innerElementStub.trigger.should.have.been.calledWith('show');
+      outsideClickHandler.bind.should.have.been.calledWith('schedule-selector', '#schedule-selector, #schedule-selector-tooltip', $scope.toggleTooltip);
     });
 
-    it('should close tooltip if open', function() {
+    it('should close tooltip if open and unregister outsideClickHandler', function() {
       //open
       $scope.toggleTooltip();
       $scope.$digest();
@@ -117,6 +125,7 @@ describe('directive: schedule-selector', function() {
       $timeout.flush();
 
       innerElementStub.trigger.should.have.been.calledWith('hide');
+      outsideClickHandler.unbind.should.have.been.called;
     });
 
   });
