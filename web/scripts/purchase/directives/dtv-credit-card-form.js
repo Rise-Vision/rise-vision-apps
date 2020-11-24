@@ -6,12 +6,13 @@ angular.module('risevision.apps.purchase')
       return {
         restrict: 'E',
         scope: {
-          paymentMethods: '=paymentMethodsObject',
           formObject: '='
         },
         template: $templateCache.get('partials/purchase/credit-card-form.html'),
         link: function ($scope) {
-          creditCardFactory.initElements();
+          creditCardFactory.initStripeElements();
+
+          $scope.factory = creditCardFactory;
 
           $scope.getCardDescription = function (card) {
             return '***-' + card.last4 + ', ' + card.cardType + (card.isDefault ? ' (default)' : '');
