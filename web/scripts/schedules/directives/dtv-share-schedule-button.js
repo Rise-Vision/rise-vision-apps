@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.schedules.directives')
-  .directive('shareScheduleButton', ['$timeout', 'currentPlanFactory', 'plansFactory', '$window',
-    function ($timeout, currentPlanFactory, plansFactory, $window) {
+  .directive('shareScheduleButton', ['$timeout', 'currentPlanFactory', 'plansFactory', '$window', 'outsideClickHandler',
+    function ($timeout, currentPlanFactory, plansFactory, $window, outsideClickHandler) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/share-schedule-button.html',
@@ -12,7 +12,7 @@ angular.module('risevision.schedules.directives')
         },
         link: function ($scope, element) {
           var isTooltipOpen = false;
-          var tooltipButton = angular.element(element[0].querySelector('#tooltipButton'));
+          var tooltipButton = angular.element(element[0].querySelector('#share-schedule-button'));
 
           var isActionSheetOpen = false;
           var actionSheetButton = angular.element(element[0].querySelector('#actionSheetButton'));
@@ -21,6 +21,7 @@ angular.module('risevision.schedules.directives')
             $timeout(function () {
               if (isTooltipOpen) {
                 isTooltipOpen = false;
+                outsideClickHandler.unbind('share-schedule');
                 tooltipButton.trigger('hide');
               }
 
@@ -37,9 +38,11 @@ angular.module('risevision.schedules.directives')
             $timeout(function () {
               if (isTooltipOpen) {
                 isTooltipOpen = false;
+                outsideClickHandler.unbind('share-schedule');
                 tooltipButton.trigger('hide');
               } else {
                 isTooltipOpen = true;
+                outsideClickHandler.bind('share-schedule', '#share-schedule-button, #share-schedule-popover', $scope.toggleTooltip);
                 tooltipButton.trigger('show');
               }
             });

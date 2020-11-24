@@ -23,7 +23,7 @@ describe('directive: schedule-selector', function() {
   }));
 
   beforeEach(inject(function($compile, $templateCache, $injector){
-    $templateCache.put('partials/schedules/schedule-selector.html', '<div id="tooltipButton"></div>');
+    $templateCache.put('partials/schedules/schedule-selector.html', '<div id="share-schedule-button"></div>');
     $rootScope = $injector.get('$rootScope');
     $timeout = $injector.get('$timeout');
     $loading = $injector.get('$loading');
@@ -36,7 +36,7 @@ describe('directive: schedule-selector', function() {
 
     $scope = $rootScope.$new();
 
-    element = $compile('<schedule-selector show-tooltip="showTooltip"></schedule-selector>')($scope);
+    element = $compile('<schedule-selector show-tooltip="share-schedule-button"></schedule-selector>')($scope);
 
     $rootScope.$digest();
     $scope = element.isolateScope();   

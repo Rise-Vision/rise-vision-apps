@@ -19,7 +19,7 @@ describe('directive: share-schedule-button', function() {
   }));
 
   beforeEach(inject(function($compile, $templateCache, $injector){
-    $templateCache.put('partials/schedules/share-schedule-button.html', '<div id="tooltipButton"></div><div id="actionSheetButton"></div>');
+    $templateCache.put('partials/schedules/share-schedule-button.html', '<div id="share-schedule-button"></div><div id="actionSheetButton"></div>');
     $rootScope = $injector.get('$rootScope');
     $timeout = $injector.get('$timeout');
     currentPlanFactory = $injector.get('currentPlanFactory');
@@ -57,7 +57,7 @@ describe('directive: share-schedule-button', function() {
   });
 
   it('should compile', function() {
-    expect(element[0].outerHTML).to.equal('<share-schedule-button schedule="selectedSchedule" class="ng-scope ng-isolate-scope"><div id="tooltipButton"></div><div id="actionSheetButton"></div></share-schedule-button>');
+    expect(element[0].outerHTML).to.equal('<share-schedule-button schedule="selectedSchedule" class="ng-scope ng-isolate-scope"><div id="share-schedule-button"></div><div id="actionSheetButton"></div></share-schedule-button>');
   });
 
   describe('toggleTooltip:', function() {
