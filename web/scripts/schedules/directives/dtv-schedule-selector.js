@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.schedules.directives')
-  .directive('scheduleSelector', ['scheduleSelectorFactory', '$timeout', '$loading',
-    function (scheduleSelectorFactory, $timeout, $loading) {
+  .directive('scheduleSelector', ['scheduleSelectorFactory', '$timeout', '$loading', 'outsideClickHandler',
+    function (scheduleSelectorFactory, $timeout, $loading, outsideClickHandler) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/schedule-selector.html',
@@ -32,12 +32,14 @@ angular.module('risevision.schedules.directives')
           $scope.$watch('showTooltip', function () {
             if ($scope.showTooltip) {
               $timeout(function () {
+                outsideClickHandler.bind('schedule-selector', '#schedule-selector, #schedule-selector-tooltip', $scope.toggleTooltip);
                 tooltipElement.trigger('show');
 
                 $scope.factory.load();
               });
             } else {
               $timeout(function () {
+                outsideClickHandler.unbind('schedule-selector');
                 tooltipElement.trigger('hide');
               });
             }
