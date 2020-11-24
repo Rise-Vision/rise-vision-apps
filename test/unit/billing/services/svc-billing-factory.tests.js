@@ -6,6 +6,7 @@ describe('service: billingFactory:', function() {
   beforeEach(module(function ($provide) {
     $provide.service('billing',function() {
       return {
+        getInvoice: sinon.stub().returns(Q.resolve({item: 'invoice'})),
         getInvoicePdf: sinon.stub().returns(Q.resolve({result: 'invoicePdf'}))
       };
     });
@@ -26,15 +27,57 @@ describe('service: billingFactory:', function() {
     inject(function($injector){
       $window = $injector.get('$window');
       billing = $injector.get('billing');
-      var BillingFactory = $injector.get('BillingFactory');
+      billingFactory = $injector.get('billingFactory');
 
-      billingFactory = new BillingFactory();
     });
   });
 
   it('should exist',function() {
     expect(billingFactory).to.be.ok;
+    expect(billingFactory.getInvoice).to.be.a.function;
     expect(billingFactory.downloadInvoice).to.be.a.function;
+  });
+
+  describe('getInvoice:', function() {
+    it('should get invoice, show spinner and reset errors', function() {
+      billingFactory.apiError = 'someError';
+      billingFactory.invoice = 'someInvoice';
+
+      billingFactory.getInvoice('invoiceId');
+
+      billing.getInvoice.should.have.been.calledWith('invoiceId');
+
+      expect(billingFactory.apiError).to.not.be.ok;
+      expect(billingFactory.invoice).to.not.be.ok;
+      expect(billingFactory.loading).to.be.true;
+    });
+
+    it('should retrieve invoice', function(done) {
+      billingFactory.getInvoice();
+
+      setTimeout(function() {
+        expect(billingFactory.loading).to.be.false;
+
+        expect(billingFactory.invoice).to.equal('invoice');
+
+        done();
+      }, 10);
+    });
+
+    it('should handle failure to get invoice correctly', function(done) {
+      billing.getInvoice.returns(Q.reject('error'));
+
+      billingFactory.getInvoice()
+
+      setTimeout(function() {
+        expect(billingFactory.loading).to.be.false;
+        expect(billingFactory.invoice).to.not.be.ok;
+
+        expect(billingFactory.apiError).to.equal('processed error');
+
+        done();
+      });
+    });
   });
 
   describe('downloadInvoice:', function() {
@@ -75,7 +118,7 @@ describe('service: billingFactory:', function() {
       }, 10);
     });
 
-    it('should handle failure to get list correctly', function(done) {
+    it('should handle failure to get url correctly', function(done) {
       billing.getInvoicePdf.returns(Q.reject('error'));
 
       billingFactory.downloadInvoice({})

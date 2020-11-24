@@ -45,6 +45,16 @@ describe('service: billing:', function() {
                   return Q.reject('API Failed');
                 }
               },
+              get: function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: 'invoice'
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              },
               getPdf: function() {
                 if (!failedResponse) {
                   return Q.resolve({
@@ -72,6 +82,7 @@ describe('service: billing:', function() {
     expect(billing).to.be.ok;
     expect(billing.getSubscriptions).to.be.a.function;
     expect(billing.getInvoices).to.be.a.function;
+    expect(billing.getInvoice).to.be.a.function;
     expect(billing.getInvoicePdf).to.be.a.function;
   });
 
@@ -119,6 +130,32 @@ describe('service: billing:', function() {
       failedResponse = true;
 
       billing.getInvoices({})
+      .then(function(invoices) {
+        done(invoices);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+
+  describe('getInvoice:', function() {
+    it('should return an invoice', function(done) {
+      failedResponse = false;
+
+      billing.getInvoice('invoiceId')
+      .then(function(result) {
+        expect(result).to.be.ok;
+        expect(result).to.equal('invoice');
+        done();
+      });
+    });
+
+    it('should handle failure to get invoice correctly', function(done) {
+      failedResponse = true;
+
+      billing.getInvoice('invoiceId')
       .then(function(invoices) {
         done(invoices);
       })

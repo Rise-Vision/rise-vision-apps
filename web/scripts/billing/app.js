@@ -14,9 +14,7 @@ angular.module('risevision.apps')
 
         .state('apps.billing.home', {
           url: '/billing?edit',
-          templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get('partials/billing/app-billing.html');
-          }],
+          templateUrl: 'partials/billing/app-billing.html',
           controller: 'BillingCtrl',
           resolve: {
             canAccessApps: ['canAccessApps', '$stateParams', 'ChargebeeFactory', 'billingFactory', 'userState',
@@ -37,9 +35,7 @@ angular.module('risevision.apps')
 
         .state('apps.billing.invoice', {
           url: '/invoice/:invoiceId',
-          templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get('partials/billing/invoice.html');
-          }],
+          templateUrl: 'partials/billing/invoice.html',
           controller: 'InvoiceCtrl',
           resolve: {
             invoiceInfo: ['canAccessApps', 'billingFactory', '$stateParams',
