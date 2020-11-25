@@ -2,15 +2,13 @@
 
   'use strict';
 
-  /*jshint camelcase: false */
-
   angular.module('risevision.apps.purchase')
     .constant('RPP_ADDON_ID', 'c4b368be86245bf9501baaa6e0b00df9719869fd')
-    .factory('purchaseFactory', ['$rootScope', '$q', '$log', '$state', '$timeout',
-      'userState', 'storeService', 'stripeService', 'addressService', 'contactService', 'purchaseFlowTracker',
+    .factory('purchaseFactory', ['$rootScope', '$q', '$log', '$timeout', 'userState', 
+      'storeService', 'addressService', 'contactService', 'creditCardFactory', 'purchaseFlowTracker',
       'RPP_ADDON_ID', 'PLANS_LIST',
-      function ($rootScope, $q, $log, $state, $timeout, userState,
-        storeService, stripeService, addressService, contactService, purchaseFlowTracker, RPP_ADDON_ID, PLANS_LIST
+      function ($rootScope, $q, $log, $timeout, userState, storeService, addressService, 
+        contactService, creditCardFactory, purchaseFlowTracker, RPP_ADDON_ID, PLANS_LIST
         ) {
         var factory = {};
 
@@ -44,26 +42,18 @@
           factory.purchase.billingAddress = addressService.copyAddress(userState.getCopyOfSelectedCompany());
 
           factory.purchase.contact = contactService.copyContactObj(userState.getCopyOfProfile());
-          factory.purchase.paymentMethods = {
-            paymentMethod: 'card',
-            existingCreditCards: [],
-            newCreditCard: {
-              isNew: true,
-              address: {},
-              useBillingAddress: true,
-              billingAddress: factory.purchase.billingAddress
-            }
-          };
+
           factory.purchase.taxExemption = {};
+          factory.purchase.estimate = {};
+
+          creditCardFactory.initPaymentMethods();
+
+          creditCardFactory.paymentMethods.paymentMethod = 'card';
+          creditCardFactory.paymentMethods.newCreditCard.billingAddress = factory.purchase.billingAddress;
 
           var invoiceDate = new Date();
           invoiceDate.setDate(invoiceDate.getDate() + 30);
-          factory.purchase.paymentMethods.invoiceDate = invoiceDate;
-
-          // Alpha Release - Select New Card by default
-          factory.purchase.paymentMethods.selectedCard = factory.purchase.paymentMethods.newCreditCard;
-          factory.purchase.estimate = {};
-
+          creditCardFactory.paymentMethods.invoiceDate = invoiceDate;
         };
 
         factory.updatePlan = function (displays, isMonthly, total) {
@@ -106,24 +96,8 @@
 
         };
 
-        factory.authenticate3ds = function (intentSecret) {
-          return stripeService.authenticate3ds(intentSecret)
-            .then(function (result) {
-              if (result.error) {
-                factory.purchase.checkoutError = result.error;
-                return $q.reject(result.error);
-              }
-            })
-            .catch(function (error) {
-              console.log(error);
-              factory.purchase.checkoutError =
-                'Something went wrong, please retry or contact support@risevision.com';
-              return $q.reject(error);
-            });
-        };
-
         factory.preparePaymentIntent = function () {
-          var paymentMethods = factory.purchase.paymentMethods;
+          var paymentMethods = creditCardFactory.paymentMethods;
 
           if (paymentMethods.paymentMethod === 'invoice') {
             return $q.resolve();
@@ -140,7 +114,7 @@
                 } else {
                   paymentMethods.intentResponse = response;
                   if (response.authenticationRequired) {
-                    return factory.authenticate3ds(response.intentSecret);
+                    return creditCardFactory.authenticate3ds(response.intentSecret);
                   } else {
                     return $q.resolve();
                   }
@@ -156,54 +130,19 @@
           }
         };
 
-        factory.validatePaymentMethod = function (element) {
-          var paymentMethods = factory.purchase.paymentMethods;
-
+        factory.validatePaymentMethod = function () {
           factory.purchase.checkoutError = null;
-          paymentMethods.tokenError = null;
 
-          if (paymentMethods.paymentMethod === 'invoice') {
+          if (creditCardFactory.paymentMethods.paymentMethod === 'invoice') {
             // TODO: Check Invoice credit (?)
             return $q.resolve();
-          } else if (paymentMethods.paymentMethod === 'card') {
-            if (!paymentMethods.selectedCard.isNew) {
-              return $q.resolve();
-            } else {
-              var address = paymentMethods.newCreditCard && paymentMethods.newCreditCard.address;
-              if (paymentMethods.newCreditCard && paymentMethods.newCreditCard.useBillingAddress) {
-                address = paymentMethods.newCreditCard.billingAddress;
-              }
+          } else if (creditCardFactory.paymentMethods.paymentMethod === 'card') {
+            factory.loading = true;
 
-              var details = {
-                billing_details: {
-                  name: paymentMethods.newCreditCard && paymentMethods.newCreditCard.name,
-                  address: address ? {
-                    city: address.city,
-                    country: address.country,
-                    postal_code: address.postalCode,
-                    state: address.province
-                  } : {}
-                }
-              };
-
-              factory.loading = true;
-
-              return stripeService.createPaymentMethod('card', element, details)
-                .then(function (response) {
-                  if (response.error) {
-                    paymentMethods.tokenError = response.error.message;
-
-                    return $q.reject(response.error);
-                  } else {
-                    paymentMethods.paymentMethodResponse = response;
-
-                    return $q.resolve();
-                  }
-                })
-                .finally(function () {
-                  factory.loading = false;
-                });
-            }
+            return creditCardFactory.validatePaymentMethod()
+              .finally(function () {
+                factory.loading = false;
+              });
           }
         };
 
@@ -228,7 +167,7 @@
           return {
             displaysCount: factory.purchase.plan.displays,
             paymentTerm: factory.purchase.plan.isMonthly ? 'monthly' : 'yearly',
-            paymentMethod: factory.purchase.paymentMethods.paymentMethod,
+            paymentMethod: creditCardFactory.paymentMethods.paymentMethod,
             discount: factory.purchase.estimate.couponAmount,
             subscriptionPlan: factory.purchase.plan.name,
             currency: factory.purchase.estimate.currency,
@@ -272,7 +211,7 @@
 
         var _getOrderAsJson = function () {
           //clean up items
-          var paymentMethods = factory.purchase.paymentMethods;
+          var paymentMethods = creditCardFactory.paymentMethods;
           var newItems = [{
             id: _getChargebeePlanId(),
             qty: factory.purchase.plan.displays
@@ -281,7 +220,7 @@
             qty: factory.purchase.plan.additionalDisplayLicenses
           }];
 
-          var card = factory.purchase.paymentMethods.selectedCard;
+          var card = paymentMethods.selectedCard;
           var cardData = paymentMethods.paymentMethod === 'invoice' ? null : {
             cardId: card.id,
             intentId: paymentMethods.intentResponse ? paymentMethods.intentResponse.intentId : null,

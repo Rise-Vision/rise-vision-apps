@@ -77,12 +77,14 @@ describe("Services: purchase factory", function() {
       };
     });
 
-    $provide.service("stripeService", function() {
-      return {
-        createPaymentMethod: sinon.stub().returns(Q.resolve({})),
-        authenticate3ds: sinon.stub().returns(Q.resolve())
-      };
+    $provide.value("creditCardFactory", {
+      initPaymentMethods: sinon.stub(),
+      validatePaymentMethod: sinon.stub().returns(Q.resolve({})),
+      paymentMethods: {
+        newCreditCard: {}
+      }
     });
+
     $provide.service("purchaseFlowTracker", function() {
       return purchaseFlowTracker = {
         trackProductAdded: sinon.stub(),
@@ -93,7 +95,7 @@ describe("Services: purchase factory", function() {
 
   }));
 
-  var $rootScope, $modal, $state, $timeout, clock, purchaseFactory, userState, stripeService, storeService, purchaseFlowTracker, validate, RPP_ADDON_ID;
+  var $rootScope, $modal, $state, $timeout, clock, purchaseFactory, creditCardFactory, userState, storeService, purchaseFlowTracker, validate, RPP_ADDON_ID;
 
   beforeEach(function() {
     inject(function($injector) {
@@ -102,8 +104,8 @@ describe("Services: purchase factory", function() {
       $modal = $injector.get("$modal");
       $state = $injector.get("$state");
       $timeout = $injector.get("$timeout");
-      stripeService = $injector.get("stripeService");
       purchaseFactory = $injector.get("purchaseFactory");
+      creditCardFactory = $injector.get("creditCardFactory");
     });
   });
 
@@ -132,9 +134,8 @@ describe("Services: purchase factory", function() {
 
     it("should initialize default volume plan, attach addresses and clean contact info", function() {
       purchaseFactory.init();
-      
-      expect(purchaseFactory.purchase).to.be.ok;
 
+      expect(purchaseFactory.purchase).to.be.ok;
       expect(purchaseFactory.purchase.plan).to.be.ok;
       expect(purchaseFactory.purchase.plan.name).to.equal("5 Display Licenses (Yearly)");
       expect(purchaseFactory.purchase.plan.displays).to.equal(5)
@@ -155,26 +156,19 @@ describe("Services: purchase factory", function() {
       expect(purchaseFactory.purchase.contact).to.not.have.property("uselessProperty");
 
       expect(purchaseFactory.purchase.taxExemption).to.be.an('object');
+      expect(purchaseFactory.purchase.estimate).to.deep.equal({});
     });
 
     it("should initialize payment methods", function() {
       purchaseFactory.init();
       
+      creditCardFactory.initPaymentMethods.should.have.been.called;
+
       expect(purchaseFactory.purchase).to.be.ok;
-      expect(purchaseFactory.purchase.paymentMethods).to.be.ok;
-      expect(purchaseFactory.purchase.paymentMethods.paymentMethod).to.equal("card");
-      expect(purchaseFactory.purchase.paymentMethods.existingCreditCards).to.deep.equal([]);
+      expect(creditCardFactory.paymentMethods).to.be.ok;
+      expect(creditCardFactory.paymentMethods.paymentMethod).to.equal("card");
 
-      expect(purchaseFactory.purchase.paymentMethods.newCreditCard).to.deep.equal({
-        isNew: true,
-        address: {},
-        useBillingAddress: true,
-        billingAddress: purchaseFactory.purchase.billingAddress
-      });
-
-      expect(purchaseFactory.purchase.paymentMethods.selectedCard).to.equal(purchaseFactory.purchase.paymentMethods.newCreditCard);
-
-      expect(purchaseFactory.purchase.estimate).to.deep.equal({});
+      expect(creditCardFactory.paymentMethods.newCreditCard.billingAddress).to.equal(purchaseFactory.purchase.billingAddress);
     });
 
     it("should initialize invoice due date 30 days from now", function() {
@@ -182,9 +176,9 @@ describe("Services: purchase factory", function() {
 
       purchaseFactory.init();
 
-      expect(purchaseFactory.purchase.paymentMethods.invoiceDate).to.be.ok;
-      expect(purchaseFactory.purchase.paymentMethods.invoiceDate).to.be.a("date");
-      expect(purchaseFactory.purchase.paymentMethods.invoiceDate - newDate).to.equal(30 * 24 * 60 * 60 * 1000);
+      expect(creditCardFactory.paymentMethods.invoiceDate).to.be.ok;
+      expect(creditCardFactory.paymentMethods.invoiceDate).to.be.a("date");
+      expect(creditCardFactory.paymentMethods.invoiceDate - newDate).to.equal(30 * 24 * 60 * 60 * 1000);
     });
   });
 
@@ -314,127 +308,34 @@ describe("Services: purchase factory", function() {
   });
 
   describe("validatePaymentMethod: ", function() {
+    beforeEach(function() {
+      purchaseFactory.purchase = {};
+    });
+
     it("should validate and resolve", function(done) {
-      purchaseFactory.purchase = {
-        paymentMethods: {
-          paymentMethod: "invoice"
-        }
-      };
+      creditCardFactory.paymentMethods.paymentMethod = "invoice";
 
       purchaseFactory.validatePaymentMethod()
-      .then(function() {
-        done();
-      })
-      .then(null, function() {
-        done("error");
-      });
+        .then(function() {
+          done();
+        })
+        .then(null, function() {
+          done("error");
+        });
     });
 
     it("should clear errors", function() {
-      purchaseFactory.purchase = {
-        checkoutError: "checkoutError",
-        paymentMethods: {
-          paymentMethod: "invoice",
-          tokenError: "tokenError"
-        }
-      };
+      purchaseFactory.purchase.checkoutError = "checkoutError";
 
       purchaseFactory.validatePaymentMethod();
 
       expect(purchaseFactory.purchase.checkoutError).to.not.be.ok;
-      expect(purchaseFactory.purchase.paymentMethods.tokenError).to.not.be.ok;
     });
 
-    describe("existing card: ", function() {
+    describe("card:", function() {
       var card;
       beforeEach(function() {
-        purchaseFactory.purchase = {
-          paymentMethods: {
-            paymentMethod: "card",
-            selectedCard: card = {
-              isNew: true,
-              number: "123"
-            }
-          }
-        };
-      });
-
-      it("should validate card and proceed to next step", function(done) {
-        purchaseFactory.validatePaymentMethod()
-        .then(function() {
-          stripeService.createPaymentMethod.should.have.been.called;
-
-          done();
-        })
-        .then(null,function(error) {
-          done(error);
-        });
-      });
-
-      it("should validate and not proceed if there are errors", function(done) {
-        stripeService.createPaymentMethod.returns(Q.resolve({error: {}}));
-
-        purchaseFactory.validatePaymentMethod()
-        .then(function () {
-          console.log("Should not be here");
-        }, function() {
-          stripeService.createPaymentMethod.should.have.been.called;
-          done();
-        });
-      });
-      
-    });
-
-    describe("new card: ", function() {
-      var card;
-
-      beforeEach(function() {
-        validate = true;
-
-        purchaseFactory.purchase = {
-          paymentMethods: {
-            paymentMethod: "card",
-            existingCreditCards: [],
-            newCreditCard: card = {
-              isNew: true,
-              number: "123",
-              address: {},
-              billingAddress: {}
-            }
-          }
-        };
-        purchaseFactory.purchase.paymentMethods.selectedCard = purchaseFactory.purchase.paymentMethods.newCreditCard;
-      });
-
-      it("should validate card", function() {
-        purchaseFactory.validatePaymentMethod();
-
-        stripeService.createPaymentMethod.should.have.been.called;
-      });
-
-      it("should validate and not proceed if there are errors", function(done) {
-        stripeService.createPaymentMethod.returns(Q.resolve({error: {message: "tokenError"}}));
-
-        purchaseFactory.validatePaymentMethod()
-        .then(null, function() {
-          stripeService.createPaymentMethod.should.have.been.called;
-
-          expect(purchaseFactory.purchase.paymentMethods.tokenError).to.equal("tokenError");
-
-          done();
-        })
-        .then(null,function() {
-          done("should not be here");
-        });
-      });
-
-      it("should use billing address if selected", function() {
-        card.useBillingAddress = true;
-        card.billingAddress = {city: "test-billing-city"};
-
-        purchaseFactory.validatePaymentMethod();
-
-        assert.equal(stripeService.createPaymentMethod.getCall(0).args[2].billing_details.address.city, "test-billing-city");
+        creditCardFactory.paymentMethods.paymentMethod = "card";
       });
 
       it("should start and stop spinner", function(done) {
@@ -449,6 +350,11 @@ describe("Services: purchase factory", function() {
         }, 10);
       });
 
+      it("should validate card and proceed to next step", function() {
+        purchaseFactory.validatePaymentMethod();
+
+        creditCardFactory.validatePaymentMethod.should.have.been.called;
+      });
     });
 
   });
@@ -499,7 +405,7 @@ describe("Services: purchase factory", function() {
     it("should populate estimate object if call succeeds", function(done) {
       purchaseFactory.purchase.plan.name = "myPlan";
       purchaseFactory.purchase.plan.displays = 3;
-      purchaseFactory.purchase.paymentMethods = {paymentMethod: "card"};
+      creditCardFactory.paymentMethods.paymentMethod = "card";
 
       purchaseFactory.getEstimate()
       .then(function() {
@@ -538,7 +444,7 @@ describe("Services: purchase factory", function() {
 
       purchaseFactory.purchase.plan.name = "myPlan";
       purchaseFactory.purchase.plan.displays = 3;
-      purchaseFactory.purchase.paymentMethods = {paymentMethod: "card"};
+      creditCardFactory.paymentMethods.paymentMethod = "card";
 
       purchaseFactory.getEstimate()
       .then(function() {
@@ -637,20 +543,21 @@ describe("Services: purchase factory", function() {
           additionalDisplayLicenses: 3,
           displays: 3
         },
-        paymentMethods: {
-          paymentMethod: "card",
-          selectedCard: {
-            id: "cardId",
-            isDefault: true,
-            junkProperty: "junkValue"
-          },
-          purchaseOrderNumber: "purchaseOrderNumber"
-        },
         estimate: {
           currency: "usd",
           total: "total",
           couponAmount: "couponAmount"
         }
+      };
+
+      creditCardFactory.paymentMethods = {
+        paymentMethod: "card",
+        selectedCard: {
+          id: "cardId",
+          isDefault: true,
+          junkProperty: "junkValue"
+        },
+        purchaseOrderNumber: "purchaseOrderNumber"
       };
 
       sinon.spy($rootScope, "$emit");
@@ -672,7 +579,7 @@ describe("Services: purchase factory", function() {
     });
 
     it("should call purchase with a JSON string", function() {
-      purchaseFactory.purchase.paymentMethods.intentResponse = {intentId: "test"};
+      creditCardFactory.paymentMethods.intentResponse = {intentId: "test"};
       purchaseFactory.purchase.paymentMethodResponse = {paymentMethod: {id: "test"}};
       purchaseFactory.completePayment();
 
@@ -707,14 +614,14 @@ describe("Services: purchase factory", function() {
     });
 
     it("should populate card isDefault value if missing", function() {
-      delete purchaseFactory.purchase.paymentMethods.selectedCard.isDefault;
+      delete creditCardFactory.paymentMethods.selectedCard.isDefault;
       purchaseFactory.completePayment();
 
       expect(storeService.purchase.getCall(0).args[0]).to.contain("\"isDefault\":false");
     });
 
     it("should not add card for onAccount", function() {
-      purchaseFactory.purchase.paymentMethods.paymentMethod = "invoice";
+      creditCardFactory.paymentMethods.paymentMethod = "invoice";
       purchaseFactory.completePayment();
 
       expect(storeService.purchase.getCall(0).args[0]).to.contain("\"card\":null");
