@@ -34,7 +34,7 @@ angular.module('risevision.apps.billing.services')
         var authKey = company && company.authKey;
 
         if (authKey && authKey.length > 6) {
-          return authKey.substr(authKey.length - 6)
+          return authKey.substr(authKey.length - 6);
         } else {
           return authKey || null;
         }
