@@ -34,16 +34,14 @@ angular.module('risevision.apps')
         })
 
         .state('apps.billing.invoice', {
-          url: '/invoice/:invoiceId',
+          url: '/invoice/:invoiceId/:token',
           templateUrl: 'partials/billing/invoice.html',
           controller: 'InvoiceCtrl',
           resolve: {
-            invoiceInfo: ['canAccessApps', 'billingFactory', '$stateParams',
-              function (canAccessApps, billingFactory, $stateParams) {
-                return canAccessApps().then(function () {
-                  //load the invoice based on the url param
-                  billingFactory.getInvoice($stateParams.invoiceId);
-                });
+            invoiceInfo: ['billingFactory', '$stateParams',
+              function (billingFactory, $stateParams) {
+                //load the invoice based on the url param
+                billingFactory.getInvoice($stateParams.invoiceId, $stateParams.cid, $stateParams.token);
               }
             ]
           }

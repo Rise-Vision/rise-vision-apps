@@ -129,7 +129,7 @@
               </a>
             </td>
             <td class="table-body__cell py-0">
-              <a class="btn btn-default btn-pay-now" ng-if="item.invoice.status !== 'paid'" ui-sref="apps.billing.invoice({invoiceId: item.invoice.id})">Pay Now</a>
+              <a class="btn btn-default btn-pay-now" ng-if="item.invoice.status !== 'paid'" ui-sref="apps.billing.invoice({invoiceId: item.invoice.id, token: billingFactory.getToken()})" target="_blank">Pay Now</a>
             </td>
           </tr>
 

@@ -56,11 +56,12 @@ angular.module('risevision.apps.billing.services')
 
           return deferred.promise;
         },
-        getInvoice: function (invoiceId) {
+        getInvoice: function (invoiceId, companyId, token) {
           var deferred = $q.defer();
           var params = {
-            'companyId': userState.getSelectedCompanyId(),
-            'invoiceId': invoiceId
+            'companyId': companyId,
+            'invoiceId': invoiceId,
+            'token': token
           };
 
           $log.debug('Store integrations.invoice.get called with', params);
@@ -80,11 +81,12 @@ angular.module('risevision.apps.billing.services')
 
           return deferred.promise;
         },
-        getInvoicePdf: function (invoiceId) {
+        getInvoicePdf: function (invoiceId, companyId, token) {
           var deferred = $q.defer();
           var params = {
-            'companyId': userState.getSelectedCompanyId(),
-            'invoiceId': invoiceId
+            'companyId': companyId,
+            'invoiceId': invoiceId,
+            'token': token
           };
 
           $log.debug('Store integrations.invoice.getPdf called with', params);
