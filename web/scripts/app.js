@@ -182,7 +182,8 @@ angular.module('risevision.apps', [
             reload: true
           });
         } else if ($state.current.name === 'apps.purchase.plans' ||
-          $state.current.name === 'apps.purchase.home') {
+          $state.current.name === 'apps.purchase.home' ||
+          $state.current.name === 'apps.billing.invoice') {
           $state.go('apps.home');
         }
       });

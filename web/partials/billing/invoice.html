@@ -101,6 +101,14 @@
                   {{billingFactory.invoice.line_items[0].date_from * 1000 | date:'d-MMM-yyyy'}} — {{billingFactory.invoice.line_items[0].date_to * 1000 | date:'d-MMM-yyyy'}}
                 </div>
               </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="mb-0">Next Billing Date:</label>
+                </div>
+                <div class="col-md-8" ng-show="billingFactory.invoice.line_items[0]">
+                  {{billingFactory.invoice.line_items[0].date_to * 1000 | date:'d-MMM-yyyy'}}
+                </div>
+              </div>
               <div class="row" ng-show="billingFactory.invoice.po_number">
                 <div class="col-md-4">
                   <label class="mb-0">PO:</label>
