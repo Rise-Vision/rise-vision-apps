@@ -60,7 +60,6 @@
                 var result = resp.result;
 
                 angular.forEach(result.items, function (item) {
-
                   item.lastActivityDate = item.onlineStatus === 'online' ? new Date() : (item
                     .lastActivityDate ? new Date(item.lastActivityDate) : '');
                 });
