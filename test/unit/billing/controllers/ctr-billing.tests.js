@@ -47,6 +47,8 @@ describe('controller: BillingCtrl', function () {
         getInvoices: 'getInvoices'
       };
     });
+    $provide.value('billingFactory', {
+    });
   }));
 
   beforeEach(inject(function($injector, _$rootScope_, $controller) {

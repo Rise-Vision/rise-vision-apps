@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: InvoiceCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $scope, $loading;
+  var $scope, $loading, billingFactory;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -13,14 +13,19 @@ describe('controller: InvoiceCtrl', function () {
       };
     });
 
-    $provide.service('billingFactory', function () {
-      return {};
+    $provide.value('billingFactory', {
+      payInvoice: sandbox.spy()
     });
   }));
 
   beforeEach(inject(function($injector, $rootScope, $controller) {
     $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
+    billingFactory = $injector.get('billingFactory');
+
+    $scope.form = {
+      paymentMethodsForm: {}
+    };
 
     $controller('InvoiceCtrl', {
       $scope: $scope
@@ -34,7 +39,10 @@ describe('controller: InvoiceCtrl', function () {
 
   it('should exist',function () {
     expect($scope).to.be.ok;
+
     expect($scope.billingFactory).to.be.ok;
+
+    expect($scope.completeCardPayment).to.be.a('function');
   });
   
   describe('$loading: ', function() {
@@ -53,5 +61,20 @@ describe('controller: InvoiceCtrl', function () {
     });
   });
 
+  describe('completeCardPayment:', function() {
+    it('should not pay invoice if form is invalid', function() {
+      $scope.completeCardPayment();
+
+      billingFactory.payInvoice.should.not.have.been.called;
+    });
+
+    it('should pay invoice', function() {
+      $scope.form.paymentMethodsForm.$valid = true;
+
+      $scope.completeCardPayment();
+
+      billingFactory.payInvoice.should.have.been.called;
+    });
+  });
 
 });

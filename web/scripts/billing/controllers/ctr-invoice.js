@@ -14,5 +14,13 @@ angular.module('risevision.apps.billing.controllers')
         }
       });
 
+      $scope.completeCardPayment = function () {
+        if (!$scope.form.paymentMethodsForm.$valid) {
+          return;
+        }
+
+        billingFactory.payInvoice();
+      };
+
     }
   ]);
