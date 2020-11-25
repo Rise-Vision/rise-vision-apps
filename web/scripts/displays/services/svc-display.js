@@ -60,7 +60,8 @@
                 var result = resp.result;
 
                 angular.forEach(result.items, function (item) {
-                  item.lastActivityDate = item.onlineStatus === 'online' ? Date.now() : (item
+
+                  item.lastActivityDate = item.onlineStatus === 'online' ? new Date() : (item
                     .lastActivityDate ? new Date(item.lastActivityDate) : '');
                 });
 
@@ -91,7 +92,7 @@
 
                 var item = resp.result.item;
                 if (item) {
-                  item.lastActivityDate = item.onlineStatus === 'online' ? Date.now() : (item.lastActivityDate ?
+                  item.lastActivityDate = item.onlineStatus === 'online' ? new Date() : (item.lastActivityDate ?
                     new Date(item.lastActivityDate) : '');
 
                   $rootScope.$broadcast('displaysLoaded', [item]);
