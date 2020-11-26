@@ -2,22 +2,24 @@
 
 describe("Services: helpWidgetFactory", function() {
   var sandbox = sinon.sandbox.create();
-  var $window, factory;
+  var $timeout, $window, factory;
 
   beforeEach(module("risevision.common.support"));
 
   beforeEach(module(function ($provide) {
+    $provide.value("HELP_URL", "https://help.risevision.com/");
     $provide.value("HELP_WIDGET_SCRIPT", "");
     $provide.service("userState", function() {
       return {};
     });
     $provide.service("userAuthFactory", function() {
       return {};
-    });    
+    });
   }));
 
   beforeEach(function() {
     inject(function($injector, _$rootScope_) {
+      $timeout = $injector.get("$timeout");
       $window = $injector.get("$window");
       factory = $injector.get("helpWidgetFactory");
 
@@ -26,6 +28,8 @@ describe("Services: helpWidgetFactory", function() {
         setSettings: sandbox.stub(),
         openHome: sandbox.stub(),
       };
+
+      $window.open = sandbox.stub();
     });
   });
 
@@ -75,6 +79,37 @@ describe("Services: helpWidgetFactory", function() {
       factory.initializeWidget();
       $window.document.createElement.should.not.have.been.called;
       $window._elev.on.should.not.have.been.called;
+    });
+
+    it("should not open failback help screen if help script was loaded", function(done) {
+      factory.initializeWidget();
+      $window._elev.on.should.have.been.calledWith('load');
+
+      var loadCallback = $window._elev.on.getCall(0).args[1];
+      expect(loadCallback).to.be.a("function");
+      loadCallback($window._elev)
+
+      $window._elev.setSettings.should.have.been.calledWith({hideLauncher: true});
+
+      $timeout.flush(2000);
+      setTimeout(function() {
+        $window.open.should.not.have.been.called;
+
+        done();
+      }, 10);
+    });
+
+    it("should open failback help screen if help script was not loaded", function(done) {
+      factory.initializeWidget();
+      $window._elev.on.should.have.been.calledWith('load');
+      $window._elev.setSettings.should.not.have.been.called;
+
+      $timeout.flush(2000);
+      setTimeout(function() {
+        $window.open.should.have.been.calledWith('https://help.risevision.com/', '_blank');
+
+        done();
+      }, 10);
     });
   });
 
