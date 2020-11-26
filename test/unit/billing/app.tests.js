@@ -89,21 +89,33 @@ describe('app:', function() {
 
   });
 
+  describe('state apps.billing.unpaid:',function(){
+
+    it('should register state',function(){
+      var state = $state.get('apps.billing.unpaid');
+      expect(state).to.be.ok;
+      expect(state.url).to.equal('/billing/unpaid?:token');
+      expect(state.controller).to.equal('UnpaidInvoicesCtrl');
+    });
+
+  });
+
   describe('state apps.billing.invoice:',function(){
 
     it('should register state',function(){
       var state = $state.get('apps.billing.invoice');
       expect(state).to.be.ok;
-      expect(state.url).to.equal('/invoice/:invoiceId');
+      expect(state.url).to.equal('/billing/invoice/:invoiceId?:token');
       expect(state.controller).to.equal('InvoiceCtrl');
     });
 
     it('should open Edit Invoice', function(done) {
       $stateParams.invoiceId = 'invoiceId';
-      $state.get('apps.billing.invoice').resolve.invoiceInfo[3](canAccessApps, billingFactory, $stateParams);
+      $stateParams.cid = 'companyId';
+      $stateParams.token = 'token';
+      $state.get('apps.billing.invoice').resolve.invoiceInfo[2](billingFactory, $stateParams);
       setTimeout(function() {
-        canAccessApps.should.have.been.called.once;
-        billingFactory.getInvoice.should.have.been.calledWith('invoiceId');
+        billingFactory.getInvoice.should.have.been.calledWith('invoiceId', 'companyId', 'token');
 
         done();
       }, 10);
