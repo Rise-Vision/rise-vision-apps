@@ -47,7 +47,7 @@
         }
 
         function showHelpWidget() {
-          if ($window._elev) {
+          if ($window._elev && widgetScriptLoaded) {
             $window._elev.openHome();
           }
 
