@@ -33,10 +33,10 @@ angular.module('risevision.apps.billing.services')
         var company = userState.getCopyOfSelectedCompany();
         var authKey = company && company.authKey;
 
-        if (authKey && authKey.length > 6) {
+        if (authKey) {
           return authKey.substr(authKey.length - 6);
         } else {
-          return authKey || null;
+          return null;
         }
       };
 
