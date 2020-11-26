@@ -13,7 +13,7 @@ angular.module('risevision.apps.billing.controllers')
         name: 'Unpaid Invoices'
       });
 
-      $scope.$watch('billingFactory.loading', function (newValue) {
+      $scope.$watch('unpaidInvoices.loadingItems', function (newValue) {
         if (newValue) {
           $loading.start('unpaid-invoice-loader');
         } else {
