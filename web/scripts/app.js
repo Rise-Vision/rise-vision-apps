@@ -30,6 +30,7 @@ angular.module('risevision.apps', [
     'risevision.apps.services',
     'risevision.apps.controllers',
     'risevision.apps.directives',
+    'risevision.apps.billing.directives',
     'risevision.apps.billing.controllers',
     'risevision.apps.billing.services',
     'risevision.apps.purchase',
