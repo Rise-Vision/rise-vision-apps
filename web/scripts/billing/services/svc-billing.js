@@ -56,11 +56,38 @@ angular.module('risevision.apps.billing.services')
 
           return deferred.promise;
         },
-        getInvoice: function (invoiceId) {
+        getUnpaidInvoices: function (search, cursor) {
           var deferred = $q.defer();
           var params = {
-            'companyId': userState.getSelectedCompanyId(),
-            'invoiceId': invoiceId
+            'companyId': search.companyId,
+            'token': search.token,
+            'cursor': cursor,
+            'count': search.count
+          };
+
+          $log.debug('Store integrations.invoice.listUnpaid called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.invoice.listUnpaid(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.invoice.listUnpaid resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to get company\'s unpaid invoices.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+        getInvoice: function (invoiceId, companyId, token) {
+          var deferred = $q.defer();
+          var params = {
+            'companyId': companyId,
+            'invoiceId': invoiceId,
+            'token': token
           };
 
           $log.debug('Store integrations.invoice.get called with', params);
@@ -80,11 +107,12 @@ angular.module('risevision.apps.billing.services')
 
           return deferred.promise;
         },
-        getInvoicePdf: function (invoiceId) {
+        getInvoicePdf: function (invoiceId, companyId, token) {
           var deferred = $q.defer();
           var params = {
-            'companyId': userState.getSelectedCompanyId(),
-            'invoiceId': invoiceId
+            'companyId': companyId,
+            'invoiceId': invoiceId,
+            'token': token
           };
 
           $log.debug('Store integrations.invoice.getPdf called with', params);

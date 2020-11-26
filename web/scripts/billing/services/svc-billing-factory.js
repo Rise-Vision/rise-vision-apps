@@ -3,9 +3,10 @@
 /*jshint camelcase: false */
 
 angular.module('risevision.apps.billing.services')
-  .service('billingFactory', ['$q', '$log', '$window', 'billing', 'storeService', 'creditCardFactory',
-    'userState', 'processErrorCode',
-    function ($q, $log, $window, billing, storeService, creditCardFactory, userState, processErrorCode) {
+  .service('billingFactory', ['$q', '$log', '$window', '$stateParams', 'billing',
+    'storeService', 'creditCardFactory', 'userState', 'processErrorCode',
+    function ($q, $log, $window, $stateParams, billing, storeService, creditCardFactory,
+      userState, processErrorCode) {
       var factory = {};
 
       var _clearMessages = function () {
@@ -20,13 +21,32 @@ angular.module('risevision.apps.billing.services')
         creditCardFactory.initPaymentMethods();
       };
 
-      factory.getInvoice = function (invoiceId) {
+      var _getCompanyId = function() {
+        return $stateParams.cid || userState.getSelectedCompanyId();
+      };
+
+      factory.getToken = function () {
+        if ($stateParams.token) {
+          return $stateParams.token;
+        }
+
+        var company = userState.getCopyOfSelectedCompany();
+        var authKey = company && company.authKey;
+
+        if (authKey) {
+          return authKey.substr(authKey.length - 6);
+        } else {
+          return null;
+        }
+      };
+
+      factory.getInvoice = function (invoiceId, companyId, token) {
         factory.init();
 
         factory.invoice = null;
         factory.loading = true;
 
-        return billing.getInvoice(invoiceId)
+        return billing.getInvoice(invoiceId, companyId, token)
           .then(function (resp) {
             factory.invoice = resp.item;
           })
@@ -43,7 +63,7 @@ angular.module('risevision.apps.billing.services')
           creditCardFactory.paymentMethods.paymentMethodResponse.paymentMethod.id : null;
 
         return storeService.preparePayment(paymentMethodId, factory.invoice.id, 
-          userState.getSelectedCompanyId())
+          _getCompanyId(), factory.getToken())
           .then(function (response) {
             if (response.error) {
               return $q.reject(response.error);
@@ -63,7 +83,7 @@ angular.module('risevision.apps.billing.services')
           creditCardFactory.paymentMethods.intentResponse.intentId : null;
 
         return storeService.collectPayment(paymentIntentId, factory.invoice.id, 
-          userState.getSelectedCompanyId())
+          _getCompanyId(), factory.getToken())
           .then(function () {
             factory.invoice.status = 'paid';
             factory.invoice.amount_paid = factory.invoice.total;
@@ -110,7 +130,7 @@ angular.module('risevision.apps.billing.services')
 
         factory.loading = true;
 
-        billing.getInvoicePdf(invoiceId)
+        billing.getInvoicePdf(invoiceId, _getCompanyId(), factory.getToken())
           .then(function (resp) {
             if (resp && resp.result) {
               // Trigger download

@@ -1,6 +1,6 @@
 'use strict';
 describe('service: billingFactory:', function() {
-  var billingFactory, $window, billing, storeService, creditCardFactory;
+  var billingFactory, $window, $stateParams, userState, billing, storeService, creditCardFactory;
 
   beforeEach(module('risevision.apps.billing.services'));
   beforeEach(module(function ($provide) {
@@ -9,7 +9,10 @@ describe('service: billingFactory:', function() {
       return {
         getSelectedCompanyId : function() {
           return 'testId1';
-        }
+        },
+        getCopyOfSelectedCompany: sinon.stub().returns({
+          authKey: 'longAuthKey'
+        })
       };
     });
     $provide.service('billing',function() {
@@ -37,6 +40,9 @@ describe('service: billingFactory:', function() {
         return 'processed ' + err;
       };
     });
+    $provide.value('$stateParams', {
+      
+    });
     $provide.service('$window',function() {
       return {
         location: {}
@@ -48,6 +54,8 @@ describe('service: billingFactory:', function() {
   beforeEach(function() {
     inject(function($injector){
       $window = $injector.get('$window');
+      $stateParams = $injector.get('$stateParams');
+      userState = $injector.get('userState');
       billing = $injector.get('billing');
       storeService = $injector.get('storeService');
       creditCardFactory = $injector.get('creditCardFactory');
@@ -61,9 +69,37 @@ describe('service: billingFactory:', function() {
 
   it('should exist',function() {
     expect(billingFactory).to.be.ok;
+    expect(billingFactory.getToken).to.be.a('function');
     expect(billingFactory.getInvoice).to.be.a('function');
     expect(billingFactory.payInvoice).to.be.a('function');
     expect(billingFactory.downloadInvoice).to.be.a('function');
+  });
+
+  describe('getToken:', function() {
+    it('should return from $stateParams', function() {
+      $stateParams.token = 'token';
+
+      expect(billingFactory.getToken()).to.equal('token');
+    });
+
+    it('should return last 6 digits', function() {
+      expect(billingFactory.getToken()).to.equal('uthKey');
+    });
+
+    it('should not fail if token is shorter', function() {
+      userState.getCopyOfSelectedCompany.returns({
+        authKey: 'key'
+      });
+
+      expect(billingFactory.getToken()).to.equal('key');
+    });
+
+    it('should not fail if token is missing', function() {
+      userState.getCopyOfSelectedCompany.returns({});
+
+      expect(billingFactory.getToken()).to.be.null;
+    });
+
   });
 
   describe('getInvoice:', function() {
@@ -71,9 +107,9 @@ describe('service: billingFactory:', function() {
       billingFactory.apiError = 'someError';
       billingFactory.invoice = 'someInvoice';
 
-      billingFactory.getInvoice('invoiceId');
+      billingFactory.getInvoice('invoiceId', 'companyId', 'token');
 
-      billing.getInvoice.should.have.been.calledWith('invoiceId');
+      billing.getInvoice.should.have.been.calledWith('invoiceId', 'companyId', 'token');
 
       expect(billingFactory.apiError).to.not.be.ok;
       expect(billingFactory.invoice).to.not.be.ok;
@@ -165,7 +201,7 @@ describe('service: billingFactory:', function() {
         billingFactory.payInvoice();
 
         setTimeout(function() {
-          storeService.preparePayment.should.have.been.calledWith('paymentMethodId', 'invoiceId', 'testId1');
+          storeService.preparePayment.should.have.been.calledWith('paymentMethodId', 'invoiceId', 'testId1', 'uthKey');
           expect(creditCardFactory.paymentMethods.intentResponse).to.deep.equal({item: 'intentResponse'});
 
           done();
@@ -271,7 +307,7 @@ describe('service: billingFactory:', function() {
         billingFactory.payInvoice();
 
         setTimeout(function() {
-          storeService.collectPayment.should.have.been.calledWith('intentId', 'invoiceId', 'testId1');
+          storeService.collectPayment.should.have.been.calledWith('intentId', 'invoiceId', 'testId1', 'uthKey');
 
           expect(billingFactory.invoice.status).to.equal('paid');
           expect(billingFactory.invoice.amount_paid).to.equal(50);
@@ -304,7 +340,7 @@ describe('service: billingFactory:', function() {
 
       billingFactory.downloadInvoice('invoiceId');
 
-      billing.getInvoicePdf.should.have.been.calledWith('invoiceId');
+      billing.getInvoicePdf.should.have.been.calledWith('invoiceId', 'testId1', 'uthKey');
 
       expect(billingFactory.apiError).to.not.be.ok;
       expect(billingFactory.loading).to.be.true;

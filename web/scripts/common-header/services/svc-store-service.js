@@ -125,13 +125,14 @@
               });
             return deferred.promise;
           },
-          preparePayment: function (paymentMethodId, invoiceId, companyId) {
+          preparePayment: function (paymentMethodId, invoiceId, companyId, token) {
             var deferred = $q.defer();
             storeAPILoader().then(function (storeAPI) {
                 var obj = {
                   paymentMethodId: paymentMethodId,
                   invoiceId: invoiceId,
-                  companyId: companyId
+                  companyId: companyId,
+                  token: token
                 };
                 return storeAPI.payment.prepare(obj);
               })
@@ -150,13 +151,14 @@
               });
             return deferred.promise;
           },
-          collectPayment: function (paymentIntentId, invoiceId, companyId) {
+          collectPayment: function (paymentIntentId, invoiceId, companyId, token) {
             var deferred = $q.defer();
             storeAPILoader().then(function (storeAPI) {
                 var obj = {
                   paymentIntentId: paymentIntentId,
                   invoiceId: invoiceId,
-                  companyId: companyId
+                  companyId: companyId,
+                  token: token
                 };
                 return storeAPI.payment.collect(obj);
               })

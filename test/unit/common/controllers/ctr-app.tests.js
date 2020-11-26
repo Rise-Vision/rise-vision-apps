@@ -29,7 +29,7 @@ describe('controller: app', function() {
 
   it('should exist',function(){
     expect($scope).to.be.ok;
-    expect($scope.hideCommonHeader).to.be.false;
+    expect($scope.hideCommonHeader).to.be.true;
     expect($scope.navOptions).to.be.ok;
     expect($scope.navSelected).to.be.ok;
   });
@@ -40,13 +40,30 @@ describe('controller: app', function() {
     expect($scope.navSelected).to.equal('apps.display.alerts');
   });
 
-  it('should hide CH on login page',function(){
-    $state.current.name = 'common.auth.unauthorized';
-    rootScope.$broadcast('$stateChangeSuccess');
-    expect($scope.hideCommonHeader).to.be.true;
-    
-    $state.current.name = 'apps.home';
-    rootScope.$broadcast('$stateChangeSuccess');
-    expect($scope.hideCommonHeader).to.be.false;
+  describe('hideCommonHeader', function() {
+    it('should hide CH on login page',function(){
+      $state.current.name = 'common.auth.unauthorized';
+      rootScope.$broadcast('$stateChangeSuccess');
+      expect($scope.hideCommonHeader).to.be.true;
+    });
+
+    it('should hide CH on invoice page',function(){
+      $state.current.name = 'apps.billing.invoice';
+      rootScope.$broadcast('$stateChangeSuccess');
+      expect($scope.hideCommonHeader).to.be.true;
+    });
+
+    it('should hide CH on unpaid invoices page',function(){
+      $state.current.name = 'apps.billing.unpaid';
+      rootScope.$broadcast('$stateChangeSuccess');
+      expect($scope.hideCommonHeader).to.be.true;
+    });
+
+    it('should show CH otherwise',function(){
+      $state.current.name = 'apps.home';
+      rootScope.$broadcast('$stateChangeSuccess');
+      expect($scope.hideCommonHeader).to.be.false;
+    });
   });
+
 });
