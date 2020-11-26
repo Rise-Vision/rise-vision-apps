@@ -419,13 +419,14 @@ describe("Services: storeService", function() {
     });
 
     it("should pass the parameters and call the api", function(done) {
-      storeService.preparePayment("paymentMethodId", "invoiceId", "companyId")
+      storeService.preparePayment("paymentMethodId", "invoiceId", "companyId", "token")
       .then(function() {
         storeApi.payment.prepare.should.have.been.called;
         storeApi.payment.prepare.should.have.been.calledWith({
           paymentMethodId: "paymentMethodId",
           invoiceId: "invoiceId",
-          companyId: "companyId"
+          companyId: "companyId",
+          token: "token"
         });
         done();
       })
@@ -509,13 +510,14 @@ describe("Services: storeService", function() {
     });
 
     it("should pass the parameters and call the api", function(done) {
-      storeService.collectPayment("paymentIntentId", "invoiceId", "companyId")
+      storeService.collectPayment("paymentIntentId", "invoiceId", "companyId", "token")
       .then(function() {
         storeApi.payment.collect.should.have.been.called;
         storeApi.payment.collect.should.have.been.calledWith({
           paymentIntentId: "paymentIntentId",
           invoiceId: "invoiceId",
-          companyId: "companyId"
+          companyId: "companyId",
+          token: "token"
         });
         done();
       })
