@@ -80,37 +80,6 @@ describe("Services: helpWidgetFactory", function() {
       $window.document.createElement.should.not.have.been.called;
       $window._elev.on.should.not.have.been.called;
     });
-
-    it("should not open failback help screen if help script was loaded", function(done) {
-      factory.initializeWidget();
-      $window._elev.on.should.have.been.calledWith('load');
-
-      var loadCallback = $window._elev.on.getCall(0).args[1];
-      expect(loadCallback).to.be.a("function");
-      loadCallback($window._elev)
-
-      $window._elev.setSettings.should.have.been.calledWith({hideLauncher: true});
-
-      $timeout.flush(2000);
-      setTimeout(function() {
-        $window.open.should.not.have.been.called;
-
-        done();
-      }, 10);
-    });
-
-    it("should open failback help screen if help script was not loaded", function(done) {
-      factory.initializeWidget();
-      $window._elev.on.should.have.been.calledWith('load');
-      $window._elev.setSettings.should.not.have.been.called;
-
-      $timeout.flush(2000);
-      setTimeout(function() {
-        $window.open.should.have.been.calledWith('https://help.risevision.com/', '_blank');
-
-        done();
-      }, 10);
-    });
   });
 
   describe("showWidgetButton:", function() {
@@ -131,6 +100,61 @@ describe("Services: helpWidgetFactory", function() {
     it("should open help widget", function() {
       factory.showHelpWidget();
       $window._elev.openHome.should.have.been.called;
+    });
+  });
+
+  describe("showHelpWidget:helpFallback", function() {
+    var element;
+
+    beforeEach(function() {
+      element = $window.document.createElement('script');
+      element.innerText = "ToBeChanged";
+
+      sandbox.stub($window.document,"createElement", function() {
+        return element;
+      });
+    });
+
+    afterEach(function() {
+      $window.document.createElement.restore();
+    });
+
+    it("should not open failback help screen if help script was loaded", function(done) {
+      factory.initializeWidget();
+      $window._elev.on.should.have.been.calledWith('load');
+
+      var loadCallback = $window._elev.on.getCall(0).args[1];
+      expect(loadCallback).to.be.a("function");
+
+      factory.showHelpWidget();
+      $window._elev.openHome.should.have.been.called;
+
+      // simulating that the script loads and the load callback is called
+      loadCallback($window._elev)
+      $window._elev.setSettings.should.have.been.calledWith({hideLauncher: true});
+
+      $timeout.flush(2000);
+      setTimeout(function() {
+        $window.open.should.not.have.been.called;
+
+        done();
+      }, 10);
+    });
+
+    it("should open failback help screen if help script was not loaded", function(done) {
+      factory.initializeWidget();
+      $window._elev.on.should.have.been.calledWith('load');
+      $window._elev.setSettings.should.not.have.been.called;
+
+      factory.showHelpWidget();
+      $window._elev.openHome.should.have.been.called;
+
+      $timeout.flush(2000);
+      setTimeout(function() {
+        $window.open.should.have.been.calledWith('https://help.risevision.com/', '_blank');
+
+        done();
+      }, 10);
     });
   });
 });

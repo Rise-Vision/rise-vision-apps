@@ -27,12 +27,6 @@
               });
             });
             loaded = true;
-
-            $timeout(function() {
-              if( !widgetScriptLoaded ) {
-                $window.open(HELP_URL, '_blank');
-              }
-            }, failsafeCheckDelay);
           }
         }
 
@@ -56,6 +50,12 @@
           if ($window._elev) {
             $window._elev.openHome();
           }
+
+          $timeout(function() {
+            if( !widgetScriptLoaded ) {
+              $window.open(HELP_URL, '_blank');
+            }
+          }, failsafeCheckDelay);
         }
 
         return {
