@@ -2,6 +2,7 @@
 
 describe('controller: display add', function() {
   var displayId = '1234';
+  var isProAvailable = true;
   var sandbox = sinon.sandbox.create();
 
   beforeEach(module('risevision.displays.services'));
@@ -36,7 +37,7 @@ describe('controller: display add', function() {
     $provide.factory('playerLicenseFactory', function() {
       return {
         isProAvailable: function() {
-          return true;
+          return isProAvailable;
         }
       };
     });
@@ -95,9 +96,23 @@ describe('controller: display add', function() {
     });
   });
 
-  describe('license:', function() {
-    it('should not show license modal if there are licenses available', function() {
+  describe('license:available:', function() {
+    before( function() {
+      isProAvailable = true;
+    });
+
+    it('should not show license modal if licenses are available', function() {
       plansFactory.confirmAndPurchase.should.not.have.been.called;
+    });
+  });
+
+  describe('license:unavailable:', function() {
+    before( function() {
+      isProAvailable = false;
+    });
+
+    it('should show license modal if no licenses are available', function() {
+      plansFactory.confirmAndPurchase.should.have.been.called;
     });
   });
 
