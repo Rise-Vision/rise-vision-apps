@@ -13,6 +13,10 @@ describe('controller: display add', function() {
         addDisplay: sinon.spy()
       };
     });
+    $provide.service('plansFactory', function() {
+      return {
+      };
+    });
     $provide.service('scheduleFactory', function() {
       return {
         getAllDisplaysSchedule: function() {
