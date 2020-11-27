@@ -15,6 +15,7 @@ describe('controller: display add', function() {
     });
     $provide.service('plansFactory', function() {
       return {
+        confirmAndPurchase: sandbox.stub()
       };
     });
     $provide.service('scheduleFactory', function() {
@@ -33,14 +34,19 @@ describe('controller: display add', function() {
       };
     });
     $provide.factory('playerLicenseFactory', function() {
-      return {};
+      return {
+        isProAvailable: function() {
+          return true;
+        }
+      };
     });
 
   }));
-  var $scope, $loading, displayFactory, scheduleFactory;
+  var $scope, $loading, displayFactory, plansFactory, scheduleFactory;
   beforeEach(function(){
     inject(function($injector, $controller){
       displayFactory = $injector.get('displayFactory');
+      plansFactory = $injector.get('plansFactory');
       scheduleFactory = $injector.get('scheduleFactory');
       $loading = $injector.get('$loading');
 
@@ -86,6 +92,12 @@ describe('controller: display add', function() {
 
         done();
       }, 10);
+    });
+  });
+
+  describe('license:', function() {
+    it('should not show license modal if there are licenses available', function() {
+      plansFactory.confirmAndPurchase.should.not.have.been.called;
     });
   });
 

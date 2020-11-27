@@ -33,5 +33,8 @@ angular.module('risevision.displays.controllers')
         displayFactory.addDisplay($scope.selectedSchedule);
       };
 
+      if(!playerLicenseFactory.isProAvailable(displayFactory.display)) {
+        plansFactory.confirmAndPurchase();
+      }
     }
   ]);
