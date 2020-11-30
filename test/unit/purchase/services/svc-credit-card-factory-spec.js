@@ -4,6 +4,8 @@
 describe("Services: credit card factory", function() {
   beforeEach(module("risevision.apps.purchase"));
   beforeEach(module(function ($provide) {
+    $provide.service("$q", function() {return Q;});
+
     var _generateElement = function(id) {
       return {
         id: id,
@@ -13,7 +15,16 @@ describe("Services: credit card factory", function() {
     };
 
     $provide.value("stripeService", {
-      initializeStripeElements: sinon.stub().returns(Q.resolve([_generateElement(1), _generateElement(2), _generateElement(3)]))
+      initializeStripeElements: sinon.stub().returns(Q.resolve([_generateElement(1), _generateElement(2), _generateElement(3)])),
+      createPaymentMethod: sinon.stub().returns(Q.resolve({})),
+      authenticate3ds: sinon.stub().returns(Q.resolve())
+    });
+
+    $provide.value("userState", {
+      getCopyOfSelectedCompany: sinon.stub().returns({
+        id: "id",
+        street: "billingStreet",
+      })
     });
 
   }));
@@ -30,12 +41,16 @@ describe("Services: credit card factory", function() {
 
   it("should exist", function() {
     expect(creditCardFactory).to.be.ok;
-    expect(creditCardFactory.initElements).to.be.a("function");
+    expect(creditCardFactory.initStripeElements).to.be.a("function");
+    expect(creditCardFactory.initPaymentMethods).to.be.a("function");
+
+    expect(creditCardFactory.validatePaymentMethod).to.be.a("function");
+    expect(creditCardFactory.authenticate3ds).to.be.a("function");
   });
 
-  describe("initElements: ", function() {
+  describe("initStripeElements: ", function() {
     beforeEach(function(done) {
-      creditCardFactory.initElements();
+      creditCardFactory.initStripeElements();
       setTimeout(function() {
         done();
       }, 10);
@@ -93,5 +108,133 @@ describe("Services: credit card factory", function() {
     });
 
   });
+
+  it("initPaymentMethods:", function() {
+    creditCardFactory.initPaymentMethods();
+    
+    expect(creditCardFactory).to.be.ok;
+    expect(creditCardFactory.paymentMethods).to.be.ok;
+    expect(creditCardFactory.paymentMethods.existingCreditCards).to.deep.equal([]);
+
+    expect(creditCardFactory.paymentMethods.newCreditCard).to.deep.equal({
+      isNew: true,
+      address: {},
+      useBillingAddress: true,
+      billingAddress: {
+        id: "id",
+        name: undefined,
+        street: "billingStreet",
+        unit: undefined,
+        city: undefined,
+        country: undefined,
+        postalCode: undefined,
+        province: undefined
+      }
+    });
+
+    expect(creditCardFactory.paymentMethods.selectedCard).to.equal(creditCardFactory.paymentMethods.newCreditCard);
+  });
+
+  describe("validatePaymentMethod: ", function() {
+    it("should clear errors", function() {
+      creditCardFactory.paymentMethods = {
+        selectedCard: {},
+        tokenError: "tokenError"
+      };
+
+      creditCardFactory.validatePaymentMethod();
+
+      expect(creditCardFactory.paymentMethods.tokenError).to.not.be.ok;
+    });
+
+    describe("existing card: ", function() {
+      var card;
+      beforeEach(function() {
+        creditCardFactory.paymentMethods = {
+          selectedCard: card = {
+            isNew: true,
+            number: "123"
+          }
+        };
+      });
+
+      it("should validate card and proceed to next step", function(done) {
+        creditCardFactory.validatePaymentMethod()
+        .then(function() {
+          stripeService.createPaymentMethod.should.have.been.called;
+
+          done();
+        })
+        .then(null,function(error) {
+          done(error);
+        });
+      });
+
+      it("should validate and not proceed if there are errors", function(done) {
+        stripeService.createPaymentMethod.returns(Q.resolve({error: {}}));
+
+        creditCardFactory.validatePaymentMethod()
+        .then(function () {
+          console.log("Should not be here");
+        }, function() {
+          stripeService.createPaymentMethod.should.have.been.called;
+          done();
+        });
+      });
+      
+    });
+
+    describe("new card:", function() {
+      var card;
+
+      beforeEach(function() {
+        creditCardFactory.paymentMethods = {
+          paymentMethod: "card",
+          existingCreditCards: [],
+          newCreditCard: card = {
+            isNew: true,
+            number: "123",
+            address: {},
+            billingAddress: {}
+          }
+        };
+        creditCardFactory.paymentMethods.selectedCard = creditCardFactory.paymentMethods.newCreditCard;
+      });
+
+      it("should validate card", function() {
+        creditCardFactory.validatePaymentMethod();
+
+        stripeService.createPaymentMethod.should.have.been.called;
+      });
+
+      it("should validate and not proceed if there are errors", function(done) {
+        stripeService.createPaymentMethod.returns(Q.resolve({error: {message: "tokenError"}}));
+
+        creditCardFactory.validatePaymentMethod()
+        .then(null, function() {
+          stripeService.createPaymentMethod.should.have.been.called;
+
+          expect(creditCardFactory.paymentMethods.tokenError).to.equal("tokenError");
+
+          done();
+        })
+        .then(null,function() {
+          done("should not be here");
+        });
+      });
+
+      it("should use billing address if selected", function() {
+        card.useBillingAddress = true;
+        card.billingAddress = {city: "test-billing-city"};
+
+        creditCardFactory.validatePaymentMethod();
+
+        assert.equal(stripeService.createPaymentMethod.getCall(0).args[2].billing_details.address.city, "test-billing-city");
+      });
+
+    });
+
+  });
+  
 
 });

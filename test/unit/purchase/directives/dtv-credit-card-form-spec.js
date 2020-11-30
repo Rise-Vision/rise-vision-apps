@@ -13,7 +13,7 @@ describe("directive: credit card form", function() {
     }; 
 
     $provide.value("creditCardFactory", {
-      initElements: sinon.stub()
+      initStripeElements: sinon.stub()
     });
 
   }));
@@ -27,11 +27,8 @@ describe("directive: credit card form", function() {
     $rootScope.form = {
       creditCardForm: {}
     };
-    $rootScope.paymentMethods = {
-      stripeElements: {}
-    };
 
-    element = $compile("<credit-card-form form-object=\"form.creditCardForm\" payment-methods-object=\"paymentMethods\"></credit-card-form>")($rootScope);
+    element = $compile("<credit-card-form form-object=\"form.creditCardForm\"></credit-card-form>")($rootScope);
 
     $scope = element.isolateScope();
   }));
@@ -43,15 +40,15 @@ describe("directive: credit card form", function() {
   it("should initialize scope", function() {
     expect($scope).to.be.an("object");
 
-    expect($scope.paymentMethods).to.be.an('object');
+    expect($scope.factory).to.be.an('object');
     expect($scope.formObject).to.be.an('object');
 
     expect($scope.getCardDescription).to.be.a("function");
     expect($scope.stripeElementError).to.be.a("function");
   });
 
-  it('initElements', function() {
-    creditCardFactory.initElements.should.have.been.called;
+  it('initStripeElements', function() {
+    creditCardFactory.initStripeElements.should.have.been.called;
   });
 
   it("getCardDescription: ", function() {
