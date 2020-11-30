@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.apps.billing.directives')
-  .directive('shareUrlButton', ['$timeout',
-    function ($timeout) {
+  .directive('shareUrlButton', ['$timeout', 'outsideClickHandler',
+    function ($timeout, outsideClickHandler) {
       return {
         restrict: 'E',
         templateUrl: 'partials/billing/share-url-button.html',
@@ -14,6 +14,7 @@ angular.module('risevision.apps.billing.directives')
           $scope.dismiss = function () {
             $timeout(function () {
               isTooltipOpen = false;
+              outsideClickHandler.unbind('share-url-button');
               element.trigger('hide');
             });
           };
@@ -22,9 +23,11 @@ angular.module('risevision.apps.billing.directives')
             $timeout(function () {
               if (isTooltipOpen) {
                 isTooltipOpen = false;
+                outsideClickHandler.unbind('share-url-button');
                 element.trigger('hide');
               } else {
                 isTooltipOpen = true;
+                outsideClickHandler.bind('share-url-button', '#share-url-button, #share-url-popover', $scope.toggleTooltip);
                 element.trigger('show');
               }
             });
