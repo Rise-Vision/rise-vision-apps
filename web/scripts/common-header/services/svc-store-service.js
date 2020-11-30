@@ -125,6 +125,58 @@
               });
             return deferred.promise;
           },
+          preparePayment: function (paymentMethodId, invoiceId, companyId, token) {
+            var deferred = $q.defer();
+            storeAPILoader().then(function (storeAPI) {
+                var obj = {
+                  paymentMethodId: paymentMethodId,
+                  invoiceId: invoiceId,
+                  companyId: companyId,
+                  token: token
+                };
+                return storeAPI.payment.prepare(obj);
+              })
+              .then(function (resp) {
+                if (resp && resp.result && !resp.result.error) {
+                  $log.debug('prepare payment resp', resp);
+                  deferred.resolve(resp.result);
+                } else {
+                  deferred.reject(resp && resp.result && resp.result.error);
+                }
+              })
+              .then(null, function (resp) {
+                console.error('Failed to prepare Payment.', resp);
+
+                deferred.reject(resp && resp.result && resp.result.error);
+              });
+            return deferred.promise;
+          },
+          collectPayment: function (paymentIntentId, invoiceId, companyId, token) {
+            var deferred = $q.defer();
+            storeAPILoader().then(function (storeAPI) {
+                var obj = {
+                  paymentIntentId: paymentIntentId,
+                  invoiceId: invoiceId,
+                  companyId: companyId,
+                  token: token
+                };
+                return storeAPI.payment.collect(obj);
+              })
+              .then(function (resp) {
+                if (resp && resp.result && !resp.result.error) {
+                  $log.debug('purchase resp', resp);
+                  deferred.resolve(resp.result);
+                } else {
+                  deferred.reject(resp && resp.result && resp.result.error);
+                }
+              })
+              .then(null, function (resp) {
+                console.error('Failed to get Purchase.', resp);
+
+                deferred.reject(resp && resp.result && resp.result.error);
+              });
+            return deferred.promise;
+          },
           createSession: function (companyId) {
             var deferred = $q.defer();
 

@@ -42,10 +42,6 @@
     padding: 2px 12px;
   }
 
-  .StripeElement {
-    padding: 11px 12px;
-  }
-
   .purchase-sideways-panels {
     @extend .stack-md-sideways-panels;
 
@@ -93,18 +89,23 @@
     width: 744px;
   }
 
-  .purchase-footer {
-    text-align: center;
+}
 
-    .title {
-       font-weight: bold;
+.StripeElement {
+  padding: 11px 12px;
+}
 
-       svg {
-        fill: $madero-gray;
-        vertical-align: middle;
-        margin-left: 5px;
-       }
-    }
+.purchase-footer {
+  text-align: center;
+
+  .title {
+     font-weight: bold;
+
+     svg {
+      fill: $madero-gray;
+      vertical-align: middle;
+      margin-left: 5px;
+     }
   }
 }
 

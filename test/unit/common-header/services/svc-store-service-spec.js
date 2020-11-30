@@ -61,6 +61,22 @@ describe("Services: storeService", function() {
               }
             })
           },
+          payment: {
+            prepare: sinon.spy(function() {
+              if (storeApiFailure) {
+                return Q.reject(response);
+              } else {
+                return Q.resolve(response);
+              }
+            }),
+            collect: sinon.spy(function() {
+              if (storeApiFailure) {
+                return Q.reject(response);
+              } else {
+                return Q.resolve(response);
+              }
+            })
+          },
           taxExemption: {
             add: function () {
               return {
@@ -373,6 +389,188 @@ describe("Services: storeService", function() {
       response.result.error = "Call Failed";
 
       storeService.purchase("jsonData")
+      .then(function() {
+        done("error");
+      })
+      .then(null, function(error) {
+        expect(error).to.equal("Call Failed");
+
+        done();
+      })
+      .then(null,done);
+    });
+
+  });
+
+  describe("preparePayment: ", function() {
+    beforeEach(function() {
+      response = {
+        result: {}
+      };
+    });
+
+    it("should exist", function() {
+      expect(storeService.preparePayment).to.be.ok;
+      expect(storeService.preparePayment).to.be.a("function");
+    });
+    
+    it("should return a promise", function() {
+      expect(storeService.preparePayment().then).to.be.a("function");
+    });
+
+    it("should pass the parameters and call the api", function(done) {
+      storeService.preparePayment("paymentMethodId", "invoiceId", "companyId", "token")
+      .then(function() {
+        storeApi.payment.prepare.should.have.been.called;
+        storeApi.payment.prepare.should.have.been.calledWith({
+          paymentMethodId: "paymentMethodId",
+          invoiceId: "invoiceId",
+          companyId: "companyId",
+          token: "token"
+        });
+        done();
+      })
+      .then(null,done);
+
+    });
+
+    it("should resolve if result is received", function(done) {
+      storeService.preparePayment()
+      .then(function(result) {
+        expect(result).to.be.ok;
+        expect(result).to.deep.equal({});
+        
+        done();
+      })
+      .then(null,done);
+    });
+    
+    it("should reject if no result is received", function(done) {
+      response = {};
+
+      storeService.preparePayment()
+      .then(function(result) {
+        done(result);
+      })
+      .then(null, function(error) {
+        expect(error).to.not.be.ok;
+
+        done();
+      })
+      .then(null,done);
+    });
+
+    it("should return error response", function(done) {
+      response.result.error = "Call Failed";
+
+      storeService.preparePayment()
+      .then(function(result) {
+        done(result);
+      })
+      .then(null, function(error) {
+        expect(error).to.equal("Call Failed");
+
+        done();
+      })
+      .then(null,done);
+    });
+
+    it("should reject on API failure", function(done) {
+      storeApiFailure = true;
+      response.result.error = "Call Failed";
+
+      storeService.preparePayment()
+      .then(function() {
+        done("error");
+      })
+      .then(null, function(error) {
+        expect(error).to.equal("Call Failed");
+
+        done();
+      })
+      .then(null,done);
+    });
+
+  });
+
+  describe("collectPayment: ", function() {
+    beforeEach(function() {
+      response = {
+        result: {}
+      };
+    });
+
+    it("should exist", function() {
+      expect(storeService.collectPayment).to.be.ok;
+      expect(storeService.collectPayment).to.be.a("function");
+    });
+    
+    it("should return a promise", function() {
+      expect(storeService.collectPayment().then).to.be.a("function");
+    });
+
+    it("should pass the parameters and call the api", function(done) {
+      storeService.collectPayment("paymentIntentId", "invoiceId", "companyId", "token")
+      .then(function() {
+        storeApi.payment.collect.should.have.been.called;
+        storeApi.payment.collect.should.have.been.calledWith({
+          paymentIntentId: "paymentIntentId",
+          invoiceId: "invoiceId",
+          companyId: "companyId",
+          token: "token"
+        });
+        done();
+      })
+      .then(null,done);
+
+    });
+
+    it("should resolve if result is received", function(done) {
+      storeService.collectPayment()
+      .then(function(result) {
+        expect(result).to.be.ok;
+        expect(result).to.deep.equal({});
+        
+        done();
+      })
+      .then(null,done);
+    });
+    
+    it("should reject if no result is received", function(done) {
+      response = {};
+
+      storeService.collectPayment()
+      .then(function(result) {
+        done(result);
+      })
+      .then(null, function(error) {
+        expect(error).to.not.be.ok;
+
+        done();
+      })
+      .then(null,done);
+    });
+
+    it("should return error response", function(done) {
+      response.result.error = "Call Failed";
+
+      storeService.collectPayment()
+      .then(function(result) {
+        done(result);
+      })
+      .then(null, function(error) {
+        expect(error).to.equal("Call Failed");
+
+        done();
+      })
+      .then(null,done);
+    });
+
+    it("should reject on API failure", function(done) {
+      storeApiFailure = true;
+      response.result.error = "Call Failed";
+
+      storeService.collectPayment()
       .then(function() {
         done("error");
       })

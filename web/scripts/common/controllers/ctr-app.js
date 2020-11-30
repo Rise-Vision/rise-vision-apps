@@ -41,12 +41,14 @@ angular.module('risevision.apps.controllers')
         states: ['apps.storage.home']
       }];
       $scope.navSelected = 'apps.editor.home';
-      $scope.hideCommonHeader = false;
+      $scope.hideCommonHeader = true;
 
       $rootScope.$on('$stateChangeSuccess', function () {
         $scope.navSelected = $state.current.name;
         $scope.hideCommonHeader =
-          $state.current.name.indexOf('common.auth') !== -1;
+          $state.current.name.indexOf('common.auth') !== -1 ||
+          $state.current.name.indexOf('apps.billing.invoice') !== -1 ||
+          $state.current.name.indexOf('apps.billing.unpaid') !== -1;
       });
     }
   ]); //ctr
