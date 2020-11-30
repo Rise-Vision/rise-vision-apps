@@ -55,6 +55,7 @@ angular.module('risevision.apps')
     }
   ]);
 
+angular.module('risevision.apps.billing.directives', []);
 angular.module('risevision.apps.billing.controllers', [
   'risevision.apps.billing.services'
 ]);

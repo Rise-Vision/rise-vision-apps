@@ -6,9 +6,7 @@
 
     <div class="col-xs-12 col-sm-10">
       <div class="button-row text-right my-0">
-        <button id="shareButton" type="button" class="btn btn-default btn-toolbar mr-2">
-          Share
-        </button>
+        <share-url-button class="btn btn-default btn-toolbar mr-2"></share-url-button>
       </div>
     </div>
   </div>
@@ -64,7 +62,7 @@
         </tr>
 
         <tr ng-show="unpaidInvoices.items.list.length === 0 && unpaidInvoices.items.list.length === 0">
-          <td colspan="6" class="text-center"><span translate>You do not have any unpaidInvoices yet.</span></td>
+          <td colspan="6" class="text-center"><span translate>You do not have any Unpaid Invoices.</span></td>
         </tr>
       </tbody>
     </table>
