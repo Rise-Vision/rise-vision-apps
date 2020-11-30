@@ -21,7 +21,7 @@ var ScheduleAddPage = function() {
 
   var playlistItems = element.all(by.repeater('playlistItem in playlistItems'));
 
-  var shareScheduleButton = element(by.id('tooltipButton'));
+  var shareScheduleButton = element(by.id('share-schedule-button'));
 
   var saveButton = element(by.id('saveButton'));
   var cancelButton = element(by.id('cancelButton'));

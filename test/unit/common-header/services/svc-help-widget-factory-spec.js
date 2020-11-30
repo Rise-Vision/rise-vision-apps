@@ -7,13 +7,14 @@ describe("Services: helpWidgetFactory", function() {
   beforeEach(module("risevision.common.support"));
 
   beforeEach(module(function ($provide) {
+    $provide.value("HELP_URL", "https://help.risevision.com/");
     $provide.value("HELP_WIDGET_SCRIPT", "");
     $provide.service("userState", function() {
       return {};
     });
     $provide.service("userAuthFactory", function() {
       return {};
-    });    
+    });
   }));
 
   beforeEach(function() {
@@ -26,6 +27,8 @@ describe("Services: helpWidgetFactory", function() {
         setSettings: sandbox.stub(),
         openHome: sandbox.stub(),
       };
+
+      $window.open = sandbox.stub();
     });
   });
 
@@ -93,9 +96,45 @@ describe("Services: helpWidgetFactory", function() {
   });
 
   describe("showHelpWidget:", function() {
-    it("should open help widget", function() {
+    var element;
+
+    beforeEach(function() {
+      element = $window.document.createElement('script');
+      element.innerText = "ToBeChanged";
+
+      sandbox.stub($window.document,"createElement", function() {
+        return element;
+      });
+    });
+
+    afterEach(function() {
+      $window.document.createElement.restore();
+    });
+
+    it("should open help widget and not open failback help screen if help script was loaded", function() {
+      factory.initializeWidget();
+      $window._elev.on.should.have.been.calledWith('load');
+
+      var loadCallback = $window._elev.on.getCall(0).args[1];
+      expect(loadCallback).to.be.a("function");
+
+      // simulating that the script loads and the load callback is called
+      loadCallback($window._elev)
+      $window._elev.setSettings.should.have.been.calledWith({hideLauncher: true});
+
       factory.showHelpWidget();
       $window._elev.openHome.should.have.been.called;
+      $window.open.should.not.have.been.called;
+    });
+
+    it("should not open help widget and open failback help screen if help script was not loaded", function() {
+      factory.initializeWidget();
+      $window._elev.on.should.have.been.calledWith('load');
+      $window._elev.setSettings.should.not.have.been.called;
+
+      factory.showHelpWidget();
+      $window._elev.openHome.should.not.have.been.called;
+      $window.open.should.have.been.calledWith('https://help.risevision.com/', '_blank');
     });
   });
 });
