@@ -23,9 +23,6 @@ angular.module('risevision.template-editor.directives')
             element: element,
             show: function () {
               $scope.setPanelTitle('Schedules');
-            },
-            onBackHandler: function () {
-              $scope.showTooltip = false;
             }
           });
 

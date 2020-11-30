@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.schedules.directives')
-  .directive('previewSelector', ['$timeout', '$loading', 'ScrollingListService', 'schedule', '$document',
-    function ($timeout, $loading, ScrollingListService, schedule, $document) {
+  .directive('previewSelector', ['$timeout', '$loading', 'ScrollingListService', 'schedule', 'outsideClickHandler',
+    function ($timeout, $loading, ScrollingListService, schedule, outsideClickHandler) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/preview-selector.html',
@@ -36,31 +36,18 @@ angular.module('risevision.schedules.directives')
             }
           });
 
-          var _closeTooltip = function (event) {
-            var tooltipContent = angular.element('#preview-selector-tooltip');
-            if (tooltipContent && tooltipContent[0] && tooltipContent[0].contains(event.target) ||
-              tooltipElement && tooltipElement[0] && tooltipElement[0].contains(event.target)) {
-              return;
-            }
-            $timeout(function () {
-              $scope.toggleTooltip();
-            });
-          };
-
           $scope.$watch('showTooltip', function () {
             if ($scope.showTooltip) {
               $scope.schedules = new ScrollingListService(schedule.list, $scope.search);
               selected = $scope.ngModel;
 
               $timeout(function () {
-                $document.bind('click', _closeTooltip);
-                $document.bind('touchstart', _closeTooltip);
+                outsideClickHandler.bind('preview-selector', '#preview-selector, #preview-selector-tooltip', $scope.toggleTooltip);
                 tooltipElement.trigger('show');
               });
             } else {
               $timeout(function () {
-                $document.unbind('click', _closeTooltip);
-                $document.unbind('touchstart', _closeTooltip);
+                outsideClickHandler.unbind('preview-selector');                
                 tooltipElement.trigger('hide');
               });
             }

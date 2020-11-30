@@ -64,7 +64,6 @@ describe('directive: templateComponentSchedules', function() {
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-schedules');
     expect(directive.show).to.be.a('function');
-    expect(directive.onBackHandler).to.be.a('function');
   });
 
   it('directive.show: ', function() {
@@ -73,16 +72,6 @@ describe('directive: templateComponentSchedules', function() {
     directive.show();
 
     $scope.setPanelTitle.should.have.been.calledWith('Schedules');
-  });
-
-  it('directive.onBackHandler: ', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
-
-    $scope.showTooltip = true;
-
-    directive.onBackHandler();
-
-    expect($scope.showTooltip).to.be.false;
   });
 
   describe('watch loadingSchedules:', function() {

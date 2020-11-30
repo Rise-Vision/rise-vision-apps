@@ -1,7 +1,7 @@
 'use strict';
 
 describe('directive: preview-selector', function() {
-  var $scope, $rootScope, element, $loading, $timeout, innerElementStub, listServiceInstance, $document,
+  var $scope, $rootScope, element, $loading, $timeout, innerElementStub, listServiceInstance, outsideClickHandler,
     sandbox = sinon.sandbox.create();
 
 
@@ -22,6 +22,12 @@ describe('directive: preview-selector', function() {
         return listServiceInstance;
       };
     });
+    $provide.service('outsideClickHandler', function() {
+      return {
+        bind: sinon.stub(),
+        unbind: sinon.stub()
+      };
+    });
   }));
 
   beforeEach(inject(function($compile, $injector, $templateCache){
@@ -29,7 +35,7 @@ describe('directive: preview-selector', function() {
     $rootScope = $injector.get('$rootScope');
     $timeout = $injector.get('$timeout');
     $loading = $injector.get('$loading');
-    $document = $injector.get('$document');
+    outsideClickHandler = $injector.get('outsideClickHandler');
 
     listServiceInstance = {
       doSearch: sandbox.stub()
@@ -103,17 +109,14 @@ describe('directive: preview-selector', function() {
   });
 
   describe('toggleTooltip:', function() {
-    it('should open tooltip and load', function() {
-      sinon.spy($document,'bind');
-
+    it('should open tooltip and register oustide click handler', function() {
       $scope.toggleTooltip();
       $scope.$digest();
       $timeout.flush();
 
       innerElementStub.trigger.should.have.been.calledWith('show');
 
-      $document.bind.should.have.been.calledWith('click');
-      $document.bind.should.have.been.calledWith('touchstart');
+      outsideClickHandler.bind.should.have.been.calledWith('preview-selector', '#preview-selector, #preview-selector-tooltip', $scope.toggleTooltip);
     });
 
     it('should initialize schedules list', function() {
@@ -124,8 +127,7 @@ describe('directive: preview-selector', function() {
       expect($scope.schedules).to.equal(listServiceInstance);
     });
 
-    it('should close tooltip if open', function() {
-      sinon.spy($document,'unbind');
+    it('should close tooltip if open and unregister click handler', function() {
       //open
       $scope.toggleTooltip();
       $scope.$digest();
@@ -139,39 +141,8 @@ describe('directive: preview-selector', function() {
 
       innerElementStub.trigger.should.have.been.calledWith('hide');
 
-      $document.unbind.should.have.been.calledWith('click');
-      $document.unbind.should.have.been.calledWith('touchstart');
-    });
-
-    it('should close tooltip when clicking outside', function() {
-      $scope.toggleTooltip();
-      $scope.$digest();
-      $timeout.flush();
-      innerElementStub.trigger.reset();
-
-      //click outside
-      $document.trigger('click');
-
-      $scope.$digest();
-      $timeout.flush();
-
-      innerElementStub.trigger.should.have.been.calledWith('hide');
-    });
-
-    it('should not close tooltip when clicking inside', function() {
-      $scope.toggleTooltip();
-      $scope.$digest();
-      $timeout.flush();
-      innerElementStub.trigger.reset();
-
-      //click inside tooltip
-      var event = new CustomEvent('click');
-      var target = angular.element('#preview-selector-tooltip');
-      target.trigger('click');
-
-      $scope.$digest();
-      innerElementStub.trigger.should.not.have.been.calledWith('hide');
-    });
+      outsideClickHandler.unbind.should.have.been.calledWith('preview-selector')
+    });    
 
   });
 
