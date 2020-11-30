@@ -22,7 +22,7 @@ describe('service: widgetUtils:', function() {
     expect(widgetUtils.getWidgetId).to.be.a('function');
     expect(widgetUtils.getProfessionalWidgets).to.be.a('function');
   });
-  
+
   it('isRenderingAllowed: ', function() {
     expect(widgetUtils.isRenderingAllowed(WIDGETS_INFO.WEB_PAGE.ids.PROD)).to.be.true;
     expect(widgetUtils.isRenderingAllowed(WIDGETS_INFO.VIDEO.ids.PROD)).to.be.false;
@@ -31,8 +31,8 @@ describe('service: widgetUtils:', function() {
 
   it('isWebpageWidget: ', function() {
     expect(widgetUtils.isWebpageWidget(WIDGETS_INFO.WEB_PAGE.ids.PROD)).to.be.true;
-    expect(widgetUtils.isWebpageWidget(WIDGETS_INFO.VIDEO.ids.PROD)).to.be.false;    
-    expect(widgetUtils.isWebpageWidget('1234')).to.be.false;    
+    expect(widgetUtils.isWebpageWidget(WIDGETS_INFO.VIDEO.ids.PROD)).to.be.false;
+    expect(widgetUtils.isWebpageWidget('1234')).to.be.false;
   });
 
   it('getInAppSettings: ', function() {
@@ -43,10 +43,10 @@ describe('service: widgetUtils:', function() {
     expect(widgetUtils.getInAppSettings(WIDGETS_INFO.IMAGE.ids.PROD)).to.be.null;
     expect(widgetUtils.getInAppSettings('1234')).to.be.null;
   });
-  
+
   it('getIconClass: ', function() {
     item.objectReference = WIDGETS_INFO.VIDEO.ids.PROD;
-    expect(widgetUtils.getIconClass(item)).to.equal('ph-item-icon ph-video-item');    
+    expect(widgetUtils.getIconClass(item)).to.equal('ph-item-icon ph-video-item');
     item.objectReference = WIDGETS_INFO.WEB_PAGE.ids.PROD;
     expect(widgetUtils.getIconClass(item)).to.equal('ph-item-icon');
     item.objectReference = '1234';
@@ -55,10 +55,10 @@ describe('service: widgetUtils:', function() {
     item.type = 'presentation';
     expect(widgetUtils.getIconClass(item)).to.equal('ph-item-icon ph-embedded-item');
   });
-  
+
   it('getSvgIcon: ', function() {
     item.objectReference = WIDGETS_INFO.VIDEO.ids.PROD;
-    expect(widgetUtils.getSvgIcon(item)).to.equal('riseWidgetVideo');    
+    expect(widgetUtils.getSvgIcon(item)).to.equal('riseWidgetVideo');
     item.objectReference = WIDGETS_INFO.WEB_PAGE.ids.PROD;
     expect(widgetUtils.getSvgIcon(item)).to.equal('riseWidgetMore');
     item.objectReference = '1234';
@@ -71,7 +71,7 @@ describe('service: widgetUtils:', function() {
   it('getWidgetId: ', function() {
     expect(widgetUtils.getWidgetId('video')).to.equal(WIDGETS_INFO.VIDEO.ids.TEST);
     expect(widgetUtils.getWidgetId('web_page')).to.equal(WIDGETS_INFO.WEB_PAGE.ids.TEST);
-    expect(widgetUtils.getWidgetId()).to.not.be.ok;    
+    expect(widgetUtils.getWidgetId()).to.not.be.ok;
     expect(widgetUtils.getWidgetId('1234')).to.not.be.ok;
   });
 
@@ -87,14 +87,14 @@ describe('service: widgetUtils:', function() {
   describe('getProfessionalWidgets: ', function() {
     it('should have expected properties', function() {
       var widgets = widgetUtils.getProfessionalWidgets();
-      
+
       widgets.forEach(function(widget) {
         expect(widget.name).to.be.a('string');
         expect(widget.imageUrl).to.be.a('string');
         expect(widget.imageAlt).to.be.a('string');
         expect(widget.gadgetType).to.be.a('string');
         expect(widget.id).to.be.a('string');
-      });      
+      });
     });
 
     it('should contain all Pro widgets', function() {
@@ -106,32 +106,6 @@ describe('service: widgetUtils:', function() {
       expect(widgets[1].name).to.contain('Embedded');
       expect(widgets[1].env).to.be.undefined;
     });
-  });
-
-  describe('rewriteS3Urls: ', function() {
-    it('should rewrite S3 urls', function() {
-      var urlHttp  = "http://s3.amazonaws.com/widget-image/0.1.1/dist/widget.html";
-      var urlHttps = "https://s3.amazonaws.com/widget-image/0.1.1/dist/widget.html";
-      var expected = "https://widgets.risevision.com/widget-image/0.1.1/dist/widget.html";
-
-      expect(widgetUtils.rewriteS3Urls(urlHttp)).to.be.equal(expected);
-      expect(widgetUtils.rewriteS3Urls(urlHttps)).to.be.equal(expected);
-    });
-
-    it('should rewrite url with parameters', function() {
-      var url      = "http://s3.amazonaws.com/widget-image/0.1.1/dist/widget.html?p1=v1&p2=v2";
-      var expected = "https://widgets.risevision.com/widget-image/0.1.1/dist/widget.html?p1=v1&p2=v2";
-
-      expect(widgetUtils.rewriteS3Urls(url)).to.be.equal(expected);
-    });
-
-    it('should rewrite 3rd party urls', function() {
-      var url      = "http://scottsdigitalsignage.com/widget/vimeo-widget/demo/index.html";
-      var expected = "https://widgets.risevision.com/widget-vimeo/demo/index.html";
-
-      expect(widgetUtils.rewriteS3Urls(url)).to.be.equal(expected);
-    });
-
   });
 
 });
