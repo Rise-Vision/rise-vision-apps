@@ -1,6 +1,8 @@
 'use strict';
 describe('service: display:', function() {
-  var CONNECTION_TIME = Date.now();
+  var CONNECTION_TIME_STRING = "2012-04-02T14:19:36.000Z";
+  var CONNECTION_TIME = new Date(CONNECTION_TIME_STRING);
+  var CONNECTION_TIME_MILLIS = CONNECTION_TIME.getTime();
   var screenshotRequesterMock;
 
   beforeEach(module('risevision.displays.services'));
@@ -57,7 +59,10 @@ describe('service: display:', function() {
                 def.resolve({
                   result : {
                     nextPageToken : 1,
-                    items : [{id: 'abc', companyId: 'comp1', lastActivityDate: new Date("2012-04-02T14:19:36.000Z") }]
+                    items : [
+                      {id: 'abc', companyId: 'comp1', onlineStatus: 'online', lastActivityDate: CONNECTION_TIME_STRING },
+                      {id: 'def', companyId: 'comp2', onlineStatus: 'offline', lastActivityDate: CONNECTION_TIME_STRING }
+                    ]
                   }
                 });
               } else {
@@ -83,8 +88,8 @@ describe('service: display:', function() {
                       "restartEnabled": true,
                       "restartTime": "02:45",
                       "connected": false,
-                      "onlineStatus": "online",
-                      "lastActivityDate": new Date("2012-04-02T14:19:36.000Z")
+                      "onlineStatus": obj.id === 'display1' ? "online" : "offline",
+                      "lastActivityDate": CONNECTION_TIME_STRING
                     }
                   }
                 });
@@ -284,9 +289,14 @@ describe('service: display:', function() {
       display.list({})
       .then(function(result){
         expect(result).to.be.ok;
-        expect(result.items).to.be.an.array;
         items = result.items;
-        expect(result.items).to.have.length.above(0);
+        expect(items).to.be.an.array;
+        expect(items.length).to.equal(2);
+        expect(items[0].onlineStatus).to.equal('online');
+        expect(items[0].lastActivityDate.getTime()).to.not.equal(CONNECTION_TIME_MILLIS);
+        expect(items[1].onlineStatus).to.equal('offline');
+        expect(items[1].lastActivityDate.getTime()).to.equal(CONNECTION_TIME_MILLIS);
+
         setTimeout(function() {
           broadcastSpy.should.have.been.calledWith('displaysLoaded', items);
 
@@ -354,18 +364,40 @@ describe('service: display:', function() {
 
   describe('get:',function(){
     var item;
-    it('should return a display',function(done){
+    it('should return an online display',function(done){
       var broadcastSpy = sinon.spy($rootScope,'$broadcast');
 
       display.get('display1')
       .then(function(result){
         expect(result).to.be.ok;
         item = result.item;
-        expect(result.item).to.be.ok;
-        expect(result.item).to.have.property("name");
+        expect(item).to.be.ok;
+        expect(item).to.have.property("name");
 
         expect(item.onlineStatus).to.equal('online');
-        expect(item.lastActivityDate.getTime()).to.not.equal(CONNECTION_TIME);
+        expect(item.lastActivityDate.getTime()).to.not.equal(CONNECTION_TIME_MILLIS);
+
+        broadcastSpy.should.have.been.calledWith('displaysLoaded', [item]);
+
+        displayActivationTracker.should.have.been.calledWith([item]);
+
+        done();
+      })
+      .then(null,done);
+    });
+
+    it('should return an offline display',function(done){
+      var broadcastSpy = sinon.spy($rootScope,'$broadcast');
+
+      display.get('display2')
+      .then(function(result){
+        expect(result).to.be.ok;
+        item = result.item;
+        expect(item).to.be.ok;
+        expect(item).to.have.property("name");
+
+        expect(item.onlineStatus).to.equal('offline');
+        expect(item.lastActivityDate.getTime()).to.equal(CONNECTION_TIME_MILLIS);
 
         broadcastSpy.should.have.been.calledWith('displaysLoaded', [item]);
 
@@ -607,7 +639,7 @@ describe('service: display:', function() {
         .then(null,done);
     });
   });
-  
+
   describe('sendSetupEmail', function() {
 	it('should send setup email', function(done) {
 	  display.sendSetupEmail('display1', 'email@company.com')
