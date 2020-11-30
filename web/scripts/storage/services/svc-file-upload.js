@@ -297,15 +297,22 @@ angular.module('risevision.storage.services')
           });
 
           svc.notifyBeforeUploadItem(item);
+
+          item.tusAbort = function() {
+            tusUpload.abort();
+            svc.notifyCancelItem(item);
+            svc.notifyCompleteItem(item);
+          };
+
           tusUpload.start();
         };
 
         svc.cancelItem = function (value) {
           var index = svc.getIndexOfItem(value);
           var item = svc.queue[index];
-          if (item && item.isUploading) {
-            item.xhr.abort();
-          }
+          if (!item || !item.isUploading) { return; }
+
+          return item.tusAbort ? item.tusAbort() : item.xhr.abort();
         };
 
         svc.retryItem = function (value) {
