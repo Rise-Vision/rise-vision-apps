@@ -41,16 +41,18 @@ angular.module('risevision.apps')
 
         .state('apps.billing.invoice', {
           url: '/billing/invoice/:invoiceId?:token',
-          templateUrl: 'partials/billing/invoice.html',
-          controller: 'InvoiceCtrl',
-          resolve: {
-            invoiceInfo: ['billingFactory', '$stateParams',
-              function (billingFactory, $stateParams) {
-                // pass $stateParams to service as values could be blank before state is loaded
-                billingFactory.getInvoice($stateParams.invoiceId, $stateParams.cid, $stateParams.token);
-              }
-            ]
-          }
+          template: '<invoice inv="InvoiceCtrl.inv"></invoice>',
+          controllerAs: 'InvoiceCtrl',
+          controller: ['billingFactory', '$stateParams',
+            function (billingFactory, $stateParams) {
+              var ctrl = this;
+              // pass $stateParams to service as values could be blank before state is loaded
+              billingFactory.getInvoice($stateParams.invoiceId, $stateParams.cid, $stateParams.token)
+                .then(function() {
+                  ctrl.inv = billingFactory.invoice;
+                });
+            }
+          ]
         });
     }
   ]);

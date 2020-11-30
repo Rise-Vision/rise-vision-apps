@@ -30,8 +30,6 @@
           // Do not apply during $state.trasition (handler will)
           if (selectedCompanyId && $location.search().cid !==
             selectedCompanyId && !$state.transition) {
-            $stateParams.cid = selectedCompanyId;
-            $state.params.cid = selectedCompanyId;
 
             $location.search('cid', selectedCompanyId);
           }

@@ -2,6 +2,7 @@
 
 angular.module('risevision.apps', [
     'ui.router',
+    'ui.router.state.events',
     'ngTouch',
     'ui.bootstrap',
     'ui.codemirror',
