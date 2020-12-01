@@ -82,7 +82,8 @@ describe("Services: purchase factory", function() {
       validatePaymentMethod: sinon.stub().returns(Q.resolve({})),
       paymentMethods: {
         newCreditCard: {}
-      }
+      },
+      getPaymentMethodId: sinon.stub().returns('paymentMethodId')
     });
 
     $provide.service("purchaseFlowTracker", function() {
@@ -580,7 +581,6 @@ describe("Services: purchase factory", function() {
 
     it("should call purchase with a JSON string", function() {
       creditCardFactory.paymentMethods.intentResponse = {intentId: "test"};
-      purchaseFactory.purchase.paymentMethodResponse = {paymentMethod: {id: "test"}};
       purchaseFactory.completePayment();
 
       storeService.purchase.should.have.been.called;
@@ -608,7 +608,7 @@ describe("Services: purchase factory", function() {
           intentId: "test",
           isDefault: true
         },
-        paymentMethodId: null
+        paymentMethodId: "paymentMethodId"
       }));
 
     });
