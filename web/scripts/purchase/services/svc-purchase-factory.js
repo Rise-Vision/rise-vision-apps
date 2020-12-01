@@ -234,8 +234,7 @@
             items: newItems,
             purchaseOrderNumber: paymentMethods.purchaseOrderNumber,
             card: cardData,
-            paymentMethodId: paymentMethods.paymentMethodResponse ?
-              paymentMethods.paymentMethodResponse.paymentMethod.id : null
+            paymentMethodId: creditCardFactory.getPaymentMethodId()
           };
 
           return JSON.stringify(obj);

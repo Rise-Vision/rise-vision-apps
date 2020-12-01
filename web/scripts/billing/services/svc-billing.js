@@ -131,6 +131,31 @@ angular.module('risevision.apps.billing.services')
             });
 
           return deferred.promise;
+        },
+        getCreditCards: function (search, cursor) {
+          var deferred = $q.defer();
+          var params = {
+            'companyId': userState.getSelectedCompanyId(),
+            'cursor': cursor,
+            'count': search.count
+          };
+
+          $log.debug('Store integrations.card.list called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.card.list(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.card.list resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to get company\'s cards.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
         }
       };
 

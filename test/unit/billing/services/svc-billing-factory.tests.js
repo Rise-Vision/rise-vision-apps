@@ -30,6 +30,8 @@ describe('service: billingFactory:', function() {
     $provide.service('creditCardFactory',function() {
       return {
         initPaymentMethods: sinon.stub(),
+        loadCreditCards: sinon.stub(),
+        getPaymentMethodId: sinon.stub().returns('paymentMethodId'),
         validatePaymentMethod: sinon.stub().returns(Q.resolve()),
         authenticate3ds: sinon.stub().returns(Q.resolve({item: 'invoice'})),
         paymentMethods: {}
@@ -69,10 +71,25 @@ describe('service: billingFactory:', function() {
 
   it('should exist',function() {
     expect(billingFactory).to.be.ok;
+
+    expect(billingFactory.init).to.be.a('function');
     expect(billingFactory.getToken).to.be.a('function');
     expect(billingFactory.getInvoice).to.be.a('function');
     expect(billingFactory.payInvoice).to.be.a('function');
     expect(billingFactory.downloadInvoice).to.be.a('function');
+  });
+
+  it('init:', function() {
+    billingFactory.loading = true;
+    billingFactory.apiError = 'error';
+
+    billingFactory.init();
+
+    expect(billingFactory.loading).to.be.false;
+    expect(billingFactory.apiError).to.not.be.ok;
+
+    creditCardFactory.initPaymentMethods.should.have.been.called;
+    creditCardFactory.loadCreditCards.should.have.been.called;
   });
 
   describe('getToken:', function() {
@@ -192,15 +209,11 @@ describe('service: billingFactory:', function() {
 
     describe('_preparePaymentIntent:', function() {
       it('should get payment intent', function(done) {
-        creditCardFactory.paymentMethods.paymentMethodResponse = {
-          paymentMethod: {
-            id: 'paymentMethodId'
-          }
-        };
-
         billingFactory.payInvoice();
 
         setTimeout(function() {
+          creditCardFactory.getPaymentMethodId.should.have.been.called;
+
           storeService.preparePayment.should.have.been.calledWith('paymentMethodId', 'invoiceId', 'testId1', 'uthKey');
           expect(creditCardFactory.paymentMethods.intentResponse).to.deep.equal({item: 'intentResponse'});
 

@@ -78,6 +78,21 @@ describe('service: billing:', function() {
                   return Q.reject('API Failed');
                 }
               })
+            },
+            card: {
+              list: sinon.spy(function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: {
+                      nextPageToken: 1,
+                      items: [{ card: 'card1' }]
+                    }
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              })
             }  
           }
         });
@@ -98,6 +113,7 @@ describe('service: billing:', function() {
     expect(billing.getUnpaidInvoices).to.be.a.function;
     expect(billing.getInvoice).to.be.a.function;
     expect(billing.getInvoicePdf).to.be.a.function;
+    expect(billing.getCreditCards).to.be.a.function;
   });
 
   describe('getSubscriptions:', function() {
@@ -251,6 +267,42 @@ describe('service: billing:', function() {
       billing.getInvoicePdf('invoiceId')
       .then(function(result) {
         done(result);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+
+  describe('getCreditCards:', function() {
+    it('should return a list of credit cards', function(done) {
+      failedResponse = false;
+
+      billing.getCreditCards({
+        count: 'count'
+      }, 'cursor')
+      .then(function(result) {
+        storeApi.integrations.card.list.should.have.been.called;
+        storeApi.integrations.card.list.should.have.been.calledWith({
+          companyId: 'testId1',
+          count: 'count',
+          cursor: 'cursor'
+        });
+
+        expect(result).to.be.ok;
+        expect(result.items).to.be.ok;
+        expect(result.items.length).to.equal(1);
+        done();
+      });
+    });
+
+    it('should handle failure to get list correctly', function(done) {
+      failedResponse = true;
+
+      billing.getCreditCards({})
+      .then(function(invoices) {
+        done(invoices);
       })
       .then(null, function(error) {
         expect(error).to.deep.equal('API Failed');
