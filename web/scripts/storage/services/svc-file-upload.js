@@ -108,14 +108,20 @@ angular.module('risevision.storage.services')
       }
     };
   }])
+  .factory('TUSFactory', [function () {
+    return {
+      get: function (domFileItem, options) {
+        return new tus.Upload(domFileItem, options);
+      }
+    };
+  }])
   .factory('FileUploader', ['fileUploaderFactory',
     function (fileUploaderFactory) {
       return fileUploaderFactory();
     }
   ])
-  .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'encoding', 'ExifStripper', '$timeout',
-    'JPGCompressor',
-    function ($rootScope, $q, XHRFactory, encoding, ExifStripper, $timeout, JPGCompressor) {
+  .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'encoding', 'ExifStripper', '$timeout', 'TUSFactory', 'JPGCompressor',
+    function ($rootScope, $q, XHRFactory, encoding, ExifStripper, $timeout, TUSFactory, JPGCompressor) {
       return function () {
         var svc = {};
         var loadBatchTimer = null;
@@ -252,7 +258,7 @@ angular.module('risevision.storage.services')
         };
 
         svc.tusUpload = function (item) {
-          var tusUpload = new tus.Upload(item.domFileItem, {
+          var tusUpload = TUSFactory.get(item.domFileItem, {
             endpoint: [item.url, item.taskToken].join('/'),
             retryDelays: [0, 2000, 6000, 9000],
             removeFingerprintOnSuccess: true,

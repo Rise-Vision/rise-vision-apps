@@ -36,12 +36,23 @@ describe('Services: uploader', function() {
       };
     });
 
+    $provide.service('TUSFactory', function() {
+      return {
+        get: function() {
+          return TUSUploader = {
+            start: sinon.stub(),
+            abort: sinon.stub()
+          };
+        }
+      };
+    });
+
     $provide.service('ExifStripper', function() {
       return ExifStripper = { strip: function() {} };
     })
   }));
 
-  var uploader, lastAddedFileItem, $timeout, XHRFactory, ExifStripper, JPGCompressor;
+  var uploader, lastAddedFileItem, $timeout, XHRFactory, ExifStripper, TUSUploader, JPGCompressor;
 
   beforeEach(function() {
     inject(function($injector) {
@@ -312,6 +323,30 @@ describe('Services: uploader', function() {
           uploader.notifyErrorItem.should.have.been.called;
           uploader.notifyCompleteItem.should.have.been.called;
         });
+      });
+
+    });
+
+    describe('tus upload: ', function() {
+      var fileItem;
+
+      beforeEach(function() {
+        uploader.notifySuccessItem = sinon.spy();
+        uploader.notifyCompleteItem = sinon.spy();
+
+        fileItem = { taskToken: "abc", file: { name: 'test1.mp4', size: 200}, domFileItem: { slice: function() {} } };
+        uploader.addToQueue([ fileItem ]);
+      });
+
+      it('should start', function() {
+        uploader.uploadItem(lastAddedFileItem);
+        TUSUploader.start.should.have.been.called;
+      });
+
+      it('should abort', function() {
+        uploader.uploadItem(lastAddedFileItem);
+        uploader.cancelItem(lastAddedFileItem);
+        TUSUploader.abort.should.have.been.called;
       });
 
     });
