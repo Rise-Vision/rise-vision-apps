@@ -148,7 +148,7 @@
         factory.getPaymentMethodId = function () {
           if (factory.paymentMethods.paymentMethodResponse) {
             return factory.paymentMethods.paymentMethodResponse.paymentMethod.id;
-          } else if (factory.paymentMethods.selectedCard.payment_source) {
+          } else if (factory.paymentMethods.selectedCard && factory.paymentMethods.selectedCard.payment_source) {
             return factory.paymentMethods.selectedCard.payment_source.reference_id;
           } else {
             return null;
