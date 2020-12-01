@@ -108,14 +108,20 @@ angular.module('risevision.storage.services')
       }
     };
   }])
+  .factory('TUSFactory', [function () {
+    return {
+      get: function (domFileItem, options) {
+        return new tus.Upload(domFileItem, options);
+      }
+    };
+  }])
   .factory('FileUploader', ['fileUploaderFactory',
     function (fileUploaderFactory) {
       return fileUploaderFactory();
     }
   ])
-  .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'encoding', 'ExifStripper', '$timeout',
-    'JPGCompressor',
-    function ($rootScope, $q, XHRFactory, encoding, ExifStripper, $timeout, JPGCompressor) {
+  .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'encoding', 'ExifStripper', '$timeout', 'TUSFactory', 'JPGCompressor',
+    function ($rootScope, $q, XHRFactory, encoding, ExifStripper, $timeout, TUSFactory, JPGCompressor) {
       return function () {
         var svc = {};
         var loadBatchTimer = null;
@@ -252,7 +258,7 @@ angular.module('risevision.storage.services')
         };
 
         svc.tusUpload = function (item) {
-          var tusUpload = new tus.Upload(item.domFileItem, {
+          var tusUpload = TUSFactory.get(item.domFileItem, {
             endpoint: [item.url, item.taskToken].join('/'),
             retryDelays: [0, 2000, 6000, 9000],
             removeFingerprintOnSuccess: true,
@@ -297,15 +303,22 @@ angular.module('risevision.storage.services')
           });
 
           svc.notifyBeforeUploadItem(item);
+
+          item.tusAbort = function() {
+            tusUpload.abort();
+            svc.notifyCancelItem(item);
+            svc.notifyCompleteItem(item);
+          };
+
           tusUpload.start();
         };
 
         svc.cancelItem = function (value) {
           var index = svc.getIndexOfItem(value);
           var item = svc.queue[index];
-          if (item && item.isUploading) {
-            item.xhr.abort();
-          }
+          if (!item || !item.isUploading) { return; }
+
+          return item.tusAbort ? item.tusAbort() : item.xhr.abort();
         };
 
         svc.retryItem = function (value) {
