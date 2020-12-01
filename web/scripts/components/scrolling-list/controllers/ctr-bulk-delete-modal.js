@@ -16,6 +16,15 @@ angular.module('risevision.common.components.scrolling-list')
         }
       });
 
+      $scope.inputKeyDown = function (keyEvent) {
+        // handle enter key
+        if (keyEvent.which === 13) {
+          $scope.delete();
+
+          keyEvent.preventDefault();
+        }
+      };
+
       $scope.delete = function () {
         if ($scope.inputText === $scope.expectedText) {
           $modalInstance.close();
