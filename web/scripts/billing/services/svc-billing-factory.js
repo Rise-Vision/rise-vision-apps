@@ -19,6 +19,7 @@ angular.module('risevision.apps.billing.services')
         _clearMessages();
 
         creditCardFactory.initPaymentMethods();
+        creditCardFactory.loadCreditCards();
       };
 
       var _getCompanyId = function() {
@@ -59,8 +60,7 @@ angular.module('risevision.apps.billing.services')
       };
 
       var _preparePaymentIntent = function () {
-        var paymentMethodId = creditCardFactory.paymentMethods.paymentMethodResponse ?
-          creditCardFactory.paymentMethods.paymentMethodResponse.paymentMethod.id : null;
+        var paymentMethodId = creditCardFactory.getPaymentMethodId();
 
         return storeService.preparePayment(paymentMethodId, factory.invoice.id, 
           _getCompanyId(), factory.getToken())

@@ -1,5 +1,5 @@
 <div id="credit-card-form">
-  <!-- Alpha Release - Select New Card by default -->
+  <!-- SELECTOR - Hidden -->
   <div class="row" ng-if="false">
     <div class="col-md-12">
       <div class="form-group">
@@ -13,7 +13,7 @@
 
   <!-- NEW CREDIT CARD -->
   <div id="new-credit-card-form" ng-show="factory.paymentMethods.selectedCard.isNew">
-    <div class="row">
+    <div class="row" ng-if="factory.paymentMethods.selectedCard.isNew">
       <div class="col-md-12">
         <div class="form-group" ng-class="{ 'has-error': (formObject.cardholderName.$dirty || formObject.$submitted) && formObject.cardholderName.$invalid }">
           <label for="new-card-name" class="control-label">Cardholder Name: *</label>
@@ -80,39 +80,19 @@
 
   <!-- EXISTING CREDIT CARD -->
   <div id="existing-credit-card-form" ng-if="!factory.paymentMethods.selectedCard.isNew">
-    <div id="errorBox" class="alert alert-danger" role="alert" ng-show="factory.paymentMethods.selectedCard.validationErrors.length">
-      <strong>Card Validation Error</strong> {{factory.paymentMethods.selectedCard.validationErrors[0]}}
-    </div>
-
     <div class="row">
       <div class="col-md-12">
-        <div class="form-group">
-          <label for="existing-card-name" class="control-label">Cardholder Name</label>
-          <input id="existing-card-name" type="text" class="form-control" placeholder="{{factory.paymentMethods.selectedCard.name}}" disabled="disabled">
+        <label>Choose Payment Method:</label><br>
+        <div class="madero-radio" ng-repeat="card in factory.paymentMethods.existingCreditCards">
+          <input type="radio" ng-model="factory.paymentMethods.selectedCard" ng-value="card" name="{{card.payment_source.id}}" id="{{card.payment_source.id}}" tabindex="1">
+          <label for="{{card.payment_source.id}}" class="font-weight-normal">
+            <span class="u_capitalize">{{card.payment_source.card.brand}}</span>, ending in {{card.payment_source.card.last4}}.
+          </label>
         </div>
+        <div class="mt-4">
+          <a class="madero-link u_clickable" ng-click="factory.selectNewCreditCard()">Use A Different Payment Method</a>
+        <div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="form-group">
-          <label for="existing-card-number" class="control-label">Card Number</label>
-          <input id="existing-card-number" type="text" class="form-control" placeholder="{{factory.paymentMethods.selectedCard.last4 | cardLastFour}}" disabled="disabled" />
-        </div>
-      </div>
-    </div>
-    <div class="row form-group">
-      <div class="col-md-4">
-        <div class="form-group">
-          <label for="existing-card-expiry-month" class="control-label">Expiry Month</label>
-          <input id="existing-card-expiry-month" type="text" class="form-control masked"  placeholder="{{factory.paymentMethods.selectedCard.expMonth | paddedMonth}}" disabled="disabled" />
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          <label for="existing-card-expiry-year" class="control-label">Expiry Year</label>
-          <input id="existing-card-expiry-year" type="text" class="form-control masked"  placeholder="{{factory.paymentMethods.selectedCard.expYear}}" disabled="disabled"/>
-        </div>
-      </div>          
     </div>
   </div>
   <!-- END EXISTING CC -->

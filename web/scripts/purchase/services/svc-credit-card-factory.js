@@ -6,8 +6,8 @@
 
   angular.module('risevision.apps.purchase')
     .factory('creditCardFactory', ['$rootScope', '$q', 'stripeService', 'userState',
-      'addressService',
-      function ($rootScope, $q, stripeService, userState, addressService) {
+      'userAuthFactory', 'billing', 'addressService',
+      function ($rootScope, $q, stripeService, userState, userAuthFactory, billing, addressService) {
         var factory = {
           stripeElements: {}
         };
@@ -69,6 +69,10 @@
             });  
         };
 
+        factory.selectNewCreditCard = function() {
+          factory.paymentMethods.selectedCard = factory.paymentMethods.newCreditCard;
+        };
+
         factory.initPaymentMethods = function() {
           factory.paymentMethods = {
             existingCreditCards: [],
@@ -80,8 +84,26 @@
             }
           };
 
-          // Alpha Release - Select New Card by default
-          factory.paymentMethods.selectedCard = factory.paymentMethods.newCreditCard;
+          // Select New Card by default
+          factory.selectNewCreditCard();
+        };
+
+        factory.loadCreditCards = function() {
+          userAuthFactory.authenticate()
+            .then(function () {
+              if (userState.isRiseVisionUser()) {
+                billing.getCreditCards({
+                  count: 40
+                })
+                .then(function(result) {
+                  factory.paymentMethods.existingCreditCards = result.items;
+                  
+                  if (result.items[0]) {
+                    factory.paymentMethods.selectedCard = result.items[0];
+                  }
+                });
+              }
+            });
         };
 
         factory.validatePaymentMethod = function () {
@@ -120,6 +142,16 @@
                   return $q.resolve();
                 }
               });
+          }
+        };
+
+        factory.getPaymentMethodId = function () {
+          if (factory.paymentMethods.paymentMethodResponse) {
+            return factory.paymentMethods.paymentMethodResponse.paymentMethod.id;
+          } else if (factory.paymentMethods.selectedCard.payment_source) {
+            return factory.paymentMethods.selectedCard.payment_source.reference_id;
+          } else {
+            return null;
           }
         };
 
