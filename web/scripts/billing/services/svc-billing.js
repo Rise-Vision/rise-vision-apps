@@ -1,8 +1,12 @@
 'use strict';
 
 angular.module('risevision.apps.billing.services')
-  .service('billing', ['$q', '$log', 'storeAPILoader', 'userState',
-    function ($q, $log, storeAPILoader, userState) {
+  .constant('INVOICE_WRITABLE_FIELDS', [
+    'poNumber'
+  ])
+  .service('billing', ['$q', '$log', 'pick', 'storeAPILoader', 'userState',
+    'INVOICE_WRITABLE_FIELDS',
+    function ($q, $log, pick, storeAPILoader, userState, INVOICE_WRITABLE_FIELDS) {
       var service = {
         getSubscriptions: function (search, cursor) {
           var deferred = $q.defer();
@@ -102,6 +106,34 @@ angular.module('risevision.apps.billing.services')
             })
             .then(null, function (e) {
               console.error('Failed to get invoice.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+        updateInvoice: function (invoice, companyId, token) {
+          var deferred = $q.defer();
+
+          var fields = pick.apply(this, [invoice].concat(INVOICE_WRITABLE_FIELDS));
+          var params = {
+            'companyId': companyId,
+            'invoiceId': invoice.id,
+            'token': token,
+            'data': fields
+          };
+
+          $log.debug('Store integrations.invoice.put called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.invoice.put(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.invoice.put resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to update invoice.', e);
               deferred.reject(e);
             });
 

@@ -22,5 +22,19 @@ angular.module('risevision.apps.billing.controllers')
         billingFactory.payInvoice();
       };
 
+      $scope.updatePoNumber = function () {
+        billingFactory.invoice.poNumber = billingFactory.invoice.poNumber || '';
+
+        billingFactory.updatePoNumber()
+          .then(function() {
+            $scope.clearPoNumber();
+          });
+      };
+
+      $scope.clearPoNumber = function () {
+        billingFactory.invoice.poNumber = null;
+        $scope.editPoNumber = false;
+      };
+
     }
   ]);

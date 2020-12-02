@@ -59,6 +59,23 @@ angular.module('risevision.apps.billing.services')
           });
       };
 
+      factory.updatePoNumber = function () {
+        _clearMessages();
+
+        factory.loading = true;
+
+        return billing.updateInvoice(factory.invoice, _getCompanyId(), factory.getToken())
+          .then(function (resp) {
+            factory.invoice = resp.item;
+          })
+          .catch(function(e) {
+            _showErrorMessage(e);
+          })
+          .finally(function() {
+            factory.loading = false;
+          });
+      };
+
       var _preparePaymentIntent = function () {
         var paymentMethodId = creditCardFactory.getPaymentMethodId();
 
