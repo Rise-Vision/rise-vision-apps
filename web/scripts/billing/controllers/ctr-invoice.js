@@ -25,14 +25,13 @@ angular.module('risevision.apps.billing.controllers')
       $scope.updatePoNumber = function () {
         billingFactory.invoice.poNumber = billingFactory.invoice.poNumber || '';
 
-        billingFactory.updatePoNumber()
+        billingFactory.updateInvoice()
           .then(function() {
-            $scope.clearPoNumber();
+            $scope.hideEditForm();
           });
       };
 
-      $scope.clearPoNumber = function () {
-        billingFactory.invoice.poNumber = null;
+      $scope.hideEditForm = function () {
         $scope.editPoNumber = false;
       };
 

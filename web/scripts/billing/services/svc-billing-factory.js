@@ -59,7 +59,7 @@ angular.module('risevision.apps.billing.services')
           });
       };
 
-      factory.updatePoNumber = function () {
+      factory.updateInvoice = function () {
         _clearMessages();
 
         factory.loading = true;
