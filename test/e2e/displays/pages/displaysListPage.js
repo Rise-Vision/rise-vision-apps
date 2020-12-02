@@ -23,6 +23,9 @@ var DisplaysListPage = function() {
   var displayItems = element.all(by.repeater('display in displays.items.list'));
   var displaysLoader = element(by.xpath('//div[@spinner-key="displays-list-loader"]'));
   var bulkActionsDropdown = element(by.id('listActionsButton'));
+  var deleteDisplayBulkAction = element.all(by.css('.multi-actions-panel .btn-dropdown')).last();
+  var deleteDisplayConfirmButton = element(by.id('confirm-primary'));
+  var deleteDisplayFailsafeField = element(by.css('#confirmForm .modal-body input'));
   var restartPlayerBulkAction = element.all(by.css('.multi-actions-panel .btn-dropdown')).first();
   var restartPlayerConfirmButton = element(by.id('confirm-primary'));
   var bulkActionsProgressBar = element(by.css('.multi-actions-progress-panel'));
@@ -132,6 +135,18 @@ var DisplaysListPage = function() {
   this.getBulkActionsDropdown = function() {
     return bulkActionsDropdown;
   };
+
+  this.getDeleteDisplayBulkAction = function() {
+    return deleteDisplayBulkAction;
+  };
+
+  this.getDeleteDisplayConfirmButton = function() {
+    return deleteDisplayConfirmButton;
+  }
+
+  this.getDeleteDisplayFailsafeField = function() {
+    return deleteDisplayFailsafeField;
+  }
 
   this.getRestartPlayerBulkAction = function() {
     return restartPlayerBulkAction;
