@@ -68,6 +68,16 @@ describe('service: billing:', function() {
                   return Q.reject('API Failed');
                 }
               }),
+              put: sinon.spy(function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: 'invoice'
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              }),
               getPdf: sinon.spy(function() {
                 if (!failedResponse) {
                   return Q.resolve({
@@ -112,6 +122,7 @@ describe('service: billing:', function() {
     expect(billing.getInvoices).to.be.a.function;
     expect(billing.getUnpaidInvoices).to.be.a.function;
     expect(billing.getInvoice).to.be.a.function;
+    expect(billing.updateInvoice).to.be.a.function;
     expect(billing.getInvoicePdf).to.be.a.function;
     expect(billing.getCreditCards).to.be.a.function;
   });
@@ -232,6 +243,45 @@ describe('service: billing:', function() {
       failedResponse = true;
 
       billing.getInvoice('invoiceId')
+      .then(function(invoices) {
+        done(invoices);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+  
+  describe('updateInvoice:', function() {
+    it('should update the invoice return the response', function(done) {
+      failedResponse = false;
+
+      billing.updateInvoice({
+        id: 'invoiceId',
+        poNumber: 'poNumber',
+        invalidField: 'invalidValue'
+      }, 'companyId', 'token')
+      .then(function(result) {
+        storeApi.integrations.invoice.put.should.have.been.calledWith({
+          invoiceId: 'invoiceId',
+          companyId: 'companyId',
+          token: 'token',
+          data: {
+            poNumber: 'poNumber'
+          }
+        });
+
+        expect(result).to.be.ok;
+        expect(result).to.equal('invoice');
+        done();
+      });
+    });
+
+    it('should handle failure to update invoice correctly', function(done) {
+      failedResponse = true;
+
+      billing.updateInvoice('invoiceId')
       .then(function(invoices) {
         done(invoices);
       })

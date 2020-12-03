@@ -18,6 +18,7 @@ describe('service: billingFactory:', function() {
     $provide.service('billing',function() {
       return {
         getInvoice: sinon.stub().returns(Q.resolve({item: 'invoice'})),
+        updateInvoice: sinon.stub().returns(Q.resolve({item: 'invoice'})),
         getInvoicePdf: sinon.stub().returns(Q.resolve({result: 'invoicePdf'}))
       };
     });
@@ -75,6 +76,7 @@ describe('service: billingFactory:', function() {
     expect(billingFactory.init).to.be.a('function');
     expect(billingFactory.getToken).to.be.a('function');
     expect(billingFactory.getInvoice).to.be.a('function');
+    expect(billingFactory.updateInvoice).to.be.a('function');
     expect(billingFactory.payInvoice).to.be.a('function');
     expect(billingFactory.downloadInvoice).to.be.a('function');
   });
@@ -153,6 +155,48 @@ describe('service: billingFactory:', function() {
       setTimeout(function() {
         expect(billingFactory.loading).to.be.false;
         expect(billingFactory.invoice).to.not.be.ok;
+
+        expect(billingFactory.apiError).to.equal('processed error');
+
+        done();
+      });
+    });
+  });
+
+  describe('updateInvoice:', function() {
+    it('should update invoice, show spinner and reset errors', function() {
+      billingFactory.apiError = 'someError';
+      billingFactory.invoice = 'someInvoice';
+
+      billingFactory.updateInvoice();
+
+      billing.updateInvoice.should.have.been.calledWith('someInvoice', 'testId1', 'uthKey');
+
+      expect(billingFactory.apiError).to.not.be.ok;
+      expect(billingFactory.loading).to.be.true;
+    });
+
+    it('should update invoice', function(done) {
+      billingFactory.updateInvoice();
+
+      setTimeout(function() {
+        expect(billingFactory.loading).to.be.false;
+
+        expect(billingFactory.invoice).to.equal('invoice');
+
+        done();
+      }, 10);
+    });
+
+    it('should handle failure to update invoice correctly', function(done) {
+      billing.updateInvoice.returns(Q.reject('error'));
+      billingFactory.invoice = 'someInvoice';
+
+      billingFactory.updateInvoice();
+
+      setTimeout(function() {
+        expect(billingFactory.loading).to.be.false;
+        expect(billingFactory.invoice).to.equal('someInvoice');
 
         expect(billingFactory.apiError).to.equal('processed error');
 
