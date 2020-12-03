@@ -87,6 +87,8 @@ describe('directive: page title', function() {
 
     checkState('apps.billing', 'Billing');
     checkState('apps.billing.home', 'Billing');
+    checkState('apps.billing.unpaid', 'Unpaid Invoices');
+    checkState('apps.billing.invoice', 'Invoice');
 
     checkState('apps.schedules', 'Schedules');
     checkState('apps.schedules.list', 'Schedules');
