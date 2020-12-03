@@ -9,18 +9,18 @@
     "test"
   ],
   "dependencies": {
-    "angular": "~1.7.0",
-    "angular-animate": "~1.7.0",
+    "angular": "~1.8.0",
+    "angular-animate": "~1.8.0",
     "angular-bootstrap": "0.13.1",
     "angular-bootstrap-colorpicker": "~3.0.19",
-    "angular-cookies": "~1.7.0",
+    "angular-cookies": "~1.8.0",
     "angular-local-storage": "^0.7.1",
     "angular-md5": "^0.1.10",
-    "angular-messages": "^1.7.8",
-    "angular-sanitize": "~1.7.0",
+    "angular-messages": "^1.8.0",
+    "angular-sanitize": "~1.8.0",
     "angular-slugify": "^1.0.1",
     "angular-spinner": "~1.0.1",
-    "angular-touch": "~1.7.0",
+    "angular-touch": "~1.8.0",
     "angular-translate": "~2.18.1",
     "angular-translate-loader-static-files": "~2.18.1",
     "angular-truncate": "*",
@@ -43,7 +43,7 @@
     "angularjs-slider": "^7.0.0"
   },
   "devDependencies": {
-    "angular-mocks": "~1.7.0",
+    "angular-mocks": "~1.8.0",
     "bootstrap-sass-official": "~3.2.0",
     "q": "1.0.1",
     "seiyria-bootstrap-slider": "~3.1.0",
@@ -57,6 +57,6 @@
   "description": "RiseVision App Launcher",
   "license": "GNU",
   "resolutions": {
-    "angular": "~1.7.0"
+    "angular": "~1.8.0"
   }
 }
