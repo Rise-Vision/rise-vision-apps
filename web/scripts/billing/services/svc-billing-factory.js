@@ -4,9 +4,9 @@
 
 angular.module('risevision.apps.billing.services')
   .service('billingFactory', ['$q', '$log', '$window', '$stateParams', 'billing',
-    'storeService', 'creditCardFactory', 'userState', 'processErrorCode',
+    'storeService', 'creditCardFactory', 'userState', 'processErrorCode', 'analyticsFactory',
     function ($q, $log, $window, $stateParams, billing, storeService, creditCardFactory,
-      userState, processErrorCode) {
+      userState, processErrorCode, analyticsFactory) {
       var factory = {};
 
       var _clearMessages = function () {
@@ -127,6 +127,14 @@ angular.module('risevision.apps.billing.services')
       };
 
       factory.payInvoice = function () {
+        analyticsFactory.track('Invoice Pay Now Clicked', {
+          invoiceId: factory.invoice.id,
+          currency: factory.invoice.currency_code,
+          amount: factory.invoice.amount_due / 100,
+          userId: userState.getUsername(),
+          companyId: factory.invoice.customer_id
+        });
+
         _clearMessages();
 
         factory.loading = true;

@@ -1,6 +1,6 @@
 'use strict';
 describe('service: billingFactory:', function() {
-  var billingFactory, $window, $stateParams, userState, billing, storeService, creditCardFactory;
+  var billingFactory, $window, $stateParams, userState, billing, storeService, creditCardFactory, analyticsFactory;
 
   beforeEach(module('risevision.apps.billing.services'));
   beforeEach(module(function ($provide) {
@@ -10,6 +10,7 @@ describe('service: billingFactory:', function() {
         getSelectedCompanyId : function() {
           return 'testId1';
         },
+        getUsername: sinon.stub().returns('user@test.com'),
         getCopyOfSelectedCompany: sinon.stub().returns({
           authKey: 'longAuthKey'
         })
@@ -51,6 +52,11 @@ describe('service: billingFactory:', function() {
         location: {}
       };
     });
+    $provide.service('analyticsFactory',function() {
+      return {
+        track: sinon.stub()
+      };
+    });
 
   }));
 
@@ -63,9 +69,13 @@ describe('service: billingFactory:', function() {
       storeService = $injector.get('storeService');
       creditCardFactory = $injector.get('creditCardFactory');
       billingFactory = $injector.get('billingFactory');
+      analyticsFactory = $injector.get('analyticsFactory');
 
       billingFactory.invoice = {
-        id: 'invoiceId'
+        id: 'invoiceId',
+        currency_code: 'CAD',
+        amount_due: 1100,
+        customer_id: 'companyId'
       }
     });
   });
@@ -219,6 +229,14 @@ describe('service: billingFactory:', function() {
       billingFactory.payInvoice();
 
       creditCardFactory.validatePaymentMethod.should.have.been.called;
+
+      analyticsFactory.track.should.have.been.calledWith('Invoice Pay Now Clicked', {
+        invoiceId: 'invoiceId',
+        currency: 'CAD',
+        amount: 11,
+        userId: 'user@test.com',
+        companyId: 'companyId'
+      });
 
       setTimeout(function() {
         storeService.preparePayment.should.have.been.called;
