@@ -5,6 +5,7 @@
   var DisplayListScenarios = require('./displays/cases/displaylist.js');
   var DisplayAddScenarios = require('./displays/cases/displayadd.js');
   var DisplayManageScenarios = require('./displays/cases/displaymanage.js');
+  var DisplayBulkDeleteScenarios = require('./displays/cases/displaybulkdelete.js');
 
   var ScheduleListScenarios = require('./schedules/cases/schedulelist.js');
   var AddDistributionScenarios = require('./schedules/cases/add-distribution.js');
@@ -33,6 +34,7 @@
     var displayAddScenarios = new DisplayAddScenarios();
     var displayListScenarios = new DisplayListScenarios();
     var displayManageScenarios = new DisplayManageScenarios();
+    var displayBulkDeleteScenarios = new DisplayBulkDeleteScenarios();
   });
 
   describe('Schedules', function () {

@@ -1,9 +1,16 @@
 'use strict';
+
+var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
+var helper = require('rv-common-e2e').helper;
+var expect = require('rv-common-e2e').expect;
+
 var DisplayManagePage = function() {
+  var commonHeaderPage = new CommonHeaderPage();
+
   var displaysAppContainer = element(by.css('.displays-app'));
   var title = element(by.id('title'));
 
-  var displayNameField = element(by.css('display-fields stretchy-input input'));  
+  var displayNameField = element(by.css('display-fields stretchy-input input'));
   var displayNameEditButton = element(by.css('display-fields stretchy-input #editButton'));
 
   var displayInstructionsPanel = element(by.css('.display-instructions-panel'));
@@ -16,8 +23,8 @@ var DisplayManagePage = function() {
   var displayRebootCheckbox = element(by.id('restartEnabled'));
   var viewScheduleLink = element(by.id('viewSchedule'));
 
-  var displayCountrySelect = element(by.model('display.country'));  
-  var displayTimeZoneSelect = element(by.model('display.timeZoneOffset'));  
+  var displayCountrySelect = element(by.model('display.country'));
+  var displayTimeZoneSelect = element(by.model('display.timeZoneOffset'));
 
   var saveButton = element(by.id('saveButton'));
   var cancelButton = element(by.id('cancelButton'));
@@ -26,6 +33,23 @@ var DisplayManagePage = function() {
   var deleteForeverButton = element(by.id('confirm-primary'));
 
   var displayLoader = element(by.xpath('//div[@spinner-key="display-loader"]'));
+
+  this.addTestDisplay = function() {
+    var displayName = 'TEST_E2E_DISPLAY ' + commonHeaderPage.getStageEnv();
+
+    helper.waitDisappear(this.getDisplayLoader(), 'Display loader');
+    expect(this.getDisplayNameField().isPresent()).to.eventually.be.true;
+
+    helper.clickWhenClickable(this.getDisplayNameEditButton(), 'Display Name Edit Button');
+    expect(this.getDisplayNameField().isEnabled()).to.eventually.be.true;
+
+    this.getDisplayNameField().sendKeys(displayName + protractor.Key.ENTER);
+    expect(this.getDisplayNameField().isEnabled()).to.eventually.be.false;
+
+    this.getSaveButton().click();
+
+    helper.waitDisappear(this.getDisplayLoader(), 'Display loader');
+  }
 
   this.getDisplaysAppContainer = function() {
     return displaysAppContainer;
