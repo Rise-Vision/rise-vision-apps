@@ -102,9 +102,19 @@ angular.module('risevision.apps.billing.services')
         return storeService.collectPayment(paymentIntentId, factory.invoice.id, 
           _getCompanyId(), factory.getToken())
           .then(function () {
+            var originalAmountDue = factory.invoice.amount_due;
+
             factory.invoice.status = 'paid';
             factory.invoice.amount_paid = factory.invoice.total;
             factory.invoice.amount_due = 0;
+
+            analyticsFactory.track('Invoice Paid', {
+              invoiceId: factory.invoice.id,
+              currency: factory.invoice.currency_code,
+              amount: originalAmountDue / 100,
+              userId: userState.getUsername(),
+              companyId: factory.invoice.customer_id
+            });
 
           //   factory.purchase.reloadingCompany = true;
           // 
@@ -127,14 +137,6 @@ angular.module('risevision.apps.billing.services')
       };
 
       factory.payInvoice = function () {
-        analyticsFactory.track('Invoice Pay Now Clicked', {
-          invoiceId: factory.invoice.id,
-          currency: factory.invoice.currency_code,
-          amount: factory.invoice.amount_due / 100,
-          userId: userState.getUsername(),
-          companyId: factory.invoice.customer_id
-        });
-
         _clearMessages();
 
         factory.loading = true;

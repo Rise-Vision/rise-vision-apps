@@ -230,14 +230,6 @@ describe('service: billingFactory:', function() {
 
       creditCardFactory.validatePaymentMethod.should.have.been.called;
 
-      analyticsFactory.track.should.have.been.calledWith('Invoice Pay Now Clicked', {
-        invoiceId: 'invoiceId',
-        currency: 'CAD',
-        amount: 11,
-        userId: 'user@test.com',
-        companyId: 'companyId'
-      });
-
       setTimeout(function() {
         storeService.preparePayment.should.have.been.called;
         storeService.collectPayment.should.have.been.called;
@@ -245,6 +237,14 @@ describe('service: billingFactory:', function() {
         expect(billingFactory.loading).to.be.false;
 
         expect(billingFactory.invoice.status).to.equal('paid');
+
+        analyticsFactory.track.should.have.been.calledWith('Invoice Paid', {
+          invoiceId: 'invoiceId',
+          currency: 'CAD',
+          amount: 11,
+          userId: 'user@test.com',
+          companyId: 'companyId'
+        });
 
         done();
       }, 10);
@@ -263,6 +263,8 @@ describe('service: billingFactory:', function() {
           expect(billingFactory.apiError).to.equal('processed error');
 
           expect(billingFactory.invoice.status).to.not.be.ok;
+
+          analyticsFactory.track.should.not.have.been.called;
 
           done();
         }, 10);
