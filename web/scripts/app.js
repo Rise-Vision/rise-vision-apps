@@ -143,12 +143,15 @@ angular.module('risevision.apps', [
       $sessionStorageProvider.setKeyPrefix('RiseVision-');
     }
   ])
-  .run(['$rootScope', '$state', '$modalStack', 'userState', '$window',
-    function ($rootScope, $state, $modalStack, userState, $window) {
-
+  .run(['$window',
+    function ($window) {
       if ($window.Stretchy) {
         $window.Stretchy.selectors.filter = '.input-stretchy, .input-stretchy *';
       }
+    }
+  ])
+  .run(['$rootScope', '$state', '$modalStack', 'userState', '$window', '$exceptionHandler',
+    function ($rootScope, $state, $modalStack, userState, $window, $exceptionHandler) {
 
       $rootScope.$on('risevision.user.signedOut', function () {
         $state.go('common.auth.unauthorized');
@@ -168,6 +171,10 @@ angular.module('risevision.apps', [
         } else {
           $rootScope.showWhiteBackground = true;
         }
+      });
+
+      $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, err) {
+        $exceptionHandler(err, 'UI Router Error.', true);
       });
 
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {

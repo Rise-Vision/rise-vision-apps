@@ -90,18 +90,13 @@ describe("service: userauth:", function() {
       };
     });
 
-    $provide.service('$exceptionHandler', function() {
-      return sinon.spy();
-    })
-
   }));
-  var userauth, $exceptionHandler, returnResult;
+  var userauth, returnResult;
   beforeEach(function(){
     returnResult = true;
 
     inject(function($injector){
       userauth = $injector.get("userauth");
-      $exceptionHandler = $injector.get("$exceptionHandler");
     });
   });
 

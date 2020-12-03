@@ -2,8 +2,8 @@
   'use strict';
 
   angular.module('risevision.common.components.userstate')
-    .service('userauth', ['$q', '$log', '$exceptionHandler', 'riseAPILoader',
-      function ($q, $log, $exceptionHandler, riseAPILoader) {
+    .service('userauth', ['$q', '$log', 'riseAPILoader',
+      function ($q, $log, riseAPILoader) {
 
         var service = {
           add: function (username, password) {

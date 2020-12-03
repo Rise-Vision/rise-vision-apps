@@ -23,6 +23,7 @@ describe('app:', function() {
         }
       });
 
+      $provide.value('$exceptionHandler', sinon.stub());
     });
 
     inject(function ($injector) {
@@ -33,10 +34,17 @@ describe('app:', function() {
       $rootScope = $injector.get('$rootScope');
       $location = $injector.get('$location');
       $modal = $injector.get('$modal');
+      $exceptionHandler = $injector.get('$exceptionHandler');
     });
   });
 
-  var $state, canAccessApps, plansFactory, userState, $rootScope, $location, $modal;
+  var $state, canAccessApps, plansFactory, userState, $rootScope, $location, $modal, $exceptionHandler;
+
+  it('$stateChangeError:', function() {
+    $rootScope.$broadcast('$stateChangeError', '', '', '', '', 'error');
+
+    $exceptionHandler.should.have.been.calledWith('error', 'UI Router Error.', true);
+  });
 
   describe('state apps.users.add:',function(){
     it('should register parent',function(){
