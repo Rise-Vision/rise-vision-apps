@@ -158,7 +158,7 @@
                 </span>
               </div>
             </div>
-            <div class="row" ng-show="editPoNumber">
+            <div class="row" ng-if="editPoNumber">
               <div class="col-md-12">
                 <div class="flex-row">
                   <input id="po-number" aria-required="false" type="text" class="form-control mr-3" name="poNumber" ng-model="billingFactory.invoice.poNumber" ng-value="billingFactory.invoice.po_number">
