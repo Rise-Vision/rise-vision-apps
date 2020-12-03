@@ -108,4 +108,30 @@ describe('service: widgetUtils:', function() {
     });
   });
 
+  describe('rewriteS3Urls: ', function() {
+    it('should rewrite S3 urls', function() {
+      var urlHttp  = "http://s3.amazonaws.com/widget-image/0.1.1/dist/widget.html";
+      var urlHttps = "https://s3.amazonaws.com/widget-image/0.1.1/dist/widget.html";
+      var expected = "https://widgets.risevision.com/widget-image/0.1.1/dist/widget.html";
+
+      expect(widgetUtils.rewriteS3Urls(urlHttp)).to.be.equal(expected);
+      expect(widgetUtils.rewriteS3Urls(urlHttps)).to.be.equal(expected);
+    });
+
+    it('should rewrite url with parameters', function() {
+      var url      = "http://s3.amazonaws.com/widget-image/0.1.1/dist/widget.html?p1=v1&p2=v2";
+      var expected = "https://widgets.risevision.com/widget-image/0.1.1/dist/widget.html?p1=v1&p2=v2";
+
+      expect(widgetUtils.rewriteS3Urls(url)).to.be.equal(expected);
+    });
+
+    it('should rewrite 3rd party urls', function() {
+      var url      = "http://scottsdigitalsignage.com/widget/vimeo-widget/demo/index.html";
+      var expected = "https://widgets.risevision.com/widget-vimeo/demo/index.html";
+
+      expect(widgetUtils.rewriteS3Urls(url)).to.be.equal(expected);
+    });
+
+  });
+
 });
