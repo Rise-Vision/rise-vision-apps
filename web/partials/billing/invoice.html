@@ -181,6 +181,28 @@
       <div ng-show="billingFactory.invoice">
         <div class="row">
           <div class="col-md-offset-8 col-md-4">
+            <div class="pb-3 mb-3 border-bottom" ng-hide="billingFactory.invoice.sub_total === billingFactory.invoice.total">
+              <div class="text-right">
+                <span class="pull-left">Sub Total:</span>
+                <span>
+                  ${{billingFactory.invoice.sub_total / 100 | number:2}}
+                </span>
+              </div>
+              <div class="text-right mt-3" ng-repeat="discount in billingFactory.invoice.discounts">
+                <span class="pull-left">{{discount.description}}:</span>
+                <span>
+                  -${{discount.amount / 100 | number:2}}
+                </span>
+              </div>
+              <div class="text-right mt-3" ng-repeat="tax in billingFactory.invoice.taxes">
+                <span class="pull-left">{{tax.description}}:</span>
+                <span>
+                  ${{tax.amount / 100 | number:2}}
+                </span>
+              </div>
+
+            </div>
+
             <div class="text-right">
               <label class="mb-0 pull-left">Total:</label>
               <label class="mb-0">
@@ -188,12 +210,19 @@
               </label>
             </div>
             <div class="text-right mt-3" ng-show="billingFactory.invoice.amount_paid">
-              <label class="mb-0 pull-left">Payment:</label>
-              <label class="mb-0">
-                ${{billingFactory.invoice.amount_paid / 100 | number:2}}
-              </label>
+              <span class="mb-0 pull-left">Payment:</span>
+              <span class="mb-0">
+                -${{billingFactory.invoice.amount_paid / 100 | number:2}}
+              </span>
             </div>
-            <div class="text-right mt-3">
+            <div class="text-right mt-3" ng-show="billingFactory.invoice.credits_applied">
+              <span class="mb-0 pull-left">Credits:</span>
+              <span class="mb-0">
+                -${{billingFactory.invoice.credits_applied / 100 | number:2}}
+              </span>
+            </div>
+
+            <div class="text-right mt-3 border-top">
               <h4>
                 <span class="pull-left">Amount Due:</span>
                 ${{billingFactory.invoice.amount_due / 100 | number:2}}
