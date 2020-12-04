@@ -102,22 +102,34 @@
             redirect_uri: loc
           };
 
-          auth2APILoader()
-            .then(function (auth2) {
-              return auth2.getAuthInstance().signIn(opts);
-            })
-            .then(function () {
-              if (_isPopupAuth()) {
-                deferred.resolve(authenticate());
-              } else {
-                deferred.resolve();
-              }
-            })
-            .then(null, function (err) {
-              deferred.reject(err);
-            });
+          $window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' +
+             'scope=email%20profile&' +
+             'access_type=online&' +
+             'include_granted_scopes=true&' +
+             'response_type=code&' +
+             'state=' + loc + '&' +
+             // 'redirect_uri=http://localhost:8000/' +
+             'redirect_uri=https://google-oauth2-dot-rvacore-test.appspot.com/oauth2callback&' +
+             'client_id=614513768474-dnnhi8e6b8motn6i5if2ur05g6foskoc.apps.googleusercontent.com';
 
-          return deferred.promise;
+          return;
+
+          // auth2APILoader()
+          //   .then(function (auth2) {
+          //     return auth2.getAuthInstance().signIn(opts);
+          //   })
+          //   .then(function () {
+          //     if (_isPopupAuth()) {
+          //       deferred.resolve(authenticate());
+          //     } else {
+          //       deferred.resolve();
+          //     }
+          //   })
+          //   .then(null, function (err) {
+          //     deferred.reject(err);
+          //   });
+          // 
+          // return deferred.promise;
         };
 
         var googleAuthFactory = {

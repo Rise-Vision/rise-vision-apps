@@ -1,6 +1,8 @@
 (function (angular) {
   'use strict';
 
+  /*jshint camelcase: false */
+
   try {
     angular.module('risevision.common.config');
   } catch (err) {
@@ -42,14 +44,43 @@
           .when(/\/.*&id_token=.*&client_id=.*/, function () {
             console.log('Google Auth result received');
           })
-          .when('/', ['$location', 'customAuthFactory',
-            function ($location, customAuthFactory) {
+          .when('/', ['$location', 'customAuthFactory', '$http',
+            function ($location, customAuthFactory, $http) {
               var hash = $location.hash();
 
               if (hash && hash.match(/\/.*&id_token=.*&client_id=.*/)) {
-                var token = hash.split('&')[1].split('=')[1];
-                customAuthFactory.loginGoogle(token);
+                var idToken = hash.split('&')[1].split('=')[1];
+                customAuthFactory.loginGoogle(idToken);
                 console.log('Google Auth result received');
+              } else if (hash && hash.match(/access_token=.*/)) {
+                var accessToken = hash.split('&')[0].split('=')[1];
+                customAuthFactory.loginGoogle(accessToken);
+                window.location.hash = '';
+                console.log('Google Auth result received');
+              } else if ($location.search().code) {
+                console.log('Google Auth result received');
+
+                $http.post('https://accounts.google.com/o/oauth2/token', {
+                  client_id: '614513768474-dnnhi8e6b8motn6i5if2ur05g6foskoc.apps.googleusercontent.com',
+                  client_secret: '-',
+                  code: $location.search().code, 
+                  redirect_uri: 'http://localhost:8000/',
+                  grant_type: 'authorization_code'
+                })
+                .then(function(resp) {
+                  console.log(resp);
+
+                  customAuthFactory.loginGoogle(resp.data.access_token);
+
+                  window.location.href = $location.search().state;
+                });
+
+              } else if ($location.search().access_token) {
+                console.log('Google Auth result received');
+
+                customAuthFactory.loginGoogle($location.search().access_token);
+
+                $location.search().access_token = null;
               } else {
                 return false;
               }
