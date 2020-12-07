@@ -53,7 +53,7 @@
                 customAuthFactory.loginGoogle(idToken);
                 console.log('Google Auth result received');
               } else if (hash && hash.match(/access_token=.*/)) {
-                var accessToken = hash.split('&')[0].split('=')[1];
+                var accessToken = hash.split('&')[1].split('=')[1];
                 customAuthFactory.loginGoogle(accessToken);
                 window.location.hash = '';
                 console.log('Google Auth result received');
@@ -216,10 +216,11 @@
     ])
 
     .run(['$rootScope', '$state', '$stateParams', 'urlStateService',
-      'userState',
-      function ($rootScope, $state, $stateParams, urlStateService, userState) {
+      'userState', 'googleAuthFactory',
+      function ($rootScope, $state, $stateParams, urlStateService, userState, googleAuthFactory) {
         userState._restoreState();
 
+        $rootScope.googleAuthFactory = googleAuthFactory;
         $rootScope.$on('$stateChangeStart', function (event, toState,
           toParams, fromState, fromParams) {
           if (toState && (
