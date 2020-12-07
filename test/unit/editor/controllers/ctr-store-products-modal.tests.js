@@ -131,6 +131,8 @@ describe('controller: Store Products Modal', function() {
     expect($scope.search).to.be.ok;
     expect($scope.search).to.have.property('category');
     expect($scope.search.count).to.equal(1000);
+    // mocks search function for client side search
+    expect($scope.search.doSearch).to.be.a('function');
   });
 
   describe('isEducationCustomer:',function(){   
