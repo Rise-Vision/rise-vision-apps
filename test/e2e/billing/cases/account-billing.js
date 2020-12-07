@@ -37,10 +37,13 @@
           helper.waitDisappear(accountBillingPage.getLoader(), "Account & Billing Page");
         });
 
-        it("Shows billing history", function() {
+        it("Shows Account & Billing page", function() {
           expect(accountBillingPage.getBillingAppContainer().isPresent()).to.eventually.be.true;
+        });
 
-          // expect(accountBillingPage.getBillingHistorySection().isDisplayed()).to.eventually.be.true;
+        it("Shows invoices list table", function() {
+          expect(accountBillingPage.getInvoicesListTable().isPresent()).to.eventually.be.true;
+          browser.sleep(60000);
         });
       });
 
