@@ -16,7 +16,8 @@
       var commonHeaderPage,
         homepage,
         accountBillingPage,
-        signInPage;
+        signInPage,
+        unauthenticatedParams;
 
       before(function (){
         commonHeaderPage = new CommonHeaderPage();
@@ -37,14 +38,34 @@
           helper.waitDisappear(accountBillingPage.getLoader(), "Account & Billing Page");
         });
 
-        it("Shows Account & Billing page", function() {
+        it("shows Account & Billing page", function() {
           expect(accountBillingPage.getBillingAppContainer().isPresent()).to.eventually.be.true;
         });
 
-        it("Shows invoices list table", function() {
+        it("shows invoices list table", function() {
           expect(accountBillingPage.getInvoicesListTable().isPresent()).to.eventually.be.true;
-          browser.sleep(60000);
         });
+
+        it("shows at least one paid invoice", function() {
+          expect(accountBillingPage.getPaidInvoiceIcon().isPresent()).to.eventually.be.true;
+        });
+
+        it("shows pay now button", function() {
+          expect(accountBillingPage.getPayNowButton().isPresent()).to.eventually.be.true;
+        });
+
+        it("navigates to unauthenticated invoice page", function() {
+          accountBillingPage.getPayNowButton().getAttribute('href').then(function(href) {
+            unauthenticatedParams = href.split('?')[1];
+
+            return browser.get(href);
+          });
+        });
+
+        it("shows unauthenticated invoice", function() {
+          browser.sleep(60000);
+        })
+
       });
 
     });
