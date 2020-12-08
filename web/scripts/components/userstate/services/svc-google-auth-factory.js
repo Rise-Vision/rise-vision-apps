@@ -76,7 +76,7 @@
           return (userState._state.inRVAFrame || ($window.self !== $window.top));
         };
 
-        var forceAuthenticate = function (forceAuth) {
+        var forceAuthenticate = function (silent) {
           var deferred = $q.defer();
           var loc;
           var redirectState = $stateParams.state;
@@ -96,10 +96,10 @@
           uiFlowManager.persist();
 
 
-          if (forceAuth) {
-            openidConnect.signIn(redirectState);            
+          if (silent) {
+            openidConnect.signInSilent(redirectState);            
           } else {
-            openidConnect.signInSilent(redirectState);
+            openidConnect.signIn(redirectState);
           }
 
           // var opts = {
@@ -146,8 +146,12 @@
         };
 
         var googleAuthFactory = {
-          authenticate: function (silent) {
-            return forceAuthenticate(silent);
+          authenticate: function (forceAuth, silent) {
+            if (!forceAuth) {
+              return authenticate();
+            } else {
+              return forceAuthenticate(silent);
+            }
           }
         };
 

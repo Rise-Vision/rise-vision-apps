@@ -33,7 +33,7 @@
         var client = new Oidc.UserManager(settings);
 
         service.signIn = function(state) {
-          client.createSigninRequest({ state: state }).then(function(req) {
+          client.signinRedirect({ state: state }).then(function(req) {
             console.log('signin request', req);
 
             $window.location.href = req.url;
@@ -56,10 +56,10 @@
         };
 
         service.processSigninResponse = function() {
-          return client.processSigninResponse().then(function(response) {
-              console.log('signin response', response);
+          return client.signinRedirectCallback().then(function(user) {
+              console.log('signin response', user);
               
-              return response.id_token;
+              return user.id_token;
           }).catch(function(err) {
               console.log(err);
           });
