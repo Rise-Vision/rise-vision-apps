@@ -18,6 +18,10 @@ describe('controller: InvoiceCtrl', function () {
       updateInvoice: sandbox.stub().returns(Q.resolve()),
       invoice: {}
     });
+
+    $provide.service('helpWidgetFactory', function () {
+      return {};
+    });
   }));
 
   beforeEach(inject(function($injector, $rootScope, $controller) {
@@ -43,6 +47,7 @@ describe('controller: InvoiceCtrl', function () {
     expect($scope).to.be.ok;
 
     expect($scope.billingFactory).to.be.ok;
+    expect($scope.helpWidgetFactory).to.be.ok;
 
     expect($scope.completeCardPayment).to.be.a('function');
     expect($scope.updatePoNumber).to.be.a('function');
