@@ -21,6 +21,8 @@ var HomePage = function() {
   var signUpLink = element(by.id('sign-up-link'));
   var signInLink = element(by.id('sign-in-link'));
 
+  var accountBillingButton = element(by.css(".dropdown-menu .store-account-button.ng-scope"));
+
   this.confirmGet = function(url) {
     return browser.get(url)
       .then(null,function () {
@@ -114,6 +116,10 @@ var HomePage = function() {
 
   this.getMetaByProperty = function(property) {
     return element(by.xpath("//meta[@property='"+property+"']"));
+  };
+
+  this.getAccountBillingButton = function() {
+    return accountBillingButton;
   };
 
 };
