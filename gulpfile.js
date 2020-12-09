@@ -239,7 +239,11 @@ gulp.task("html-selector", function () {
   return buildHtml("./web/storage-selector.html");
 });
 
-gulp.task("html", ["lint", "html-index", "html-selector"]);
+gulp.task("html-user-manager-silent", function () {
+  return buildHtml("./web/user-manager-silent.html");
+});
+
+gulp.task("html", ["lint", "html-index", "html-selector", "html-user-manager-silent"]);
 
 gulp.task("jpgcompressor", function() {
   return gulp.src("node_modules/compressorjs/dist/compressor.min.js")
@@ -346,7 +350,7 @@ gulp.task("test:e2e:core", ["test:webdriver_update"],factory.testE2EAngular({
   stageEnv: process.env.STAGE_ENV || os.userInfo().username || 'local',
   twitterUser: process.env.TWITTER_USER,
   twitterPass: process.env.TWITTER_PASS,
-  testFiles: function(){ 
+  testFiles: function(){
     try{
       return JSON.parse(fs.readFileSync('/tmp/testFiles.txt').toString())
     } catch (e) {
@@ -354,7 +358,7 @@ gulp.task("test:e2e:core", ["test:webdriver_update"],factory.testE2EAngular({
     }
   }()
 }));
-gulp.task("test:e2e", function (cb) { 
+gulp.task("test:e2e", function (cb) {
   runSequence(["build-pieces", "config-e2e"], "server", "test:e2e:core", "server-close", cb);
 });
 
