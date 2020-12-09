@@ -48,8 +48,8 @@
 
               if ($location.search().code || 
                 (hash && (hash.match(/.*id_token=.*/) || hash.match(/access_token=.*/)))) {
-                var idToken = hash.split('&')[1].split('=')[1];
-                // var accessToken = hash.split('&')[1].split('=')[1];
+                var idToken = hash && hash.split('&')[1].split('=')[1];
+                // var accessToken = hash && hash.split('&')[1].split('=')[1];
 
                 console.log('Google Auth result received', 'id_token=' + idToken);
 
