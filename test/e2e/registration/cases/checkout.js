@@ -10,24 +10,30 @@
   var SignInPage = require('./../../common/pages/signInPage.js');
   var PurchaseFlowPage = require('./../pages/purchaseFlowPage.js');
   var PricingPage = require('./../pages/pricingPage.js');
+  var AccountBillingPage = require('./../../billing/pages/accountBillingPage.js');
+  var InvoicePage = require('./../../billing/pages/invoicePage.js');
   var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
 
   var Checkout = function() {
 
     describe("Checkout", function() {
-      var commonHeaderPage, 
-        homepage, 
+      var commonHeaderPage,
+        homepage,
         signInPage,
         purchaseFlowPage,
         pricingPage,
+        accountBillingPage,
+        invoicePage,
         presentationListPage;
-                
+
       before(function (){
         commonHeaderPage = new CommonHeaderPage();
         homepage = new HomePage();
         signInPage = new SignInPage();
         purchaseFlowPage = new PurchaseFlowPage();
         pricingPage = new PricingPage();
+        accountBillingPage = new AccountBillingPage();
+        invoicePage = new InvoicePage();
         presentationListPage = new PresentationListPage();
 
         homepage.get();
@@ -55,10 +61,10 @@
 
         it("should open checkout page", function() {
           helper.clickWhenClickable(pricingPage.getSubscribeButton(), 'Subscribe Button');
-          
+
           helper.waitDisappear(pricingPage.getSubscribeButton(), 'Subscribe Button Disappear');
 
-          expect(purchaseFlowPage.getContinueButton().isDisplayed()).to.eventually.be.true;        
+          expect(purchaseFlowPage.getContinueButton().isDisplayed()).to.eventually.be.true;
         });
       });
 
@@ -90,7 +96,7 @@
           helper.waitForSpinner();
           helper.waitDisappear(purchaseFlowPage.getBillingAddressPage(), 'Purchase flow Billing');
         });
-        
+
       });
 
       describe("payment form: ", function() {
@@ -134,7 +140,7 @@
           purchaseFlowPage.getCardNumber().sendKeys('4242424242424242');
           purchaseFlowPage.getCardExpMon().sendKeys('0');
           purchaseFlowPage.getCardExpYr().sendKeys('222');
-          purchaseFlowPage.getCardCVS().sendKeys('222');          
+          purchaseFlowPage.getCardCVS().sendKeys('222');
         });
 
       });
@@ -160,7 +166,7 @@
           expect(purchaseFlowPage.getCheckoutDoneButton().isDisplayed()).to.eventually.be.true;
 
           helper.clickWhenClickable(purchaseFlowPage.getCheckoutDoneButton(), 'Checkout Done Button');
-          
+
           helper.waitForSpinner();
           helper.waitDisappear(purchaseFlowPage.getCheckoutSuccessPage(), 'Checkout Success Page');
 
@@ -175,6 +181,51 @@
           expect(purchaseFlowPage.getPlanSubscribeLink().isPresent()).to.eventually.be.false;
         });
 
+      });
+
+      describe("invoice details: ", function() {
+        it("should allow selecting Account & Billing menu option", function() {
+          commonHeaderPage.openProfileMenu();
+          homepage.getAccountBillingButton().click();
+
+          helper.waitDisappear(accountBillingPage.getLoader(), "Account & Billing Page");
+        });
+
+        it("shows invoices list table", function() {
+          expect(accountBillingPage.getInvoicesListTable().isPresent()).to.eventually.be.true;
+        });
+
+        it("shows pay now button", function() {
+          expect(accountBillingPage.getPayNowButton().isPresent()).to.eventually.be.true;
+        });
+
+        it("navigates to unauthenticated invoice page", function() {
+          accountBillingPage.getPayNowButton().getAttribute('href').then(function(href) {
+            return browser.get(href);
+          });
+
+          helper.waitDisappear(invoicePage.getLoader(), "Invoice Page");
+        });
+
+        it("shows unauthenticated invoice", function() {
+          expect(invoicePage.getInvoiceContainer().isPresent()).to.eventually.be.true;
+        })
+
+        it("shows invoice title", function() {
+          expect(invoicePage.getInvoiceTitle().isPresent()).to.eventually.be.true;
+        })
+
+        it("shows share button", function() {
+          expect(invoicePage.getShareButton().isPresent()).to.eventually.be.true;
+        })
+
+        it("shows download button", function() {
+          expect(invoicePage.getDownloadButton().isPresent()).to.eventually.be.true;
+        })
+
+        it("shows pay now button", function() {
+          expect(invoicePage.getPayNowButton().isPresent()).to.eventually.be.true;
+        })
       });
 
       after(function() {
