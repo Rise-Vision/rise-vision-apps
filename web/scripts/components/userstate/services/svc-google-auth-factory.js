@@ -7,9 +7,9 @@
     // constants (you can override them in your app as needed)
     .factory('googleAuthFactory', ['$rootScope', '$q', '$log', '$window',
       '$stateParams', 'auth2APILoader', 'uiFlowManager',
-      'userState', 'urlStateService',
+      'userState', 'urlStateService', 'openidConnect',
       function ($rootScope, $q, $log, $window, $stateParams, auth2APILoader,
-        uiFlowManager, userState, urlStateService) {
+        uiFlowManager, userState, urlStateService, openidConnect) {
 
         var _getUserProfile = function (authInstance) {
           if (!authInstance.currentUser) {
@@ -95,30 +95,37 @@
           userState._persistState();
           uiFlowManager.persist();
 
-          var opts = {
-            response_type: 'token',
-            prompt: 'select_account',
-            ux_mode: _isPopupAuth() ? 'popup' : 'redirect',
-            redirect_uri: loc
-          };
 
-          $window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' +
-             'scope=email%20profile&' +
-             'access_type=online&' +
-             'include_granted_scopes=true&' +
-             // 'response_type=code&' +
-             'response_type=token&' +
-             'state=' + loc + '&' +
-             (silent ? 'prompt=none&' : '') +
-             // 'redirect_uri=http://localhost:8000/&' +
-             'redirect_uri=' + loc + '&' +
-             // 'nonce=' + Math.floor((Math.random() * 10000) + 1) + '&' +
-             (silent ? 'login_hint=' + userState.getUsername() + '&' : '') +
-             // 'redirect_uri=https://google-oauth2-dot-rvacore-test.appspot.com/oauth2callback&' +
-             // 'client_id=614513768474-dnnhi8e6b8motn6i5if2ur05g6foskoc.apps.googleusercontent.com';
-             'client_id=614513768474.apps.googleusercontent.com';
+          if (silent) {
+            openidConnect.signInSilent(redirectState);            
+          } else {
+            openidConnect.signIn(redirectState);
+          }
 
-          return;
+          // var opts = {
+          //   response_type: 'token',
+          //   prompt: 'select_account',
+          //   ux_mode: _isPopupAuth() ? 'popup' : 'redirect',
+          //   redirect_uri: loc
+          // };
+          // 
+          // $window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' +
+          //    'scope=email%20profile&' +
+          //    'access_type=online&' +
+          //    'include_granted_scopes=true&' +
+          //    // 'response_type=code&' +
+          //    'response_type=token&' +
+          //    'state=' + loc + '&' +
+          //    (silent ? 'prompt=none&' : '') +
+          //    // 'redirect_uri=http://localhost:8000/&' +
+          //    'redirect_uri=' + loc + '&' +
+          //    // 'nonce=' + Math.floor((Math.random() * 10000) + 1) + '&' +
+          //    (silent ? 'login_hint=' + userState.getUsername() + '&' : '') +
+          //    // 'redirect_uri=https://google-oauth2-dot-rvacore-test.appspot.com/oauth2callback&' +
+          //    // 'client_id=614513768474-dnnhi8e6b8motn6i5if2ur05g6foskoc.apps.googleusercontent.com';
+          //    'client_id=614513768474.apps.googleusercontent.com';
+          // 
+          // return;
 
           // auth2APILoader()
           //   .then(function (auth2) {

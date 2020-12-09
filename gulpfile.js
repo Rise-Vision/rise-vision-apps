@@ -284,7 +284,7 @@ gulp.task("vendor", function () {
 });
 
 gulp.task("static-html", function() {
-  return gulp.src(['./web/loading-preview.html'])
+  return gulp.src(['./web/loading-preview.html', './web/user-manager-silent.html'])
     .pipe(gulp.dest('dist/'));
 })
 

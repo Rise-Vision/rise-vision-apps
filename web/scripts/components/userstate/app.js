@@ -44,19 +44,31 @@
           .when(/\/.*&id_token=.*&client_id=.*/, function () {
             console.log('Google Auth result received');
           })
-          .when('/', ['$location', 'customAuthFactory', '$http',
-            function ($location, customAuthFactory, $http) {
+          .when('/', ['$location', 'customAuthFactory', '$http', 'openidConnect',
+            function ($location, customAuthFactory, $http, openidConnect) {
               var hash = $location.hash();
 
-              if (hash && hash.match(/\/.*&id_token=.*&client_id=.*/)) {
+              if (hash && hash.match(/.*id_token=.*/)) {
                 var idToken = hash.split('&')[1].split('=')[1];
-                customAuthFactory.loginGoogle(idToken);
-                console.log('Google Auth result received');
+
+                openidConnect.processSigninResponse().then(function(idToken) {
+                  customAuthFactory.loginGoogle(idToken);
+                  
+                  window.location.hash = '';
+
+                  console.log('Google Auth result received');
+                });
               } else if (hash && hash.match(/access_token=.*/)) {
-                var accessToken = hash.split('&')[1].split('=')[1];
-                customAuthFactory.loginGoogle(accessToken);
-                window.location.hash = '';
-                console.log('Google Auth result received');
+                openidConnect.processSigninResponse().then(function(accessToken) {
+                  customAuthFactory.loginGoogle(accessToken);
+                  
+                  console.log('Google Auth result received');
+                });
+
+                // var accessToken = hash.split('&')[1].split('=')[1];
+                // customAuthFactory.loginGoogle(accessToken);
+                // window.location.hash = '';
+                // console.log('Google Auth result received');
               } else if ($location.search().code) {
                 console.log('Google Auth result received');
 
