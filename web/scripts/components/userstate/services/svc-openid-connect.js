@@ -4,8 +4,8 @@
   /*jshint camelcase: false */
 
   angular.module('risevision.common.components.userstate')
-    .factory('openidConnect', ['$window', '$location', 'userState',
-      function ($window, $location, userState) {
+    .factory('openidConnect', ['$q', '$window', '$location', 'userState',
+      function ($q, $window, $location, userState) {
         var Oidc = $window.Oidc;
 
         Oidc.Log.logger = console;
@@ -32,37 +32,65 @@
         };
         var client = new Oidc.UserManager(settings);
 
-        service.signIn = function(state) {
-          client.signinRedirect({ state: state }).then(function(req) {
-            console.log('signin request', req);
+        service.getUser = function() {
+          return client.getUser()
+            .then(function(user) {
+              console.log('get user request', user);
 
-            $window.location.href = req.url;
-          }).catch(function(err) {
-            console.log(err);
-          });
+              return user;
+            }).catch(function(err) {
+              console.log(err);
+
+              throw err;
+            });
         };
 
-        service.signInSilent = function(state) {
+        service.signinRedirect = function(state) {
+          return client.signinRedirect({ state: state })
+            .then(function(req) {
+              console.log('signin redirect request', req);
+            }).catch(function(err) {
+              console.log(err);
+
+              throw err;
+            });
+        };
+
+        service.signinRedirectCallback = function() {
+          return client.signinRedirectCallback()
+            .then(function(user) {
+              console.log('signin redirect response', user);
+              
+              return user;
+            }).catch(function(err) {
+              console.log(err);
+
+              throw err;
+            });
+        };
+
+        service.signinPopup = function() {
+          return $q.reject('Not implemented');
+        };
+
+        service.signinSilent = function(user) {
           return client.signinSilent({ 
-            state: state,
-            // login_hint: userState.getUsername()
-           }).then(function(response) {
-              console.log('signin response', response);
+            // id_token_hint: null,
+            // login_hint: user.profile.sub
+           })
+           .then(function(user) {
+              console.log('signin silent response', user);
               
-              return response.id_token;
-          }).catch(function(err) {
+              return user;
+            }).catch(function(err) {
               console.log(err);
-          });
+
+              throw err;
+            });
         };
 
-        service.processSigninResponse = function() {
-          return client.signinRedirectCallback().then(function(user) {
-              console.log('signin response', user);
-              
-              return user.id_token;
-          }).catch(function(err) {
-              console.log(err);
-          });
+        service.removeUser = function() {
+          return client.removeUser();
         };
 
         return service;
