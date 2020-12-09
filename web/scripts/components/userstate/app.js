@@ -1,8 +1,6 @@
 (function (angular) {
   'use strict';
 
-  /*jshint camelcase: false */
-
   try {
     angular.module('risevision.common.config');
   } catch (err) {
@@ -44,8 +42,8 @@
           .when(/\/.*&id_token=.*&client_id=.*/, function () {
             console.log('Google Auth result received');
           })
-          .when('/', ['$location', 'googleAuthFactory', 'customAuthFactory', '$http', 'openidConnect',
-            function ($location, googleAuthFactory, customAuthFactory, $http, openidConnect) {
+          .when('/', ['$location', 'userAuthFactory', 'openidConnect',
+            function ($location, userAuthFactory, openidConnect) {
               var hash = $location.hash();
 
               if ($location.search().code || 
@@ -57,7 +55,7 @@
 
                 openidConnect.signinRedirectCallback()
                   .then(function(user) {
-                    googleAuthFactory.setToken(user);
+                    userAuthFactory.authenticate(false);
 
                     window.location.hash = '';
                   });
@@ -195,10 +193,15 @@
       }
     ])
 
-    .run(['$rootScope', '$state', '$stateParams', 'urlStateService',
-      'userState', 'googleAuthFactory',
-      function ($rootScope, $state, $stateParams, urlStateService, userState, googleAuthFactory) {
+    .run(['$rootScope', '$state', '$stateParams', '$loading', 'urlStateService',
+      'userState', 'userAuthFactory', 'googleAuthFactory',
+      function ($rootScope, $state, $stateParams, $loading, urlStateService, userState, userAuthFactory, googleAuthFactory) {
         userState._restoreState();
+
+        $loading.startGlobal('auth-silent');
+        userAuthFactory.authenticate(false).finally(function () {
+          $loading.stopGlobal('auth-silent');
+        });
 
         $rootScope.googleAuthFactory = googleAuthFactory;
         $rootScope.$on('$stateChangeStart', function (event, toState,

@@ -2,11 +2,11 @@
 
 angular.module('risevision.common.header')
   .controller('AuthButtonsCtr', ['$scope', '$state', '$modal', '$templateCache',
-    'userState', 'userAuthFactory', 'canAccessApps',
+    'userState', 'canAccessApps',
     '$loading',
     '$log', 'uiFlowManager', 'bindToScopeWithWatch',
     '$window', 'APPS_URL',
-    function ($scope, $state, $modal, $templateCache, userState, userAuthFactory,
+    function ($scope, $state, $modal, $templateCache, userState,
       canAccessApps,
       $loading, $log, uiFlowManager,
       bindToScopeWithWatch, $window, APPS_URL) {
@@ -95,11 +95,5 @@ angular.module('risevision.common.header')
       $scope.isChargebee = function () {
         return userState.isSelectedCompanyChargebee();
       };
-
-      $loading.startGlobal('auth-buttons-silent');
-
-      userAuthFactory.authenticate(false).finally(function () {
-        $loading.stopGlobal('auth-buttons-silent');
-      });
     }
   ]);
