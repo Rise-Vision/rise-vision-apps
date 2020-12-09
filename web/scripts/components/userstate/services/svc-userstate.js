@@ -29,12 +29,6 @@
           //populate profile if the current user is a rise vision user
           getUserProfile(_state.user.username, true)
             .then(function (profile) {
-              objectHelper.clearAndCopy({
-                userId: profile
-                  .id, //TODO: ideally we should not use real user ID or email, but use hash value instead
-                username: profile.email
-              }, _state.user);
-
               userState.updateUserProfile(profile);
 
               //populate company info

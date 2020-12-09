@@ -5,12 +5,12 @@
     .value('FORCE_GOOGLE_AUTH', false)
     .factory('userAuthFactory', ['$q', '$log', '$location',
       '$rootScope', '$loading', '$window', '$document',
-      'auth2APILoader', 'objectHelper', 'rvTokenStore', 'externalLogging',
-      'userState', 'googleAuthFactory', 'customAuthFactory',
+      'objectHelper', 'rvTokenStore', 'externalLogging',
+      'userState', 'gapiLoader', 'googleAuthFactory', 'customAuthFactory',
       'FORCE_GOOGLE_AUTH',
       function ($q, $log, $location, $rootScope, $loading, $window,
-        $document, auth2APILoader, objectHelper,
-        rvTokenStore, externalLogging, userState, googleAuthFactory,
+        $document, objectHelper,
+        rvTokenStore, externalLogging, userState, gapiLoader, googleAuthFactory,
         customAuthFactory, FORCE_GOOGLE_AUTH) {
 
         var _state = userState._state;
@@ -128,7 +128,8 @@
           }
 
           if (authenticatedUser) {
-            if (!_state.user.username || !_state.profile.username) {
+            if (!_state.user.username || !_state.profile.username ||
+              _state.user.username !== authenticatedUser.email) {
               _authorizeDeferred = $q.defer();
 
               //populate user
@@ -198,7 +199,7 @@
           }
 
           // pre-load gapi to prevent popup blocker issues
-          auth2APILoader().finally(function () {
+          gapiLoader().then(function() {
             var authenticationPromise,
               isRiseAuthUser = false;
 
@@ -246,26 +247,22 @@
         };
 
         var signOut = function (signOutGoogle) {
-          return auth2APILoader().then(function (auth2) {
-            if (!userState.isRiseAuthUser()) {
-              if (signOutGoogle) {
-                $window.logoutFrame.location =
-                  'https://accounts.google.com/Logout';
-              }
+          var promise = $q.resolve();
+          if (!userState.isRiseAuthUser()) {
+            promise = googleAuthFactory.signOut(signOutGoogle);
+          }
 
-              auth2.getAuthInstance().signOut();
-            }
+          _authenticateDeferred = null;
 
-            _authenticateDeferred = null;
+          // The flag the indicates a user is potentially
+          // authenticated already, must be destroyed.
+          _resetUserState();
 
-            // The flag the indicates a user is potentially
-            // authenticated already, must be destroyed.
-            _resetUserState();
+          //call google api to sign out
+          $rootScope.$broadcast('risevision.user.signedOut');
+          $log.debug('User is signed out.');
 
-            //call google api to sign out
-            $rootScope.$broadcast('risevision.user.signedOut');
-            $log.debug('User is signed out.');
-          });
+          return promise;
         };
 
         var userAuthFactory = {

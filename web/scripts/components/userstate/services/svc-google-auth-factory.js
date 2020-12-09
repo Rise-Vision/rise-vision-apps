@@ -4,155 +4,121 @@
   /*jshint camelcase: false */
 
   angular.module('risevision.common.components.userstate')
-    // constants (you can override them in your app as needed)
     .factory('googleAuthFactory', ['$rootScope', '$q', '$log', '$window',
-      '$stateParams', 'auth2APILoader', 'uiFlowManager',
+      '$stateParams', 'gapiLoader', 'uiFlowManager',
       'userState', 'urlStateService', 'openidConnect',
-      function ($rootScope, $q, $log, $window, $stateParams, auth2APILoader,
+      function ($rootScope, $q, $log, $window, $stateParams, gapiLoader,
         uiFlowManager, userState, urlStateService, openidConnect) {
 
-        var _getUserProfile = function (authInstance) {
-          if (!authInstance.currentUser) {
+        var setToken = function (user) {
+          return gapiLoader().then(function (gApi) {
+            var token = {
+              access_token: user.id_token,
+              expires_in: '3600',
+              token_type: 'Bearer'
+            };
+
+            gApi.auth.setToken(token);
+          });
+        };
+
+        var _getUserProfile = function (currentUser) {
+          if (!currentUser) {
             return null;
           }
 
-          var profile = authInstance.currentUser.get().getBasicProfile();
+          var profile = currentUser.profile;
 
           var user = {
-            id: profile.getId(),
-            email: profile.getEmail(),
-            picture: profile.getImageUrl()
+            id: profile.sub,
+            email: profile.email,
+            picture: profile.picture
           };
 
           return user;
-        };
-
-        var _gapiAuthorize = function () {
-          var deferred = $q.defer();
-
-          auth2APILoader()
-            .then(function (auth2) {
-              var authResult = auth2.getAuthInstance() &&
-                auth2.getAuthInstance().isSignedIn.get();
-
-              $log.debug('auth2.isSignedIn result:', authResult);
-              if (authResult) {
-
-                deferred.resolve(_getUserProfile(auth2.getAuthInstance()));
-              } else {
-                deferred.reject('Failed to authorize user (auth2)');
-              }
-            })
-            .then(null, deferred.reject); //auth2APILoader
-
-          return deferred.promise;
         };
 
         /*
          * Responsible for triggering the Google OAuth process.
          *
          */
-        var authenticate = function () {
-          var deferred = $q.defer();
+        var authenticate = function (silent) {
+          return openidConnect.getUser()
+            .then(function(user) {
+              if (user) {
+                // Silent means we actually perform the check with API
+                if (silent) {
+                  return openidConnect.signinSilent(user);
+                } else {
+                  return $q.resolve(user);                  
+                }
+              } else {
+                return $q.reject('No user');
+              }
+            })
+            .then(function(user) {
+              setToken(user);
 
-          _gapiAuthorize()
-            .then(function (oauthUserInfo) {
               if (userState._state.redirectState) {
                 urlStateService.redirectToState(userState._state.redirectState);
 
                 delete userState._state.redirectState;
               }
 
-              deferred.resolve(oauthUserInfo);
+              return _getUserProfile(user);          
             })
-            .then(null, function (err) {
-              deferred.reject(err);
+            .catch(function (err) {
+              return $q.reject(err);
             });
-
-          return deferred.promise;
         };
 
         var _isPopupAuth = function () {
           return (userState._state.inRVAFrame || ($window.self !== $window.top));
         };
 
-        var forceAuthenticate = function (silent) {
-          var deferred = $q.defer();
-          var loc;
-          var redirectState = $stateParams.state;
-
-          // Redirect to full URL path
-          if ($rootScope.redirectToRoot === false) {
-            loc = $window.location.href.substr(0, $window.location.href
-              .indexOf('#')) || $window.location.href;
-
-            redirectState = urlStateService.clearStatePath(redirectState);
+        var forceAuthenticate = function () {
+          if (_isPopupAuth()) {
+            return openidConnect.signinPopup();
           } else {
-            loc = $window.location.origin + '/';
+            var loc;
+            var redirectState = $stateParams.state;
+
+            // Redirect to full URL path
+            if ($rootScope.redirectToRoot === false) {
+              loc = $window.location.href.substr(0, $window.location.href
+                .indexOf('#')) || $window.location.href;
+
+              redirectState = urlStateService.clearStatePath(redirectState);
+            } else {
+              loc = $window.location.origin + '/';
+            }
+
+            userState._state.redirectState = redirectState;
+            userState._persistState();
+            uiFlowManager.persist();
+
+            return openidConnect.signinRedirect(redirectState);              
+          }
+        };
+
+        var signOut = function(signOutGoogle) {
+          if (signOutGoogle) {
+            $window.logoutFrame.location = 'https://accounts.google.com/Logout';
           }
 
-          userState._state.redirectState = redirectState;
-          userState._persistState();
-          uiFlowManager.persist();
-
-
-          if (silent) {
-            openidConnect.signInSilent(redirectState);            
-          } else {
-            openidConnect.signIn(redirectState);
-          }
-
-          // var opts = {
-          //   response_type: 'token',
-          //   prompt: 'select_account',
-          //   ux_mode: _isPopupAuth() ? 'popup' : 'redirect',
-          //   redirect_uri: loc
-          // };
-          // 
-          // $window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' +
-          //    'scope=email%20profile&' +
-          //    'access_type=online&' +
-          //    'include_granted_scopes=true&' +
-          //    // 'response_type=code&' +
-          //    'response_type=token&' +
-          //    'state=' + loc + '&' +
-          //    (silent ? 'prompt=none&' : '') +
-          //    // 'redirect_uri=http://localhost:8000/&' +
-          //    'redirect_uri=' + loc + '&' +
-          //    // 'nonce=' + Math.floor((Math.random() * 10000) + 1) + '&' +
-          //    (silent ? 'login_hint=' + userState.getUsername() + '&' : '') +
-          //    // 'redirect_uri=https://google-oauth2-dot-rvacore-test.appspot.com/oauth2callback&' +
-          //    // 'client_id=614513768474-dnnhi8e6b8motn6i5if2ur05g6foskoc.apps.googleusercontent.com';
-          //    'client_id=614513768474.apps.googleusercontent.com';
-          // 
-          // return;
-
-          // auth2APILoader()
-          //   .then(function (auth2) {
-          //     return auth2.getAuthInstance().signIn(opts);
-          //   })
-          //   .then(function () {
-          //     if (_isPopupAuth()) {
-          //       deferred.resolve(authenticate());
-          //     } else {
-          //       deferred.resolve();
-          //     }
-          //   })
-          //   .then(null, function (err) {
-          //     deferred.reject(err);
-          //   });
-          // 
-          // return deferred.promise;
+          return openidConnect.removeUser();
         };
 
         var googleAuthFactory = {
           authenticate: function (forceAuth, silent) {
             if (!forceAuth) {
-              return authenticate();
+              return authenticate(silent);
             } else {
-              return forceAuthenticate(silent);
+              return forceAuthenticate();
             }
-          }
+          },
+          setToken: setToken,
+          signOut: signOut
         };
 
         return googleAuthFactory;

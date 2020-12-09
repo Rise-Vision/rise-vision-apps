@@ -4,11 +4,11 @@ angular.module('risevision.common.header')
   .controller('AuthButtonsCtr', ['$scope', '$state', '$modal', '$templateCache',
     'userState', 'userAuthFactory', 'canAccessApps',
     '$loading',
-    '$log', 'uiFlowManager', 'auth2APILoader', 'bindToScopeWithWatch',
+    '$log', 'uiFlowManager', 'bindToScopeWithWatch',
     '$window', 'APPS_URL',
     function ($scope, $state, $modal, $templateCache, userState, userAuthFactory,
       canAccessApps,
-      $loading, $log, uiFlowManager, auth2APILoader,
+      $loading, $log, uiFlowManager,
       bindToScopeWithWatch, $window, APPS_URL) {
 
       window.$loading = $loading; //DEBUG
@@ -97,12 +97,9 @@ angular.module('risevision.common.header')
       };
 
       $loading.startGlobal('auth-buttons-silent');
-      auth2APILoader() //force loading auth2 api on startup
-        //to avoid popup blocker
-        .then().finally(function () {
-          userAuthFactory.authenticate(false).then().finally(function () {
-            $loading.stopGlobal('auth-buttons-silent');
-          });
-        });
+
+      userAuthFactory.authenticate(false).finally(function () {
+        $loading.stopGlobal('auth-buttons-silent');
+      });
     }
   ]);
