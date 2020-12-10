@@ -42,16 +42,18 @@
          * Responsible for triggering the Google OAuth process.
          *
          */
-        var authenticate = function (silent) {
+        var authenticate = function () {
           return openidConnect.getUser()
             .then(function(user) {
               if (user) {
                 // Silent means we actually perform the check with API
-                if (silent) {
-                  return openidConnect.signinSilent(user);
+                if (user.expires_in < 60) {
+                  return openidConnect.signinSilent(user.profile.sub);
                 } else {
                   return $q.resolve(user);                  
                 }
+              } else if (userState._state.userToken) {
+                return openidConnect.signinSilent(userState._state.userToken.id);
               } else {
                 return $q.reject('No user');
               }
@@ -110,13 +112,8 @@
         };
 
         var googleAuthFactory = {
-          authenticate: function (forceAuth, silent) {
-            if (!forceAuth) {
-              return authenticate(silent);
-            } else {
-              return forceAuthenticate();
-            }
-          },
+          authenticate: authenticate,
+          forceAuthenticate: forceAuthenticate,
           signOut: signOut
         };
 

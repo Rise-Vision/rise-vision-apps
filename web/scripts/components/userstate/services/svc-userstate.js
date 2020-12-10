@@ -64,8 +64,7 @@
         };
 
         var _restoreState = function () {
-          var sFromStorage = localStorageService.get(
-            'risevision.common.userState');
+          var sFromStorage = localStorageService.get('risevision.common.userState');
           if (sFromStorage) {
             angular.extend(_state, sFromStorage);
             localStorageService.remove('risevision.common.userState'); //clear
@@ -184,17 +183,9 @@
           // private
           _restoreState: _restoreState,
           _resetState: _resetState,
-          _setUserToken: function (params) {
-            // save params in state in case of redirect
-            _state.params = params;
-
-            // set fake user token to idicate user is logged in
-            _state.userToken = 'dummy';
-          },
           _persistState: function () {
             // persist user state
-            localStorageService.set('risevision.common.userState',
-              _state);
+            localStorageService.set('risevision.common.userState', _state);
           },
           _state: _state,
           _setIsRiseAuthUser: function (isRiseAuthUser) {

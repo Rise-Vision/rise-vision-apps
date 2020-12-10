@@ -43,7 +43,7 @@
         service.getUser = function() {
           return client.getUser()
             .then(function(user) {
-              console.log('get user request', user);
+              console.log('get user response', user);
 
               return user;
             }).catch(function(err) {
@@ -55,8 +55,8 @@
 
         service.signinRedirect = function(state) {
           return client.signinRedirect({ state: state })
-            .then(function(req) {
-              console.log('signin redirect request', req);
+            .then(function(resp) {
+              console.log('signin redirect response', resp);
             }).catch(function(err) {
               console.log(err);
 
@@ -93,10 +93,14 @@
           return _signinSilent(params);
         };
 
-        service.signinSilent = function(user) {
-          return client.signinSilent({
-            login_hint: user.profile.sub
-           })
+        service.signinSilent = function(username) {
+          if (!username) {
+            return $q.reject('Missing user id');
+          }
+
+          return client.signinSilent({ 
+            login_hint: username
+          })
            .then(function(user) {
               console.log('signin silent response', user);
 
