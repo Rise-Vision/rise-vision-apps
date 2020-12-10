@@ -5,7 +5,7 @@ describe('directive: TemplateAttributeEditor', function() {
       element,
       factory,
       timeout,
-      window,
+      $window,
       blueprintFactory,
       sandbox = sinon.sandbox.create();
 
@@ -23,15 +23,6 @@ describe('directive: TemplateAttributeEditor', function() {
       return factory;
     });
 
-    window = {
-      addEventListener: sandbox.spy(),
-      removeEventListener: sandbox.spy()
-    };
-
-    $provide.service('$window', function() {
-      return window;
-    });
-
     blueprintFactory = {};
 
     $provide.service('blueprintFactory', function() {
@@ -39,7 +30,11 @@ describe('directive: TemplateAttributeEditor', function() {
     });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout, $injector){
+    $window = injector.get($window);
+    sandbox.spy($window, 'addEventListener');
+    sandbox.spy($window, 'removeEventListener');
+
     $templateCache.put('partials/template-editor/attribute-editor.html', '<p>mock</p>');
     $scope = $rootScope.$new();
     timeout = $timeout
@@ -77,12 +72,12 @@ describe('directive: TemplateAttributeEditor', function() {
   });
 
   it('Handles message from templates', function() {
-    sinon.assert.calledWith(window.addEventListener, 'message');
+    sinon.assert.calledWith($window.addEventListener, 'message');
   });
 
   it('Clears window event listener when element is destroyed', function() {
     element.remove();
-    sinon.assert.calledWith(window.removeEventListener, 'message');
+    sinon.assert.calledWith($window.removeEventListener, 'message');
   });
 
   it('Registers a directive', function() {

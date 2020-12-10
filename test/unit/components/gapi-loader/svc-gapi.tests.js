@@ -27,7 +27,7 @@ describe("Services: gapi loader", function() {
 
   }));
   
-  var $window, gapiAuth2, auth2APILoader, loadApi;
+  var $window, gapiAuth2, loadApi;
   
   beforeEach(function () {
     loadApi = true;
@@ -56,8 +56,6 @@ describe("Services: gapi loader", function() {
       $window.gapi.load = function(path, cb) {
         if (path === "client") {
           $window.gapi[path] = gapiClient;
-        } else if (path === "auth2") {
-          $window.gapi[path] = gapiAuth2;
         } else {
           $window.gapi[path] = {};
         }
@@ -65,8 +63,6 @@ describe("Services: gapi loader", function() {
       };
       
       $window.handleClientJSLoad();
-      
-      auth2APILoader = $injector.get("auth2APILoader");
     });
   });
 
@@ -78,37 +74,6 @@ describe("Services: gapi loader", function() {
           done();
         });
       });
-    });
-  });
-
-  describe("auth2APILoader", function () {
-    it("should load and initialize auth2", function(done) {
-      expect(auth2APILoader).to.be.ok;
-      auth2APILoader().then(function (auth2) {
-        expect(auth2).to.be.an("object");
-        expect($window.gapi.auth2).to.be.ok;
-        
-        expect(gapiAuth2.init.args[0][0]).to.deep.equal({
-          "client_id": "614513768474.apps.googleusercontent.com",
-          "scope": "profile",
-          "cookie_policy": "protocol://domain:9876"
-        });
-
-        done();
-      }, done);
-    });
-
-    it("should return auth2 instance", function(done) {
-      auth2APILoader().then(function () {
-        gapiAuth2.getAuthInstance.should.not.have.been.called;
-
-        auth2APILoader().then(function (auth2) {
-          expect(auth2).to.be.an("object");
-          gapiAuth2.getAuthInstance.should.have.been.called;
-
-          done();
-        }, done);
-      }, done);
     });
   });
   
