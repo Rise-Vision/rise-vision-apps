@@ -40,6 +40,25 @@
         };
         var client = new Oidc.UserManager(settings);
 
+        client.events.addUserLoaded(function(args) {
+          console.log(`OIDC Client - user loaded: ${JSON.stringify(args)}`);
+        })
+        client.events.addUserUnloaded(function(args) {
+          console.log(`OIDC Client - user unloaded: ${JSON.stringify(args)}`);
+        })
+        client.events.addAccessTokenExpiring(function(args) {
+          console.log(`OIDC Client - access token expiring: ${JSON.stringify(args)}`);
+        })
+        client.events.addAccessTokenExpired(function(args) {
+          console.log(`OIDC Client - access token expired: ${JSON.stringify(args)}`);
+        })
+        client.events.addSilentRenewError(function(args) {
+          console.log(`OIDC Client - silent renew error: ${JSON.stringify(args)}`);
+        })
+        client.events.addUserSignedOut(function(args) {
+          console.log(`OIDC Client - user signed out: ${JSON.stringify(args)}`);
+        })
+
         service.getUser = function() {
           return client.getUser()
             .then(function(user) {
