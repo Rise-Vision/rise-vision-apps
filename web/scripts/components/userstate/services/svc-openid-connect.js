@@ -28,7 +28,6 @@
 
           silent_redirect_uri: loc + 'user-manager-silent.html',
           automaticSilentRenew: true,
-          accessTokenExpiringNotificationTime: 3550,
           includeIdTokenInSilentRenew: false,
 
           filterProtocolClaims: true,
