@@ -13,6 +13,11 @@ describe("controller: Log In", function() {
         login: sinon.stub().returns(Q.reject({}))
       };
     });
+    $provide.service("googleAuthFactory", function() {
+      return {
+        forceAuthenticate: sinon.stub().returns(Q.reject({}))
+      };
+    });
 
     $provide.service("urlStateService", function() {
       return urlStateService = {
@@ -47,7 +52,7 @@ describe("controller: Log In", function() {
     });
 
   }));
-  var $scope, $loading, uiFlowManager, urlStateService, customAuthFactory, userAuthFactory;
+  var $scope, $loading, uiFlowManager, urlStateService, customAuthFactory, userAuthFactory, googleAuthFactory;
   beforeEach(function () {
     
     inject(function($injector,$rootScope, $controller){
@@ -57,6 +62,7 @@ describe("controller: Log In", function() {
       uiFlowManager = $injector.get("uiFlowManager");
       customAuthFactory = $injector.get("customAuthFactory");
       userAuthFactory = $injector.get("userAuthFactory");
+      googleAuthFactory = $injector.get("googleAuthFactory");
 
       $controller("LoginCtrl", {
         $scope: $scope,
@@ -91,7 +97,7 @@ describe("controller: Log In", function() {
 
   describe("googleLogin: ", function() {
     it("should handle successful login", function(done) {
-      userAuthFactory.authenticate.returns(Q.resolve());
+      googleAuthFactory.forceAuthenticate.returns(Q.resolve());
 
       $scope.googleLogin("endStatus");
 
