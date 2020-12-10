@@ -2,10 +2,10 @@
 
 angular.module('risevision.common.components.userstate')
   .controller('LoginCtrl', ['$scope', '$filter', '$loading', '$stateParams',
-    '$state', '$exceptionHandler', 'userAuthFactory', 'customAuthFactory', 'uiFlowManager',
-    'urlStateService', 'userState', 'getError', 'FORCE_GOOGLE_AUTH',
+    '$state', '$exceptionHandler', 'userAuthFactory', 'customAuthFactory', 'googleAuthFactory',
+    'uiFlowManager', 'urlStateService', 'userState', 'getError', 'FORCE_GOOGLE_AUTH',
     function ($scope, $filter, $loading, $stateParams, $state, $exceptionHandler, userAuthFactory,
-      customAuthFactory, uiFlowManager, urlStateService, userState, getError,
+      customAuthFactory, googleAuthFactory, uiFlowManager, urlStateService, userState, getError,
       FORCE_GOOGLE_AUTH) {
       $scope.forms = {};
       $scope.credentials = {};
@@ -38,7 +38,7 @@ angular.module('risevision.common.components.userstate')
 
       $scope.googleLogin = function (endStatus) {
         $loading.startGlobal('auth-buttons-login');
-        userAuthFactory.authenticate(true)
+        googleAuthFactory.authenticate(true)
           .finally(function () {
             $loading.stopGlobal('auth-buttons-login');
             uiFlowManager.invalidateStatus(endStatus);
