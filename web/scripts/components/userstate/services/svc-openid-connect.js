@@ -28,6 +28,7 @@
 
           silent_redirect_uri: loc + 'user-manager-silent.html',
           automaticSilentRenew: true,
+          accessTokenExpiringNotificationTime: 3550,
           includeIdTokenInSilentRenew: false,
 
           filterProtocolClaims: true,
@@ -117,7 +118,7 @@
             return $q.reject('Missing user id');
           }
 
-          return client.signinSilent({ 
+          return client.signinSilent({
             login_hint: username
           })
            .then(function(user) {
