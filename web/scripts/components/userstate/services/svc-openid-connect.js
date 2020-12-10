@@ -28,7 +28,6 @@
 
           silent_redirect_uri: loc + 'user-manager-silent.html',
           automaticSilentRenew: true,
-          accessTokenExpiringNotificationTime: 3550,
           includeIdTokenInSilentRenew: false,
 
           filterProtocolClaims: true,
@@ -41,23 +40,23 @@
         };
         var client = new Oidc.UserManager(settings);
 
-        client.events.addUserLoaded(function(args) {
-          console.log(`OIDC Client - user loaded: ${JSON.stringify(args)}`);
+        client.events.addUserLoaded(function(user) {
+          console.log(`OIDC Client - user loaded: ${JSON.stringify(user)}`);
         });
-        client.events.addUserUnloaded(function(args) {
-          console.log(`OIDC Client - user unloaded: ${JSON.stringify(args)}`);
+        client.events.addUserUnloaded(function() {
+          console.log('OIDC Client - user unloaded');
         });
-        client.events.addAccessTokenExpiring(function(args) {
-          console.log(`OIDC Client - access token expiring: ${JSON.stringify(args)}`);
+        client.events.addAccessTokenExpiring(function() {
+          console.log('OIDC Client - access token expiring');
         });
-        client.events.addAccessTokenExpired(function(args) {
-          console.log(`OIDC Client - access token expired: ${JSON.stringify(args)}`);
+        client.events.addAccessTokenExpired(function() {
+          console.log('OIDC Client - access token expired');
         });
-        client.events.addSilentRenewError(function(args) {
-          console.log(`OIDC Client - silent renew error: ${JSON.stringify(args)}`);
+        client.events.addSilentRenewError(function(error) {
+          console.log(`OIDC Client - silent renew error: ${error}`);
         });
-        client.events.addUserSignedOut(function(args) {
-          console.log(`OIDC Client - user signed out : ${JSON.stringify(args)}`);
+        client.events.addUserSignedOut(function() {
+          console.log('OIDC Client - user signed out');
         });
 
         service.getUser = function() {
