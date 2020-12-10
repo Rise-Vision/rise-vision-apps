@@ -33,6 +33,7 @@
           filterProtocolClaims: true,
           loadUserInfo: true,
 
+          userStore: new Oidc.WebStorageStateStore({ store: window.localStorage }),
           extraQueryParams: {
             access_type: 'online'
           }
@@ -67,7 +68,7 @@
           return client.signinRedirectCallback()
             .then(function(user) {
               console.log('signin redirect response', user);
-              
+
               return user;
             }).catch(function(err) {
               console.log(err);
@@ -84,7 +85,7 @@
 
         client.signinSilent = function(params) {
           if (!params) {
-            params = { 
+            params = {
               login_hint: userState.getUsername()
             };
           }
@@ -93,12 +94,12 @@
         };
 
         service.signinSilent = function(user) {
-          return client.signinSilent({ 
+          return client.signinSilent({
             login_hint: user.profile.sub
            })
            .then(function(user) {
               console.log('signin silent response', user);
-              
+
               return user;
             }).catch(function(err) {
               console.log(err);
