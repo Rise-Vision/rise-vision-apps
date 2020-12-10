@@ -194,8 +194,8 @@
     ])
 
     .run(['$rootScope', '$state', '$stateParams', '$loading', 'urlStateService',
-      'userState', 'userAuthFactory', 'googleAuthFactory',
-      function ($rootScope, $state, $stateParams, $loading, urlStateService, userState, userAuthFactory, googleAuthFactory) {
+      'userState', 'userAuthFactory',
+      function ($rootScope, $state, $stateParams, $loading, urlStateService, userState, userAuthFactory) {
         userState._restoreState();
 
         $loading.startGlobal('auth-silent');
@@ -203,7 +203,6 @@
           $loading.stopGlobal('auth-silent');
         });
 
-        $rootScope.googleAuthFactory = googleAuthFactory;
         $rootScope.$on('$stateChangeStart', function (event, toState,
           toParams, fromState, fromParams) {
           if (toState && (
