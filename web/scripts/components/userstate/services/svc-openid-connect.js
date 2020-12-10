@@ -4,8 +4,12 @@
   /*jshint camelcase: false */
 
   angular.module('risevision.common.components.userstate')
-    .factory('openidConnect', ['$q', '$window', '$location', 'userState',
-      function ($q, $window, $location, userState) {
+    // .value('CLIENT_ID', '614513768474.apps.googleusercontent.com')
+    .value('CLIENT_ID', '614513768474-dnnhi8e6b8motn6i5if2ur05g6foskoc.apps.googleusercontent.com')
+    .value('OAUTH2_SCOPES', 'email profile')
+    .factory('openidConnect', ['$q', '$window', 'userState',
+      'CLIENT_ID', 'OAUTH2_SCOPES',
+      function ($q, $window, userState, CLIENT_ID, OAUTH2_SCOPES) {
         var Oidc = $window.Oidc;
 
         Oidc.Log.logger = console;
@@ -16,12 +20,15 @@
 
         var settings = {
           authority: 'https://accounts.google.com/',
-          client_id: '614513768474-dnnhi8e6b8motn6i5if2ur05g6foskoc.apps.googleusercontent.com',
+          client_id: CLIENT_ID,
+          response_type: 'token id_token',
+          scope: OAUTH2_SCOPES,
           redirect_uri: loc,
           post_logout_redirect_uri: loc + 'oidc-client-sample.html',
+
           silent_redirect_uri: loc + 'user-manager-silent.html',
-          response_type: 'id_token',
-          scope: 'openid email profile',
+          automaticSilentRenew: true,
+          includeIdTokenInSilentRenew: false,
 
           filterProtocolClaims: true,
           loadUserInfo: true,
@@ -73,10 +80,21 @@
           return $q.reject('Not implemented');
         };
 
+        var _signinSilent = client.signinSilent.bind(client);
+
+        client.signinSilent = function(params) {
+          if (!params) {
+            params = { 
+              login_hint: userState.getUsername()
+            };
+          }
+
+          return _signinSilent(params);
+        };
+
         service.signinSilent = function(user) {
           return client.signinSilent({ 
-            // id_token_hint: null,
-            // login_hint: user.profile.sub
+            login_hint: user.profile.sub
            })
            .then(function(user) {
               console.log('signin silent response', user);

@@ -10,7 +10,7 @@
       function ($rootScope, $q, $log, $window, $stateParams, gapiLoader,
         uiFlowManager, userState, urlStateService, openidConnect) {
 
-        var setToken = function (user) {
+        var _setToken = function (user) {
           return gapiLoader().then(function (gApi) {
             var token = {
               access_token: user.id_token,
@@ -57,7 +57,7 @@
               }
             })
             .then(function(user) {
-              setToken(user);
+              _setToken(user);
 
               if (userState._state.redirectState) {
                 urlStateService.redirectToState(userState._state.redirectState);
@@ -117,7 +117,6 @@
               return forceAuthenticate();
             }
           },
-          setToken: setToken,
           signOut: signOut
         };
 

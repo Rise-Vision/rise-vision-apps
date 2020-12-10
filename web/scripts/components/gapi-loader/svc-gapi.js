@@ -19,9 +19,6 @@ var handleClientJSLoad = function () {
 angular.module('risevision.common.gapi', [
     'risevision.common.components.util'
   ])
-  .value('CLIENT_ID', '614513768474.apps.googleusercontent.com')
-  .value('OAUTH2_SCOPES', 'profile')
-
   .factory('gapiLoader', ['$q', '$window',
     function ($q, $window) {
       var deferred = $q.defer();

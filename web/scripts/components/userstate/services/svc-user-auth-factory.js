@@ -213,7 +213,7 @@
                 _resetUserState();
               }
 
-              authenticationPromise = googleAuthFactory.authenticate(forceAuth);
+              authenticationPromise = googleAuthFactory.authenticate();
             }
 
             authenticationPromise
