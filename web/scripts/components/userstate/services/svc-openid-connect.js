@@ -56,7 +56,7 @@
           console.log(`OIDC Client - silent renew error: ${JSON.stringify(args)}`);
         });
         client.events.addUserSignedOut(function(args) {
-          console.log(`OIDC Client - user signed out: ${JSON.stringify(args)}`);
+          console.log(`OIDC Client - user signed out : ${JSON.stringify(args)}`);
         });
 
         service.getUser = function() {
