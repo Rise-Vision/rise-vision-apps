@@ -193,15 +193,10 @@
       }
     ])
 
-    .run(['$rootScope', '$state', '$stateParams', '$loading', 'urlStateService',
-      'userState', 'userAuthFactory',
-      function ($rootScope, $state, $stateParams, $loading, urlStateService, userState, userAuthFactory) {
+    .run(['$rootScope', '$state', '$stateParams', 'urlStateService',
+      'userState',
+      function ($rootScope, $state, $stateParams, urlStateService, userState) {
         userState._restoreState();
-
-        $loading.startGlobal('auth-silent');
-        userAuthFactory.authenticate(false).finally(function () {
-          $loading.stopGlobal('auth-silent');
-        });
 
         $rootScope.$on('$stateChangeStart', function (event, toState,
           toParams, fromState, fromParams) {

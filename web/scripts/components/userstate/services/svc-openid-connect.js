@@ -13,7 +13,7 @@
         var Oidc = $window.Oidc;
 
         Oidc.Log.logger = console;
-        Oidc.Log.level = Oidc.Log.INFO;
+        Oidc.Log.level = Oidc.Log.WARN;
 
         var service = {};
         var loc = $window.location.origin + '/';
