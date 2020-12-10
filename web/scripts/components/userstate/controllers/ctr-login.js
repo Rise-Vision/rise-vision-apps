@@ -38,7 +38,7 @@ angular.module('risevision.common.components.userstate')
 
       $scope.googleLogin = function (endStatus) {
         $loading.startGlobal('auth-buttons-login');
-        googleAuthFactory.authenticate(true)
+        googleAuthFactory.forceAuthenticate()
           .finally(function () {
             $loading.stopGlobal('auth-buttons-login');
             uiFlowManager.invalidateStatus(endStatus);

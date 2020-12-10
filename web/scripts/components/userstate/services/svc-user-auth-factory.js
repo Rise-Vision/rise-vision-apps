@@ -6,11 +6,11 @@
     .factory('userAuthFactory', ['$q', '$log', '$location',
       '$rootScope', '$loading', '$window', '$document',
       'objectHelper', 'rvTokenStore', 'externalLogging',
-      'userState', 'gapiLoader', 'googleAuthFactory', 'customAuthFactory',
+      'userState', 'googleAuthFactory', 'customAuthFactory',
       'FORCE_GOOGLE_AUTH',
       function ($q, $log, $location, $rootScope, $loading, $window,
         $document, objectHelper,
-        rvTokenStore, externalLogging, userState, gapiLoader, googleAuthFactory,
+        rvTokenStore, externalLogging, userState, googleAuthFactory,
         customAuthFactory, FORCE_GOOGLE_AUTH) {
 
         var _state = userState._state;
@@ -40,13 +40,18 @@
           rvTokenStore.write(_state.userToken);
         };
 
+        var _deleteUserToken = function (userToken) {
+          delete _state.userToken;
+          rvTokenStore.clear();
+        };
+
         var _cancelAccessTokenAutoRefresh = function () {};
 
         var _resetUserState = function () {
           $log.debug('Clearing user token...');
           _cancelAccessTokenAutoRefresh();
-          delete _state.userToken;
-          rvTokenStore.clear();
+
+          _deleteUserToken();
 
           userState._resetState();
         };
@@ -176,6 +181,8 @@
 
         var authenticate = function (forceAuth) {
           var authenticateDeferred;
+          var authenticationPromise,
+            isRiseAuthUser = false;
 
           // Clear User state
           if (forceAuth) {
@@ -198,50 +205,39 @@
             $loading.startGlobal('risevision.user.authenticate');
           }
 
-          // pre-load gapi to prevent popup blocker issues
-          gapiLoader().then(function() {
-            var authenticationPromise,
-              isRiseAuthUser = false;
+          // Check for Token
+          if (_state.userToken && _state.userToken.token && !FORCE_GOOGLE_AUTH) {
+            isRiseAuthUser = true;
+            authenticationPromise = customAuthFactory.authenticate();
+          } else {
+            authenticationPromise = googleAuthFactory.authenticate();
+          }
 
-            // Check for Token
-            if (_state.userToken && _state.userToken.token && !FORCE_GOOGLE_AUTH) {
-              isRiseAuthUser = true;
-              authenticationPromise = customAuthFactory.authenticate();
-            } else {
-              // Clear User state before redirect
-              if (forceAuth) {
-                _resetUserState();
+          authenticationPromise
+            .then(_authorize)
+            .then(function () {
+              userState._setIsRiseAuthUser(isRiseAuthUser);
+              authenticateDeferred.resolve();
+            })
+            .then(null, function (err) {
+              if (_state.redirectDetected) {
+                $log.error('Authentication Error from Redirect: ', err);
+
+                delete _state.redirectDetected;
+              } else {
+                $log.debug('Authentication Error: ', err);
               }
+              _resetUserState();
 
-              authenticationPromise = googleAuthFactory.authenticate();
-            }
+              authenticateDeferred.reject(err);
+            })
+            .finally(function () {
+              _addEventListenerVisibilityAPI();
 
-            authenticationPromise
-              .then(_authorize)
-              .then(function () {
-                userState._setIsRiseAuthUser(isRiseAuthUser);
-                authenticateDeferred.resolve();
-              })
-              .then(null, function (err) {
-                if (_state.redirectDetected) {
-                  $log.error('Authentication Error from Redirect: ', err);
+              $loading.stopGlobal('risevision.user.authenticate');
 
-                  delete _state.redirectDetected;
-                } else {
-                  $log.debug('Authentication Error: ', err);
-                }
-                _resetUserState();
-
-                authenticateDeferred.reject(err);
-              })
-              .finally(function () {
-                _addEventListenerVisibilityAPI();
-
-                $loading.stopGlobal('risevision.user.authenticate');
-
-                _logPageLoad('authenticated user');
-              });
-          });
+              _logPageLoad('authenticated user');
+            });
 
           return authenticateDeferred.promise;
         };
