@@ -152,8 +152,21 @@ angular.module('risevision.apps', [
       }
     }
   ])
-  .run(['$rootScope', '$state', '$modalStack', 'userState', '$window', '$exceptionHandler',
-    function ($rootScope, $state, $modalStack, userState, $window, $exceptionHandler) {
+  .run(['$rootScope', '$state', '$modalStack', 'userState', '$window', '$exceptionHandler', 'userAuthFactory', 'messageBox',
+    function ($rootScope, $state, $modalStack, userState, $window, $exceptionHandler, userAuthFactory, messageBox) {
+
+      $rootScope.$on('risevision.gapi.unauthorized', function () {
+        if(userState.isLoggedIn()) {
+          messageBox('Authentication failed!',
+            'You have been disconnected. Please sign in again.',
+            'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html','sm'
+          ).finally(function () {
+            //clear authentication
+            userAuthFactory.signOut();
+            $state.go('common.auth.unauthorized');
+          });
+        }
+      });
 
       $rootScope.$on('risevision.user.signedOut', function () {
         $state.go('common.auth.unauthorized');
