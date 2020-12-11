@@ -21,14 +21,21 @@ describe('service: display tracker:', function() {
         load: function(){}
       }
     });
+    $provide.service('bigQueryLogging',function(){
+      return {
+        logEvent: function() {}
+      }
+    });
   }));
 
-  var openidTracker, eventName, eventData;
+  var openidTracker, eventName, eventData, bQSpy;
   beforeEach(function(){
     eventName = undefined;
     eventData = undefined;
     inject(function($injector){
       openidTracker = $injector.get('openidTracker');
+      var bigQueryLogging = $injector.get('bigQueryLogging');
+      bQSpy = sinon.spy(bigQueryLogging,'logEvent');
     });
   });
 
@@ -48,6 +55,8 @@ describe('service: display tracker:', function() {
       googleUserId: '12345',
       companyId: 'companyId'
     });
+
+    bQSpy.should.not.have.been.called;
   });
 
   it('should append additional properties',function(){
@@ -62,6 +71,8 @@ describe('service: display tracker:', function() {
       companyId: 'companyId',
       extra: 'param'
     });
+
+    bQSpy.should.not.have.been.called;
   });
 
 });
