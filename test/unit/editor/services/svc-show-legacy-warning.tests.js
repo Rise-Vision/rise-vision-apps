@@ -1,6 +1,6 @@
 'use strict';
 
-describe('service: showLegacyWarning:', function() {
+xdescribe('service: showLegacyWarning:', function() {
   beforeEach(module('risevision.editor.services'));
 
   beforeEach(module(function ($provide) {
