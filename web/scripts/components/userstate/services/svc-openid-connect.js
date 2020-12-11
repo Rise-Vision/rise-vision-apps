@@ -7,9 +7,9 @@
     // .value('CLIENT_ID', '614513768474.apps.googleusercontent.com')
     .value('CLIENT_ID', '614513768474-dnnhi8e6b8motn6i5if2ur05g6foskoc.apps.googleusercontent.com')
     .value('OAUTH2_SCOPES', 'email profile')
-    .factory('openidConnect', ['$q', '$window', 'userState',
+    .factory('openidConnect', ['$q', '$window', 'userState', 'openidTracker',
       'CLIENT_ID', 'OAUTH2_SCOPES',
-      function ($q, $window, userState, CLIENT_ID, OAUTH2_SCOPES) {
+      function ($q, $window, userState, openidTracker, CLIENT_ID, OAUTH2_SCOPES) {
         var Oidc = $window.Oidc;
 
         Oidc.Log.logger = console;
@@ -41,22 +41,22 @@
         var client = new Oidc.UserManager(settings);
 
         client.events.addUserLoaded(function(user) {
-          console.log(`OIDC Client - user loaded: ${JSON.stringify(user)}`);
+          openidTracker('user loaded');
         });
         client.events.addUserUnloaded(function() {
-          console.log('OIDC Client - user unloaded');
+          openidTracker('user unloaded');
         });
         client.events.addAccessTokenExpiring(function() {
-          console.log('OIDC Client - access token expiring');
+          openidTracker('access token expiring');
         });
         client.events.addAccessTokenExpired(function() {
-          console.log('OIDC Client - access token expired');
+          openidTracker('access token expired');
         });
         client.events.addSilentRenewError(function(error) {
-          console.log(`OIDC Client - silent renew error: ${error}`);
+          openidTracker('silent renew error', {errorMessage: error.message});
         });
         client.events.addUserSignedOut(function() {
-          console.log('OIDC Client - user signed out');
+          openidTracker('user signed out');
         });
 
         service.getUser = function() {
