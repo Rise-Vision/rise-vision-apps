@@ -40,23 +40,32 @@
         };
         var client = new Oidc.UserManager(settings);
 
+        var trackOpenidEvent = function(openidEventType, eventProperties) {
+          return client.getUser()
+            .then(function(user) {
+              openidTracker(openidEventType, user.profile, eventProperties);
+            }).catch(function(err) {
+              openidTracker(openidEventType, {}, eventProperties);
+            });
+        }
+
         client.events.addUserLoaded(function(user) {
-          openidTracker('user loaded');
+          openidTracker('user loaded', user.profile);
         });
         client.events.addUserUnloaded(function() {
-          openidTracker('user unloaded');
+          trackOpenidEvent('user unloaded');
         });
         client.events.addAccessTokenExpiring(function() {
-          openidTracker('access token expiring');
+          trackOpenidEvent('access token expiring');
         });
         client.events.addAccessTokenExpired(function() {
-          openidTracker('access token expired');
+          trackOpenidEvent('access token expired');
         });
         client.events.addSilentRenewError(function(error) {
-          openidTracker('silent renew error', {errorMessage: error.message});
+          trackOpenidEvent('silent renew error', {errorMessage: error.message});
         });
         client.events.addUserSignedOut(function() {
-          openidTracker('user signed out');
+          trackOpenidEvent('user signed out');
         });
 
         service.getUser = function() {
