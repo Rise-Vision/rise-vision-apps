@@ -7,7 +7,6 @@ angular.module('risevision.common.header', [
     'risevision.common.gapi',
     'risevision.common.config',
     'risevision.core.company',
-    'risevision.common.cookie',
     'risevision.common.header.directives',
     'risevision.common.header.filters',
     'risevision.common.header.services',
@@ -93,10 +92,10 @@ angular.module('risevision.common.header', [
   .directive('commonHeader', ['$rootScope', '$q', '$loading',
     '$interval', '$log',
     '$templateCache', 'userState', '$location', 'bindToScopeWithWatch',
-    '$document', 'cookieTester', 'companyIcpFactory', 'ENV_NAME', '$window', 'APPS_URL', 'helpWidgetFactory',
+    '$document', 'companyIcpFactory', 'ENV_NAME', '$window', 'APPS_URL', 'helpWidgetFactory',
     function ($rootScope, $q, $loading, $interval,
       $log, $templateCache, userState, $location,
-      bindToScopeWithWatch, $document, cookieTester, companyIcpFactory,
+      bindToScopeWithWatch, $document, companyIcpFactory,
       ENV_NAME, $window, APPS_URL, helpWidgetFactory) {
       return {
         restrict: 'E',
@@ -104,11 +103,6 @@ angular.module('risevision.common.header', [
         scope: false,
         link: function ($scope, element, attr) {
           companyIcpFactory.init();
-          cookieTester.checkCookies().then(function () {
-            $scope.cookieEnabled = true;
-          }, function () {
-            $scope.cookieEnabled = false;
-          });
           $scope.navCollapsed = true;
           $scope.inRVAFrame = userState.inRVAFrame();
           $scope.isSubcompanySelected = userState.isSubcompanySelected;

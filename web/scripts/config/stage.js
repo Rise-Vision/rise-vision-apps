@@ -17,8 +17,7 @@
     .constant('LOCALES_SUFIX', '.json');
 
   angular.module('risevision.common.config')
-    .value('CORE_URL', 'https://google-oauth2-dot-rvacore-test.appspot.com/_ah/api') // override default core value
-    .value('COOKIE_CHECK_URL', '//storage-dot-rvacore-test.appspot.com');
+    .value('CORE_URL', 'https://google-oauth2-dot-rvacore-test.appspot.com/_ah/api'); // override default core value
 
   angular.module('risevision.apps.config', [])
     .value('APPS_ENV', 'TEST')
