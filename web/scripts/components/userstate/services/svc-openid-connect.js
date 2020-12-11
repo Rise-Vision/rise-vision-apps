@@ -7,10 +7,13 @@
     // .value('CLIENT_ID', '614513768474.apps.googleusercontent.com')
     .value('CLIENT_ID', '614513768474-dnnhi8e6b8motn6i5if2ur05g6foskoc.apps.googleusercontent.com')
     .value('OAUTH2_SCOPES', 'email profile')
-    .factory('openidConnect', ['$q', '$window', 'userState',
+
+    .factory('openidConnectLoader', ['$q', '$window', 'userState',
       'CLIENT_ID', 'OAUTH2_SCOPES',
       function ($q, $window, userState, CLIENT_ID, OAUTH2_SCOPES) {
-        var Oidc = $window.Oidc;
+        var deferred = $q.defer();
+
+        var Oidc = $window.Oidc || {};
 
         Oidc.Log.logger = console;
         Oidc.Log.level = Oidc.Log.WARN;
@@ -40,8 +43,33 @@
         };
         var client = new Oidc.UserManager(settings);
 
+        var _signinSilent = client.signinSilent.bind(client);
+
+        client.signinSilent = function(params) {
+          if (!params) {
+            params = {
+              login_hint: userState.getUsername()
+            };
+          }
+
+          return _signinSilent(params);
+        };
+
+        return function () {
+          return $q.resolve(client);
+        };
+      }
+    ])
+
+    .factory('openidConnect', ['$q', 'openidConnectLoader',
+      function ($q, openidConnectLoader) {
+        var service = {};
+
         service.getUser = function() {
-          return client.getUser()
+          return openidConnectLoader()
+            .then(function(client) {
+              return client.getUser();
+            })
             .then(function(user) {
               console.log('get user response', user);
 
@@ -54,7 +82,10 @@
         };
 
         service.signinRedirect = function(state) {
-          return client.signinRedirect({ state: state })
+          return openidConnectLoader()
+            .then(function(client) {
+              return client.signinRedirect({ state: state });
+            })
             .then(function(resp) {
               console.log('signin redirect response', resp);
             }).catch(function(err) {
@@ -65,7 +96,10 @@
         };
 
         service.signinRedirectCallback = function() {
-          return client.signinRedirectCallback()
+          return openidConnectLoader()
+            .then(function(client) {
+              return client.signinRedirectCallback();
+            })
             .then(function(user) {
               console.log('signin redirect response', user);
 
@@ -81,26 +115,17 @@
           return $q.reject('Not implemented');
         };
 
-        var _signinSilent = client.signinSilent.bind(client);
-
-        client.signinSilent = function(params) {
-          if (!params) {
-            params = {
-              login_hint: userState.getUsername()
-            };
-          }
-
-          return _signinSilent(params);
-        };
-
         service.signinSilent = function(username) {
           if (!username) {
             return $q.reject('Missing user id');
           }
 
-          return client.signinSilent({ 
-            login_hint: username
-          })
+          return openidConnectLoader()
+            .then(function(client) {
+              return client.signinSilent({ 
+                login_hint: username
+              });
+            })
            .then(function(user) {
               console.log('signin silent response', user);
 
@@ -113,7 +138,10 @@
         };
 
         service.removeUser = function() {
-          return client.removeUser();
+          return openidConnectLoader()
+            .then(function(client) {
+              return client.removeUser();
+            });
         };
 
         return service;
