@@ -8,6 +8,11 @@ describe("controller: user settings", function() {
   beforeEach(module("risevision.common.header"));
   beforeEach(module(function ($provide, $translateProvider) {
     $provide.service("userState",userState);
+    $provide.service('userAuthFactory', function() {
+      return {
+        signOut: sandbox.stub().returns(Q.resolve())
+      };
+    });
     $provide.service("$modalInstance",function(){
       return {
         dismiss : sinon.stub(),

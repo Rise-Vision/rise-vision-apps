@@ -114,18 +114,44 @@ describe('app:', function() {
       expect(state.controller).to.be.ok;
     });
 
-    it('should redirect to editor',function(){
+    it('should redirect to editor',function(done){
       var $location = {
         replace: sinon.spy()
       };
 
       sinon.spy($state,'go');
       
-      $state.get('apps.home').controller[2]($location, $state);
+      $state.get('apps.home').controller[3]($location, $state, canAccessApps);
 
-      $location.replace.should.have.been.called;
-      $state.go.should.have.been.calledWith('apps.editor.home');
+      setTimeout(function() {
+        canAccessApps.should.have.been.called;
+
+        $location.replace.should.have.been.called;
+        $state.go.should.have.been.calledWith('apps.editor.home');
+
+        done();
+      }, 10);
     });
+
+    it('should not redirect if user is not logged in',function(done){
+      canAccessApps.returns(Q.reject());
+
+      var $location = {
+        replace: sinon.spy()
+      };
+
+      sinon.spy($state,'go');
+      
+      $state.get('apps.home').controller[3]($location, $state, canAccessApps);
+
+      setTimeout(function() {
+        $location.replace.should.not.have.been.called;
+        $state.go.should.not.have.been.called;
+
+        done();
+      }, 10);
+    });
+
   });
 
   describe('state common.auth.signup:',function(){
@@ -188,10 +214,6 @@ describe('app:', function() {
     });
 
     it('should redirect to home',function(done){
-      var canAccessApps = function() {
-        return Q.resolve();
-      };
-
       sinon.spy($state,'go');
 
       var $location = {
@@ -208,9 +230,7 @@ describe('app:', function() {
     });
 
     it('should not redirect to home if not signed in',function(done){
-      var canAccessApps = function() {
-        return Q.reject();
-      };
+      canAccessApps.returns(Q.reject());
 
       sinon.spy($state,'go');
 

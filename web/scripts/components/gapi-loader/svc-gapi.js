@@ -51,51 +51,6 @@ angular.module('risevision.common.gapi', [
     }
   ])
 
-  .factory('auth2APILoader', ['$q', '$log', '$location', '$window', 'gapiLoader',
-    'getBaseDomain', 'CLIENT_ID', 'OAUTH2_SCOPES',
-    function ($q, $log, $location, $window, gapiLoader, getBaseDomain,
-      CLIENT_ID, OAUTH2_SCOPES) {
-      return function () {
-        var deferred = $q.defer();
-        gapiLoader().then(function (gApi) {
-          if (gApi.auth2 && gApi.auth2.getAuthInstance()) {
-            //already loaded. return right away
-            deferred.resolve(gApi.auth2);
-          } else {
-            gApi.load('auth2', function (err) {
-              if (gApi.auth2) {
-                var config = {
-                  client_id: CLIENT_ID,
-                  scope: OAUTH2_SCOPES,
-                  cookie_policy: $location.protocol() + '://' + getBaseDomain() +
-                    ($window.location.port ? ':' + $window.location.port : '')
-                };
-
-                gApi.auth2.init(config)
-                  .then(function () {
-                    $log.debug('auth2 API Loaded');
-
-                    deferred.resolve(gApi.auth2);
-                  })
-                  .catch(function (err) {
-                    var errMsg = 'auth2 GoogleAuth Init Failed';
-                    $log.error(errMsg, err);
-                    deferred.reject(err || errMsg);
-                  });
-              } else {
-                var errMsg = 'auth2 API Load Failed';
-                $log.error(errMsg, err);
-                deferred.reject(err || errMsg);
-              }
-            });
-          }
-        });
-
-        return deferred.promise;
-      };
-    }
-  ])
-
   .factory('clientAPILoader', ['$q', '$log', 'gapiLoader',
     function ($q, $log, gapiLoader) {
       return function () {

@@ -13,7 +13,7 @@
         var Oidc = $window.Oidc;
 
         Oidc.Log.logger = console;
-        Oidc.Log.level = Oidc.Log.INFO;
+        Oidc.Log.level = Oidc.Log.WARN;
 
         var service = {};
         var loc = $window.location.origin + '/';
@@ -39,6 +39,25 @@
           }
         };
         var client = new Oidc.UserManager(settings);
+
+        client.events.addUserLoaded(function(user) {
+          console.log(`OIDC Client - user loaded: ${JSON.stringify(user)}`);
+        });
+        client.events.addUserUnloaded(function() {
+          console.log('OIDC Client - user unloaded');
+        });
+        client.events.addAccessTokenExpiring(function() {
+          console.log('OIDC Client - access token expiring');
+        });
+        client.events.addAccessTokenExpired(function() {
+          console.log('OIDC Client - access token expired');
+        });
+        client.events.addSilentRenewError(function(error) {
+          console.log(`OIDC Client - silent renew error: ${error}`);
+        });
+        client.events.addUserSignedOut(function() {
+          console.log('OIDC Client - user signed out');
+        });
 
         service.getUser = function() {
           return client.getUser()
@@ -98,7 +117,7 @@
             return $q.reject('Missing user id');
           }
 
-          return client.signinSilent({ 
+          return client.signinSilent({
             login_hint: username
           })
            .then(function(user) {
