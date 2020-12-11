@@ -47,7 +47,7 @@
             }).catch(function(err) {
               openidTracker(openidEventType, {}, eventProperties);
             });
-        }
+        };
 
         client.events.addUserLoaded(function(user) {
           openidTracker('user loaded', user.profile);
