@@ -15,7 +15,7 @@ angular.module('risevision.common.components.logging')
             googleUserId: profile.sub,
             companyId: userState.getSelectedCompanyId()
           });
-          console.log(JSON.stringify(eventProperties));
+
           analyticsFactory.track('OpenId Event', eventProperties);
         }
       };
