@@ -31,7 +31,7 @@ describe('directive: TemplateAttributeEditor', function() {
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout, $injector){
-    $window = injector.get($window);
+    $window = $injector.get('$window');
     sandbox.spy($window, 'addEventListener');
     sandbox.spy($window, 'removeEventListener');
 
