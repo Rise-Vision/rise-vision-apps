@@ -7,7 +7,6 @@ describe("Services: openidConnect", function() {
 
   beforeEach(function() {
     openidClient = {
-      getUser: function() { return Q.resolve({ profile: 'profile' }); },
       events: {
         addUserLoaded: sinon.stub(),
         addUserUnloaded: sinon.stub(),
@@ -76,6 +75,10 @@ describe("Services: openidConnect", function() {
     });
 
     it("should call tracker for user unloaded event", function(done) {
+      openidClient.getUser = function() {
+        return Q.resolve({ profile: 'profile' });
+      };
+
       setTimeout(function() {
         var userUnloadedHandler =
           openidClient.events.addUserUnloaded.getCall(0).args[0]
