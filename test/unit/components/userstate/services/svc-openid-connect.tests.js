@@ -9,9 +9,7 @@ describe("Services: openidConnect", function() {
     //stub services
     $provide.service("$q", function() {return Q;});
     $provide.service("openidConnectLoader", function() {
-      return openidConnectLoader = function() {
-        return Q.resolve(openidClient);
-      };
+      return openidConnectLoader = sinon.stub().resolves(openidClient);
     });
 
     $provide.service("openidTracker", function() {
@@ -43,7 +41,15 @@ describe("Services: openidConnect", function() {
   describe("events: ", function() {
     it("should exist", function() {
       expect(openidConnect).to.be.ok;
+    });
 
+    it("should register event handlers", function() {
+      expect(openidConnectLoader).to.have.been.called;
+    });
+  });
+
+  describe("getUser: ", function() {
+    it("should exist, be a function", function() {
       expect(openidConnect.getUser).to.be.ok;
       expect(openidConnect.getUser).to.be.a("function");
     });
