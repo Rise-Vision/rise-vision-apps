@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('risevision.common.components.logging')
-  .factory('openidTracker', ['userState', 'analyticsFactory', 'bigQueryLogging',
-    function (userState, analyticsFactory, bigQueryLogging) {
+  .value('OPENID_EVENTS_TO_BQ', ['silent renew error'])
+  .factory('openidTracker', ['userState', 'analyticsFactory', 'bigQueryLogging', 'OPENID_EVENTS_TO_BQ',
+    function (userState, analyticsFactory, bigQueryLogging, OPENID_EVENTS_TO_BQ) {
       return function (openidEventType, profile, eventProperties) {
         if (openidEventType) {
           profile = profile || {};
@@ -21,7 +22,7 @@ angular.module('risevision.common.components.logging')
 
           analyticsFactory.track('OpenId Event', eventProperties);
 
-          if (openidEventType === 'silent renew error') {
+          if (OPENID_EVENTS_TO_BQ.indexOf(openidEventType) !== -1) {
             bigQueryLogging.logEvent('OpenId silent renew error', eventProperties.errorMessage, null, userId || email);
           }
         }
