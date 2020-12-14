@@ -8,10 +8,10 @@
     .value('CLIENT_ID', '614513768474-dnnhi8e6b8motn6i5if2ur05g6foskoc.apps.googleusercontent.com')
     .value('OAUTH2_SCOPES', 'email profile')
 
-    .factory('openidConnectLoader', ['$q', '$window', 'userState',
+    .factory('openidConnectLoader', ['$q', '$window', 'localStorageService', 'userState',
       'CLIENT_ID', 'OAUTH2_SCOPES',
-      function ($q, $window, userState, CLIENT_ID, OAUTH2_SCOPES) {
-        if (!$window.Oidc) {
+      function ($q, $window, localStorageService, userState, CLIENT_ID, OAUTH2_SCOPES) {
+        if (!$window.Oidc || !localStorageService.isSupported) {
           return function () {
             return $q.reject('Oidc client not found!');
           };
@@ -40,7 +40,7 @@
           filterProtocolClaims: true,
           loadUserInfo: true,
 
-          userStore: new Oidc.WebStorageStateStore({ store: window.localStorage }),
+          userStore: new Oidc.WebStorageStateStore({ store: $window.localStorage }),
           extraQueryParams: {
             access_type: 'online'
           }
