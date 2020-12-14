@@ -5,6 +5,19 @@
 describe("Services: openidConnect", function() {
   beforeEach(module("risevision.common.components.userstate"));
 
+  beforeEach(function() {
+    openidClient = {
+      events: {
+        addUserLoaded: sinon.stub(),
+        addUserUnloaded: sinon.stub(),
+        addAccessTokenExpiring: sinon.stub(),
+        addAccessTokenExpired: sinon.stub(),
+        addSilentRenewError: sinon.stub(),
+        addUserSignedOut: sinon.stub(),
+      }
+    };
+  });
+
   beforeEach(module(function ($provide) {
     //stub services
     $provide.service("$q", function() {return Q;});
@@ -25,26 +38,24 @@ describe("Services: openidConnect", function() {
     });
   });
 
-  beforeEach(function() {
-    openidClient = {
-      events: {
-        addUserLoaded: sinon.stub(),
-        addUserUnloaded: sinon.stub(),
-        addAccessTokenExpiring: sinon.stub(),
-        addAccessTokenExpired: sinon.stub(),
-        addSilentRenewError: sinon.stub(),
-        addUserSignedOut: sinon.stub(),
-      }
-    };
-  });
-
   describe("events: ", function() {
     it("should exist", function() {
       expect(openidConnect).to.be.ok;
     });
 
-    it("should register event handlers", function() {
+    it("should register event handlers", function(done) {
       expect(openidConnectLoader).to.have.been.called;
+
+      setTimeout(function() {
+        expect(openidClient.events.addUserLoaded).to.have.been.called;
+        expect(openidClient.events.addUserUnloaded).to.have.been.called;
+        expect(openidClient.events.addAccessTokenExpiring).to.have.been.called;
+        expect(openidClient.events.addAccessTokenExpired).to.have.been.called;
+        expect(openidClient.events.addSilentRenewError).to.have.been.called;
+        expect(openidClient.events.addUserSignedOut).to.have.been.called;
+
+        done();
+      }, 10);
     });
   });
 
