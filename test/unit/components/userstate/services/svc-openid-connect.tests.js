@@ -116,6 +116,80 @@ describe("Services: openidConnect", function() {
         }, 10);
       }, 10);
     });
+
+    it("should call tracker for token expiring event", function(done) {
+      setTimeout(function() {
+        var tokenExpiringHandler =
+          openidClient.events.addAccessTokenExpiring.getCall(0).args[0]
+
+        expect(tokenExpiringHandler).to.be.ok;
+        expect(tokenExpiringHandler).to.be.a("function");
+
+        tokenExpiringHandler();
+
+        setTimeout(function() {
+          expect(openidTracker).to.have.been.calledWith('access token expiring', 'profile');
+
+          done();
+        }, 10);
+      }, 10);
+    });
+
+    it("should call tracker for token expired event", function(done) {
+      setTimeout(function() {
+        var tokenExpiredHandler =
+          openidClient.events.addAccessTokenExpired.getCall(0).args[0]
+
+        expect(tokenExpiredHandler).to.be.ok;
+        expect(tokenExpiredHandler).to.be.a("function");
+
+        tokenExpiredHandler();
+
+        setTimeout(function() {
+          expect(openidTracker).to.have.been.calledWith('access token expired', 'profile');
+
+          done();
+        }, 10);
+      }, 10);
+    });
+
+    it("should call tracker for silent renew error", function(done) {
+      setTimeout(function() {
+        var silentRenewErrorHandler =
+          openidClient.events.addSilentRenewError.getCall(0).args[0]
+
+        expect(silentRenewErrorHandler).to.be.ok;
+        expect(silentRenewErrorHandler).to.be.a("function");
+
+        silentRenewErrorHandler({ message: 'network error' });
+
+        setTimeout(function() {
+          expect(openidTracker).to.have.been.calledWith('silent renew error', 'profile', {
+            errorMessage: 'network error'
+          });
+
+          done();
+        }, 10);
+      }, 10);
+    });
+
+    it("should call tracker for user signed out event", function(done) {
+      setTimeout(function() {
+        var userSignedOutHandler =
+          openidClient.events.addUserSignedOut.getCall(0).args[0]
+
+        expect(userSignedOutHandler).to.be.ok;
+        expect(userSignedOutHandler).to.be.a("function");
+
+        userSignedOutHandler();
+
+        setTimeout(function() {
+          expect(openidTracker).to.have.been.calledWith('user signed out', 'profile');
+
+          done();
+        }, 10);
+      }, 10);
+    });
   });
 
   describe("getUser: ", function() {
