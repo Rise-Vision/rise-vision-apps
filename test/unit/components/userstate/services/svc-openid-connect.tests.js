@@ -7,6 +7,7 @@ describe("Services: openidConnect", function() {
 
   beforeEach(function() {
     openidClient = {
+      getUser: function() { return Q.resolve({ profile: 'profile' }); },
       events: {
         addUserLoaded: sinon.stub(),
         addUserUnloaded: sinon.stub(),
@@ -66,11 +67,29 @@ describe("Services: openidConnect", function() {
         expect(userLoadedHandler).to.be.ok;
         expect(userLoadedHandler).to.be.a("function");
 
-        userLoadedHandler({ profile: 'profile' })
+        userLoadedHandler({ profile: 'profile' });
 
         expect(openidTracker).to.have.been.calledWith('user loaded', 'profile');
 
         done();
+      }, 10);
+    });
+
+    it("should call tracker for user unloaded event", function(done) {
+      setTimeout(function() {
+        var userUnloadedHandler =
+          openidClient.events.addUserUnloaded.getCall(0).args[0]
+
+        expect(userUnloadedHandler).to.be.ok;
+        expect(userUnloadedHandler).to.be.a("function");
+
+        userUnloadedHandler();
+
+        setTimeout(function() {
+          expect(openidTracker).to.have.been.calledWith('user unloaded', 'profile');
+
+          done();
+        }, 10);
       }, 10);
     });
   });
