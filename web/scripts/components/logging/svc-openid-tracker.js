@@ -22,7 +22,7 @@ angular.module('risevision.common.components.logging')
           analyticsFactory.track('OpenId Event', eventProperties);
 
           if (openidEventType === 'silent renew error') {
-            bigQueryLogging.logEvent('OpenId silent renew error', eventProperties.errorMessage, null, email);
+            bigQueryLogging.logEvent('OpenId silent renew error', eventProperties.errorMessage, null, userId || email);
           }
         }
       };

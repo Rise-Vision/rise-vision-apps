@@ -88,7 +88,7 @@ describe('service: display tracker:', function() {
       errorMessage: 'Frame window timed out'
     });
 
-    bQSpy.should.have.been.calledWith('OpenId silent renew error', 'Frame window timed out', null, 'userEmail');
+    bQSpy.should.have.been.calledWith('OpenId silent renew error', 'Frame window timed out', null, 'userId');
   });
 
 });
