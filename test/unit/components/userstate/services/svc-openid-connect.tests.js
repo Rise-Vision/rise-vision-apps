@@ -57,6 +57,22 @@ describe("Services: openidConnect", function() {
         done();
       }, 10);
     });
+
+    it("should call tracker for user loaded event", function(done) {
+      setTimeout(function() {
+        var userLoadedHandler =
+          openidClient.events.addUserLoaded.getCall(0).args[0]
+
+        expect(userLoadedHandler).to.be.ok;
+        expect(userLoadedHandler).to.be.a("function");
+
+        userLoadedHandler({ profile: 'profile' })
+
+        expect(openidTracker).to.have.been.calledWith('user loaded', 'profile');
+
+        done();
+      }, 10);
+    });
   });
 
   describe("getUser: ", function() {
