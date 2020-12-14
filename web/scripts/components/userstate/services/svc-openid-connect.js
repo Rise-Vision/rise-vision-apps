@@ -61,9 +61,37 @@
       }
     ])
 
-    .factory('openidConnect', ['$q', 'openidConnectLoader',
-      function ($q, openidConnectLoader) {
+    .factory('openidConnect', ['$q', 'openidConnectLoader', 'openidTracker',
+      function ($q, openidConnectLoader, openidTracker) {
         var service = {};
+
+        var trackOpenidEvent = function(openidEventType, eventProperties) {
+          return service.getUser()
+            .then(function(user) {
+              openidTracker(openidEventType, user.profile, eventProperties);
+            }).catch(function(err) {
+              openidTracker(openidEventType, {}, eventProperties);
+            });
+        };
+
+        client.events.addUserLoaded(function(user) {
+          openidTracker('user loaded', user.profile);
+        });
+        client.events.addUserUnloaded(function() {
+          trackOpenidEvent('user unloaded');
+        });
+        client.events.addAccessTokenExpiring(function() {
+          trackOpenidEvent('access token expiring');
+        });
+        client.events.addAccessTokenExpired(function() {
+          trackOpenidEvent('access token expired');
+        });
+        client.events.addSilentRenewError(function(error) {
+          trackOpenidEvent('silent renew error', {errorMessage: error.message});
+        });
+        client.events.addUserSignedOut(function() {
+          trackOpenidEvent('user signed out');
+        });
 
         service.getUser = function() {
           return openidConnectLoader()
