@@ -7,6 +7,9 @@ describe("Services: openidConnect", function() {
 
   beforeEach(function() {
     openidClient = {
+      getUser : function() {
+        return Q.resolve({ profile: 'profile' });
+      },
       events: {
         addUserLoaded: sinon.stub(),
         addUserUnloaded: sinon.stub(),
@@ -75,8 +78,26 @@ describe("Services: openidConnect", function() {
     });
 
     it("should call tracker for user unloaded event", function(done) {
+      setTimeout(function() {
+        var userUnloadedHandler =
+          openidClient.events.addUserUnloaded.getCall(0).args[0]
+
+        expect(userUnloadedHandler).to.be.ok;
+        expect(userUnloadedHandler).to.be.a("function");
+
+        userUnloadedHandler();
+
+        setTimeout(function() {
+          expect(openidTracker).to.have.been.calledWith('user unloaded', 'profile');
+
+          done();
+        }, 10);
+      }, 10);
+    });
+
+    it("should send empty profile if there's no user", function(done) {
       openidClient.getUser = function() {
-        return Q.resolve({ profile: 'profile' });
+        return Q.resolve(null);
       };
 
       setTimeout(function() {
@@ -89,7 +110,7 @@ describe("Services: openidConnect", function() {
         userUnloadedHandler();
 
         setTimeout(function() {
-          expect(openidTracker).to.have.been.calledWith('user unloaded', 'profile');
+          expect(openidTracker).to.have.been.calledWith('user unloaded', {});
 
           done();
         }, 10);
