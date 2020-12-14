@@ -11,9 +11,13 @@
     .factory('openidConnectLoader', ['$q', '$window', 'userState',
       'CLIENT_ID', 'OAUTH2_SCOPES',
       function ($q, $window, userState, CLIENT_ID, OAUTH2_SCOPES) {
-        var deferred = $q.defer();
+        if (!$window.Oidc) {
+          return function () {
+            return $q.reject('Oidc client not found!');
+          };
+        }
 
-        var Oidc = $window.Oidc || {};
+        var Oidc = $window.Oidc;
 
         Oidc.Log.logger = console;
         Oidc.Log.level = Oidc.Log.WARN;
@@ -65,33 +69,34 @@
       function ($q, openidConnectLoader, openidTracker) {
         var service = {};
 
-        var trackOpenidEvent = function(openidEventType, eventProperties) {
-          return service.getUser()
-            .then(function(user) {
-              openidTracker(openidEventType, user.profile, eventProperties);
-            }).catch(function(err) {
-              openidTracker(openidEventType, {}, eventProperties);
-            });
-        };
+        openidConnectLoader()
+          .then(function(client) {
+            var trackOpenidEvent = function(openidEventType, eventProperties) {
+              return client.getUser()
+                .then(function(user) {
+                  openidTracker(openidEventType, user ? user.profile : {}, eventProperties);
+                });
+            };
 
-        client.events.addUserLoaded(function(user) {
-          openidTracker('user loaded', user.profile);
-        });
-        client.events.addUserUnloaded(function() {
-          trackOpenidEvent('user unloaded');
-        });
-        client.events.addAccessTokenExpiring(function() {
-          trackOpenidEvent('access token expiring');
-        });
-        client.events.addAccessTokenExpired(function() {
-          trackOpenidEvent('access token expired');
-        });
-        client.events.addSilentRenewError(function(error) {
-          trackOpenidEvent('silent renew error', {errorMessage: error.message});
-        });
-        client.events.addUserSignedOut(function() {
-          trackOpenidEvent('user signed out');
-        });
+            client.events.addUserLoaded(function(user) {
+              openidTracker('user loaded', user.profile);
+            });
+            client.events.addUserUnloaded(function() {
+              trackOpenidEvent('user unloaded');
+            });
+            client.events.addAccessTokenExpiring(function() {
+              trackOpenidEvent('access token expiring');
+            });
+            client.events.addAccessTokenExpired(function() {
+              trackOpenidEvent('access token expired');
+            });
+            client.events.addSilentRenewError(function(error) {
+              trackOpenidEvent('silent renew error', {errorMessage: error.message});
+            });
+            client.events.addUserSignedOut(function() {
+              trackOpenidEvent('user signed out');
+            });
+          });
 
         service.getUser = function() {
           return openidConnectLoader()
