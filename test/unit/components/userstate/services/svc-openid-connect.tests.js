@@ -1,5 +1,3 @@
-/*jshint expr:true */
-
 "use strict";
 
 describe("Services: openidConnect", function() {
