@@ -8,12 +8,12 @@
   <div class="modal-body u_padding-lg" stop-event="touchend">
     
     <div class="u_margin-md-bottom" ng-if="!categoryFilters">
-      <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
+      <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch"></search-filter>
     </div>
 
     <div class="row" ng-if="categoryFilters">
       <div class="col-md-8 u_margin-sm-bottom">
-        <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
+        <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch"></search-filter>
       </div>
       <div class="col-md-4 u_margin-md-bottom aligner">
         <label for="filter-templates" class="u_remove-bottom u_nowrap u_margin-right">Filter Templates:</label>
@@ -44,7 +44,7 @@
 
               <ng-include ng-if="!isEducationCustomer" src="'partials/editor/blank-presentation.html'"></ng-include>
 
-              <ng-repeat ng-repeat="product in factory.items.list | filter: getTemplatesFilter()">
+              <ng-repeat ng-repeat="product in factory.items.list | filter:search.query | filter: getTemplatesFilter()">
                 <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3" ng-click="select(product)">
                   <div class="product-grid_item panel panel-default">
 

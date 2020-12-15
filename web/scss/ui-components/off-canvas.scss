@@ -1,11 +1,11 @@
 .off-canvas--nav {
-  width: 350px;
   background-color: #fff;
   color: #000;
   position: absolute;
   left: 0;
   top: 0;
   width: 300px;
+  max-width: 300px;
   height: 100%;
   -webkit-user-drag: none;
   z-index: $zindex-off-canvas;

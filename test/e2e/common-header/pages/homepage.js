@@ -21,6 +21,7 @@
     var selectSubcompanyButton = element(by.css(".dropdown-menu #select-subcompany-button"));
     var changeSubcompanyButton = element(by.css(".dropdown-menu #change-subcompany-button"));
     var resetSubcompanyButton = element(by.css(".dropdown-menu #reset-subcompany-button"));
+    var accountBillingButton = element(by.css(".dropdown-menu .store-account-button.ng-scope"));
 
     var subcompanyAlert = element(by.css(".common-header-alert.sub-company-alert.hidden-xs"));
     var testCompanyAlert = element(by.css(".sub-company-alert.test-company-alert"));
@@ -80,6 +81,10 @@
     this.getResetSubcompanyButton = function() {
       return resetSubcompanyButton;
     };
+
+    this.getAccountBillingButton = function() {
+      return accountBillingButton;
+    }
 
     this.getSubcompanyAlert = function() {
       return subcompanyAlert;

@@ -6,7 +6,7 @@
 
   <div rv-spinner rv-spinner-key="billing-loader" rv-spinner-start-active="1">
 
-    <div class="form-group mt-5 mb-4">
+    <div class="form-group mt-5 mb-3">
       <label>Billing Settings</label>
     </div>
 
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="form-group mt-5 mb-4">
+    <div class="form-group mt-5 mb-3">
       <label>Subscriptions</label>
     </div>
 
@@ -45,7 +45,7 @@
       <span ng-hide="chargebeeFactory.apiError === 403">{{chargebeeFactory.apiError}}</span>
     </div>
 
-    <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom" scrolling-list="subscriptions.load()">
+    <div class="scrollable-list horizontal-scroll border-container mt-0 u_margin-md-bottom" scrolling-list="subscriptions.load()">
 
       <table id="subscriptionsListTable" class="table">
         <thead class="table-header">
@@ -84,7 +84,7 @@
 
     </div>
 
-    <div class="form-group mt-5 mb-4">
+    <div class="form-group mt-5 mb-3">
       <label>Billing History</label>
     </div>
 
@@ -97,7 +97,7 @@
       <strong>{{billingFactory.apiError}}</strong>
     </div>
 
-    <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom" scrolling-list="invoices.load()">
+    <div class="scrollable-list horizontal-scroll border-container mt-0 u_margin-md-bottom" scrolling-list="invoices.load()">
 
       <table id="invoicesListTable" class="table">
         <thead class="table-header">
@@ -141,7 +141,7 @@
 
     </div>
 
-    <div class="form-group mt-5 mb-4">
+    <div class="form-group mt-5 mb-3">
       <label>Payment Methods</label>
     </div>
 
