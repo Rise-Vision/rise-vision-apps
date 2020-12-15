@@ -21,14 +21,21 @@ describe('service: display tracker:', function() {
         load: function(){}
       }
     });
+    $provide.service('bigQueryLogging',function(){
+      return {
+        logEvent: function() {}
+      }
+    });
   }));
 
-  var openidTracker, eventName, eventData;
+  var openidTracker, eventName, eventData, bQSpy;
   beforeEach(function(){
     eventName = undefined;
     eventData = undefined;
     inject(function($injector){
       openidTracker = $injector.get('openidTracker');
+      var bigQueryLogging = $injector.get('bigQueryLogging');
+      bQSpy = sinon.spy(bigQueryLogging,'logEvent');
     });
   });
 
@@ -48,6 +55,8 @@ describe('service: display tracker:', function() {
       googleUserId: '12345',
       companyId: 'companyId'
     });
+
+    bQSpy.should.not.have.been.called;
   });
 
   it('should append additional properties',function(){
@@ -62,6 +71,24 @@ describe('service: display tracker:', function() {
       companyId: 'companyId',
       extra: 'param'
     });
+
+    bQSpy.should.not.have.been.called;
+  });
+
+  it('should track silent renew errors to BQ',function(){
+    openidTracker('silent renew error', {sub: '12345'}, {errorMessage: 'Frame window timed out'});
+
+    expect(eventName).to.equal('OpenId Event');
+    expect(eventData).to.deep.equal({
+      openidEventType: 'silent renew error',
+      userId: 'userId',
+      email: 'userEmail',
+      googleUserId: '12345',
+      companyId: 'companyId',
+      errorMessage: 'Frame window timed out'
+    });
+
+    bQSpy.should.have.been.calledWith('OpenId silent renew error', 'Frame window timed out', null, 'userId');
   });
 
 });
