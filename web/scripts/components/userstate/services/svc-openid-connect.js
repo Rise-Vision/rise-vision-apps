@@ -4,8 +4,7 @@
   /*jshint camelcase: false */
 
   angular.module('risevision.common.components.userstate')
-    // .value('CLIENT_ID', '614513768474.apps.googleusercontent.com')
-    .value('CLIENT_ID', '614513768474-dnnhi8e6b8motn6i5if2ur05g6foskoc.apps.googleusercontent.com')
+    .value('CLIENT_ID', '614513768474.apps.googleusercontent.com')
     .value('OAUTH2_SCOPES', 'email profile')
 
     .factory('openidConnectLoader', ['$q', '$window', 'localStorageService', 'userState',
