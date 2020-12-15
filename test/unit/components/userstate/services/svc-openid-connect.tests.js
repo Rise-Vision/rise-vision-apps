@@ -8,6 +8,10 @@ describe("Services: openidConnect", function() {
       getUser : function() {
         return Q.resolve({ profile: 'profile' });
       },
+      removeUser: sinon.stub(),
+      signinRedirect: sinon.stub(),
+      signinRedirectCallback: sinon.stub(),
+      signinSilent: sinon.stub().resolves({ profile: 'profile' }),
       events: {
         addUserLoaded: sinon.stub(),
         addUserUnloaded: sinon.stub(),
@@ -194,6 +198,105 @@ describe("Services: openidConnect", function() {
     it("should exist, be a function", function() {
       expect(openidConnect.getUser).to.be.ok;
       expect(openidConnect.getUser).to.be.a("function");
+    });
+
+    it("return the user", function(done) {
+      openidConnect.getUser().then((user) => {
+        expect(user).to.deep.equal({ profile: 'profile' });
+
+        done();
+      });
+    });
+  });
+
+  describe("signinRedirect: ", function() {
+    it("should exist, be a function", function() {
+      expect(openidConnect.signinRedirect).to.be.ok;
+      expect(openidConnect.signinRedirect).to.be.a("function");
+    });
+
+    it("should call signin redirect", function(done) {
+      var state = 'some state';
+
+      openidConnect.signinRedirect(state).then(() => {
+        expect(openidClient.signinRedirect).to.have.been.calledWith({
+          state: 'some state'
+        });
+
+        done();
+      });
+    });
+  });
+
+  describe("signinRedirectCallback: ", function() {
+    it("should exist, be a function", function() {
+      expect(openidConnect.signinRedirectCallback).to.be.ok;
+      expect(openidConnect.signinRedirectCallback).to.be.a("function");
+    });
+
+    it("should call signin redirect callback", function(done) {
+      openidConnect.signinRedirectCallback().then(() => {
+        expect(openidClient.signinRedirectCallback).to.have.been.called;
+
+        done();
+      });
+    });
+  });
+
+  describe("signinPopup: ", function() {
+    it("should exist, be a function", function() {
+      expect(openidConnect.signinPopup).to.be.ok;
+      expect(openidConnect.signinPopup).to.be.a("function");
+    });
+
+    it("should reject", function(done) {
+      openidConnect.signinPopup().catch(e => {
+        expect(e).to.equal('Not implemented');
+
+        done();
+      });
+    });
+  });
+
+  describe("signinSilent: ", function() {
+    it("should exist, be a function", function() {
+      expect(openidConnect.signinSilent).to.be.ok;
+      expect(openidConnect.signinSilent).to.be.a("function");
+    });
+
+    it("should reject if no username is provided", function(done) {
+      openidConnect.signinSilent().catch(e => {
+        expect(e).to.equal('Missing user id');
+
+        done();
+      });
+    });
+
+    it("should sign in silent", function(done) {
+      openidConnect.signinSilent('a username').then(user => {
+        expect(openidClient.signinSilent).to.have.been.calledWith({
+          login_hint: 'a username'
+        });
+
+        expect(user).to.deep.equal({ profile: 'profile' });
+
+        done();
+      });
+    });
+  });
+
+  describe("removeUser: ", function() {
+    it("should exist, be a function", function() {
+      expect(openidConnect.removeUser).to.be.ok;
+      expect(openidConnect.removeUser).to.be.a("function");
+    });
+
+    it("should remove user", function(done) {
+      openidConnect.removeUser().then(user => {
+        expect(openidClient.removeUser).to.have.been.called;
+
+        done();
+      });
     });
   });
 
