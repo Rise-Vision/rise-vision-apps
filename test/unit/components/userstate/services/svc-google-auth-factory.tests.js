@@ -2,7 +2,7 @@
 
 "use strict";
 
-xdescribe("Services: googleAuthFactory", function() {
+describe("Services: googleAuthFactory", function() {
   beforeEach(module("risevision.common.components.userstate"));
 
   beforeEach(module(function ($provide) {
@@ -42,47 +42,42 @@ xdescribe("Services: googleAuthFactory", function() {
       };
     });
 
-    authInstance = {
-      isSignedIn: {
-        get: sinon.spy(function() {
-          return isSignedIn;
-        })
-      },
-      signIn: sinon.spy(function() {
-        if (isSignedIn) {
-          return Q.resolve();
-        } else {
-          return Q.reject("popup closed");
-        }
-      }),
-      currentUser: {
-        get: sinon.stub().returns({
-          getBasicProfile: sinon.stub().returns({
-            getId: sinon.stub().returns("userId"),
-            getEmail: sinon.stub().returns("userEmail"),
-            getImageUrl: sinon.stub().returns("imageUrl"),
-          })
-        })
-      }
-    };
-
-    $provide.service("auth2APILoader", function () {
-      return auth2APILoader = sinon.spy(function() {
+    $provide.service("gapiLoader", function () {
+      return gapiLoader = sinon.spy(function() {
         return Q.resolve({
-          getAuthInstance: function() {
-            return authInstance;
+          setToken: function(paramToken) {
+            token = paramToken;
           }
         });
       });
     });
 
+    user = {
+      expires_in: 100,
+      profile: {
+        sub: 'userId',
+        email: 'userEmail',
+        picture: 'imageUrl'
+      }
+    }
+
+    $provide.service("openidConnect", function () {
+      return openidConnect = {
+        getUser: sinon.stub().resolves(user),
+        signinSilent: sinon.stub(),
+        signinPopup: sinon.stub(),
+        signinRedirect: sinon.stub(),
+        removeUser: sinon.stub()
+      };
+    });
+
   }));
-  
-  var googleAuthFactory, userState, uiFlowManager, $window, $rootScope, 
-    urlStateService, auth2APILoader, authInstance;
-    
+
+  var googleAuthFactory, userState, uiFlowManager, $window, $rootScope,
+    urlStateService, gapiLoader, openidConnect, user;
+
   var isSignedIn;
-  
+
   describe("authenticate: ", function() {
     beforeEach(function() {
       isSignedIn = true;
@@ -107,37 +102,26 @@ xdescribe("Services: googleAuthFactory", function() {
       expect(googleAuthFactory.authenticate(true).then).to.be.a("function");
     });
 
-    describe("_gapiAuthorize: ", function() {
-      it("should load gapi.auth2 and attempt to authorize user", function(done) {
-        googleAuthFactory.authenticate();
-        
-        setTimeout(function() {
-          auth2APILoader.should.have.been.called;
-          authInstance.isSignedIn.get.should.have.been.called;
+    it("should handle authorization failure", function(done) {
+      openidConnect.getUser = function() {
+        return Q.reject("Failed to authorize user (auth2)");
+      };
 
-          done();
-        }, 10);
-      });
-      
-      it("should handle authorization failure", function(done) {
-        isSignedIn = false;
-
-        googleAuthFactory.authenticate()
-        .then(done)
-        .then(null, function(error) {
-          expect(error).to.equal("Failed to authorize user (auth2)");
-          done();
-        })
-        .then(null,done);
-      });
+      googleAuthFactory.authenticate()
+      .then(done)
+      .then(null, function(error) {
+        expect(error).to.equal("Failed to authorize user (auth2)");
+        done();
+      })
+      .then(null,done);
     });
-    
+
     describe("_getUserProfile: ", function() {
       it("should retrieve user profile correctly", function(done) {
         googleAuthFactory.authenticate().then(function(resp) {
           urlStateService.redirectToState.should.not.have.been.called;
 
-          expect(resp).to.deep.equal({ 
+          expect(resp).to.deep.equal({
             id: "userId",
             email: "userEmail",
             picture: "imageUrl"
@@ -147,8 +131,8 @@ xdescribe("Services: googleAuthFactory", function() {
         })
         .then(null,done);
       });
-      
-      it("should redirect and clear state if present", function(done) {
+
+      xit("should redirect and clear state if present", function(done) {
         userState._state.redirectState = "someState";
 
         googleAuthFactory.authenticate().then(function() {
@@ -163,7 +147,7 @@ xdescribe("Services: googleAuthFactory", function() {
     });
   });
 
-  describe("forceAuthenticate", function() {
+  xdescribe("forceAuthenticate", function() {
     beforeEach(module(function ($provide) {
       $provide.value("$window", {
         location: {
@@ -193,7 +177,7 @@ xdescribe("Services: googleAuthFactory", function() {
       googleAuthFactory.authenticate(true);
 
       expect(userState._state.redirectState).to.equal("someState");
-      
+
       userState._persistState.should.have.been.called;
       uiFlowManager.persist.should.have.been.called;
     });
@@ -202,7 +186,7 @@ xdescribe("Services: googleAuthFactory", function() {
       isSignedIn = true;
 
       googleAuthFactory.authenticate(true);
-      
+
       setTimeout(function() {
         auth2APILoader.should.have.been.called;
         authInstance.signIn.should.have.been.called;
@@ -223,10 +207,10 @@ xdescribe("Services: googleAuthFactory", function() {
       $rootScope.redirectToRoot = false;
 
       googleAuthFactory.authenticate(true);
-      
+
       setTimeout(function() {
         expect(userState._state.redirectState).to.equal("clearedPath");
-        
+
         expect(authInstance.signIn.args[0][0]).to.deep.equal({
           "response_type":"token",
           "prompt":"select_account",
@@ -242,7 +226,7 @@ xdescribe("Services: googleAuthFactory", function() {
       userState._state.inRVAFrame = true;
 
       googleAuthFactory.authenticate(true);
-      
+
       setTimeout(function() {
         expect(authInstance.signIn.args[0][0]).to.deep.equal({
           "response_type":"token",
@@ -254,12 +238,12 @@ xdescribe("Services: googleAuthFactory", function() {
         done();
       }, 10);
     });
-    
+
     it("should authenticate with popup via select_account if in iframe", function(done) {
       $window.self = 1;
       $window.top = 0;
       googleAuthFactory.authenticate(true);
-      
+
       setTimeout(function() {
         expect(authInstance.signIn.args[0][0]).to.deep.equal({
           "response_type":"token",
@@ -271,7 +255,7 @@ xdescribe("Services: googleAuthFactory", function() {
         done();
       }, 10);
     });
-    
+
     it("should authorize user after popup authentication", function(done) {
       userState._state.inRVAFrame = true;
 
@@ -281,7 +265,7 @@ xdescribe("Services: googleAuthFactory", function() {
         authInstance.signIn.should.have.been.called;
         authInstance.isSignedIn.get.should.have.been.called;
 
-        expect(resp).to.deep.equal({ 
+        expect(resp).to.deep.equal({
           id: "userId",
           email: "userEmail",
           picture: "imageUrl"
