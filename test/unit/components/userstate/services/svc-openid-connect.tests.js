@@ -201,7 +201,7 @@ describe("Services: openidConnect", function() {
     });
 
     it("return the user", function(done) {
-      openidConnect.getUser().then((user) => {
+      openidConnect.getUser().then( function(user) {
         expect(user).to.deep.equal({ profile: 'profile' });
 
         done();
@@ -218,7 +218,7 @@ describe("Services: openidConnect", function() {
     it("should call signin redirect", function(done) {
       var state = 'some state';
 
-      openidConnect.signinRedirect(state).then(() => {
+      openidConnect.signinRedirect(state).then( function() {
         expect(openidClient.signinRedirect).to.have.been.calledWith({
           state: 'some state'
         });
@@ -235,7 +235,7 @@ describe("Services: openidConnect", function() {
     });
 
     it("should call signin redirect callback", function(done) {
-      openidConnect.signinRedirectCallback().then(() => {
+      openidConnect.signinRedirectCallback().then( function() {
         expect(openidClient.signinRedirectCallback).to.have.been.called;
 
         done();
@@ -250,7 +250,7 @@ describe("Services: openidConnect", function() {
     });
 
     it("should reject", function(done) {
-      openidConnect.signinPopup().catch(e => {
+      openidConnect.signinPopup().catch( function(e) {
         expect(e).to.equal('Not implemented');
 
         done();
@@ -265,7 +265,7 @@ describe("Services: openidConnect", function() {
     });
 
     it("should reject if no username is provided", function(done) {
-      openidConnect.signinSilent().catch(e => {
+      openidConnect.signinSilent().catch( function(e) {
         expect(e).to.equal('Missing user id');
 
         done();
@@ -273,7 +273,7 @@ describe("Services: openidConnect", function() {
     });
 
     it("should sign in silent", function(done) {
-      openidConnect.signinSilent('a username').then(user => {
+      openidConnect.signinSilent('a username').then( function(user) {
         expect(openidClient.signinSilent).to.have.been.calledWith({
           login_hint: 'a username'
         });
@@ -292,7 +292,7 @@ describe("Services: openidConnect", function() {
     });
 
     it("should remove user", function(done) {
-      openidConnect.removeUser().then(user => {
+      openidConnect.removeUser().then( function(user) {
         expect(openidClient.removeUser).to.have.been.called;
 
         done();
