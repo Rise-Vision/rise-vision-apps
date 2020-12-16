@@ -346,17 +346,17 @@ describe("Services: userAuthFactory", function() {
       .then(null,done);
     });
 
-    xit("should log user out of their Google account", function(done) {
+    it("should log user out of their Google account", function(done) {
       $window.logoutFrame = {};
       userAuthFactory.signOut(true).then(function() {
-        expect($window.logoutFrame.location).to.equal("https://accounts.google.com/Logout");
+        googleAuthFactory.signOut.should.have.been.calledWith(true);
 
         done();
       })
       .then(null,done);
     });
 
-    xit("should reset authenticate promise", function(done) {
+    it("should reset authenticate promise", function(done) {
       var initialPromise = userAuthFactory.authenticate();
 
       setTimeout(function() {
