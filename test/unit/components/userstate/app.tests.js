@@ -85,8 +85,8 @@ describe("app:", function() {
     });
 
     describe("root matcher: ", function() {
-      let location, userAuthFactory, openidConnect, rootMatcher;
-      let searchOutput;
+      var location, userAuthFactory, openidConnect, rootMatcher;
+      var searchOutput;
 
       beforeEach(function () {
         searchOutput = {};
