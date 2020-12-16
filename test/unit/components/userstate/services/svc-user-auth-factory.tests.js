@@ -63,7 +63,7 @@ describe("Services: userAuthFactory", function() {
           email: "username@test.com",
           picture: "picture"
         }),
-        signOut: sinon.spy()
+        signOut: sinon.stub().resolves()
       };
     });
 
@@ -93,7 +93,7 @@ describe("Services: userAuthFactory", function() {
 
   }));
 
-  var userAuthFactory, userState, isRiseAuthUser, $loading, authInstance,
+  var userAuthFactory, userState, isRiseAuthUser, $loading,
   googleAuthFactory, customAuthFactory, rvTokenStore, $broadcastSpy,
   externalLogging, $window;
 
@@ -254,7 +254,7 @@ describe("Services: userAuthFactory", function() {
 
       });
 
-      xit("should not update if users match", function(done) {
+      it("should not update if users match", function(done) {
         userAuthFactory.authenticate(true).then(function() {
           expect(userState._state.user).to.deep.equal({ username: "username@test.com" });
 
@@ -266,7 +266,7 @@ describe("Services: userAuthFactory", function() {
         .then(null,done);
       });
 
-      xit("should update if users don't match", function(done) {
+      it("should update if users don't match", function(done) {
         authenticatedUser.email = "username2@test.com";
 
         userAuthFactory.authenticate(true).then(function() {
@@ -291,18 +291,18 @@ describe("Services: userAuthFactory", function() {
 
   });
 
-  xit("authenticatePopup: ", function(done) {
+  it("authenticatePopup: ", function(done) {
     userAuthFactory.authenticatePopup();
 
     setTimeout(function() {
-      googleAuthFactory.authenticate.should.have.been.calledWith(true);
+      googleAuthFactory.authenticate.should.have.been.called;
       customAuthFactory.authenticate.should.not.have.been.called;
 
       done();
     }, 10);
   });
 
-  xdescribe("signOut: ", function() {
+  describe("signOut: ", function() {
     it("should return a promise", function() {
       expect(userAuthFactory.signOut().then).to.be.a("function");
     });
@@ -312,8 +312,7 @@ describe("Services: userAuthFactory", function() {
       userState._state.userToken = {};
 
       userAuthFactory.signOut().then(function() {
-        auth2APILoader.should.have.been.called;
-        expect(authInstance).to.be.undefined;
+        googleAuthFactory.signOut.should.not.have.been.called;
 
         // _clearUserToken
         expect(userState._state.userToken).to.be.undefined;
@@ -332,8 +331,7 @@ describe("Services: userAuthFactory", function() {
       userState._state.userToken = {};
 
       userAuthFactory.signOut().then(function() {
-        auth2APILoader.should.have.been.called;
-        authInstance.signOut.should.have.been.called;
+        googleAuthFactory.signOut.should.have.been.called;
 
         // _clearUserToken
         expect(userState._state.userToken).to.be.undefined;
@@ -348,7 +346,7 @@ describe("Services: userAuthFactory", function() {
       .then(null,done);
     });
 
-    it("should log user out of their Google account", function(done) {
+    xit("should log user out of their Google account", function(done) {
       $window.logoutFrame = {};
       userAuthFactory.signOut(true).then(function() {
         expect($window.logoutFrame.location).to.equal("https://accounts.google.com/Logout");
@@ -358,7 +356,7 @@ describe("Services: userAuthFactory", function() {
       .then(null,done);
     });
 
-    it("should reset authenticate promise", function(done) {
+    xit("should reset authenticate promise", function(done) {
       var initialPromise = userAuthFactory.authenticate();
 
       setTimeout(function() {
