@@ -64,8 +64,8 @@
       }
     ])
 
-    .factory('openidConnect', ['$q', 'openidConnectLoader', 'openidTracker',
-      function ($q, openidConnectLoader, openidTracker) {
+    .factory('openidConnect', ['$q', '$log', 'openidConnectLoader', 'openidTracker',
+      function ($q, $log, openidConnectLoader, openidTracker) {
         var service = {};
 
         openidConnectLoader()
@@ -137,7 +137,7 @@
 
               return user;
             }).catch(function(err) {
-              console.log(err);
+              $log.error('Authentication Error from Redirect: ', err);
 
               throw err;
             });

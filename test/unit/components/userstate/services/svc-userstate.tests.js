@@ -453,7 +453,6 @@ describe("Services: userState", function() {
         var oldState = angular.copy(userState._state);
         oldState.user.username = "username@test.com";
         oldState.userToken = "dummy";
-        oldState.redirectDetected = true;
 
         localStorageService.get = sinon.spy(function() { return {user: {username: "username@test.com"}, userToken: "dummy"}; });
 

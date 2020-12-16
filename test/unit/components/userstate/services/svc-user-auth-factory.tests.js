@@ -116,10 +116,9 @@ describe("Services: userAuthFactory", function() {
 
   it("should exist, also methods", function() {
     expect(userAuthFactory.authenticate).to.be.ok;
-    expect(userAuthFactory.authenticatePopup).to.be.ok;
     expect(userAuthFactory.signOut).to.be.ok;
 
-    ["authenticate", "authenticatePopup", "signOut",
+    ["authenticate", "signOut",
     "addEventListenerVisibilityAPI", "removeEventListenerVisibilityAPI"]
       .forEach(function (method) {
         expect(userAuthFactory).to.have.property(method);
@@ -289,17 +288,6 @@ describe("Services: userAuthFactory", function() {
 
     });
 
-  });
-
-  it("authenticatePopup: ", function(done) {
-    userAuthFactory.authenticatePopup();
-
-    setTimeout(function() {
-      googleAuthFactory.authenticate.should.have.been.called;
-      customAuthFactory.authenticate.should.not.have.been.called;
-
-      done();
-    }, 10);
   });
 
   describe("signOut: ", function() {
