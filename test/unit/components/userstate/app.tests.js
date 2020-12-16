@@ -76,9 +76,14 @@ describe("app:", function() {
 
     describe("root matcher: ", function() {
       let location, userAuthFactory, openidConnect, rootMatcher;
+      let searchOutput;
 
       beforeEach(function () {
-        location = {};
+        searchOutput = {};
+        location = {
+          hash: function() { return null },
+          search: function() { return searchOutput; }
+        };
         userAuthFactory = { authenticate: sinon.stub() };
         openidConnect = { signinRedirectCallback: sinon.stub().resolves() };
 
@@ -86,7 +91,31 @@ describe("app:", function() {
         rootMatcher = args[3];
       });
 
-      it("validates root hash matcher", function() {
+      it("should return false if there's no hash and no search code", function() {
+        var response = rootMatcher(location, userAuthFactory, openidConnect)
+
+        expect(response).to.be.false;
+      });
+
+      it("should return false if there's hash but with no tokens", function() {
+        location.hash = function() { return 'some_hash' };
+
+        var response = rootMatcher(location, userAuthFactory, openidConnect)
+
+        expect(response).to.be.false;
+      });
+
+      it("should signin redirect callback if there's hash with id_token", function(done) {
+        location.hash = function() { return '&id_token=1234' };
+
+        rootMatcher(location, userAuthFactory, openidConnect);
+
+        setTimeout(function() {
+          openidConnect.signinRedirectCallback.should.have.been.calledOnce;
+          userAuthFactory.authenticate.should.have.been.calledWith(true);
+
+          done();
+        }, 10);
       });
     });
   });
