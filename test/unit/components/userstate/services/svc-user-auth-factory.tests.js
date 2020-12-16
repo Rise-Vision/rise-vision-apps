@@ -58,7 +58,11 @@ describe("Services: userAuthFactory", function() {
 
     $provide.service("googleAuthFactory", function() {
       return googleAuthFactory = {
-        authenticate: sinon.spy(),
+        authenticate: sinon.stub().resolves({
+          id: "userId",
+          email: "userEmail",
+          picture: "imageUrl"
+        }),
         signOut: sinon.spy()
       };
     });
@@ -119,7 +123,7 @@ describe("Services: userAuthFactory", function() {
       });
   });
 
-  xdescribe("authenticate: ", function() {
+  describe("authenticate: ", function() {
     it("should load gapi, cache authenticate promise", function() {
       var initialPromise = userAuthFactory.authenticate();
 
@@ -128,10 +132,10 @@ describe("Services: userAuthFactory", function() {
 
       userState._resetState.should.not.have.been.called;
       $loading.startGlobal.should.not.have.been.called;
-      //auth2APILoader.should.have.been.calledOnce;
+      googleAuthFactory.authenticate.should.have.been.calledOnce;
     });
 
-    it("should resetState, return new promise and start spinner if forceAuth", function(done) {
+    xit("should resetState, return new promise and start spinner if forceAuth", function(done) {
       var initialPromise = userAuthFactory.authenticate();
 
       expect(userAuthFactory.authenticate(true)).to.not.equal(initialPromise);
