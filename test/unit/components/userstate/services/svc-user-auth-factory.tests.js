@@ -69,7 +69,11 @@ describe("Services: userAuthFactory", function() {
 
     $provide.service("customAuthFactory", function() {
       return customAuthFactory = {
-        authenticate: sinon.spy()
+        authenticate: sinon.stub().resolves({
+          id: "userId",
+          email: "userEmail",
+          picture: "imageUrl"
+        }),
       };
     });
 
@@ -165,20 +169,16 @@ describe("Services: userAuthFactory", function() {
 
     });
 
-    xdescribe("customAuthFactory", function() {
-      it("should call factory when a userToken.token is available", function(done) {
+    describe("customAuthFactory", function() {
+      it("should call factory when a userToken.token is available", function() {
         userState._state.userToken = {
           token: "testToken"
         };
 
         userAuthFactory.authenticate(true);
 
-        setTimeout(function() {
-          customAuthFactory.authenticate.should.have.been.called;
-          googleAuthFactory.authenticate.should.not.have.been.called;
-
-          done();
-        }, 10);
+        customAuthFactory.authenticate.should.have.been.called;
+        googleAuthFactory.authenticate.should.not.have.been.called;
       });
 
     });
