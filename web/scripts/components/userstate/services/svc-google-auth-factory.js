@@ -50,7 +50,7 @@
                 if (user.expires_in < 60) {
                   return openidConnect.signinSilent(user.profile.sub);
                 } else {
-                  return $q.resolve(user);                  
+                  return $q.resolve(user);
                 }
               } else if (userState._state.userToken) {
                 return openidConnect.signinSilent(userState._state.userToken.id);
@@ -67,7 +67,7 @@
                 delete userState._state.redirectState;
               }
 
-              return _getUserProfile(user);          
+              return _getUserProfile(user);
             })
             .catch(function (err) {
               return $q.reject(err);
@@ -82,24 +82,18 @@
           if (_isPopupAuth()) {
             return openidConnect.signinPopup();
           } else {
-            var loc;
             var redirectState = $stateParams.state;
 
             // Redirect to full URL path
             if ($rootScope.redirectToRoot === false) {
-              loc = $window.location.href.substr(0, $window.location.href
-                .indexOf('#')) || $window.location.href;
-
               redirectState = urlStateService.clearStatePath(redirectState);
-            } else {
-              loc = $window.location.origin + '/';
             }
 
             userState._state.redirectState = redirectState;
             userState._persistState();
             uiFlowManager.persist();
 
-            return openidConnect.signinRedirect(redirectState);              
+            return openidConnect.signinRedirect(redirectState);
           }
         };
 
