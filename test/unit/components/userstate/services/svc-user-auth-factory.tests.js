@@ -135,45 +135,32 @@ describe("Services: userAuthFactory", function() {
       googleAuthFactory.authenticate.should.have.been.calledOnce;
     });
 
-    xit("should resetState, return new promise and start spinner if forceAuth", function(done) {
+    it("should return new promise and start spinner if forceAuth", function() {
       var initialPromise = userAuthFactory.authenticate();
 
       expect(userAuthFactory.authenticate(true)).to.not.equal(initialPromise);
 
       $loading.startGlobal.should.have.been.calledOnce;
       $loading.startGlobal.should.have.been.calledWith("risevision.user.authenticate");
-      //auth2APILoader.should.have.been.calledTwice;
-
-      setTimeout(function() {
-        userState._resetState.should.have.been.calledOnce;
-
-        done();
-      }, 10);
+      googleAuthFactory.authenticate.should.have.been.calledTwice;
+      userState._resetState.should.not.have.been.called;
     });
 
-    xdescribe("googleAuthFactory: ", function() {
-      it("should call factory with forceAuth and no credentials", function(done) {
+    describe("googleAuthFactory: ", function() {
+      it("should call factory authenticate", function() {
         userAuthFactory.authenticate(true);
 
-        setTimeout(function() {
-          googleAuthFactory.authenticate.should.have.been.calledWith(true);
-          customAuthFactory.authenticate.should.not.have.been.called;
-
-          done();
-        }, 10);
+        googleAuthFactory.authenticate.should.have.been.called;
+        customAuthFactory.authenticate.should.not.have.been.called;
       });
 
-      it("should call factory when no userToken.token is available and no credentials", function(done) {
+      it("should call factory when no userToken.token is available and no credentials", function() {
         userState._state.userToken = {};
 
         userAuthFactory.authenticate();
 
-        setTimeout(function() {
-          googleAuthFactory.authenticate.should.have.been.calledWith(undefined);
-          customAuthFactory.authenticate.should.not.have.been.called;
-
-          done();
-        }, 10);
+        googleAuthFactory.authenticate.should.have.been.called;
+        customAuthFactory.authenticate.should.not.have.been.called;
       });
 
     });
