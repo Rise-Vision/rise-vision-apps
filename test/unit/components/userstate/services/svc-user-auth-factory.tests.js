@@ -59,9 +59,9 @@ describe("Services: userAuthFactory", function() {
     $provide.service("googleAuthFactory", function() {
       return googleAuthFactory = {
         authenticate: sinon.stub().resolves({
-          id: "userId",
-          email: "userEmail",
-          picture: "imageUrl"
+          id: "id",
+          email: "username@test.com",
+          picture: "picture"
         }),
         signOut: sinon.spy()
       };
@@ -70,9 +70,9 @@ describe("Services: userAuthFactory", function() {
     $provide.service("customAuthFactory", function() {
       return customAuthFactory = {
         authenticate: sinon.stub().resolves({
-          id: "userId",
-          email: "userEmail",
-          picture: "imageUrl"
+          id: "id",
+          email: "username@test.com",
+          picture: "picture"
         }),
       };
     });
@@ -183,7 +183,7 @@ describe("Services: userAuthFactory", function() {
 
     });
 
-    xdescribe("authenticate failure: ", function() {
+    describe("authenticate failure: ", function() {
       beforeEach(function() {
         userState._state.userToken = { test: "testToken" };
         googleAuthFactory.authenticate = function() {
@@ -198,8 +198,7 @@ describe("Services: userAuthFactory", function() {
           // _clearUserToken
           expect(userState._state.userToken).to.be.undefined;
           rvTokenStore.clear.should.have.been.called;
-          // Reset also happens before the authenticate process on forceAuth=true
-          userState._resetState.should.have.been.calledTwice;
+          userState._resetState.should.have.been.calledOnce;
 
           $broadcastSpy.should.not.have.been.calledWith("risevision.user.authorized");
 
@@ -221,7 +220,7 @@ describe("Services: userAuthFactory", function() {
 
     });
 
-    xdescribe("authenticate success: ", function() {
+    describe("authenticate success: ", function() {
       var authenticatedUser;
 
       beforeEach(function() {
@@ -245,8 +244,7 @@ describe("Services: userAuthFactory", function() {
           // _clearUserToken
           expect(userState._state.userToken).to.be.undefined;
           rvTokenStore.clear.should.have.been.called;
-          // Reset also happens before the authenticate process on forceAuth=true
-          userState._resetState.should.have.been.calledTwice;
+          userState._resetState.should.have.been.calledOnce;
 
           $broadcastSpy.should.not.have.been.calledWith("risevision.user.authorized");
 
@@ -256,7 +254,7 @@ describe("Services: userAuthFactory", function() {
 
       });
 
-      it("should not update if users match", function(done) {
+      xit("should not update if users match", function(done) {
         userAuthFactory.authenticate(true).then(function() {
           expect(userState._state.user).to.deep.equal({ username: "username@test.com" });
 
@@ -268,7 +266,7 @@ describe("Services: userAuthFactory", function() {
         .then(null,done);
       });
 
-      it("should update if users don't match", function(done) {
+      xit("should update if users don't match", function(done) {
         authenticatedUser.email = "username2@test.com";
 
         userAuthFactory.authenticate(true).then(function() {
