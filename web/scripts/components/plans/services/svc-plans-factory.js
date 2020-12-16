@@ -1,7 +1,7 @@
 (function (angular) {
 
   'use strict';
-  angular.module('risevision.apps.plans')
+  angular.module('risevision.common.components.plans')
     .value('PLANS_LIST', [{
       name: 'Free',
       type: 'free',

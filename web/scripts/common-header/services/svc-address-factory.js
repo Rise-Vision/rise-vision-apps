@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.apps.purchase')
+angular.module('risevision.common.address')
   .service('addressFactory', ['$q', '$log', 'userState', 'storeService', 'updateCompany', 'updateUser',
     'addressService', 'contactService', 'confirmModal',
     function ($q, $log, userState, storeService, updateCompany, updateUser, addressService, contactService,

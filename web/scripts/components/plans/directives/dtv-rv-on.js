@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.apps.plans')
+angular.module('risevision.common.components.plans')
   .directive('rvOn', function () {
     return {
       restrict: 'A',
