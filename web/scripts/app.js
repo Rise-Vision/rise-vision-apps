@@ -156,14 +156,15 @@ angular.module('risevision.apps', [
     function ($rootScope, $state, $modalStack, userState, $window, $exceptionHandler, userAuthFactory, messageBox) {
 
       $rootScope.$on('risevision.gapi.unauthorized', function () {
+        //if user was logged in, try to silent refresh token so they can try again, or show an error if it fails
         if(userState.isLoggedIn()) {
-          messageBox('Authentication failed!',
-            'You have been disconnected. Please sign in again.',
-            'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html','sm'
-          ).finally(function () {
-            //clear authentication
-            userAuthFactory.signOut();
-            $state.go('common.auth.unauthorized');
+          userAuthFactory.authenticate().catch(function () {
+            messageBox('Authentication failed!',
+              'You have been disconnected. Please sign in again.',
+              'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html','sm'
+            ).finally(function () {
+              userAuthFactory.signOut();
+            });
           });
         }
       });
