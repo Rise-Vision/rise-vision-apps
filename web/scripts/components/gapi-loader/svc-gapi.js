@@ -101,11 +101,13 @@ angular.module('risevision.common.gapi', [
                         var originalFunc = service[func];
                         service[func] = function () {
                           var ret = originalFunc.apply(service, arguments);
-                          ret.then(null, function(resp) {
-                            if (resp && resp.status === 401) {
-                              $rootScope.$broadcast('risevision.gapi.unauthorized');
-                            }
-                          });
+                          if (ret && ret.then) {
+                            ret.then(null, function(resp) {
+                              if (resp && resp.status === 401) {
+                                $rootScope.$broadcast('risevision.gapi.unauthorized');
+                              }
+                            });
+                          }
                           return ret;
                         };
                       };
