@@ -117,6 +117,32 @@ describe("app:", function() {
           done();
         }, 10);
       });
+
+      it("should signin redirect callback if there's hash with access_token", function(done) {
+        location.hash = function() { return '&access_token=1234' };
+
+        rootMatcher(location, userAuthFactory, openidConnect);
+
+        setTimeout(function() {
+          openidConnect.signinRedirectCallback.should.have.been.calledOnce;
+          userAuthFactory.authenticate.should.have.been.calledWith(true);
+
+          done();
+        }, 10);
+      });
+
+      it("should signin redirect callback if there's a search code value", function(done) {
+        searchOutput.code = 'xyz';
+
+        rootMatcher(location, userAuthFactory, openidConnect);
+
+        setTimeout(function() {
+          openidConnect.signinRedirectCallback.should.have.been.calledOnce;
+          userAuthFactory.authenticate.should.have.been.calledWith(true);
+
+          done();
+        }, 10);
+      });
     });
   });
 
