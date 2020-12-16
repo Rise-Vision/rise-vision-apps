@@ -2,7 +2,7 @@
 
 "use strict";
 
-xdescribe("Services: userAuthFactory", function() {
+describe("Services: userAuthFactory", function() {
   var path = "";
 
   beforeEach(module("risevision.common.components.userstate"));
@@ -29,7 +29,7 @@ xdescribe("Services: userAuthFactory", function() {
       startGlobal: sinon.spy(),
       stopGlobal: sinon.spy()
     });
-    
+
     $provide.service("userState", function() {
       return userState = {
         _state: {
@@ -58,7 +58,8 @@ xdescribe("Services: userAuthFactory", function() {
 
     $provide.service("googleAuthFactory", function() {
       return googleAuthFactory = {
-        authenticate: sinon.spy()
+        authenticate: sinon.spy(),
+        signOut: sinon.spy()
       };
     });
 
@@ -82,25 +83,13 @@ xdescribe("Services: userAuthFactory", function() {
       };
     }]);
 
-    $provide.service("auth2APILoader", function () {
-      return auth2APILoader = sinon.spy(function() {
-        return Q.resolve({
-          getAuthInstance: function() {
-            return authInstance = {
-              signOut: sinon.spy()
-            };
-          }
-        });
-      });
-    });
-
   }));
-  
-  var userAuthFactory, userState, isRiseAuthUser, $loading, auth2APILoader, authInstance, 
-  googleAuthFactory, customAuthFactory, rvTokenStore, $broadcastSpy, 
+
+  var userAuthFactory, userState, isRiseAuthUser, $loading, authInstance,
+  googleAuthFactory, customAuthFactory, rvTokenStore, $broadcastSpy,
   externalLogging, $window;
 
-  beforeEach(function() {      
+  beforeEach(function() {
     inject(function($injector){
       userAuthFactory = $injector.get("userAuthFactory");
       isRiseAuthUser = false;
@@ -116,7 +105,7 @@ xdescribe("Services: userAuthFactory", function() {
       $broadcastSpy = sinon.spy($rootScope, "$broadcast");
     });
   });
-  
+
   it("should exist, also methods", function() {
     expect(userAuthFactory.authenticate).to.be.ok;
     expect(userAuthFactory.authenticatePopup).to.be.ok;
@@ -129,8 +118,8 @@ xdescribe("Services: userAuthFactory", function() {
         expect(userAuthFactory[method]).to.be.a("function");
       });
   });
-  
-  describe("authenticate: ", function() {
+
+  xdescribe("authenticate: ", function() {
     it("should load gapi, cache authenticate promise", function() {
       var initialPromise = userAuthFactory.authenticate();
 
@@ -139,7 +128,7 @@ xdescribe("Services: userAuthFactory", function() {
 
       userState._resetState.should.not.have.been.called;
       $loading.startGlobal.should.not.have.been.called;
-      auth2APILoader.should.have.been.calledOnce;
+      //auth2APILoader.should.have.been.calledOnce;
     });
 
     it("should resetState, return new promise and start spinner if forceAuth", function(done) {
@@ -149,7 +138,7 @@ xdescribe("Services: userAuthFactory", function() {
 
       $loading.startGlobal.should.have.been.calledOnce;
       $loading.startGlobal.should.have.been.calledWith("risevision.user.authenticate");
-      auth2APILoader.should.have.been.calledTwice;
+      //auth2APILoader.should.have.been.calledTwice;
 
       setTimeout(function() {
         userState._resetState.should.have.been.calledOnce;
@@ -157,11 +146,11 @@ xdescribe("Services: userAuthFactory", function() {
         done();
       }, 10);
     });
-    
-    describe("googleAuthFactory: ", function() {
+
+    xdescribe("googleAuthFactory: ", function() {
       it("should call factory with forceAuth and no credentials", function(done) {
         userAuthFactory.authenticate(true);
-        
+
         setTimeout(function() {
           googleAuthFactory.authenticate.should.have.been.calledWith(true);
           customAuthFactory.authenticate.should.not.have.been.called;
@@ -174,7 +163,7 @@ xdescribe("Services: userAuthFactory", function() {
         userState._state.userToken = {};
 
         userAuthFactory.authenticate();
-        
+
         setTimeout(function() {
           googleAuthFactory.authenticate.should.have.been.calledWith(undefined);
           customAuthFactory.authenticate.should.not.have.been.called;
@@ -184,8 +173,8 @@ xdescribe("Services: userAuthFactory", function() {
       });
 
     });
-    
-    describe("customAuthFactory", function() {
+
+    xdescribe("customAuthFactory", function() {
       it("should call factory when a userToken.token is available", function(done) {
         userState._state.userToken = {
           token: "testToken"
@@ -202,13 +191,13 @@ xdescribe("Services: userAuthFactory", function() {
       });
 
     });
-    
-    describe("authenticate failure: ", function() {
+
+    xdescribe("authenticate failure: ", function() {
       beforeEach(function() {
         userState._state.userToken = { test: "testToken" };
         googleAuthFactory.authenticate = function() {
           return Q.reject("Authentication Failure");
-        };        
+        };
       });
 
       it("should handle authentication failure", function(done) {
@@ -230,7 +219,7 @@ xdescribe("Services: userAuthFactory", function() {
 
       it("should hide spinner and log page load time regardless of failure", function(done) {
         userAuthFactory.authenticate(true);
-        
+
         setTimeout(function() {
           $loading.stopGlobal.should.have.been.calledWith("risevision.user.authenticate");
           externalLogging.logEvent.should.have.been.calledWith("page load time", "authenticated user", sinon.match.number, "username@test.com", "companyId");
@@ -240,8 +229,8 @@ xdescribe("Services: userAuthFactory", function() {
       });
 
     });
-    
-    describe("authenticate success: ", function() {
+
+    xdescribe("authenticate success: ", function() {
       var authenticatedUser;
 
       beforeEach(function() {
@@ -297,7 +286,7 @@ xdescribe("Services: userAuthFactory", function() {
             username: "username2@test.com",
             picture: "picture"
           });
-          
+
           userState.refreshProfile.should.have.been.called;
 
           $broadcastSpy.should.have.been.calledWith("risevision.user.authorized");
@@ -312,10 +301,10 @@ xdescribe("Services: userAuthFactory", function() {
     });
 
   });
-  
-  it("authenticatePopup: ", function(done) {
+
+  xit("authenticatePopup: ", function(done) {
     userAuthFactory.authenticatePopup();
-    
+
     setTimeout(function() {
       googleAuthFactory.authenticate.should.have.been.calledWith(true);
       customAuthFactory.authenticate.should.not.have.been.called;
@@ -323,8 +312,8 @@ xdescribe("Services: userAuthFactory", function() {
       done();
     }, 10);
   });
-  
-  describe("signOut: ", function() {
+
+  xdescribe("signOut: ", function() {
     it("should return a promise", function() {
       expect(userAuthFactory.signOut().then).to.be.a("function");
     });
@@ -379,7 +368,7 @@ xdescribe("Services: userAuthFactory", function() {
       })
       .then(null,done);
     });
-    
+
     it("should reset authenticate promise", function(done) {
       var initialPromise = userAuthFactory.authenticate();
 
