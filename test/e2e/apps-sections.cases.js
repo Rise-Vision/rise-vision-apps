@@ -11,6 +11,8 @@
   var CompanyUsersScenarios = require("./common-header/cases/company-users.js");
   var UserSettingsScenarios = require("./common-header/cases/user-settings.js");
 
+  var AccountBillingScenarios = require("./billing/cases/account-billing.js");
+
   var StorageSelectorScenarios = require('./storage/cases/storage-selector.js');
   var NewFolderModalScenarios = require('./storage/cases/new-folder.js');
   var UploadScenarios = require('./storage/cases/upload.js');
@@ -33,6 +35,10 @@
     var companySubcompaniesScenarios = new CompanySubcompaniesScenarios();
     var companyUsersSenarios = new CompanyUsersScenarios();
     var userSettingsScenarios = new UserSettingsScenarios();
+  });
+
+  describe('Billing', function () {
+    var accountBillingScenarios = new AccountBillingScenarios();
   });
 
   describe('Storage', function () {

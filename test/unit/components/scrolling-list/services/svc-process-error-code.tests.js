@@ -116,6 +116,13 @@ describe("service: process error code:", function() {
         result: { error: { message: "Storage requires active subscription" } }
       })).to.equal("apps-common.errors.permissionRequired");
     });
+
+    it("should process Storage subscription error", function() {
+      expect(processErrorCode(itemName, action, {
+        status: 403,
+        result: { error: { message: "Not allowed access" } }
+      })).to.equal("apps-common.errors.permissionRequired");
+    });
   });
 
   it("should process 404 error codes", function() {

@@ -71,6 +71,8 @@ angular.module('risevision.common.components.scrolling-list')
             return permissionRequired;
           } else if (errorString.indexOf('Storage requires active subscription') >= 0) {
             return permissionRequired;
+          } else if (errorString.indexOf('Not allowed access') >= 0) {
+            return permissionRequired;
           } else {
             return errorString;
           }

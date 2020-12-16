@@ -4,12 +4,18 @@
   /*jshint camelcase: false */
 
   angular.module('risevision.common.components.userstate')
-    // .value('CLIENT_ID', '614513768474.apps.googleusercontent.com')
-    .value('CLIENT_ID', '614513768474-dnnhi8e6b8motn6i5if2ur05g6foskoc.apps.googleusercontent.com')
+    .value('CLIENT_ID', '614513768474.apps.googleusercontent.com')
     .value('OAUTH2_SCOPES', 'email profile')
-    .factory('openidConnect', ['$q', '$window', 'userState',
+
+    .factory('openidConnectLoader', ['$q', '$window', 'localStorageService', 'userState',
       'CLIENT_ID', 'OAUTH2_SCOPES',
-      function ($q, $window, userState, CLIENT_ID, OAUTH2_SCOPES) {
+      function ($q, $window, localStorageService, userState, CLIENT_ID, OAUTH2_SCOPES) {
+        if (!$window.Oidc || !localStorageService.isSupported) {
+          return function () {
+            return $q.reject('Oidc client not found!');
+          };
+        }
+
         var Oidc = $window.Oidc;
 
         Oidc.Log.logger = console;
@@ -33,34 +39,69 @@
           filterProtocolClaims: true,
           loadUserInfo: true,
 
-          userStore: new Oidc.WebStorageStateStore({ store: window.localStorage }),
+          userStore: new Oidc.WebStorageStateStore({ store: $window.localStorage }),
           extraQueryParams: {
             access_type: 'online'
           }
         };
         var client = new Oidc.UserManager(settings);
 
-        client.events.addUserLoaded(function(user) {
-          console.log(`OIDC Client - user loaded: ${JSON.stringify(user)}`);
-        });
-        client.events.addUserUnloaded(function() {
-          console.log('OIDC Client - user unloaded');
-        });
-        client.events.addAccessTokenExpiring(function() {
-          console.log('OIDC Client - access token expiring');
-        });
-        client.events.addAccessTokenExpired(function() {
-          console.log('OIDC Client - access token expired');
-        });
-        client.events.addSilentRenewError(function(error) {
-          console.log(`OIDC Client - silent renew error: ${error}`);
-        });
-        client.events.addUserSignedOut(function() {
-          console.log('OIDC Client - user signed out');
-        });
+        var _signinSilent = client.signinSilent.bind(client);
+
+        client.signinSilent = function(params) {
+          if (!params) {
+            params = {
+              login_hint: userState.getUsername()
+            };
+          }
+
+          return _signinSilent(params);
+        };
+
+        return function () {
+          return $q.resolve(client);
+        };
+      }
+    ])
+
+    .factory('openidConnect', ['$q', 'openidConnectLoader', 'openidTracker',
+      function ($q, openidConnectLoader, openidTracker) {
+        var service = {};
+
+        openidConnectLoader()
+          .then(function(client) {
+            var trackOpenidEvent = function(openidEventType, eventProperties) {
+              return client.getUser()
+                .then(function(user) {
+                  openidTracker(openidEventType, user ? user.profile : {}, eventProperties);
+                });
+            };
+
+            client.events.addUserLoaded(function(user) {
+              openidTracker('user loaded', user.profile);
+            });
+            client.events.addUserUnloaded(function() {
+              trackOpenidEvent('user unloaded');
+            });
+            client.events.addAccessTokenExpiring(function() {
+              trackOpenidEvent('access token expiring');
+            });
+            client.events.addAccessTokenExpired(function() {
+              trackOpenidEvent('access token expired');
+            });
+            client.events.addSilentRenewError(function(error) {
+              trackOpenidEvent('silent renew error', {errorMessage: error.message});
+            });
+            client.events.addUserSignedOut(function() {
+              trackOpenidEvent('user signed out');
+            });
+          });
 
         service.getUser = function() {
-          return client.getUser()
+          return openidConnectLoader()
+            .then(function(client) {
+              return client.getUser();
+            })
             .then(function(user) {
               console.log('get user response', user);
 
@@ -73,7 +114,10 @@
         };
 
         service.signinRedirect = function(state) {
-          return client.signinRedirect({ state: state })
+          return openidConnectLoader()
+            .then(function(client) {
+              return client.signinRedirect({ state: state });
+            })
             .then(function(resp) {
               console.log('signin redirect response', resp);
             }).catch(function(err) {
@@ -84,7 +128,10 @@
         };
 
         service.signinRedirectCallback = function() {
-          return client.signinRedirectCallback()
+          return openidConnectLoader()
+            .then(function(client) {
+              return client.signinRedirectCallback();
+            })
             .then(function(user) {
               console.log('signin redirect response', user);
 
@@ -100,26 +147,17 @@
           return $q.reject('Not implemented');
         };
 
-        var _signinSilent = client.signinSilent.bind(client);
-
-        client.signinSilent = function(params) {
-          if (!params) {
-            params = {
-              login_hint: userState.getUsername()
-            };
-          }
-
-          return _signinSilent(params);
-        };
-
         service.signinSilent = function(username) {
           if (!username) {
             return $q.reject('Missing user id');
           }
 
-          return client.signinSilent({
-            login_hint: username
-          })
+          return openidConnectLoader()
+            .then(function(client) {
+              return client.signinSilent({ 
+                login_hint: username
+              });
+            })
            .then(function(user) {
               console.log('signin silent response', user);
 
@@ -132,7 +170,10 @@
         };
 
         service.removeUser = function() {
-          return client.removeUser();
+          return openidConnectLoader()
+            .then(function(client) {
+              return client.removeUser();
+            });
         };
 
         return service;
