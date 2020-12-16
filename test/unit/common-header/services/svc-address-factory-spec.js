@@ -2,7 +2,7 @@
 "use strict";
 
 describe("Services: address factory", function() {
-  beforeEach(module("risevision.apps.purchase"));
+  beforeEach(module("risevision.common.address"));
   beforeEach(module(function ($provide) {
     $provide.service("$q", function() {return Q;});
     $provide.service("$log", function() {

@@ -32,7 +32,7 @@ angular.module('risevision.apps')
 angular.module('risevision.storage.services', [
   'risevision.common.header',
   'risevision.common.gapi',
-  'risevision.apps.plans'
+  'risevision.common.components.plans'
 ]);
 angular.module('risevision.storage.directives', []);
 angular.module('risevision.storage.controllers', []);

@@ -12,6 +12,7 @@ angular.module('risevision.common.header', [
     'risevision.common.header.filters',
     'risevision.common.header.services',
     'risevision.common.i18n',
+    'risevision.common.address',
     'risevision.core.countries',
     'risevision.store.authorization',
     'risevision.store.services',
@@ -26,6 +27,7 @@ angular.module('risevision.common.header', [
     'risevision.common.components.userstate',
     'risevision.common.components.last-modified',
     'risevision.common.components.loading',
+    'risevision.common.components.plans',
     'risevision.common.components.search-filter',
     'risevision.common.components.scrolling-list',
     'risevision.common.components.stop-event',
@@ -33,8 +35,7 @@ angular.module('risevision.common.header', [
     'risevision.common.components.message-box',
     'risevision.common.components.confirm-modal',
     'risevision.common.components.svg',
-    'risevision.common.support',
-    'risevision.apps.plans.services'
+    'risevision.common.support'
   ])
 
   .factory('bindToScopeWithWatch', [
@@ -237,4 +238,5 @@ angular.module('risevision.common.header', [
 angular.module('risevision.common.header.directives', []);
 angular.module('risevision.common.header.filters', []);
 angular.module('risevision.common.header.services', []);
+angular.module('risevision.common.address', []);
 angular.module('risevision.store.services', []);
