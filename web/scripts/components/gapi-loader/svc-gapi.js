@@ -95,7 +95,12 @@ angular.module('risevision.common.gapi', [
                 .then(function () {
                   if (gApi.client[libName]) {
 
-                    var _addGlobalCatcher = function(library) {
+                    var _addGlobalCatcher = function(library, recursionLevel) {
+                      recursionLevel = recursionLevel || 0;
+                      if (recursionLevel > 5) {
+                        $log.error('gApi global cather has reached recursion level limit!');
+                        return;
+                      }
 
                       var _wrapWithCatcher = function (service, func) {
                         var originalFunc = service[func];
@@ -116,7 +121,7 @@ angular.module('risevision.common.gapi', [
                           if (typeof library[key] === 'function') {
                             _wrapWithCatcher(library,key);
                           } else if (typeof library[key] === 'object') {
-                            _addGlobalCatcher(library[key]);
+                            _addGlobalCatcher(library[key], recursionLevel + 1);
                           }
                       });
                     };
