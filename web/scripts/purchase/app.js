@@ -75,6 +75,7 @@ angular.module('risevision.apps.purchase', [
   'risevision.common.gapi',
   'risevision.common.geodata',
   'risevision.common.currency',
+  'risevision.common.address',
   'risevision.common.components.loading',
   'risevision.core.countries',
   'ui.bootstrap'

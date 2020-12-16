@@ -2,7 +2,7 @@
 "use strict";
 
 describe("Services: address service", function() {
-  beforeEach(module("risevision.apps.purchase"));
+  beforeEach(module("risevision.common.address"));
 
   var addressService, validAddress;
 

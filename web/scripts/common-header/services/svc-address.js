@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.apps.purchase')
+angular.module('risevision.common.address')
   .service('addressService', [
 
     function () {
