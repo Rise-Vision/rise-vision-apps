@@ -158,7 +158,7 @@ angular.module('risevision.apps', [
       $rootScope.$on('risevision.gapi.unauthorized', function () {
         //if user was logged in, try to silent refresh token so they can try again, or show an error if it fails
         if(userState.isLoggedIn()) {
-          userAuthFactory.authenticate().catch(function () {
+          userAuthFactory.authenticate(true).catch(function () {
             messageBox('Authentication failed!',
               'You have been disconnected. Please sign in again.',
               'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html','sm'
