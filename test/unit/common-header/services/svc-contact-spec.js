@@ -2,7 +2,7 @@
 "use strict";
 
 describe("Services: contact service", function() {
-  beforeEach(module("risevision.apps.purchase"));
+  beforeEach(module("risevision.common.address"));
 
   var contactService, validContact;
 

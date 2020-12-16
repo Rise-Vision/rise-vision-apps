@@ -3,7 +3,7 @@
 
 describe("Services: plans factory", function() {
 
-  beforeEach(module("risevision.apps.plans"));
+  beforeEach(module("risevision.common.components.plans"));
   beforeEach(module(function ($provide) {
     $provide.service("$modal", function() {
       return {
