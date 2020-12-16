@@ -11,10 +11,14 @@ describe("app:", function() {
 
     module("ui.router");
 
-    module(function($urlRouterProvider) {
-      urlRouterProvider = $urlRouterProvider
+    module(function($urlRouterProvider, $urlMatcherFactoryProvider, $stateProvider) {
+      urlRouterProvider = $urlRouterProvider;
+      urlMatcherFactoryProvider = $urlMatcherFactoryProvider;
+      stateProvider = $stateProvider;
 
       sinon.spy(urlRouterProvider, 'when');
+      sinon.spy(urlMatcherFactoryProvider, 'strictMode');
+      sinon.spy(stateProvider, 'state');
     });
   });
 
@@ -31,7 +35,7 @@ describe("app:", function() {
   });
 
   var $state, $rootScope, urlStateService;
-  var locationProvider, urlRouterProvider;
+  var locationProvider, urlRouterProvider, urlMatcherFactoryProvider, stateProvider;
 
   describe("mappings: ", function() {
     it("calls mappings config", function() {
@@ -41,6 +45,12 @@ describe("app:", function() {
 
       expect(urlRouterProvider).to.be.ok;
       expect(urlRouterProvider.when).to.have.been.called;
+
+      expect(urlMatcherFactoryProvider).to.be.ok;
+      expect(urlMatcherFactoryProvider.strictMode).to.have.been.calledWith(false);
+
+      expect(stateProvider).to.be.ok;
+      expect(stateProvider.state).to.have.been.called;
     });
 
     it("validates google auth rule", function() {
