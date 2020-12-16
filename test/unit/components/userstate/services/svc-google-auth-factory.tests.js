@@ -16,8 +16,6 @@ describe("Services: googleAuthFactory", function() {
         _state: {
           inRVAFrame: false
         },
-        refreshProfile: sinon.spy(function() { return Q.resolve(); }),
-        _setUserToken: sinon.spy(),
         _persistState: sinon.spy(),
         _restoreState: sinon.spy()
       };
@@ -98,13 +96,13 @@ describe("Services: googleAuthFactory", function() {
 
     it("should handle authorization failure", function(done) {
       openidConnect.getUser = function() {
-        return Q.reject("Failed to authorize user (auth2)");
+        return Q.reject("Failed to authorize user");
       };
 
       googleAuthFactory.authenticate()
       .then(done)
       .then(null, function(error) {
-        expect(error).to.equal("Failed to authorize user (auth2)");
+        expect(error).to.equal("Failed to authorize user");
         done();
       })
       .then(null,done);
@@ -123,8 +121,7 @@ describe("Services: googleAuthFactory", function() {
           });
 
           done();
-        })
-        .then(null,done);
+        });
       });
 
       it("should signin silently if expiration is low", function(done) {
