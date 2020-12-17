@@ -1,6 +1,4 @@
 'use strict';
-var https = require('https');
-var url = require('url');
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../../common/pages/homepage.js');
 var SignInPage = require('./../../common/pages/signInPage.js');
@@ -137,71 +135,6 @@ var DisplayManageScenarios = function() {
           done();
         });
       });
-    });
-
-    describe('display activation', function() {
-      it('should show the Display instructions', function() {
-        helper.wait(displayManagePage.getDisplayInstructionsPanel(), 'Display Instructions Panel');
-        expect(displayManagePage.getDisplayInstructionsPanel().isDisplayed()).to.eventually.be.true;
-
-        expect(displayManagePage.getPurchasePlayerButton().isDisplayed()).to.eventually.be.true;
-        expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
-      });
-
-      it('should show Download options',function() {
-        helper.clickWhenClickable(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
-
-        helper.wait(downloadPlayerModalPage.getDownloadPlayerModal(), 'Download Player Modal');
-        
-        expect(downloadPlayerModalPage.getDownloadPlayerModal().isDisplayed()).to.eventually.be.true;
-
-        expect(downloadPlayerModalPage.getTitle().getText()).to.eventually.equal('Install Rise Player');
-        
-        expect(downloadPlayerModalPage.getDownloadWindows32Link().isDisplayed()).to.eventually.be.true;
-      });
-
-      it('should provide HTTPS download links to prevent browsers block',function() {
-        expect(downloadPlayerModalPage.getDownloadWindows32Link().getAttribute('href')).to.eventually.match(/^https:/);
-        expect(downloadPlayerModalPage.getDownloadWindows64Link().getAttribute('href')).to.eventually.match(/^https:/);
-
-        expect(downloadPlayerModalPage.getDownloadUbuntu32Link().getAttribute('href')).to.eventually.match(/^https:/);
-        expect(downloadPlayerModalPage.getDownloadUbuntu64Link().getAttribute('href')).to.eventually.match(/^https:/);
-
-        expect(downloadPlayerModalPage.getDownloadRaspberryLink().getAttribute('href')).to.eventually.match(/^https:/);
-      });
-
-      it('should provide working download links',function() {
-        downloadPlayerModalPage.getDownloadWindows32Link().getAttribute('href').then(function(href) {
-          var httpHeadRequest = function() {
-            var defer = protractor.promise.defer();
-            const options = {
-              hostname: url.parse(href).hostname,
-              port: 443,
-              path: url.parse(href).path,
-              method: 'HEAD',
-            }
-            https.request(options, function(response) {
-              defer.fulfill(response.statusCode);
-            }).on('error', function(e) {
-              defer.reject('Request failed: ' + e.message);
-            }).end();
-            return defer.promise;
-          };
-
-          protractor.promise.controlFlow().execute(httpHeadRequest).then(function (statusCode) {
-              expect(statusCode).to.equal(200);
-          });
-        });
-
-      });
-
-      it('should close modal',function() {
-        helper.clickWhenClickable(downloadPlayerModalPage.getDismissButton(), 'Dismiss Button');
-
-        helper.waitDisappear(downloadPlayerModalPage.getDownloadPlayerModal(), 'Download Player Modal');
-        expect(downloadPlayerModalPage.getDownloadPlayerModal().isPresent()).to.eventually.be.false;
-      });
-
     });
 
     describe('display actions', function() {
