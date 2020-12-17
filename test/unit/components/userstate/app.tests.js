@@ -116,6 +116,7 @@ describe("app:", function() {
       });
 
       it("should signin redirect callback if there's hash with id_token", function(done) {
+        window.location.hash = '&id_token=1234';
         location.hash = function() { return '&id_token=1234' };
 
         rootMatcher(location, userAuthFactory, openidConnect);
@@ -123,12 +124,14 @@ describe("app:", function() {
         setTimeout(function() {
           openidConnect.signinRedirectCallback.should.have.been.calledOnce;
           userAuthFactory.authenticate.should.have.been.calledWith(true);
+          expect(window.location.hash).to.equal('');
 
           done();
         }, 10);
       });
 
       it("should signin redirect callback if there's hash with access_token", function(done) {
+        window.location.hash = '&access_token=1234';
         location.hash = function() { return '&access_token=1234' };
 
         rootMatcher(location, userAuthFactory, openidConnect);
@@ -136,12 +139,14 @@ describe("app:", function() {
         setTimeout(function() {
           openidConnect.signinRedirectCallback.should.have.been.calledOnce;
           userAuthFactory.authenticate.should.have.been.calledWith(true);
+          expect(window.location.hash).to.equal('');
 
           done();
         }, 10);
       });
 
       it("should signin redirect callback if there's a search code value", function(done) {
+        window.location.hash = 'some_hash';
         searchOutput.code = 'xyz';
 
         rootMatcher(location, userAuthFactory, openidConnect);
@@ -149,6 +154,21 @@ describe("app:", function() {
         setTimeout(function() {
           openidConnect.signinRedirectCallback.should.have.been.calledOnce;
           userAuthFactory.authenticate.should.have.been.calledWith(true);
+          expect(window.location.hash).to.equal('');
+
+          done();
+        }, 10);
+      });
+
+      it("should clear hash even if there's an issue with signing redirect", function(done) {
+        window.location.hash = 'some_hash';
+        searchOutput.code = 'xyz';
+
+        rootMatcher(location, null, openidConnect); // force a null pointer error
+
+        setTimeout(function() {
+          openidConnect.signinRedirectCallback.should.have.been.calledOnce;
+          expect(window.location.hash).to.equal('');
 
           done();
         }, 10);
