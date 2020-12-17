@@ -220,13 +220,8 @@
               authenticateDeferred.resolve();
             })
             .then(null, function (err) {
-              if (_state.redirectDetected) {
-                $log.error('Authentication Error from Redirect: ', err);
+              $log.debug('Authentication Error: ', err);
 
-                delete _state.redirectDetected;
-              } else {
-                $log.debug('Authentication Error: ', err);
-              }
               _resetUserState();
 
               authenticateDeferred.reject(err);
@@ -263,9 +258,6 @@
 
         var userAuthFactory = {
           authenticate: authenticate,
-          authenticatePopup: function () {
-            return authenticate(true);
-          },
           signOut: signOut,
           addEventListenerVisibilityAPI: _addEventListenerVisibilityAPI,
           removeEventListenerVisibilityAPI: _removeEventListenerVisibilityAPI,
