@@ -29,7 +29,7 @@ describe("Services: userAuthFactory", function() {
       startGlobal: sinon.spy(),
       stopGlobal: sinon.spy()
     });
-    
+
     $provide.service("userState", function() {
       return userState = {
         _state: {
@@ -58,13 +58,22 @@ describe("Services: userAuthFactory", function() {
 
     $provide.service("googleAuthFactory", function() {
       return googleAuthFactory = {
-        authenticate: sinon.spy()
+        authenticate: sinon.stub().resolves({
+          id: "id",
+          email: "username@test.com",
+          picture: "picture"
+        }),
+        signOut: sinon.stub().resolves()
       };
     });
 
     $provide.service("customAuthFactory", function() {
       return customAuthFactory = {
-        authenticate: sinon.spy()
+        authenticate: sinon.stub().resolves({
+          id: "id",
+          email: "username@test.com",
+          picture: "picture"
+        }),
       };
     });
 
@@ -82,25 +91,13 @@ describe("Services: userAuthFactory", function() {
       };
     }]);
 
-    $provide.service("auth2APILoader", function () {
-      return auth2APILoader = sinon.spy(function() {
-        return Q.resolve({
-          getAuthInstance: function() {
-            return authInstance = {
-              signOut: sinon.spy()
-            };
-          }
-        });
-      });
-    });
-
   }));
-  
-  var userAuthFactory, userState, isRiseAuthUser, $loading, auth2APILoader, authInstance, 
-  googleAuthFactory, customAuthFactory, rvTokenStore, $broadcastSpy, 
+
+  var userAuthFactory, userState, isRiseAuthUser, $loading,
+  googleAuthFactory, customAuthFactory, rvTokenStore, $broadcastSpy,
   externalLogging, $window;
 
-  beforeEach(function() {      
+  beforeEach(function() {
     inject(function($injector){
       userAuthFactory = $injector.get("userAuthFactory");
       isRiseAuthUser = false;
@@ -116,20 +113,19 @@ describe("Services: userAuthFactory", function() {
       $broadcastSpy = sinon.spy($rootScope, "$broadcast");
     });
   });
-  
+
   it("should exist, also methods", function() {
     expect(userAuthFactory.authenticate).to.be.ok;
-    expect(userAuthFactory.authenticatePopup).to.be.ok;
     expect(userAuthFactory.signOut).to.be.ok;
 
-    ["authenticate", "authenticatePopup", "signOut",
+    ["authenticate", "signOut",
     "addEventListenerVisibilityAPI", "removeEventListenerVisibilityAPI"]
       .forEach(function (method) {
         expect(userAuthFactory).to.have.property(method);
         expect(userAuthFactory[method]).to.be.a("function");
       });
   });
-  
+
   describe("authenticate: ", function() {
     it("should load gapi, cache authenticate promise", function() {
       var initialPromise = userAuthFactory.authenticate();
@@ -139,76 +135,59 @@ describe("Services: userAuthFactory", function() {
 
       userState._resetState.should.not.have.been.called;
       $loading.startGlobal.should.not.have.been.called;
-      auth2APILoader.should.have.been.calledOnce;
+      googleAuthFactory.authenticate.should.have.been.calledOnce;
     });
 
-    it("should resetState, return new promise and start spinner if forceAuth", function(done) {
+    it("should return new promise and start spinner if forceAuth", function() {
       var initialPromise = userAuthFactory.authenticate();
 
       expect(userAuthFactory.authenticate(true)).to.not.equal(initialPromise);
 
       $loading.startGlobal.should.have.been.calledOnce;
       $loading.startGlobal.should.have.been.calledWith("risevision.user.authenticate");
-      auth2APILoader.should.have.been.calledTwice;
-
-      setTimeout(function() {
-        userState._resetState.should.have.been.calledOnce;
-
-        done();
-      }, 10);
+      googleAuthFactory.authenticate.should.have.been.calledTwice;
+      userState._resetState.should.not.have.been.called;
     });
-    
-    describe("googleAuthFactory: ", function() {
-      it("should call factory with forceAuth and no credentials", function(done) {
-        userAuthFactory.authenticate(true);
-        
-        setTimeout(function() {
-          googleAuthFactory.authenticate.should.have.been.calledWith(true);
-          customAuthFactory.authenticate.should.not.have.been.called;
 
-          done();
-        }, 10);
+    describe("googleAuthFactory: ", function() {
+      it("should call factory authenticate", function() {
+        userAuthFactory.authenticate(true);
+
+        googleAuthFactory.authenticate.should.have.been.called;
+        customAuthFactory.authenticate.should.not.have.been.called;
       });
 
-      it("should call factory when no userToken.token is available and no credentials", function(done) {
+      it("should call factory when no userToken.token is available and no credentials", function() {
         userState._state.userToken = {};
 
         userAuthFactory.authenticate();
-        
-        setTimeout(function() {
-          googleAuthFactory.authenticate.should.have.been.calledWith(undefined);
-          customAuthFactory.authenticate.should.not.have.been.called;
 
-          done();
-        }, 10);
+        googleAuthFactory.authenticate.should.have.been.called;
+        customAuthFactory.authenticate.should.not.have.been.called;
       });
 
     });
-    
+
     describe("customAuthFactory", function() {
-      it("should call factory when a userToken.token is available", function(done) {
+      it("should call factory when a userToken.token is available", function() {
         userState._state.userToken = {
           token: "testToken"
         };
 
         userAuthFactory.authenticate(true);
 
-        setTimeout(function() {
-          customAuthFactory.authenticate.should.have.been.called;
-          googleAuthFactory.authenticate.should.not.have.been.called;
-
-          done();
-        }, 10);
+        customAuthFactory.authenticate.should.have.been.called;
+        googleAuthFactory.authenticate.should.not.have.been.called;
       });
 
     });
-    
+
     describe("authenticate failure: ", function() {
       beforeEach(function() {
         userState._state.userToken = { test: "testToken" };
         googleAuthFactory.authenticate = function() {
           return Q.reject("Authentication Failure");
-        };        
+        };
       });
 
       it("should handle authentication failure", function(done) {
@@ -218,8 +197,7 @@ describe("Services: userAuthFactory", function() {
           // _clearUserToken
           expect(userState._state.userToken).to.be.undefined;
           rvTokenStore.clear.should.have.been.called;
-          // Reset also happens before the authenticate process on forceAuth=true
-          userState._resetState.should.have.been.calledTwice;
+          userState._resetState.should.have.been.calledOnce;
 
           $broadcastSpy.should.not.have.been.calledWith("risevision.user.authorized");
 
@@ -230,7 +208,7 @@ describe("Services: userAuthFactory", function() {
 
       it("should hide spinner and log page load time regardless of failure", function(done) {
         userAuthFactory.authenticate(true);
-        
+
         setTimeout(function() {
           $loading.stopGlobal.should.have.been.calledWith("risevision.user.authenticate");
           externalLogging.logEvent.should.have.been.calledWith("page load time", "authenticated user", sinon.match.number, "username@test.com", "companyId");
@@ -240,7 +218,7 @@ describe("Services: userAuthFactory", function() {
       });
 
     });
-    
+
     describe("authenticate success: ", function() {
       var authenticatedUser;
 
@@ -265,8 +243,7 @@ describe("Services: userAuthFactory", function() {
           // _clearUserToken
           expect(userState._state.userToken).to.be.undefined;
           rvTokenStore.clear.should.have.been.called;
-          // Reset also happens before the authenticate process on forceAuth=true
-          userState._resetState.should.have.been.calledTwice;
+          userState._resetState.should.have.been.calledOnce;
 
           $broadcastSpy.should.not.have.been.calledWith("risevision.user.authorized");
 
@@ -297,7 +274,7 @@ describe("Services: userAuthFactory", function() {
             username: "username2@test.com",
             picture: "picture"
           });
-          
+
           userState.refreshProfile.should.have.been.called;
 
           $broadcastSpy.should.have.been.calledWith("risevision.user.authorized");
@@ -312,18 +289,7 @@ describe("Services: userAuthFactory", function() {
     });
 
   });
-  
-  it("authenticatePopup: ", function(done) {
-    userAuthFactory.authenticatePopup();
-    
-    setTimeout(function() {
-      googleAuthFactory.authenticate.should.have.been.calledWith(true);
-      customAuthFactory.authenticate.should.not.have.been.called;
 
-      done();
-    }, 10);
-  });
-  
   describe("signOut: ", function() {
     it("should return a promise", function() {
       expect(userAuthFactory.signOut().then).to.be.a("function");
@@ -334,8 +300,7 @@ describe("Services: userAuthFactory", function() {
       userState._state.userToken = {};
 
       userAuthFactory.signOut().then(function() {
-        auth2APILoader.should.have.been.called;
-        expect(authInstance).to.be.undefined;
+        googleAuthFactory.signOut.should.not.have.been.called;
 
         // _clearUserToken
         expect(userState._state.userToken).to.be.undefined;
@@ -354,8 +319,7 @@ describe("Services: userAuthFactory", function() {
       userState._state.userToken = {};
 
       userAuthFactory.signOut().then(function() {
-        auth2APILoader.should.have.been.called;
-        authInstance.signOut.should.have.been.called;
+        googleAuthFactory.signOut.should.have.been.called;
 
         // _clearUserToken
         expect(userState._state.userToken).to.be.undefined;
@@ -373,13 +337,13 @@ describe("Services: userAuthFactory", function() {
     it("should log user out of their Google account", function(done) {
       $window.logoutFrame = {};
       userAuthFactory.signOut(true).then(function() {
-        expect($window.logoutFrame.location).to.equal("https://accounts.google.com/Logout");
+        googleAuthFactory.signOut.should.have.been.calledWith(true);
 
         done();
       })
       .then(null,done);
     });
-    
+
     it("should reset authenticate promise", function(done) {
       var initialPromise = userAuthFactory.authenticate();
 

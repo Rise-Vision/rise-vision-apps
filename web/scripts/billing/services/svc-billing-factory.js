@@ -118,8 +118,6 @@ angular.module('risevision.apps.billing.services')
 
           //   factory.purchase.reloadingCompany = true;
           // 
-          //   purchaseFlowTracker.trackOrderPayNowClicked(_getTrackingProperties());
-          // 
           //   $timeout(10000)
           //     .then(function () {
           //       return userState.reloadSelectedCompany();

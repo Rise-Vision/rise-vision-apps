@@ -9,7 +9,7 @@
 
   <link rel="icon" href="https://s3.amazonaws.com/Rise-Images/favicons/rv_favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="https://s3.amazonaws.com/Rise-Images/favicons/rv_favicon.ico" type="image/x-icon">
-  
+
   <title itemprop='name'>Rise Vision | Storage Selector</title>
   <meta name="description" content="We have a couple of apps that will allow you to manage your Digital Signage. Managing from the content creation to its delivery on an unlimited number of displays anywhere in the world.">
 
@@ -24,7 +24,7 @@
   <div ui-view></div>
 
   <!-- dependencies -->
-  <!-- build:js js/storage-selector.min.js --> 
+  <!-- build:js js/storage-selector.min.js -->
 
   <!-- common-header dependencies -->
   <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -46,6 +46,7 @@
   <script src="bower_components/oclazyload/dist/ocLazyLoad.js"></script>
   <script src="bower_components/angular-md5/angular-md5.min.js"></script>
   <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+  <script src="bower_components/oidc-client/dist/oidc-client.js"></script>
 
   <!-- common header -->
   <script src="scripts/common-header/dtv-common-header.js"></script>
@@ -81,9 +82,9 @@
   <script src="scripts/common-header/directives/dtv-require-role.js"></script>
   <script src="scripts/common-header/directives/dtv-website-validator.js"></script>
   <script src="scripts/common-header/directives/dtv-email-validator.js"></script>
-  
+
   <script src="scripts/common-header/filters/ftr-supress-zero.js"></script>
-  
+
   <script src="scripts/common-header/services/svc-account.js"></script>
   <script src="scripts/common-header/services/svc-company-icp.js"></script>
   <script src="scripts/common-header/services/svc-company-settings-factory.js"></script>
@@ -131,6 +132,7 @@
   <script src="scripts/components/logging/svc-exception-handler.js"></script>
   <script src="scripts/components/logging/svc-purchase-flow-tracker.js"></script>
   <script src="scripts/components/logging/svc-user-tracker.js"></script>
+  <script src="scripts/components/logging/svc-openid-tracker.js"></script>
 
   <script src="scripts/components/userstate/app.js"></script>
   <script src="scripts/components/userstate/controllers/ctr-login.js"></script>
@@ -147,6 +149,7 @@
   <script src="scripts/components/userstate/services/svc-user-auth-factory.js"></script>
   <script src="scripts/components/userstate/services/svc-userauth.js"></script>
   <script src="scripts/components/userstate/services/svc-userstate.js"></script>
+  <script src="scripts/components/userstate/services/svc-openid-connect.js"></script>
 
   <script src="scripts/components/last-modified/dtv-last-modified.js"></script>
   <script src="scripts/components/last-modified/ftr-username.js"></script>

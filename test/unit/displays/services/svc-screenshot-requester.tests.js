@@ -12,20 +12,6 @@ describe('service: screenshot requester:', function() {
       };
     });
 
-    $provide.service('$window', function() {
-      var primusHandler;
-
-      return {
-        Primus: function() { return {
-          open: function() {},
-          on: function(eName, cb) {if (eName === 'data') {primusHandler = cb; }},
-          end: function() {}
-        }; },
-        primus: primus,
-        triggerPrimusHandler: function(data) { primusHandler(data); }
-      };
-    });
-
   }));
 
   var primus;
@@ -37,8 +23,20 @@ describe('service: screenshot requester:', function() {
 
     beforeEach(function() {
       inject(function($injector){
-        primus = $injector.get('$window').primus;
-        triggerPrimusHandler = $injector.get('$window').triggerPrimusHandler;
+        var $window = $injector.get('$window');
+
+        var primusHandler;
+
+        $window.Primus = function() { return {
+            open: function() {},
+            on: function(eName, cb) {if (eName === 'data') {primusHandler = cb; }},
+            end: function() {}
+          };
+        };
+
+        $window.primus = primus;
+        $window.triggerPrimusHandler = triggerPrimusHandler = function(data) { primusHandler(data); };
+
         screenshotRequester = $injector.get('screenshotRequester');
         $timeout = $injector.get('$timeout');
       });

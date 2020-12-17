@@ -42,12 +42,21 @@
           .when(/\/.*&id_token=.*&client_id=.*/, function () {
             console.log('Google Auth result received');
           })
-          .when('/', ['$location',
-            function ($location) {
+          .when('/', ['$location', 'userAuthFactory', 'openidConnect',
+            function ($location, userAuthFactory, openidConnect) {
               var hash = $location.hash();
 
-              if (hash && hash.match(/\/.*&id_token=.*&client_id=.*/)) {
+              if ($location.search().code ||
+                (hash && (hash.match(/.*id_token=.*/) || hash.match(/access_token=.*/)))) {
                 console.log('Google Auth result received');
+
+                openidConnect.signinRedirectCallback()
+                  .then(function(user) {
+                    userAuthFactory.authenticate(true);
+                  })
+                  .finally(function() {
+                    window.location.hash = '';
+                  });
               } else {
                 return false;
               }

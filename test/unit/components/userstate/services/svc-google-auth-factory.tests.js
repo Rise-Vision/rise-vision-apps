@@ -14,16 +14,8 @@ describe("Services: googleAuthFactory", function() {
     $provide.service("userState", function() {
       return userState = {
         _state: {
-          inRVAFrame: false,
-          userToken: {
-            email: "username@test.com"
-          },
-          params: {
-            access_token: "testToken"
-          }
+          inRVAFrame: false
         },
-        refreshProfile: sinon.spy(function() { return Q.resolve(); }),
-        _setUserToken: sinon.spy(),
         _persistState: sinon.spy(),
         _restoreState: sinon.spy()
       };
@@ -42,47 +34,42 @@ describe("Services: googleAuthFactory", function() {
       };
     });
 
-    authInstance = {
-      isSignedIn: {
-        get: sinon.spy(function() {
-          return isSignedIn;
-        })
-      },
-      signIn: sinon.spy(function() {
-        if (isSignedIn) {
-          return Q.resolve();
-        } else {
-          return Q.reject("popup closed");
-        }
-      }),
-      currentUser: {
-        get: sinon.stub().returns({
-          getBasicProfile: sinon.stub().returns({
-            getId: sinon.stub().returns("userId"),
-            getEmail: sinon.stub().returns("userEmail"),
-            getImageUrl: sinon.stub().returns("imageUrl"),
-          })
-        })
-      }
-    };
-
-    $provide.service("auth2APILoader", function () {
-      return auth2APILoader = sinon.spy(function() {
+    $provide.service("gapiLoader", function () {
+      return gapiLoader = sinon.spy(function() {
         return Q.resolve({
-          getAuthInstance: function() {
-            return authInstance;
+          setToken: function(paramToken) {
+            token = paramToken;
           }
         });
       });
     });
 
+    user = {
+      expires_in: 100,
+      profile: {
+        sub: 'userId',
+        email: 'userEmail',
+        picture: 'imageUrl'
+      }
+    }
+
+    $provide.service("openidConnect", function () {
+      return openidConnect = {
+        getUser: sinon.stub().resolves(user),
+        signinSilent: sinon.stub().resolves(user),
+        signinPopup: sinon.stub(),
+        signinRedirect: sinon.stub(),
+        removeUser: sinon.stub()
+      };
+    });
+
   }));
-  
-  var googleAuthFactory, userState, uiFlowManager, $window, $rootScope, 
-    urlStateService, auth2APILoader, authInstance;
-    
+
+  var googleAuthFactory, userState, uiFlowManager, $window, $rootScope,
+    urlStateService, gapiLoader, openidConnect, user;
+
   var isSignedIn;
-  
+
   describe("authenticate: ", function() {
     beforeEach(function() {
       isSignedIn = true;
@@ -107,37 +94,44 @@ describe("Services: googleAuthFactory", function() {
       expect(googleAuthFactory.authenticate(true).then).to.be.a("function");
     });
 
-    describe("_gapiAuthorize: ", function() {
-      it("should load gapi.auth2 and attempt to authorize user", function(done) {
-        googleAuthFactory.authenticate();
-        
-        setTimeout(function() {
-          auth2APILoader.should.have.been.called;
-          authInstance.isSignedIn.get.should.have.been.called;
+    it("should handle authorization failure", function(done) {
+      openidConnect.getUser = function() {
+        return Q.reject("Failed to authorize user");
+      };
 
-          done();
-        }, 10);
-      });
-      
-      it("should handle authorization failure", function(done) {
-        isSignedIn = false;
-
-        googleAuthFactory.authenticate()
-        .then(done)
-        .then(null, function(error) {
-          expect(error).to.equal("Failed to authorize user (auth2)");
-          done();
-        })
-        .then(null,done);
-      });
+      googleAuthFactory.authenticate()
+      .then(done)
+      .then(null, function(error) {
+        expect(error).to.equal("Failed to authorize user");
+        done();
+      })
+      .then(null,done);
     });
-    
+
     describe("_getUserProfile: ", function() {
       it("should retrieve user profile correctly", function(done) {
         googleAuthFactory.authenticate().then(function(resp) {
+          openidConnect.signinSilent.should.not.have.been.called;
           urlStateService.redirectToState.should.not.have.been.called;
 
-          expect(resp).to.deep.equal({ 
+          expect(resp).to.deep.equal({
+            id: "userId",
+            email: "userEmail",
+            picture: "imageUrl"
+          });
+
+          done();
+        });
+      });
+
+      it("should signin silently if expiration is low", function(done) {
+        user.expires_in = 10;
+
+        googleAuthFactory.authenticate().then(function(resp) {
+          openidConnect.signinSilent.should.have.been.calledWith('userId');
+          urlStateService.redirectToState.should.not.have.been.called;
+
+          expect(resp).to.deep.equal({
             id: "userId",
             email: "userEmail",
             picture: "imageUrl"
@@ -147,7 +141,35 @@ describe("Services: googleAuthFactory", function() {
         })
         .then(null,done);
       });
-      
+
+      it("should signin silently if there's no user, but there's a user token", function(done) {
+        openidConnect.getUser = function() { return Q.resolve(null); };
+        userState._state.userToken = { id: 'tokenId' };
+
+        googleAuthFactory.authenticate().then(function(resp) {
+          openidConnect.signinSilent.should.have.been.calledWith('tokenId');
+          urlStateService.redirectToState.should.not.have.been.called;
+
+          expect(resp).to.deep.equal({
+            id: "userId",
+            email: "userEmail",
+            picture: "imageUrl"
+          });
+
+          done();
+        })
+        .then(null,done);
+      });
+
+      it("should reject if there's no user and no user token", function(done) {
+        openidConnect.getUser = function() { return Q.resolve(null); };
+
+        googleAuthFactory.authenticate().catch( function(error) {
+          expect(error).to.equal("No user");
+          done();
+        });
+      });
+
       it("should redirect and clear state if present", function(done) {
         userState._state.redirectState = "someState";
 
@@ -165,15 +187,7 @@ describe("Services: googleAuthFactory", function() {
 
   describe("forceAuthenticate", function() {
     beforeEach(module(function ($provide) {
-      $provide.value("$window", {
-        location: {
-          href: "http://localhost:8000/editor/list?cid=companyId#somehash",
-          origin: "http://localhost:8000",
-          pathname: "/editor/list",
-          search: "?cid=companyId",
-          hash: ""
-        }
-      });
+      $provide.value("$window", {});
     }));
 
     beforeEach(function() {
@@ -190,126 +204,81 @@ describe("Services: googleAuthFactory", function() {
     });
 
     it("should save current state variables", function() {
-      googleAuthFactory.authenticate(true);
+      googleAuthFactory.forceAuthenticate();
 
       expect(userState._state.redirectState).to.equal("someState");
-      
+
       userState._persistState.should.have.been.called;
       uiFlowManager.persist.should.have.been.called;
+      openidConnect.signinRedirect.should.have.been.called;
+      openidConnect.signinPopup.should.not.have.been.called;
     });
 
-    it("should authenticate with the default options", function(done) {
-      isSignedIn = true;
-
-      googleAuthFactory.authenticate(true);
-      
-      setTimeout(function() {
-        auth2APILoader.should.have.been.called;
-        authInstance.signIn.should.have.been.called;
-        authInstance.isSignedIn.get.should.not.have.been.called;
-
-        expect(authInstance.signIn.args[0][0]).to.deep.equal({
-          "response_type":"token",
-          "prompt":"select_account",
-          "ux_mode":"redirect",
-          "redirect_uri":"http://localhost:8000/"
-        });
-
-        done();
-      }, 10);
-    });
-
-    it("should strip params for redirect_uri", function(done) {
+    it("should clear state path", function() {
       $rootScope.redirectToRoot = false;
 
-      googleAuthFactory.authenticate(true);
-      
-      setTimeout(function() {
-        expect(userState._state.redirectState).to.equal("clearedPath");
-        
-        expect(authInstance.signIn.args[0][0]).to.deep.equal({
-          "response_type":"token",
-          "prompt":"select_account",
-          "ux_mode":"redirect",
-          "redirect_uri":"http://localhost:8000/editor/list?cid=companyId"
-        });
+      googleAuthFactory.forceAuthenticate();
 
-        done();
-      }, 10);
+      expect(userState._state.redirectState).to.equal("clearedPath");
+
+      userState._persistState.should.have.been.called;
+      uiFlowManager.persist.should.have.been.called;
+      openidConnect.signinRedirect.should.have.been.called;
+      openidConnect.signinPopup.should.not.have.been.called;
     });
 
-    it("should authenticate with popup via select_account", function(done) {
+    it("should authenticate with popup via select_account", function() {
       userState._state.inRVAFrame = true;
 
-      googleAuthFactory.authenticate(true);
-      
-      setTimeout(function() {
-        expect(authInstance.signIn.args[0][0]).to.deep.equal({
-          "response_type":"token",
-          "prompt":"select_account",
-          "ux_mode":"popup",
-          "redirect_uri":"http://localhost:8000/"
-        });
+      googleAuthFactory.forceAuthenticate();
 
-        done();
-      }, 10);
+      userState._persistState.should.not.have.been.called;
+      uiFlowManager.persist.should.not.have.been.called;
+      openidConnect.signinPopup.should.have.been.called;
     });
-    
-    it("should authenticate with popup via select_account if in iframe", function(done) {
+
+    it("should authenticate with popup via select_account if in iframe", function() {
       $window.self = 1;
       $window.top = 0;
-      googleAuthFactory.authenticate(true);
-      
-      setTimeout(function() {
-        expect(authInstance.signIn.args[0][0]).to.deep.equal({
-          "response_type":"token",
-          "prompt":"select_account",
-          "ux_mode":"popup",
-          "redirect_uri":"http://localhost:8000/"
-        });
 
-        done();
-      }, 10);
-    });
-    
-    it("should authorize user after popup authentication", function(done) {
-      userState._state.inRVAFrame = true;
+      googleAuthFactory.forceAuthenticate();
 
-      isSignedIn = true;
-
-      googleAuthFactory.authenticate(true).then(function(resp) {
-        authInstance.signIn.should.have.been.called;
-        authInstance.isSignedIn.get.should.have.been.called;
-
-        expect(resp).to.deep.equal({ 
-          id: "userId",
-          email: "userEmail",
-          picture: "imageUrl"
-        });
-
-        done();
-      })
-      .then(null,done);
+      userState._persistState.should.not.have.been.called;
+      uiFlowManager.persist.should.not.have.been.called;
+      openidConnect.signinPopup.should.have.been.called;
     });
 
-    it("should reject if user closes popup authentication", function(done) {
-      userState._state.inRVAFrame = true;
+  });
 
-      isSignedIn = false;
+  describe("signOut", function() {
+    beforeEach(module(function ($provide) {
+      $provide.value("$window", {
+        logoutFrame: { location: '' }
+      });
+    }));
 
-      googleAuthFactory.authenticate(true)
-        .then(done)
-        .then(null, function(error) {
-          authInstance.signIn.should.have.been.called;
-          authInstance.isSignedIn.get.should.not.have.been.called;
-
-          expect(error).to.equal("popup closed");
-          done();
-        })
-        .then(null,done);
+    beforeEach(function() {
+      inject(function($injector){
+        $window = $injector.get("$window");
+        googleAuthFactory = $injector.get("googleAuthFactory");
+      });
     });
 
+    it("should sign out user without signing out google", function() {
+      googleAuthFactory.signOut( false );
 
+      expect($window.logoutFrame.location).to.equal('');
+
+      openidConnect.removeUser.should.have.been.called;
+    });
+
+    it("should sign out user and google", function() {
+      googleAuthFactory.signOut( true );
+
+      expect($window.logoutFrame.location).to.equal('https://accounts.google.com/Logout');
+
+      openidConnect.removeUser.should.have.been.called;
+    });
   });
 
 });

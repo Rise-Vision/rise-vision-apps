@@ -73,10 +73,12 @@ angular.module('risevision.apps', [
 
         .state('apps.home', {
           url: '/',
-          controller: ['$location', '$state',
-            function ($location, $state) {
-              $location.replace();
-              $state.go('apps.editor.home');
+          controller: ['$location', '$state', 'canAccessApps',
+            function ($location, $state, canAccessApps) {
+              return canAccessApps().then(function () {
+                $location.replace();
+                $state.go('apps.editor.home');
+              });
             }
           ]
         })

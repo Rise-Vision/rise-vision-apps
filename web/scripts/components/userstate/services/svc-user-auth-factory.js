@@ -5,11 +5,11 @@
     .value('FORCE_GOOGLE_AUTH', false)
     .factory('userAuthFactory', ['$q', '$log', '$location',
       '$rootScope', '$loading', '$window', '$document',
-      'auth2APILoader', 'objectHelper', 'rvTokenStore', 'externalLogging',
+      'objectHelper', 'rvTokenStore', 'externalLogging',
       'userState', 'googleAuthFactory', 'customAuthFactory',
       'FORCE_GOOGLE_AUTH',
       function ($q, $log, $location, $rootScope, $loading, $window,
-        $document, auth2APILoader, objectHelper,
+        $document, objectHelper,
         rvTokenStore, externalLogging, userState, googleAuthFactory,
         customAuthFactory, FORCE_GOOGLE_AUTH) {
 
@@ -40,13 +40,18 @@
           rvTokenStore.write(_state.userToken);
         };
 
+        var _deleteUserToken = function (userToken) {
+          delete _state.userToken;
+          rvTokenStore.clear();
+        };
+
         var _cancelAccessTokenAutoRefresh = function () {};
 
         var _resetUserState = function () {
           $log.debug('Clearing user token...');
           _cancelAccessTokenAutoRefresh();
-          delete _state.userToken;
-          rvTokenStore.clear();
+
+          _deleteUserToken();
 
           userState._resetState();
         };
@@ -176,6 +181,8 @@
 
         var authenticate = function (forceAuth) {
           var authenticateDeferred;
+          var authenticationPromise,
+            isRiseAuthUser = false;
 
           // Clear User state
           if (forceAuth) {
@@ -198,82 +205,59 @@
             $loading.startGlobal('risevision.user.authenticate');
           }
 
-          // pre-load gapi to prevent popup blocker issues
-          auth2APILoader().finally(function () {
-            var authenticationPromise,
-              isRiseAuthUser = false;
+          // Check for Token
+          if (_state.userToken && _state.userToken.token && !FORCE_GOOGLE_AUTH) {
+            isRiseAuthUser = true;
+            authenticationPromise = customAuthFactory.authenticate();
+          } else {
+            authenticationPromise = googleAuthFactory.authenticate();
+          }
 
-            // Check for Token
-            if (_state.userToken && _state.userToken.token && !FORCE_GOOGLE_AUTH) {
-              isRiseAuthUser = true;
-              authenticationPromise = customAuthFactory.authenticate();
-            } else {
-              // Clear User state before redirect
-              if (forceAuth) {
-                _resetUserState();
-              }
+          authenticationPromise
+            .then(_authorize)
+            .then(function () {
+              userState._setIsRiseAuthUser(isRiseAuthUser);
+              authenticateDeferred.resolve();
+            })
+            .then(null, function (err) {
+              $log.debug('Authentication Error: ', err);
 
-              authenticationPromise = googleAuthFactory.authenticate(forceAuth);
-            }
+              _resetUserState();
 
-            authenticationPromise
-              .then(_authorize)
-              .then(function () {
-                userState._setIsRiseAuthUser(isRiseAuthUser);
-                authenticateDeferred.resolve();
-              })
-              .then(null, function (err) {
-                if (_state.redirectDetected) {
-                  $log.error('Authentication Error from Redirect: ', err);
+              authenticateDeferred.reject(err);
+            })
+            .finally(function () {
+              _addEventListenerVisibilityAPI();
 
-                  delete _state.redirectDetected;
-                } else {
-                  $log.debug('Authentication Error: ', err);
-                }
-                _resetUserState();
+              $loading.stopGlobal('risevision.user.authenticate');
 
-                authenticateDeferred.reject(err);
-              })
-              .finally(function () {
-                _addEventListenerVisibilityAPI();
-
-                $loading.stopGlobal('risevision.user.authenticate');
-
-                _logPageLoad('authenticated user');
-              });
-          });
+              _logPageLoad('authenticated user');
+            });
 
           return authenticateDeferred.promise;
         };
 
         var signOut = function (signOutGoogle) {
-          return auth2APILoader().then(function (auth2) {
-            if (!userState.isRiseAuthUser()) {
-              if (signOutGoogle) {
-                $window.logoutFrame.location =
-                  'https://accounts.google.com/Logout';
-              }
+          var promise = $q.resolve();
+          if (!userState.isRiseAuthUser()) {
+            promise = googleAuthFactory.signOut(signOutGoogle);
+          }
 
-              auth2.getAuthInstance().signOut();
-            }
+          _authenticateDeferred = null;
 
-            _authenticateDeferred = null;
+          // The flag the indicates a user is potentially
+          // authenticated already, must be destroyed.
+          _resetUserState();
 
-            // The flag the indicates a user is potentially
-            // authenticated already, must be destroyed.
-            _resetUserState();
+          //call google api to sign out
+          $rootScope.$broadcast('risevision.user.signedOut');
+          $log.debug('User is signed out.');
 
-            //call google api to sign out
-            $rootScope.$broadcast('risevision.user.signedOut');
-            $log.debug('User is signed out.');
-          });
+          return promise;
         };
 
         var userAuthFactory = {
           authenticate: authenticate,
-          authenticatePopup: function () {
-            return authenticate(true);
-          },
           signOut: signOut,
           addEventListenerVisibilityAPI: _addEventListenerVisibilityAPI,
           removeEventListenerVisibilityAPI: _removeEventListenerVisibilityAPI,

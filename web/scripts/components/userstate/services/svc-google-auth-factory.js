@@ -4,48 +4,38 @@
   /*jshint camelcase: false */
 
   angular.module('risevision.common.components.userstate')
-    // constants (you can override them in your app as needed)
     .factory('googleAuthFactory', ['$rootScope', '$q', '$log', '$window',
-      '$stateParams', 'auth2APILoader', 'uiFlowManager',
-      'userState', 'urlStateService',
-      function ($rootScope, $q, $log, $window, $stateParams, auth2APILoader,
-        uiFlowManager, userState, urlStateService) {
+      '$stateParams', 'gapiLoader', 'uiFlowManager',
+      'userState', 'urlStateService', 'openidConnect',
+      function ($rootScope, $q, $log, $window, $stateParams, gapiLoader,
+        uiFlowManager, userState, urlStateService, openidConnect) {
 
-        var _getUserProfile = function (authInstance) {
-          if (!authInstance.currentUser) {
+        var _setToken = function (user) {
+          return gapiLoader().then(function (gApi) {
+            var token = {
+              access_token: user.id_token,
+              expires_in: '3600',
+              token_type: 'Bearer'
+            };
+
+            gApi.auth.setToken(token);
+          });
+        };
+
+        var _getUserProfile = function (currentUser) {
+          if (!currentUser) {
             return null;
           }
 
-          var profile = authInstance.currentUser.get().getBasicProfile();
+          var profile = currentUser.profile;
 
           var user = {
-            id: profile.getId(),
-            email: profile.getEmail(),
-            picture: profile.getImageUrl()
+            id: profile.sub,
+            email: profile.email,
+            picture: profile.picture
           };
 
           return user;
-        };
-
-        var _gapiAuthorize = function () {
-          var deferred = $q.defer();
-
-          auth2APILoader()
-            .then(function (auth2) {
-              var authResult = auth2.getAuthInstance() &&
-                auth2.getAuthInstance().isSignedIn.get();
-
-              $log.debug('auth2.isSignedIn result:', authResult);
-              if (authResult) {
-
-                deferred.resolve(_getUserProfile(auth2.getAuthInstance()));
-              } else {
-                deferred.reject('Failed to authorize user (auth2)');
-              }
-            })
-            .then(null, deferred.reject); //auth2APILoader
-
-          return deferred.promise;
         };
 
         /*
@@ -53,23 +43,35 @@
          *
          */
         var authenticate = function () {
-          var deferred = $q.defer();
+          return openidConnect.getUser()
+            .then(function(user) {
+              if (user) {
+                // Silent means we actually perform the check with API
+                if (user.expires_in < 60) {
+                  return openidConnect.signinSilent(user.profile.sub);
+                } else {
+                  return $q.resolve(user);
+                }
+              } else if (userState._state.userToken) {
+                return openidConnect.signinSilent(userState._state.userToken.id);
+              } else {
+                return $q.reject('No user');
+              }
+            })
+            .then(function(user) {
+              _setToken(user);
 
-          _gapiAuthorize()
-            .then(function (oauthUserInfo) {
               if (userState._state.redirectState) {
                 urlStateService.redirectToState(userState._state.redirectState);
 
                 delete userState._state.redirectState;
               }
 
-              deferred.resolve(oauthUserInfo);
+              return _getUserProfile(user);
             })
-            .then(null, function (err) {
-              deferred.reject(err);
+            .catch(function (err) {
+              return $q.reject(err);
             });
-
-          return deferred.promise;
         };
 
         var _isPopupAuth = function () {
@@ -77,57 +79,36 @@
         };
 
         var forceAuthenticate = function () {
-          var deferred = $q.defer();
-          var loc;
-          var redirectState = $stateParams.state;
-
-          // Redirect to full URL path
-          if ($rootScope.redirectToRoot === false) {
-            loc = $window.location.href.substr(0, $window.location.href
-              .indexOf('#')) || $window.location.href;
-
-            redirectState = urlStateService.clearStatePath(redirectState);
+          if (_isPopupAuth()) {
+            return openidConnect.signinPopup();
           } else {
-            loc = $window.location.origin + '/';
+            var redirectState = $stateParams.state;
+
+            // Redirect to full URL path
+            if ($rootScope.redirectToRoot === false) {
+              redirectState = urlStateService.clearStatePath(redirectState);
+            }
+
+            userState._state.redirectState = redirectState;
+            userState._persistState();
+            uiFlowManager.persist();
+
+            return openidConnect.signinRedirect(redirectState);
+          }
+        };
+
+        var signOut = function(signOutGoogle) {
+          if (signOutGoogle) {
+            $window.logoutFrame.location = 'https://accounts.google.com/Logout';
           }
 
-          userState._state.redirectState = redirectState;
-          userState._persistState();
-          uiFlowManager.persist();
-
-          var opts = {
-            response_type: 'token',
-            prompt: 'select_account',
-            ux_mode: _isPopupAuth() ? 'popup' : 'redirect',
-            redirect_uri: loc
-          };
-
-          auth2APILoader()
-            .then(function (auth2) {
-              return auth2.getAuthInstance().signIn(opts);
-            })
-            .then(function () {
-              if (_isPopupAuth()) {
-                deferred.resolve(authenticate());
-              } else {
-                deferred.resolve();
-              }
-            })
-            .then(null, function (err) {
-              deferred.reject(err);
-            });
-
-          return deferred.promise;
+          return openidConnect.removeUser();
         };
 
         var googleAuthFactory = {
-          authenticate: function (forceAuth) {
-            if (!forceAuth) {
-              return authenticate();
-            } else {
-              return forceAuthenticate();
-            }
-          }
+          authenticate: authenticate,
+          forceAuthenticate: forceAuthenticate,
+          signOut: signOut
         };
 
         return googleAuthFactory;

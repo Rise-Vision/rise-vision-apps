@@ -83,7 +83,7 @@ describe("Services: userState", function() {
       "isLoggedIn", "getAccessToken", "checkUsername", "updateUserProfile", 
       "refreshProfile",
       // private
-      "_restoreState", "_resetState", "_setUserToken", "_persistState"];
+      "_restoreState", "_resetState", "_persistState"];
       
     inject(function($injector){
       var $rootScope = $injector.get("$rootScope");
@@ -438,13 +438,6 @@ describe("Services: userState", function() {
   });
   
   describe("private methods: ", function() {
-    it("_setUserToken: ", function() {
-      userState._setUserToken("testParams");
-      
-      expect(userState._state.params).to.equal("testParams");
-      expect(userState._state.userToken).to.equal("dummy");
-    });
-    
     describe("_restoreState: ", function() {
       it("should ignore if nothing to restore", function() {
         var oldState = angular.copy(userState._state);
@@ -460,7 +453,6 @@ describe("Services: userState", function() {
         var oldState = angular.copy(userState._state);
         oldState.user.username = "username@test.com";
         oldState.userToken = "dummy";
-        oldState.redirectDetected = true;
 
         localStorageService.get = sinon.spy(function() { return {user: {username: "username@test.com"}, userToken: "dummy"}; });
 
