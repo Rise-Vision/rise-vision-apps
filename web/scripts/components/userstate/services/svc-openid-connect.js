@@ -116,6 +116,7 @@
         service.signinRedirect = function(state) {
           return openidConnectLoader()
             .then(function(client) {
+              openidTracker('sign in redirect started');
               return client.signinRedirect({ state: state });
             })
             .then(function(resp) {

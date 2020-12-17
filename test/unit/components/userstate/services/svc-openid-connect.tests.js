@@ -215,13 +215,14 @@ describe("Services: openidConnect", function() {
       expect(openidConnect.signinRedirect).to.be.a("function");
     });
 
-    it("should call signin redirect", function(done) {
+    it("should call signin redirect and track event", function(done) {
       var state = 'some state';
 
       openidConnect.signinRedirect(state).then( function() {
         expect(openidClient.signinRedirect).to.have.been.calledWith({
           state: 'some state'
         });
+        expect(openidTracker).to.have.been.calledWith('sign in redirect started');
 
         done();
       });
