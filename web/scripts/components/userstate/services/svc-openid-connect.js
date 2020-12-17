@@ -86,9 +86,10 @@
             client.events.addAccessTokenExpiring(function() {
               trackOpenidEvent('access token expiring');
             });
-            client.events.addAccessTokenExpired(function() {
-              trackOpenidEvent('access token expired');
-            });
+            // Temporarily removed to avoid sending too many events
+            // client.events.addAccessTokenExpired(function() {
+            //   trackOpenidEvent('access token expired');
+            // });
             client.events.addSilentRenewError(function(error) {
               trackOpenidEvent('silent renew error', {errorMessage: error.message});
             });
