@@ -159,6 +159,20 @@ describe("app:", function() {
           done();
         }, 10);
       });
+
+      it("should clear hash even if there's an issue with signing redirect", function(done) {
+        window.location.hash = 'some_hash';
+        searchOutput.code = 'xyz';
+
+        rootMatcher(location, null, openidConnect); // force a null pointer error
+
+        setTimeout(function() {
+          openidConnect.signinRedirectCallback.should.have.been.calledOnce;
+          expect(window.location.hash).to.equal('');
+
+          done();
+        }, 10);
+      });
     });
   });
 
