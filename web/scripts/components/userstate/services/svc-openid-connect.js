@@ -64,8 +64,8 @@
       }
     ])
 
-    .factory('openidConnect', ['$q', 'openidConnectLoader', 'openidTracker',
-      function ($q, openidConnectLoader, openidTracker) {
+    .factory('openidConnect', ['$q', '$log', 'openidConnectLoader', 'openidTracker',
+      function ($q, $log, openidConnectLoader, openidTracker) {
         var service = {};
 
         openidConnectLoader()
@@ -86,9 +86,10 @@
             client.events.addAccessTokenExpiring(function() {
               trackOpenidEvent('access token expiring');
             });
-            client.events.addAccessTokenExpired(function() {
-              trackOpenidEvent('access token expired');
-            });
+            // Temporarily removed to avoid sending too many events
+            // client.events.addAccessTokenExpired(function() {
+            //   trackOpenidEvent('access token expired');
+            // });
             client.events.addSilentRenewError(function(error) {
               trackOpenidEvent('silent renew error', {errorMessage: error.message});
             });
@@ -116,6 +117,7 @@
         service.signinRedirect = function(state) {
           return openidConnectLoader()
             .then(function(client) {
+              openidTracker('sign in redirect started');
               return client.signinRedirect({ state: state });
             })
             .then(function(resp) {
@@ -137,7 +139,7 @@
 
               return user;
             }).catch(function(err) {
-              console.log(err);
+              $log.error('Authentication Error from Redirect: ', err);
 
               throw err;
             });

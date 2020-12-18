@@ -46,17 +46,15 @@
             function ($location, userAuthFactory, openidConnect) {
               var hash = $location.hash();
 
-              if ($location.search().code || 
+              if ($location.search().code ||
                 (hash && (hash.match(/.*id_token=.*/) || hash.match(/access_token=.*/)))) {
-                var idToken = hash && hash.split('&')[1].split('=')[1];
-                // var accessToken = hash && hash.split('&')[1].split('=')[1];
-
-                console.log('Google Auth result received', 'id_token=' + idToken);
+                console.log('Google Auth result received');
 
                 openidConnect.signinRedirectCallback()
                   .then(function(user) {
                     userAuthFactory.authenticate(true);
-
+                  })
+                  .finally(function() {
                     window.location.hash = '';
                   });
               } else {
