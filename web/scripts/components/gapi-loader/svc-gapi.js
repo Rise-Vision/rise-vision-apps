@@ -81,8 +81,8 @@ angular.module('risevision.common.gapi', [
   //abstract method for creading a loader factory service that loads any
   //custom Google Client API library
 
-  .factory('gapiClientLoaderGenerator', ['$q', '$log', 'clientAPILoader', '$rootScope',
-    function ($q, $log, clientAPILoader, $rootScope) {
+  .factory('gapiClientLoaderGenerator', ['$q', '$log', 'clientAPILoader',
+    function ($q, $log, clientAPILoader) {
       return function (libName, libVer, baseUrl) {
         return function () {
           var deferred = $q.defer();
@@ -94,40 +94,6 @@ angular.module('risevision.common.gapi', [
               gApi.client.load(libName, libVer, null, baseUrl)
                 .then(function () {
                   if (gApi.client[libName]) {
-
-                    var _addGlobalCatcher = function(library, recursionLevel) {
-                      recursionLevel = recursionLevel || 0;
-                      if (recursionLevel > 5) {
-                        $log.error('gApi global cather has reached recursion level limit!');
-                        return;
-                      }
-
-                      var _wrapWithCatcher = function (service, func) {
-                        var originalFunc = service[func];
-                        service[func] = function () {
-                          var ret = originalFunc.apply(service, arguments);
-                          if (ret && ret.then) {
-                            ret.then(null, function(resp) {
-                              if (resp && resp.status === 401) {
-                                $rootScope.$broadcast('risevision.gapi.unauthorized');
-                              }
-                            });
-                          }
-                          return ret;
-                        };
-                      };
-
-                      _.map(library, function(val,key) {
-                          if (typeof library[key] === 'function') {
-                            _wrapWithCatcher(library,key);
-                          } else if (typeof library[key] === 'object') {
-                            _addGlobalCatcher(library[key], recursionLevel + 1);
-                          }
-                      });
-                    };
-
-                    _addGlobalCatcher(gApi.client[libName]);
-
                     $log.debug(libName + '.' + libVer + ' Loaded');
                     deferred.resolve(gApi.client[libName]);
                   } else {

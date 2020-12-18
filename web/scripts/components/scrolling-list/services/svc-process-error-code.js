@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.common.components.scrolling-list')
-  .service('processErrorCode', ['$filter', 'getError',
-    function ($filter, getError) {
+  .service('processErrorCode', ['$filter', 'getError', '$rootScope',
+    function ($filter, getError, $rootScope) {
       var actionsMap = {
         get: 'loaded',
         load: 'loaded',
@@ -61,6 +61,7 @@ angular.module('risevision.common.components.scrolling-list')
             return errorString;
           }
         } else if (e.status === 401) {
+          $rootScope.$broadcast('risevision.gapi.unauthorized');
           return tryAgainReload;
         } else if (e.status === 403) {
           if (errorString.indexOf('User is not allowed access') >= 0) {
