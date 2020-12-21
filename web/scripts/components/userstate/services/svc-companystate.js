@@ -3,9 +3,9 @@
   'use strict';
 
   angular.module('risevision.common.components.userstate')
-    .factory('companyState', ['$location', 'getCompany', 'objectHelper',
+    .factory('companyState', ['$location', '$state', 'getCompany', 'objectHelper',
       '$rootScope', '$log', '$q',
-      function ($location, getCompany, objectHelper, $rootScope, $log, $q) {
+      function ($location, $state, getCompany, objectHelper, $rootScope, $log, $q) {
         var pendingSelectedCompany;
 
         var _state = {
@@ -39,7 +39,9 @@
               return _switchCompany(selectedCompanyId);
             })
             .then(null, function () {
-              _companyState.resetCompany();
+              if ($state.current.forceAuth !== false) {                
+                _companyState.resetCompany();
+              }
             })
             .finally(function () {
               pendingSelectedCompany = null;
@@ -116,8 +118,7 @@
           resetCompany: function () {
             objectHelper.clearAndCopy(_state.userCompany, _state.selectedCompany);
 
-            $rootScope.$broadcast(
-              'risevision.company.selectedCompanyChanged');
+            $rootScope.$broadcast('risevision.company.selectedCompanyChanged');
           },
           resetCompanyState: _resetCompanyState,
           getUserCompanyId: function () {
