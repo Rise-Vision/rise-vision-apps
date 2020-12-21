@@ -91,7 +91,7 @@
         factory.loadCreditCards = function() {
           userAuthFactory.authenticate()
             .then(function () {
-              if (userState.isRiseVisionUser()) {
+              if (userState.getSelectedCompanyId()) {
                 billing.getCreditCards({
                   count: 40
                 })

@@ -25,7 +25,7 @@ describe("Services: credit card factory", function() {
         id: "id",
         street: "billingStreet",
       }),
-      isRiseVisionUser: sinon.stub().returns(true)
+      getSelectedCompanyId: sinon.stub().returns("id")
     });
 
     $provide.value('userAuthFactory', {
@@ -189,7 +189,7 @@ describe("Services: credit card factory", function() {
     });
 
     it('should not retrieve cards if user is not registered', function(done) {
-      userState.isRiseVisionUser.returns(false);
+      userState.getSelectedCompanyId.returns(null);
 
       creditCardFactory.loadCreditCards();
 
