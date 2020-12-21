@@ -52,7 +52,7 @@
 
                 openidConnect.signinRedirectCallback()
                   .then(function(user) {
-                    userAuthFactory.authenticate(true);
+                    return userAuthFactory.authenticate(true);
                   })
                   .finally(function() {
                     window.location.hash = '';
