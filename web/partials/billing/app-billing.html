@@ -86,6 +86,9 @@
 
     <div class="form-group mt-5 mb-3">
       <label>Billing History</label>
+      <span ng-show="invoices.items.list.length > 0">
+        (<a class="madero-link" ui-sref="apps.billing.unpaid({token: billingFactory.getToken()})" target="_blank">View Unpaid Invoices</a>)
+      </span>
     </div>
 
     <div id="errorBox" ng-show="invoices.apiError" class="madero-style alert alert-danger" role="alert">
