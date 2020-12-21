@@ -266,8 +266,9 @@ describe("Services: company state", function() {
 
         expect(apiCount).to.equal(2);
         expect(companyState.getUserCompanyId()).to.equal("RV_parent_id");
-        expect(companyState.getSelectedCompanyId()).to.not.be.ok;
-        expect(companyState.isSubcompanySelected()).to.be.true;
+        expect(companyState.getSelectedCompanyId()).to.equal("RV_parent_id");
+        expect(companyState.getSelectedCompanyName()).to.equal("Parent Company");
+        expect(companyState.isSubcompanySelected()).to.be.false;
         
         done();
       },10);

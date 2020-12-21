@@ -41,6 +41,8 @@
             .then(null, function () {
               if ($state.current.forceAuth !== false) {                
                 _companyState.resetCompany();
+              } else {
+                objectHelper.clearAndCopy(_state.userCompany, _state.selectedCompany);
               }
             })
             .finally(function () {
