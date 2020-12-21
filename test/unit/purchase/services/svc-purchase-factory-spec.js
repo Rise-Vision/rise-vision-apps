@@ -169,14 +169,17 @@ describe("Services: purchase factory", function() {
       }, 10);
     });
 
-    it("should initialize invoice due date 30 days from now", function() {
+    it("should initialize invoice due date 30 days from now", function(done) {
       var newDate = new Date();
 
       purchaseFactory.init();
 
-      expect(creditCardFactory.paymentMethods.invoiceDate).to.be.ok;
-      expect(creditCardFactory.paymentMethods.invoiceDate).to.be.a("date");
-      expect(creditCardFactory.paymentMethods.invoiceDate - newDate).to.equal(30 * 24 * 60 * 60 * 1000);
+      setTimeout(function() {
+        expect(creditCardFactory.paymentMethods.invoiceDate).to.be.ok;
+        expect(creditCardFactory.paymentMethods.invoiceDate).to.be.a("date");
+        expect(creditCardFactory.paymentMethods.invoiceDate - newDate).to.equal(30 * 24 * 60 * 60 * 1000);
+        done();
+      }, 10);
     });
   });
 
