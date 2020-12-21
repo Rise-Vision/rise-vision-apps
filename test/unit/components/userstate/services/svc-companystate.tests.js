@@ -21,6 +21,13 @@ describe("Services: company state", function() {
       },
       url: function() {}
     });
+    $provide.factory("$state", function() {
+      return {
+        current: {
+          
+        }
+      };
+    });
     $provide.factory("getCompany", [function () {
       return function(companyId) {
         var deferred = Q.defer();
@@ -28,12 +35,16 @@ describe("Services: company state", function() {
         apiCount++;
         if (companyId) {
           expect(companyId).to.equal("RV_subcompany_id");
-          
-          deferred.resolve({
-            "id": "RV_subcompany_id",
-            "parentId": "RV_parent_id",
-            "name": "Sub Company"
-          });
+
+          if (!subCompanyFailure) {
+            deferred.resolve({
+              "id": "RV_subcompany_id",
+              "parentId": "RV_parent_id",
+              "name": "Sub Company"
+            });            
+          } else {
+            deferred.reject();
+          }
         }
         else {
           deferred.resolve({
@@ -62,11 +73,12 @@ describe("Services: company state", function() {
     };
   }));
   
-  var companyState, subCompany, apiCount, rootScope, broadcastSpy;
+  var companyState, $state, subCompany, apiCount, subCompanyFailure, rootScope, broadcastSpy;
   var companyWithNewSettings, subCompanyWithNewSettings;
   
   beforeEach(function() {
     apiCount = 0;
+    subCompanyFailure = false;
   });
   
   describe("no selected company: ",function(){
@@ -203,6 +215,7 @@ describe("Services: company state", function() {
         companyState = $injector.get("companyState");
         rootScope = $injector.get("$rootScope");
         broadcastSpy = sinon.spy(rootScope, "$broadcast");
+        $state = $injector.get("$state");
       });
     });
     
@@ -222,7 +235,44 @@ describe("Services: company state", function() {
         done();
       },10);
     });
-    
+
+    it("should handle failure to find selected company", function(done) {
+      subCompanyFailure = true;
+
+      companyState.init();
+      
+      setTimeout(function() {
+        broadcastSpy.should.have.been.calledWithExactly("risevision.company.selectedCompanyChanged");
+        broadcastSpy.should.have.been.calledOnce;
+
+        expect(apiCount).to.equal(2);
+        expect(companyState.getUserCompanyId()).to.equal("RV_parent_id");
+        expect(companyState.getSelectedCompanyId()).to.equal("RV_parent_id");
+        expect(companyState.getSelectedCompanyName()).to.equal("Parent Company");
+        expect(companyState.isSubcompanySelected()).to.be.false;
+        
+        done();
+      },10);
+    });
+
+    it("should not reset sub-company if route does not forceAuth", function(done) {
+      subCompanyFailure = true;
+      $state.current.forceAuth = false;
+
+      companyState.init();
+      
+      setTimeout(function() {
+        broadcastSpy.should.not.have.been.called;
+
+        expect(apiCount).to.equal(2);
+        expect(companyState.getUserCompanyId()).to.equal("RV_parent_id");
+        expect(companyState.getSelectedCompanyId()).to.not.be.ok;
+        expect(companyState.isSubcompanySelected()).to.be.true;
+        
+        done();
+      },10);
+    });
+
     it("should not reset sub-company if init is called twice", function(done) {
       companyState.init();
       

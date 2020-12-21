@@ -36,7 +36,8 @@ angular.module('risevision.apps')
         .state('apps.billing.unpaid', {
           url: '/billing/unpaid?:token',
           templateUrl: 'partials/billing/unpaid-invoices.html',
-          controller: 'UnpaidInvoicesCtrl'
+          controller: 'UnpaidInvoicesCtrl',
+          forceAuth: false
         })
 
         .state('apps.billing.invoice', {
@@ -50,7 +51,8 @@ angular.module('risevision.apps')
                 billingFactory.getInvoice($stateParams.invoiceId, $stateParams.cid, $stateParams.token);
               }
             ]
-          }
+          },
+          forceAuth: false
         });
     }
   ]);

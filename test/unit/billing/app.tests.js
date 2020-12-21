@@ -60,6 +60,7 @@ describe('app:', function() {
       expect(state).to.be.ok;
       expect(state.url).to.equal('/billing?edit');
       expect(state.controller).to.be.ok;
+      expect(state.forceAuth).to.not.be.false;
     });
 
     it('should open Edit Subscription if edit param is provided', function(done) {
@@ -96,6 +97,7 @@ describe('app:', function() {
       expect(state).to.be.ok;
       expect(state.url).to.equal('/billing/unpaid?:token');
       expect(state.controller).to.equal('UnpaidInvoicesCtrl');
+      expect(state.forceAuth).to.be.false;
     });
 
   });
@@ -107,6 +109,7 @@ describe('app:', function() {
       expect(state).to.be.ok;
       expect(state.url).to.equal('/billing/invoice/:invoiceId?:token');
       expect(state.controller).to.equal('InvoiceCtrl');
+      expect(state.forceAuth).to.be.false;
     });
 
     it('should open Edit Invoice', function(done) {
