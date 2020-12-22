@@ -51,28 +51,34 @@
         <thead class="table-header">
           <tr class="table-header__row">
             <th class="table-header__cell col-xs-4">Subscription</th>
-            <th class="table-header__cell col-xs-4">Status</th>
-            <th class="table-header__cell col-xs-4">Ship To</th>
-            <!-- <th class="table-header__cell col-xs-4">Price</th> -->
+            <th class="table-header__cell col-xs-2">Status</th>
+            <th class="table-header__cell col-xs-2">Renewal Date</th>
+            <th class="table-header__cell col-xs-2">Renewal Amount</th>
+            <th class="table-header__cell col-xs-2">Ship To</th>
           </tr>
         </thead>
         <tbody class="table-body">
-          <tr class="table-body__row" ng-repeat="subs in subscriptions.items.list">
+          <tr class="table-body__row" ng-repeat="item in subscriptions.items.list" ng-if="item.subscription.current_term_end">
             <td class="table-body__cell font-weight-bold">
-              {{getSubscriptionDesc(subs)}}
+              <a class="madero-link u_clickable" ng-click="editSubscription(item.subscription)" ng-if="item.subscription.customer_id === company.id">{{getSubscriptionDesc(item.subscription)}}</a>
+              <span ng-if="item.subscription.customer_id !== company.id">{{getSubscriptionDesc(item.subscription)}}</span>
             </td>
             <td class="table-body__cell">
-              <span ng-class="{ 'text-success': isActive(subs), 'text-danger': isSuspended(subs) || isCancelled(subs) }">
-                {{subs.status}}
+              <span class="u_capitalize" ng-class="{ 'text-success': isActive(item.subscription), 'text-danger': isSuspended(item.subscription) || isCancelled(item.subscription) }">
+                {{item.subscription.status}}
               </span>
             </td>
             <td class="table-body__cell">
-              {{subs.shipToName}}
+              {{item.subscription.current_term_end * 1000 | date:'d-MMM-yyyy'}}
             </td>
-            <!-- <td>${{getSubscriptionPrice(subs) | number:2}}</td> -->
             <td class="table-body__cell">
-              <a class="madero-link u_clickable" ng-click="editSubscription(subs)" ng-if="subs.billToId === company.id">Edit</a>
-              <span ng-if="subs.billToId !== company.id">Managed by Parent</span>
+              ${{item.subscription.plan_amount / 100 | number:2}}
+            </td>
+            <td class="table-body__cell">
+              <span ng-if="item.subscription.customer_id !== item.subscription.cf_ship_to_company">{{item.subscription.shipping_address.company}}</span>
+            </td>
+            <td class="table-body__cell">
+              <span ng-if="item.subscription.customer_id !== company.id">Managed by Parent</span>
             </td>
           </tr>
 
