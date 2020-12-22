@@ -10,6 +10,7 @@
           replace: false,
           terminal: true,
           priority: 1000,
+          scope: true,
           link: function link(scope, element, attr) {
             var fn = $parse(attr.scrollingList);
 
