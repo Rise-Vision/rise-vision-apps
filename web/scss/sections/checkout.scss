@@ -72,7 +72,7 @@
     }
   }
 
-  .purchase-summary {
+  .checkout-gray-panel {
     @extend .p-4;
 
     background-color: $lighter-gray;
@@ -83,7 +83,7 @@
     font-weight: bold;
   }
 
-  #checkout-success {
+  .checkout-centered-panel {
     @extend .mx-auto;
 
     width: 744px;
@@ -126,16 +126,6 @@
     margin-top: 30px;
   }
 
-  .display-count-input {
-    @extend .form-control;
-    
-    width: 75px;    
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    display: inline;
-  }
-
   .btn-group-period {
     .btn {
       font-weight: normal;
@@ -163,6 +153,16 @@
       }
     }
   }
+}
+
+.display-count-input {
+  @extend .form-control;
+  
+  width: 75px;    
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  display: inline;
 }
 
 

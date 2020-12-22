@@ -15,11 +15,13 @@ angular.module('risevision.apps.billing.services')
         factory.apiError = '';
       };
 
-      factory.init = function() {
+      factory.init = function(initCreditCards) {
         _clearMessages();
 
-        creditCardFactory.initPaymentMethods();
-        creditCardFactory.loadCreditCards();
+        if (initCreditCards) {
+          creditCardFactory.initPaymentMethods();
+          creditCardFactory.loadCreditCards();          
+        }
       };
 
       var _getCompanyId = function() {
@@ -42,7 +44,7 @@ angular.module('risevision.apps.billing.services')
       };
 
       factory.getInvoice = function (invoiceId, companyId, token) {
-        factory.init();
+        factory.init(true);
 
         factory.invoice = null;
         factory.loading = true;
