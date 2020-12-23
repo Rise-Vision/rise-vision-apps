@@ -87,7 +87,7 @@ angular.module('risevision.apps.billing.controllers')
         var name = plan ? plan.name : subscription.plan_id;
         
         // Show `1` plan_quantity for Per Display subscriptions
-        if ((plan && _isVolumePlan(plan) && subscription.plan_quantity > 0) || subscription.plan_quantity > 1) {
+        if (plan && _isVolumePlan(plan) && subscription.plan_quantity > 0) {
           prefix = subscription.plan_quantity + ' x ';
         }
         
