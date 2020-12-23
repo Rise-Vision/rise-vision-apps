@@ -85,8 +85,6 @@ describe('controller: BillingCtrl', function () {
   it('should init list service', function() {
     ScrollingListService.should.have.been.calledTwice;
     ScrollingListService.should.have.been.calledWith('getSubscriptions', {
-      sortBy: 'status',
-      reverse: false,
       name: 'Subscriptions'
     });
     ScrollingListService.should.have.been.calledWith('getInvoices', {
@@ -155,99 +153,97 @@ describe('controller: BillingCtrl', function () {
     describe('getSubscriptionDesc: ', function() {
       it('should format legacy subscription names', function () {
         expect($scope.getSubscriptionDesc({
-          productName: 'Enterprise Plan',
-          quantity: 1,
-          unit: 'per Company per Month'
+          plan_id: 'b1844725d63fde197f5125b58b6cba6260ee7a57-m',
+          plan_quantity: 1,
+          billing_period: 1,
+          billing_period_unit: 'month'
         })).to.equal('Enterprise Plan Monthly');
 
         expect($scope.getSubscriptionDesc({
-          productName: 'Enterprise Plan',
-          quantity: 3,
-          unit: 'per Display per month'
+          plan_id: 'b1844725d63fde197f5125b58b6cba6260ee7a57-m',
+          plan_quantity: 3,
+          billing_period: 1,
+          billing_period_unit: 'month'
         })).to.equal('3 x Enterprise Plan Monthly');
 
         expect($scope.getSubscriptionDesc({
-          productName: 'Advanced Plan',
-          quantity: 1,
-          unit: 'per Company per Year',
-          billingPeriod: 0
+          plan_id: '93b5595f0d7e4c04a3baba1102ffaecb17607bf4-m',
+          plan_quantity: 1,
+          billing_period: 0,
+          billing_period_unit: 'year'
         })).to.equal('Advanced Plan Yearly');
 
         expect($scope.getSubscriptionDesc({
-          productName: 'Basic Plan',
-          quantity: 2,
-          unit: 'per Company per Year',
-          billingPeriod: 1
+          plan_id: '40c092161f547f8f72c9f173cd8eebcb9ca5dd25-m',
+          plan_quantity: 2,
+          billing_period: 1,
+          billing_period_unit: 'year'
         })).to.equal('2 x Basic Plan Yearly');
 
         expect($scope.getSubscriptionDesc({
-          productName: 'Basic Plan',
-          quantity: 2,
-          unit: 'per Company per Year',
-          billingPeriod: 3
+          plan_id: '40c092161f547f8f72c9f173cd8eebcb9ca5dd25-m',
+          plan_quantity: 2,
+          billing_period: 3,
+          billing_period_unit: 'year'
         })).to.equal('2 x Basic Plan 3 Year');
 
         expect($scope.getSubscriptionDesc({
-          productName: 'Additional Licenses',
-          quantity: 1,
-          unit: 'per Display per Year',
-          productCode: 'pppc'
-        })).to.equal('1 x Additional Licenses Yearly');
+          plan_id: '40c092161f547f8f72c9f173cd8eebcb9ca5dd25-m',
+          plan_quantity: 2,
+          billing_period: 3,
+          billing_period_unit: 'month'
+        })).to.equal('2 x Basic Plan 3 Month');
 
+      });
+
+      it('Use plan_id if the plan mapping is not found', function() {
+        expect($scope.getSubscriptionDesc({
+          plan_id: 'pppc',
+          plan_quantity: 1,
+          billing_period: 1,
+          billing_period_unit: 'year',
+        })).to.equal('pppc Plan Yearly');
+
+        expect($scope.getSubscriptionDesc({
+          plan_id: 'pppc',
+          plan_quantity: 3,
+          billing_period: 1,
+          billing_period_unit: 'year',
+        })).to.equal('3 x pppc Plan Yearly');
       });
 
       it('should format volume plan names', function () {
         expect($scope.getSubscriptionDesc({
-          productName: 'Volume Plan',
-          quantity: 1,
-          unit: 'per Company per Month',
-          productCode: '34e8b511c4cc4c2affa68205cd1faaab427657dc'
+          plan_id: '34e8b511c4cc4c2affa68205cd1faaab427657dc',
+          plan_quantity: 1,
+          billing_period: 1,
+          billing_period_unit: 'month',
         })).to.equal('1 x Display Licenses Monthly Plan');
 
         expect($scope.getSubscriptionDesc({
-          productName: 'Volume Plan for Education',
-          quantity: 3,
-          unit: 'per Company per Year',
-          productCode: '88725121a2c7a57deefcf06688ffc8e84cc4f93b'
+          plan_id: '88725121a2c7a57deefcf06688ffc8e84cc4f93b',
+          plan_quantity: 3,
+          billing_period: 1,
+          billing_period_unit: 'year',
         })).to.equal('3 x Display Licenses for Education Yearly Plan');
 
       });
 
     });
 
-    it('should calculate total price', function () {
-      expect($scope.getSubscriptionPrice({
-        quantity: 1,
-        price: 100,
-        shipping: 0
-      })).to.equal(100);
-
-      expect($scope.getSubscriptionPrice({
-        quantity: 5,
-        price: 50,
-        shipping: 0
-      })).to.equal(250);
-
-      expect($scope.getSubscriptionPrice({
-        quantity: 3,
-        price: 200,
-        shipping: 500
-      })).to.equal(1100);
-    });
-
     it('should validate Active status type', function () {
-      expect($scope.isActive({ status: 'Active' })).to.be.true;
-      expect($scope.isActive({ status: 'Cancelled' })).to.be.false;
+      expect($scope.isActive({ status: 'active' })).to.be.true;
+      expect($scope.isActive({ status: 'cancelled' })).to.be.false;
     });
 
     it('should validate Cancelled status type', function () {
-      expect($scope.isCancelled({ status: 'Cancelled' })).to.be.true;
-      expect($scope.isCancelled({ status: 'Active' })).to.be.false;
+      expect($scope.isCancelled({ status: 'cancelled' })).to.be.true;
+      expect($scope.isCancelled({ status: 'active' })).to.be.false;
     });
 
     it('should validate Suspended status type', function () {
-      expect($scope.isSuspended({ status: 'Suspended' })).to.be.true;
-      expect($scope.isSuspended({ status: 'Active' })).to.be.false;
+      expect($scope.isSuspended({ status: 'suspended' })).to.be.true;
+      expect($scope.isSuspended({ status: 'active' })).to.be.false;
     });
   });
 });

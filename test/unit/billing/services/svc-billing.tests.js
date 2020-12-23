@@ -15,22 +15,22 @@ describe('service: billing:', function() {
     $provide.service('storeAPILoader',function () {
       return function() {
         return Q.resolve(storeApi = {
-          subscription: {
-            listUser: function() {
-              if (!failedResponse) {
-                return Q.resolve({
-                  result: {
-                    nextPageToken: 1,
-                    items: [{ subscriptionId: 'subs1', productName: 'productName1' }]
-                  }
-                });
-              }
-              else {
-                return Q.reject('API Failed');
-              }
-            }
-          },
           integrations: {
+            subscription: {
+              list: sinon.spy(function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: {
+                      nextPageToken: 1,
+                      items: [{ subscriptionId: 'subs1', productName: 'productName1' }]
+                    }
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              })
+            },
             invoice: {
               list: function() {
                 if (!failedResponse) {
@@ -131,8 +131,17 @@ describe('service: billing:', function() {
     it('should return a list of subscriptions', function(done) {
       failedResponse = false;
 
-      billing.getSubscriptions({})
+      billing.getSubscriptions({
+        count: 'count'
+      }, 'cursor')
       .then(function(result) {
+        storeApi.integrations.subscription.list.should.have.been.called;
+        storeApi.integrations.subscription.list.should.have.been.calledWith({
+          companyId: 'testId1',
+          count: 'count',
+          cursor: 'cursor'
+        });
+
         expect(result).to.be.ok;
         expect(result.items).to.be.ok;
         expect(result.items.length).to.equal(1);
@@ -144,8 +153,8 @@ describe('service: billing:', function() {
       failedResponse = true;
 
       billing.getSubscriptions({})
-      .then(function(subscriptions) {
-        done(subscriptions);
+      .then(function(invoices) {
+        done(invoices);
       })
       .then(null, function(error) {
         expect(error).to.deep.equal('API Failed');

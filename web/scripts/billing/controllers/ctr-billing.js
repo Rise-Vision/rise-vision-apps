@@ -69,7 +69,16 @@ angular.module('risevision.apps.billing.controllers')
       };
 
       var _isVolumePlan = function (plan) {
-        return plan.type.indexOf('volume') !== -1;
+        return plan && plan.type.indexOf('volume') !== -1;
+      };
+
+      var _getPeriod = function(subscription) {
+        if (subscription.billing_period > 1) {
+          return (subscription.billing_period + ' ' + (subscription.billing_period_unit === 'month' ?
+            'Month' : 'Year'));
+        } else {
+          return subscription.billing_period_unit === 'month' ? 'Monthly' : 'Yearly';
+        }
       };
 
       $scope.getSubscriptionDesc = function (subscription) {
@@ -78,7 +87,7 @@ angular.module('risevision.apps.billing.controllers')
         var name = plan ? plan.name : subscription.plan_id;
         
         // Show `1` plan_quantity for Per Display subscriptions
-        if (_isVolumePlan(plan) && subscription.plan_quantity > 0) {
+        if ((plan && _isVolumePlan(plan) && subscription.plan_quantity > 0) || subscription.plan_quantity > 1) {
           prefix = subscription.plan_quantity + ' x ';
         }
         
@@ -93,10 +102,6 @@ angular.module('risevision.apps.billing.controllers')
         return prefix + name;
       };
 
-      $scope.getSubscriptionPrice = function (subscription) {
-        return subscription.plan_quantity * subscription.price + subscription.shipping;
-      };
-
       $scope.isActive = function (subscription) {
         return subscription.status === 'active';
       };
@@ -107,20 +112,6 @@ angular.module('risevision.apps.billing.controllers')
 
       $scope.isSuspended = function (subscription) {
         return subscription.status === 'suspended';
-      };
-
-      var _getPeriod = function(subscription) {
-        if (subscription.billing_period > 1) {
-          return (subscription.billing_period + ' ' + (subscription.billing_period_unit === 'month' ?
-            'Month' : 'Year'));
-        } else {
-          return subscription.billing_period_unit === 'month' ? 'Monthly' : 'Yearly';
-        }
-      };
-
-      var _isPerDisplay = function(subscription) {
-        return true;
-        // return subscription.unit.toLowerCase().indexOf('per display') >= 0 ? true : false;
       };
 
     }
