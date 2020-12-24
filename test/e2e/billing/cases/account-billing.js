@@ -41,6 +41,30 @@
           expect(accountBillingPage.getBillingAppContainer().isPresent()).to.eventually.be.true;
         });
 
+        it("shows subscriptions list table", function() {
+          expect(accountBillingPage.getSubscriptionsListTable().isPresent()).to.eventually.be.true;
+        });
+
+        it('should show subscriptions list header Subscription', function () {
+          expect(accountBillingPage.getSubscriptionsTableHeaderSubscription().isPresent()).to.eventually.be.true;
+          expect(accountBillingPage.getSubscriptionsTableHeaderSubscription().getText()).to.eventually.equal('Subscription');
+        });
+
+        it('should show subscriptions list header Status', function () {
+          expect(accountBillingPage.getSubscriptionsTableHeaderStatus().isPresent()).to.eventually.be.true;
+          expect(accountBillingPage.getSubscriptionsTableHeaderStatus().getText()).to.eventually.equal('Status');
+        });
+
+        it('should show subscriptions list header Renewal Date', function () {
+          expect(accountBillingPage.getSubscriptionsTableHeaderRenewalDate().isPresent()).to.eventually.be.true;
+          expect(accountBillingPage.getSubscriptionsTableHeaderRenewalDate().getText()).to.eventually.equal('Renewal Date');
+        });
+
+        it('should show subscriptions list header Renewal Amount', function () {
+          expect(accountBillingPage.getSubscriptionsTableHeaderRenewalAmount().isPresent()).to.eventually.be.true;
+          expect(accountBillingPage.getSubscriptionsTableHeaderRenewalAmount().getText()).to.eventually.equal('Renewal Amount');
+        });
+
         it("shows invoices list table", function() {
           expect(accountBillingPage.getInvoicesListTable().isPresent()).to.eventually.be.true;
         });
