@@ -16,7 +16,7 @@ describe('controller: BillingCtrl', function () {
       return {
         openCompanySettings: sandbox.stub()
       };
-    });   
+    });
     $provide.service('ScrollingListService', function () {
       return sinon.stub().returns(listServiceInstance);
     });
@@ -81,7 +81,7 @@ describe('controller: BillingCtrl', function () {
     expect($scope.subscriptions).to.be.ok;
     expect($scope.invoices).to.be.ok;
   });
-  
+
   it('should init list service', function() {
     ScrollingListService.should.have.been.calledTwice;
     ScrollingListService.should.have.been.calledWith('getSubscriptions', {
@@ -118,14 +118,14 @@ describe('controller: BillingCtrl', function () {
 
   describe('edit subscriptions', function () {
     it('should show Chargebee subscription details for a Subscription with parentId == null', function () {
-      $scope.editSubscription({ subscriptionId: 'subs1' });
+      $scope.editSubscription({ id: 'subs1' });
       expect($scope.chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
       expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
       expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('subs1');
     });
 
     it('should show Chargebee parent subscription details for a Subscription with parentId != null', function () {
-      $scope.editSubscription({ subscriptionId: 'subs1', parentId: 'parentId' });
+      $scope.editSubscription({ id: 'subs1', parentId: 'parentId' });
       expect($scope.chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
       expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
       expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('parentId');

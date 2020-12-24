@@ -53,7 +53,7 @@ angular.module('risevision.apps.billing.controllers')
       };
 
       $scope.editSubscription = function (subscription) {
-        var subscriptionId = subscription.id;
+        var subscriptionId = subscription.parentId || subscription.id;
 
         $scope.chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscriptionId);
       };
