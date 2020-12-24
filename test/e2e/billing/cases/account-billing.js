@@ -65,6 +65,11 @@
           expect(accountBillingPage.getSubscriptionsTableHeaderRenewalAmount().getText()).to.eventually.equal('Renewal Amount');
         });
 
+        it('should show at least one subscription with its link', function () {
+          expect(accountBillingPage.getFirstSubscriptionLink().isPresent()).to.eventually.be.true;
+          expect(accountBillingPage.getFirstSubscriptionLink().getText()).to.eventually.equal('5 x Display Licenses Yearly Plan');
+        });
+
         it("shows invoices list table", function() {
           expect(accountBillingPage.getInvoicesListTable().isPresent()).to.eventually.be.true;
         });
