@@ -12,6 +12,7 @@
     var subscriptionsTableHeaderRenewalDate = element(by.css('#subscriptionsListTable tr th:nth-child(3)'));
     var subscriptionsTableHeaderRenewalAmount = element(by.css('#subscriptionsListTable tr th:nth-child(4)'));
     var firstSubscriptionLink = element(by.css('#subscriptionsListTable tbody tr:first-child td a'));
+    var firstSubscriptionName = element(by.css('#subscriptionsListTable tbody tr:first-child td'));
     var paidInvoiceIcon = element(by.css('#invoicesListTable td .paid'));
     var payNowButton = element(by.css('#invoicesListTable td .btn-pay-now'));
 
@@ -49,6 +50,10 @@
 
     this.getFirstSubscriptionLink = function() {
       return firstSubscriptionLink;
+    };
+
+    this.getFirstSubscriptionName = function() {
+      return firstSubscriptionName;
     };
 
     this.getPaidInvoiceIcon = function() {

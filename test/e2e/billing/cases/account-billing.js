@@ -78,6 +78,20 @@
           expect(accountBillingPage.getPaidInvoiceIcon().isPresent()).to.eventually.be.true;
         });
 
+        describe("Subscriptions managed by parent", function() {
+          it("should load subcompany", function() {
+            commonHeaderPage.selectSubscribedSubCompany();
+
+            helper.waitDisappear(accountBillingPage.getLoader(), "Account & Billing Page");
+          });
+
+          it('should list the subscription managed by the parent company', function () {
+            expect(accountBillingPage.getFirstSubscriptionName().isPresent()).to.eventually.be.true;
+            expect(accountBillingPage.getFirstSubscriptionName().getText()).to.eventually.contain('Subscription managed by');
+          });
+
+        });
+
       });
 
     });
