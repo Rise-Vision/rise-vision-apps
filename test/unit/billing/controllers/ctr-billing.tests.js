@@ -195,14 +195,14 @@ describe('controller: BillingCtrl', function () {
           plan_quantity: 1,
           billing_period: 1,
           billing_period_unit: 'year',
-        })).to.equal('pppc Plan Yearly');
+        })).to.equal('pppc');
 
         expect($scope.getSubscriptionDesc({
           plan_id: 'pppc',
           plan_quantity: 3,
           billing_period: 1,
           billing_period_unit: 'year',
-        })).to.equal('3 x pppc Plan Yearly');
+        })).to.equal('pppc');
       });
 
       it('should format volume plan names', function () {

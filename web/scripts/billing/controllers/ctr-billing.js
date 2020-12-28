@@ -69,7 +69,7 @@ angular.module('risevision.apps.billing.controllers')
       };
 
       var _isVolumePlan = function (plan) {
-        return plan && plan.type.indexOf('volume') !== -1;
+        return plan && plan.type && plan.type.indexOf('volume') !== -1;
       };
 
       var _getPeriod = function(subscription) {
@@ -84,22 +84,26 @@ angular.module('risevision.apps.billing.controllers')
       $scope.getSubscriptionDesc = function (subscription) {
         var prefix = subscription.plan_quantity > 1 ? subscription.plan_quantity + ' x ' : '';
         var plan = _getPlan(subscription);
-        var name = plan ? plan.name : subscription.plan_id;
+        if (plan) {
+          var name = plan.name;
 
-        // Show `1` plan_quantity for Per Display subscriptions
-        if (plan && _isVolumePlan(plan) && subscription.plan_quantity > 0) {
-          prefix = subscription.plan_quantity + ' x ';
-        }
+          // Show `1` plan_quantity for Per Display subscriptions
+          if (plan && _isVolumePlan(plan) && subscription.plan_quantity > 0) {
+            prefix = subscription.plan_quantity + ' x ';
+          }
 
-        var period = _getPeriod(subscription);
+          var period = _getPeriod(subscription);
 
-        if (_isVolumePlan(plan)) {
-          name = name + ' ' + period + ' Plan';
+          if (_isVolumePlan(plan)) {
+            name = name + ' ' + period + ' Plan';
+          } else {
+            name = name + ' Plan ' + period;
+          }
+
+          return prefix + name;
         } else {
-          name = name + ' Plan ' + period;
+          return subscription.plan_id;
         }
-
-        return prefix + name;
       };
 
       $scope.isActive = function (subscription) {
