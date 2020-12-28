@@ -7,7 +7,7 @@ angular.module('risevision.apps.billing.controllers')
     'ScrollingListService', 'userState', 'currentPlanFactory', 'ChargebeeFactory', 'billing',
     'billingFactory', 'PLANS_LIST', 'companySettingsFactory',
     function ($rootScope, $scope, $loading, $timeout, ScrollingListService, userState,
-      currentPlanFactory, ChargebeeFactory, billing, billingFactory, PLANS_LIST, 
+      currentPlanFactory, ChargebeeFactory, billing, billingFactory, PLANS_LIST,
       companySettingsFactory) {
 
       $scope.company = userState.getCopyOfSelectedCompany();
@@ -53,7 +53,7 @@ angular.module('risevision.apps.billing.controllers')
       };
 
       $scope.editSubscription = function (subscription) {
-        var subscriptionId = subscription.parentId || subscription.subscriptionId;
+        var subscriptionId = subscription.id;
 
         $scope.chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscriptionId);
       };
@@ -69,19 +69,28 @@ angular.module('risevision.apps.billing.controllers')
       };
 
       var _isVolumePlan = function (plan) {
-        return plan.type.indexOf('volume') !== -1;
+        return plan && plan.type.indexOf('volume') !== -1;
+      };
+
+      var _getPeriod = function(subscription) {
+        if (subscription.billing_period > 1) {
+          return (subscription.billing_period + ' ' + (subscription.billing_period_unit === 'month' ?
+            'Month' : 'Year'));
+        } else {
+          return subscription.billing_period_unit === 'month' ? 'Monthly' : 'Yearly';
+        }
       };
 
       $scope.getSubscriptionDesc = function (subscription) {
         var prefix = subscription.plan_quantity > 1 ? subscription.plan_quantity + ' x ' : '';
         var plan = _getPlan(subscription);
         var name = plan ? plan.name : subscription.plan_id;
-        
+
         // Show `1` plan_quantity for Per Display subscriptions
-        if (_isVolumePlan(plan) && subscription.plan_quantity > 0) {
+        if (plan && _isVolumePlan(plan) && subscription.plan_quantity > 0) {
           prefix = subscription.plan_quantity + ' x ';
         }
-        
+
         var period = _getPeriod(subscription);
 
         if (_isVolumePlan(plan)) {
@@ -89,12 +98,8 @@ angular.module('risevision.apps.billing.controllers')
         } else {
           name = name + ' Plan ' + period;
         }
-        
-        return prefix + name;
-      };
 
-      $scope.getSubscriptionPrice = function (subscription) {
-        return subscription.plan_quantity * subscription.price + subscription.shipping;
+        return prefix + name;
       };
 
       $scope.isActive = function (subscription) {
@@ -107,20 +112,6 @@ angular.module('risevision.apps.billing.controllers')
 
       $scope.isSuspended = function (subscription) {
         return subscription.status === 'suspended';
-      };
-
-      var _getPeriod = function(subscription) {
-        if (subscription.billing_period > 1) {
-          return (subscription.billing_period + ' ' + (subscription.billing_period_unit === 'month' ?
-            'Month' : 'Year'));
-        } else {
-          return subscription.billing_period_unit === 'month' ? 'Monthly' : 'Yearly';
-        }
-      };
-
-      var _isPerDisplay = function(subscription) {
-        return true;
-        // return subscription.unit.toLowerCase().indexOf('per display') >= 0 ? true : false;
       };
 
     }

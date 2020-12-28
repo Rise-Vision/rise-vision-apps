@@ -6,6 +6,12 @@
     var billingAppContainer = element(by.css('.billing-app'));
     var loader = element(by.xpath('//div[@spinner-key="billing-loader"]'));
     var invoicesListTable = element(by.id('invoicesListTable'));
+    var subscriptionsListTable = element(by.id('subscriptionsListTable'));
+    var subscriptionsTableHeaderSubscription = element(by.css('#subscriptionsListTable tr th:nth-child(1)'));
+    var subscriptionsTableHeaderStatus = element(by.css('#subscriptionsListTable tr th:nth-child(2)'));
+    var subscriptionsTableHeaderRenewalDate = element(by.css('#subscriptionsListTable tr th:nth-child(3)'));
+    var subscriptionsTableHeaderRenewalAmount = element(by.css('#subscriptionsListTable tr th:nth-child(4)'));
+    var firstSubscriptionLink = element(by.css('#subscriptionsListTable tbody tr:first-child td a'));
     var paidInvoiceIcon = element(by.css('#invoicesListTable td .paid'));
     var payNowButton = element(by.css('#invoicesListTable td .btn-pay-now'));
 
@@ -19,6 +25,30 @@
 
     this.getInvoicesListTable = function() {
       return invoicesListTable;
+    };
+
+    this.getSubscriptionsListTable = function() {
+      return subscriptionsListTable;
+    };
+
+    this.getSubscriptionsTableHeaderSubscription = function() {
+      return subscriptionsTableHeaderSubscription;
+    };
+
+    this.getSubscriptionsTableHeaderStatus = function() {
+      return subscriptionsTableHeaderStatus;
+    };
+
+    this.getSubscriptionsTableHeaderRenewalDate = function() {
+      return subscriptionsTableHeaderRenewalDate;
+    };
+
+    this.getSubscriptionsTableHeaderRenewalAmount = function() {
+      return subscriptionsTableHeaderRenewalAmount;
+    };
+
+    this.getFirstSubscriptionLink = function() {
+      return firstSubscriptionLink;
     };
 
     this.getPaidInvoiceIcon = function() {
