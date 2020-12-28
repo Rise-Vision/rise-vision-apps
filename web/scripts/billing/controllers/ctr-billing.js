@@ -69,7 +69,7 @@ angular.module('risevision.apps.billing.controllers')
       };
 
       var _isVolumePlan = function (plan) {
-        return plan && plan.type.indexOf('volume') !== -1;
+        return plan && plan.type && plan.type.indexOf('volume') !== -1;
       };
 
       var _getPeriod = function(subscription) {
