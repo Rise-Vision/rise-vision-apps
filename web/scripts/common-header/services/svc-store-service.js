@@ -279,6 +279,30 @@
               });
             return deferred.promise;
           },
+          updateSubscription: function (displayCount, subscriptionId, companyId) {
+            var deferred = $q.defer();
+
+            var obj = {
+              displayCount: displayCount,
+              subscriptionId: subscriptionId,
+              companyId: companyId
+            };
+
+            $log.debug('integrations.subscription.update request:', obj);
+
+            storeAPILoader().then(function (storeApi) {
+                return storeApi.integrations.subscription.update(obj);
+              })
+              .then(function (resp) {
+                $log.debug('integrations.subscription.update resp', resp);
+                deferred.resolve(resp.result);
+              })
+              .then(null, function (e) {
+                console.error('Failed to retrieve subscription update.', e);
+                deferred.reject(e);
+              });
+            return deferred.promise;
+          }
         };
 
         return service;

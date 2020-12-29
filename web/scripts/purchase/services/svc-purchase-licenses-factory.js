@@ -34,7 +34,7 @@
           // creditCardFactory.paymentMethods.invoiceDate = invoiceDate;
         };
 
-        factory.updatePlan = function (displays, isMonthly, total) {
+        // factory.updatePlan = function (displays, isMonthly, total) {
           // var period = !isMonthly ? 'Yearly' : 'Monthly';
           // var s = displays > 1 ? 's' : '';
           // var planName = '' + displays + ' Display License' + s + ' (' + period + ')';
@@ -49,81 +49,81 @@
           // }
 
           // purchaseFlowTracker.trackProductAdded(factory.purchase.plan);
-        };
+        // };
 
-        factory.preparePaymentIntent = function () {
-          var paymentMethods = creditCardFactory.paymentMethods;
+        // factory.preparePaymentIntent = function () {
+        //   var paymentMethods = creditCardFactory.paymentMethods;
 
-          if (paymentMethods.paymentMethod === 'invoice') {
-            return $q.resolve();
-          } else if (paymentMethods.paymentMethod === 'card') {
-            var jsonData = _getOrderAsJson();
+        //   if (paymentMethods.paymentMethod === 'invoice') {
+        //     return $q.resolve();
+        //   } else if (paymentMethods.paymentMethod === 'card') {
+        //     var jsonData = _getOrderAsJson();
 
-            factory.loading = true;
+        //     factory.loading = true;
 
-            return storeService.preparePurchase(jsonData)
-              .then(function (response) {
-                if (response.error) {
-                  factory.purchase.checkoutError = response.error;
-                  return $q.reject(response.error);
-                } else {
-                  paymentMethods.intentResponse = response;
-                  if (response.authenticationRequired) {
-                    return creditCardFactory.authenticate3ds(response.intentSecret);
-                  } else {
-                    return $q.resolve();
-                  }
-                }
-              })
-              .catch(function (error) {
-                factory.purchase.checkoutError = error.message || 'Something went wrong, please retry';
-                return $q.reject(error);
-              })
-              .finally(function () {
-                factory.loading = false;
-              });
-          }
-        };
+        //     return storeService.preparePurchase(jsonData)
+        //       .then(function (response) {
+        //         if (response.error) {
+        //           factory.purchase.checkoutError = response.error;
+        //           return $q.reject(response.error);
+        //         } else {
+        //           paymentMethods.intentResponse = response;
+        //           if (response.authenticationRequired) {
+        //             return creditCardFactory.authenticate3ds(response.intentSecret);
+        //           } else {
+        //             return $q.resolve();
+        //           }
+        //         }
+        //       })
+        //       .catch(function (error) {
+        //         factory.purchase.checkoutError = error.message || 'Something went wrong, please retry';
+        //         return $q.reject(error);
+        //       })
+        //       .finally(function () {
+        //         factory.loading = false;
+        //       });
+        //   }
+        // };
 
-        factory.validatePaymentMethod = function () {
-          factory.purchase.checkoutError = null;
+        // factory.validatePaymentMethod = function () {
+        //   factory.purchase.checkoutError = null;
 
-          if (creditCardFactory.paymentMethods.paymentMethod === 'invoice') {
-            // TODO: Check Invoice credit (?)
-            return $q.resolve();
-          } else if (creditCardFactory.paymentMethods.paymentMethod === 'card') {
-            factory.loading = true;
+        //   if (creditCardFactory.paymentMethods.paymentMethod === 'invoice') {
+        //     // TODO: Check Invoice credit (?)
+        //     return $q.resolve();
+        //   } else if (creditCardFactory.paymentMethods.paymentMethod === 'card') {
+        //     factory.loading = true;
 
-            return creditCardFactory.validatePaymentMethod()
-              .finally(function () {
-                factory.loading = false;
-              });
-          }
-        };
+        //     return creditCardFactory.validatePaymentMethod()
+        //       .finally(function () {
+        //         factory.loading = false;
+        //       });
+        //   }
+        // };
 
-        var _getBillingPeriod = function () {
-          return factory.purchase.plan.isMonthly ? '01m' : '01y';
-        };
+        // var _getBillingPeriod = function () {
+        //   return factory.purchase.plan.isMonthly ? '01m' : '01y';
+        // };
 
-        var _getCurrency = function () {
-          return (factory.purchase.billingAddress.country === 'CA') ? 'cad' : 'usd';
-        };
+        // var _getCurrency = function () {
+        //   return (factory.purchase.billingAddress.country === 'CA') ? 'cad' : 'usd';
+        // };
 
-        var _getChargebeePlanId = function () {
-          return factory.purchase.plan.productCode + '-' + _getCurrency() + _getBillingPeriod();
-        };
+        // var _getChargebeePlanId = function () {
+        //   return factory.purchase.plan.productCode + '-' + _getCurrency() + _getBillingPeriod();
+        // };
 
-        var _getTrackingProperties = function () {
-          return {
-            displaysCount: factory.purchase.plan.displays,
-            paymentTerm: factory.purchase.plan.isMonthly ? 'monthly' : 'yearly',
-            paymentMethod: creditCardFactory.paymentMethods.paymentMethod,
-            discount: factory.purchase.estimate.couponAmount,
-            subscriptionPlan: factory.purchase.plan.name,
-            currency: factory.purchase.estimate.currency,
-            revenueTotal: factory.purchase.estimate.total
-          };
-        };
+        // var _getTrackingProperties = function () {
+        //   return {
+        //     displaysCount: factory.purchase.plan.displays,
+        //     paymentTerm: factory.purchase.plan.isMonthly ? 'monthly' : 'yearly',
+        //     paymentMethod: creditCardFactory.paymentMethods.paymentMethod,
+        //     discount: factory.purchase.estimate.couponAmount,
+        //     subscriptionPlan: factory.purchase.plan.name,
+        //     currency: factory.purchase.estimate.currency,
+        //     revenueTotal: factory.purchase.estimate.total
+        //   };
+        // };
 
         factory.getEstimate = function () {
           factory.loading = true;
@@ -161,45 +161,50 @@
             });
         };
 
-        var _getOrderAsJson = function () {
-          //clean up items
-          var paymentMethods = creditCardFactory.paymentMethods;
-          var newItems = [{
-            id: _getChargebeePlanId(),
-            qty: factory.purchase.plan.displays
-          }];
+        // var _getOrderAsJson = function () {
+        //   //clean up items
+        //   var paymentMethods = creditCardFactory.paymentMethods;
+        //   var newItems = [{
+        //     id: _getChargebeePlanId(),
+        //     qty: factory.purchase.plan.displays
+        //   }];
 
-          var card = paymentMethods.selectedCard;
-          var cardData = paymentMethods.paymentMethod === 'invoice' ? null : {
-            cardId: card.id,
-            intentId: paymentMethods.intentResponse ? paymentMethods.intentResponse.intentId : null,
-            isDefault: card.isDefault ? true : false
-          };
+        //   var card = paymentMethods.selectedCard;
+        //   var cardData = paymentMethods.paymentMethod === 'invoice' ? null : {
+        //     cardId: card.id,
+        //     intentId: paymentMethods.intentResponse ? paymentMethods.intentResponse.intentId : null,
+        //     isDefault: card.isDefault ? true : false
+        //   };
 
-          var obj = {
-            billTo: addressService.copyAddress(factory.purchase.billingAddress),
-            shipTo: addressService.copyAddress(factory.purchase.billingAddress),
-            couponCode: factory.purchase.couponCode,
-            items: newItems,
-            purchaseOrderNumber: paymentMethods.purchaseOrderNumber,
-            card: cardData,
-            paymentMethodId: creditCardFactory.getPaymentMethodId()
-          };
+        //   var obj = {
+        //     billTo: addressService.copyAddress(factory.purchase.billingAddress),
+        //     shipTo: addressService.copyAddress(factory.purchase.billingAddress),
+        //     couponCode: factory.purchase.couponCode,
+        //     items: newItems,
+        //     purchaseOrderNumber: paymentMethods.purchaseOrderNumber,
+        //     card: cardData,
+        //     paymentMethodId: creditCardFactory.getPaymentMethodId()
+        //   };
 
-          return JSON.stringify(obj);
-        };
+        //   return JSON.stringify(obj);
+        // };
 
         factory.completePayment = function () {
-          var jsonData = _getOrderAsJson();
+          // var jsonData = _getOrderAsJson();
 
           factory.purchase.checkoutError = null;
+          
           factory.loading = true;
 
-          return storeService.purchase(jsonData)
+          var displayCount = factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount;
+          var subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
+          var companyId = currentPlanFactory.currentPlan.billToId;
+
+          return storeService.updateSubscription(displayCount, subscriptionId, companyId)
             .then(function () {
               factory.purchase.reloadingCompany = true;
 
-              purchaseFlowTracker.trackOrderPayNowClicked(_getTrackingProperties());
+              // purchaseFlowTracker.trackOrderPayNowClicked(_getTrackingProperties());
 
               $timeout(10000)
                 .then(function () {
