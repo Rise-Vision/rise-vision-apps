@@ -158,6 +158,15 @@
       productId: '303',
       productCode: 'd521f5bfbc1eef109481eebb79831e11c7804ad8',
       proLicenseCount: 0
+    }, {
+      name: 'Basic Financial MarketWall',
+      productCode: '0dbb19f8394612730c2673b092d811e46413b132'
+    }, {
+      name: 'Premium Financial MarketWall',
+      productCode: '0c583c663655c246c3e7b3c1be0ec05a442211aa'
+    }, {
+      name: 'Financial Data License',
+      productCode: '356ab5e0541a41e96e4ef0b45ecac9f72af454ac'
     }])
     .factory('plansFactory', ['$modal', 'userState', 'PLANS_LIST', 'analyticsFactory',
       '$state', 'confirmModal',
