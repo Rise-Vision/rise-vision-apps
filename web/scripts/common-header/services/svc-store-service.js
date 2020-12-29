@@ -254,7 +254,31 @@
               });
             });
             return deferred.promise;
-          }
+          },
+          estimateSubscriptionUpdate: function (displayCount, subscriptionId, companyId) {
+            var deferred = $q.defer();
+
+            var obj = {
+              displayCount: displayCount,
+              subscriptionId: subscriptionId,
+              companyId: companyId
+            };
+
+            $log.debug('integrations.subscription.estimate request:', obj);
+
+            storeAPILoader().then(function (storeApi) {
+                return storeApi.integrations.subscription.estimate(obj);
+              })
+              .then(function (resp) {
+                $log.debug('integrations.subscription.estimate resp', resp);
+                deferred.resolve(resp.result);
+              })
+              .then(null, function (e) {
+                console.error('Failed to retrieve subscription estimate.', e);
+                deferred.reject(e);
+              });
+            return deferred.promise;
+          },
         };
 
         return service;

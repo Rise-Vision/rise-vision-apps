@@ -14,34 +14,39 @@
 
         factory.init = function () {
           factory.purchase = {};
-          factory.purchase.plan = angular.copy(currentPlanFactory.currentPlan);
-          factory.purchase.couponCode = '';
+          factory.purchase.displayCount = 5;
 
-          factory.purchase.estimate = {};
+          factory.getEstimate();
 
-          creditCardFactory.initPaymentMethods();
-          creditCardFactory.loadCreditCards();
 
-          creditCardFactory.paymentMethods.paymentMethod = 'card';
+          // factory.purchase.plan = angular.copy(currentPlanFactory.currentPlan);
+          // factory.purchase.couponCode = '';
 
-          var invoiceDate = new Date();
-          invoiceDate.setDate(invoiceDate.getDate() + 30);
-          creditCardFactory.paymentMethods.invoiceDate = invoiceDate;
+          // factory.purchase.estimate = {};
+
+          // creditCardFactory.initPaymentMethods();
+          // creditCardFactory.loadCreditCards();
+
+          // creditCardFactory.paymentMethods.paymentMethod = 'card';
+
+          // var invoiceDate = new Date();
+          // invoiceDate.setDate(invoiceDate.getDate() + 30);
+          // creditCardFactory.paymentMethods.invoiceDate = invoiceDate;
         };
 
         factory.updatePlan = function (displays, isMonthly, total) {
-          var period = !isMonthly ? 'Yearly' : 'Monthly';
-          var s = displays > 1 ? 's' : '';
-          var planName = '' + displays + ' Display License' + s + ' (' + period + ')';
+          // var period = !isMonthly ? 'Yearly' : 'Monthly';
+          // var s = displays > 1 ? 's' : '';
+          // var planName = '' + displays + ' Display License' + s + ' (' + period + ')';
 
-          factory.purchase.plan.name = planName;
-          factory.purchase.plan.displays = displays;
-          factory.purchase.plan.isMonthly = isMonthly;
-          if (isMonthly) {
-            factory.purchase.plan.monthly.billAmount = total;
-          } else {
-            factory.purchase.plan.yearly.billAmount = total;
-          }
+          // factory.purchase.plan.name = planName;
+          // factory.purchase.plan.displays = displays;
+          // factory.purchase.plan.isMonthly = isMonthly;
+          // if (isMonthly) {
+          //   factory.purchase.plan.monthly.billAmount = total;
+          // } else {
+          //   factory.purchase.plan.yearly.billAmount = total;
+          // }
 
           // purchaseFlowTracker.trackProductAdded(factory.purchase.plan);
         };
@@ -123,27 +128,29 @@
         factory.getEstimate = function () {
           factory.loading = true;
 
-          return storeService.calculateTaxes(factory.purchase.billingAddress.id, _getChargebeePlanId(),
-              factory.purchase.plan.displays,
-              null,
-              factory.purchase.plan.additionalDisplayLicenses, factory.purchase.billingAddress, factory.purchase
-              .couponCode)
+          var displayCount = factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount;
+          var subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
+          var companyId = currentPlanFactory.currentPlan.billToId;
+
+          return storeService.estimateSubscriptionUpdate(displayCount, subscriptionId, companyId)
             .then(function (result) {
-              var estimate = {};
+              factory.estimate = result.item;
 
-              estimate.currency = _getCurrency();
-              estimate.taxesCalculated = true;
-              estimate.taxes = result.taxes || [];
-              estimate.total = result.total;
-              estimate.subTotal = result.subTotal;
-              estimate.coupons = result.coupons || [];
-              estimate.couponAmount = result.couponAmount;
-              estimate.totalTax = result.totalTax;
-              estimate.shippingTotal = result.shippingTotal;
+              // var estimate = {};
 
-              factory.purchase.estimate = estimate;
+              // estimate.currency = _getCurrency();
+              // estimate.taxesCalculated = true;
+              // estimate.taxes = result.taxes || [];
+              // estimate.total = result.total;
+              // estimate.subTotal = result.subTotal;
+              // estimate.coupons = result.coupons || [];
+              // estimate.couponAmount = result.couponAmount;
+              // estimate.totalTax = result.totalTax;
+              // estimate.shippingTotal = result.shippingTotal;
 
-              purchaseFlowTracker.trackPlaceOrderClicked(_getTrackingProperties());
+              // factory.purchase.estimate = estimate;
+
+              // purchaseFlowTracker.trackPlaceOrderClicked(_getTrackingProperties());
             })
             .catch(function (result) {
               factory.purchase.estimate.estimateError = result && result.message ? result.message :

@@ -3,12 +3,13 @@
 angular.module('risevision.apps.purchase')
 
   .controller('PurchaseLicensesCtrl', ['$scope', '$state', '$loading', 'purchaseLicensesFactory',
-    'helpWidgetFactory', '$location', 'redirectTo',
+    'helpWidgetFactory', '$location', 'redirectTo', 'currentPlanFactory',
     function ($scope, $state, $loading, purchaseLicensesFactory, helpWidgetFactory, $location,
-      redirectTo) {
+      redirectTo, currentPlanFactory) {
       $scope.helpWidgetFactory = helpWidgetFactory;
       $scope.form = {};
       $scope.factory = purchaseLicensesFactory;
+      $scope.currentPlan = currentPlanFactory.currentPlan;
 
       purchaseLicensesFactory.init();
 

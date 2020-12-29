@@ -24,7 +24,7 @@
         <div class="col-md-12">
           <div class="form-group">
             <label for="displayCount" class="control-label">Number of display licenses you want to add:</label>
-            <input class="display-count-input mt-3 pull-right" type="number" name="displayCount" ng-model="purchase.displayCount" min="1" ng-pattern="/^[0-9]+$/" required/>
+            <input class="display-count-input mt-3 pull-right" type="number" name="displayCount" ng-model="factory.purchase.displayCount" min="1" ng-pattern="/^[0-9]+$/" required ng-change="factory.getEstimate()"/>
           </div>
         </div>
       </div>
@@ -33,7 +33,7 @@
         <p class="mb-0">
           <span>Total number of display licenses for this subscription:</span>
           <span class="pull-right">
-            {{purchase.plan.playerProTotalLicenseCount}}
+            {{currentPlan.playerProTotalLicenseCount + factory.purchase.displayCount}}
           </span>
         </p>
       </div>
@@ -76,11 +76,16 @@
 
       <div class="py-4">
         <p class="mb-0">
-          <span class="font-weight-bold">Total cost per {{purchase.plan.isMonthly ? 'month' : 'year'}}:</span>
-          <span class="pull-right"><span class="u_margin-right text-subtle">{{purchase.estimate.currency | uppercase}}</span><span class="purchase-total">${{purchase.estimate.total | number:2}}</span></span>
-        </p>    
+          <span class="font-weight-bold">Prorated amount, due now:</span>
+          <span class="pull-right"><span class="u_margin-right text-subtle">{{factory.estimate.invoice_estimate.currency_code}}</span><span class="purchase-total">${{factory.estimate.invoice_estimate.amount_due/100 | number:2}}</span></span>
+        </p>
+        <p class="mb-0">
+          <span class="font-weight-bold">Nex invoice on {{factory.estimate.subscription_estimate.next_billing_at * 1000 | date:'d-MMM-yyyy'}}:</span>
+          <span class="pull-right"><span class="u_margin-right text-subtle">{{factory.estimate.next_invoice_estimate.currency_code}}</span><span class="purchase-total">${{factory.estimate.next_invoice_estimate.amount_due/100 | number:2}}</span></span>
+        </p>
       </div>
     </div>
+
     <div class="button-row text-right mt-5">
       <button id="backButton" type="button" aria-label="Go back to Billing Address" class="btn btn-default btn-toolbar pull-left" ng-click="setPreviousStep()" translate>common.cancel</button>
       <button id="payButton" type="submit" class="btn btn-primary btn-toolbar-wide" form="form.paymentMethodsForm" ng-click="completeCardPayment()" tabindex="1" aria-label="Complete Payment" ng-if="paymentMethods.paymentMethod === 'card'">
