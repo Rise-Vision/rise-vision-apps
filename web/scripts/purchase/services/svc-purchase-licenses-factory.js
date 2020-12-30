@@ -9,15 +9,11 @@
         creditCardFactory, purchaseFlowTracker) {
         var factory = {};
 
-        // Stop spinner - workaround for spinner not rendering
-        factory.loading = false;
-
         factory.init = function () {
           factory.purchase = {};
           factory.purchase.displayCount = 5;
 
           factory.getEstimate();
-
 
           // factory.purchase.plan = angular.copy(currentPlanFactory.currentPlan);
           // factory.purchase.couponCode = '';
@@ -125,7 +121,16 @@
         //   };
         // };
 
+        var _clearMessages = function () {
+          factory.loading = false;
+
+          factory.errorMessage = '';
+          factory.apiError = '';
+        };
+
         factory.getEstimate = function () {
+          _clearMessages();
+
           factory.loading = true;
 
           var displayCount = factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount;
@@ -153,7 +158,8 @@
               // purchaseFlowTracker.trackPlaceOrderClicked(_getTrackingProperties());
             })
             .catch(function (result) {
-              factory.purchase.estimate.estimateError = result && result.message ? result.message :
+              factory.errorMessage = 'Something went wrong.';
+              factory.apiError = result && result.message ? result.message :
                 'An unexpected error has occurred. Please try again.';
             })
             .finally(function () {
@@ -192,8 +198,8 @@
         factory.completePayment = function () {
           // var jsonData = _getOrderAsJson();
 
-          factory.purchase.checkoutError = null;
-          
+          _clearMessages();
+
           factory.loading = true;
 
           var displayCount = factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount;
@@ -221,13 +227,16 @@
                 });
             })
             .catch(function (result) {
-              factory.purchase.checkoutError = result && result.message ? result.message :
-                'There was an unknown error with the payment.';
+              factory.errorMessage = 'Something went wrong.';
+              factory.apiError = result && result.message ? result.message :
+                 'There was an unknown error with the payment.';
             })
             .finally(function () {
               factory.loading = false;
             });
         };
+
+        _clearMessages();
 
         return factory;
       }

@@ -1,24 +1,18 @@
 <div class="madero-style">
   <div class="app-header u_padding-20-vertical mb-5 border-bottom">
-    <!-- App Title -->
     <h1 class="app-header-title">Add Display Licenses</h1>
   </div>
 
   <div rv-spinner rv-spinner-key="purchase-licenses-loader" rv-spinner-start-active="1"></div>
 
+  <div ng-show="factory.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
+    <p><strong>{{factory.errorMessage}}</strong></p>
+    {{factory.apiError}}
+  </div> 
+
   <div class="checkout-centered-panel">
     <div class="checkout-gray-panel">
       <h4 class="u_margin-md-bottom mt-0">Subscription Details</h4>
-
-      <div id="errorBox" class="madero-style alert alert-danger u_margin-md-top" role="alert" ng-show="purchase.estimate.estimateError">
-        <strong>Tax Estimate Error</strong> {{purchase.estimate.estimateError}}
-        <a aria-label="Retry Estimate" class="madero-link u_clickable" ng-click="factory.getEstimate()">Retry</a>
-      </div>
-
-      <p ng-show="isSubcompanySelected">
-        <b>Purchasing for: {{selectedCompany.name}}</b><br>
-        {{selectedCompany.id}}
-      </p>
 
       <div class="row">
         <div class="col-md-12">
@@ -31,7 +25,7 @@
 
       <div class="border-bottom py-4 mb-4">
         <p class="mb-0">
-          <span>Total number of display licenses for this subscription:</span>
+          <span class="font-weight-bold">Total number of display licenses for this subscription:</span>
           <span class="pull-right">
             {{currentPlan.playerProTotalLicenseCount + factory.purchase.displayCount}}
           </span>
@@ -64,14 +58,6 @@
           <span class="font-weight-bold">{{coupon.couponName}}:</span>
           <span class="pull-right">-${{coupon.couponAmount | number:2}}</span>
         </p>
-        <p class="mb-0" ng-repeat="tax in purchase.estimate.taxes">
-          <span>{{tax.taxName}}:</span>
-          <span class="pull-right">${{tax.taxAmount | number:2}}</span>
-        </p>
-        <p class="mb-0">
-          <span class="font-weight-bold">Total tax:</span>
-          <span class="pull-right">${{purchase.estimate.totalTax | number:2}}</span>
-        </p>
       </div>
 
       <div class="py-4">
@@ -88,11 +74,8 @@
 
     <div class="button-row text-right mt-5">
       <button id="backButton" type="button" aria-label="Go back to Billing Address" class="btn btn-default btn-toolbar pull-left" ng-click="setPreviousStep()" translate>common.cancel</button>
-      <button id="payButton" type="submit" class="btn btn-primary btn-toolbar-wide" form="form.paymentMethodsForm" ng-click="completeCardPayment()" tabindex="1" aria-label="Complete Payment" ng-if="paymentMethods.paymentMethod === 'card'">
-        <span id="payLabel">Pay ${{factory.estimate.invoice_estimate.amount_due/100 | number:2}} Now</span>
-      </button>
-      <button id="invoiceButton" type="submit" class="btn btn-primary btn-toolbar-wide" form="form.paymentMethodsForm" ng-click="completePayment()" tabindex="1" aria-label="Complete Payment">
-        <span id="invoiceLabel">Invoice Me ${{factory.estimate.invoice_estimate.amount_due/100 | number:2}} Now</span>
+      <button id="payButton" type="submit" class="btn btn-primary btn-toolbar-wide" form="form.paymentMethodsForm" ng-click="completePayment()" tabindex="1" aria-label="Complete Payment">
+        <span id="invoiceLabel">Pay ${{factory.estimate.invoice_estimate.amount_due/100 | number:2}} Now</span>
       </button>
     </div>
 
