@@ -10,7 +10,7 @@
     {{factory.apiError}}
   </div> 
 
-  <div class="checkout-centered-panel" ng-hide="factory.purchase.completed">
+  <div class="purchase-licenses-centered-panel" ng-hide="factory.purchase.completed">
     <div class="checkout-gray-panel">
       <h4 class="u_margin-md-bottom mt-0">Subscription Details</h4>
 
@@ -29,10 +29,12 @@
           <span class="pull-right">
             {{currentPlan.playerProTotalLicenseCount + factory.purchase.displayCount}}
           </span>
+          <br/>
+          $8 per display license, per month.
         </p>
       </div>
 
-      <p class="mb-4" ng-show="!addCoupon && !purchase.couponCode">
+      <p class="mb-0" ng-show="!addCoupon && !purchase.couponCode">
         &nbsp;
         <span class="pull-right">
           <a aria-label="Add Coupon Code" class="madero-link u_clickable" ng-click="addCoupon = true" tabindex="1">Add A Coupon Code</a>
@@ -61,7 +63,7 @@
       </div>
 
       <div class="py-4">
-        <p class="mb-0">
+        <p class="mb-4">
           <span class="font-weight-bold">Prorated amount, due now:</span>
           <span class="pull-right"><span class="u_margin-right text-subtle">{{factory.estimate.invoice_estimate.currency_code}}</span><span class="purchase-total">${{factory.estimate.invoice_estimate.amount_due/100 | number:2}}</span></span>
         </p>
@@ -72,9 +74,9 @@
       </div>
     </div>
 
-    <div class="button-row text-right mt-5">
+    <div class="flex-row u_margin-md-top mb-5">
       <button id="backButton" type="button" aria-label="Go back to Billing Address" class="btn btn-default btn-toolbar pull-left" ng-click="close()" translate>common.cancel</button>
-      <button id="payButton" type="submit" class="btn btn-primary btn-toolbar-wide" form="form.paymentMethodsForm" ng-click="completePayment()" tabindex="1" aria-label="Complete Payment">
+      <button id="payButton" type="submit" class="btn btn-primary ml-4 w-100" form="form.paymentMethodsForm" ng-click="completePayment()" tabindex="1" aria-label="Complete Payment">
         <span id="invoiceLabel">Pay ${{factory.estimate.invoice_estimate.amount_due/100 | number:2}} Now</span>
       </button>
     </div>
