@@ -8,10 +8,14 @@
       function ($rootScope, $q, $log, $timeout, userState, currentPlanFactory, storeService, addressService, 
         creditCardFactory, purchaseFlowTracker) {
         var factory = {};
+        factory.userEmail = userState.getUserEmail();
 
         factory.init = function () {
+          _clearMessages();
+
           factory.purchase = {};
-          factory.purchase.displayCount = 5;
+          factory.purchase.completed = false;
+          factory.purchase.displayCount = 1;
 
           factory.getEstimate();
 
@@ -208,22 +212,16 @@
 
           return storeService.updateSubscription(displayCount, subscriptionId, companyId)
             .then(function () {
-              factory.purchase.reloadingCompany = true;
-
               // purchaseFlowTracker.trackOrderPayNowClicked(_getTrackingProperties());
 
-              $timeout(10000)
+              return $timeout(10000)
                 .then(function () {
                   return userState.reloadSelectedCompany();
-                })
-                .then(function () {
-                  $rootScope.$emit('risevision.company.planStarted');
+                }).then(function() {
+                  factory.purchase.completed = true;
                 })
                 .catch(function (err) {
                   $log.debug('Failed to reload company', err);
-                })
-                .finally(function () {
-                  factory.purchase.reloadingCompany = false;
                 });
             })
             .catch(function (result) {
@@ -235,8 +233,6 @@
               factory.loading = false;
             });
         };
-
-        _clearMessages();
 
         return factory;
       }

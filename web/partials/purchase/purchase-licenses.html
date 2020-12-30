@@ -10,7 +10,7 @@
     {{factory.apiError}}
   </div> 
 
-  <div class="checkout-centered-panel">
+  <div class="checkout-centered-panel" ng-hide="factory.purchase.completed">
     <div class="checkout-gray-panel">
       <h4 class="u_margin-md-bottom mt-0">Subscription Details</h4>
 
@@ -73,14 +73,15 @@
     </div>
 
     <div class="button-row text-right mt-5">
-      <button id="backButton" type="button" aria-label="Go back to Billing Address" class="btn btn-default btn-toolbar pull-left" ng-click="setPreviousStep()" translate>common.cancel</button>
+      <button id="backButton" type="button" aria-label="Go back to Billing Address" class="btn btn-default btn-toolbar pull-left" ng-click="close()" translate>common.cancel</button>
       <button id="payButton" type="submit" class="btn btn-primary btn-toolbar-wide" form="form.paymentMethodsForm" ng-click="completePayment()" tabindex="1" aria-label="Complete Payment">
         <span id="invoiceLabel">Pay ${{factory.estimate.invoice_estimate.amount_due/100 | number:2}} Now</span>
       </button>
     </div>
 
   </div>
-  <checkout-success ng-show="currentStep === 3"></checkout-success>
+
+  <div ng-show="factory.purchase.completed" ng-include="'partials/purchase/purchase-licenses-success.html'"></div>
 
   <div class="mt-5 border-top" ng-include="'partials/purchase/purchase-footer.html'"></div>
 

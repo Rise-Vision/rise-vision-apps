@@ -35,31 +35,9 @@ angular.module('risevision.apps.purchase')
         return purchaseLicensesFactory.completePayment();
       };
 
-      // $scope.completeCardPayment = function (element) {
-      //   if (!_isFormValid()) {
-      //     return;
-      //   }
-
-      //   purchaseLicensesFactory.validatePaymentMethod(element)
-      //     .then(purchaseLicensesFactory.preparePaymentIntent)
-      //     .then(purchaseLicensesFactory.completePayment);
-      // };
-
-      // $scope.close = function () {
-      //   if (!purchaseLicensesFactory.purchase.reloadingCompany) {
-      //     $location.path(redirectTo);
-      //   } else {
-      //     purchaseLicensesFactory.loading = true;
-
-      //     $scope.$watch('factory.purchase.reloadingCompany', function (loading) {
-      //       if (!loading) {
-      //         purchaseLicensesFactory.loading = false;
-
-      //         $location.path(redirectTo);
-      //       }
-      //     });
-      //   }
-      // };
+      $scope.close = function () {
+        $location.path(redirectTo);
+      };
 
     }
 
