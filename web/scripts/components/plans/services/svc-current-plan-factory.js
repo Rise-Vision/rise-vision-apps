@@ -37,6 +37,7 @@
 
           plan.shareCompanyPlan = company.shareCompanyPlan;
 
+          plan.billToId = company.planBillToId;
           plan.isPurchasedByParent = !!company.planBillToId && !!company.planShipToId && (company.planBillToId !==
             company.planShipToId) && (_factory.isSubscribed() || _factory.isCancelledActive());
           plan.parentPlanCompanyName = company.parentPlanCompanyName;
