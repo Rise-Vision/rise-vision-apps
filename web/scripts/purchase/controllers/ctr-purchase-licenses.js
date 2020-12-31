@@ -27,6 +27,14 @@ angular.module('risevision.apps.purchase')
         return !form || form.$valid;
       };
 
+      $scope.getCouponDescription = function(coupon) {
+        if(coupon.entity_id === 'EDUCATION') {
+          return 'Schools save 10%!';
+        }
+
+        return coupon.description;
+      }
+
       $scope.completePayment = function () {
         if (!_isFormValid()) {
           return;
