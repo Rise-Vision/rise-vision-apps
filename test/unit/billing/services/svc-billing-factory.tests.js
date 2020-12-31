@@ -45,7 +45,7 @@ describe('service: billingFactory:', function() {
       };
     });
     $provide.value('$stateParams', {
-      
+
     });
     $provide.service('$window',function() {
       return {
@@ -91,17 +91,32 @@ describe('service: billingFactory:', function() {
     expect(billingFactory.downloadInvoice).to.be.a('function');
   });
 
-  it('init:', function() {
-    billingFactory.loading = true;
-    billingFactory.apiError = 'error';
+  describe('init:', function() {
+    it('should init payment methods and load credit cards', function() {
+      billingFactory.loading = true;
+      billingFactory.apiError = 'error';
 
-    billingFactory.init();
+      billingFactory.init(true);
 
-    expect(billingFactory.loading).to.be.false;
-    expect(billingFactory.apiError).to.not.be.ok;
+      expect(billingFactory.loading).to.be.false;
+      expect(billingFactory.apiError).to.not.be.ok;
 
-    creditCardFactory.initPaymentMethods.should.have.been.called;
-    creditCardFactory.loadCreditCards.should.have.been.called;
+      creditCardFactory.initPaymentMethods.should.have.been.called;
+      creditCardFactory.loadCreditCards.should.have.been.called;
+    });
+
+    it('should not init payment methods and load credit cards', function() {
+      billingFactory.loading = true;
+      billingFactory.apiError = 'error';
+
+      billingFactory.init(false);
+
+      expect(billingFactory.loading).to.be.false;
+      expect(billingFactory.apiError).to.not.be.ok;
+
+      creditCardFactory.initPaymentMethods.should.not.have.been.called;
+      creditCardFactory.loadCreditCards.should.not.have.been.called;
+    });
   });
 
   describe('getToken:', function() {
@@ -249,7 +264,7 @@ describe('service: billingFactory:', function() {
         done();
       }, 10);
     });
-    
+
     describe('validatePaymentMethod:', function() {
       it('should handle failure to get validate payment method', function(done) {
         creditCardFactory.validatePaymentMethod.returns(Q.reject('error'));
@@ -371,7 +386,7 @@ describe('service: billingFactory:', function() {
       });
 
     });
-    
+
     describe('_completePayment:', function() {
       it('should complete payment and update totals', function(done) {
         storeService.preparePayment.returns(Q.resolve({
