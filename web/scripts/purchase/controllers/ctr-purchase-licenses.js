@@ -28,12 +28,13 @@ angular.module('risevision.apps.purchase')
       };
 
       $scope.getCouponDescription = function(coupon) {
+        /*jshint camelcase: false */
         if(coupon.entity_id === 'EDUCATION') {
           return 'Schools save 10%!';
         }
 
         return coupon.description;
-      }
+      };
 
       $scope.completePayment = function () {
         if (!_isFormValid()) {
