@@ -70,7 +70,6 @@ describe("controller: purchase-licenses", function() {
     expect($scope.helpWidgetFactory).to.equal(helpWidgetFactory);
     expect($scope.currentPlan).to.be.ok;
 
-    expect($scope.getCouponDescription).to.be.a("function");
     expect($scope.completePayment).to.be.a("function");
     expect($scope.close).to.be.a("function");
 
@@ -88,25 +87,6 @@ describe("controller: purchase-licenses", function() {
       $scope.$digest();
 
       $loading.stop.should.have.been.calledTwice;
-    });
-  });
-
-  describe('getCouponDescription:', function() {
-    it("should get coupon description for education", function() {
-      var description = $scope.getCouponDescription({
-        entity_id: 'EDUCATION'
-      });
-
-      expect(description).to.equal('Schools save 10%!');
-    });
-
-    it("should get coupon description for other coupons", function() {
-      var description = $scope.getCouponDescription({
-        entity_id: 'SAVE50',
-        description: 'Save 50%!'
-      });
-
-      expect(description).to.equal('Save 50%!');
     });
   });
 
