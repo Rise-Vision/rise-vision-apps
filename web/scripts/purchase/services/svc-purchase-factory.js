@@ -46,14 +46,16 @@
           factory.purchase.taxExemption = {};
           factory.purchase.estimate = {};
 
-          creditCardFactory.initPaymentMethods();
+          creditCardFactory.initPaymentMethods(false)
+            .finally(function() {
+              creditCardFactory.paymentMethods.paymentMethod = 'card';
+              creditCardFactory.paymentMethods.newCreditCard.billingAddress = factory.purchase.billingAddress;
+              
+              var invoiceDate = new Date();
+              invoiceDate.setDate(invoiceDate.getDate() + 30);
+              creditCardFactory.paymentMethods.invoiceDate = invoiceDate;
+            });
 
-          creditCardFactory.paymentMethods.paymentMethod = 'card';
-          creditCardFactory.paymentMethods.newCreditCard.billingAddress = factory.purchase.billingAddress;
-
-          var invoiceDate = new Date();
-          invoiceDate.setDate(invoiceDate.getDate() + 30);
-          creditCardFactory.paymentMethods.invoiceDate = invoiceDate;
         };
 
         factory.updatePlan = function (displays, isMonthly, total) {

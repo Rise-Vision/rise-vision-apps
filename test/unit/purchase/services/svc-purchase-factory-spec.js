@@ -78,7 +78,7 @@ describe("Services: purchase factory", function() {
     });
 
     $provide.value("creditCardFactory", {
-      initPaymentMethods: sinon.stub(),
+      initPaymentMethods: sinon.stub().returns(Q.resolve()),
       validatePaymentMethod: sinon.stub().returns(Q.resolve({})),
       paymentMethods: {
         newCreditCard: {}
@@ -96,7 +96,7 @@ describe("Services: purchase factory", function() {
 
   }));
 
-  var $rootScope, $modal, $state, $timeout, clock, purchaseFactory, creditCardFactory, userState, storeService, purchaseFlowTracker, validate, RPP_ADDON_ID;
+  var $rootScope, $modal, $state, $timeout, purchaseFactory, creditCardFactory, userState, storeService, purchaseFlowTracker, validate, RPP_ADDON_ID;
 
   beforeEach(function() {
     inject(function($injector) {
@@ -125,13 +125,6 @@ describe("Services: purchase factory", function() {
   });
 
   describe("init: ", function() {
-    beforeEach(function() {
-      clock = sinon.useFakeTimers();
-    });
-
-    afterEach(function () {
-      clock.restore();
-    });
 
     it("should initialize default volume plan, attach addresses and clean contact info", function() {
       purchaseFactory.init();
@@ -160,26 +153,33 @@ describe("Services: purchase factory", function() {
       expect(purchaseFactory.purchase.estimate).to.deep.equal({});
     });
 
-    it("should initialize payment methods", function() {
+    it("should initialize payment methods", function(done) {
       purchaseFactory.init();
       
-      creditCardFactory.initPaymentMethods.should.have.been.called;
+      creditCardFactory.initPaymentMethods.should.have.been.calledWith(false);
 
-      expect(purchaseFactory.purchase).to.be.ok;
-      expect(creditCardFactory.paymentMethods).to.be.ok;
-      expect(creditCardFactory.paymentMethods.paymentMethod).to.equal("card");
+      setTimeout(function() {
+        expect(purchaseFactory.purchase).to.be.ok;
+        expect(creditCardFactory.paymentMethods).to.be.ok;
+        expect(creditCardFactory.paymentMethods.paymentMethod).to.equal("card");
+        
+        expect(creditCardFactory.paymentMethods.newCreditCard.billingAddress).to.equal(purchaseFactory.purchase.billingAddress);
 
-      expect(creditCardFactory.paymentMethods.newCreditCard.billingAddress).to.equal(purchaseFactory.purchase.billingAddress);
+        done();
+      }, 10);
     });
 
-    it("should initialize invoice due date 30 days from now", function() {
+    it("should initialize invoice due date 30 days from now", function(done) {
       var newDate = new Date();
 
       purchaseFactory.init();
 
-      expect(creditCardFactory.paymentMethods.invoiceDate).to.be.ok;
-      expect(creditCardFactory.paymentMethods.invoiceDate).to.be.a("date");
-      expect(creditCardFactory.paymentMethods.invoiceDate - newDate).to.equal(30 * 24 * 60 * 60 * 1000);
+      setTimeout(function() {
+        expect(creditCardFactory.paymentMethods.invoiceDate).to.be.ok;
+        expect(creditCardFactory.paymentMethods.invoiceDate).to.be.a("date");
+        expect(creditCardFactory.paymentMethods.invoiceDate - newDate).to.equal(30 * 24 * 60 * 60 * 1000);
+        done();
+      }, 10);
     });
   });
 

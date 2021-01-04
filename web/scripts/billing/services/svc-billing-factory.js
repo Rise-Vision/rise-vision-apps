@@ -19,8 +19,7 @@ angular.module('risevision.apps.billing.services')
         _clearMessages();
 
         if (initCreditCards) {
-          creditCardFactory.initPaymentMethods();
-          creditCardFactory.loadCreditCards();          
+          creditCardFactory.initPaymentMethods(true);
         }
       };
 
