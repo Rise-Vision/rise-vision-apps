@@ -16,7 +16,7 @@
 
       <div class="left-right-aligner">
         <label for="displayCount" class="control-label">Number of display licenses you want to add:</label>
-        <input class="display-count-input mt-0 pull-right" type="number" name="displayCount" ng-model="factory.purchase.displayCount" min="1" ng-pattern="/^[0-9]+$/" required ng-change="factory.getEstimate()"/>
+        <input class="display-count-input mt-0 pull-right" type="number" name="displayCount" ng-model="factory.purchase.displayCount" min="1" ng-pattern="/^[0-9]+$/" required ng-change="factory.getEstimate()" ng-model-options="{ debounce: 1000 }"/>
       </div>
 
       <div class="border-bottom py-4 mb-4">
