@@ -11,77 +11,78 @@
   </div> 
 
   <div class="purchase-licenses-centered-panel" ng-hide="factory.purchase.completed">
-    <div class="checkout-gray-panel">
-      <h4 class="u_margin-md-bottom mt-0 mb-4">Subscription Details</h4>
+    <form role="form" name="purchaseLicensesForm" ng-submit="completePayment()">
+      <div class="checkout-gray-panel">
+        <h4 class="u_margin-md-bottom mt-0 mb-4">Subscription Details</h4>
 
-      <div class="left-right-aligner">
-        <label for="displayCount" class="control-label">Number of display licenses you want to add:</label>
-        <input class="display-count-input mt-0 pull-right" type="number" name="displayCount" ng-model="factory.purchase.displayCount" min="1" ng-pattern="/^[0-9]+$/" required ng-change="factory.getEstimate()"/>
-      </div>
+        <div class="left-right-aligner" ng-class="{'has-error': purchaseLicensesForm.displayCount.$invalid }">
+          <label for="displayCount" class="control-label">Number of display licenses you want to add:</label>
+          <input class="display-count-input mt-0 pull-right" type="number" name="displayCount" ng-model="factory.purchase.displayCount" min="1" ng-pattern="/^[0-9]+$/" required ng-change="getEstimate()" ng-model-options="{ debounce: 1000 }" autofocus />
+        </div>
 
-      <div class="border-bottom py-4 mb-4">
-        <p class="left-right-aligner mb-0">
-          <span class="font-weight-bold">Total number of display licenses for this subscription:</span>
-          <span>
-            {{currentPlan.playerProTotalLicenseCount + factory.purchase.displayCount}}
-          </span>
-        </p>
-        <p class="mb-0">$-- per display license, per month.</p>
-      </div>
-
-      <p class="mb-0" ng-show="!addCoupon && !purchase.couponCode">
-        &nbsp;
-        <span class="pull-right">
-          <a aria-label="Add Coupon Code" class="madero-link u_clickable" ng-click="addCoupon = true" tabindex="1">Add A Coupon Code</a>
-        </span>
-      </p>    
-      <div class="row" ng-show="addCoupon">
-        <div class="col-md-12">
-          <div class="form-group">
-            <label for="coupon-code" class="control-label">Coupon Code:</label>
-            <span class="pull-right">
-              <a aria-label="Cancel Coupon Code" class="madero-link u_clickable" ng-click="clearCouponCode()" tabindex="1">Cancel</a>
+        <div class="border-bottom py-4 mb-4">
+          <p class="left-right-aligner mb-0">
+            <span class="font-weight-bold">Total number of display licenses for this subscription:</span>
+            <span>
+              {{currentPlan.playerProTotalLicenseCount + factory.purchase.displayCount}}
             </span>
-            <div class="flex-row">
-              <input id="coupon-code" aria-required="false" type="text" class="form-control mr-3" name="couponCode" ng-model="purchase.couponCode">
-              <button id="apply-coupon-code" type="button" aria-label="Apply Coupon Code" class="btn btn-default" ng-click="applyCouponCode()">Apply</button>
+          </p>
+          <p class="mb-0">$-- per display license, per month.</p>
+        </div>
+
+        <p class="mb-0" ng-show="!addCoupon && !purchase.couponCode">
+          &nbsp;
+          <span class="pull-right">
+            <a aria-label="Add Coupon Code" class="madero-link u_clickable" ng-click="addCoupon = true" tabindex="1">Add A Coupon Code</a>
+          </span>
+        </p>    
+        <div class="row" ng-show="addCoupon">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="coupon-code" class="control-label">Coupon Code:</label>
+              <span class="pull-right">
+                <a aria-label="Cancel Coupon Code" class="madero-link u_clickable" ng-click="clearCouponCode()" tabindex="1">Cancel</a>
+              </span>
+              <div class="flex-row">
+                <input id="coupon-code" aria-required="false" type="text" class="form-control mr-3" name="couponCode" ng-model="purchase.couponCode">
+                <button id="apply-coupon-code" type="button" aria-label="Apply Coupon Code" class="btn btn-default" ng-click="applyCouponCode()">Apply</button>
+              </div>
             </div>
           </div>
         </div>
+
+        <div class="border-bottom pb-4">
+          <p class="mb-0" ng-repeat="coupon in purchase.estimate.coupons">
+            <span class="font-weight-bold">{{coupon.couponName}}:</span>
+            <span class="pull-right">-${{coupon.couponAmount | number:2}}</span>
+          </p>
+        </div>
+
+        <div class="pt-4">
+          <p class="left-right-aligner mb-4">
+            <span class="font-weight-bold">Prorated amount, due now:</span>
+            <span>
+              <span class="u_margin-right text-subtle">{{factory.estimate.invoice_estimate.currency_code}}</span>
+              <span class="purchase-total">${{factory.estimate.invoice_estimate.amount_due/100 | number:2}}</span>
+            </span>
+          </p>
+          <p class="left-right-aligner mb-0">
+            <span class="font-weight-bold">Next invoice on {{factory.estimate.subscription_estimate.next_billing_at * 1000 | date:'d-MMM-yyyy'}}:</span>
+            <span>
+              <span class="u_margin-right text-subtle">{{factory.estimate.next_invoice_estimate.currency_code}}</span>
+              <span class="purchase-total">${{factory.estimate.next_invoice_estimate.amount_due/100 | number:2}}</span>
+            </span>
+          </p>
+        </div>
       </div>
 
-      <div class="border-bottom pb-4">
-        <p class="mb-0" ng-repeat="coupon in purchase.estimate.coupons">
-          <span class="font-weight-bold">{{coupon.couponName}}:</span>
-          <span class="pull-right">-${{coupon.couponAmount | number:2}}</span>
-        </p>
+      <div class="flex-row u_margin-md-top mb-5">
+        <button id="backButton" type="button" aria-label="Go back to Billing Address" class="btn btn-default btn-toolbar pull-left" ng-click="close()" translate>common.cancel</button>
+        <button id="payButton" type="submit" class="btn btn-primary ml-4 w-100" tabindex="1" aria-label="Complete Payment" ng-disabled="purchaseLicensesForm.$invalid" >
+          <span id="invoiceLabel">Pay ${{factory.estimate.invoice_estimate.amount_due/100 | number:2}} Now</span>
+        </button>
       </div>
-
-      <div class="pt-4">
-        <p class="left-right-aligner mb-4">
-          <span class="font-weight-bold">Prorated amount, due now:</span>
-          <span>
-            <span class="u_margin-right text-subtle">{{factory.estimate.invoice_estimate.currency_code}}</span>
-            <span class="purchase-total">${{factory.estimate.invoice_estimate.amount_due/100 | number:2}}</span>
-          </span>
-        </p>
-        <p class="left-right-aligner mb-0">
-          <span class="font-weight-bold">Next invoice on {{factory.estimate.subscription_estimate.next_billing_at * 1000 | date:'d-MMM-yyyy'}}:</span>
-          <span>
-            <span class="u_margin-right text-subtle">{{factory.estimate.next_invoice_estimate.currency_code}}</span>
-            <span class="purchase-total">${{factory.estimate.next_invoice_estimate.amount_due/100 | number:2}}</span>
-          </span>
-        </p>
-      </div>
-    </div>
-
-    <div class="flex-row u_margin-md-top mb-5">
-      <button id="backButton" type="button" aria-label="Go back to Billing Address" class="btn btn-default btn-toolbar pull-left" ng-click="close()" translate>common.cancel</button>
-      <button id="payButton" type="submit" class="btn btn-primary ml-4 w-100" form="form.paymentMethodsForm" ng-click="completePayment()" tabindex="1" aria-label="Complete Payment">
-        <span id="invoiceLabel">Pay ${{factory.estimate.invoice_estimate.amount_due/100 | number:2}} Now</span>
-      </button>
-    </div>
-
+    </form>
   </div>
 
   <div ng-show="factory.purchase.completed" ng-include="'partials/purchase/purchase-licenses-success.html'"></div>
