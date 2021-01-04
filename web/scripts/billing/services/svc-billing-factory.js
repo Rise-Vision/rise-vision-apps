@@ -18,8 +18,7 @@ angular.module('risevision.apps.billing.services')
       factory.init = function() {
         _clearMessages();
 
-        creditCardFactory.initPaymentMethods();
-        creditCardFactory.loadCreditCards();
+        creditCardFactory.initPaymentMethods(true);
       };
 
       var _getCompanyId = function() {
