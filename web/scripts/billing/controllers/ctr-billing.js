@@ -1,11 +1,13 @@
 'use strict';
 
+/*jshint camelcase: false */
+
 angular.module('risevision.apps.billing.controllers')
   .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$timeout',
     'ScrollingListService', 'userState', 'currentPlanFactory', 'ChargebeeFactory', 'billing',
     'billingFactory', 'PLANS_LIST', 'companySettingsFactory',
     function ($rootScope, $scope, $loading, $timeout, ScrollingListService, userState,
-      currentPlanFactory, ChargebeeFactory, billing, billingFactory, PLANS_LIST, 
+      currentPlanFactory, ChargebeeFactory, billing, billingFactory, PLANS_LIST,
       companySettingsFactory) {
 
       $scope.company = userState.getCopyOfSelectedCompany();
@@ -14,8 +16,6 @@ angular.module('risevision.apps.billing.controllers')
       $scope.billingFactory = billingFactory;
 
       $scope.subscriptions = new ScrollingListService(billing.getSubscriptions, {
-        sortBy: 'status',
-        reverse: false,
         name: 'Subscriptions'
       });
       $scope.invoices = new ScrollingListService(billing.getInvoices, {
@@ -53,62 +53,69 @@ angular.module('risevision.apps.billing.controllers')
       };
 
       $scope.editSubscription = function (subscription) {
-        var subscriptionId = subscription.parentId || subscription.subscriptionId;
+        var subscriptionId = subscription.id;
 
         $scope.chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscriptionId);
       };
 
-      var _getVolumePlan = function (subscription) {
-        var volumePlan = _.find(PLANS_LIST, function (plan) {
-          return plan.productCode === subscription.productCode &&
-            plan.type.indexOf('volume') !== -1;
+      var _getPlan = function (subscription) {
+        var productCode = subscription.plan_id && subscription.plan_id.split('-')[0];
+
+        var plan = _.find(PLANS_LIST, function (plan) {
+          return plan.productCode === productCode;
         });
 
-        return volumePlan;
+        return plan;
       };
 
-      $scope.getSubscriptionDesc = function (subscription) {
-        var prefix = subscription.quantity > 1 ? subscription.quantity + ' x ' : '';
-        var volumePlan = _getVolumePlan(subscription);
-
-        // Show `1` quantity for Per Display subscriptions
-        if ((_isPerDisplay(subscription) || volumePlan) && subscription.quantity > 0) {
-          prefix = subscription.quantity + ' x ';
-        }
-
-        var period = _getPeriod(subscription);
-        var name = volumePlan ? volumePlan.name : subscription.productName;
-
-        return prefix + name + ' ' + period + (volumePlan ? ' Plan' : '');
-      };
-
-      $scope.getSubscriptionPrice = function (subscription) {
-        return subscription.quantity * subscription.price + subscription.shipping;
-      };
-
-      $scope.isActive = function (subscription) {
-        return subscription.status === 'Active';
-      };
-
-      $scope.isCancelled = function (subscription) {
-        return subscription.status === 'Cancelled';
-      };
-
-      $scope.isSuspended = function (subscription) {
-        return subscription.status === 'Suspended';
+      var _isVolumePlan = function (plan) {
+        return plan && plan.type && plan.type.indexOf('volume') !== -1;
       };
 
       var _getPeriod = function(subscription) {
-        if (subscription.billingPeriod > 1) {
-          return (subscription.billingPeriod + ' ' + (subscription.unit.toLowerCase().indexOf('per month') >= 0 ?
+        if (subscription.billing_period > 1) {
+          return (subscription.billing_period + ' ' + (subscription.billing_period_unit === 'month' ?
             'Month' : 'Year'));
         } else {
-          return subscription.unit.toLowerCase().indexOf('per month') >= 0 ? 'Monthly' : 'Yearly';
+          return subscription.billing_period_unit === 'month' ? 'Monthly' : 'Yearly';
         }
       };
 
-      var _isPerDisplay = function(subscription) {
-        return subscription.unit.toLowerCase().indexOf('per display') >= 0 ? true : false;
+      $scope.getSubscriptionDesc = function (subscription) {
+        var prefix = subscription.plan_quantity > 1 ? subscription.plan_quantity + ' x ' : '';
+        var plan = _getPlan(subscription);
+        if (plan) {
+          var name = plan.name;
+
+          // Show `1` plan_quantity for Per Display subscriptions
+          if (plan && _isVolumePlan(plan) && subscription.plan_quantity > 0) {
+            prefix = subscription.plan_quantity + ' x ';
+          }
+
+          var period = _getPeriod(subscription);
+
+          if (_isVolumePlan(plan)) {
+            name = name + ' ' + period + ' Plan';
+          } else {
+            name = name + ' Plan ' + period;
+          }
+
+          return prefix + name;
+        } else {
+          return subscription.plan_id;
+        }
+      };
+
+      $scope.isActive = function (subscription) {
+        return subscription.status === 'active';
+      };
+
+      $scope.isCancelled = function (subscription) {
+        return subscription.status === 'cancelled';
+      };
+
+      $scope.isSuspended = function (subscription) {
+        return subscription.status === 'suspended';
       };
 
     }

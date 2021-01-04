@@ -12,19 +12,17 @@ angular.module('risevision.apps.billing.services')
           var deferred = $q.defer();
           var params = {
             'companyId': userState.getSelectedCompanyId(),
-            'search': 'origin:Chargebee',
             'cursor': cursor,
-            'count': search.count,
-            'sort': search.sortBy + (search.reverse ? ' desc' : ' asc')
+            'count': search.count
           };
 
-          $log.debug('Store subscription.listUser called with', params);
+          $log.debug('Store integrations.subscription.list called with', params);
 
           storeAPILoader().then(function (storeApi) {
-              return storeApi.subscription.listUser(params);
+              return storeApi.integrations.subscription.list(params);
             })
             .then(function (resp) {
-              $log.debug('susbcription.listUser resp', resp);
+              $log.debug('integrations.subscription.list resp', resp);
 
               deferred.resolve(resp.result);
             })
