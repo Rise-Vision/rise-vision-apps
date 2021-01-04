@@ -49,7 +49,7 @@
             Invoice #{{item.invoice.id}}
           </td>
           <td class="table-body__cell">
-            ${{(item.invoice.total || item.invoice.amount_due) / 100 | number:2}}
+            ${{(item.invoice.amount_due || item.invoice.total) / 100 | number:2}}
           </td>
           <td class="table-body__cell">
             <a class="madero-link u_clickable" ng-click="billingFactory.downloadInvoice(item.invoice.id)">
