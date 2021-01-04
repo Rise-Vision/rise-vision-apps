@@ -86,7 +86,13 @@
   .checkout-centered-panel {
     @extend .mx-auto;
 
-    width: 744px;
+    max-width: 744px;
+  }
+
+  .purchase-licenses-centered-panel {
+    @extend .mx-auto;
+
+    max-width: 554px; 
   }
 
 }
