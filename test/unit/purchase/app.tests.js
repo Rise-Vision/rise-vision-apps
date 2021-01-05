@@ -75,7 +75,7 @@ describe('app:', function() {
       canAccessApps.should.have.been.called;
 
       setTimeout(function(){
-        expect($state.go).to.have.been.calledWith('apps.billing.home', {edit: 'subscriptionId'});
+        expect($state.go).to.have.been.calledWith('apps.purchase.licenses');
 
         expect(messageBoxStub).to.not.have.been.called;
         done();
@@ -105,7 +105,7 @@ describe('app:', function() {
     });
 
     it('should show plan admin email if available', function(done) {
-      currentPlanFactory.currentPlan.isPurchasedByParent = true      
+      currentPlanFactory.currentPlan.isPurchasedByParent = true
       currentPlanFactory.currentPlan.parentPlanContactEmail = 'test@email.com';
 
       $state.go('apps.purchase.home');
@@ -129,8 +129,6 @@ describe('app:', function() {
       $rootScope.$digest();
 
       setTimeout(function(){
-        expect(messageBoxStub).to.not.have.been.called;
-
         $state.go.should.have.been.calledOnce;
 
         done();
@@ -140,14 +138,14 @@ describe('app:', function() {
     it('should resolve redirectTo as previous path', function() {
       sinon.stub($location, 'path').returns('/displays/list');
 
-      var redirectTo = $state.get('apps.purchase.home').resolve.redirectTo[1]($location);      
+      var redirectTo = $state.get('apps.purchase.home').resolve.redirectTo[1]($location);
       expect(redirectTo).to.equal('/displays/list');
     });
 
     it('should resolve redirectTo as Apps home if previous path is purchase', function() {
       sinon.stub($location, 'path').returns('/purchase');
 
-      var redirectTo = $state.get('apps.purchase.home').resolve.redirectTo[1]($location);      
+      var redirectTo = $state.get('apps.purchase.home').resolve.redirectTo[1]($location);
       expect(redirectTo).to.equal('/');
     });
 

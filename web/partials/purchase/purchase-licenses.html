@@ -8,7 +8,7 @@
   <div ng-show="factory.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
     <p><strong>{{factory.errorMessage}}</strong></p>
     {{factory.apiError}}
-  </div> 
+  </div>
 
   <div class="purchase-licenses-centered-panel" ng-hide="factory.purchase.completed">
     <form role="form" name="purchaseLicensesForm" ng-submit="completePayment()">
@@ -35,7 +35,7 @@
           <span class="pull-right">
             <a aria-label="Add Coupon Code" class="madero-link u_clickable" ng-click="addCoupon = true" tabindex="1">Add A Coupon Code</a>
           </span>
-        </p>    
+        </p>
         <div class="row" ng-show="addCoupon">
           <div class="col-md-12">
             <div class="form-group">
@@ -52,9 +52,9 @@
         </div>
 
         <div class="border-bottom pb-4">
-          <p class="mb-0" ng-repeat="coupon in purchase.estimate.coupons">
-            <span class="font-weight-bold">{{coupon.couponName}}:</span>
-            <span class="pull-right">-${{coupon.couponAmount | number:2}}</span>
+          <p class="mb-0" ng-repeat="coupon in factory.estimate.next_invoice_estimate.discounts">
+            <span class="font-weight-bold">{{coupon.description}}</span>
+            <span class="pull-right">-${{coupon.amount/100 | number:2}}</span>
           </p>
         </div>
 
