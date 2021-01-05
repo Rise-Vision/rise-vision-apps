@@ -46,7 +46,7 @@
           factory.purchase.taxExemption = {};
           factory.purchase.estimate = {};
 
-          creditCardFactory.initPaymentMethods(false)
+          return creditCardFactory.initPaymentMethods(false)
             .finally(function() {
               creditCardFactory.paymentMethods.paymentMethod = 'card';
               creditCardFactory.paymentMethods.newCreditCard.billingAddress = factory.purchase.billingAddress;
