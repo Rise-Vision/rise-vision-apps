@@ -65,7 +65,6 @@ describe("controller: purchase-licenses", function() {
   });
 
   it("should initialize",function() {
-    expect($scope.form).to.be.an("object");
     expect($scope.factory).to.equal(purchaseLicensesFactory);
     expect($scope.helpWidgetFactory).to.equal(helpWidgetFactory);
     expect($scope.currentPlan).to.be.ok;
@@ -92,7 +91,7 @@ describe("controller: purchase-licenses", function() {
 
   describe('completePayment:', function() {
     it("should complete payment", function() {
-      $scope.form.purchaseLicensesForm = {
+      $scope.purchaseLicensesForm = {
         $valid: true
       };
 
@@ -102,7 +101,7 @@ describe("controller: purchase-licenses", function() {
     });
 
     it("should not complete payment if form is not valid", function() {
-      $scope.form.purchaseLicensesForm = {
+      $scope.purchaseLicensesForm = {
         $valid: false
       };
 
