@@ -726,15 +726,76 @@ describe("Services: storeService", function() {
       .then(null,done);
     });
 
-    it("should return error response", function(done) {
+    it("should reject on API failure", function(done) {
+      storeApiFailure = true;
       response.result.error = "Call Failed";
 
       storeService.estimateSubscriptionUpdate()
+      .then(function() {
+        done("error");
+      })
+      .then(null, function(error) {
+        expect(error).to.equal("Call Failed");
+
+        done();
+      })
+      .then(null,done);
+    });
+
+  });
+
+  describe("updateSubscription: ", function() {
+    beforeEach(function() {
+      response = {
+        result: {}
+      };
+    });
+
+    it("should exist", function() {
+      expect(storeService.updateSubscription).to.be.ok;
+      expect(storeService.updateSubscription).to.be.a("function");
+    });
+
+    it("should return a promise", function() {
+      expect(storeService.updateSubscription().then).to.be.a("function");
+    });
+
+    it("should pass the parameters and call the api", function(done) {
+      storeService.updateSubscription("displayCount", "subscriptionId", "companyId", "couponCode")
+      .then(function() {
+        storeApi.integrations.subscription.update.should.have.been.called;
+        storeApi.integrations.subscription.update.should.have.been.calledWith({
+          displayCount: "displayCount",
+          subscriptionId: "subscriptionId",
+          companyId: "companyId",
+          couponCode: "couponCode"
+        });
+        done();
+      })
+      .then(null,done);
+
+    });
+
+    it("should resolve if result is received", function(done) {
+      storeService.updateSubscription()
+      .then(function(result) {
+        expect(result).to.be.ok;
+        expect(result).to.deep.equal({});
+
+        done();
+      })
+      .then(null,done);
+    });
+
+    it("should reject if no result is received", function(done) {
+      response = {};
+
+      storeService.updateSubscription()
       .then(function(result) {
         done(result);
       })
       .then(null, function(error) {
-        expect(error).to.equal("Call Failed");
+        expect(error).to.not.be.ok;
 
         done();
       })
@@ -745,7 +806,7 @@ describe("Services: storeService", function() {
       storeApiFailure = true;
       response.result.error = "Call Failed";
 
-      storeService.estimateSubscriptionUpdate()
+      storeService.updateSubscription()
       .then(function() {
         done("error");
       })
