@@ -95,18 +95,8 @@
     max-width: 554px; 
   }
 
-  .madero-style {
-    &.alert {
-      padding: 10px;
-
-      &.alert-success {
-        border-color: $madero-green;
-
-        strong {
-          color: $madero-green;
-        }
-      }
-    }
+  .madero-style.alert.price-decrease {
+    padding: 10px;
   }
 
 }

@@ -49,5 +49,23 @@
                 color: $state-warning-text;
             }
         }
+
+        &.alert-success {
+            border-color: $madero-green;
+
+            strong {
+                color: $madero-green;
+            }
+        }
     }
+}
+
+.purchase-app {
+  
+}
+.madero-style {
+  &.alert {
+    padding: 10px;
+
+  }
 }
