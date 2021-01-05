@@ -73,35 +73,42 @@
           factory.paymentMethods.selectedCard = factory.paymentMethods.newCreditCard;
         };
 
-        factory.initPaymentMethods = function() {
+        var _loadCreditCards = function() {
+          billing.getCreditCards({
+            count: 40
+          })
+          .then(function(result) {
+            factory.paymentMethods.existingCreditCards = result.items;
+            
+            if (result.items[0]) {
+              factory.paymentMethods.selectedCard = result.items[0];
+            }
+          });
+        };
+
+        factory.initPaymentMethods = function(loadExistingCards) {
           factory.paymentMethods = {
             existingCreditCards: [],
             newCreditCard: {
               isNew: true,
               address: {},
-              useBillingAddress: true,
-              billingAddress: addressService.copyAddress(userState.getCopyOfSelectedCompany())
+              useBillingAddress: false
             }
           };
 
           // Select New Card by default
           factory.selectNewCreditCard();
-        };
 
-        factory.loadCreditCards = function() {
-          userAuthFactory.authenticate()
+          return userAuthFactory.authenticate()
             .then(function () {
-              if (userState.isRiseVisionUser()) {
-                billing.getCreditCards({
-                  count: 40
-                })
-                .then(function(result) {
-                  factory.paymentMethods.existingCreditCards = result.items;
-                  
-                  if (result.items[0]) {
-                    factory.paymentMethods.selectedCard = result.items[0];
-                  }
-                });
+              var company = userState.getCopyOfSelectedCompany();
+              if (company.id) {
+                factory.paymentMethods.newCreditCard.useBillingAddress = true;
+                factory.paymentMethods.newCreditCard.billingAddress = addressService.copyAddress(company);
+
+                if (loadExistingCards) {
+                  _loadCreditCards();
+                }
               }
             });
         };

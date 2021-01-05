@@ -60,7 +60,7 @@
       <div class="col-md-12">
         <div class="form-group">
           <label for="toggleMatchBillingAddress" class="control-label mb-0">Cardholder Billing Address: *</label>
-          <div class="flex-row">
+          <div class="flex-row" ng-if="factory.paymentMethods.newCreditCard.billingAddress">
             <madero-checkbox id="toggleMatchBillingAddress" ng-model="factory.paymentMethods.newCreditCard.useBillingAddress"></madero-checkbox>
             <span class="mr-3">Use Company Billing Address</span>
           </div>
