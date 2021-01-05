@@ -6,7 +6,7 @@ describe('service: billingFactory:', function() {
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
     $provide.service('userState',function() {
-      return { 
+      return {
         getSelectedCompanyId : function() {
           return 'testId1';
         },

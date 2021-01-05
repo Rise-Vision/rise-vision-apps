@@ -3,9 +3,9 @@
   'use strict';
 
   angular.module('risevision.apps.purchase')
-    .factory('purchaseLicensesFactory', ['$rootScope', '$q', '$log', '$timeout', 'userState', 
+    .factory('purchaseLicensesFactory', ['$rootScope', '$q', '$log', '$timeout', 'userState',
       'currentPlanFactory', 'storeService', 'addressService', 'creditCardFactory', 'purchaseFlowTracker',
-      function ($rootScope, $q, $log, $timeout, userState, currentPlanFactory, storeService, addressService, 
+      function ($rootScope, $q, $log, $timeout, userState, currentPlanFactory, storeService, addressService,
         creditCardFactory, purchaseFlowTracker) {
         var factory = {};
         factory.userEmail = userState.getUserEmail();
@@ -16,6 +16,7 @@
           factory.purchase = {};
           factory.purchase.completed = false;
           factory.purchase.displayCount = 1;
+          factory.purchase.couponCode = '';
 
           factory.getEstimate();
 
@@ -137,11 +138,12 @@
 
           factory.loading = true;
 
+          var couponCode = factory.purchase.couponCode;
           var displayCount = factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount;
           var subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
           var companyId = currentPlanFactory.currentPlan.billToId;
 
-          return storeService.estimateSubscriptionUpdate(displayCount, subscriptionId, companyId)
+          return storeService.estimateSubscriptionUpdate(displayCount, subscriptionId, companyId, couponCode)
             .then(function (result) {
               factory.estimate = result.item;
 

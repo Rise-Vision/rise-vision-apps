@@ -25,6 +25,26 @@ angular.module('risevision.apps.purchase')
         return !form || form.$valid;
       };
 
+      $scope.applyCouponCode = function () {
+        if ($scope.factory.purchase.couponCode) {
+          $scope.factory.getEstimate()
+            .then(function () {
+              if (!$scope.factory.apiError) {
+                $scope.addCoupon = false;
+              }
+            });
+        }
+      };
+
+      $scope.clearCouponCode = function () {
+        $scope.factory.purchase.couponCode = null;
+        $scope.addCoupon = false;
+
+        if ($scope.factory.apiError) {
+          $scope.factory.getEstimate();
+        }
+      };
+
       $scope.getEstimate = function() {
         if (!_isFormValid()) {
           return;
