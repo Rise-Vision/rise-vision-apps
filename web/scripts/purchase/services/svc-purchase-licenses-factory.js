@@ -208,11 +208,12 @@
 
           factory.loading = true;
 
+          var couponCode = factory.purchase.couponCode;
           var displayCount = factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount;
           var subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
           var companyId = currentPlanFactory.currentPlan.billToId;
 
-          return storeService.updateSubscription(displayCount, subscriptionId, companyId)
+          return storeService.updateSubscription(displayCount, subscriptionId, companyId, couponCode)
             .then(function () {
               // purchaseFlowTracker.trackOrderPayNowClicked(_getTrackingProperties());
 
