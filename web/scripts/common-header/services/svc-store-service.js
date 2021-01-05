@@ -274,9 +274,10 @@
                 $log.debug('integrations.subscription.estimate resp', resp);
                 deferred.resolve(resp.result);
               })
-              .then(null, function (e) {
-                console.error('Failed to retrieve subscription estimate.', e);
-                deferred.reject(e);
+              .then(null, function (resp) {
+                console.error('Failed to retrieve subscription estimate.', resp);
+
+                deferred.reject(resp && resp.result && resp.result.error);
               });
             return deferred.promise;
           },
@@ -298,9 +299,10 @@
                 $log.debug('integrations.subscription.update resp', resp);
                 deferred.resolve(resp.result);
               })
-              .then(null, function (e) {
-                console.error('Failed to retrieve subscription update.', e);
-                deferred.reject(e);
+              .then(null, function (resp) {
+                console.error('Failed to retrieve subscription update.', resp);
+
+                deferred.reject(resp && resp.result && resp.result.error);
               });
             return deferred.promise;
           }
