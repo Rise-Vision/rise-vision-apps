@@ -112,7 +112,7 @@ describe('controller: Playlist Item Modal', function() {
     $modalInstanceDismissSpy.should.have.been.called;
   });
   
-  describe('selectPresentation:', function(done) {
+  describe('selectPresentation:', function() {
     it('should get cached presentation:', function(done) {
       $scope.selectPresentation();
 
