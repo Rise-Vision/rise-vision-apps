@@ -86,8 +86,22 @@ describe("directive: plan picker", function() {
       expect($scope.basePricePerDisplay).to.equal(10);
       expect($scope.pricePerDisplay).to.equal(9);
       expect($scope.totalPrice).to.equal(45);
-      expect($scope.yearlySavings).to.equal(0);
     });
+
+    it("should not update if displayCount is 0", function() {
+      $scope.basePricePerDisplay = 5;
+      $scope.pricePerDisplay = 5;
+      $scope.totalPrice = 5;
+
+      $scope.displayCount = 0;
+
+      $scope.$digest();
+
+      expect($scope.basePricePerDisplay).to.equal(5);
+      expect($scope.pricePerDisplay).to.equal(5);
+      expect($scope.totalPrice).to.equal(5);
+    });
+
   });
 
 });

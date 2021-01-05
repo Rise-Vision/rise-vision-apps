@@ -1,12 +1,15 @@
 (function (angular) {
 
+  /*jshint camelcase: false */
+
   'use strict';
 
   angular.module('risevision.apps.purchase')
     .factory('purchaseLicensesFactory', ['$rootScope', '$q', '$log', '$timeout', 'userState',
       'currentPlanFactory', 'storeService', 'addressService', 'creditCardFactory', 'purchaseFlowTracker',
-      function ($rootScope, $q, $log, $timeout, userState, currentPlanFactory, storeService, addressService,
-        creditCardFactory, purchaseFlowTracker) {
+      'pricingFactory',
+      function ($rootScope, $q, $log, $timeout, userState, currentPlanFactory, storeService, addressService, 
+        creditCardFactory, purchaseFlowTracker, pricingFactory) {
         var factory = {};
         factory.userEmail = userState.getUserEmail();
 
@@ -133,6 +136,19 @@
           factory.apiError = '';
         };
 
+        var _updatePerDisplayPrice = function () {
+          var isEducation = userState.isEducationCustomer();
+
+          var currentDisplayCount = currentPlanFactory.currentPlan.playerProTotalLicenseCount;
+          var displayCount = factory.purchase.displayCount + currentDisplayCount;
+
+          var lineItem = factory.estimate.next_invoice_estimate.line_items[0];
+          var isMonthly = lineItem.entity_id.endsWith('m');
+
+          factory.currentPricePerDisplay = pricingFactory.getPricePerDisplay(isMonthly, currentDisplayCount, isEducation);
+          factory.newPricePerDisplay = pricingFactory.getPricePerDisplay(isMonthly, displayCount, isEducation);
+        };
+
         factory.getEstimate = function () {
           _clearMessages();
 
@@ -146,6 +162,8 @@
           return storeService.estimateSubscriptionUpdate(displayCount, subscriptionId, companyId, couponCode)
             .then(function (result) {
               factory.estimate = result.item;
+
+              _updatePerDisplayPrice();
 
               // var estimate = {};
 
