@@ -7,7 +7,6 @@ angular.module('risevision.apps.purchase')
     function ($scope, $state, $loading, purchaseLicensesFactory, helpWidgetFactory, $location,
       redirectTo, currentPlanFactory) {
       $scope.helpWidgetFactory = helpWidgetFactory;
-      $scope.form = {};
       $scope.factory = purchaseLicensesFactory;
       $scope.currentPlan = currentPlanFactory.currentPlan;
 
@@ -22,8 +21,7 @@ angular.module('risevision.apps.purchase')
       });
 
       var _isFormValid = function () {
-        var form = $scope.form.purchaseLicensesForm;
-
+        var form = $scope.purchaseLicensesForm;
         return !form || form.$valid;
       };
 
@@ -45,6 +43,14 @@ angular.module('risevision.apps.purchase')
         if ($scope.factory.apiError) {
           $scope.factory.getEstimate();
         }
+      };
+
+      $scope.getEstimate = function() {
+        if (!_isFormValid()) {
+          return;
+        }
+
+        return purchaseLicensesFactory.getEstimate();
       };
 
       $scope.completePayment = function () {

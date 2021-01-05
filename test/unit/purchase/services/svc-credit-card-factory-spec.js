@@ -24,8 +24,7 @@ describe("Services: credit card factory", function() {
       getCopyOfSelectedCompany: sinon.stub().returns({
         id: "id",
         street: "billingStreet",
-      }),
-      isRiseVisionUser: sinon.stub().returns(true)
+      })
     });
 
     $provide.value('userAuthFactory', {
@@ -60,7 +59,6 @@ describe("Services: credit card factory", function() {
 
     expect(creditCardFactory.selectNewCreditCard).to.be.a("function");
     expect(creditCardFactory.initPaymentMethods).to.be.a("function");
-    expect(creditCardFactory.loadCreditCards).to.be.a('function');
 
     expect(creditCardFactory.validatePaymentMethod).to.be.a("function");
     expect(creditCardFactory.getPaymentMethodId).to.be.a("function");
@@ -139,91 +137,138 @@ describe("Services: credit card factory", function() {
     expect(creditCardFactory.paymentMethods.selectedCard).to.equal('newCard');
   });
 
-  it("initPaymentMethods:", function() {
-    creditCardFactory.initPaymentMethods();
-    
-    expect(creditCardFactory).to.be.ok;
-    expect(creditCardFactory.paymentMethods).to.be.ok;
-    expect(creditCardFactory.paymentMethods.existingCreditCards).to.deep.equal([]);
+  describe("initPaymentMethods:", function() {
+    it("should init factory object", function() {
+      creditCardFactory.initPaymentMethods(false);
+      
+      expect(creditCardFactory).to.be.ok;
+      expect(creditCardFactory.paymentMethods).to.be.ok;
+      expect(creditCardFactory.paymentMethods.existingCreditCards).to.deep.equal([]);
 
-    expect(creditCardFactory.paymentMethods.newCreditCard).to.deep.equal({
-      isNew: true,
-      address: {},
-      useBillingAddress: true,
-      billingAddress: {
-        id: "id",
-        name: undefined,
-        street: "billingStreet",
-        unit: undefined,
-        city: undefined,
-        country: undefined,
-        postalCode: undefined,
-        province: undefined
-      }
-    });
+      expect(creditCardFactory.paymentMethods.newCreditCard).to.deep.equal({
+        isNew: true,
+        address: {},
+        useBillingAddress: false
+      });
 
-    expect(creditCardFactory.paymentMethods.selectedCard).to.equal(creditCardFactory.paymentMethods.newCreditCard);
-  });
-
-  describe('loadCreditCards:', function() {
-    beforeEach(function() {
-      creditCardFactory.paymentMethods = {};
+      expect(creditCardFactory.paymentMethods.selectedCard).to.equal(creditCardFactory.paymentMethods.newCreditCard);
     });
 
     it('should authenticate user', function() {
-      creditCardFactory.loadCreditCards();
+      creditCardFactory.initPaymentMethods(false);
 
       userAuthFactory.authenticate.should.have.been.called;
     });
 
-    it('should handle failure to authenticate', function(done) {
+    it('should use company address', function(done) {
+      creditCardFactory.initPaymentMethods(true)
+        .then(function() {
+          expect(creditCardFactory.paymentMethods.newCreditCard).to.deep.equal({
+            isNew: true,
+            address: {},
+            useBillingAddress: true,
+            billingAddress: {
+              id: "id",
+              name: undefined,
+              street: "billingStreet",
+              unit: undefined,
+              city: undefined,
+              country: undefined,
+              postalCode: undefined,
+              province: undefined
+            }
+          });
+
+          done();
+        });
+    });
+
+    it('should not update address on authentication failure', function(done) {
       userAuthFactory.authenticate.returns(Q.reject());
 
-      creditCardFactory.loadCreditCards();
+      creditCardFactory.initPaymentMethods(false)
+        .catch(function() {
+          expect(creditCardFactory.paymentMethods.newCreditCard).to.deep.equal({
+            isNew: true,
+            address: {},
+            useBillingAddress: false
+          });
 
-      setTimeout(function() {
-        billing.getCreditCards.should.not.have.been.called;
-
-        done();
-      });
-    });
-
-    it('should not retrieve cards if user is not registered', function(done) {
-      userState.isRiseVisionUser.returns(false);
-
-      creditCardFactory.loadCreditCards();
-
-      setTimeout(function() {
-        billing.getCreditCards.should.not.have.been.called;
-
-        done();
-      });
-    });
-
-    it('should retrieve cards and update list if successful', function(done) {
-      creditCardFactory.loadCreditCards();
-
-      setTimeout(function() {
-        billing.getCreditCards.should.have.been.calledWith({
-          count: 40
+          done();
         });
-
-        expect(creditCardFactory.paymentMethods.existingCreditCards).to.be.an('array');
-
-        done();
-      });
     });
 
-    it('should set selected card to the first item if available', function(done) {
-      billing.getCreditCards.returns(Q.resolve({items: ['card1']}))
+    it('should not update address if selected company is invalid', function(done) {
+      userState.getCopyOfSelectedCompany.returns({});
 
-      creditCardFactory.loadCreditCards();
+      creditCardFactory.initPaymentMethods(false)
+        .then(function() {
+          expect(creditCardFactory.paymentMethods.newCreditCard).to.deep.equal({
+            isNew: true,
+            address: {},
+            useBillingAddress: false
+          });
 
-      setTimeout(function() {
-        expect(creditCardFactory.paymentMethods.selectedCard).to.equal('card1');
+          done();
+        });
+    });
 
-        done();
+    it('should not load cards', function(done) {
+      creditCardFactory.initPaymentMethods(false)
+        .then(function() {
+          billing.getCreditCards.should.not.have.been.called;
+
+          done();
+        });
+    });
+
+    describe('_loadCreditCards:', function() {
+      it('should handle failure to authenticate', function(done) {
+        userAuthFactory.authenticate.returns(Q.reject());
+
+        creditCardFactory.initPaymentMethods(true)
+          .catch(function() {
+            billing.getCreditCards.should.not.have.been.called;
+
+            done();
+          });
       });
+
+      it('should not retrieve cards selected company is invalid', function(done) {
+        userState.getCopyOfSelectedCompany.returns({});
+
+        creditCardFactory.initPaymentMethods(true)
+          .then(function() {
+            billing.getCreditCards.should.not.have.been.called;
+
+            done();
+          });
+      });
+
+      it('should retrieve cards and update list if successful', function(done) {
+        creditCardFactory.initPaymentMethods(true)
+          .then(function() {
+            billing.getCreditCards.should.have.been.calledWith({
+              count: 40
+            });
+
+            expect(creditCardFactory.paymentMethods.existingCreditCards).to.be.an('array');
+
+            done();
+          });
+      });
+
+      it('should set selected card to the first item if available', function(done) {
+        billing.getCreditCards.returns(Q.resolve({items: ['card1']}))
+
+        creditCardFactory.initPaymentMethods(true)
+          .then(function() {
+            expect(creditCardFactory.paymentMethods.selectedCard).to.equal('card1');
+
+            done();
+          });
+      });
+
     });
 
   });

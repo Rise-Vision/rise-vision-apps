@@ -32,7 +32,6 @@ describe('service: billingFactory:', function() {
     $provide.service('creditCardFactory',function() {
       return {
         initPaymentMethods: sinon.stub(),
-        loadCreditCards: sinon.stub(),
         getPaymentMethodId: sinon.stub().returns('paymentMethodId'),
         validatePaymentMethod: sinon.stub().returns(Q.resolve()),
         authenticate3ds: sinon.stub().returns(Q.resolve({item: 'invoice'})),
@@ -102,7 +101,6 @@ describe('service: billingFactory:', function() {
       expect(billingFactory.apiError).to.not.be.ok;
 
       creditCardFactory.initPaymentMethods.should.have.been.called;
-      creditCardFactory.loadCreditCards.should.have.been.called;
     });
 
     it('should not init payment methods and load credit cards', function() {
@@ -115,7 +113,6 @@ describe('service: billingFactory:', function() {
       expect(billingFactory.apiError).to.not.be.ok;
 
       creditCardFactory.initPaymentMethods.should.not.have.been.called;
-      creditCardFactory.loadCreditCards.should.not.have.been.called;
     });
   });
 
