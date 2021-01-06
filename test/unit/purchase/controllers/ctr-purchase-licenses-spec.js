@@ -100,8 +100,27 @@ describe("controller: purchase-licenses", function() {
       purchaseLicensesFactory.getEstimate.should.not.have.been.called;
     });
 
+    it("should not get estimate if form is not valid", function() {
+      $scope.couponCode = 'SAVE50';
+      $scope.purchaseLicensesForm = { $valid: false };
+      $scope.addCoupon = true;
+
+      $scope.applyCouponCode();
+
+      purchaseLicensesFactory.getEstimate.should.not.have.been.called;
+    });
+
+    it("should not get estimate if coupon code is not set", function() {
+      $scope.couponCode = '';
+      $scope.addCoupon = true;
+
+      $scope.applyCouponCode();
+
+      purchaseLicensesFactory.getEstimate.should.not.have.been.called;
+    });
+
     it("should get estimate and unset addCoupon flag if there's no API error", function(done) {
-      $scope.factory.purchase.couponCode = 'SAVE50';
+      $scope.couponCode = 'SAVE50';
       $scope.addCoupon = true;
 
       $scope.applyCouponCode();
@@ -109,6 +128,7 @@ describe("controller: purchase-licenses", function() {
       purchaseLicensesFactory.getEstimate.should.have.been.called;
 
       setTimeout(function() {
+        expect($scope.factory.purchase.couponCode).to.equal('SAVE50');
         expect($scope.addCoupon).to.be.false;
 
         done();
@@ -117,7 +137,7 @@ describe("controller: purchase-licenses", function() {
 
     it("should get estimate and not unset addCoupon flag if there's API error", function(done) {
       $scope.factory.apiError = true;
-      $scope.factory.purchase.couponCode = 'SAVE50';
+      $scope.couponCode = 'SAVE50';
       $scope.addCoupon = true;
 
       $scope.applyCouponCode();
@@ -125,6 +145,7 @@ describe("controller: purchase-licenses", function() {
       purchaseLicensesFactory.getEstimate.should.have.been.called;
 
       setTimeout(function() {
+        expect($scope.factory.purchase.couponCode).to.equal('SAVE50');
         expect($scope.addCoupon).to.be.true;
 
         done();
