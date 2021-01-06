@@ -7,7 +7,7 @@
   angular.module('risevision.apps.purchase')
     .factory('purchaseLicensesFactory', ['$rootScope', '$q', '$log', '$timeout', '$stateParams',
       'userState', 'currentPlanFactory', 'storeService', 'addressService', 'creditCardFactory',
-      'purchaseFlowTracker', 'pricingFactory'
+      'purchaseFlowTracker', 'pricingFactory',
       function ($rootScope, $q, $log, $timeout, $stateParams, userState, currentPlanFactory, 
         storeService, addressService, creditCardFactory, purchaseFlowTracker, pricingFactory) {
         var factory = {};
