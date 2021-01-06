@@ -147,7 +147,10 @@
           var lineItem = factory.estimate.next_invoice_estimate.line_items[0];
           var isMonthly = lineItem.entity_id.endsWith('m');
 
-          var isEducation = factory.estimate.next_invoice_estimate.line_item_discounts.indexOf('EDUCATION') >= 0;
+          var educationDiscount = _.find(factory.estimate.next_invoice_estimate.line_item_discounts, {
+            coupon_id: 'EDUCATION'
+          });
+          var isEducation = !!educationDiscount;
 
           factory.currentPricePerDisplay = pricingFactory.getPricePerDisplay(isMonthly, currentDisplayCount, isEducation);
           factory.newPricePerDisplay = pricingFactory.getPricePerDisplay(isMonthly, displayCount, isEducation);
