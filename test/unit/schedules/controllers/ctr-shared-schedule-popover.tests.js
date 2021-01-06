@@ -2,7 +2,7 @@
 describe('controller: SharedSchedulePopoverController', function() {
   beforeEach(module('risevision.schedules.controllers'));
   beforeEach(module(function ($provide) {
-    $provide.value('SHARED_SCHEDULE_URL','https://preview.risevision.com/?type=sharedschedule&id=SCHEDULE_ID');
+    $provide.value('SHARED_SCHEDULE_URL','https://widgets.risevision.com/viewer/?type=sharedschedule&id=SCHEDULE_ID');
 
     $provide.service("scheduleFactory", function() {
        return {};
@@ -71,7 +71,7 @@ describe('controller: SharedSchedulePopoverController', function() {
   });
 
   it('getLink', function() {
-    expect($scope.getLink()).to.equal('https://preview.risevision.com/?type=sharedschedule&id=scheduleId');
+    expect($scope.getLink()).to.equal('https://widgets.risevision.com/viewer/?type=sharedschedule&id=scheduleId');
   });
 
   describe('isScheduleDetails:', function() {
@@ -96,7 +96,7 @@ describe('controller: SharedSchedulePopoverController', function() {
 
   describe('getEnterpriseLink', function() {
     it('should get schedule link with enterprise env', function() {
-      expect($scope.getEnterpriseLink()).to.equal('https://preview.risevision.com/?type=sharedschedule&id=scheduleId&env=enterprise'); 
+      expect($scope.getEnterpriseLink()).to.equal('https://widgets.risevision.com/viewer/?type=sharedschedule&id=scheduleId&env=enterprise'); 
     });
 
     it('should return blank if no schedule defined', function() {
@@ -109,7 +109,7 @@ describe('controller: SharedSchedulePopoverController', function() {
     expect($scope.getEmbedCode()).to.be.contain('<div style="position:relative;padding-bottom:56.25%;">\n\
    <iframe style="width:100%;height:100%;position:absolute;left:0px;top:0px;"\n\
       frameborder="0" width="100%" height="100%"\n\
-      src="https://preview.risevision.com/?type=sharedschedule&id=scheduleId&env=embed">\n\
+      src="https://widgets.risevision.com/viewer/?type=sharedschedule&id=scheduleId&env=embed">\n\
    </iframe>\n\
 </div>\n\
 <div style="background:#f2f2f2;color:#020620;font-family:Helvetica;font-size:12px;padding:5px;text-align:center;">\n\
@@ -118,7 +118,7 @@ describe('controller: SharedSchedulePopoverController', function() {
   });
 
   it('getInviteMessage', function() {
-    expect($scope.getInviteMessage()).to.equal('I\'m using Rise Vision to help keep you in the loop. I\'d like for you to install the Rise Chrome Extension. Once installed, you\'ll see important information when you open a new tab.\n\nHere\'s how to install (promise, it only takes 2 minutes):\n 1. Click the following link to open the Rise Chrome Extension in the Chrome Store:\n    https://chrome.google.com/webstore/detail/rise-chrome-extension/dkoohkdagjpgjheoaaegomjhdccfbcle?hl=en\n 2. Click "Add to Chrome" in the top right\n 3. When prompted, copy and paste the following URL into the area provided:\n    https://preview.risevision.com/?type=sharedschedule&id=scheduleId\n\nLet me know if you have any questions.\nRegards,\nuserFirstName');
+    expect($scope.getInviteMessage()).to.equal('I\'m using Rise Vision to help keep you in the loop. I\'d like for you to install the Rise Chrome Extension. Once installed, you\'ll see important information when you open a new tab.\n\nHere\'s how to install (promise, it only takes 2 minutes):\n 1. Click the following link to open the Rise Chrome Extension in the Chrome Store:\n    https://chrome.google.com/webstore/detail/rise-chrome-extension/dkoohkdagjpgjheoaaegomjhdccfbcle?hl=en\n 2. Click "Add to Chrome" in the top right\n 3. When prompted, copy and paste the following URL into the area provided:\n    https://widgets.risevision.com/viewer/?type=sharedschedule&id=scheduleId\n\nLet me know if you have any questions.\nRegards,\nuserFirstName');
   });
 
   describe('copyToClipboard:', function() {
@@ -164,33 +164,33 @@ describe('controller: SharedSchedulePopoverController', function() {
     it('should open a popup with the correct sharing url', function() {
       $scope.shareOnSocial('twitter');
 
-      $window.open.should.have.been.calledWith('https://twitter.com/share?via=RiseVision&url=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId', '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=600');
+      $window.open.should.have.been.calledWith('https://twitter.com/share?via=RiseVision&url=https%3A%2F%2Fwidgets.risevision.com%2Fviewer%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId', '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=600');
 
       scheduleTracker.should.have.been.calledWith('schedule shared', 'scheduleId', 'scheduleName', {source: 'socialMedia', network: 'twitter'});
     });
 
     it('should use the correct social network url', function() {
       $scope.shareOnSocial('twitter');
-      $window.open.should.have.been.calledWith('https://twitter.com/share?via=RiseVision&url=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
+      $window.open.should.have.been.calledWith('https://twitter.com/share?via=RiseVision&url=https%3A%2F%2Fwidgets.risevision.com%2Fviewer%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
       scheduleTracker.should.have.been.calledWith('schedule shared', 'scheduleId', 'scheduleName', {source: 'socialMedia', network: 'twitter'});
       scheduleTracker.resetHistory();
       $window.open.resetHistory();
 
 
       $scope.shareOnSocial('facebook');
-      $window.open.should.have.been.calledWith('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
+      $window.open.should.have.been.calledWith('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwidgets.risevision.com%2Fviewer%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
       scheduleTracker.should.have.been.calledWith('schedule shared', 'scheduleId', 'scheduleName', {source: 'socialMedia', network: 'facebook'});
       scheduleTracker.resetHistory();
       $window.open.resetHistory();
 
       $scope.shareOnSocial('linkedin');
-      $window.open.should.have.been.calledWith('https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
+      $window.open.should.have.been.calledWith('https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fwidgets.risevision.com%2Fviewer%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
       scheduleTracker.should.have.been.calledWith('schedule shared', 'scheduleId', 'scheduleName', {source: 'socialMedia', network: 'linkedin'});
       scheduleTracker.resetHistory();
       $window.open.resetHistory();
 
       $scope.shareOnSocial('classroom');
-      $window.open.should.have.been.calledWith('https://classroom.google.com/share?url=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
+      $window.open.should.have.been.calledWith('https://classroom.google.com/share?url=https%3A%2F%2Fwidgets.risevision.com%2Fviewer%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
       scheduleTracker.should.have.been.calledWith('schedule shared', 'scheduleId', 'scheduleName', {source: 'socialMedia', network: 'classroom'});
     });
 
