@@ -281,13 +281,14 @@
               });
             return deferred.promise;
           },
-          updateSubscription: function (displayCount, subscriptionId, companyId) {
+          updateSubscription: function (displayCount, subscriptionId, companyId, couponCode) {
             var deferred = $q.defer();
 
             var obj = {
               displayCount: displayCount,
               subscriptionId: subscriptionId,
-              companyId: companyId
+              companyId: companyId,
+              couponCode: couponCode
             };
 
             $log.debug('integrations.subscription.update request:', obj);
