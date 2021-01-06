@@ -8,6 +8,7 @@ angular.module('risevision.apps.purchase')
       redirectTo, currentPlanFactory) {
       $scope.factory = purchaseLicensesFactory;
       $scope.currentPlan = currentPlanFactory.currentPlan;
+      $scope.couponCode = null;
 
       purchaseLicensesFactory.init();
 
@@ -25,7 +26,13 @@ angular.module('risevision.apps.purchase')
       };
 
       $scope.applyCouponCode = function () {
-        if ($scope.factory.purchase.couponCode) {
+        if (!_isFormValid()) {
+          return;
+        }
+
+        if ($scope.couponCode) {
+          $scope.factory.purchase.couponCode = $scope.couponCode;
+
           $scope.factory.getEstimate()
             .then(function () {
               if (!$scope.factory.apiError) {
@@ -36,6 +43,7 @@ angular.module('risevision.apps.purchase')
       };
 
       $scope.clearCouponCode = function () {
+        $scope.couponCode = null;
         $scope.factory.purchase.couponCode = null;
         $scope.addCoupon = false;
 
