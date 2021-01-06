@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('risevision.apps.billing.controllers')
-  .controller('InvoiceCtrl', ['$scope', '$loading', 'billingFactory', 'helpWidgetFactory',
-    function ($scope, $loading, billingFactory, helpWidgetFactory) {
-      $scope.helpWidgetFactory = helpWidgetFactory;
+  .controller('InvoiceCtrl', ['$scope', '$loading', 'billingFactory',
+    function ($scope, $loading, billingFactory) {
       $scope.billingFactory = billingFactory;
 
       $scope.$watch('billingFactory.loading', function (newValue) {

@@ -38,9 +38,6 @@ describe("controller: purchase", function() {
         init: sandbox.stub()
       };
     });
-    $provide.service("helpWidgetFactory", function() {
-      return {};
-    });
     $provide.service("$location", function() {
       return {
         path: sandbox.stub().returns("/purchase")
@@ -48,7 +45,7 @@ describe("controller: purchase", function() {
     });    
   }));
 
-  var sandbox, $scope, $state, $loading, validate, purchaseFactory, addressFactory, helpWidgetFactory, $location, redirectTo;
+  var sandbox, $scope, $state, $loading, validate, purchaseFactory, addressFactory, $location, redirectTo;
 
   beforeEach(function() {
     validate = true;
@@ -60,7 +57,6 @@ describe("controller: purchase", function() {
       $loading = $injector.get("$loading");
       addressFactory = $injector.get("addressFactory");
       purchaseFactory = $injector.get("purchaseFactory");
-      helpWidgetFactory = $injector.get("helpWidgetFactory");
       $location = $injector.get("$location");
       redirectTo =  '/displays/list'
 
@@ -81,7 +77,6 @@ describe("controller: purchase", function() {
   it("should initialize",function() {
     expect($scope.form).to.be.an("object");
     expect($scope.factory).to.equal(purchaseFactory);
-    expect($scope.helpWidgetFactory).to.equal(helpWidgetFactory);
 
     expect($scope.PURCHASE_STEPS).to.be.ok;
     expect($scope.currentStep).to.equal(0);
