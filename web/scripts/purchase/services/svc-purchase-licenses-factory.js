@@ -5,13 +5,19 @@
   'use strict';
 
   angular.module('risevision.apps.purchase')
-    .factory('purchaseLicensesFactory', ['$rootScope', '$q', '$log', '$timeout', '$stateParams',
-      'userState', 'currentPlanFactory', 'storeService', 'addressService', 'creditCardFactory',
-      'analyticsFactory', 'pricingFactory',
-      function ($rootScope, $q, $log, $timeout, $stateParams, userState, currentPlanFactory,
-        storeService, addressService, creditCardFactory, analyticsFactory, pricingFactory) {
+    .factory('purchaseLicensesFactory', ['$log', '$timeout', '$stateParams',
+      'userState', 'currentPlanFactory', 'storeService', 'analyticsFactory', 'pricingFactory',
+      function ($log, $timeout, $stateParams, userState, currentPlanFactory,
+        storeService, analyticsFactory, pricingFactory) {
         var factory = {};
         factory.userEmail = userState.getUserEmail();
+
+        var _clearMessages = function () {
+          factory.loading = false;
+
+          factory.errorMessage = '';
+          factory.apiError = '';
+        };
 
         factory.init = function () {
           _clearMessages();
@@ -31,13 +37,6 @@
             totalLicenses: factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount,
             companyId: currentPlanFactory.currentPlan.billToId
           };
-        };
-
-        var _clearMessages = function () {
-          factory.loading = false;
-
-          factory.errorMessage = '';
-          factory.apiError = '';
         };
 
         var _updatePerDisplayPrice = function () {
@@ -102,12 +101,10 @@
             .then(function () {
               analyticsFactory.track('Subscription Updated', _getTrackingProperties());
 
-              return $timeout(10000)
-                .then(function () {
-                  return userState.reloadSelectedCompany();
-                }).then(function() {
-                  factory.purchase.completed = true;
-                })
+              return $timeout(10000);
+            })
+            .then(function () {
+              return userState.reloadSelectedCompany()
                 .catch(function (err) {
                   $log.debug('Failed to reload company', err);
                 });
@@ -118,6 +115,7 @@
                  'There was an unknown error with the payment.';
             })
             .finally(function () {
+              factory.purchase.completed = true;
               factory.loading = false;
             });
         };
