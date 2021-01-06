@@ -173,12 +173,8 @@
       function ($modal, userState, PLANS_LIST, analyticsFactory, $state, confirmModal) {
         var _factory = {};
 
-        _factory.showPlansModal = function () {
-          $state.go('apps.purchase.home');
-        };
-
         _factory.showPurchaseOptions = function () {
-          _factory.showPlansModal();
+          $state.go('apps.purchase.home');
         };
 
         _factory.confirmAndPurchase = function () {
@@ -207,7 +203,7 @@
               cancelButton: null
             }
           }).result.then(function () {
-            _factory.showPlansModal();
+            _factory.showPurchaseOptions();
           });
         };
 

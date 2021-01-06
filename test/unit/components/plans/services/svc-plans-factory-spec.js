@@ -62,15 +62,8 @@ describe("Services: plans factory", function() {
 
   it("should exist", function() {
     expect(plansFactory).to.be.ok;
-    expect(plansFactory.showPlansModal).to.be.a('function');
     expect(plansFactory.showPurchaseOptions).to.be.a('function');
     expect(plansFactory.initVolumePlanTrial).to.be.a('function');
-  });
-
-  it("showPlansModal: ", function() {
-    plansFactory.showPlansModal();
-
-    $state.go.should.have.been.calledWith('apps.purchase.home');
   });
 
   it("showPurchaseOptions: ", function() {
