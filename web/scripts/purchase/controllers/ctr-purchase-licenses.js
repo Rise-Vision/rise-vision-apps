@@ -9,7 +9,7 @@ angular.module('risevision.apps.purchase')
       $scope.helpWidgetFactory = helpWidgetFactory;
       $scope.factory = purchaseLicensesFactory;
       $scope.currentPlan = currentPlanFactory.currentPlan;
-      $scope.couponCode = '';
+      $scope.couponCode = null;
 
       purchaseLicensesFactory.init();
 
