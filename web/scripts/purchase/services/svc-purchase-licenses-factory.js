@@ -104,6 +104,8 @@
               return $timeout(10000);
             })
             .then(function () {
+              factory.purchase.completed = true;
+
               return userState.reloadSelectedCompany()
                 .catch(function (err) {
                   $log.debug('Failed to reload company', err);
@@ -115,7 +117,6 @@
                  'There was an unknown error with the payment.';
             })
             .finally(function () {
-              factory.purchase.completed = true;
               factory.loading = false;
             });
         };

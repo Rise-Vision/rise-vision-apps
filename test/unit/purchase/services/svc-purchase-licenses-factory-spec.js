@@ -360,6 +360,7 @@ describe("Services: purchase licenses factory", function() {
       purchaseLicensesFactory.completePayment()
         .then(function() {
           expect(purchaseLicensesFactory.apiError).to.equal("There was an unknown error with the payment.");
+          expect(purchaseLicensesFactory.purchase.completed).to.not.be.ok;
           expect(purchaseLicensesFactory.loading).to.be.false;
 
           done();
