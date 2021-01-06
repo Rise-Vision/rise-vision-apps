@@ -27,9 +27,6 @@ describe("controller: purchase-licenses", function() {
         purchase: {}
       };
     });
-    $provide.service("helpWidgetFactory", function() {
-      return {};
-    });
     $provide.service("$location", function() {
       return {
         path: sandbox.stub().returns("/purchase")
@@ -37,7 +34,7 @@ describe("controller: purchase-licenses", function() {
     });
   }));
 
-  var sandbox, $scope, $state, $loading, validate, purchaseLicensesFactory, helpWidgetFactory, $location, redirectTo;
+  var sandbox, $scope, $state, $loading, validate, purchaseLicensesFactory, $location, redirectTo;
 
   beforeEach(function() {
     validate = true;
@@ -48,7 +45,6 @@ describe("controller: purchase-licenses", function() {
       $state = $injector.get("$state");
       $loading = $injector.get("$loading");
       purchaseLicensesFactory = $injector.get("purchaseLicensesFactory");
-      helpWidgetFactory = $injector.get("helpWidgetFactory");
       $location = $injector.get("$location");
       redirectTo =  '/displays/list'
 
@@ -68,7 +64,6 @@ describe("controller: purchase-licenses", function() {
 
   it("should initialize",function() {
     expect($scope.factory).to.equal(purchaseLicensesFactory);
-    expect($scope.helpWidgetFactory).to.equal(helpWidgetFactory);
     expect($scope.currentPlan).to.be.ok;
 
     expect($scope.applyCouponCode).to.be.a("function");
