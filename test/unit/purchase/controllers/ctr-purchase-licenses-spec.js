@@ -68,6 +68,7 @@ describe("controller: purchase-licenses", function() {
 
     expect($scope.applyCouponCode).to.be.a("function");
     expect($scope.clearCouponCode).to.be.a("function");
+    expect($scope.getEstimate).to.be.a("function");
     expect($scope.completePayment).to.be.a("function");
     expect($scope.close).to.be.a("function");
 
@@ -174,6 +175,29 @@ describe("controller: purchase-licenses", function() {
       purchaseLicensesFactory.getEstimate.should.have.been.called;
     });
   });
+
+  describe('getEstimate:', function() {
+    it("should get estimate", function() {
+      $scope.purchaseLicensesForm = {
+        $valid: true
+      };
+
+      $scope.getEstimate();
+
+      purchaseLicensesFactory.getEstimate.should.have.been.called;
+    });
+
+    it("should not get estimate if form is not valid", function() {
+      $scope.purchaseLicensesForm = {
+        $valid: false
+      };
+
+      $scope.getEstimate();
+
+      purchaseLicensesFactory.getEstimate.should.not.have.been.called;
+    });
+  });
+
 
   describe('completePayment:', function() {
     it("should complete payment", function() {
