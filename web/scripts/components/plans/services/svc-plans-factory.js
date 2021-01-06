@@ -173,17 +173,19 @@
       function ($modal, userState, PLANS_LIST, analyticsFactory, $state, confirmModal) {
         var _factory = {};
 
-        _factory.showPurchaseOptions = function () {
-          $state.go('apps.purchase.home');
+        _factory.showPurchaseOptions = function (displayCount) {
+          $state.go('apps.purchase.home', {
+            displayCount: displayCount
+          });
         };
 
-        _factory.confirmAndPurchase = function () {
+        _factory.confirmAndPurchase = function (displayCount) {
           confirmModal('Almost there!',
               'There aren\'t available licenses to assign to the selected displays. Subscribe to additional licenses?',
               'Yes', 'No', 'madero-style centered-modal',
               'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
             .then(function () {
-              _factory.showPurchaseOptions();
+              _factory.showPurchaseOptions(displayCount);
             });
         };
 

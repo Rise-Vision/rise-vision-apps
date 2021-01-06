@@ -75,7 +75,21 @@ describe('app:', function() {
       canAccessApps.should.have.been.called;
 
       setTimeout(function(){
-        expect($state.go).to.have.been.calledWith('apps.purchase.licenses');
+        expect($state.go).to.have.been.calledWith('apps.purchase.licenses', {displayCount: 1});
+
+        expect(messageBoxStub).to.not.have.been.called;
+        done();
+      },10);
+    });
+
+    it('should pass displayCount parameter value', function(done) {
+      $state.go('apps.purchase.home', {displayCount: 'displayCount'});
+      $rootScope.$digest();
+
+      canAccessApps.should.have.been.called;
+
+      setTimeout(function(){
+        expect($state.go).to.have.been.calledWith('apps.purchase.licenses', {displayCount: 'displayCount'});
 
         expect(messageBoxStub).to.not.have.been.called;
         done();
