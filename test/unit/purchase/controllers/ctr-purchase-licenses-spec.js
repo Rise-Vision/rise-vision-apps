@@ -156,23 +156,25 @@ describe("controller: purchase-licenses", function() {
   describe('clearCouponCode:', function() {
     it("should clear coupon code without estimating if there's no API error", function() {
       $scope.addCoupon = true;
-      $scope.factory.purchase.couponCode = 'SAVE50';
+      $scope.couponCode = 'SAVE50';
 
       $scope.clearCouponCode();
 
       expect($scope.addCoupon).to.be.false;
+      expect($scope.couponCode).to.be.null;
       expect($scope.factory.purchase.couponCode).to.be.null;
       purchaseLicensesFactory.getEstimate.should.not.have.been.called;
     });
 
     it("should clear coupon code and estimate if there's API error", function() {
       $scope.addCoupon = true;
-      $scope.factory.purchase.couponCode = 'SAVE50';
-        $scope.factory.apiError = true;
+      $scope.couponCode = 'SAVE50';
+      $scope.factory.apiError = true;
 
       $scope.clearCouponCode();
 
       expect($scope.addCoupon).to.be.false;
+      expect($scope.couponCode).to.be.null;
       expect($scope.factory.purchase.couponCode).to.be.null;
       purchaseLicensesFactory.getEstimate.should.have.been.called;
     });
