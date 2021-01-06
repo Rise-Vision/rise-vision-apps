@@ -214,7 +214,7 @@ describe('service: DisplayListOperations:', function() {
 
         licenseOperation.beforeBatchAction(selected)
           .catch(function() {
-            plansFactory.confirmAndPurchase.should.have.been.called;
+            plansFactory.confirmAndPurchase.should.have.been.calledWith(1);
 
             done();
           });        
@@ -338,7 +338,7 @@ describe('service: DisplayListOperations:', function() {
               '2 of your selected displays are not licensed and to perform this action they need to be. You have 1 available license and you need to subscribe for 1 more to license these displays.',
               'Subscribe', 'Cancel', 'madero-style centered-modal','partials/components/confirm-modal/madero-confirm-modal.html','sm');
 
-            plansFactory.showPurchaseOptions.should.have.been.called;
+            plansFactory.showPurchaseOptions.should.have.been.calledWith(1);
 
             done();
           },10);

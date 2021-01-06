@@ -73,7 +73,7 @@ angular.module('risevision.displays.services')
             if (factory.getProAvailableLicenseCount() >= displayIds.length) {
               return _licenseDisplays(displayIds);
             } else {
-              plansFactory.confirmAndPurchase();
+              plansFactory.confirmAndPurchase(displayIds.length - factory.getProAvailableLicenseCount());
               return $q.reject();
             }
           });

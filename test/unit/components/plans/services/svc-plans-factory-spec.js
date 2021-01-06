@@ -62,28 +62,23 @@ describe("Services: plans factory", function() {
 
   it("should exist", function() {
     expect(plansFactory).to.be.ok;
-    expect(plansFactory.showPlansModal).to.be.a('function');
     expect(plansFactory.showPurchaseOptions).to.be.a('function');
     expect(plansFactory.initVolumePlanTrial).to.be.a('function');
   });
 
-  it("showPlansModal: ", function() {
-    plansFactory.showPlansModal();
-
-    $state.go.should.have.been.calledWith('apps.purchase.home');
-  });
-
   it("showPurchaseOptions: ", function() {
-    plansFactory.showPurchaseOptions();
+    plansFactory.showPurchaseOptions('displayCount');
 
-    $state.go.should.have.been.calledWith('apps.purchase.home');
+    $state.go.should.have.been.calledWith('apps.purchase.home', {
+      displayCount: 'displayCount'
+    });
   });
 
   describe("confirmAndPurchase:", function(){
     it("should show confirmation message and proceed to purchase on confirmation", function(done) {
       sinon.spy(plansFactory, "showPurchaseOptions");
 
-      plansFactory.confirmAndPurchase();
+      plansFactory.confirmAndPurchase('displayCount');
 
       setTimeout(function() {        
         expect(confirmModalStub).to.have.been.calledWith(
@@ -92,7 +87,7 @@ describe("Services: plans factory", function() {
           'Yes', 'No', 'madero-style centered-modal',
           'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
         );
-        expect(plansFactory.showPurchaseOptions).to.have.been.called;
+        expect(plansFactory.showPurchaseOptions).to.have.been.calledWith('displayCount');
 
         done();
       },10);

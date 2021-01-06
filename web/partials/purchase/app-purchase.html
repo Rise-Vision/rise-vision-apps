@@ -11,6 +11,8 @@
   <payment-methods ng-show="currentStep === 2"></payment-methods>
   <checkout-success ng-show="currentStep === 3"></checkout-success>
 
-  <div class="mt-5 border-top" ng-include="'partials/purchase/purchase-footer.html'"></div>
+  <div class="mt-5 border-top">
+    <purchase-footer></purchase-footer>
+  </div>
 
 </div>
