@@ -57,6 +57,9 @@ var DisplayListScenarios = function() {
       });
 
       it('should show bulk actions bar when display is selected', function() {
+        //double check display name before deleting to prevent e2e issues
+        expect(displaysListPage.getFirstRowName().getText()).to.eventually.equal(displayName);
+
         expect(displaysListPage.getBulkActionsDropdown().isDisplayed()).to.eventually.be.false;
         helper.clickWhenClickable(displaysListPage.getFirstRowCheckbox());
         expect(displaysListPage.getBulkActionsDropdown().isDisplayed()).to.eventually.be.true;
