@@ -84,7 +84,7 @@
                     <span class="number mr-2">${{totalPrice | number : 0}} </span>
                     <span ng-if="periodMonthly">Billed monthly</span>
                     <span ng-if="!periodMonthly">Billed annually</span>
-                    <span ng-if="yearlySavings" class="text-success">- save ${{yearlySavings | number : 0}}!</span>
+                    <span ng-if="!periodMonthly" class="text-success">- save ${{yearlySavings | number : 0}}!</span>
                   </div>
                 </div>
 
