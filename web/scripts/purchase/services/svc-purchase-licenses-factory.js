@@ -6,10 +6,10 @@
 
   angular.module('risevision.apps.purchase')
     .factory('purchaseLicensesFactory', ['$rootScope', '$q', '$log', '$timeout', 'userState',
-      'currentPlanFactory', 'storeService', 'addressService', 'creditCardFactory', 'purchaseFlowTracker',
+      'currentPlanFactory', 'storeService', 'addressService', 'creditCardFactory', 'analyticsFactory',
       'pricingFactory',
       function ($rootScope, $q, $log, $timeout, userState, currentPlanFactory, storeService, addressService, 
-        creditCardFactory, purchaseFlowTracker, pricingFactory) {
+        creditCardFactory, analyticsFactory, pricingFactory) {
         var factory = {};
         factory.userEmail = userState.getUserEmail();
 
@@ -117,17 +117,14 @@
         //   return factory.purchase.plan.productCode + '-' + _getCurrency() + _getBillingPeriod();
         // };
 
-        // var _getTrackingProperties = function () {
-        //   return {
-        //     displaysCount: factory.purchase.plan.displays,
-        //     paymentTerm: factory.purchase.plan.isMonthly ? 'monthly' : 'yearly',
-        //     paymentMethod: creditCardFactory.paymentMethods.paymentMethod,
-        //     discount: factory.purchase.estimate.couponAmount,
-        //     subscriptionPlan: factory.purchase.plan.name,
-        //     currency: factory.purchase.estimate.currency,
-        //     revenueTotal: factory.purchase.estimate.total
-        //   };
-        // };
+        var _getTrackingProperties = function () {
+          return {
+            subscriptionId: currentPlanFactory.currentPlan.subscriptionId,
+            changeInLicenses: factory.purchase.displayCount,
+            totalLicenses: factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount,
+            companyId: currentPlanFactory.currentPlan.billToId
+          };
+        };
 
         var _clearMessages = function () {
           factory.loading = false;
@@ -171,6 +168,8 @@
               factory.estimate = result.item;
 
               _updatePerDisplayPrice();
+
+              analyticsFactory.track('Subscription Update Estimated', _getTrackingProperties());
 
               // var estimate = {};
 
@@ -240,7 +239,7 @@
 
           return storeService.updateSubscription(displayCount, subscriptionId, companyId, couponCode)
             .then(function () {
-              // purchaseFlowTracker.trackOrderPayNowClicked(_getTrackingProperties());
+              analyticsFactory.track('Subscription Updated', _getTrackingProperties());
 
               return $timeout(10000)
                 .then(function () {
