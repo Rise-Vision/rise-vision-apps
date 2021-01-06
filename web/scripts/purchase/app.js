@@ -9,7 +9,10 @@ angular.module('risevision.apps')
       $stateProvider
         .state('apps.purchase', {
           abstract: true,
-          template: '<div class="container purchase-app" ui-view></div>'
+          template: '<div class="container purchase-app" ui-view></div>',
+          params: {
+            displayCount: 1 
+          }
         })
 
         .state('apps.purchase.plans', {
@@ -28,12 +31,14 @@ angular.module('risevision.apps')
           }],
           controller: 'PurchaseCtrl',
           resolve: {
-            canAccessApps: ['$state', 'canAccessApps', 'currentPlanFactory',
-              function ($state, canAccessApps, currentPlanFactory) {
+            canAccessApps: ['$state', '$stateParams', 'canAccessApps', 'currentPlanFactory',
+              function ($state, $stateParams, canAccessApps, currentPlanFactory) {
                 return canAccessApps()
                   .then(function () {
                     if (currentPlanFactory.isSubscribed() && !currentPlanFactory.isParentPlan()) {
-                      $state.go('apps.purchase.licenses');
+                      $state.go('apps.purchase.licenses', {
+                        displayCount: $stateParams.displayCount
+                      });
                     }
                   });
               }

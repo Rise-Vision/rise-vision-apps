@@ -2,9 +2,9 @@
 
 angular.module('risevision.apps.purchase')
 
-  .controller('PurchaseLicensesCtrl', ['$scope', '$state', '$loading', 'purchaseLicensesFactory',
+  .controller('PurchaseLicensesCtrl', ['$scope', '$loading', 'purchaseLicensesFactory',
     '$location', 'redirectTo', 'currentPlanFactory',
-    function ($scope, $state, $loading, purchaseLicensesFactory, $location,
+    function ($scope, $loading, purchaseLicensesFactory, $location,
       redirectTo, currentPlanFactory) {
       $scope.factory = purchaseLicensesFactory;
       $scope.currentPlan = currentPlanFactory.currentPlan;

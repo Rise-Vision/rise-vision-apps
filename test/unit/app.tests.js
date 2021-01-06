@@ -11,12 +11,6 @@ describe('app:', function() {
         return sinon.stub().returns(Q.resolve("auth"));
       });
 
-      $provide.service('plansFactory',function(){
-        return {
-          showPurchaseOptions: sinon.stub()
-        };
-      });
-
       $provide.service('$modal', function() {
         return {
           open: sinon.stub().returns({result: Q.resolve()})
@@ -92,7 +86,6 @@ describe('app:', function() {
       setTimeout(function() {
         canAccessApps.should.have.been.called;
 
-        expect(plansFactory.showPurchaseOptions).to.not.have.been.called;
         $modal.open.should.have.been.calledWith({
           templateUrl: 'partials/common-header/user-settings-modal.html',
           controller: 'AddUserModalCtrl',

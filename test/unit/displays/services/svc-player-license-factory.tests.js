@@ -458,7 +458,7 @@ describe('Services: playerLicenseFactory', function() {
 
       playerLicenseFactory.confirmAndLicense(['displayId']).catch(function() {
         confirmModal.should.have.been.called;
-        plansFactory.confirmAndPurchase.should.have.been.called;
+        plansFactory.confirmAndPurchase.should.have.been.calledWith(1);
 
         done();
       });

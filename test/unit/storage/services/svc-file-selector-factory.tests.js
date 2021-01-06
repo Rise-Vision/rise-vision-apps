@@ -10,7 +10,7 @@ describe('service: FileSelectorFactory (aka FilesFactory):', function() {
     });
     $provide.factory("plansFactory", function() {
       return {
-        showPlansModal: sinon.stub()
+        showPurchaseOptions: sinon.stub()
       };
     });
   }));

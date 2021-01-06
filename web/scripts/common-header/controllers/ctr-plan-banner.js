@@ -7,7 +7,7 @@ angular.module('risevision.common.header')
     function ($scope, $rootScope, userState, plansFactory, currentPlanFactory,
       STORE_URL, ACCOUNT_PATH) {
       $scope.plan = {};
-      $scope.showPlans = plansFactory.showPlansModal;
+      $scope.showPlans = plansFactory.showPurchaseOptions;
       $scope.storeAccountUrl = STORE_URL + ACCOUNT_PATH;
 
       $rootScope.$on('risevision.plan.loaded', function () {

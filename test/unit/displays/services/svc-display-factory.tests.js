@@ -87,7 +87,7 @@ describe('service: displayFactory:', function() {
     });
     $provide.factory('plansFactory', function() {
       return {
-        showPlansModal: sinon.spy()
+        showPurchaseOptions: sinon.spy()
       };
     });
     $provide.factory('scheduleFactory', function() {

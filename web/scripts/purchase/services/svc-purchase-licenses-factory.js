@@ -5,11 +5,11 @@
   'use strict';
 
   angular.module('risevision.apps.purchase')
-    .factory('purchaseLicensesFactory', ['$rootScope', '$q', '$log', '$timeout', 'userState',
-      'currentPlanFactory', 'storeService', 'addressService', 'creditCardFactory', 'purchaseFlowTracker',
-      'pricingFactory',
-      function ($rootScope, $q, $log, $timeout, userState, currentPlanFactory, storeService, addressService, 
-        creditCardFactory, purchaseFlowTracker, pricingFactory) {
+    .factory('purchaseLicensesFactory', ['$rootScope', '$q', '$log', '$timeout', '$stateParams',
+      'userState', 'currentPlanFactory', 'storeService', 'addressService', 'creditCardFactory',
+      'purchaseFlowTracker', 'pricingFactory',
+      function ($rootScope, $q, $log, $timeout, $stateParams, userState, currentPlanFactory, 
+        storeService, addressService, creditCardFactory, purchaseFlowTracker, pricingFactory) {
         var factory = {};
         factory.userEmail = userState.getUserEmail();
 
@@ -18,7 +18,7 @@
 
           factory.purchase = {};
           factory.purchase.completed = false;
-          factory.purchase.displayCount = 1;
+          factory.purchase.displayCount = $stateParams.displayCount;
           factory.purchase.couponCode = '';
 
           factory.getEstimate();

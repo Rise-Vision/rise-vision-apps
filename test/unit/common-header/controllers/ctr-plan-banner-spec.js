@@ -27,7 +27,7 @@ describe("controller: plan banner", function() {
     });
     $provide.factory("plansFactory", function() {
       return {
-        showPlansModal: sinon.stub()
+        showPurchaseOptions: sinon.stub()
       };
     });
   }));

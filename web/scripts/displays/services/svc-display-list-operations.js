@@ -19,7 +19,7 @@ angular.module('risevision.displays.services')
               'sm');
             return $q.reject();
           } else if (playerLicenseFactory.getProAvailableLicenseCount() < selected.length) {
-            plansFactory.confirmAndPurchase();
+            plansFactory.confirmAndPurchase(selected.length - playerLicenseFactory.getProAvailableLicenseCount());
             return $q.reject();
           } else {
             return confirmModal(
@@ -77,7 +77,7 @@ angular.module('risevision.displays.services')
                 ' more to license ' + (notAuthorized.length > 1 ? 'these displays.' : 'this display.'),
                 'Subscribe', 'Cancel', 'madero-style centered-modal',
                 'partials/components/confirm-modal/madero-confirm-modal.html', 'sm').then(function () {
-                plansFactory.showPurchaseOptions();
+                plansFactory.showPurchaseOptions(notAuthorized.length - availableLicenses);
                 return $q.reject();
               });
             }

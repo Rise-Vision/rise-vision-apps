@@ -13,7 +13,7 @@ describe('service: presentationUtils:', function() {
 
     $provide.service('plansFactory', function() {
       return plansFactory = {
-        showPlansModal: sinon.stub()
+        showPurchaseOptions: sinon.stub()
       }
     })
   }));
