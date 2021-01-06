@@ -137,13 +137,17 @@
         };
 
         var _updatePerDisplayPrice = function () {
-          var isEducation = userState.isEducationCustomer();
+          if (!factory.estimate.next_invoice_estimate) {
+            return;
+          }
 
           var currentDisplayCount = currentPlanFactory.currentPlan.playerProTotalLicenseCount;
           var displayCount = factory.purchase.displayCount + currentDisplayCount;
 
           var lineItem = factory.estimate.next_invoice_estimate.line_items[0];
           var isMonthly = lineItem.entity_id.endsWith('m');
+
+          var isEducation = factory.estimate.next_invoice_estimate.line_item_discounts.indexOf('EDUCATION') >= 0;
 
           factory.currentPricePerDisplay = pricingFactory.getPricePerDisplay(isMonthly, currentDisplayCount, isEducation);
           factory.newPricePerDisplay = pricingFactory.getPricePerDisplay(isMonthly, displayCount, isEducation);
