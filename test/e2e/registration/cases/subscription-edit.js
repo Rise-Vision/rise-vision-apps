@@ -37,8 +37,9 @@
       describe("estimate page: ", function() {
         before(function() {
           addDisplayLicensesPage.get();
+
           helper.waitDisappear(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
-          browser.sleep(1500);
+          helper.wait(addDisplayLicensesPage.getDisplayCountInput(), 'Display count input');
         });
 
         it("should show display count input", function() {
@@ -64,7 +65,7 @@
 
       describe("update display licenses: ", function() {
         before(function() {
-          browser.sleep(2000);
+          browser.sleep(2000); // give some time to actual totals to be displayed. Otherwise, just '$' is detected.
         });
 
         it("should show prorated amount total output", function() {
@@ -104,6 +105,45 @@
 
             done();
           });
+        });
+      });
+
+      describe("coupon: ", function() {
+        it("should display coupon code field", function() {
+          addDisplayLicensesPage.getAddCouponCodeLink().click();
+
+          expect(addDisplayLicensesPage.getCouponCodeInput().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should display apply coupon code button", function() {
+          expect(addDisplayLicensesPage.getApplyCouponCodeButton().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should display cancel coupon code link", function() {
+          expect(addDisplayLicensesPage.getCancelCouponCodeLink().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should cancel the coupon code edition", function() {
+          addDisplayLicensesPage.getCancelCouponCodeLink().click();
+
+          expect(addDisplayLicensesPage.getAddCouponCodeLink().isDisplayed()).to.eventually.be.true;
+          expect(addDisplayLicensesPage.getCouponCodeInput().isDisplayed()).to.eventually.be.false;
+        });
+
+        it("should display coupon code field - again", function() {
+          addDisplayLicensesPage.getAddCouponCodeLink().click();
+
+          expect(addDisplayLicensesPage.getCouponCodeInput().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should apply a coupon", function() {
+          addDisplayLicensesPage.getCouponCodeInput().sendKeys('save50');
+          addDisplayLicensesPage.getApplyCouponCodeButton().click();
+
+          helper.wait(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
+          helper.waitDisappear(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
+
+          browser.sleep(100000);
         });
       });
 

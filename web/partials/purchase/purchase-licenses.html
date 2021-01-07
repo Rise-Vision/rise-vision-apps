@@ -55,7 +55,7 @@
         </div>
 
         <div class="border-bottom pb-4">
-          <p class="mb-0" ng-repeat="coupon in factory.estimate.next_invoice_estimate.discounts">
+          <p class="coupon-row mb-0" ng-repeat="coupon in factory.estimate.next_invoice_estimate.discounts">
             <span class="font-weight-bold">{{coupon.description}}</span>
             <span class="pull-right">-${{coupon.amount/100 | number:2}}</span>
           </p>
