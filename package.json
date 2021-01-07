@@ -41,8 +41,8 @@
     "jshint": "^2.10.3",
     "jshint-stylish": "^2.0.1",
     "run-sequence": "^1.1.1",
-    "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git#dependabot/npm_and_yarn/ini-1.3.8",
-    "widget-tester": "git://github.com/Rise-Vision/widget-tester.git#fix/vulnerabilities"
+    "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git",
+    "widget-tester": "git://github.com/Rise-Vision/widget-tester.git"
   },
   "repository": {
     "type": "git",
