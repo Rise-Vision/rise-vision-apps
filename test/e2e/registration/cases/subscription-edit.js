@@ -38,7 +38,11 @@
           browser.sleep(1000);
         });
 
-        it("should show Add Display Licenses page", function() {
+        it("should show display count input", function() {
+          expect(addDisplayLicensesPage.getDisplayCountInput().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should show Add Display Licenses panel", function() {
           expect(addDisplayLicensesPage.getPurchaseLicensesPanel().isDisplayed()).to.eventually.be.true;
         });
 
@@ -48,6 +52,10 @@
 
         it("should show Pay button", function() {
           expect(addDisplayLicensesPage.getPayButton().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should show Add Coupon Code link", function() {
+          expect(addDisplayLicensesPage.getAddCouponCodeLink().isDisplayed()).to.eventually.be.true;
         });
       });
 
