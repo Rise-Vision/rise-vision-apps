@@ -16,8 +16,8 @@ angular.module('risevision.widget.common.url-field.url-pattern-validator', [
               ngModelCtrl.$setValidity('pattern', false);
             }
 
-            if (value && (value.indexOf('preview.risevision.com') > -1) ||
-              (value.indexOf('widgets.risevision.com/viewer') > -1)) {
+            if (value && (value.indexOf('preview.risevision.com') > -1 ||
+              value.indexOf('widgets.risevision.com/viewer') > -1)) {
               ngModelCtrl.$setValidity('noPreviewUrl', false);
             } else {
               ngModelCtrl.$setValidity('noPreviewUrl', true);
