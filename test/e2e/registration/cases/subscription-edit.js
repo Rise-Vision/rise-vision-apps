@@ -41,6 +41,8 @@
 
           helper.waitDisappear(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
           helper.wait(addDisplayLicensesPage.getDisplayCountInput(), 'Display count input');
+
+          browser.sleep(500);
         });
 
         it("should show display count input", function() {
