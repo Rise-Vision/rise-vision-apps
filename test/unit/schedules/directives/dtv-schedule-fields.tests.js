@@ -38,7 +38,7 @@ describe('directive: scheduleFields', function() {
       };
     });
 
-    $provide.value('SHARED_SCHEDULE_URL','https://preview.risevision.com/?type=sharedschedule&id=SCHEDULE_ID');
+    $provide.value('SHARED_SCHEDULE_URL','https://widgets.risevision.com/viewer/?type=sharedschedule&id=SCHEDULE_ID');
   }));
 
   beforeEach(inject(function($compile, _$rootScope_, $templateCache, $injector){
@@ -212,7 +212,7 @@ describe('directive: scheduleFields', function() {
       scheduleFactory.schedule.id = 'ID';
 
       expect($scope.getEmbedUrl()).to.equal('http://trustedUrl');
-      $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=apps_schedule&applyTimeline=false');
+      $sce.trustAsResourceUrl.should.have.been.calledWith('https://widgets.risevision.com/viewer/?type=sharedschedule&id=ID&env=apps_schedule&applyTimeline=false');
     });
 
     it('should apply timelines if user selects the option', function() {
@@ -220,7 +220,7 @@ describe('directive: scheduleFields', function() {
       $scope.applyTimeline = true;
 
       expect($scope.getEmbedUrl()).to.equal('http://trustedUrl');
-      $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=apps_schedule');
+      $sce.trustAsResourceUrl.should.have.been.calledWith('https://widgets.risevision.com/viewer/?type=sharedschedule&id=ID&env=apps_schedule');
     });
 
     it('should indicate core data retrieval and append cachebuster parameter to force refresh', function() {
@@ -228,7 +228,7 @@ describe('directive: scheduleFields', function() {
       scheduleFactory.schedule.changeDate = 'updatedDate';
 
       expect($scope.getEmbedUrl()).to.equal('http://trustedUrl');
-      $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=apps_schedule&applyTimeline=false&dataSource=core&changeDate=updatedDate');
+      $sce.trustAsResourceUrl.should.have.been.calledWith('https://widgets.risevision.com/viewer/?type=sharedschedule&id=ID&env=apps_schedule&applyTimeline=false&dataSource=core&changeDate=updatedDate');
     });
 
     it('should return null, to not render iframe, when schedule id is not provided', function() {

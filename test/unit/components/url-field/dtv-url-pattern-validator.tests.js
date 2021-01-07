@@ -65,6 +65,7 @@ describe("directive: url pattern validator", function() {
     expectInvalid("http://preview.risevision.com");
     expectInvalid("https://preview.risevision.com");
     expectInvalid("http://preview.risevision.com/?type=presentation");
+    expectInvalid("https://widgets.risevision.com/viewer/?type=presentation");
   });
   
 });
