@@ -3,6 +3,7 @@
   "use strict";
 
   var MONETARY_VALUE_REGEX = /[$][\d,]+[.*]\d{2}/;
+  var DISCOUNT_VALUE_REGEX = /-[$][\d,]+[.*]\d{2}/;
 
   var expect = require('rv-common-e2e').expect;
   var assert = require('rv-common-e2e').assert;
@@ -109,6 +110,10 @@
       });
 
       describe("coupon: ", function() {
+        it("should not show the coupon rows", function() {
+          expect(addDisplayLicensesPage.getCouponRows().count()).to.eventually.equal(0);
+        });
+
         it("should display coupon code field", function() {
           addDisplayLicensesPage.getAddCouponCodeLink().click();
 
@@ -142,8 +147,20 @@
 
           helper.wait(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
           helper.waitDisappear(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
+        });
 
-          browser.sleep(100000);
+        it("should show the coupon row", function() {
+          helper.wait(addDisplayLicensesPage.getCouponAmount(), 'Coupon Amount');
+
+          expect(addDisplayLicensesPage.getCouponRows().count()).to.eventually.equal(1);
+        });
+
+        it("should show the coupon amount", function() {
+          expect(addDisplayLicensesPage.getCouponAmount().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should show a negative coupon amount", function() {
+          expect(addDisplayLicensesPage.getCouponAmount().getText()).to.eventually.match(DISCOUNT_VALUE_REGEX);
         });
       });
 

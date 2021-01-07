@@ -16,6 +16,8 @@ var AddDisplayLicensesPage = function() {
   var couponCodeInput = element(by.id('coupon-code'));
   var applyCouponCodeButton = element(by.id('apply-coupon-code'));
   var cancelCouponCodeLink = element(by.css('a[aria-label="Cancel Coupon Code"]'));
+  var couponRows = element.all(by.css('p.coupon-row'));
+  var couponAmount = element(by.css('p.coupon-row > span:last-child'));
   var proratedAmountTotal = element(by.css('#prorated-amount-row .purchase-total'));
   var nextInvoiceTotal = element(by.css('#next-invoice-row .purchase-total'));
 
@@ -57,6 +59,14 @@ var AddDisplayLicensesPage = function() {
 
   this.getCancelCouponCodeLink = function() {
     return cancelCouponCodeLink;
+  };
+
+  this.getCouponRows = function() {
+    return couponRows;
+  };
+
+  this.getCouponAmount = function() {
+    return couponAmount;
   };
 
   this.getProratedAmountTotal = function() {
