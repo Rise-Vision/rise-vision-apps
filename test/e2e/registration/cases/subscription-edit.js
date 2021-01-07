@@ -41,6 +41,14 @@
         it("should show Add Display Licenses page", function() {
           expect(addDisplayLicensesPage.getPurchaseLicensesPanel().isDisplayed()).to.eventually.be.true;
         });
+
+        it("should show Back button", function() {
+          expect(addDisplayLicensesPage.getBackButton().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should show Pay button", function() {
+          expect(addDisplayLicensesPage.getPayButton().isDisplayed()).to.eventually.be.true;
+        });
       });
 
       after(function() {
