@@ -39,7 +39,7 @@
           <a aria-label="Cancel Coupon Code" class="madero-link u_clickable" ng-click="clearCouponCode()" tabindex="1">Cancel</a>
         </span>
         <div class="flex-row">
-          <input id="coupon-code" aria-required="false" type="text" class="form-control mr-3" name="couponCode" ng-model="purchase.couponCode">
+          <input id="coupon-code" aria-required="false" type="text" class="form-control mr-3" name="couponCode" ng-model="purchase.couponCode" ng-enter="applyCouponCode()">
           <button id="apply-coupon-code" type="button" aria-label="Apply Coupon Code" class="btn btn-default" ng-click="applyCouponCode()">Apply</button>
         </div>
       </div>
