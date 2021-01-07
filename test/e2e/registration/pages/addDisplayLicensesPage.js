@@ -13,6 +13,8 @@ var AddDisplayLicensesPage = function() {
   var payButton = element(by.id('payButton'));
   var displayCountInput = element(by.css('input[name="displayCount"]'));
   var addCouponCodeLink = element(by.css('a[aria-label="Add Coupon Code"]'));
+  var proratedAmountTotal = element(by.css('#prorated-amount-row .purchase-total'));
+  var nextInvoiceTotal = element(by.css('#next-invoice-row .purchase-total'));
 
   this.get = function() {
     browser.get(url);
@@ -40,6 +42,14 @@ var AddDisplayLicensesPage = function() {
 
   this.getAddCouponCodeLink = function() {
     return addCouponCodeLink;
+  };
+
+  this.getProratedAmountTotal = function() {
+    return proratedAmountTotal;
+  };
+
+  this.getNextInvoiceTotal = function() {
+    return nextInvoiceTotal;
   };
 };
 

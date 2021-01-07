@@ -62,14 +62,14 @@
         </div>
 
         <div class="pt-4">
-          <p class="left-right-aligner mb-4">
+          <p id="prorated-amount-row" class="left-right-aligner mb-4">
             <span class="font-weight-bold">Prorated amount, due now:</span>
             <span>
               <span class="u_margin-right text-subtle">{{factory.estimate.invoice_estimate.currency_code}}</span>
               <span class="purchase-total">${{factory.estimate.invoice_estimate.amount_due/100 | number:2}}</span>
             </span>
           </p>
-          <p class="left-right-aligner mb-0">
+          <p id="next-invoice-row" class="left-right-aligner mb-0">
             <span class="font-weight-bold">Next invoice on {{factory.estimate.subscription_estimate.next_billing_at * 1000 | date:'d-MMM-yyyy'}}:</span>
             <span>
               <span class="u_margin-right text-subtle">{{factory.estimate.next_invoice_estimate.currency_code}}</span>
