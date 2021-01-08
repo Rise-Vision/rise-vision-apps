@@ -10,5 +10,19 @@
     <strong>{{billingFactory.apiError}}</strong>
   </div>
 
+  <h4>
+    {{billingFactory.subscription.subscription | subscriptionDescription}} — 
+    <span class="u_capitalize" ng-class="{ 'text-success': billingFactory.subscription.subscription.status === 'active', 'text-danger': billingFactory.subscription.subscription.status === 'suspended' || billingFactory.subscription.subscription.status === 'cancelled' }">
+      {{billingFactory.subscription.subscription.status}}
+    </span>
+  </h4>
+
+  <div class="u_margin-lg subscription-footer">
+    <label>
+      <streamline-icon name="help" width="20" height="20"></streamline-icon>
+      Need to cancel or pause your subscription?
+    </label>
+    <p>Please email us at <a class="madero-link" href="mailto:support@risevision.com" target="_blank">support@risevision.com</a>.</p>
+  </div>
 
 </div><!--container-->
