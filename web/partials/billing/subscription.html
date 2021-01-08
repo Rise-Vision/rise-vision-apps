@@ -6,14 +6,14 @@
 
   <div rv-spinner rv-spinner-key="subscription-loader" rv-spinner-start-active="1">
 
-  <div id="errorBox" ng-show="billingFactory.apiError" class="madero-style alert alert-danger" role="alert">
-    <strong>{{billingFactory.apiError}}</strong>
+  <div id="errorBox" ng-show="subscriptionFactory.apiError" class="madero-style alert alert-danger" role="alert">
+    <strong>{{subscriptionFactory.apiError}}</strong>
   </div>
 
   <h4>
-    {{billingFactory.subscription.subscription | subscriptionDescription}} — 
-    <span class="u_capitalize" ng-class="{ 'text-success': billingFactory.subscription.subscription.status === 'active', 'text-danger': billingFactory.subscription.subscription.status === 'suspended' || billingFactory.subscription.subscription.status === 'cancelled' }">
-      {{billingFactory.subscription.subscription.status}}
+    {{subscriptionFactory.subscription.subscription | subscriptionDescription}} — 
+    <span class="u_capitalize" ng-class="{ 'text-success': subscriptionFactory.subscription.subscription.status === 'active', 'text-danger': subscriptionFactory.subscription.subscription.status === 'suspended' || subscriptionFactory.subscription.subscription.status === 'cancelled' }">
+      {{subscriptionFactory.subscription.subscription.status}}
     </span>
   </h4>
 

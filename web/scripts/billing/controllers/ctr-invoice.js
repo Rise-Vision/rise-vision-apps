@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('risevision.apps.billing.controllers')
-  .controller('InvoiceCtrl', ['$scope', '$loading', 'billingFactory',
-    function ($scope, $loading, billingFactory) {
-      $scope.billingFactory = billingFactory;
+  .controller('InvoiceCtrl', ['$scope', '$loading', 'invoiceFactory',
+    function ($scope, $loading, invoiceFactory) {
+      $scope.invoiceFactory = invoiceFactory;
 
-      $scope.$watch('billingFactory.loading', function (newValue) {
+      $scope.$watch('invoiceFactory.loading', function (newValue) {
         if (newValue) {
           $loading.start('invoice-loader');
         } else {
@@ -18,13 +18,13 @@ angular.module('risevision.apps.billing.controllers')
           return;
         }
 
-        billingFactory.payInvoice();
+        invoiceFactory.payInvoice();
       };
 
       $scope.updatePoNumber = function () {
-        billingFactory.invoice.poNumber = billingFactory.invoice.poNumber || '';
+        invoiceFactory.invoice.poNumber = invoiceFactory.invoice.poNumber || '';
 
-        billingFactory.updateInvoice()
+        invoiceFactory.updateInvoice()
           .then(function() {
             $scope.hideEditForm();
           });

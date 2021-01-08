@@ -1,6 +1,6 @@
 'use strict';
-describe('service: billingFactory:', function() {
-  var billingFactory, $window, $stateParams, userState, billing, storeService, creditCardFactory, analyticsFactory;
+describe('service: invoiceFactory:', function() {
+  var invoiceFactory, $window, $stateParams, userState, billing, storeService, creditCardFactory, analyticsFactory;
 
   beforeEach(module('risevision.apps.billing.services'));
   beforeEach(module(function ($provide) {
@@ -67,10 +67,10 @@ describe('service: billingFactory:', function() {
       billing = $injector.get('billing');
       storeService = $injector.get('storeService');
       creditCardFactory = $injector.get('creditCardFactory');
-      billingFactory = $injector.get('billingFactory');
+      invoiceFactory = $injector.get('invoiceFactory');
       analyticsFactory = $injector.get('analyticsFactory');
 
-      billingFactory.invoice = {
+      invoiceFactory.invoice = {
         id: 'invoiceId',
         currency_code: 'CAD',
         amount_due: 1100,
@@ -80,37 +80,37 @@ describe('service: billingFactory:', function() {
   });
 
   it('should exist',function() {
-    expect(billingFactory).to.be.ok;
+    expect(invoiceFactory).to.be.ok;
 
-    expect(billingFactory.init).to.be.a('function');
-    expect(billingFactory.getToken).to.be.a('function');
-    expect(billingFactory.getInvoice).to.be.a('function');
-    expect(billingFactory.updateInvoice).to.be.a('function');
-    expect(billingFactory.payInvoice).to.be.a('function');
-    expect(billingFactory.downloadInvoice).to.be.a('function');
+    expect(invoiceFactory.init).to.be.a('function');
+    expect(invoiceFactory.getToken).to.be.a('function');
+    expect(invoiceFactory.getInvoice).to.be.a('function');
+    expect(invoiceFactory.updateInvoice).to.be.a('function');
+    expect(invoiceFactory.payInvoice).to.be.a('function');
+    expect(invoiceFactory.downloadInvoice).to.be.a('function');
   });
 
   describe('init:', function() {
     it('should init payment methods and load credit cards', function() {
-      billingFactory.loading = true;
-      billingFactory.apiError = 'error';
+      invoiceFactory.loading = true;
+      invoiceFactory.apiError = 'error';
 
-      billingFactory.init(true);
+      invoiceFactory.init(true);
 
-      expect(billingFactory.loading).to.be.false;
-      expect(billingFactory.apiError).to.not.be.ok;
+      expect(invoiceFactory.loading).to.be.false;
+      expect(invoiceFactory.apiError).to.not.be.ok;
 
       creditCardFactory.initPaymentMethods.should.have.been.called;
     });
 
     it('should not init payment methods and load credit cards', function() {
-      billingFactory.loading = true;
-      billingFactory.apiError = 'error';
+      invoiceFactory.loading = true;
+      invoiceFactory.apiError = 'error';
 
-      billingFactory.init(false);
+      invoiceFactory.init(false);
 
-      expect(billingFactory.loading).to.be.false;
-      expect(billingFactory.apiError).to.not.be.ok;
+      expect(invoiceFactory.loading).to.be.false;
+      expect(invoiceFactory.apiError).to.not.be.ok;
 
       creditCardFactory.initPaymentMethods.should.not.have.been.called;
     });
@@ -120,11 +120,11 @@ describe('service: billingFactory:', function() {
     it('should return from $stateParams', function() {
       $stateParams.token = 'token';
 
-      expect(billingFactory.getToken()).to.equal('token');
+      expect(invoiceFactory.getToken()).to.equal('token');
     });
 
     it('should return last 6 digits', function() {
-      expect(billingFactory.getToken()).to.equal('uthKey');
+      expect(invoiceFactory.getToken()).to.equal('uthKey');
     });
 
     it('should not fail if token is shorter', function() {
@@ -132,38 +132,38 @@ describe('service: billingFactory:', function() {
         authKey: 'key'
       });
 
-      expect(billingFactory.getToken()).to.equal('key');
+      expect(invoiceFactory.getToken()).to.equal('key');
     });
 
     it('should not fail if token is missing', function() {
       userState.getCopyOfSelectedCompany.returns({});
 
-      expect(billingFactory.getToken()).to.be.null;
+      expect(invoiceFactory.getToken()).to.be.null;
     });
 
   });
 
   describe('getInvoice:', function() {
     it('should get invoice, show spinner and reset errors', function() {
-      billingFactory.apiError = 'someError';
-      billingFactory.invoice = 'someInvoice';
+      invoiceFactory.apiError = 'someError';
+      invoiceFactory.invoice = 'someInvoice';
 
-      billingFactory.getInvoice('invoiceId', 'companyId', 'token');
+      invoiceFactory.getInvoice('invoiceId', 'companyId', 'token');
 
       billing.getInvoice.should.have.been.calledWith('invoiceId', 'companyId', 'token');
 
-      expect(billingFactory.apiError).to.not.be.ok;
-      expect(billingFactory.invoice).to.not.be.ok;
-      expect(billingFactory.loading).to.be.true;
+      expect(invoiceFactory.apiError).to.not.be.ok;
+      expect(invoiceFactory.invoice).to.not.be.ok;
+      expect(invoiceFactory.loading).to.be.true;
     });
 
     it('should retrieve invoice', function(done) {
-      billingFactory.getInvoice();
+      invoiceFactory.getInvoice();
 
       setTimeout(function() {
-        expect(billingFactory.loading).to.be.false;
+        expect(invoiceFactory.loading).to.be.false;
 
-        expect(billingFactory.invoice).to.equal('invoice');
+        expect(invoiceFactory.invoice).to.equal('invoice');
 
         done();
       }, 10);
@@ -172,13 +172,13 @@ describe('service: billingFactory:', function() {
     it('should handle failure to get invoice correctly', function(done) {
       billing.getInvoice.returns(Q.reject('error'));
 
-      billingFactory.getInvoice()
+      invoiceFactory.getInvoice()
 
       setTimeout(function() {
-        expect(billingFactory.loading).to.be.false;
-        expect(billingFactory.invoice).to.not.be.ok;
+        expect(invoiceFactory.loading).to.be.false;
+        expect(invoiceFactory.invoice).to.not.be.ok;
 
-        expect(billingFactory.apiError).to.equal('processed error');
+        expect(invoiceFactory.apiError).to.equal('processed error');
 
         done();
       });
@@ -187,24 +187,24 @@ describe('service: billingFactory:', function() {
 
   describe('updateInvoice:', function() {
     it('should update invoice, show spinner and reset errors', function() {
-      billingFactory.apiError = 'someError';
-      billingFactory.invoice = 'someInvoice';
+      invoiceFactory.apiError = 'someError';
+      invoiceFactory.invoice = 'someInvoice';
 
-      billingFactory.updateInvoice();
+      invoiceFactory.updateInvoice();
 
       billing.updateInvoice.should.have.been.calledWith('someInvoice', 'testId1', 'uthKey');
 
-      expect(billingFactory.apiError).to.not.be.ok;
-      expect(billingFactory.loading).to.be.true;
+      expect(invoiceFactory.apiError).to.not.be.ok;
+      expect(invoiceFactory.loading).to.be.true;
     });
 
     it('should update invoice', function(done) {
-      billingFactory.updateInvoice();
+      invoiceFactory.updateInvoice();
 
       setTimeout(function() {
-        expect(billingFactory.loading).to.be.false;
+        expect(invoiceFactory.loading).to.be.false;
 
-        expect(billingFactory.invoice).to.equal('invoice');
+        expect(invoiceFactory.invoice).to.equal('invoice');
 
         done();
       }, 10);
@@ -212,15 +212,15 @@ describe('service: billingFactory:', function() {
 
     it('should handle failure to update invoice correctly', function(done) {
       billing.updateInvoice.returns(Q.reject('error'));
-      billingFactory.invoice = 'someInvoice';
+      invoiceFactory.invoice = 'someInvoice';
 
-      billingFactory.updateInvoice();
+      invoiceFactory.updateInvoice();
 
       setTimeout(function() {
-        expect(billingFactory.loading).to.be.false;
-        expect(billingFactory.invoice).to.equal('someInvoice');
+        expect(invoiceFactory.loading).to.be.false;
+        expect(invoiceFactory.invoice).to.equal('someInvoice');
 
-        expect(billingFactory.apiError).to.equal('processed error');
+        expect(invoiceFactory.apiError).to.equal('processed error');
 
         done();
       });
@@ -229,16 +229,16 @@ describe('service: billingFactory:', function() {
 
   describe('payInvoice:', function() {
     it('should show spinner and reset errors', function() {
-      billingFactory.apiError = 'someError';
+      invoiceFactory.apiError = 'someError';
 
-      billingFactory.payInvoice();
+      invoiceFactory.payInvoice();
 
-      expect(billingFactory.apiError).to.not.be.ok;
-      expect(billingFactory.loading).to.be.true;
+      expect(invoiceFactory.apiError).to.not.be.ok;
+      expect(invoiceFactory.loading).to.be.true;
     });
 
     it('should pay invoice', function(done) {
-      billingFactory.payInvoice();
+      invoiceFactory.payInvoice();
 
       creditCardFactory.validatePaymentMethod.should.have.been.called;
 
@@ -246,9 +246,9 @@ describe('service: billingFactory:', function() {
         storeService.preparePayment.should.have.been.called;
         storeService.collectPayment.should.have.been.called;
 
-        expect(billingFactory.loading).to.be.false;
+        expect(invoiceFactory.loading).to.be.false;
 
-        expect(billingFactory.invoice.status).to.equal('paid');
+        expect(invoiceFactory.invoice.status).to.equal('paid');
 
         analyticsFactory.track.should.have.been.calledWith('Invoice Paid', {
           invoiceId: 'invoiceId',
@@ -266,15 +266,15 @@ describe('service: billingFactory:', function() {
       it('should handle failure to get validate payment method', function(done) {
         creditCardFactory.validatePaymentMethod.returns(Q.reject('error'));
 
-        billingFactory.payInvoice();
+        invoiceFactory.payInvoice();
 
         setTimeout(function() {
           storeService.preparePayment.should.not.have.been.called;
           storeService.collectPayment.should.not.have.been.called;
 
-          expect(billingFactory.apiError).to.equal('processed error');
+          expect(invoiceFactory.apiError).to.equal('processed error');
 
-          expect(billingFactory.invoice.status).to.not.be.ok;
+          expect(invoiceFactory.invoice.status).to.not.be.ok;
 
           analyticsFactory.track.should.not.have.been.called;
 
@@ -285,7 +285,7 @@ describe('service: billingFactory:', function() {
 
     describe('_preparePaymentIntent:', function() {
       it('should get payment intent', function(done) {
-        billingFactory.payInvoice();
+        invoiceFactory.payInvoice();
 
         setTimeout(function() {
           creditCardFactory.getPaymentMethodId.should.have.been.called;
@@ -300,16 +300,16 @@ describe('service: billingFactory:', function() {
       it('should handle intent errors', function(done) {
         storeService.preparePayment.returns(Q.resolve({error: 'error'}));
 
-        billingFactory.payInvoice();
+        invoiceFactory.payInvoice();
 
         setTimeout(function() {
           expect(creditCardFactory.paymentMethods.intentResponse).to.not.be.ok;
 
           storeService.collectPayment.should.not.have.been.called;
 
-          expect(billingFactory.apiError).to.equal('processed error');
+          expect(invoiceFactory.apiError).to.equal('processed error');
 
-          expect(billingFactory.invoice.status).to.not.be.ok;
+          expect(invoiceFactory.invoice.status).to.not.be.ok;
 
           done();
         }, 10);
@@ -318,16 +318,16 @@ describe('service: billingFactory:', function() {
       it('should handle failure to get intent', function(done) {
         storeService.preparePayment.returns(Q.reject('error'));
 
-        billingFactory.payInvoice();
+        invoiceFactory.payInvoice();
 
         setTimeout(function() {
           expect(creditCardFactory.paymentMethods.intentResponse).to.not.be.ok;
 
           storeService.collectPayment.should.not.have.been.called;
 
-          expect(billingFactory.apiError).to.equal('processed error');
+          expect(invoiceFactory.apiError).to.equal('processed error');
 
-          expect(billingFactory.invoice.status).to.not.be.ok;
+          expect(invoiceFactory.invoice.status).to.not.be.ok;
 
           done();
         }, 10);
@@ -335,7 +335,7 @@ describe('service: billingFactory:', function() {
 
       describe('authenticate3ds:', function() {
         it('should not authenticate if its not needed', function(done) {
-          billingFactory.payInvoice();
+          invoiceFactory.payInvoice();
 
           setTimeout(function() {
             creditCardFactory.authenticate3ds.should.not.have.been.called;
@@ -350,12 +350,12 @@ describe('service: billingFactory:', function() {
             intentSecret: 'intentSecret'
           }));
 
-          billingFactory.payInvoice();
+          invoiceFactory.payInvoice();
 
           setTimeout(function() {
             creditCardFactory.authenticate3ds.should.have.been.calledWith('intentSecret');
 
-            expect(billingFactory.invoice.status).to.equal('paid');
+            expect(invoiceFactory.invoice.status).to.equal('paid');
 
             done();
           }, 10);
@@ -368,14 +368,14 @@ describe('service: billingFactory:', function() {
           }));
           creditCardFactory.authenticate3ds.returns(Q.reject('error'));
 
-          billingFactory.payInvoice();
+          invoiceFactory.payInvoice();
 
           setTimeout(function() {
             storeService.collectPayment.should.not.have.been.called;
 
-            expect(billingFactory.apiError).to.equal('processed error');
+            expect(invoiceFactory.apiError).to.equal('processed error');
 
-            expect(billingFactory.invoice.status).to.not.be.ok;
+            expect(invoiceFactory.invoice.status).to.not.be.ok;
 
             done();
           }, 10);
@@ -389,18 +389,18 @@ describe('service: billingFactory:', function() {
         storeService.preparePayment.returns(Q.resolve({
           intentId: 'intentId'
         }));
-        billingFactory.invoice.amount_paid = 0;
-        billingFactory.invoice.total = 50;
-        billingFactory.invoice.amount_due = 50;
+        invoiceFactory.invoice.amount_paid = 0;
+        invoiceFactory.invoice.total = 50;
+        invoiceFactory.invoice.amount_due = 50;
 
-        billingFactory.payInvoice();
+        invoiceFactory.payInvoice();
 
         setTimeout(function() {
           storeService.collectPayment.should.have.been.calledWith('intentId', 'invoiceId', 'testId1', 'uthKey');
 
-          expect(billingFactory.invoice.status).to.equal('paid');
-          expect(billingFactory.invoice.amount_paid).to.equal(50);
-          expect(billingFactory.invoice.amount_due).to.equal(0);
+          expect(invoiceFactory.invoice.status).to.equal('paid');
+          expect(invoiceFactory.invoice.amount_paid).to.equal(50);
+          expect(invoiceFactory.invoice.amount_due).to.equal(0);
 
           done();
         }, 10);
@@ -409,12 +409,12 @@ describe('service: billingFactory:', function() {
       it('should handle failure complete payment', function(done) {
         storeService.collectPayment.returns(Q.reject('error'));
 
-        billingFactory.payInvoice();
+        invoiceFactory.payInvoice();
 
         setTimeout(function() {
-          expect(billingFactory.apiError).to.equal('processed error');
+          expect(invoiceFactory.apiError).to.equal('processed error');
 
-          expect(billingFactory.invoice.status).to.not.be.ok;
+          expect(invoiceFactory.invoice.status).to.not.be.ok;
 
           done();
         }, 10);
@@ -425,21 +425,21 @@ describe('service: billingFactory:', function() {
 
   describe('downloadInvoice:', function() {
     it('should download pdf, show spinner and reset errors', function() {
-      billingFactory.apiError = 'someError';
+      invoiceFactory.apiError = 'someError';
 
-      billingFactory.downloadInvoice('invoiceId');
+      invoiceFactory.downloadInvoice('invoiceId');
 
       billing.getInvoicePdf.should.have.been.calledWith('invoiceId', 'testId1', 'uthKey');
 
-      expect(billingFactory.apiError).to.not.be.ok;
-      expect(billingFactory.loading).to.be.true;
+      expect(invoiceFactory.apiError).to.not.be.ok;
+      expect(invoiceFactory.loading).to.be.true;
     });
 
     it('should retrieve pdf and trigger download', function(done) {
-      billingFactory.downloadInvoice();
+      invoiceFactory.downloadInvoice();
 
       setTimeout(function() {
-        expect(billingFactory.loading).to.be.false;
+        expect(invoiceFactory.loading).to.be.false;
 
         expect($window.location.href).to.equal('invoicePdf');
 
@@ -450,10 +450,10 @@ describe('service: billingFactory:', function() {
     it('should not trigger download if result is not received', function(done) {
       billing.getInvoicePdf.returns(Q.resolve());
 
-      billingFactory.downloadInvoice();
+      invoiceFactory.downloadInvoice();
 
       setTimeout(function() {
-        expect(billingFactory.loading).to.be.false;
+        expect(invoiceFactory.loading).to.be.false;
 
         expect($window.location.href).to.not.be.ok;
 
@@ -464,13 +464,13 @@ describe('service: billingFactory:', function() {
     it('should handle failure to get url correctly', function(done) {
       billing.getInvoicePdf.returns(Q.reject('error'));
 
-      billingFactory.downloadInvoice({})
+      invoiceFactory.downloadInvoice({})
 
       setTimeout(function() {
-        expect(billingFactory.loading).to.be.false;
+        expect(invoiceFactory.loading).to.be.false;
         expect($window.location.href).to.not.be.ok;
 
-        expect(billingFactory.apiError).to.equal('processed error');
+        expect(invoiceFactory.apiError).to.equal('processed error');
 
         done();
       });

@@ -17,11 +17,11 @@ angular.module('risevision.apps')
           templateUrl: 'partials/billing/app-billing.html',
           controller: 'BillingCtrl',
           resolve: {
-            canAccessApps: ['canAccessApps', '$stateParams', 'ChargebeeFactory', 'billingFactory', 'userState',
-              function (canAccessApps, $stateParams, ChargebeeFactory, billingFactory, userState) {
+            canAccessApps: ['canAccessApps', '$stateParams', 'ChargebeeFactory', 'invoiceFactory', 'userState',
+              function (canAccessApps, $stateParams, ChargebeeFactory, invoiceFactory, userState) {
                 return canAccessApps().then(function () {
                   // Clear potential error messages
-                  billingFactory.init();
+                  invoiceFactory.init();
 
                   if ($stateParams.edit) {
                     new ChargebeeFactory().openEditSubscription(userState.getSelectedCompanyId(), $stateParams
@@ -45,10 +45,10 @@ angular.module('risevision.apps')
           templateUrl: 'partials/billing/subscription.html',
           controller: 'SubscriptionCtrl',
           resolve: {
-            invoiceInfo: ['canAccessApps', 'billingFactory', '$stateParams',
-              function (canAccessApps, billingFactory, $stateParams) {
+            invoiceInfo: ['canAccessApps', 'subscriptionFactory', '$stateParams',
+              function (canAccessApps, subscriptionFactory, $stateParams) {
                 return canAccessApps().then(function () {
-                  billingFactory.getSubscription($stateParams.subscriptionId);
+                  subscriptionFactory.getSubscription($stateParams.subscriptionId);
                 });
               }
             ]
@@ -60,10 +60,10 @@ angular.module('risevision.apps')
           templateUrl: 'partials/billing/invoice.html',
           controller: 'InvoiceCtrl',
           resolve: {
-            invoiceInfo: ['billingFactory', '$stateParams',
-              function (billingFactory, $stateParams) {
+            invoiceInfo: ['invoiceFactory', '$stateParams',
+              function (invoiceFactory, $stateParams) {
                 // pass $stateParams to service as values could be blank before state is loaded
-                billingFactory.getInvoice($stateParams.invoiceId, $stateParams.cid, $stateParams.token);
+                invoiceFactory.getInvoice($stateParams.invoiceId, $stateParams.cid, $stateParams.token);
               }
             ]
           },
