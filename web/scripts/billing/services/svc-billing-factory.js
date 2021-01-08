@@ -42,6 +42,24 @@ angular.module('risevision.apps.billing.services')
         }
       };
 
+      factory.getSubscription = function (subscriptionId) {
+        factory.init(true);
+
+        factory.subscription = null;
+        factory.loading = true;
+
+        return billing.getSubscription(subscriptionId)
+          .then(function (resp) {
+            factory.subscription = resp.item;
+          })
+          .catch(function(e) {
+            _showErrorMessage(e);
+          })
+          .finally(function() {
+            factory.loading = false;
+          });
+      };
+
       factory.getInvoice = function (invoiceId, companyId, token) {
         factory.init(true);
 
