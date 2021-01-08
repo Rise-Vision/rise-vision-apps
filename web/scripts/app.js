@@ -191,8 +191,7 @@ angular.module('risevision.apps', [
           $state.go($state.current, null, {
             reload: true
           });
-        } else if ($state.current.name === 'apps.purchase.plans' ||
-          $state.current.name === 'apps.purchase.home') {
+        } else if ($state.current.name.indexOf('apps.purchase') !== -1) {
           $state.go('apps.home');
         }
       });
