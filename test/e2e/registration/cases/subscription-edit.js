@@ -142,28 +142,6 @@
 
           expect(addDisplayLicensesPage.getCouponCodeInput().isDisplayed()).to.eventually.be.true;
         });
-
-        it("should apply a coupon", function() {
-          addDisplayLicensesPage.getCouponCodeInput().sendKeys('save50');
-          addDisplayLicensesPage.getApplyCouponCodeButton().click();
-
-          helper.wait(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
-          helper.waitDisappear(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
-        });
-
-        it("should show the coupon row", function() {
-          helper.wait(addDisplayLicensesPage.getCouponAmount(), 'Coupon Amount');
-
-          expect(addDisplayLicensesPage.getCouponRows().count()).to.eventually.equal(1);
-        });
-
-        it("should show the coupon amount", function() {
-          expect(addDisplayLicensesPage.getCouponAmount().isDisplayed()).to.eventually.be.true;
-        });
-
-        it("should show a negative coupon amount", function() {
-          expect(addDisplayLicensesPage.getCouponAmount().getText()).to.eventually.match(DISCOUNT_VALUE_REGEX);
-        });
       });
 
       after(function() {
