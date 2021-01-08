@@ -96,6 +96,7 @@
         });
 
         it("should update estimation after display count update", function() {
+          addDisplayLicensesPage.getDisplayCountInput().clear();
           addDisplayLicensesPage.getDisplayCountInput().sendKeys('2');
 
           helper.wait(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
@@ -148,15 +149,6 @@
       });
 
       describe("update subscription: ", function() {
-        before(function() {
-          addDisplayLicensesPage.get();
-
-          helper.waitDisappear(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
-          helper.wait(addDisplayLicensesPage.getDisplayCountInput(), 'Display count input');
-
-          browser.sleep(2000);
-        });
-
         it("should show Pay button", function() {
           expect(addDisplayLicensesPage.getPayButton().isDisplayed()).to.eventually.be.true;
         });
