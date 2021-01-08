@@ -13,6 +13,7 @@
   var SignInPage = require('./../../common/pages/signInPage.js');
   var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
   var AddDisplayLicensesPage = require('./../pages/addDisplayLicensesPage.js');
+  var PurchaseLicensesSuccessPage = require('./../pages/purchaseLicensesSuccessPage.js');
 
   var SubscriptionEdit = function() {
 
@@ -22,6 +23,7 @@
         signInPage,
         presentationListPage,
         addDisplayLicensesPage,
+        purchaseLicensesSuccessPage,
         currentNextInvoice;
 
       before(function (){
@@ -30,6 +32,7 @@
         signInPage = new SignInPage();
         presentationListPage = new PresentationListPage();
         addDisplayLicensesPage = new AddDisplayLicensesPage();
+        purchaseLicensesSuccessPage = new PurchaseLicensesSuccessPage();
 
         homepage.getEditor();
         signInPage.signIn();
@@ -93,6 +96,7 @@
         });
 
         it("should update estimation after display count update", function() {
+          addDisplayLicensesPage.getDisplayCountInput().clear();
           addDisplayLicensesPage.getDisplayCountInput().sendKeys('2');
 
           helper.wait(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
@@ -141,6 +145,26 @@
           addDisplayLicensesPage.getAddCouponCodeLink().click();
 
           expect(addDisplayLicensesPage.getCouponCodeInput().isDisplayed()).to.eventually.be.true;
+        });
+      });
+
+      describe("update subscription: ", function() {
+        it("should show Pay button", function() {
+          expect(addDisplayLicensesPage.getPayButton().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should go to purchase licenses success page after payment", function() {
+          addDisplayLicensesPage.getPayButton().click();
+
+          helper.wait(purchaseLicensesSuccessPage.getDoneButton(), 'Purchase Licenses Done');
+        });
+
+        it("should show Purchase done button", function() {
+          expect(purchaseLicensesSuccessPage.getDoneButton().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should show Purchase success panel", function() {
+          expect(purchaseLicensesSuccessPage.getPurchaseSuccessPanel().isDisplayed()).to.eventually.be.true;
         });
       });
 
