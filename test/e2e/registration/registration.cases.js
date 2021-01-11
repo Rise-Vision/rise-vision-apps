@@ -5,6 +5,7 @@
   var RegistrationScenarios = require("./cases/registration.js");
   var CheckoutScenarios = require("./cases/checkout.js");
   var TrialScenarios = require("./cases/trial.js");
+  var SubscriptionEditScenarios = require("./cases/subscription-edit.js");
   var AccountRemovalScenarios = require("./cases/account-removal.js");
   var RegistrationExistingCompanyScenarios = require("./cases/registration-existing-company.js");
 
@@ -16,9 +17,10 @@
     var registrationScenarios = new RegistrationScenarios();
     var trialScenarios = new TrialScenarios();
     var checkoutScenarios = new CheckoutScenarios();
-    var accountRemovalScenarios = new AccountRemovalScenarios(); 
+    var subscriptionEditScenarios = new SubscriptionEditScenarios();
+    var accountRemovalScenarios = new AccountRemovalScenarios();
     var registrationExistingCompany = new RegistrationExistingCompanyScenarios();
 
   });
-  
+
 })();

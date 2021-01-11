@@ -92,6 +92,24 @@ describe("Services: storeService", function() {
                 })
               };
             }
+          },
+          integrations: {
+            subscription: {
+              estimate: sinon.spy(function() {
+                if (storeApiFailure) {
+                  return Q.reject(response);
+                } else {
+                  return Q.resolve(response);
+                }
+              }),
+              update: sinon.spy(function() {
+                if (storeApiFailure) {
+                  return Q.reject(response);
+                } else {
+                  return Q.resolve(response);
+                }
+              })
+            }
           }
         });
 
@@ -129,7 +147,7 @@ describe("Services: storeService", function() {
       });
     });
   });
-  
+
   describe("validateAddress: ", function() {
     beforeEach(function() {
       response = {
@@ -152,7 +170,7 @@ describe("Services: storeService", function() {
       expect(storeService.validateAddress).to.be.ok;
       expect(storeService.validateAddress).to.be.a("function");
     });
-    
+
     it("should return a promise", function() {
       expect(storeService.validateAddress(addressObject).then).to.be.a("function");
     });
@@ -161,12 +179,12 @@ describe("Services: storeService", function() {
       storeService.validateAddress(addressObject)
       .then(function(result) {
         expect(result).to.be.ok;
-        
+
         done();
       })
       .then(null,done);
     });
-    
+
     it("should reject if code is -1", function(done) {
       response.result.code = -1;
 
@@ -188,7 +206,7 @@ describe("Services: storeService", function() {
       storeService.validateAddress(addressObject)
       .then(function(result) {
         expect(result).to.be.ok;
-        
+
         done();
       })
       .then(null,done);
@@ -220,7 +238,7 @@ describe("Services: storeService", function() {
       expect(storeService.calculateTaxes).to.be.ok;
       expect(storeService.calculateTaxes).to.be.a("function");
     });
-    
+
     it("should return a promise", function() {
       expect(storeService.calculateTaxes("companyId", "planId", displayCount, "addonId", "addonQty", addressObject).then).to.be.a("function");
     });
@@ -257,12 +275,12 @@ describe("Services: storeService", function() {
         expect(result).to.deep.equal({
           result: true
         });
-        
+
         done();
       })
       .then(null,done);
     });
-    
+
     it("should reject if result is not correct with no error message", function(done) {
       response.result = {};
 
@@ -325,7 +343,7 @@ describe("Services: storeService", function() {
       expect(storeService.purchase).to.be.ok;
       expect(storeService.purchase).to.be.a("function");
     });
-    
+
     it("should return a promise", function() {
       expect(storeService.purchase("jsonData").then).to.be.a("function");
     });
@@ -348,12 +366,12 @@ describe("Services: storeService", function() {
       .then(function(result) {
         expect(result).to.be.ok;
         expect(result).to.deep.equal({});
-        
+
         done();
       })
       .then(null,done);
     });
-    
+
     it("should reject if no result is received", function(done) {
       response = {};
 
@@ -413,7 +431,7 @@ describe("Services: storeService", function() {
       expect(storeService.preparePayment).to.be.ok;
       expect(storeService.preparePayment).to.be.a("function");
     });
-    
+
     it("should return a promise", function() {
       expect(storeService.preparePayment().then).to.be.a("function");
     });
@@ -439,12 +457,12 @@ describe("Services: storeService", function() {
       .then(function(result) {
         expect(result).to.be.ok;
         expect(result).to.deep.equal({});
-        
+
         done();
       })
       .then(null,done);
     });
-    
+
     it("should reject if no result is received", function(done) {
       response = {};
 
@@ -504,7 +522,7 @@ describe("Services: storeService", function() {
       expect(storeService.collectPayment).to.be.ok;
       expect(storeService.collectPayment).to.be.a("function");
     });
-    
+
     it("should return a promise", function() {
       expect(storeService.collectPayment().then).to.be.a("function");
     });
@@ -530,12 +548,12 @@ describe("Services: storeService", function() {
       .then(function(result) {
         expect(result).to.be.ok;
         expect(result).to.deep.equal({});
-        
+
         done();
       })
       .then(null,done);
     });
-    
+
     it("should reject if no result is received", function(done) {
       response = {};
 
@@ -648,6 +666,158 @@ describe("Services: storeService", function() {
         done();
       });
     });
+  });
+
+  describe("estimateSubscriptionUpdate: ", function() {
+    beforeEach(function() {
+      response = {
+        result: {}
+      };
+    });
+
+    it("should exist", function() {
+      expect(storeService.estimateSubscriptionUpdate).to.be.ok;
+      expect(storeService.estimateSubscriptionUpdate).to.be.a("function");
+    });
+
+    it("should return a promise", function() {
+      expect(storeService.estimateSubscriptionUpdate().then).to.be.a("function");
+    });
+
+    it("should pass the parameters and call the api", function(done) {
+      storeService.estimateSubscriptionUpdate("displayCount", "subscriptionId", "companyId", "couponCode")
+      .then(function() {
+        storeApi.integrations.subscription.estimate.should.have.been.called;
+        storeApi.integrations.subscription.estimate.should.have.been.calledWith({
+          displayCount: "displayCount",
+          subscriptionId: "subscriptionId",
+          companyId: "companyId",
+          couponCode: "couponCode"
+        });
+        done();
+      })
+      .then(null,done);
+
+    });
+
+    it("should resolve if result is received", function(done) {
+      storeService.estimateSubscriptionUpdate()
+      .then(function(result) {
+        expect(result).to.be.ok;
+        expect(result).to.deep.equal({});
+
+        done();
+      })
+      .then(null,done);
+    });
+
+    it("should reject if no result is received", function(done) {
+      response = {};
+
+      storeService.estimateSubscriptionUpdate()
+      .then(function(result) {
+        done(result);
+      })
+      .then(null, function(error) {
+        expect(error).to.not.be.ok;
+
+        done();
+      })
+      .then(null,done);
+    });
+
+    it("should reject on API failure", function(done) {
+      storeApiFailure = true;
+      response.result.error = "Call Failed";
+
+      storeService.estimateSubscriptionUpdate()
+      .then(function() {
+        done("error");
+      })
+      .then(null, function(error) {
+        expect(error).to.equal("Call Failed");
+
+        done();
+      })
+      .then(null,done);
+    });
+
+  });
+
+  describe("updateSubscription: ", function() {
+    beforeEach(function() {
+      response = {
+        result: {}
+      };
+    });
+
+    it("should exist", function() {
+      expect(storeService.updateSubscription).to.be.ok;
+      expect(storeService.updateSubscription).to.be.a("function");
+    });
+
+    it("should return a promise", function() {
+      expect(storeService.updateSubscription().then).to.be.a("function");
+    });
+
+    it("should pass the parameters and call the api", function(done) {
+      storeService.updateSubscription("displayCount", "subscriptionId", "companyId", "couponCode")
+      .then(function() {
+        storeApi.integrations.subscription.update.should.have.been.called;
+        storeApi.integrations.subscription.update.should.have.been.calledWith({
+          displayCount: "displayCount",
+          subscriptionId: "subscriptionId",
+          companyId: "companyId",
+          couponCode: "couponCode"
+        });
+        done();
+      })
+      .then(null,done);
+
+    });
+
+    it("should resolve if result is received", function(done) {
+      storeService.updateSubscription()
+      .then(function(result) {
+        expect(result).to.be.ok;
+        expect(result).to.deep.equal({});
+
+        done();
+      })
+      .then(null,done);
+    });
+
+    it("should reject if no result is received", function(done) {
+      response = {};
+
+      storeService.updateSubscription()
+      .then(function(result) {
+        done(result);
+      })
+      .then(null, function(error) {
+        expect(error).to.not.be.ok;
+
+        done();
+      })
+      .then(null,done);
+    });
+
+    it("should reject on API failure", function(done) {
+      storeApiFailure = true;
+      response.result.error = "Call Failed";
+
+      storeService.updateSubscription()
+      .then(function() {
+        done("error");
+      })
+      .then(null, function(error) {
+        expect(error).to.equal("Call Failed");
+
+        done();
+      })
+      .then(null,done);
+    });
+
   });
 
 });

@@ -411,6 +411,12 @@ All utilities have a prefix u_ added to them
   }
 }
 
+.left-right-aligner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .aligner {
   display: flex;
   align-items: center;

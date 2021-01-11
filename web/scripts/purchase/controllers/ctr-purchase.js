@@ -19,10 +19,9 @@ angular.module('risevision.apps.purchase')
   }])
 
   .controller('PurchaseCtrl', ['$scope', '$state', '$loading', 'purchaseFactory', 'addressFactory',
-    'PURCHASE_STEPS', 'helpWidgetFactory', '$location', 'redirectTo',
-    function ($scope, $state, $loading, purchaseFactory, addressFactory, PURCHASE_STEPS, helpWidgetFactory, $location,
+    'PURCHASE_STEPS', '$location', 'redirectTo',
+    function ($scope, $state, $loading, purchaseFactory, addressFactory, PURCHASE_STEPS, $location,
       redirectTo) {
-      $scope.helpWidgetFactory = helpWidgetFactory;
       $scope.form = {};
       $scope.factory = purchaseFactory;
 

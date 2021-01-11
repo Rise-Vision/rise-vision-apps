@@ -1,5 +1,5 @@
 <!-- Step 5 -->
-<div class="purchase-summary">
+<div class="checkout-gray-panel">
   <h4 class="u_margin-md-bottom mt-0">Subscription Details</h4>
 
   <div id="errorBox" class="madero-style alert alert-danger u_margin-md-top" role="alert" ng-show="purchase.estimate.estimateError">
@@ -39,7 +39,7 @@
           <a aria-label="Cancel Coupon Code" class="madero-link u_clickable" ng-click="clearCouponCode()" tabindex="1">Cancel</a>
         </span>
         <div class="flex-row">
-          <input id="coupon-code" aria-required="false" type="text" class="form-control mr-3" name="couponCode" ng-model="purchase.couponCode">
+          <input id="coupon-code" aria-required="false" type="text" class="form-control mr-3" name="couponCode" ng-model="purchase.couponCode" ng-enter="applyCouponCode()">
           <button id="apply-coupon-code" type="button" aria-label="Apply Coupon Code" class="btn btn-default" ng-click="applyCouponCode()">Apply</button>
         </div>
       </div>

@@ -35,7 +35,7 @@ describe("Services: ChargebeeFactory", function() {
     });
     $provide.service("plansFactory", function() {
       return {
-        showPlansModal: sinon.stub(),
+        showPurchaseOptions: sinon.stub(),
         isPlansModalOpen: false
       };
     });
@@ -204,7 +204,7 @@ describe("Services: ChargebeeFactory", function() {
       setTimeout(function () {
         expect($window.Chargebee.init.getCall(0).args[0].site).to.equal("risevision-test");
         expect(chargebeePortal.open).to.have.been.calledOnce;
-        expect(plansFactory.showPlansModal).to.not.have.been.called;
+        expect(plansFactory.showPurchaseOptions).to.not.have.been.called;
         expect(plansFactory.apiError).to.not.be.ok;
         done();
       });
@@ -219,7 +219,7 @@ describe("Services: ChargebeeFactory", function() {
       setTimeout(function () {
         expect($window.Chargebee.init.getCall(0).args[0].site).to.equal("risevision");
         expect(chargebeePortal.open).to.have.been.calledOnce;
-        expect(plansFactory.showPlansModal).to.not.have.been.called;
+        expect(plansFactory.showPurchaseOptions).to.not.have.been.called;
         expect(plansFactory.apiError).to.not.be.ok;
         done();
       });
@@ -236,7 +236,7 @@ describe("Services: ChargebeeFactory", function() {
 
       setTimeout(function () {
         expect(chargebeePortal.open).to.not.have.been.called;
-        expect(plansFactory.showPlansModal).to.not.have.been.called;
+        expect(plansFactory.showPurchaseOptions).to.not.have.been.called;
         expect(plansFactory.apiError).to.be.not.null;
         done();
       });
@@ -315,7 +315,7 @@ describe("Services: ChargebeeFactory", function() {
 
         setTimeout(function () {
           expect(chargebeePortal.open).to.not.have.been.called;
-          expect(plansFactory.showPlansModal).to.have.been.calledOnce;
+          expect(plansFactory.showPurchaseOptions).to.have.been.calledOnce;
 
           done();
         });
@@ -326,7 +326,7 @@ describe("Services: ChargebeeFactory", function() {
 
         setTimeout(function () {
           expect(chargebeePortal.open).to.not.have.been.called;
-          expect(plansFactory.showPlansModal).to.have.been.calledOnce;
+          expect(plansFactory.showPurchaseOptions).to.have.been.calledOnce;
           done();
         });
       });
@@ -336,7 +336,7 @@ describe("Services: ChargebeeFactory", function() {
 
         setTimeout(function () {
           expect(chargebeePortal.open).to.not.have.been.called;
-          expect(plansFactory.showPlansModal).to.have.been.calledOnce;
+          expect(plansFactory.showPurchaseOptions).to.have.been.calledOnce;
           done();
         });
       });
@@ -346,7 +346,7 @@ describe("Services: ChargebeeFactory", function() {
 
         setTimeout(function () {
           expect(chargebeePortal.open).to.not.have.been.called;
-          expect(plansFactory.showPlansModal).to.have.been.calledOnce;
+          expect(plansFactory.showPurchaseOptions).to.have.been.calledOnce;
           done();
         });
       });
@@ -356,7 +356,7 @@ describe("Services: ChargebeeFactory", function() {
 
         setTimeout(function () {
           expect(chargebeePortal.open).to.not.have.been.called;
-          expect(plansFactory.showPlansModal).to.have.been.calledOnce;
+          expect(plansFactory.showPurchaseOptions).to.have.been.calledOnce;
           done();
         });
       });
@@ -366,7 +366,7 @@ describe("Services: ChargebeeFactory", function() {
 
         setTimeout(function () {
           expect(chargebeePortal.open).to.not.have.been.called;
-          expect(plansFactory.showPlansModal).to.have.been.calledOnce;
+          expect(plansFactory.showPurchaseOptions).to.have.been.calledOnce;
           done();
         });
       });
@@ -379,7 +379,7 @@ describe("Services: ChargebeeFactory", function() {
 
           setTimeout(function () {
             expect(chargebeePortal.open).to.not.have.been.called;
-            expect(plansFactory.showPlansModal).to.not.have.been.called;
+            expect(plansFactory.showPurchaseOptions).to.not.have.been.called;
             expect(chargebeeFactoryInstance.apiError).to.equal(403);
 
             done();

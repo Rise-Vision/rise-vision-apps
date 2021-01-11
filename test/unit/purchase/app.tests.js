@@ -61,23 +61,88 @@ describe('app:', function() {
   });
 
 
-  describe('state apps.purchase.home:',function(){
+  describe('state apps.purchase.home:', function(){
     it('should register state',function(){
       var state = $state.get('apps.purchase.home');
       expect(state).to.be.ok;
       expect(state.url).to.equal('/purchase');
+      expect(state.controller).to.equal('PurchaseCtrl')
     });
 
-    it('should go to billing page/edit subscription if company has a plan and manages it', function(done) {
+    it('should go to purchase licenses if company has a plan and manages it', function(done) {
       $state.go('apps.purchase.home');
       $rootScope.$digest();
 
       canAccessApps.should.have.been.called;
 
       setTimeout(function(){
-        expect($state.go).to.have.been.calledWith('apps.billing.home', {edit: 'subscriptionId'});
+        expect($state.go).to.have.been.calledWith('apps.purchase.licenses', {displayCount: 1});
 
         expect(messageBoxStub).to.not.have.been.called;
+        done();
+      },10);
+    });
+
+    it('should pass displayCount parameter value', function(done) {
+      $state.go('apps.purchase.home', {displayCount: 'displayCount'});
+      $rootScope.$digest();
+
+      canAccessApps.should.have.been.called;
+
+      setTimeout(function(){
+        expect($state.go).to.have.been.calledWith('apps.purchase.licenses', {displayCount: 'displayCount'});
+
+        expect(messageBoxStub).to.not.have.been.called;
+        done();
+      },10);
+    });
+
+    it('should go to Purchase page if company is not subscribed to a plan', function(done) {
+      currentPlanFactory.isSubscribed.returns(false);
+
+      $state.go('apps.purchase.home');
+      $rootScope.$digest();
+
+      setTimeout(function(){
+        $state.go.should.have.been.calledOnce;
+
+        done();
+      },10);
+    });
+
+    it('should resolve redirectTo as previous path', function() {
+      sinon.stub($location, 'path').returns('/displays/list');
+
+      var redirectTo = $state.get('apps.purchase.home').resolve.redirectTo[1]($location);
+      expect(redirectTo).to.equal('/displays/list');
+    });
+
+    it('should resolve redirectTo as Apps home if previous path is purchase', function() {
+      sinon.stub($location, 'path').returns('/purchase');
+
+      var redirectTo = $state.get('apps.purchase.home').resolve.redirectTo[1]($location);
+      expect(redirectTo).to.equal('/');
+    });
+
+  });
+
+  describe('state apps.purchase.licenses:',function(){
+    it('should register state',function(){
+      var state = $state.get('apps.purchase.licenses');
+      expect(state).to.be.ok;
+      expect(state.url).to.equal('/licenses');
+      expect(state.controller).to.equal('PurchaseLicensesCtrl')
+    });
+
+    it('should go to Purchase page if company is not subscribed to a plan', function(done) {
+      currentPlanFactory.isSubscribed.returns(false);
+
+      $state.go('apps.purchase.licenses');
+      $rootScope.$digest();
+
+      setTimeout(function(){
+        $state.go.should.have.been.calledWith('apps.purchase.home');
+
         done();
       },10);
     });
@@ -85,7 +150,7 @@ describe('app:', function() {
     it('should show a message if company has a plan but it is managed by a parent company', function(done) {
       currentPlanFactory.currentPlan.isPurchasedByParent = true;
 
-      $state.go('apps.purchase.home');
+      $state.go('apps.purchase.licenses');
       $rootScope.$digest();
 
       canAccessApps.should.have.been.called;
@@ -105,10 +170,10 @@ describe('app:', function() {
     });
 
     it('should show plan admin email if available', function(done) {
-      currentPlanFactory.currentPlan.isPurchasedByParent = true      
+      currentPlanFactory.currentPlan.isPurchasedByParent = true
       currentPlanFactory.currentPlan.parentPlanContactEmail = 'test@email.com';
 
-      $state.go('apps.purchase.home');
+      $state.go('apps.purchase.licenses');
       $rootScope.$digest();
 
       setTimeout(function(){
@@ -122,32 +187,17 @@ describe('app:', function() {
       },10);
     });
 
-    it('should go to Purchase page if company is not subscribed to a plan', function(done) {
-      currentPlanFactory.isSubscribed.returns(false);
-
-      $state.go('apps.purchase.home');
-      $rootScope.$digest();
-
-      setTimeout(function(){
-        expect(messageBoxStub).to.not.have.been.called;
-
-        $state.go.should.have.been.calledOnce;
-
-        done();
-      },10);
-    });
-
     it('should resolve redirectTo as previous path', function() {
       sinon.stub($location, 'path').returns('/displays/list');
 
-      var redirectTo = $state.get('apps.purchase.home').resolve.redirectTo[1]($location);      
+      var redirectTo = $state.get('apps.purchase.licenses').resolve.redirectTo[1]($location);
       expect(redirectTo).to.equal('/displays/list');
     });
 
     it('should resolve redirectTo as Apps home if previous path is purchase', function() {
-      sinon.stub($location, 'path').returns('/purchase');
+      sinon.stub($location, 'path').returns('/licenses');
 
-      var redirectTo = $state.get('apps.purchase.home').resolve.redirectTo[1]($location);      
+      var redirectTo = $state.get('apps.purchase.licenses').resolve.redirectTo[1]($location);
       expect(redirectTo).to.equal('/');
     });
 

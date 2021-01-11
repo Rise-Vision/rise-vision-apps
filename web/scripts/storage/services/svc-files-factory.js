@@ -9,7 +9,7 @@ angular.module('risevision.storage.services')
         // filesFactory functionality ~~~~~~~~~~
 
         var factory = {
-          startTrial: plansFactory.showPlansModal,
+          startTrial: plansFactory.showPurchaseOptions,
           filesDetails: {
             files: [],
             code: 202

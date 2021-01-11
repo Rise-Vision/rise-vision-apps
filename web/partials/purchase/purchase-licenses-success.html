@@ -1,0 +1,14 @@
+<div id="checkout-success" class="checkout-centered-panel">
+  <h4 class="u_margin-md-bottom">A great big thank you!</h4>
+  <p class="u_margin-md-bottom">
+    We’ve sent a confirmation email to <b>{{factory.userEmail}}</b>.
+  </p>
+  <p>
+    <b>Details:</b><br />
+    You’ve added <b>{{factory.purchase.displayCount}} display license{{ factory.purchase.displayCount > 1 ? 's' : '' }}</b> to your subscription.<br/>
+    You will be charged <b>${{factory.estimate.invoice_estimate.amount_due/100 | number:2}}</b>.
+  </p>
+  <div class="button-row mt-5">
+    <button id="doneButton" class="btn btn-primary btn-block" ng-click="close()" aria-label="Done" tabindex="1">Continue</button>
+  </div>
+</div>
