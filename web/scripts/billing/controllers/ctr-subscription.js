@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('risevision.apps.billing.controllers')
-  .controller('SubscriptionCtrl', ['$scope', '$loading', 'billingFactory',
-    function ($scope, $loading, billingFactory) {
-      $scope.billingFactory = billingFactory;
+  .controller('SubscriptionCtrl', ['$scope', '$loading', 'subscriptionFactory',
+    function ($scope, $loading, subscriptionFactory) {
+      $scope.subscriptionFactory = subscriptionFactory;
 
-      $scope.$watch('billingFactory.loading', function (newValue) {
+      $scope.$watch('subscriptionFactory.loading', function (newValue) {
         if (newValue) {
           $loading.start('subscription-loader');
         } else {

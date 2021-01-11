@@ -8,10 +8,10 @@
     <div class="col-xs-12 col-sm-10">
       <div class="button-row text-right my-0">
         <share-url-button class="btn btn-default btn-toolbar mr-2"></share-url-button>
-        <button id="downloadButton" type="button" class="btn btn-default btn-toolbar mr-2" ng-click="billingFactory.downloadInvoice(billingFactory.invoice.id)">
+        <button id="downloadButton" type="button" class="btn btn-default btn-toolbar mr-2" ng-click="invoiceFactory.downloadInvoice(invoiceFactory.invoice.id)">
           Download
         </button>
-        <button id="payNowButton" type="button" class="btn btn-primary btn-toolbar" ng-click="showPaymentForm = true" ng-disabled="showPaymentForm" ng-hide="billingFactory.invoice.status === 'paid'">
+        <button id="payNowButton" type="button" class="btn btn-primary btn-toolbar" ng-click="showPaymentForm = true" ng-disabled="showPaymentForm" ng-hide="invoiceFactory.invoice.status === 'paid'">
           Pay Now
         </button>
       </div>
@@ -20,11 +20,11 @@
 
   <div rv-spinner rv-spinner-key="invoice-loader" rv-spinner-start-active="1"></div>
 
-  <div id="errorBox" ng-show="billingFactory.apiError" class="madero-style alert alert-danger" role="alert">
-    <strong>{{billingFactory.apiError}}</strong>
+  <div id="errorBox" ng-show="invoiceFactory.apiError" class="madero-style alert alert-danger" role="alert">
+    <strong>{{invoiceFactory.apiError}}</strong>
   </div>
 
-  <div class="border-container u_margin-md-top u_margin-md-bottom" ng-show="showPaymentForm && billingFactory.invoice.status !== 'paid'">
+  <div class="border-container u_margin-md-top u_margin-md-bottom" ng-show="showPaymentForm && invoiceFactory.invoice.status !== 'paid'">
     <div class="panel-body">
 
       <form id="form.paymentMethodsForm" role="form" name="form.paymentMethodsForm" novalidate>
@@ -36,7 +36,7 @@
       <div class="text-right mt-5">
         <button id="cancelButton" type="button" aria-label="Cancel" class="btn btn-default btn-toolbar pull-left" ng-click="showPaymentForm = false">Cancel</button>
         <button id="payButton" type="submit" class="btn btn-primary btn-toolbar-wide" form="form.paymentMethodsForm" ng-click="completeCardPayment()" tabindex="1" aria-label="Complete Payment">
-          <span id="payLabel">Pay ${{billingFactory.invoice.amount_due / 100 | number:2}} Now</span>
+          <span id="payLabel">Pay ${{invoiceFactory.invoice.amount_due / 100 | number:2}} Now</span>
         </button>
       </div>
 
@@ -50,30 +50,30 @@
           <div class="col-sm-12 col-md-6 pb-4 pb-lg-0">
             <div class="app-header mb-3">
               <!-- App Title -->
-              <h1 class="app-header-title">Invoice #{{billingFactory.invoice.id}}</h1>
+              <h1 class="app-header-title">Invoice #{{invoiceFactory.invoice.id}}</h1>
             </div>
             <label>Billed To:</label><br>
-            <span ng-show="billingFactory.invoice.billing_address.first_name || billingFactory.invoice.billing_address.last_name">
-              {{billingFactory.invoice.billing_address.first_name}} {{billingFactory.invoice.billing_address.last_name}}<br>
+            <span ng-show="invoiceFactory.invoice.billing_address.first_name || invoiceFactory.invoice.billing_address.last_name">
+              {{invoiceFactory.invoice.billing_address.first_name}} {{invoiceFactory.invoice.billing_address.last_name}}<br>
             </span>
-            {{billingFactory.invoice.billing_address.company}}<br>
-            {{billingFactory.invoice.billing_address.line1}}<br> 
-            <span ng-show="billingFactory.invoice.billing_address.line2">
-              {{billingFactory.invoice.billing_address.line2}}
+            {{invoiceFactory.invoice.billing_address.company}}<br>
+            {{invoiceFactory.invoice.billing_address.line1}}<br> 
+            <span ng-show="invoiceFactory.invoice.billing_address.line2">
+              {{invoiceFactory.invoice.billing_address.line2}}
               <br>
             </span>
-            {{billingFactory.invoice.billing_address.city}}, <span ng-show="billingFactory.invoice.billing_address.state">{{billingFactory.invoice.billing_address.state}},</span> {{billingFactory.invoice.billing_address.zip}}<br> 
-            {{billingFactory.invoice.billing_address.country | countryName}}<br>
-            <span ng-show="billingFactory.invoice.billing_address.email">
-              {{billingFactory.invoice.billing_address.email}}<br>
+            {{invoiceFactory.invoice.billing_address.city}}, <span ng-show="invoiceFactory.invoice.billing_address.state">{{invoiceFactory.invoice.billing_address.state}},</span> {{invoiceFactory.invoice.billing_address.zip}}<br> 
+            {{invoiceFactory.invoice.billing_address.country | countryName}}<br>
+            <span ng-show="invoiceFactory.invoice.billing_address.email">
+              {{invoiceFactory.invoice.billing_address.email}}<br>
             </span>
-            <span ng-show="billingFactory.invoice.billing_address.phone">
-              {{billingFactory.invoice.billing_address.phone}}<br>
+            <span ng-show="invoiceFactory.invoice.billing_address.phone">
+              {{invoiceFactory.invoice.billing_address.phone}}<br>
             </span>
           </div>
 
           <div class="col-sm-12 col-md-6">
-            <div class="app-header mb-3" ng-show="billingFactory.invoice.status === 'paid'">
+            <div class="app-header mb-3" ng-show="invoiceFactory.invoice.status === 'paid'">
               <!-- App Title -->
               <h1 class="app-header-title text-success">Paid</h1>
             </div>
@@ -82,16 +82,16 @@
               <div class="col-md-4">
                 <label class="mb-0">Invoice Date:</label>
               </div>
-              <div class="col-md-8" ng-show="billingFactory.invoice.date">
-                {{billingFactory.invoice.date * 1000 | date:'d-MMM-yyyy'}}
+              <div class="col-md-8" ng-show="invoiceFactory.invoice.date">
+                {{invoiceFactory.invoice.date * 1000 | date:'d-MMM-yyyy'}}
               </div>
             </div>
             <div class="row">
               <div class="col-md-4">
                 <label class="mb-0">Invoice Amount:</label>
               </div>
-              <div class="col-md-8" ng-show="billingFactory.invoice">
-                ${{billingFactory.invoice.total / 100 | number:2}} {{billingFactory.invoice.currency_code}}
+              <div class="col-md-8" ng-show="invoiceFactory.invoice">
+                ${{invoiceFactory.invoice.total / 100 | number:2}} {{invoiceFactory.invoice.currency_code}}
               </div>
             </div>
             <div class="row">
@@ -99,7 +99,7 @@
                 <label class="mb-0">Customer ID:</label>
               </div>
               <div class="col-md-8">
-                {{billingFactory.invoice.customer_id}}
+                {{invoiceFactory.invoice.customer_id}}
               </div>
             </div>
             <div class="row">
@@ -107,10 +107,10 @@
                 <label class="mb-0">Payment Terms:</label>
               </div>
               <div class="col-md-8">
-                <span ng-show="billingFactory.invoice.net_term_days > 0">
-                  Net {{billingFactory.invoice.net_term_days}}
+                <span ng-show="invoiceFactory.invoice.net_term_days > 0">
+                  Net {{invoiceFactory.invoice.net_term_days}}
                 </span>
-                <span ng-show="billingFactory.invoice.net_term_days === 0">
+                <span ng-show="invoiceFactory.invoice.net_term_days === 0">
                   Due Upon Receipt
                 </span>
               </div>
@@ -119,24 +119,24 @@
               <div class="col-md-4">
                 <label class="mb-0">Due Date:</label>
               </div>
-              <div class="col-md-8" ng-show="billingFactory.invoice.due_date">
-                {{billingFactory.invoice.due_date * 1000 | date:'d-MMM-yyyy'}}
+              <div class="col-md-8" ng-show="invoiceFactory.invoice.due_date">
+                {{invoiceFactory.invoice.due_date * 1000 | date:'d-MMM-yyyy'}}
               </div>
             </div>
             <div class="row">
               <div class="col-md-4">
                 <label class="mb-0">Billing Period:</label>
               </div>
-              <div class="col-md-8" ng-show="billingFactory.invoice.line_items[0]">
-                {{billingFactory.invoice.line_items[0].date_from * 1000 | date:'d-MMM-yyyy'}} — {{billingFactory.invoice.line_items[0].date_to * 1000 | date:'d-MMM-yyyy'}}
+              <div class="col-md-8" ng-show="invoiceFactory.invoice.line_items[0]">
+                {{invoiceFactory.invoice.line_items[0].date_from * 1000 | date:'d-MMM-yyyy'}} — {{invoiceFactory.invoice.line_items[0].date_to * 1000 | date:'d-MMM-yyyy'}}
               </div>
             </div>
             <div class="row">
               <div class="col-md-4">
                 <label class="mb-0">Next Billing Date:</label>
               </div>
-              <div class="col-md-8" ng-show="billingFactory.invoice.line_items[0]">
-                {{billingFactory.invoice.line_items[0].date_to * 1000 | date:'d-MMM-yyyy'}}
+              <div class="col-md-8" ng-show="invoiceFactory.invoice.line_items[0]">
+                {{invoiceFactory.invoice.line_items[0].date_to * 1000 | date:'d-MMM-yyyy'}}
               </div>
             </div>
             <div class="row">
@@ -144,12 +144,12 @@
                 <label class="mb-0">PO:</label>
               </div>
               <div class="col-md-8">
-                <span ng-show="!billingFactory.invoice.po_number && !editPoNumber">
+                <span ng-show="!invoiceFactory.invoice.po_number && !editPoNumber">
                   <a aria-label="Add PO Number" class="madero-link u_clickable" tabindex="1" ng-click="editPoNumber = true">Add</a>
                 </span>
-                <span ng-show="billingFactory.invoice.po_number && !editPoNumber">
+                <span ng-show="invoiceFactory.invoice.po_number && !editPoNumber">
                   <span class="mr-2">
-                  {{billingFactory.invoice.po_number}}
+                  {{invoiceFactory.invoice.po_number}}
                   </span>
                   <a aria-label="Edit PO Number" class="madero-link u_clickable" tabindex="1" ng-click="editPoNumber = true">Edit</a>
                 </span>
@@ -161,7 +161,7 @@
             <div class="row" ng-if="editPoNumber">
               <div class="col-md-12">
                 <div class="flex-row">
-                  <input id="po-number" aria-required="false" type="text" class="form-control mr-3" name="poNumber" ng-model="billingFactory.invoice.poNumber" ng-value="billingFactory.invoice.po_number">
+                  <input id="po-number" aria-required="false" type="text" class="form-control mr-3" name="poNumber" ng-model="invoiceFactory.invoice.poNumber" ng-value="invoiceFactory.invoice.po_number">
                   <button id="update-po-number" type="button" aria-label="Update PO Number" class="btn btn-default" ng-click="updatePoNumber()">Update</button>
                 </div>
               </div>
@@ -171,30 +171,30 @@
         </div>
       </div>
 
-      <div class="pb-5 mb-5 border-bottom" ng-show="billingFactory.invoice.line_items">
-        <div class="text-right" ng-repeat="line_item in billingFactory.invoice.line_items">
+      <div class="pb-5 mb-5 border-bottom" ng-show="invoiceFactory.invoice.line_items">
+        <div class="text-right" ng-repeat="line_item in invoiceFactory.invoice.line_items">
           <label class="mb-0 pull-left">{{line_item.description}}</label>
           ${{line_item.amount / 100 | number:2}}
         </div>
       </div>
 
-      <div ng-show="billingFactory.invoice">
+      <div ng-show="invoiceFactory.invoice">
         <div class="row">
           <div class="col-md-offset-8 col-md-4">
-            <div class="pb-3 mb-3 border-bottom" ng-hide="billingFactory.invoice.sub_total === billingFactory.invoice.total">
+            <div class="pb-3 mb-3 border-bottom" ng-hide="invoiceFactory.invoice.sub_total === invoiceFactory.invoice.total">
               <div class="text-right">
                 <span class="pull-left">Sub Total:</span>
                 <span>
-                  ${{billingFactory.invoice.sub_total / 100 | number:2}}
+                  ${{invoiceFactory.invoice.sub_total / 100 | number:2}}
                 </span>
               </div>
-              <div class="text-right mt-3" ng-repeat="discount in billingFactory.invoice.discounts">
+              <div class="text-right mt-3" ng-repeat="discount in invoiceFactory.invoice.discounts">
                 <span class="pull-left">{{discount.description}}:</span>
                 <span>
                   -${{discount.amount / 100 | number:2}}
                 </span>
               </div>
-              <div class="text-right mt-3" ng-repeat="tax in billingFactory.invoice.taxes">
+              <div class="text-right mt-3" ng-repeat="tax in invoiceFactory.invoice.taxes">
                 <span class="pull-left">{{tax.description}}:</span>
                 <span>
                   ${{tax.amount / 100 | number:2}}
@@ -206,26 +206,26 @@
             <div class="text-right">
               <label class="mb-0 pull-left">Total:</label>
               <label class="mb-0">
-                ${{billingFactory.invoice.total / 100 | number:2}}
+                ${{invoiceFactory.invoice.total / 100 | number:2}}
               </label>
             </div>
-            <div class="text-right mt-3" ng-show="billingFactory.invoice.amount_paid">
+            <div class="text-right mt-3" ng-show="invoiceFactory.invoice.amount_paid">
               <span class="mb-0 pull-left">Payment:</span>
               <span class="mb-0">
-                -${{billingFactory.invoice.amount_paid / 100 | number:2}}
+                -${{invoiceFactory.invoice.amount_paid / 100 | number:2}}
               </span>
             </div>
-            <div class="text-right mt-3" ng-show="billingFactory.invoice.credits_applied">
+            <div class="text-right mt-3" ng-show="invoiceFactory.invoice.credits_applied">
               <span class="mb-0 pull-left">Credits:</span>
               <span class="mb-0">
-                -${{billingFactory.invoice.credits_applied / 100 | number:2}}
+                -${{invoiceFactory.invoice.credits_applied / 100 | number:2}}
               </span>
             </div>
 
             <div class="text-right mt-3 border-top">
               <h4>
                 <span class="pull-left">Amount Due:</span>
-                ${{billingFactory.invoice.amount_due / 100 | number:2}}
+                ${{invoiceFactory.invoice.amount_due / 100 | number:2}}
               </h4>
             </div>
 

@@ -3,7 +3,7 @@
 /*jshint camelcase: false */
 
 angular.module('risevision.apps.billing.services')
-  .service('billingFactory', ['$q', '$log', '$window', '$stateParams', 'billing',
+  .service('invoiceFactory', ['$q', '$log', '$window', '$stateParams', 'billing',
     'storeService', 'creditCardFactory', 'userState', 'processErrorCode', 'analyticsFactory',
     function ($q, $log, $window, $stateParams, billing, storeService, creditCardFactory,
       userState, processErrorCode, analyticsFactory) {
@@ -40,24 +40,6 @@ angular.module('risevision.apps.billing.services')
         } else {
           return null;
         }
-      };
-
-      factory.getSubscription = function (subscriptionId) {
-        factory.init(true);
-
-        factory.subscription = null;
-        factory.loading = true;
-
-        return billing.getSubscription(subscriptionId)
-          .then(function (resp) {
-            factory.subscription = resp.item;
-          })
-          .catch(function(e) {
-            _showErrorMessage(e);
-          })
-          .finally(function() {
-            factory.loading = false;
-          });
       };
 
       factory.getInvoice = function (invoiceId, companyId, token) {
