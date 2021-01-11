@@ -58,7 +58,9 @@ angular.module('risevision.apps')
           }
         })
         .state('apps.purchase.licenses', {
+          url: '/licenses',
           abstract: true,
+          template: '<ui-view/>',
           resolve: {
             canAccessApps: ['$q', '$state', 'canAccessApps', 'currentPlanFactory', 'messageBox',
               function ($q, $state, canAccessApps, currentPlanFactory, messageBox) {
@@ -89,11 +91,10 @@ angular.module('risevision.apps')
             ]
           }
         })
-
         .state('apps.purchase.licenses.add', {
-          url: '/licenses/add',
+          url: '/add',
           templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get('partials/purchase/purchase-licenses.html');
+            return $templateCache.get('partials/purchase/purchase-licenses-add.html');
           }],
           controller: 'PurchaseLicensesCtrl',
           resolve: {
