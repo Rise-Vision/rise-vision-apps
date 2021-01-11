@@ -52,7 +52,7 @@ angular.module('risevision.apps')
             ],
             redirectTo: ['$location',
               function ($location) {
-                return $location.path() !== '/licenses' ? $location.path() : '/';
+                return $location.path() !== '/purchase' ? $location.path() : '/';
               }
             ]
           }
