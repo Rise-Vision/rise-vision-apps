@@ -11,7 +11,8 @@ angular.module('risevision.apps')
           abstract: true,
           template: '<div class="container purchase-app" ui-view></div>',
           params: {
-            displayCount: 1 
+            displayCount: 1,
+            purchaseAction: 'add'
           }
         })
 
@@ -36,9 +37,15 @@ angular.module('risevision.apps')
                 return canAccessApps()
                   .then(function () {
                     if (currentPlanFactory.isSubscribed() && !currentPlanFactory.isParentPlan()) {
-                      $state.go('apps.purchase.licenses', {
-                        displayCount: $stateParams.displayCount
-                      });
+                      if ($stateParams.purchaseAction === 'remove') {
+                        $state.go('apps.purchase.licenses.remove', {
+                          displayCount: $stateParams.displayCount
+                        });
+                      } else {
+                        $state.go('apps.purchase.licenses.add', {
+                          displayCount: $stateParams.displayCount
+                        });
+                      }
                     }
                   });
               }
@@ -51,11 +58,7 @@ angular.module('risevision.apps')
           }
         })
         .state('apps.purchase.licenses', {
-          url: '/licenses',
-          templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get('partials/purchase/purchase-licenses.html');
-          }],
-          controller: 'PurchaseLicensesCtrl',
+          abstract: true,
           resolve: {
             canAccessApps: ['$q', '$state', 'canAccessApps', 'currentPlanFactory', 'messageBox',
               function ($q, $state, canAccessApps, currentPlanFactory, messageBox) {
@@ -83,10 +86,20 @@ angular.module('risevision.apps')
                     }
                   });
               }
-            ],
+            ]
+          }
+        })
+
+        .state('apps.purchase.licenses.add', {
+          url: '/licenses/add',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get('partials/purchase/purchase-licenses.html');
+          }],
+          controller: 'PurchaseLicensesCtrl',
+          resolve: {
             redirectTo: ['$location',
               function ($location) {
-                return $location.path() !== '/licenses' ? $location.path() : '/';
+                return $location.path() !== '/licenses/add' ? $location.path() : '/';
               }
             ]
           }
