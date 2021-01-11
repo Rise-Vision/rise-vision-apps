@@ -104,6 +104,20 @@ angular.module('risevision.apps')
               }
             ]
           }
+        })
+        .state('apps.purchase.licenses.remove', {
+          url: '/remove',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get('partials/purchase/purchase-licenses-remove.html');
+          }],
+          controller: 'PurchaseLicensesCtrl',
+          resolve: {
+            redirectTo: ['$location',
+              function ($location) {
+                return $location.path() !== '/licenses/remove' ? $location.path() : '/';
+              }
+            ]
+          }
         });
     }
   ]);
