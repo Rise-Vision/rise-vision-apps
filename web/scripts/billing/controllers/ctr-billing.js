@@ -1,5 +1,7 @@
 'use strict';
 
+/*jshint camelcase: false */
+
 angular.module('risevision.apps.billing.controllers')
   .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$timeout',
     'ScrollingListService', 'userState', 'currentPlanFactory', 'ChargebeeFactory', 'billing',
@@ -54,6 +56,16 @@ angular.module('risevision.apps.billing.controllers')
         var subscriptionId = subscription.id;
 
         $scope.chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscriptionId);
+      };
+
+      $scope.showSubscriptionLink = function (subscription) {
+        if (subscription.customer_id !== $scope.company.id) {
+          return false;
+        } else if ($scope.isCancelled(subscription)) {
+          return false;
+        }
+
+        return true;
       };
 
       $scope.isActive = function (subscription) {
