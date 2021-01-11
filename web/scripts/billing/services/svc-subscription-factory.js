@@ -30,7 +30,7 @@ angular.module('risevision.apps.billing.services')
 
         return billing.getSubscription(subscriptionId)
           .then(function (resp) {
-            factory.subscription = resp.item;
+            factory.item = resp.item;
           })
           .catch(function(e) {
             _showErrorMessage(e);

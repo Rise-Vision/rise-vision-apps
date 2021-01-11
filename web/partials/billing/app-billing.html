@@ -79,8 +79,8 @@
 
           <tr class="table-body__row" ng-repeat="item in (filteredSubscriptions = (subscriptions.items.list | filter: { subscription: { current_term_end: '!!' }}))">
             <td class="table-body__cell font-weight-bold">
-              <a class="madero-link u_clickable" ui-sref="apps.billing.subscription({subscriptionId: item.subscription.id})" ng-if="item.subscription.customer_id === company.id">{{item.subscription | subscriptionDescription}}</a>
-              <span ng-if="item.subscription.customer_id !== company.id">{{item.subscription | subscriptionDescription}}</span>
+              <a class="madero-link u_clickable" ui-sref="apps.billing.subscription({subscriptionId: item.subscription.id})" ng-if="showSubscriptionLink(item.subscription)">{{item.subscription | subscriptionDescription}}</a>
+              <span ng-if="!showSubscriptionLink(item.subscription)">{{item.subscription | subscriptionDescription}}</span>
             </td>
             <td class="table-body__cell">
               <span class="u_capitalize" ng-class="{ 'text-success': isActive(item.subscription), 'text-danger': isSuspended(item.subscription) || isCancelled(item.subscription) }">

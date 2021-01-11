@@ -10,12 +10,103 @@
     <strong>{{subscriptionFactory.apiError}}</strong>
   </div>
 
-  <h4>
-    {{subscriptionFactory.subscription.subscription | subscriptionDescription}} — 
-    <span class="u_capitalize" ng-class="{ 'text-success': subscriptionFactory.subscription.subscription.status === 'active', 'text-danger': subscriptionFactory.subscription.subscription.status === 'suspended' || subscriptionFactory.subscription.subscription.status === 'cancelled' }">
-      {{subscriptionFactory.subscription.subscription.status}}
+  <h4 class="mb-4">
+    {{subscriptionFactory.item.subscription | subscriptionDescription}} — 
+    <span class="u_capitalize" ng-class="{ 'text-success': subscriptionFactory.item.subscription.status === 'active', 'text-danger': subscriptionFactory.item.subscription.status === 'suspended' || subscriptionFactory.item.subscription.status === 'cancelled' }">
+      {{subscriptionFactory.item.subscription.status}}
     </span>
   </h4>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="border-container subscription-card">
+        <div class="panel-body">
+          <label>Display Licenses</label>
+          <h1>11</h1>
+          <a id="addLicenses" class="btn btn-default btn-block" ui-sref="apps.billing.licenses({subscriptionId: subscriptionFactory.item.subscription.id})">Add Display Licenses</a>
+          <a id="removeLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.licenses.remove({subscriptionId: subscriptionFactory.item.subscription.id})">Remove Display Licenses</a>
+          <a id="manageLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.licenses.manage({subscriptionId: subscriptionFactory.item.subscription.id})" ng-if="false">Manage Network Licenses</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="border-container subscription-card">
+        <div class="panel-body">
+          <label ng-show="subscriptionFactory.item.subscription.auto_collection === 'off'">Next Invoice</label>
+          <label ng-show="subscriptionFactory.item.subscription.auto_collection !== 'off'">Next Payment</label>
+          <h1>${{subscriptionFactory.item.subscription.plan_amount / 100 | number:2}}</h1>
+          <p>On {{subscriptionFactory.item.subscription.current_term_end * 1000 | date:'d-MMM-yyyy'}}</p>
+          <p><b>Billing Frequency:</b> {{subscriptionFactory.item.subscription.billing_period_unit === 'month' ? 'Monthly' : subscriptionFactory.item.subscription.billing_period === 1 ? 'Yearly' : subscriptionFactory.item.subscription.billing_period + ' Years'}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="border-container subscription-card">
+        <div class="panel-body">
+          <label class="mb-3">Payment Method</label>
+          <button id="addPaymentMethod" class="btn btn-default btn-block" ng-click="addPaymentMethod()">Add Payment Method</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-md-8">
+      <div class="border-container subscription-card">
+        <div class="panel-body">
+          <label class="mb-3">Company Billing Details</label>
+          <span class="pull-right"><a class="madero-link u_clickable" ng-click="companySettingsFactory.openCompanySettings()">Edit</a></span>
+
+          <div class="align-left">
+            <div class="row mb-3" ng-show="subscriptionFactory.item.customer.billing_address.first_name || subscriptionFactory.item.customer.billing_address.last_name">
+              <div class="col-md-3">
+                <label class="mb-0">Name:</label>
+              </div>
+              <div class="col-md-9">
+                {{subscriptionFactory.item.customer.billing_address.first_name}} {{subscriptionFactory.item.customer.billing_address.last_name}}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label class="mb-0">Company Name:</label>
+              </div>
+              <div class="col-md-9">
+                {{company.name}}
+              </div>
+            </div>
+            <div class="row mb-3" ng-show="company.telephone">
+              <div class="col-md-3">
+                <label class="mb-0">Phone:</label>
+              </div>
+              <div class="col-md-9">
+                {{company.telephone}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <label class="mb-0">Address:</label>
+              </div>
+              <div class="col-md-9">
+                <p class="mb-0">{{company.street}} <span ng-show="company.unit">{{company.unit}}</span></p>
+                <p class="mb-0">{{company.city}}, {{company.province}} {{company.postalCode}}</p>
+                <p class="mb-0">{{company.country | countryName}}</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="border-container subscription-card">
+        <div class="panel-body">
+          <label class="mb-3">Tax Exemption</label>
+          <p ng-show="subscriptionFactory.item.customer.taxability !== 'taxable'">Tax exemption applied.</p>
+          <button id="addTaxExemption" class="btn btn-default btn-block" ng-click="addTaxExemption()" ng-show="subscriptionFactory.item.customer.taxability === 'taxable'">I'm Tax Exempt</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="u_margin-lg subscription-footer">
     <label>
