@@ -79,7 +79,7 @@ describe('directive: display fields', function() {
     });
 
     $provide.value('PLAYER_PRO_PRODUCT_CODE','productCode');
-    $provide.value('SHARED_SCHEDULE_URL','https://preview.risevision.com/?type=sharedschedule&id=SCHEDULE_ID');
+    $provide.value('SHARED_SCHEDULE_URL','https://widgets.risevision.com/viewer/?type=sharedschedule&id=SCHEDULE_ID');
   }));
   
   var elm, $scope, $compile, $sce, playerProFactory, displayFactory, displayControlFactory, playerLicenseFactory,
@@ -412,7 +412,7 @@ describe('directive: display fields', function() {
 
     it('should return a trusted embed URL', function() {     
       expect($scope.getEmbedUrl('ID')).to.equal('http://trustedUrl');
-      $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=apps_display');
+      $sce.trustAsResourceUrl.should.have.been.calledWith('https://widgets.risevision.com/viewer/?type=sharedschedule&id=ID&env=apps_display');
     });
 
     it('should return null, to not render iframe, when scheduleId is not provided', function() {

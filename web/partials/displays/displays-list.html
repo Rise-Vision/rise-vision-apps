@@ -74,7 +74,7 @@
         </thead>
         <tbody class="table-body">
           <tr class="table-body__row" ng-class="{ 'bg-lighter-gray' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
-            <td class="table-body__cell">
+            <td class="table-body__cell display-name">
               <div class="flex-row">
                 <madero-checkbox ng-click="displays.select(display)" ng-value="display.selected"></madero-checkbox>
                 <a class="madero-link u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
