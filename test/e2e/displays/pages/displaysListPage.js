@@ -31,6 +31,8 @@ var DisplaysListPage = function() {
   var bulkActionsProgressBar = element(by.css('.multi-actions-progress-panel'));
 
   this.searchDisplay = function(displayName) {
+    helper.waitDisappear(displaysLoader, 'Displays loader');
+
     helper.wait(searchFilterField, 'Search Filter Field');
     searchFilterField.sendKeys(displayName);
     helper.wait(displaysLoader, 'Displays loader');
@@ -118,6 +120,10 @@ var DisplaysListPage = function() {
 
   this.getDisplaysLoader = function() {
     return displaysLoader;
+  };
+
+  this.getFirstRowName = function() {
+    return displayItems.first().element(by.css('.display-name'));
   };
 
   this.getFirstRowSchedule = function() {
