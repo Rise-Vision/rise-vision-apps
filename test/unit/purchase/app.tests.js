@@ -76,9 +76,7 @@ describe('app:', function() {
       canAccessApps.should.have.been.called;
 
       setTimeout(function(){
-        expect($state.go).to.have.been.calledWith('apps.purchase.licenses.add', {
-          displayCount: 1
-        });
+        expect($state.go).to.have.been.calledWith('apps.purchase.licenses.add', {displayCount: 1});
 
         expect(messageBoxStub).to.not.have.been.called;
         done();
@@ -166,6 +164,7 @@ describe('app:', function() {
     it('should register state',function(){
       var state = $state.get('apps.purchase.licenses');
       expect(state).to.be.ok;
+      expect(state.url).to.equal('/licenses');
       expect(state.abstract).to.be.true;
     });
   });
