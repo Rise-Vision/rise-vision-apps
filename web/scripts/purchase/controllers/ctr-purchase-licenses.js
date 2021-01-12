@@ -14,9 +14,9 @@ angular.module('risevision.apps.purchase')
 
       $scope.$watch('factory.loading', function (loading) {
         if (loading) {
-          $loading.start('purchase-licenses-loader');
+          $loading.start('add-licenses-loader');
         } else {
-          $loading.stop('purchase-licenses-loader');
+          $loading.stop('add-licenses-loader');
         }
       });
 
