@@ -54,7 +54,7 @@ angular.module('risevision.apps')
         .state('apps.purchase.licenses', {
           url: '/licenses',
           abstract: true,
-          template: '<ui-view/>',
+          template: '<div ui-view></div>',
           resolve: {
             canAccessApps: ['$q', '$state', 'canAccessApps', 'currentPlanFactory', 'messageBox',
               function ($q, $state, canAccessApps, currentPlanFactory, messageBox) {
