@@ -97,40 +97,6 @@ describe('app:', function() {
       },10);
     });
 
-    it('should allow to explicitly specify add licenses state', function(done) {
-      $state.go('apps.purchase.home', {
-        displayCount: 'displayCount',
-        purchaseAction: 'add'
-      });
-      $rootScope.$digest();
-
-      canAccessApps.should.have.been.called;
-
-      setTimeout(function(){
-        expect($state.go).to.have.been.calledWith('apps.purchase.licenses.add', {displayCount: 'displayCount'});
-
-        expect(messageBoxStub).to.not.have.been.called;
-        done();
-      },10);
-    });
-
-    it('should go to remove licenses if purchaseAction is remove', function(done) {
-      $state.go('apps.purchase.home', {
-        displayCount: 'displayCount',
-        purchaseAction: 'remove'
-      });
-      $rootScope.$digest();
-
-      canAccessApps.should.have.been.called;
-
-      setTimeout(function(){
-        expect($state.go).to.have.been.calledWith('apps.purchase.licenses.remove', {displayCount: 'displayCount'});
-
-        expect(messageBoxStub).to.not.have.been.called;
-        done();
-      },10);
-    });
-
     it('should go to Purchase page if company is not subscribed to a plan', function(done) {
       currentPlanFactory.isSubscribed.returns(false);
 

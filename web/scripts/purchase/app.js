@@ -37,15 +37,9 @@ angular.module('risevision.apps')
                 return canAccessApps()
                   .then(function () {
                     if (currentPlanFactory.isSubscribed() && !currentPlanFactory.isParentPlan()) {
-                      if ($stateParams.purchaseAction === 'remove') {
-                        $state.go('apps.purchase.licenses.remove', {
-                          displayCount: $stateParams.displayCount
-                        });
-                      } else {
-                        $state.go('apps.purchase.licenses.add', {
-                          displayCount: $stateParams.displayCount
-                        });
-                      }
+                      $state.go('apps.purchase.licenses.add', {
+                        displayCount: $stateParams.displayCount
+                      });
                     }
                   });
               }
