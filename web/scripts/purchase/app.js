@@ -11,8 +11,7 @@ angular.module('risevision.apps')
           abstract: true,
           template: '<div class="container purchase-app" ui-view></div>',
           params: {
-            displayCount: 1,
-            purchaseAction: 'add'
+            displayCount: 1
           }
         })
 
