@@ -65,7 +65,6 @@ describe("controller: remove-licenses", function() {
   it("should initialize",function() {
     expect($scope.factory).to.equal(purchaseLicensesFactory);
     expect($scope.currentPlan).to.be.ok;
-    expect($scope.formValid).to.be.true;
 
     expect($scope.getEstimate).to.be.a("function");
     expect($scope.completePayment).to.be.a("function");
@@ -88,55 +87,8 @@ describe("controller: remove-licenses", function() {
     });
   });
 
-  describe('formValid:', function() {
-    it("form should be not valid if Angular invalid flag is set", function() {
-      $scope.removeLicensesForm = {
-        $invalid: true
-      };
-      purchaseLicensesFactory.purchase.displayCount = 10;
-      $scope.$digest();
-
-      expect($scope.formValid).to.be.false;
-    });
-
-    it("form should be not valid if display count is greater than plan license count", function() {
-      $scope.removeLicensesForm = {
-        $invalid: false
-      };
-      purchaseLicensesFactory.purchase.displayCount = 11;
-      $scope.$digest();
-
-      expect($scope.formValid).to.be.false;
-    });
-
-    it("form should be not valid if display count is equal than plan license count", function() {
-      $scope.removeLicensesForm = {
-        $invalid: false
-      };
-      purchaseLicensesFactory.purchase.displayCount = 10;
-      $scope.$digest();
-
-      expect($scope.formValid).to.be.false;
-    });
-
-    it("form should be valid if display count is less than plan license count", function() {
-      $scope.removeLicensesForm = {
-        $invalid: false
-      };
-      purchaseLicensesFactory.purchase.displayCount = 9;
-      $scope.$digest();
-
-      expect($scope.formValid).to.be.true;
-    });
-  });
-
   describe('getEstimate:', function() {
     it("should get estimate", function() {
-      $scope.removeLicensesForm = {
-        $invalid: false
-      };
-      purchaseLicensesFactory.purchase.displayCount = 9;
-
       $scope.getEstimate();
 
       purchaseLicensesFactory.getEstimate.should.have.been.called;
@@ -144,7 +96,7 @@ describe("controller: remove-licenses", function() {
 
     it("should not get estimate if form is not valid", function() {
       $scope.removeLicensesForm = {
-        $invalid: true
+        $valid: false
       };
 
       $scope.getEstimate();
@@ -155,11 +107,6 @@ describe("controller: remove-licenses", function() {
 
   describe('completePayment:', function() {
     it("should complete payment", function() {
-      $scope.removeLicensesForm = {
-        $invalid: false
-      };
-      purchaseLicensesFactory.purchase.displayCount = 9;
-
       $scope.completePayment();
 
       purchaseLicensesFactory.completePayment.should.have.been.called;
@@ -167,7 +114,7 @@ describe("controller: remove-licenses", function() {
 
     it("should not complete payment if form is not valid", function() {
       $scope.removeLicensesForm = {
-        $invalid: true
+        $valid: false
       };
 
       $scope.completePayment();
