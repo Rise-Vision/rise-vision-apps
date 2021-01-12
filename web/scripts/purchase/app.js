@@ -94,7 +94,7 @@ angular.module('risevision.apps')
         .state('apps.purchase.licenses.add', {
           url: '/add',
           templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get('partials/purchase/purchase-licenses-add.html');
+            return $templateCache.get('partials/purchase/add-licenses.html');
           }],
           controller: 'PurchaseLicensesCtrl',
           resolve: {
@@ -108,7 +108,7 @@ angular.module('risevision.apps')
         .state('apps.purchase.licenses.remove', {
           url: '/remove',
           templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get('partials/purchase/purchase-licenses-remove.html');
+            return $templateCache.get('partials/purchase/remove-licenses.html');
           }],
           controller: 'PurchaseLicensesCtrl',
           resolve: {
