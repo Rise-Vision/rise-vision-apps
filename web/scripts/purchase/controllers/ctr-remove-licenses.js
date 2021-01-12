@@ -10,6 +10,23 @@ angular.module('risevision.apps.purchase')
       $scope.currentPlan = currentPlanFactory.currentPlan;
       $scope.couponCode = null;
 
+      var _isFormValid = function () {
+        var form = $scope.removeLicensesForm;
+
+        if (!form) {
+          return true;
+        } else if (form.$invalid) {
+          return false;
+        }
+
+        var remainingLicenses =
+          $scope.currentPlan.playerProTotalLicenseCount - $scope.factory.purchase.displayCount;
+
+        return remainingLicenses > 0;
+      };
+
+      $scope.formValid = _isFormValid();
+
       purchaseLicensesFactory.init();
 
       $scope.$watch('factory.loading', function (loading) {
@@ -20,13 +37,12 @@ angular.module('risevision.apps.purchase')
         }
       });
 
-      var _isFormValid = function () {
-        var form = $scope.purchaseLicensesForm;
-        return !form || form.$valid; // TODO: this will change to prevent removing more displays than available
-      };
+      $scope.$watch('factory.purchase.displayCount', function () {
+        $scope.formValid = _isFormValid();
+      });
 
       $scope.getEstimate = function() {
-        if (!_isFormValid()) {
+        if (!$scope.formValid) {
           return;
         }
 
@@ -34,7 +50,7 @@ angular.module('risevision.apps.purchase')
       };
 
       $scope.completePayment = function () {
-        if (!_isFormValid()) {
+        if (!$scope.formValid) {
           return;
         }
 
