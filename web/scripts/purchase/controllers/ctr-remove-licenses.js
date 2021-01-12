@@ -42,7 +42,7 @@ angular.module('risevision.apps.purchase')
       });
 
       $scope.getEstimate = function() {
-        if (!$scope.formValid) {
+        if (!_isFormValid()) {
           return;
         }
 
@@ -50,7 +50,7 @@ angular.module('risevision.apps.purchase')
       };
 
       $scope.completePayment = function () {
-        if (!$scope.formValid) {
+        if (!_isFormValid()) {
           return;
         }
 

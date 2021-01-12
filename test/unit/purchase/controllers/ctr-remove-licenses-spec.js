@@ -136,7 +136,6 @@ describe("controller: remove-licenses", function() {
         $invalid: false
       };
       purchaseLicensesFactory.purchase.displayCount = 9;
-      $scope.$digest();
 
       $scope.getEstimate();
 
@@ -147,8 +146,6 @@ describe("controller: remove-licenses", function() {
       $scope.removeLicensesForm = {
         $invalid: true
       };
-      purchaseLicensesFactory.purchase.displayCount = 20;
-      $scope.$digest();
 
       $scope.getEstimate();
 
@@ -162,7 +159,6 @@ describe("controller: remove-licenses", function() {
         $invalid: false
       };
       purchaseLicensesFactory.purchase.displayCount = 9;
-      $scope.$digest();
 
       $scope.completePayment();
 
@@ -173,8 +169,6 @@ describe("controller: remove-licenses", function() {
       $scope.removeLicensesForm = {
         $invalid: true
       };
-      purchaseLicensesFactory.purchase.displayCount = 20;
-      $scope.$digest();
 
       $scope.completePayment();
 
