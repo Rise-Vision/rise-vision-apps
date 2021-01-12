@@ -16,7 +16,7 @@ describe("controller: remove-licenses", function() {
     });
     $provide.service("currentPlanFactory", function() {
       return {
-        currentPlan: { playerProTotalLicenseCount: 10 }
+        currentPlan: {}
       };
     });
     $provide.service("purchaseLicensesFactory", function() {
@@ -89,6 +89,10 @@ describe("controller: remove-licenses", function() {
 
   describe('getEstimate:', function() {
     it("should get estimate", function() {
+      $scope.removeLicensesForm = {
+        $valid: true
+      };
+
       $scope.getEstimate();
 
       purchaseLicensesFactory.getEstimate.should.have.been.called;
@@ -107,6 +111,10 @@ describe("controller: remove-licenses", function() {
 
   describe('completePayment:', function() {
     it("should complete payment", function() {
+      $scope.removeLicensesForm = {
+        $valid: true
+      };
+
       $scope.completePayment();
 
       purchaseLicensesFactory.completePayment.should.have.been.called;
