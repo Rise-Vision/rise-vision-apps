@@ -1,6 +1,6 @@
 "use strict";
 
-describe("controller: purchase-licenses", function() {
+describe("controller: add-licenses", function() {
   beforeEach(module("risevision.apps.purchase"));
   beforeEach(module(function ($provide) {
     $provide.service("$loading", function() {
@@ -48,7 +48,7 @@ describe("controller: purchase-licenses", function() {
       $location = $injector.get("$location");
       redirectTo =  '/displays/list'
 
-      $controller("PurchaseLicensesCtrl", {
+      $controller("AddLicensesCtrl", {
         $scope: $scope,
         $loading: $loading,
         redirectTo: redirectTo
@@ -80,7 +80,7 @@ describe("controller: purchase-licenses", function() {
       purchaseLicensesFactory.loading = true;
       $scope.$digest();
 
-      $loading.start.should.have.been.calledWith("purchase-licenses-loader");
+      $loading.start.should.have.been.calledWith("add-licenses-loader");
 
       purchaseLicensesFactory.loading = false;
       $scope.$digest();
