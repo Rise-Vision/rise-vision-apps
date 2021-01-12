@@ -89,7 +89,7 @@ describe("controller: remove-licenses", function() {
 
   describe('getEstimate:', function() {
     it("should get estimate", function() {
-      $scope.purchaseLicensesForm = {
+      $scope.removeLicensesForm = {
         $valid: true
       };
 
@@ -99,7 +99,7 @@ describe("controller: remove-licenses", function() {
     });
 
     it("should not get estimate if form is not valid", function() {
-      $scope.purchaseLicensesForm = {
+      $scope.removeLicensesForm = {
         $valid: false
       };
 
@@ -109,10 +109,9 @@ describe("controller: remove-licenses", function() {
     });
   });
 
-
   describe('completePayment:', function() {
     it("should complete payment", function() {
-      $scope.purchaseLicensesForm = {
+      $scope.removeLicensesForm = {
         $valid: true
       };
 
@@ -122,7 +121,7 @@ describe("controller: remove-licenses", function() {
     });
 
     it("should not complete payment if form is not valid", function() {
-      $scope.purchaseLicensesForm = {
+      $scope.removeLicensesForm = {
         $valid: false
       };
 

@@ -21,8 +21,8 @@ angular.module('risevision.apps.purchase')
       });
 
       var _isFormValid = function () {
-        var form = $scope.purchaseLicensesForm;
-        return !form || form.$valid; // TODO: this will change to prevent removing more displays than available
+        var form = $scope.removeLicensesForm;
+        return !form || form.$valid;
       };
 
       $scope.getEstimate = function() {
