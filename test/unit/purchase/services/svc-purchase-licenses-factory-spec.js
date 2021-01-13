@@ -415,4 +415,38 @@ describe("Services: purchase licenses factory", function() {
 
   });
 
+  describe("completePayment: remove:", function() {
+    beforeEach(function() {
+      validate = true;
+
+      purchaseLicensesFactory.purchase = {
+        displayCount: 1,
+        couponCode: '',
+        action: 'remove'
+      };
+    });
+
+    it("should call updateSubscription api and return a promise", function() {
+      expect(purchaseLicensesFactory.completePayment().then).to.be.a("function");
+
+      storeService.updateSubscription.should.have.been.called;
+      storeService.updateSubscription.should.have.been.calledWith(1, 'subscriptionId', 'billToId', '');
+    });
+
+    
+    it("should track purchase", function(done) {
+      purchaseLicensesFactory.completePayment();
+      setTimeout(function() {
+        analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
+          subscriptionId: 'subscriptionId',
+          changeInLicenses: -1,
+          totalLicenses: 1,
+          companyId: 'billToId'
+        });
+
+        done();
+      }, 10);
+    });
+  });
+
 });
