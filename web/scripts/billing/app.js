@@ -17,16 +17,11 @@ angular.module('risevision.apps')
           templateUrl: 'partials/billing/app-billing.html',
           controller: 'BillingCtrl',
           resolve: {
-            canAccessApps: ['canAccessApps', '$stateParams', 'ChargebeeFactory', 'billingFactory', 'userState',
-              function (canAccessApps, $stateParams, ChargebeeFactory, billingFactory, userState) {
+            canAccessApps: ['canAccessApps', 'billingFactory',
+              function (canAccessApps, billingFactory) {
                 return canAccessApps().then(function () {
                   // Clear potential error messages
                   billingFactory.init();
-
-                  if ($stateParams.edit) {
-                    new ChargebeeFactory().openEditSubscription(userState.getSelectedCompanyId(), $stateParams
-                      .edit);
-                  }
                 });
               }
             ]
