@@ -25,7 +25,7 @@ angular.module('risevision.apps.billing.services')
       factory.getSubscription = function (subscriptionId) {
         factory.init(false);
 
-        factory.subscription = null;
+        factory.item = null;
         factory.loading = true;
 
         return billing.getSubscription(subscriptionId)

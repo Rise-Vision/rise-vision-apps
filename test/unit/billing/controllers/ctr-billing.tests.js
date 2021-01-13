@@ -26,7 +26,9 @@ describe('controller: BillingCtrl', function () {
           return 'testId';
         },
         getCopyOfSelectedCompany: function () {
-          return {};
+          return {
+            id: 'testId'
+          };
         }
       };
     });
@@ -67,6 +69,8 @@ describe('controller: BillingCtrl', function () {
     expect($scope).to.be.ok;
     expect($scope.companySettingsFactory).to.be.ok;
 
+    expect($scope.showSubscriptionLink).to.be.a('function');
+
     expect($scope.subscriptions).to.be.ok;
     expect($scope.invoices).to.be.ok;
   });
@@ -94,6 +98,28 @@ describe('controller: BillingCtrl', function () {
 
         done();
       }, 10);
+    });
+  });
+
+  describe('showSubscriptionLink:', function() {
+    it('should not show if the subscription is purchased by the parent', function() {
+      expect($scope.showSubscriptionLink({
+        customer_id: 'anotherId'
+      })).to.be.false;
+    });
+
+    it('should not show if the subscription is cancelled', function() {
+      expect($scope.showSubscriptionLink({
+        customer_id: 'testId',
+        status: 'cancelled'
+      })).to.be.false;
+    });
+
+    it('should show otherwise', function() {
+      expect($scope.showSubscriptionLink({
+        customer_id: 'testId',
+        status: 'active'
+      })).to.be.true;
     });
   });
 
