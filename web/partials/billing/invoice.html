@@ -221,10 +221,10 @@
                 -${{invoiceFactory.invoice.credits_applied / 100 | number:2}}
               </span>
             </div>
-            <div class="text-right mt-3" ng-show="billingFactory.invoice.amount_adjusted">
+            <div class="text-right mt-3" ng-show="invoiceFactory.invoice.amount_adjusted">
               <span class="mb-0 pull-left">Adjustments:</span>
               <span class="mb-0">
-                -${{billingFactory.invoice.amount_adjusted / 100 | number:2}}
+                -${{invoiceFactory.invoice.amount_adjusted / 100 | number:2}}
               </span>
             </div>
 
