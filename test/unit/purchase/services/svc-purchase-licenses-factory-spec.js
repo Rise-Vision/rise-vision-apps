@@ -433,7 +433,6 @@ describe("Services: purchase licenses factory", function() {
       storeService.updateSubscription.should.have.been.calledWith(1, 'subscriptionId', 'billToId', '');
     });
 
-    
     it("should track purchase", function(done) {
       purchaseLicensesFactory.completePayment();
       setTimeout(function() {
@@ -446,6 +445,40 @@ describe("Services: purchase licenses factory", function() {
 
         done();
       }, 10);
+    });
+
+    describe("getCreditTotal:", function() {
+      it("should get credit total 0 if there are no credit notes", function() {
+        var total = purchaseLicensesFactory.getCreditTotal();
+
+        expect(total).to.equal(0);
+      });
+
+      it("should get credit total for a single credit note", function() {
+        purchaseLicensesFactory.estimate = {
+          credit_note_estimates: [
+            { total: 1000 }
+          ]
+        };
+
+        var total = purchaseLicensesFactory.getCreditTotal();
+
+        expect(total).to.equal(10);
+      });
+
+      it("should get credit total for multiple credit notes", function() {
+        purchaseLicensesFactory.estimate = {
+          credit_note_estimates: [
+            { total: 1000 },
+            { total: 2000 },
+            { total: 3000 }
+          ]
+        };
+
+        var total = purchaseLicensesFactory.getCreditTotal();
+
+        expect(total).to.equal(60);
+      });
     });
   });
 

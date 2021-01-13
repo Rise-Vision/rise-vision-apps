@@ -99,6 +99,18 @@
             });
         };
 
+        factory.getCreditTotal = function() {
+          if (!factory.estimate || !factory.estimate.credit_note_estimates) {
+            return 0;
+          }
+
+          var total = factory.estimate.credit_note_estimates.reduce(function(total, note) {
+            return total + note.total;
+          }, 0);
+
+          return total / 100;
+        };
+
         factory.completePayment = function () {
           _clearMessages();
 
