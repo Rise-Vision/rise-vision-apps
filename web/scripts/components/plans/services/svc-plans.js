@@ -182,6 +182,12 @@
           return plan;
         };
 
+        _factory.getPlanById = function (planId) {
+          var productCode = planId && planId.split('-')[0];
+
+          return _factory.getPlan(productCode);
+        };
+
         _factory.getFreePlan = function () {
           return _.find(PLANS_LIST, {
             type: 'free'
