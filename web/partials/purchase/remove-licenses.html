@@ -3,7 +3,7 @@
     <h1 class="app-header-title">Remove Display Licenses</h1>
   </div>
 
-  <div rv-spinner rv-spinner-key="remove-licenses-loader" rv-spinner-start-active="1"></div>
+  <div rv-spinner rv-spinner-key="purchase-licenses-loader" rv-spinner-start-active="1"></div>
 
   <div ng-show="factory.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
     <p><strong>{{factory.errorMessage}}</strong></p>
@@ -11,11 +11,11 @@
   </div>
 
   <div class="purchase-licenses-centered-panel" ng-hide="factory.purchase.completed">
-    <form role="form" name="removeLicensesForm" ng-submit="completePayment()">
+    <form role="form" name="purchaseLicensesForm" ng-submit="completePayment()">
       <div class="checkout-gray-panel">
         <h4 class="u_margin-md-bottom mt-0 mb-4">Subscription Details</h4>
 
-        <div class="left-right-aligner" ng-class="{'has-error': removeLicensesForm.$invalid }">
+        <div class="left-right-aligner" ng-class="{'has-error': purchaseLicensesForm.$invalid }">
           <label for="displayCount" class="control-label">Number of display licenses you want to remove:</label>
           <input class="display-count-input mt-0 pull-right" type="number" name="displayCount" ng-model="factory.purchase.displayCount" min="1" max="{{currentPlan.playerProTotalLicenseCount-1}}" ng-pattern="/^[0-9]+$/" required ng-change="getEstimate()" ng-model-options="{ debounce: 1000 }" autofocus />
         </div>
@@ -49,7 +49,7 @@
 
       <div class="flex-row u_margin-md-top mb-5">
         <button id="backButton" type="button" aria-label="Go back" class="btn btn-default btn-toolbar pull-left" ng-click="close()" translate>common.cancel</button>
-        <button id="payButton" type="submit" class="btn btn-primary ml-4 w-100" tabindex="1" aria-label="Update Subscription" ng-disabled="removeLicensesForm.$invalid" >
+        <button id="payButton" type="submit" class="btn btn-primary ml-4 w-100" tabindex="1" aria-label="Update Subscription" ng-disabled="purchaseLicensesForm.$invalid" >
           <span id="invoiceLabel">Update Subscription</span>
         </button>
       </div>

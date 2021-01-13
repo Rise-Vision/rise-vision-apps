@@ -14,6 +14,9 @@ describe("controller: add-licenses", function() {
         go: sandbox.spy()
       }
     });
+    $provide.value("$stateParams", {
+      purchaseAction: 'add'
+    });
     $provide.service("currentPlanFactory", function() {
       return {
         currentPlan: {}
@@ -48,7 +51,7 @@ describe("controller: add-licenses", function() {
       $location = $injector.get("$location");
       redirectTo =  '/displays/list'
 
-      $controller("AddLicensesCtrl", {
+      $controller("PurchaseLicensesCtrl", {
         $scope: $scope,
         $loading: $loading,
         redirectTo: redirectTo
@@ -80,7 +83,7 @@ describe("controller: add-licenses", function() {
       purchaseLicensesFactory.loading = true;
       $scope.$digest();
 
-      $loading.start.should.have.been.calledWith("add-licenses-loader");
+      $loading.start.should.have.been.calledWith("purchase-licenses-loader");
 
       purchaseLicensesFactory.loading = false;
       $scope.$digest();

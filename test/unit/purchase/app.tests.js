@@ -140,7 +140,8 @@ describe('app:', function() {
       var state = $state.get('apps.purchase.licenses.add');
       expect(state).to.be.ok;
       expect(state.url).to.equal('/add');
-      expect(state.controller).to.equal('AddLicensesCtrl')
+      expect(state.params).to.deep.equal({purchaseAction: 'add'});
+      expect(state.controller).to.equal('PurchaseLicensesCtrl')
     });
 
     it('should go to Purchase page if company is not subscribed to a plan', function(done) {
@@ -217,7 +218,8 @@ describe('app:', function() {
       var state = $state.get('apps.purchase.licenses.remove');
       expect(state).to.be.ok;
       expect(state.url).to.equal('/remove');
-      expect(state.controller).to.equal('RemoveLicensesCtrl')
+      expect(state.params).to.deep.equal({purchaseAction: 'remove'});
+      expect(state.controller).to.equal('PurchaseLicensesCtrl');
     });
 
     it('should go to Purchase page if company is not subscribed to a plan', function(done) {
