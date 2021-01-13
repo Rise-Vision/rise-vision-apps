@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.apps.billing.controllers')
-  .controller('SubscriptionCtrl', ['$scope', '$rootScope', '$loading', '$timeout', 'subscriptionFactory',
+  .controller('SubscriptionCtrl', ['$scope', '$rootScope', '$loading', 'subscriptionFactory',
   'userState', 'creditCardFactory', 'companySettingsFactory', 'ChargebeeFactory',
-    function ($scope, $rootScope, $loading, $timeout, subscriptionFactory, userState, creditCardFactory,
+    function ($scope, $rootScope, $loading, subscriptionFactory, userState, creditCardFactory,
       companySettingsFactory, ChargebeeFactory) {
       $scope.subscriptionFactory = subscriptionFactory;
       $scope.creditCardFactory = creditCardFactory;
@@ -23,16 +23,8 @@ angular.module('risevision.apps.billing.controllers')
         return subscriptionFactory.item && !subscriptionFactory.item.card;
       };
 
-      var _reloadSubscription = function () {
-        $loading.start('subscription-loader');
-
-        $timeout(function () {
-          subscriptionFactory.reloadSubscription();
-        }, 10000);
-      };
-
-      $rootScope.$on('chargebee.subscriptionChanged', _reloadSubscription);
-      $rootScope.$on('chargebee.subscriptionCancelled', _reloadSubscription);
+      $rootScope.$on('chargebee.subscriptionChanged', subscriptionFactory.reloadSubscription);
+      $rootScope.$on('chargebee.subscriptionCancelled', subscriptionFactory.reloadSubscription);
 
       $scope.editSubscription = function (subscription) {
         var subscriptionId = subscription.id;

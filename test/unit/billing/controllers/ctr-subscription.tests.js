@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: SubscriptionCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $rootScope, $scope, $loading, $timeout, subscriptionFactory;
+  var $rootScope, $scope, $loading, subscriptionFactory;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -57,7 +57,6 @@ describe('controller: SubscriptionCtrl', function () {
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
-    $timeout = $injector.get('$timeout');
     subscriptionFactory = $injector.get('subscriptionFactory');
 
     $controller('SubscriptionCtrl', {
@@ -143,9 +142,7 @@ describe('controller: SubscriptionCtrl', function () {
   describe('events: ', function () {
     it('should reload Subscription when it is updated on Customer Portal', function () {
       $rootScope.$emit('chargebee.subscriptionChanged');
-      $timeout.flush();
 
-      expect($loading.start).to.be.calledOnce;
       expect(subscriptionFactory.reloadSubscription).to.be.calledOnce;
     });
 
