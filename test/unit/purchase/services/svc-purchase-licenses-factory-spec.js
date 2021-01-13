@@ -81,25 +81,27 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should initialize values and retrieve estimate", function() {
-      purchaseLicensesFactory.init();
+      purchaseLicensesFactory.init('add');
 
       expect(purchaseLicensesFactory.purchase).to.be.ok;
       expect(purchaseLicensesFactory.purchase.completed).to.be.false;
       expect(purchaseLicensesFactory.purchase.displayCount).to.equal('displayCount');
       expect(purchaseLicensesFactory.purchase.couponCode).to.equal('')
+      expect(purchaseLicensesFactory.purchase.action).to.equal('add')
 
       purchaseLicensesFactory.getEstimate.should.have.been.called;
     });
 
   });
 
-  describe("getEstimate: ", function() {
+  describe("getEstimate: add:", function() {
     beforeEach(function() {
       validate = true;
 
       purchaseLicensesFactory.purchase = {
         displayCount: 5,
-        couponCode: 'couponCode'
+        couponCode: 'couponCode',
+        action: 'add'
       };
 
     });
@@ -220,7 +222,7 @@ describe("Services: purchase licenses factory", function() {
       purchaseLicensesFactory.getEstimate()
       .then(function() {
         expect(purchaseLicensesFactory.apiError).to.equal("An unexpected error has occurred. Please try again.");
-      
+
         done();
       })
       .then(null,function() {
@@ -235,7 +237,7 @@ describe("Services: purchase licenses factory", function() {
       purchaseLicensesFactory.getEstimate()
       .then(function() {
         expect(purchaseLicensesFactory.estimate).to.equal("previousEstimate");
-      
+
         done();
       })
       .then(null,function() {
@@ -257,13 +259,54 @@ describe("Services: purchase licenses factory", function() {
 
   });
 
-  describe("completePayment: ", function() {
+  describe("getEstimate: remove:", function() {
+    beforeEach(function() {
+      validate = true;
+
+      purchaseLicensesFactory.purchase = {
+        displayCount: 1,
+        couponCode: '',
+        action: 'remove'
+      };
+
+    });
+
+    it("should call estimateSubscriptionUpdate api and return a promise", function() {
+      expect(purchaseLicensesFactory.getEstimate().then).to.be.a("function");
+
+      storeService.estimateSubscriptionUpdate.should.have.been.called;
+      storeService.estimateSubscriptionUpdate.should.have.been.calledWith(1, 'subscriptionId', 'billToId', '');
+    });
+
+    it("should populate estimate object if call succeeds", function(done) {
+      purchaseLicensesFactory.getEstimate()
+      .then(function() {
+        expect(purchaseLicensesFactory.estimate).to.equal('estimateResponse');
+
+        expect(analyticsFactory.track).to.have.been.calledWith('Subscription Update Estimated', {
+          subscriptionId: 'subscriptionId',
+          changeInLicenses: -1,
+          totalLicenses: 1,
+          companyId: 'billToId'
+        });
+
+        done();
+      })
+      .then(null,function(e) {
+        console.error(e);
+        done("error");
+      });
+    });
+  });
+
+  describe("completePayment: add:", function() {
     beforeEach(function() {
       validate = true;
 
       purchaseLicensesFactory.purchase = {
         displayCount: 5,
-        couponCode: 'couponCode'
+        couponCode: 'couponCode',
+        action: 'add'
       };
 
     });
@@ -289,8 +332,8 @@ describe("Services: purchase licenses factory", function() {
 
     it("should track purchase", function(done) {
       purchaseLicensesFactory.completePayment();
-      
-      setTimeout(function() {        
+
+      setTimeout(function() {
         analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
           subscriptionId: 'subscriptionId',
           changeInLicenses: 5,
@@ -304,8 +347,8 @@ describe("Services: purchase licenses factory", function() {
 
     it("should not reload company right away", function(done) {
       purchaseLicensesFactory.completePayment();
-      
-      setTimeout(function() {        
+
+      setTimeout(function() {
         expect(purchaseLicensesFactory.purchase.completed).to.not.be.ok;
         userState.reloadSelectedCompany.should.not.have.been.called;
 
@@ -329,7 +372,7 @@ describe("Services: purchase licenses factory", function() {
 
       // Flush asynchronously
       setTimeout(function() {
-        $timeout.flush(10000);        
+        $timeout.flush(10000);
       }, 10);
     });
 
@@ -350,7 +393,7 @@ describe("Services: purchase licenses factory", function() {
 
         // Flush asynchronously
         setTimeout(function() {
-          $timeout.flush(10000);        
+          $timeout.flush(10000);
         }, 10);
     });
 
