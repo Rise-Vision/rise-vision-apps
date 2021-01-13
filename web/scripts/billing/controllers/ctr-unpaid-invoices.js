@@ -2,10 +2,10 @@
 
 angular.module('risevision.apps.billing.controllers')
   .controller('UnpaidInvoicesCtrl', ['$scope', '$loading', '$stateParams', 
-    'billing', 'billingFactory', 'ScrollingListService',
-    function ($scope, $loading, $stateParams, billing, billingFactory, ScrollingListService) {
+    'billing', 'invoiceFactory', 'ScrollingListService',
+    function ($scope, $loading, $stateParams, billing, invoiceFactory, ScrollingListService) {
 
-      $scope.billingFactory = billingFactory;
+      $scope.invoiceFactory = invoiceFactory;
 
       $scope.unpaidInvoices = new ScrollingListService(billing.getUnpaidInvoices, {
         companyId: $stateParams.cid,

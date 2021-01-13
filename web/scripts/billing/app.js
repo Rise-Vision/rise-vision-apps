@@ -17,11 +17,11 @@ angular.module('risevision.apps')
           templateUrl: 'partials/billing/app-billing.html',
           controller: 'BillingCtrl',
           resolve: {
-            canAccessApps: ['canAccessApps', 'billingFactory',
-              function (canAccessApps, billingFactory) {
+            canAccessApps: ['canAccessApps', 'invoiceFactory',
+              function (canAccessApps, invoiceFactory) {
                 return canAccessApps().then(function () {
                   // Clear potential error messages
-                  billingFactory.init();
+                  invoiceFactory.init();
                 });
               }
             ]
@@ -40,10 +40,10 @@ angular.module('risevision.apps')
           templateUrl: 'partials/billing/invoice.html',
           controller: 'InvoiceCtrl',
           resolve: {
-            invoiceInfo: ['billingFactory', '$stateParams',
-              function (billingFactory, $stateParams) {
+            invoiceInfo: ['invoiceFactory', '$stateParams',
+              function (invoiceFactory, $stateParams) {
                 // pass $stateParams to service as values could be blank before state is loaded
-                billingFactory.getInvoice($stateParams.invoiceId, $stateParams.cid, $stateParams.token);
+                invoiceFactory.getInvoice($stateParams.invoiceId, $stateParams.cid, $stateParams.token);
               }
             ]
           },

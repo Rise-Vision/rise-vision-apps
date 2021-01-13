@@ -2,7 +2,7 @@
 
 describe('app:', function() {
   var sandbox = sinon.sandbox.create();
-  var $state, canAccessApps, $stateParams, billingFactory;
+  var $state, canAccessApps, $stateParams, invoiceFactory;
 
   beforeEach(function () {
     angular.module('risevision.apps.partials',[]);
@@ -13,7 +13,7 @@ describe('app:', function() {
       $provide.service('canAccessApps',function(){
         return sandbox.stub().returns(Q.resolve());
       });
-      $provide.service('billingFactory', function() {
+      $provide.service('invoiceFactory', function() {
         return {
           getInvoice: sandbox.spy(),
           init: sandbox.spy()
@@ -30,7 +30,7 @@ describe('app:', function() {
       $state = $injector.get('$state');
       canAccessApps = $injector.get('canAccessApps');
       $stateParams = $injector.get('$stateParams');
-      billingFactory = $injector.get('billingFactory');
+      invoiceFactory = $injector.get('invoiceFactory');
     });
   });
 
@@ -49,10 +49,10 @@ describe('app:', function() {
     });
 
     it('should initialize factory', function(done) {
-      $state.get('apps.billing.home').resolve.canAccessApps[2](canAccessApps, billingFactory);
+      $state.get('apps.billing.home').resolve.canAccessApps[2](canAccessApps, invoiceFactory);
       setTimeout(function() {
         canAccessApps.should.have.been.called.once;
-        billingFactory.init.should.have.been.called;
+        invoiceFactory.init.should.have.been.called;
 
         done();
       }, 10);
@@ -86,9 +86,9 @@ describe('app:', function() {
       $stateParams.invoiceId = 'invoiceId';
       $stateParams.cid = 'companyId';
       $stateParams.token = 'token';
-      $state.get('apps.billing.invoice').resolve.invoiceInfo[2](billingFactory, $stateParams);
+      $state.get('apps.billing.invoice').resolve.invoiceInfo[2](invoiceFactory, $stateParams);
       setTimeout(function() {
-        billingFactory.getInvoice.should.have.been.calledWith('invoiceId', 'companyId', 'token');
+        invoiceFactory.getInvoice.should.have.been.calledWith('invoiceId', 'companyId', 'token');
 
         done();
       }, 10);

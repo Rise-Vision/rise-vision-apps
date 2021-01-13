@@ -21,7 +21,7 @@ describe('controller: UnpaidInvoicesCtrl', function () {
         getUnpaidInvoices: 'getUnpaidInvoices'
       };
     });
-    $provide.value('billingFactory', {
+    $provide.value('invoiceFactory', {
     });
     $provide.value('$stateParams', {
       cid: 'companyId',
@@ -46,7 +46,7 @@ describe('controller: UnpaidInvoicesCtrl', function () {
 
   it('should exist',function () {
     expect($scope).to.be.ok;
-    expect($scope.billingFactory).to.be.ok;
+    expect($scope.invoiceFactory).to.be.ok;
 
     expect($scope.unpaidInvoices).to.be.ok;
   });

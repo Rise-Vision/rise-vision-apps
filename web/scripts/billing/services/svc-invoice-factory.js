@@ -3,7 +3,7 @@
 /*jshint camelcase: false */
 
 angular.module('risevision.apps.billing.services')
-  .service('billingFactory', ['$q', '$log', '$window', '$stateParams', 'billing',
+  .service('invoiceFactory', ['$q', '$log', '$window', '$stateParams', 'billing',
     'storeService', 'creditCardFactory', 'userState', 'processErrorCode', 'analyticsFactory',
     function ($q, $log, $window, $stateParams, billing, storeService, creditCardFactory,
       userState, processErrorCode, analyticsFactory) {
