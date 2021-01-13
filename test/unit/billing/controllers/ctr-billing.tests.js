@@ -47,7 +47,7 @@ describe('controller: BillingCtrl', function () {
         getInvoices: 'getInvoices'
       };
     });
-    $provide.value('billingFactory', {
+    $provide.value('invoiceFactory', {
     });
   }));
 

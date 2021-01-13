@@ -109,7 +109,7 @@
     <div class="form-group mt-5 mb-3">
       <label>Billing History</label>
       <span ng-show="invoices.items.list.length > 0">
-        (<a class="madero-link" ui-sref="apps.billing.unpaid({token: billingFactory.getToken()})" target="_blank">View Unpaid Invoices</a>)
+        (<a class="madero-link" ui-sref="apps.billing.unpaid({token: invoiceFactory.getToken()})" target="_blank">View Unpaid Invoices</a>)
       </span>
     </div>
 
@@ -118,8 +118,8 @@
       {{invoices.apiError}}
     </div>
 
-    <div id="errorBox" ng-show="billingFactory.apiError" class="madero-style alert alert-danger" role="alert">
-      <strong>{{billingFactory.apiError}}</strong>
+    <div id="errorBox" ng-show="invoiceFactory.apiError" class="madero-style alert alert-danger" role="alert">
+      <strong>{{invoiceFactory.apiError}}</strong>
     </div>
 
     <div class="scrollable-list horizontal-scroll border-container mt-0 u_margin-md-bottom" scrolling-list="invoices.load()">
@@ -149,12 +149,12 @@
               ${{(item.invoice.amount_due || item.invoice.total) / 100 | number:2}}
             </td>
             <td class="table-body__cell">
-              <a class="madero-link u_clickable" ng-click="billingFactory.downloadInvoice(item.invoice.id)">
+              <a class="madero-link u_clickable" ng-click="invoiceFactory.downloadInvoice(item.invoice.id)">
                 <img src="../images/icon-download.svg" width="20" height="20">
               </a>
             </td>
             <td class="table-body__cell py-0">
-              <a class="btn btn-default btn-pay-now" ng-if="item.invoice.status !== 'paid'" ui-sref="apps.billing.invoice({invoiceId: item.invoice.id, token: billingFactory.getToken()})" target="_blank">Pay Now</a>
+              <a class="btn btn-default btn-pay-now" ng-if="item.invoice.status !== 'paid'" ui-sref="apps.billing.invoice({invoiceId: item.invoice.id, token: invoiceFactory.getToken()})" target="_blank">Pay Now</a>
             </td>
           </tr>
 
