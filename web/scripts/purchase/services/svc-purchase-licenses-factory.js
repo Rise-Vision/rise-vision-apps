@@ -22,18 +22,19 @@
         factory.init = function (purchaseAction) {
           _clearMessages();
 
+          var isRemove = purchaseAction === 'remove';
+
           factory.purchase = {};
           factory.purchase.completed = false;
-          factory.purchase.displayCount = $stateParams.displayCount;
+          factory.purchase.licensesToAdd = isRemove ? 0 : $stateParams.displayCount;
+          factory.purchase.licensesToRemove = isRemove ? $stateParams.displayCount : 0;
           factory.purchase.couponCode = '';
-          factory.purchase.action = purchaseAction;
 
           factory.getEstimate();
         };
 
         var _getChangeInLicenses = function() {
-          return factory.purchase.action === 'remove' ?
-            -factory.purchase.displayCount : factory.purchase.displayCount;
+          return factory.purchase.licensesToAdd - factory.purchase.licensesToRemove;
         };
 
         var _getTotalDisplayCount = function () {

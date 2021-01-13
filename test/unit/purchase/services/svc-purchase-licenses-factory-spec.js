@@ -85,9 +85,9 @@ describe("Services: purchase licenses factory", function() {
 
       expect(purchaseLicensesFactory.purchase).to.be.ok;
       expect(purchaseLicensesFactory.purchase.completed).to.be.false;
-      expect(purchaseLicensesFactory.purchase.displayCount).to.equal('displayCount');
+      expect(purchaseLicensesFactory.purchase.licensesToAdd).to.equal('displayCount');
+      expect(purchaseLicensesFactory.purchase.licensesToRemove).to.equal(0);
       expect(purchaseLicensesFactory.purchase.couponCode).to.equal('')
-      expect(purchaseLicensesFactory.purchase.action).to.equal('add')
 
       purchaseLicensesFactory.getEstimate.should.have.been.called;
     });
@@ -99,9 +99,9 @@ describe("Services: purchase licenses factory", function() {
       validate = true;
 
       purchaseLicensesFactory.purchase = {
-        displayCount: 5,
-        couponCode: 'couponCode',
-        action: 'add'
+        licensesToAdd: 5,
+        licensesToRemove: 0,
+        couponCode: 'couponCode'
       };
 
     });
@@ -264,9 +264,9 @@ describe("Services: purchase licenses factory", function() {
       validate = true;
 
       purchaseLicensesFactory.purchase = {
-        displayCount: 1,
-        couponCode: '',
-        action: 'remove'
+        licensesToAdd: 0,
+        licensesToRemove: 1,
+        couponCode: ''
       };
 
     });
@@ -304,9 +304,9 @@ describe("Services: purchase licenses factory", function() {
       validate = true;
 
       purchaseLicensesFactory.purchase = {
-        displayCount: 5,
-        couponCode: 'couponCode',
-        action: 'add'
+        licensesToAdd: 5,
+        licensesToRemove: 0,
+        couponCode: 'couponCode'
       };
 
     });
@@ -420,9 +420,9 @@ describe("Services: purchase licenses factory", function() {
       validate = true;
 
       purchaseLicensesFactory.purchase = {
-        displayCount: 1,
-        couponCode: '',
-        action: 'remove'
+        licensesToAdd: 0,
+        licensesToRemove: 1,
+        couponCode: ''
       };
     });
 
