@@ -2,9 +2,11 @@
 
 angular.module('risevision.apps.billing.controllers')
   .controller('SubscriptionCtrl', ['$scope', '$loading', 'subscriptionFactory', 'userState',
-  'companySettingsFactory',
-    function ($scope, $loading, subscriptionFactory, userState, companySettingsFactory) {
+  'creditCardFactory', 'companySettingsFactory',
+    function ($scope, $loading, subscriptionFactory, userState, creditCardFactory,
+      companySettingsFactory) {
       $scope.subscriptionFactory = subscriptionFactory;
+      $scope.creditCardFactory = creditCardFactory;
       $scope.companySettingsFactory = companySettingsFactory;
       $scope.company = userState.getCopyOfSelectedCompany();
 
@@ -15,6 +17,10 @@ angular.module('risevision.apps.billing.controllers')
           $loading.stop('subscription-loader');
         }
       });
+
+      $scope.isInvoiced = function() {
+        return subscriptionFactory.item && !subscriptionFactory.item.card;
+      };
 
     }
   ]);

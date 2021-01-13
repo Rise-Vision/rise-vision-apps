@@ -32,13 +32,24 @@
     }
   }
 
-  .subscription-card {
-    text-align: center;
+  .row.subscription-card-row {
+    display: flex;
+    flex-wrap: wrap;
 
-    h1 {
-      font-size: 48px;
-      margin-top: 10px;
-      margin-bottom: 20px;
+    & > [class*='col-'] {
+      display: flex;
+      flex-direction: column;
+
+      .subscription-card {
+        height: 100%;
+        text-align: center;
+
+        h1 {
+          font-size: 48px;
+          margin-top: 10px;
+          margin-bottom: 20px;
+        }
+      }
     }
   }
 
