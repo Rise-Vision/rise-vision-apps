@@ -37,14 +37,6 @@
       {{subscriptions.apiError}}
     </div>
 
-    <div id="errorBoxChargebee" ng-show="chargebeeFactory.apiError" class="madero-style alert alert-danger" role="alert">
-      <span ng-show="chargebeeFactory.apiError === 403">
-        <span ng-show="currentPlan.parentPlanContactEmail" translate translate-values="{ parentPlanContactEmail: currentPlan.parentPlanContactEmail }">account-and-billing.errors.403-contact-email</span>
-        <span ng-hide="currentPlan.parentPlanContactEmail" translate>account-and-billing.errors.403-no-contact-email</span>
-      </span>
-      <span ng-hide="chargebeeFactory.apiError === 403">{{chargebeeFactory.apiError}}</span>
-    </div>
-
     <div class="scrollable-list horizontal-scroll border-container mt-0 u_margin-md-bottom" scrolling-list="subscriptions.load()">
 
       <table id="subscriptionsListTable" class="table">
