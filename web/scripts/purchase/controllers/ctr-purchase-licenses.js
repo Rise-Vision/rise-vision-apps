@@ -10,7 +10,7 @@ angular.module('risevision.apps.purchase')
       $scope.currentPlan = currentPlanFactory.currentPlan;
       $scope.couponCode = null;
 
-      purchaseLicensesFactory.init();
+      purchaseLicensesFactory.init($stateParams.purchaseAction);
 
       $scope.$watch('factory.loading', function (loading) {
         if (loading) {

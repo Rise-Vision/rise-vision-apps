@@ -19,22 +19,34 @@
           factory.apiError = '';
         };
 
-        factory.init = function () {
+        factory.init = function (purchaseAction) {
           _clearMessages();
 
           factory.purchase = {};
           factory.purchase.completed = false;
           factory.purchase.displayCount = $stateParams.displayCount;
           factory.purchase.couponCode = '';
+          factory.purchase.action = purchaseAction;
 
           factory.getEstimate();
+        };
+
+        var _getChangeInLicenses = function() {
+          return factory.purchase.action === 'remove' ?
+            -factory.purchase.displayCount : factory.purchase.displayCount;
+        };
+
+        var _getTotalDisplayCount = function () {
+          var currentLicenses = currentPlanFactory.currentPlan.playerProTotalLicenseCount;
+
+          return currentLicenses + _getChangeInLicenses();
         };
 
         var _getTrackingProperties = function () {
           return {
             subscriptionId: currentPlanFactory.currentPlan.subscriptionId,
-            changeInLicenses: factory.purchase.displayCount,
-            totalLicenses: factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount,
+            changeInLicenses: _getChangeInLicenses(),
+            totalLicenses: _getTotalDisplayCount(),
             companyId: currentPlanFactory.currentPlan.billToId
           };
         };
@@ -45,7 +57,7 @@
           }
 
           var currentDisplayCount = currentPlanFactory.currentPlan.playerProTotalLicenseCount;
-          var displayCount = factory.purchase.displayCount + currentDisplayCount;
+          var displayCount = _getTotalDisplayCount();
 
           var lineItem = factory.estimate.next_invoice_estimate.line_items[0];
           var isMonthly = lineItem.entity_id.endsWith('m');
@@ -65,7 +77,7 @@
           factory.loading = true;
 
           var couponCode = factory.purchase.couponCode;
-          var displayCount = factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount;
+          var displayCount = _getTotalDisplayCount();
           var subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
           var companyId = currentPlanFactory.currentPlan.billToId;
 
@@ -93,7 +105,7 @@
           factory.loading = true;
 
           var couponCode = factory.purchase.couponCode;
-          var displayCount = factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount;
+          var displayCount = _getTotalDisplayCount();
           var subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
           var companyId = currentPlanFactory.currentPlan.billToId;
 
