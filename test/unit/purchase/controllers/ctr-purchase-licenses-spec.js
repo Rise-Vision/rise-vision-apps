@@ -83,7 +83,7 @@ describe("controller: add-licenses", function() {
       purchaseLicensesFactory.loading = true;
       $scope.$digest();
 
-      $loading.start.should.have.been.calledWith("add-licenses-loader");
+      $loading.start.should.have.been.calledWith("purchase-licenses-loader");
 
       purchaseLicensesFactory.loading = false;
       $scope.$digest();
