@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: BillingCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $rootScope, $scope, $loading, $timeout, ScrollingListService, listServiceInstance;
+  var $rootScope, $scope, $loading, ScrollingListService, listServiceInstance;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -26,20 +26,14 @@ describe('controller: BillingCtrl', function () {
           return 'testId';
         },
         getCopyOfSelectedCompany: function () {
-          return {};
+          return {
+            id: 'testId'
+          };
         }
       };
     });
     $provide.service('currentPlanFactory', function() {
       return {};
-    });
-    $provide.service('ChargebeeFactory', function () {
-      return function() {
-        return {
-          openPaymentSources: sandbox.stub(),
-          openSubscriptionDetails: sandbox.stub()
-        };
-      };
     });
     $provide.service('billing', function () {
       return {
@@ -59,7 +53,6 @@ describe('controller: BillingCtrl', function () {
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
-    $timeout = $injector.get('$timeout');
     ScrollingListService = $injector.get('ScrollingListService');
 
     $controller('BillingCtrl', {
@@ -75,8 +68,8 @@ describe('controller: BillingCtrl', function () {
   it('should exist',function () {
     expect($scope).to.be.ok;
     expect($scope.companySettingsFactory).to.be.ok;
-    expect($scope.editPaymentMethods).to.be.a.function;
-    expect($scope.editSubscription).to.be.a.function;
+
+    expect($scope.showSubscriptionLink).to.be.a('function');
 
     expect($scope.subscriptions).to.be.ok;
     expect($scope.invoices).to.be.ok;
@@ -108,38 +101,34 @@ describe('controller: BillingCtrl', function () {
     });
   });
 
-  describe('payment methods', function () {
-    it('should show Chargebee payment methods', function () {
-      $scope.editPaymentMethods();
-      expect($scope.chargebeeFactory.openPaymentSources).to.be.calledOnce;
-      expect($scope.chargebeeFactory.openPaymentSources.getCall(0).args[0]).to.equal('testId');
+  describe('showSubscriptionLink:', function() {
+    it('should not show if the subscription is purchased by the parent', function() {
+      expect($scope.showSubscriptionLink({
+        customer_id: 'anotherId'
+      })).to.be.false;
     });
-  });
 
-  describe('edit subscriptions', function () {
-    it('should show Chargebee subscription details', function () {
-      $scope.editSubscription({ id: 'subs1' });
-      expect($scope.chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
-      expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
-      expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('subs1');
+    it('should not show if the subscription is cancelled', function() {
+      expect($scope.showSubscriptionLink({
+        customer_id: 'testId',
+        status: 'cancelled'
+      })).to.be.false;
+    });
+
+    it('should show otherwise', function() {
+      expect($scope.showSubscriptionLink({
+        customer_id: 'testId',
+        status: 'active'
+      })).to.be.true;
     });
   });
 
   describe('events: ', function () {
-    it('should reload Subscriptions when Subscription is updated on Customer Portal', function () {
-      $rootScope.$emit('chargebee.subscriptionChanged');
-      $timeout.flush();
-
-      expect($loading.start).to.be.calledOnce;
-      expect(listServiceInstance.doSearch).to.be.calledOnce;
-    });
-
     it('should reload Subscriptions when Subscription is started', function () {
       $rootScope.$emit('risevision.company.planStarted');
 
       expect(listServiceInstance.doSearch).to.be.calledOnce;
     });
-
   });
 
   describe('data formatting', function () {

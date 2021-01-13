@@ -41,7 +41,7 @@ angular.module('risevision.apps')
         })
 
         .state('apps.billing.subscription', {
-          url: '/billing/subscription/:subscriptionId?:token',
+          url: '/billing/subscription/:subscriptionId',
           templateUrl: 'partials/billing/subscription.html',
           controller: 'SubscriptionCtrl',
           resolve: {
