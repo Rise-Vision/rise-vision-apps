@@ -2,7 +2,7 @@
 
 describe('app:', function() {
   var sandbox = sinon.sandbox.create();
-  var $state, canAccessApps, $stateParams, ChargebeeFactory, billingFactory, userState, chargebeeFactoryStub;
+  var $state, canAccessApps, $stateParams, billingFactory;
 
   beforeEach(function () {
     angular.module('risevision.apps.partials',[]);
@@ -12,13 +12,6 @@ describe('app:', function() {
     module(function ($provide) {
       $provide.service('canAccessApps',function(){
         return sandbox.stub().returns(Q.resolve());
-      });
-      $provide.service('ChargebeeFactory', function () {
-        return function() {
-          return chargebeeFactoryStub = {
-            openEditSubscription: sandbox.stub()
-          };
-        };
       });
       $provide.service('billingFactory', function() {
         return {
@@ -31,21 +24,13 @@ describe('app:', function() {
         };
       });
 
-      $provide.service('userState', function () {
-        return {
-          _restoreState: sandbox.stub(),
-          getSelectedCompanyId: sandbox.stub().returns('cid')
-        };
-      });
     });
 
     inject(function ($injector) {
       $state = $injector.get('$state');
       canAccessApps = $injector.get('canAccessApps');
       $stateParams = $injector.get('$stateParams');
-      ChargebeeFactory = $injector.get('ChargebeeFactory');
       billingFactory = $injector.get('billingFactory');
-      userState = $injector.get('userState');
     });
   });
 
@@ -63,26 +48,11 @@ describe('app:', function() {
       expect(state.forceAuth).to.not.be.false;
     });
 
-    it('should open Edit Subscription if edit param is provided', function(done) {
-      $stateParams.edit = 'subscriptionId';
-      $state.get('apps.billing.home').resolve.canAccessApps[5](canAccessApps, $stateParams, ChargebeeFactory, billingFactory, userState);
+    it('should initialize factory', function(done) {
+      $state.get('apps.billing.home').resolve.canAccessApps[2](canAccessApps, billingFactory);
       setTimeout(function() {
         canAccessApps.should.have.been.called.once;
         billingFactory.init.should.have.been.called;
-        chargebeeFactoryStub.openEditSubscription.should.have.been.calledWith('cid','subscriptionId');
-
-        done();
-      }, 10);
-    });
-
-    it('should not open Edit Subscription if edit is not present', function(done) {
-      chargebeeFactoryStub.openEditSubscription.resetHistory();
-
-      $state.get('apps.billing.home').resolve.canAccessApps[5](canAccessApps, $stateParams, ChargebeeFactory, billingFactory, userState);
-      setTimeout(function() {
-        canAccessApps.should.have.been.called.once;
-        billingFactory.init.should.have.been.called;
-        chargebeeFactoryStub.openEditSubscription.should.not.have.been.called;
 
         done();
       }, 10);
