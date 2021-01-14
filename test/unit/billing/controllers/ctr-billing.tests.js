@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: BillingCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $rootScope, $scope, $loading, $timeout, ScrollingListService, listServiceInstance;
+  var $rootScope, $scope, $loading, ScrollingListService, listServiceInstance;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -26,20 +26,14 @@ describe('controller: BillingCtrl', function () {
           return 'testId';
         },
         getCopyOfSelectedCompany: function () {
-          return {};
+          return {
+            id: 'testId'
+          };
         }
       };
     });
     $provide.service('currentPlanFactory', function() {
       return {};
-    });
-    $provide.service('ChargebeeFactory', function () {
-      return function() {
-        return {
-          openPaymentSources: sandbox.stub(),
-          openSubscriptionDetails: sandbox.stub()
-        };
-      };
     });
     $provide.service('billing', function () {
       return {
@@ -59,7 +53,6 @@ describe('controller: BillingCtrl', function () {
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
-    $timeout = $injector.get('$timeout');
     ScrollingListService = $injector.get('ScrollingListService');
 
     $controller('BillingCtrl', {
@@ -75,8 +68,8 @@ describe('controller: BillingCtrl', function () {
   it('should exist',function () {
     expect($scope).to.be.ok;
     expect($scope.companySettingsFactory).to.be.ok;
-    expect($scope.editPaymentMethods).to.be.a.function;
-    expect($scope.editSubscription).to.be.a.function;
+
+    expect($scope.showSubscriptionLink).to.be.a('function');
 
     expect($scope.subscriptions).to.be.ok;
     expect($scope.invoices).to.be.ok;
@@ -108,122 +101,37 @@ describe('controller: BillingCtrl', function () {
     });
   });
 
-  describe('payment methods', function () {
-    it('should show Chargebee payment methods', function () {
-      $scope.editPaymentMethods();
-      expect($scope.chargebeeFactory.openPaymentSources).to.be.calledOnce;
-      expect($scope.chargebeeFactory.openPaymentSources.getCall(0).args[0]).to.equal('testId');
+  describe('showSubscriptionLink:', function() {
+    it('should not show if the subscription is purchased by the parent', function() {
+      expect($scope.showSubscriptionLink({
+        customer_id: 'anotherId'
+      })).to.be.false;
     });
-  });
 
-  describe('edit subscriptions', function () {
-    it('should show Chargebee subscription details', function () {
-      $scope.editSubscription({ id: 'subs1' });
-      expect($scope.chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
-      expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
-      expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('subs1');
+    it('should not show if the subscription is cancelled', function() {
+      expect($scope.showSubscriptionLink({
+        customer_id: 'testId',
+        status: 'cancelled'
+      })).to.be.false;
+    });
+
+    it('should show otherwise', function() {
+      expect($scope.showSubscriptionLink({
+        customer_id: 'testId',
+        status: 'active'
+      })).to.be.true;
     });
   });
 
   describe('events: ', function () {
-    it('should reload Subscriptions when Subscription is updated on Customer Portal', function () {
-      $rootScope.$emit('chargebee.subscriptionChanged');
-      $timeout.flush();
-
-      expect($loading.start).to.be.calledOnce;
-      expect(listServiceInstance.doSearch).to.be.calledOnce;
-    });
-
     it('should reload Subscriptions when Subscription is started', function () {
       $rootScope.$emit('risevision.company.planStarted');
 
       expect(listServiceInstance.doSearch).to.be.calledOnce;
     });
-
   });
 
   describe('data formatting', function () {
-    describe('getSubscriptionDesc: ', function() {
-      it('should format legacy subscription names', function () {
-        expect($scope.getSubscriptionDesc({
-          plan_id: 'b1844725d63fde197f5125b58b6cba6260ee7a57-m',
-          plan_quantity: 1,
-          billing_period: 1,
-          billing_period_unit: 'month'
-        })).to.equal('Enterprise Plan Monthly');
-
-        expect($scope.getSubscriptionDesc({
-          plan_id: 'b1844725d63fde197f5125b58b6cba6260ee7a57-m',
-          plan_quantity: 3,
-          billing_period: 1,
-          billing_period_unit: 'month'
-        })).to.equal('3 x Enterprise Plan Monthly');
-
-        expect($scope.getSubscriptionDesc({
-          plan_id: '93b5595f0d7e4c04a3baba1102ffaecb17607bf4-m',
-          plan_quantity: 1,
-          billing_period: 0,
-          billing_period_unit: 'year'
-        })).to.equal('Advanced Plan Yearly');
-
-        expect($scope.getSubscriptionDesc({
-          plan_id: '40c092161f547f8f72c9f173cd8eebcb9ca5dd25-m',
-          plan_quantity: 2,
-          billing_period: 1,
-          billing_period_unit: 'year'
-        })).to.equal('2 x Basic Plan Yearly');
-
-        expect($scope.getSubscriptionDesc({
-          plan_id: '40c092161f547f8f72c9f173cd8eebcb9ca5dd25-m',
-          plan_quantity: 2,
-          billing_period: 3,
-          billing_period_unit: 'year'
-        })).to.equal('2 x Basic Plan 3 Year');
-
-        expect($scope.getSubscriptionDesc({
-          plan_id: '40c092161f547f8f72c9f173cd8eebcb9ca5dd25-m',
-          plan_quantity: 2,
-          billing_period: 3,
-          billing_period_unit: 'month'
-        })).to.equal('2 x Basic Plan 3 Month');
-
-      });
-
-      it('Use plan_id if the plan mapping is not found', function() {
-        expect($scope.getSubscriptionDesc({
-          plan_id: 'pppc',
-          plan_quantity: 1,
-          billing_period: 1,
-          billing_period_unit: 'year',
-        })).to.equal('pppc');
-
-        expect($scope.getSubscriptionDesc({
-          plan_id: 'pppc',
-          plan_quantity: 3,
-          billing_period: 1,
-          billing_period_unit: 'year',
-        })).to.equal('pppc');
-      });
-
-      it('should format volume plan names', function () {
-        expect($scope.getSubscriptionDesc({
-          plan_id: '34e8b511c4cc4c2affa68205cd1faaab427657dc',
-          plan_quantity: 1,
-          billing_period: 1,
-          billing_period_unit: 'month',
-        })).to.equal('1 x Display Licenses Monthly Plan');
-
-        expect($scope.getSubscriptionDesc({
-          plan_id: '88725121a2c7a57deefcf06688ffc8e84cc4f93b',
-          plan_quantity: 3,
-          billing_period: 1,
-          billing_period_unit: 'year',
-        })).to.equal('3 x Display Licenses for Education Yearly Plan');
-
-      });
-
-    });
-
     it('should validate Active status type', function () {
       expect($scope.isActive({ status: 'active' })).to.be.true;
       expect($scope.isActive({ status: 'cancelled' })).to.be.false;

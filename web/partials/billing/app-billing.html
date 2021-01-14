@@ -37,14 +37,6 @@
       {{subscriptions.apiError}}
     </div>
 
-    <div id="errorBoxChargebee" ng-show="chargebeeFactory.apiError" class="madero-style alert alert-danger" role="alert">
-      <span ng-show="chargebeeFactory.apiError === 403">
-        <span ng-show="currentPlan.parentPlanContactEmail" translate translate-values="{ parentPlanContactEmail: currentPlan.parentPlanContactEmail }">account-and-billing.errors.403-contact-email</span>
-        <span ng-hide="currentPlan.parentPlanContactEmail" translate>account-and-billing.errors.403-no-contact-email</span>
-      </span>
-      <span ng-hide="chargebeeFactory.apiError === 403">{{chargebeeFactory.apiError}}</span>
-    </div>
-
     <div class="scrollable-list horizontal-scroll border-container mt-0 u_margin-md-bottom" scrolling-list="subscriptions.load()">
 
       <table id="subscriptionsListTable" class="table">
@@ -79,8 +71,8 @@
 
           <tr class="table-body__row" ng-repeat="item in (filteredSubscriptions = (subscriptions.items.list | filter: { subscription: { current_term_end: '!!' }}))">
             <td class="table-body__cell font-weight-bold">
-              <a class="madero-link u_clickable" ng-click="editSubscription(item.subscription)" ng-if="item.subscription.customer_id === company.id">{{getSubscriptionDesc(item.subscription)}}</a>
-              <span ng-if="item.subscription.customer_id !== company.id">{{getSubscriptionDesc(item.subscription)}}</span>
+              <a class="madero-link u_clickable" ui-sref="apps.billing.subscription({subscriptionId: item.subscription.id})" ng-if="showSubscriptionLink(item.subscription)">{{item.subscription | subscriptionDescription}}</a>
+              <span ng-if="!showSubscriptionLink(item.subscription)">{{item.subscription | subscriptionDescription}}</span>
             </td>
             <td class="table-body__cell">
               <span class="u_capitalize" ng-class="{ 'text-success': isActive(item.subscription), 'text-danger': isSuspended(item.subscription) || isCancelled(item.subscription) }">
@@ -164,16 +156,6 @@
         </tbody>
       </table>
 
-    </div>
-
-    <div class="form-group mt-5 mb-3">
-      <label>Payment Methods</label>
-    </div>
-
-    <div class="border-container">
-      <div class="panel-body">
-        <a class="madero-link u_clickable" ng-click="editPaymentMethods()">Edit Payment Methods</a>
-      </div>
     </div>
 
     <div class="u_margin-lg text-center">
