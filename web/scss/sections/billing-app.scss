@@ -40,6 +40,14 @@
       display: flex;
       flex-direction: column;
 
+      &:not(:first-child) {
+        @extend .mt-5;
+
+        @media (min-width: $screen-sm) {
+          @extend .mt-md-0;
+        }
+      }
+
       .subscription-card {
         height: 100%;
         text-align: center;
