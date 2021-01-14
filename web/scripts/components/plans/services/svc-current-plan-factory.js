@@ -2,23 +2,21 @@
 
   'use strict';
   angular.module('risevision.common.components.plans')
-    .factory('currentPlanFactory', ['$log', '$rootScope', '$timeout', 'userState', 'PLANS_LIST',
-      function ($log, $rootScope, $timeout, userState, PLANS_LIST) {
+    .factory('currentPlanFactory', ['$log', '$rootScope', '$timeout', 'userState', 'plansService',
+      function ($log, $rootScope, $timeout, userState, plansService) {
         var _factory = {};
-        var _plansByType = _.keyBy(PLANS_LIST, 'type');
-        var _plansByCode = _.keyBy(PLANS_LIST, 'productCode');
 
         var _loadCurrentPlan = function () {
           var company = userState.getCopyOfSelectedCompany();
           var plan = null;
 
           if (company.id && company.parentPlanProductCode) {
-            plan = _.cloneDeep(_plansByCode[company.parentPlanProductCode]);
+            plan = _.cloneDeep(plansService.getPlan(company.parentPlanProductCode));
             plan.isParentPlan = true;
             plan.status = 'Active';
 
           } else if (company.id && company.planProductCode) {
-            plan = _.cloneDeep(_plansByCode[company.planProductCode]);
+            plan = _.cloneDeep(plansService.getPlan(company.planProductCode));
 
             plan.status = company.planSubscriptionStatus;
             plan.trialPeriod = company.planTrialPeriod;
@@ -26,7 +24,7 @@
             plan.trialExpiryDate = new Date(company.planTrialExpiryDate);
 
           } else {
-            plan = _.cloneDeep(_plansByType.free);
+            plan = _.cloneDeep(plansService.getFreePlan());
           }
 
           _factory.currentPlan = plan;

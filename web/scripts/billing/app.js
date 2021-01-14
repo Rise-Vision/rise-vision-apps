@@ -17,16 +17,11 @@ angular.module('risevision.apps')
           templateUrl: 'partials/billing/app-billing.html',
           controller: 'BillingCtrl',
           resolve: {
-            canAccessApps: ['canAccessApps', '$stateParams', 'ChargebeeFactory', 'billingFactory', 'userState',
-              function (canAccessApps, $stateParams, ChargebeeFactory, billingFactory, userState) {
+            canAccessApps: ['canAccessApps', 'invoiceFactory',
+              function (canAccessApps, invoiceFactory) {
                 return canAccessApps().then(function () {
                   // Clear potential error messages
-                  billingFactory.init();
-
-                  if ($stateParams.edit) {
-                    new ChargebeeFactory().openEditSubscription(userState.getSelectedCompanyId(), $stateParams
-                      .edit);
-                  }
+                  invoiceFactory.init();
                 });
               }
             ]
@@ -45,10 +40,10 @@ angular.module('risevision.apps')
           templateUrl: 'partials/billing/invoice.html',
           controller: 'InvoiceCtrl',
           resolve: {
-            invoiceInfo: ['billingFactory', '$stateParams',
-              function (billingFactory, $stateParams) {
+            invoiceInfo: ['invoiceFactory', '$stateParams',
+              function (invoiceFactory, $stateParams) {
                 // pass $stateParams to service as values could be blank before state is loaded
-                billingFactory.getInvoice($stateParams.invoiceId, $stateParams.cid, $stateParams.token);
+                invoiceFactory.getInvoice($stateParams.invoiceId, $stateParams.cid, $stateParams.token);
               }
             ]
           },

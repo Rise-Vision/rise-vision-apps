@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: InvoiceCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $scope, $loading, billingFactory;
+  var $scope, $loading, invoiceFactory;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -13,7 +13,7 @@ describe('controller: InvoiceCtrl', function () {
       };
     });
 
-    $provide.value('billingFactory', {
+    $provide.value('invoiceFactory', {
       payInvoice: sandbox.spy(),
       updateInvoice: sandbox.stub().returns(Q.resolve()),
       invoice: {}
@@ -24,7 +24,7 @@ describe('controller: InvoiceCtrl', function () {
   beforeEach(inject(function($injector, $rootScope, $controller) {
     $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
-    billingFactory = $injector.get('billingFactory');
+    invoiceFactory = $injector.get('invoiceFactory');
 
     $scope.form = {
       paymentMethodsForm: {}
@@ -43,7 +43,7 @@ describe('controller: InvoiceCtrl', function () {
   it('should exist',function () {
     expect($scope).to.be.ok;
 
-    expect($scope.billingFactory).to.be.ok;
+    expect($scope.invoiceFactory).to.be.ok;
 
     expect($scope.completeCardPayment).to.be.a('function');
     expect($scope.updatePoNumber).to.be.a('function');
@@ -56,7 +56,7 @@ describe('controller: InvoiceCtrl', function () {
     });
 
     it('should start spinner', function(done) {
-      $scope.billingFactory.loading = true;
+      $scope.invoiceFactory.loading = true;
       $scope.$digest();
       setTimeout(function() {
         $loading.start.should.have.been.calledWith('invoice-loader');
@@ -70,7 +70,7 @@ describe('controller: InvoiceCtrl', function () {
     it('should not pay invoice if form is invalid', function() {
       $scope.completeCardPayment();
 
-      billingFactory.payInvoice.should.not.have.been.called;
+      invoiceFactory.payInvoice.should.not.have.been.called;
     });
 
     it('should pay invoice', function() {
@@ -78,7 +78,7 @@ describe('controller: InvoiceCtrl', function () {
 
       $scope.completeCardPayment();
 
-      billingFactory.payInvoice.should.have.been.called;
+      invoiceFactory.payInvoice.should.have.been.called;
     });
   });
 
@@ -86,14 +86,14 @@ describe('controller: InvoiceCtrl', function () {
     it('should set poNumber to blank string if null', function() {
       $scope.updatePoNumber();
 
-      expect(billingFactory.invoice.poNumber).to.equal('');
+      expect(invoiceFactory.invoice.poNumber).to.equal('');
     });
 
     it('should update the invoice and hide the edit form', function(done) {
       $scope.editPoNumber = true;
       $scope.updatePoNumber();
 
-      billingFactory.updateInvoice.should.have.been.called;
+      invoiceFactory.updateInvoice.should.have.been.called;
 
       setTimeout(function() {
         expect($scope.editPoNumber).to.be.false;
@@ -103,11 +103,11 @@ describe('controller: InvoiceCtrl', function () {
     });
 
     it('should not hide the edit form on errors', function(done) {
-      billingFactory.updateInvoice.returns(Q.reject());
+      invoiceFactory.updateInvoice.returns(Q.reject());
       $scope.editPoNumber = true;
       $scope.updatePoNumber();
 
-      billingFactory.updateInvoice.should.have.been.called;
+      invoiceFactory.updateInvoice.should.have.been.called;
 
       setTimeout(function() {
         expect($scope.editPoNumber).to.be.true;

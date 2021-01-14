@@ -6,19 +6,16 @@
     .constant('RPP_ADDON_ID', 'c4b368be86245bf9501baaa6e0b00df9719869fd')
     .factory('purchaseFactory', ['$rootScope', '$q', '$log', '$timeout', 'userState', 
       'storeService', 'addressService', 'contactService', 'creditCardFactory', 'purchaseFlowTracker',
-      'RPP_ADDON_ID', 'PLANS_LIST',
+      'RPP_ADDON_ID', 'plansService',
       function ($rootScope, $q, $log, $timeout, userState, storeService, addressService, 
-        contactService, creditCardFactory, purchaseFlowTracker, RPP_ADDON_ID, PLANS_LIST
-        ) {
+        contactService, creditCardFactory, purchaseFlowTracker, RPP_ADDON_ID, plansService) {
         var factory = {};
 
         // Stop spinner - workaround for spinner not rendering
         factory.loading = false;
 
         factory.init = function () {
-          var volumePlan = _.find(PLANS_LIST, {
-            type: 'volume'
-          });
+          var volumePlan = plansService.getVolumePlan();
 
           var plan = {
             name: '5 Display Licenses (Yearly)',
