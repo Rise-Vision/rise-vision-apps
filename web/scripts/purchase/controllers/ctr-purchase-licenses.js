@@ -3,11 +3,10 @@
 angular.module('risevision.apps.purchase')
 
   .controller('PurchaseLicensesCtrl', ['$scope', '$stateParams', '$loading',
-    'purchaseLicensesFactory', '$location', 'redirectTo', 'currentPlanFactory',
+    'purchaseLicensesFactory', '$location', 'redirectTo',
     function ($scope, $stateParams, $loading, purchaseLicensesFactory,
-      $location, redirectTo, currentPlanFactory) {
+      $location, redirectTo) {
       $scope.factory = purchaseLicensesFactory;
-      $scope.currentPlan = currentPlanFactory.currentPlan;
       $scope.couponCode = null;
 
       purchaseLicensesFactory.init($stateParams.purchaseAction);

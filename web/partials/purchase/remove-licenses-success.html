@@ -1,0 +1,16 @@
+<div id="checkout-success" class="checkout-centered-panel">
+  <h4 class="u_margin-md-bottom">
+    Display licenses have been removed.
+  </h4>
+  <p class="u_margin-md-bottom">
+    We’ve sent a confirmation email to <b>{{factory.userEmail}}</b>.
+  </p>
+  <p>
+    <b>Details:</b><br />
+    You’ve removed <b>{{factory.purchase.licensesToRemove}} display license{{ factory.purchase.licensesToRemove > 1 ? 's' : '' }}</b> from your subscription.<br/>
+    You will be credited <b>${{factory.getCreditTotal() | number:2}}</b>.
+  </p>
+  <div class="button-row mt-5">
+    <button id="doneButton" class="btn btn-primary btn-block" ng-click="close()" aria-label="Done" tabindex="1">Continue</button>
+  </div>
+</div>

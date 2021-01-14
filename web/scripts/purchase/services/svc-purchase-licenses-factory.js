@@ -33,22 +33,32 @@
           factory.getEstimate();
         };
 
+        factory.getCurrentDisplayCount = function() {
+          return currentPlanFactory.currentPlan.playerProTotalLicenseCount;
+        };
+
+        var _getSubscriptionId = function() {
+          return currentPlanFactory.currentPlan.subscriptionId;
+        };
+
+        var _getCompanyId = function() {
+          return currentPlanFactory.currentPlan.billToId;
+        };
+
         var _getChangeInLicenses = function() {
           return factory.purchase.licensesToAdd - factory.purchase.licensesToRemove;
         };
 
         var _getTotalDisplayCount = function () {
-          var currentLicenses = currentPlanFactory.currentPlan.playerProTotalLicenseCount;
-
-          return currentLicenses + _getChangeInLicenses();
+          return factory.getCurrentDisplayCount() + _getChangeInLicenses();
         };
 
         var _getTrackingProperties = function () {
           return {
-            subscriptionId: currentPlanFactory.currentPlan.subscriptionId,
+            subscriptionId: _getSubscriptionId(),
             changeInLicenses: _getChangeInLicenses(),
             totalLicenses: _getTotalDisplayCount(),
-            companyId: currentPlanFactory.currentPlan.billToId
+            companyId: _getCompanyId()
           };
         };
 
@@ -57,7 +67,7 @@
             return;
           }
 
-          var currentDisplayCount = currentPlanFactory.currentPlan.playerProTotalLicenseCount;
+          var currentDisplayCount = factory.getCurrentDisplayCount();
           var displayCount = _getTotalDisplayCount();
 
           var lineItem = factory.estimate.next_invoice_estimate.line_items[0];
@@ -79,8 +89,8 @@
 
           var couponCode = factory.purchase.couponCode;
           var displayCount = _getTotalDisplayCount();
-          var subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
-          var companyId = currentPlanFactory.currentPlan.billToId;
+          var subscriptionId = _getSubscriptionId();
+          var companyId = _getCompanyId();
 
           return storeService.estimateSubscriptionUpdate(displayCount, subscriptionId, companyId, couponCode)
             .then(function (result) {
@@ -119,8 +129,8 @@
 
           var couponCode = factory.purchase.couponCode;
           var displayCount = _getTotalDisplayCount();
-          var subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
-          var companyId = currentPlanFactory.currentPlan.billToId;
+          var subscriptionId = _getSubscriptionId();
+          var companyId = _getCompanyId();
 
           return storeService.updateSubscription(displayCount, subscriptionId, companyId, couponCode)
             .then(function () {

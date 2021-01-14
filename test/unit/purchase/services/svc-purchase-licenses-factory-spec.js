@@ -65,6 +65,7 @@ describe("Services: purchase licenses factory", function() {
   it("should exist", function() {
     expect(purchaseLicensesFactory).to.be.ok;
     expect(purchaseLicensesFactory.init).to.be.a("function");
+    expect(purchaseLicensesFactory.getCurrentDisplayCount).to.be.a("function");
     expect(purchaseLicensesFactory.getEstimate).to.be.a("function");
     expect(purchaseLicensesFactory.completePayment).to.be.a("function");
 
@@ -80,7 +81,7 @@ describe("Services: purchase licenses factory", function() {
       purchaseLicensesFactory.getEstimate.restore();
     });
 
-    it("should initialize values and retrieve estimate", function() {
+    it("should initialize values on add and retrieve estimate", function() {
       purchaseLicensesFactory.init('add');
 
       expect(purchaseLicensesFactory.purchase).to.be.ok;
@@ -92,6 +93,26 @@ describe("Services: purchase licenses factory", function() {
       purchaseLicensesFactory.getEstimate.should.have.been.called;
     });
 
+    it("should initialize values on remove and retrieve estimate", function() {
+      purchaseLicensesFactory.init('remove');
+
+      expect(purchaseLicensesFactory.purchase).to.be.ok;
+      expect(purchaseLicensesFactory.purchase.completed).to.be.false;
+      expect(purchaseLicensesFactory.purchase.licensesToAdd).to.equal(0);
+      expect(purchaseLicensesFactory.purchase.licensesToRemove).to.equal('displayCount');
+      expect(purchaseLicensesFactory.purchase.couponCode).to.equal('')
+
+      purchaseLicensesFactory.getEstimate.should.have.been.called;
+    });
+
+  });
+
+  describe("getCurrentDisplayCount", function() {
+    it("should return the current display count from current plan", function() {
+      var count = purchaseLicensesFactory.getCurrentDisplayCount();
+
+      expect(count).to.equal(2);
+    });
   });
 
   describe("getEstimate: add:", function() {
