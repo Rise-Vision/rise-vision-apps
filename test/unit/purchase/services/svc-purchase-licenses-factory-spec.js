@@ -80,13 +80,25 @@ describe("Services: purchase licenses factory", function() {
       purchaseLicensesFactory.getEstimate.restore();
     });
 
-    it("should initialize values and retrieve estimate", function() {
+    it("should initialize values on add and retrieve estimate", function() {
       purchaseLicensesFactory.init('add');
 
       expect(purchaseLicensesFactory.purchase).to.be.ok;
       expect(purchaseLicensesFactory.purchase.completed).to.be.false;
       expect(purchaseLicensesFactory.purchase.licensesToAdd).to.equal('displayCount');
       expect(purchaseLicensesFactory.purchase.licensesToRemove).to.equal(0);
+      expect(purchaseLicensesFactory.purchase.couponCode).to.equal('')
+
+      purchaseLicensesFactory.getEstimate.should.have.been.called;
+    });
+
+    it("should initialize values on remove and retrieve estimate", function() {
+      purchaseLicensesFactory.init('remove');
+
+      expect(purchaseLicensesFactory.purchase).to.be.ok;
+      expect(purchaseLicensesFactory.purchase.completed).to.be.false;
+      expect(purchaseLicensesFactory.purchase.licensesToAdd).to.equal(0);
+      expect(purchaseLicensesFactory.purchase.licensesToRemove).to.equal('displayCount');
       expect(purchaseLicensesFactory.purchase.couponCode).to.equal('')
 
       purchaseLicensesFactory.getEstimate.should.have.been.called;
