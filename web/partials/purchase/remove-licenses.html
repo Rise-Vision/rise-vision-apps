@@ -17,7 +17,7 @@
 
         <div class="left-right-aligner" ng-class="{'has-error': purchaseLicensesForm.$invalid }">
           <label for="licensesToRemove" class="control-label">Number of display licenses you want to remove:</label>
-          <input class="display-count-input mt-0 pull-right" type="number" name="licensesToRemove" ng-model="factory.purchase.licensesToRemove" min="1" max="{{currentPlan.playerProTotalLicenseCount-1}}" ng-pattern="/^[0-9]+$/" required ng-change="getEstimate()" ng-model-options="{ debounce: 1000 }" autofocus />
+          <input class="display-count-input mt-0 pull-right" type="number" name="licensesToRemove" ng-model="factory.purchase.licensesToRemove" min="1" max="{{factory.getCurrentDisplayCount()-1}}" ng-pattern="/^[0-9]+$/" required ng-change="getEstimate()" ng-model-options="{ debounce: 1000 }" autofocus />
         </div>
 
         <div class="border-bottom py-4 mb-4">

@@ -17,11 +17,6 @@ describe("controller: add-licenses", function() {
     $provide.value("$stateParams", {
       purchaseAction: 'add'
     });
-    $provide.service("currentPlanFactory", function() {
-      return {
-        currentPlan: {}
-      };
-    });
     $provide.service("purchaseLicensesFactory", function() {
       return {
         completePayment: sandbox.stub().returns(Q.resolve()),
@@ -67,7 +62,6 @@ describe("controller: add-licenses", function() {
 
   it("should initialize",function() {
     expect($scope.factory).to.equal(purchaseLicensesFactory);
-    expect($scope.currentPlan).to.be.ok;
 
     expect($scope.applyCouponCode).to.be.a("function");
     expect($scope.clearCouponCode).to.be.a("function");
