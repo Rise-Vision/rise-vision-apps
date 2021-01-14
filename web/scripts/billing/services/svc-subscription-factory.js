@@ -1,7 +1,5 @@
 'use strict';
 
-/*jshint camelcase: false */
-
 angular.module('risevision.apps.billing.services')
   .service('subscriptionFactory', ['$q', '$log', 'billing', 'creditCardFactory',
   'processErrorCode', 'analyticsFactory',

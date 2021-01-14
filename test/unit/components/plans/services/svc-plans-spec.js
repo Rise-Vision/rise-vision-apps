@@ -19,6 +19,7 @@ describe("Services: plans service", function() {
   it("should exist", function() {
     expect(plansService).to.be.ok;
     expect(plansService.getPlan).to.be.a('function');
+    expect(plansService.getPlanById).to.be.a('function');
     expect(plansService.getFreePlan).to.be.a('function');
     expect(plansService.getVolumePlan).to.be.a('function');
     expect(plansService.isVolumePlan).to.be.a('function');
@@ -31,6 +32,18 @@ describe("Services: plans service", function() {
 
     it('should handle failure to get plan', function() {
       expect(plansService.getPlan('productCode')).to.not.be.ok;
+    });
+  });
+
+  describe("getPlanById:", function() {
+    it('should get plan by planId', function() {
+      expect(plansService.getPlanById(PLANS_LIST[0].productCode + '-usd01m')).to.equal(PLANS_LIST[0]);
+    });
+
+    it('should handle failure to get plan', function() {
+      expect(plansService.getPlanById('productCode-usd01m')).to.not.be.ok;
+      expect(plansService.getPlanById('productCode')).to.not.be.ok;
+      expect(plansService.getPlanById()).to.not.be.ok;
     });
   });
 
