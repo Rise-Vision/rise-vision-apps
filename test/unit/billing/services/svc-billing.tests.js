@@ -29,7 +29,17 @@ describe('service: billing:', function() {
                 else {
                   return Q.reject('API Failed');
                 }
-              })
+              }),
+              get: sinon.spy(function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: 'subscription'
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              }),
             },
             invoice: {
               list: function() {
@@ -119,6 +129,7 @@ describe('service: billing:', function() {
   it('should exist',function() {
     expect(billing).to.be.ok;
     expect(billing.getSubscriptions).to.be.a.function;
+    expect(billing.getSubscription).to.be.a.function;
     expect(billing.getInvoices).to.be.a.function;
     expect(billing.getUnpaidInvoices).to.be.a.function;
     expect(billing.getInvoice).to.be.a.function;
@@ -153,8 +164,40 @@ describe('service: billing:', function() {
       failedResponse = true;
 
       billing.getSubscriptions({})
-      .then(function(invoices) {
-        done(invoices);
+      .then(function(subscriptions) {
+        done(subscriptions);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+
+  describe('getSubscription:', function() {
+    it('should return an subscription', function(done) {
+      failedResponse = false;
+
+      billing.getSubscription('subscriptionId', 'companyId', 'token')
+      .then(function(result) {
+        storeApi.integrations.subscription.get.should.have.been.called;
+        storeApi.integrations.subscription.get.should.have.been.calledWith({
+          subscriptionId: 'subscriptionId',
+          companyId: 'testId1'
+        });
+
+        expect(result).to.be.ok;
+        expect(result).to.equal('subscription');
+        done();
+      });
+    });
+
+    it('should handle failure to get subscription correctly', function(done) {
+      failedResponse = true;
+
+      billing.getSubscription('subscriptionId')
+      .then(function(subscription) {
+        done(subscription);
       })
       .then(null, function(error) {
         expect(error).to.deep.equal('API Failed');

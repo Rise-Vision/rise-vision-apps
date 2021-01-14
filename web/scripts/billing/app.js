@@ -35,6 +35,21 @@ angular.module('risevision.apps')
           forceAuth: false
         })
 
+        .state('apps.billing.subscription', {
+          url: '/billing/subscription/:subscriptionId',
+          templateUrl: 'partials/billing/subscription.html',
+          controller: 'SubscriptionCtrl',
+          resolve: {
+            invoiceInfo: ['canAccessApps', 'subscriptionFactory', '$stateParams',
+              function (canAccessApps, subscriptionFactory, $stateParams) {
+                return canAccessApps().then(function () {
+                  subscriptionFactory.getSubscription($stateParams.subscriptionId);
+                });
+              }
+            ]
+          }
+        })
+
         .state('apps.billing.invoice', {
           url: '/billing/invoice/:invoiceId?:token',
           templateUrl: 'partials/billing/invoice.html',
@@ -53,6 +68,9 @@ angular.module('risevision.apps')
   ]);
 
 angular.module('risevision.apps.billing.directives', []);
+angular.module('risevision.apps.billing.filters', [
+  'risevision.common.components.plans'
+]);
 angular.module('risevision.apps.billing.controllers', [
   'risevision.apps.billing.services'
 ]);

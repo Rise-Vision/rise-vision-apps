@@ -2,7 +2,7 @@
 
 describe('app:', function() {
   var sandbox = sinon.sandbox.create();
-  var $state, canAccessApps, $stateParams, invoiceFactory;
+  var $state, canAccessApps, $stateParams, invoiceFactory, subscriptionFactory;
 
   beforeEach(function () {
     angular.module('risevision.apps.partials',[]);
@@ -19,6 +19,11 @@ describe('app:', function() {
           init: sandbox.spy()
         };
       });
+      $provide.service('subscriptionFactory', function() {
+        return {
+          getSubscription: sandbox.spy()
+        };
+      });
       $provide.service('currentPlanFactory', function () {
         return {
         };
@@ -31,6 +36,7 @@ describe('app:', function() {
       canAccessApps = $injector.get('canAccessApps');
       $stateParams = $injector.get('$stateParams');
       invoiceFactory = $injector.get('invoiceFactory');
+      subscriptionFactory = $injector.get('subscriptionFactory');
     });
   });
 
@@ -53,6 +59,28 @@ describe('app:', function() {
       setTimeout(function() {
         canAccessApps.should.have.been.called.once;
         invoiceFactory.init.should.have.been.called;
+
+        done();
+      }, 10);
+    });
+
+  });
+
+  describe('state apps.billing.subscription:',function(){
+
+    it('should register state',function(){
+      var state = $state.get('apps.billing.subscription');
+      expect(state).to.be.ok;
+      expect(state.url).to.equal('/billing/subscription/:subscriptionId');
+      expect(state.controller).to.equal('SubscriptionCtrl');
+    });
+
+    it('should open Edit Subscription', function(done) {
+      $stateParams.subscriptionId = 'subscriptionId';
+      $state.get('apps.billing.subscription').resolve.invoiceInfo[3](canAccessApps, subscriptionFactory, $stateParams);
+      setTimeout(function() {
+        canAccessApps.should.have.been.called.once;
+        subscriptionFactory.getSubscription.should.have.been.calledWith('subscriptionId');
 
         done();
       }, 10);

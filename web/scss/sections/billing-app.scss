@@ -1,0 +1,76 @@
+// Billing Page container
+.billing-app {
+
+  a.btn-pay-now {
+    line-height: 18px;
+    min-height: auto;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    width: 105px;
+  }
+
+  .border-container {
+    & > .panel-body {
+      @extend .u_padding-20;
+    }
+
+    &.scrollable-list {
+      .table>tbody>tr>td, .table>thead>tr>th {
+        @extend .u_padding-20;
+      }
+    }
+  }
+
+  .status {
+    &.paid svg {
+      fill: $madero-green;
+    }
+    &.unpaid svg {
+      @extend .ml-2;
+
+      fill: $danger;
+    }
+  }
+
+  .row.subscription-card-row {
+    display: flex;
+    flex-wrap: wrap;
+
+    & > [class*='col-'] {
+      display: flex;
+      flex-direction: column;
+
+      &:not(:first-child) {
+        @extend .mt-5;
+
+        @media (min-width: $screen-sm) {
+          @extend .mt-md-0;
+        }
+      }
+
+      .subscription-card {
+        height: 100%;
+        text-align: center;
+
+        h1 {
+          font-size: 48px;
+          margin-top: 10px;
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
+
+  .subscription-footer {
+    text-align: center;
+
+    label {
+       svg {
+        fill: $madero-gray;
+        vertical-align: middle;
+        margin-left: 5px;
+       }
+    }
+  }
+
+}
