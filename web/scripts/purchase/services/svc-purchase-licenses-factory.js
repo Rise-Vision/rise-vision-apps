@@ -46,10 +46,13 @@
         };
 
         var _getChangeInLicenses = function() {
-          return factory.purchase.licensesToAdd - factory.purchase.licensesToRemove;
+          var licensesToAdd = factory.purchase.licensesToAdd || 0;
+          var licensesToRemove = factory.purchase.licensesToRemove || 0;
+
+          return licensesToAdd - licensesToRemove;
         };
 
-        var _getTotalDisplayCount = function () {
+        factory.getTotalDisplayCount = function () {
           return factory.getCurrentDisplayCount() + _getChangeInLicenses();
         };
 
@@ -57,7 +60,7 @@
           return {
             subscriptionId: _getSubscriptionId(),
             changeInLicenses: _getChangeInLicenses(),
-            totalLicenses: _getTotalDisplayCount(),
+            totalLicenses: factory.getTotalDisplayCount(),
             companyId: _getCompanyId()
           };
         };
@@ -68,7 +71,7 @@
           }
 
           var currentDisplayCount = factory.getCurrentDisplayCount();
-          var displayCount = _getTotalDisplayCount();
+          var displayCount = factory.getTotalDisplayCount();
 
           var lineItem = factory.estimate.next_invoice_estimate.line_items[0];
           var isMonthly = lineItem.entity_id.endsWith('m');
@@ -88,7 +91,7 @@
           factory.loading = true;
 
           var couponCode = factory.purchase.couponCode;
-          var displayCount = _getTotalDisplayCount();
+          var displayCount = factory.getTotalDisplayCount();
           var subscriptionId = _getSubscriptionId();
           var companyId = _getCompanyId();
 
@@ -128,7 +131,7 @@
           factory.loading = true;
 
           var couponCode = factory.purchase.couponCode;
-          var displayCount = _getTotalDisplayCount();
+          var displayCount = factory.getTotalDisplayCount();
           var subscriptionId = _getSubscriptionId();
           var companyId = _getCompanyId();
 

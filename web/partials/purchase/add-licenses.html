@@ -24,7 +24,7 @@
           <p class="left-right-aligner mb-0">
             <span class="font-weight-bold">Total number of display licenses for this subscription:</span>
             <span>
-              {{factory.getCurrentDisplayCount() + factory.purchase.licensesToAdd}}
+              {{factory.getTotalDisplayCount()}}
             </span>
           </p>
           <p class="mb-0" ng-show="factory.currentPricePerDisplay && factory.currentPricePerDisplay === factory.newPricePerDisplay">${{factory.currentPricePerDisplay | number : 2}} per display license, per month.</p>
