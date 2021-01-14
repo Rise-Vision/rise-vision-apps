@@ -81,11 +81,12 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should initialize values and retrieve estimate", function() {
-      purchaseLicensesFactory.init();
+      purchaseLicensesFactory.init('add');
 
       expect(purchaseLicensesFactory.purchase).to.be.ok;
       expect(purchaseLicensesFactory.purchase.completed).to.be.false;
-      expect(purchaseLicensesFactory.purchase.displayCount).to.equal('displayCount');
+      expect(purchaseLicensesFactory.purchase.licensesToAdd).to.equal('displayCount');
+      expect(purchaseLicensesFactory.purchase.licensesToRemove).to.equal(0);
       expect(purchaseLicensesFactory.purchase.couponCode).to.equal('')
 
       purchaseLicensesFactory.getEstimate.should.have.been.called;
@@ -93,12 +94,13 @@ describe("Services: purchase licenses factory", function() {
 
   });
 
-  describe("getEstimate: ", function() {
+  describe("getEstimate: add:", function() {
     beforeEach(function() {
       validate = true;
 
       purchaseLicensesFactory.purchase = {
-        displayCount: 5,
+        licensesToAdd: 5,
+        licensesToRemove: 0,
         couponCode: 'couponCode'
       };
 
@@ -220,7 +222,7 @@ describe("Services: purchase licenses factory", function() {
       purchaseLicensesFactory.getEstimate()
       .then(function() {
         expect(purchaseLicensesFactory.apiError).to.equal("An unexpected error has occurred. Please try again.");
-      
+
         done();
       })
       .then(null,function() {
@@ -235,7 +237,7 @@ describe("Services: purchase licenses factory", function() {
       purchaseLicensesFactory.getEstimate()
       .then(function() {
         expect(purchaseLicensesFactory.estimate).to.equal("previousEstimate");
-      
+
         done();
       })
       .then(null,function() {
@@ -257,12 +259,53 @@ describe("Services: purchase licenses factory", function() {
 
   });
 
-  describe("completePayment: ", function() {
+  describe("getEstimate: remove:", function() {
     beforeEach(function() {
       validate = true;
 
       purchaseLicensesFactory.purchase = {
-        displayCount: 5,
+        licensesToAdd: 0,
+        licensesToRemove: 1,
+        couponCode: ''
+      };
+
+    });
+
+    it("should call estimateSubscriptionUpdate api and return a promise", function() {
+      expect(purchaseLicensesFactory.getEstimate().then).to.be.a("function");
+
+      storeService.estimateSubscriptionUpdate.should.have.been.called;
+      storeService.estimateSubscriptionUpdate.should.have.been.calledWith(1, 'subscriptionId', 'billToId', '');
+    });
+
+    it("should populate estimate object if call succeeds", function(done) {
+      purchaseLicensesFactory.getEstimate()
+      .then(function() {
+        expect(purchaseLicensesFactory.estimate).to.equal('estimateResponse');
+
+        expect(analyticsFactory.track).to.have.been.calledWith('Subscription Update Estimated', {
+          subscriptionId: 'subscriptionId',
+          changeInLicenses: -1,
+          totalLicenses: 1,
+          companyId: 'billToId'
+        });
+
+        done();
+      })
+      .then(null,function(e) {
+        console.error(e);
+        done("error");
+      });
+    });
+  });
+
+  describe("completePayment: add:", function() {
+    beforeEach(function() {
+      validate = true;
+
+      purchaseLicensesFactory.purchase = {
+        licensesToAdd: 5,
+        licensesToRemove: 0,
         couponCode: 'couponCode'
       };
 
@@ -289,8 +332,8 @@ describe("Services: purchase licenses factory", function() {
 
     it("should track purchase", function(done) {
       purchaseLicensesFactory.completePayment();
-      
-      setTimeout(function() {        
+
+      setTimeout(function() {
         analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
           subscriptionId: 'subscriptionId',
           changeInLicenses: 5,
@@ -304,8 +347,8 @@ describe("Services: purchase licenses factory", function() {
 
     it("should not reload company right away", function(done) {
       purchaseLicensesFactory.completePayment();
-      
-      setTimeout(function() {        
+
+      setTimeout(function() {
         expect(purchaseLicensesFactory.purchase.completed).to.not.be.ok;
         userState.reloadSelectedCompany.should.not.have.been.called;
 
@@ -329,7 +372,7 @@ describe("Services: purchase licenses factory", function() {
 
       // Flush asynchronously
       setTimeout(function() {
-        $timeout.flush(10000);        
+        $timeout.flush(10000);
       }, 10);
     });
 
@@ -350,7 +393,7 @@ describe("Services: purchase licenses factory", function() {
 
         // Flush asynchronously
         setTimeout(function() {
-          $timeout.flush(10000);        
+          $timeout.flush(10000);
         }, 10);
     });
 
@@ -370,6 +413,73 @@ describe("Services: purchase licenses factory", function() {
         });
     });
 
+  });
+
+  describe("completePayment: remove:", function() {
+    beforeEach(function() {
+      validate = true;
+
+      purchaseLicensesFactory.purchase = {
+        licensesToAdd: 0,
+        licensesToRemove: 1,
+        couponCode: ''
+      };
+    });
+
+    it("should call updateSubscription api and return a promise", function() {
+      expect(purchaseLicensesFactory.completePayment().then).to.be.a("function");
+
+      storeService.updateSubscription.should.have.been.called;
+      storeService.updateSubscription.should.have.been.calledWith(1, 'subscriptionId', 'billToId', '');
+    });
+
+    it("should track purchase", function(done) {
+      purchaseLicensesFactory.completePayment();
+      setTimeout(function() {
+        analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
+          subscriptionId: 'subscriptionId',
+          changeInLicenses: -1,
+          totalLicenses: 1,
+          companyId: 'billToId'
+        });
+
+        done();
+      }, 10);
+    });
+
+    describe("getCreditTotal:", function() {
+      it("should get credit total 0 if there are no credit notes", function() {
+        var total = purchaseLicensesFactory.getCreditTotal();
+
+        expect(total).to.equal(0);
+      });
+
+      it("should get credit total for a single credit note", function() {
+        purchaseLicensesFactory.estimate = {
+          credit_note_estimates: [
+            { total: 1000 }
+          ]
+        };
+
+        var total = purchaseLicensesFactory.getCreditTotal();
+
+        expect(total).to.equal(10);
+      });
+
+      it("should get credit total for multiple credit notes", function() {
+        purchaseLicensesFactory.estimate = {
+          credit_note_estimates: [
+            { total: 1000 },
+            { total: 2000 },
+            { total: 3000 }
+          ]
+        };
+
+        var total = purchaseLicensesFactory.getCreditTotal();
+
+        expect(total).to.equal(60);
+      });
+    });
   });
 
 });

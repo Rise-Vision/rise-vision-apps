@@ -19,22 +19,35 @@
           factory.apiError = '';
         };
 
-        factory.init = function () {
+        factory.init = function (purchaseAction) {
           _clearMessages();
+
+          var isRemove = purchaseAction === 'remove';
 
           factory.purchase = {};
           factory.purchase.completed = false;
-          factory.purchase.displayCount = $stateParams.displayCount;
+          factory.purchase.licensesToAdd = isRemove ? 0 : $stateParams.displayCount;
+          factory.purchase.licensesToRemove = isRemove ? $stateParams.displayCount : 0;
           factory.purchase.couponCode = '';
 
           factory.getEstimate();
         };
 
+        var _getChangeInLicenses = function() {
+          return factory.purchase.licensesToAdd - factory.purchase.licensesToRemove;
+        };
+
+        var _getTotalDisplayCount = function () {
+          var currentLicenses = currentPlanFactory.currentPlan.playerProTotalLicenseCount;
+
+          return currentLicenses + _getChangeInLicenses();
+        };
+
         var _getTrackingProperties = function () {
           return {
             subscriptionId: currentPlanFactory.currentPlan.subscriptionId,
-            changeInLicenses: factory.purchase.displayCount,
-            totalLicenses: factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount,
+            changeInLicenses: _getChangeInLicenses(),
+            totalLicenses: _getTotalDisplayCount(),
             companyId: currentPlanFactory.currentPlan.billToId
           };
         };
@@ -45,7 +58,7 @@
           }
 
           var currentDisplayCount = currentPlanFactory.currentPlan.playerProTotalLicenseCount;
-          var displayCount = factory.purchase.displayCount + currentDisplayCount;
+          var displayCount = _getTotalDisplayCount();
 
           var lineItem = factory.estimate.next_invoice_estimate.line_items[0];
           var isMonthly = lineItem.entity_id.endsWith('m');
@@ -65,7 +78,7 @@
           factory.loading = true;
 
           var couponCode = factory.purchase.couponCode;
-          var displayCount = factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount;
+          var displayCount = _getTotalDisplayCount();
           var subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
           var companyId = currentPlanFactory.currentPlan.billToId;
 
@@ -87,13 +100,25 @@
             });
         };
 
+        factory.getCreditTotal = function() {
+          if (!factory.estimate || !factory.estimate.credit_note_estimates) {
+            return 0;
+          }
+
+          var total = factory.estimate.credit_note_estimates.reduce(function(total, note) {
+            return total + note.total;
+          }, 0);
+
+          return total / 100;
+        };
+
         factory.completePayment = function () {
           _clearMessages();
 
           factory.loading = true;
 
           var couponCode = factory.purchase.couponCode;
-          var displayCount = factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount;
+          var displayCount = _getTotalDisplayCount();
           var subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
           var companyId = currentPlanFactory.currentPlan.billToId;
 

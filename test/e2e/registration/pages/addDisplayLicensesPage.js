@@ -11,7 +11,7 @@ var AddDisplayLicensesPage = function() {
   var purchaseLicensesPanel = element(by.css('.purchase-licenses-centered-panel'));
   var backButton = element(by.id('backButton'));
   var payButton = element(by.id('payButton'));
-  var displayCountInput = element(by.css('input[name="displayCount"]'));
+  var displayCountInput = element(by.css('input[name="licensesToAdd"]'));
   var addCouponCodeLink = element(by.css('a[aria-label="Add Coupon Code"]'));
   var couponCodeInput = element(by.id('coupon-code'));
   var applyCouponCodeButton = element(by.id('apply-coupon-code'));
