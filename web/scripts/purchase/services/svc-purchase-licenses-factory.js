@@ -33,14 +33,16 @@
           factory.getEstimate();
         };
 
+        factory.getCurrentDisplayCount = function() {
+          return currentPlanFactory.currentPlan.playerProTotalLicenseCount;
+        };
+
         var _getChangeInLicenses = function() {
           return factory.purchase.licensesToAdd - factory.purchase.licensesToRemove;
         };
 
         var _getTotalDisplayCount = function () {
-          var currentLicenses = currentPlanFactory.currentPlan.playerProTotalLicenseCount;
-
-          return currentLicenses + _getChangeInLicenses();
+          return factory.getCurrentDisplayCount() + _getChangeInLicenses();
         };
 
         var _getTrackingProperties = function () {
@@ -57,7 +59,7 @@
             return;
           }
 
-          var currentDisplayCount = currentPlanFactory.currentPlan.playerProTotalLicenseCount;
+          var currentDisplayCount = factory.getCurrentDisplayCount();
           var displayCount = _getTotalDisplayCount();
 
           var lineItem = factory.estimate.next_invoice_estimate.line_items[0];
