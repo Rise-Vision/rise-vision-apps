@@ -30,18 +30,18 @@
         </div>
 
         <div class="pt-4">
-          <p id="prorated-amount-row" class="left-right-aligner mb-4" ng-if="factory.estimate.invoice_estimate">
-            <span class="font-weight-bold">Generated invoice:</span>
-            <span>
-              <span class="u_margin-right text-subtle">{{factory.estimate.invoice_estimate.currency_code}}</span>
-              <span class="purchase-total">${{factory.estimate.invoice_estimate.total/100 | number:2}}</span>
-            </span>
-          </p>
           <p id="prorated-credit-row" class="left-right-aligner mb-4">
             <span class="font-weight-bold">Prorated credit added to your account:</span>
             <span>
               <span class="u_margin-right text-subtle">{{factory.estimate.credit_note_estimates[0].currency_code}}</span>
               <span class="purchase-total">${{factory.getCreditTotal() | number:2}}</span>
+            </span>
+          </p>
+          <p id="prorated-amount-row" class="left-right-aligner mb-4" ng-if="factory.estimate.invoice_estimate">
+            <span class="font-weight-bold">Prorated amount, due now:</span>
+            <span>
+              <span class="u_margin-right text-subtle">{{factory.estimate.invoice_estimate.currency_code}}</span>
+              <span class="purchase-total">${{factory.estimate.invoice_estimate.total/100 | number:2}}</span>
             </span>
           </p>
           <p id="next-invoice-row" class="left-right-aligner mb-0">
@@ -62,6 +62,8 @@
       </div>
     </form>
   </div>
+
+  <div ng-show="factory.purchase.completed" ng-include="'partials/purchase/remove-licenses-success.html'"></div>
 
   <div class="mt-5 border-top">
     <purchase-footer></purchase-footer>
