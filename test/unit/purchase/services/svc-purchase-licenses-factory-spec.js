@@ -65,6 +65,7 @@ describe("Services: purchase licenses factory", function() {
   it("should exist", function() {
     expect(purchaseLicensesFactory).to.be.ok;
     expect(purchaseLicensesFactory.init).to.be.a("function");
+    expect(purchaseLicensesFactory.getCurrentDisplayCount).to.be.a("function");
     expect(purchaseLicensesFactory.getEstimate).to.be.a("function");
     expect(purchaseLicensesFactory.completePayment).to.be.a("function");
 
@@ -104,6 +105,14 @@ describe("Services: purchase licenses factory", function() {
       purchaseLicensesFactory.getEstimate.should.have.been.called;
     });
 
+  });
+
+  describe("getCurrentDisplayCount", function() {
+    it("should return the current display count from current plan", function() {
+      var count = purchaseLicensesFactory.getCurrentDisplayCount();
+
+      expect(count).to.equal(2);
+    });
   });
 
   describe("getEstimate: add:", function() {
