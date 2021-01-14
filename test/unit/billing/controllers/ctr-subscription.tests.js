@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: SubscriptionCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $rootScope, $scope, $loading, subscriptionFactory;
+  var $rootScope, $scope, $loading, subscriptionFactory, plansService;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -45,12 +45,19 @@ describe('controller: SubscriptionCtrl', function () {
         };
       };
     });
-    $provide.service('billing', function () {
+    $provide.service('plansService', function () {
       return {
-        getSubscriptions: 'getSubscriptions',
-        getInvoices: 'getInvoices'
+        getPlanById: sandbox.stub().returns({
+          name: 'planName',
+          productCode: 'somePlan'
+        }),
+        getVolumePlan: sandbox.stub().returns({
+          productCode: 'volumePlan'
+        }),
+        isVolumePlan: sandbox.stub().returns(true)
       };
     });
+
   }));
 
   beforeEach(inject(function($injector, _$rootScope_, $controller) {
@@ -58,6 +65,7 @@ describe('controller: SubscriptionCtrl', function () {
     $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
     subscriptionFactory = $injector.get('subscriptionFactory');
+    plansService = $injector.get('plansService');
 
     $controller('SubscriptionCtrl', {
       $scope: $scope
@@ -77,7 +85,10 @@ describe('controller: SubscriptionCtrl', function () {
     expect($scope.companySettingsFactory).to.be.ok;
     expect($scope.company).to.be.ok;
 
-    expect($scope.isInvoiced).to.be.a('function')
+    expect($scope.isInvoiced).to.be.a('function');
+    expect($scope.isDisplayLicensePlan).to.be.a('function');
+    expect($scope.isVolumePlan).to.be.a('function');
+    expect($scope.getPlanName).to.be.a('function');
 
     expect($scope.editPaymentMethods).to.be.a('function');
     expect($scope.editSubscription).to.be.a('function');
@@ -118,6 +129,76 @@ describe('controller: SubscriptionCtrl', function () {
       };
 
       expect($scope.isInvoiced()).to.be.true;
+    });
+
+  });
+
+  describe('isDisplayLicensePlan', function() {
+    it('should return false if an invalid subscription is passed', function() {
+      expect($scope.isDisplayLicensePlan()).to.be.false;
+    });
+
+    it('should return false if the plan product codes do not match', function() {
+      expect($scope.isDisplayLicensePlan({
+        plan_id: 'planId'
+      })).to.be.false;
+
+      plansService.getPlanById.should.have.been.calledWith('planId');
+      plansService.getVolumePlan.should.have.been.called;
+    });
+
+    it('should return false if a plan is not found', function() {
+      plansService.getPlanById.returns(null);
+      expect($scope.isDisplayLicensePlan({})).to.not.be.ok;
+    });
+
+    it('should return true if the product codes match', function() {
+      plansService.getPlanById.returns({
+        productCode: 'volumePlan'
+      });
+      expect($scope.isDisplayLicensePlan({})).to.be.true;
+    });
+
+  });
+
+  describe('isVolumePlan', function() {
+    it('should return false if an invalid subscription is passed', function() {
+      expect($scope.isVolumePlan()).to.be.false;
+    });
+
+    it('should return true if the plan is a volume plan', function() {
+      expect($scope.isVolumePlan({
+        plan_id: 'planId'
+      })).to.be.true;
+
+      plansService.getPlanById.should.have.been.calledWith('planId');
+    });
+
+    it('should return false if it is not a volume plan', function() {
+      plansService.isVolumePlan.returns(false);
+      expect($scope.isVolumePlan({})).to.be.false;
+    });
+
+  });
+
+  describe('getPlanName', function() {
+    it('should return blank if an invalid subscription is passed', function() {
+      expect($scope.getPlanName()).to.equal('');
+    });
+
+    it('should return plan name', function() {
+      expect($scope.getPlanName({
+        plan_id: 'planId'
+      })).to.equal('planName Plan');
+
+      plansService.getPlanById.should.have.been.calledWith('planId');
+    });
+
+    it('should return plan id if plan is not found', function() {
+      plansService.getPlanById.returns(null);
+      expect($scope.getPlanName({
+        plan_id: 'planId'
+      })).to.equal('planId');
     });
 
   });

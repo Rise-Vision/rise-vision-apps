@@ -174,6 +174,10 @@
       function (PLANS_LIST) {
         var _factory = {};
 
+        var _getProductCode = function (planId) {
+          return planId && planId.split('-')[0];
+        };
+
         _factory.getPlan = function (productCode) {
           var plan = _.find(PLANS_LIST, function (plan) {
             return plan.productCode === productCode;
@@ -183,7 +187,7 @@
         };
 
         _factory.getPlanById = function (planId) {
-          var productCode = planId && planId.split('-')[0];
+          var productCode = _getProductCode(planId);
 
           return _factory.getPlan(productCode);
         };
