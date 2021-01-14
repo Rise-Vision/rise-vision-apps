@@ -4,17 +4,19 @@
 describe("Services: purchase factory", function() {
   beforeEach(module("risevision.apps.purchase"));
   beforeEach(module(function ($provide) {
-    $provide.value("PLANS_LIST", [{
-      type: 'volume',
-      productId: 'productId',
-      productCode: 'productCode',
-      yearly: {
-        billAmount: 'yearlyBillAmount'
-      },
-      monthly: {
-        billAmount: 'monthlyBillAmount'
-      }
-    }]);
+    $provide.value("plansService", {
+      getVolumePlan: sinon.stub().returns({
+        type: 'volume',
+        productId: 'productId',
+        productCode: 'productCode',
+        yearly: {
+          billAmount: 'yearlyBillAmount'
+        },
+        monthly: {
+          billAmount: 'monthlyBillAmount'
+        }
+      })
+    });
     $provide.service("$q", function() {return Q;});
     $provide.service("$modal", function() {
       return {
