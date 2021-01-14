@@ -50,9 +50,8 @@ describe("Services: plans factory", function() {
       analyticsFactory = $injector.get("analyticsFactory");
       $state = $injector.get("$state");
 
-      var plansByType = _.keyBy($injector.get("PLANS_LIST"), "type");
-
-      VOLUME_PLAN = plansByType.volume;
+      var plansService = $injector.get("plansService");
+      VOLUME_PLAN = plansService.getVolumePlan();
     });
   });
 
