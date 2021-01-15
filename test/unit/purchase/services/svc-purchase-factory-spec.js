@@ -73,9 +73,7 @@ describe("Services: purchase factory", function() {
           } else {
             return Q.reject();
           }
-        }),
-        addTaxExemption: sinon.stub().returns(Q.resolve()),
-        uploadTaxExemptionCertificate: sinon.stub().returns(Q.resolve("url"))
+        })
       };
     });
 
@@ -88,6 +86,10 @@ describe("Services: purchase factory", function() {
       getPaymentMethodId: sinon.stub().returns('paymentMethodId')
     });
 
+    $provide.value("taxExemptionFactory", {
+      init: sinon.stub().returns('taxExemption')
+    });
+
     $provide.service("purchaseFlowTracker", function() {
       return purchaseFlowTracker = {
         trackProductAdded: sinon.stub(),
@@ -98,7 +100,7 @@ describe("Services: purchase factory", function() {
 
   }));
 
-  var $rootScope, $modal, $state, $timeout, purchaseFactory, creditCardFactory, userState, storeService, purchaseFlowTracker, validate, RPP_ADDON_ID;
+  var $rootScope, $modal, $state, $timeout, purchaseFactory, creditCardFactory, userState, storeService, taxExemptionFactory, purchaseFlowTracker, validate, RPP_ADDON_ID;
 
   beforeEach(function() {
     inject(function($injector) {
@@ -109,6 +111,7 @@ describe("Services: purchase factory", function() {
       $timeout = $injector.get("$timeout");
       purchaseFactory = $injector.get("purchaseFactory");
       creditCardFactory = $injector.get("creditCardFactory");
+      taxExemptionFactory = $injector.get('taxExemptionFactory');
     });
   });
 
@@ -116,7 +119,6 @@ describe("Services: purchase factory", function() {
     expect(purchaseFactory).to.be.ok;
     expect(purchaseFactory.init).to.be.a("function");
     expect(purchaseFactory.updatePlan).to.be.a("function");
-    expect(purchaseFactory.submitTaxExemption).to.be.a("function");
     expect(purchaseFactory.validatePaymentMethod).to.be.a("function");
     expect(purchaseFactory.getEstimate).to.be.a("function");
     expect(purchaseFactory.completePayment).to.be.a("function");
@@ -151,8 +153,13 @@ describe("Services: purchase factory", function() {
       expect(purchaseFactory.purchase.contact).to.have.property("username");
       expect(purchaseFactory.purchase.contact).to.not.have.property("uselessProperty");
 
-      expect(purchaseFactory.purchase.taxExemption).to.be.an('object');
       expect(purchaseFactory.purchase.estimate).to.deep.equal({});
+    });
+
+    it("should initialize tax exemption", function() {
+      purchaseFactory.init();
+      
+      taxExemptionFactory.init.should.have.been.calledWith(purchaseFactory.getEstimate);
     });
 
     it("should initialize payment methods", function(done) {
@@ -225,101 +232,6 @@ describe("Services: purchase factory", function() {
 
       purchaseFlowTracker.trackProductAdded.should.have.been.calledWith(purchaseFactory.purchase.plan);
     });
-  });
-
-  describe("submitTaxExemption: ", function() {
-    beforeEach(function() {
-      purchaseFactory.purchase = {
-        taxExemption: {
-          file: 'file'
-        }
-      };
-      sinon.stub(purchaseFactory, 'getEstimate');
-    });
-
-    it("should return a promise", function() {
-      expect(purchaseFactory.submitTaxExemption().then).to.be.a("function");
-    });
-
-    it("should clear errors and start spinner", function() {
-      purchaseFactory.purchase = {
-        taxExemption: {
-          error: "error"
-        }
-      };
-
-      purchaseFactory.submitTaxExemption();
-
-      expect(purchaseFactory.purchase.taxExemption.error).to.not.be.ok;
-      expect(purchaseFactory.loading).to.be.true;
-    });
-
-    it("should successfully submit", function (done) {
-      purchaseFactory.submitTaxExemption().then(function () {
-        expect(purchaseFactory.purchase.taxExemption.error).to.not.be.ok;
-        expect(storeService.uploadTaxExemptionCertificate).to.have.been.calledWith('file');
-        expect(storeService.addTaxExemption).to.have.been.calledWith('selectedCompany', purchaseFactory.purchase.taxExemption, 'url');
-
-        expect(purchaseFactory.purchase.taxExemption.sent).to.be.true;
-
-        done();
-      });
-    });
-
-    it("should refresh estimate but not stop spinner", function (done) {
-      purchaseFactory.submitTaxExemption().then(function () {
-        purchaseFactory.getEstimate.should.have.been.called;
-
-        expect(purchaseFactory.loading).to.be.true;
-
-        done();
-      });
-    });
-
-    it("should fail to submit when uploading tax exemption certificate fails", function (done) {
-      storeService.uploadTaxExemptionCertificate.returns(Q.reject({}));
-
-      purchaseFactory.submitTaxExemption().then(function () {
-        expect(purchaseFactory.purchase.taxExemption.error).to.equal('Something went wrong. Please try again.');
-        expect(storeService.uploadTaxExemptionCertificate).to.have.been.called;
-        expect(storeService.addTaxExemption).to.not.have.been.called;
-
-        purchaseFactory.getEstimate.should.not.have.been.called;
-
-        expect(purchaseFactory.purchase.taxExemption.sent).to.not.be.ok;
-
-        done();
-      });
-    });
-
-    it("should stop spinner and show error on failure", function (done) {
-      storeService.uploadTaxExemptionCertificate.returns(Q.reject({message: 'error'}));
-
-      purchaseFactory.submitTaxExemption().then(function () {
-        expect(purchaseFactory.purchase.taxExemption.error).to.equal('error');
-
-        expect(purchaseFactory.loading).to.be.false;
-
-        done();
-      });
-    });
-
-    it("should fail to submit when sending tax exemption fails", function (done) {
-      storeService.addTaxExemption.returns(Q.reject({}));
-
-      purchaseFactory.submitTaxExemption().then(function () {
-        expect(purchaseFactory.purchase.taxExemption.error).to.be.ok;
-        expect(storeService.uploadTaxExemptionCertificate).to.have.been.called;
-        expect(storeService.addTaxExemption).to.have.been.called;
-
-        purchaseFactory.getEstimate.should.not.have.been.called;
-
-        expect(purchaseFactory.purchase.taxExemption.sent).to.not.be.ok;
-
-        done();
-      });
-    });
-
   });
 
   describe("validatePaymentMethod: ", function() {

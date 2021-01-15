@@ -138,10 +138,7 @@
         <div class="panel-body">
           <label class="mb-3">Tax Exemption</label>
           <p ng-show="subscriptionFactory.item.customer.taxability !== 'taxable'">Tax exemption applied.</p>
-          <p ng-show="subscriptionFactory.item.customer.taxability === 'taxable'">No tax exemption applied.</p>
-          <span ng-show="false">
-            <button id="addTaxExemption" class="btn btn-default btn-block" ng-click="addTaxExemption()" ng-show="subscriptionFactory.item.customer.taxability === 'taxable'">I'm Tax Exempt</button>
-          </span>
+          <button id="addTaxExemption" class="btn btn-default btn-block" ng-click="addTaxExemption()" ng-show="subscriptionFactory.item.customer.taxability === 'taxable'">I'm Tax Exempt</button>
         </div>
       </div>
     </div>

@@ -27,6 +27,9 @@ describe("controller: purchase", function() {
         updateAddress: sandbox.stub()
       };
     });
+    $provide.value("taxExemptionFactory", {
+      taxExemption: {}
+    });
     $provide.service("purchaseFactory", function() {
       return {
         validatePaymentMethod: sandbox.stub().returns(Q.resolve()),
@@ -45,7 +48,7 @@ describe("controller: purchase", function() {
     });    
   }));
 
-  var sandbox, $scope, $state, $loading, validate, purchaseFactory, addressFactory, $location, redirectTo;
+  var sandbox, $scope, $state, $loading, validate, purchaseFactory, addressFactory, taxExemptionFactory, $location, redirectTo;
 
   beforeEach(function() {
     validate = true;
@@ -57,6 +60,7 @@ describe("controller: purchase", function() {
       $loading = $injector.get("$loading");
       addressFactory = $injector.get("addressFactory");
       purchaseFactory = $injector.get("purchaseFactory");
+      taxExemptionFactory = $injector.get('taxExemptionFactory');
       $location = $injector.get("$location");
       redirectTo =  '/displays/list'
 
@@ -77,12 +81,14 @@ describe("controller: purchase", function() {
   it("should initialize",function() {
     expect($scope.form).to.be.an("object");
     expect($scope.factory).to.equal(purchaseFactory);
+    expect($scope.taxExemptionFactory).to.equal(taxExemptionFactory);
 
     expect($scope.PURCHASE_STEPS).to.be.ok;
     expect($scope.currentStep).to.equal(0);
     expect($scope.finalStep).to.be.false;
 
     expect($scope.validateAddress).to.be.a("function");
+    expect($scope.applyTaxExemption).to.be.a("function");
     expect($scope.completePayment).to.be.a("function");
     expect($scope.completeCardPayment).to.be.a("function");
     expect($scope.setNextStep).to.be.a("function");
@@ -95,7 +101,7 @@ describe("controller: purchase", function() {
   });
 
   describe("$loading spinner: ", function() {
-    it("should start and stop spinner", function() {
+    it("should start and stop spinner from purchaseFactory", function() {
       purchaseFactory.loading = true;
       $scope.$digest();
 
@@ -106,6 +112,19 @@ describe("controller: purchase", function() {
 
       $loading.stop.should.have.been.calledTwice;
     });
+
+    it("should start and stop spinner from taxExemptionFactory", function() {
+      taxExemptionFactory.loading = true;
+      $scope.$digest();
+
+      $loading.start.should.have.been.calledWith("purchase-loader");
+
+      taxExemptionFactory.loading = false;
+      $scope.$digest();
+
+      $loading.stop.should.have.been.calledTwice;
+    });
+
   });
 
   describe("validateAddress: ", function() {
@@ -177,6 +196,26 @@ describe("controller: purchase", function() {
       }, 10);
     });
 
+  });
+
+  describe("applyTaxExemption:", function () {
+    it("should not apply if already sent", function() {
+      taxExemptionFactory.taxExemption.sent = true;
+
+      $scope.applyTaxExemption();
+
+      expect(taxExemptionFactory.taxExemption.show).to.not.be.ok;
+    });
+
+    it("should toggle checkbox", function () {
+      $scope.applyTaxExemption();
+
+      expect(taxExemptionFactory.taxExemption.show).to.be.true;
+
+      $scope.applyTaxExemption();
+
+      expect(taxExemptionFactory.taxExemption.show).to.be.false;
+    });
   });
 
   describe('completePayment:', function() {

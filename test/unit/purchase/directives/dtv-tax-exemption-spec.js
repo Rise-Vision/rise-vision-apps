@@ -3,21 +3,19 @@
 describe("directive: tax exemption form", function() {
   beforeEach(module("risevision.apps.purchase"));
   beforeEach(module(function ($provide) {
-    $provide.service("purchaseFactory", function() {
+    $provide.service("taxExemptionFactory", function() {
       return {
         submitTaxExemption: sinon.stub().returns(Q.resolve()),
-        purchase: {
-          taxExemption: {}
-        }
+        taxExemption: {}
       };
     });
 
   }));
 
-  var $scope, element, purchaseFactory;
+  var $scope, element, taxExemptionFactory;
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
-    purchaseFactory = $injector.get('purchaseFactory');
+    taxExemptionFactory = $injector.get('taxExemptionFactory');
 
     $templateCache.put("partials/purchase/tax-exemption.html", "<p>mock</p>");
 
@@ -45,13 +43,11 @@ describe("directive: tax exemption form", function() {
 
   it("should exist", function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.equal(purchaseFactory);
-    expect($scope.taxExemption).to.equal(purchaseFactory.purchase.taxExemption);
+    expect($scope.taxExemption).to.equal(taxExemptionFactory.taxExemption);
 
     expect($scope.form).to.be.an("object");
 
     expect($scope.submit).to.be.a("function");
-    expect($scope.applyTaxExemption).to.be.a("function");
 
     expect($scope.selectFile).to.be.a("function");
     expect($scope.removeFile).to.be.a("function");
@@ -66,7 +62,7 @@ describe("directive: tax exemption form", function() {
 
       $scope.submit();
 
-      expect(purchaseFactory.submitTaxExemption).to.not.have.been.called;
+      expect(taxExemptionFactory.submitTaxExemption).to.not.have.been.called;
     });
 
     it("should successfully submit", function () {
@@ -74,28 +70,7 @@ describe("directive: tax exemption form", function() {
 
       $scope.submit();
       
-      purchaseFactory.submitTaxExemption.should.have.been.called;
-    });
-
-  });
-
-  describe("applyTaxExemption:", function () {
-    it("should not apply if already sent", function() {
-      purchaseFactory.purchase.taxExemption.sent = true;
-
-      $scope.applyTaxExemption();
-
-      expect($scope.taxExemption.checked).to.not.be.ok;
-    });
-
-    it("should toggle checkbox", function () {
-      $scope.applyTaxExemption();
-
-      expect($scope.taxExemption.checked).to.be.true;
-
-      $scope.applyTaxExemption();
-
-      expect($scope.taxExemption.checked).to.be.false;
+      taxExemptionFactory.submitTaxExemption.should.have.been.called;
     });
 
   });
