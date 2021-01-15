@@ -19,7 +19,7 @@ describe("directive: tax exemption form", function() {
 
     $templateCache.put("partials/purchase/tax-exemption.html", "<p>mock</p>");
 
-    element = angular.element("<tax-exemption></tax-exemption>");
+    element = angular.element("<tax-exemption show-cancel=\"true\"></tax-exemption>");
     $compile(element)($rootScope);
 
     $rootScope.$digest();
@@ -43,6 +43,8 @@ describe("directive: tax exemption form", function() {
 
   it("should exist", function() {
     expect($scope).to.be.ok;
+    expect($scope.showCancel).to.be.true;
+
     expect($scope.taxExemption).to.equal(taxExemptionFactory.taxExemption);
 
     expect($scope.form).to.be.an("object");

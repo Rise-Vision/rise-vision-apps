@@ -27,6 +27,7 @@ angular.module('risevision.apps.purchase')
       $scope.taxExemptionFactory = taxExemptionFactory;
 
       purchaseFactory.init();
+      taxExemptionFactory.init(purchaseFactory.getEstimate);
 
       $scope.PURCHASE_STEPS = PURCHASE_STEPS;
       $scope.currentStep = 0;

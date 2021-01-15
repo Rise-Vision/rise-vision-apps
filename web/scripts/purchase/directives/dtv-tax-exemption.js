@@ -5,7 +5,9 @@ angular.module('risevision.apps.purchase')
     function ($templateCache, taxExemptionFactory) {
       return {
         restrict: 'E',
-        scope: {},
+        scope: {
+          showCancel: '='
+        },
         template: $templateCache.get('partials/purchase/tax-exemption.html'),
         link: function ($scope) {
           $scope.taxExemption = taxExemptionFactory.taxExemption;
