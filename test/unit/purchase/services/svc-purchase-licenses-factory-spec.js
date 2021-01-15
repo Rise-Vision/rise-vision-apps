@@ -160,6 +160,14 @@ describe("Services: purchase licenses factory", function() {
 
         expect(count).to.equal(7);
       });
+
+      it("should not consider change when input validation fails", function() {
+        purchaseLicensesFactory.purchase.licensesToAdd = undefined;
+
+        var count = purchaseLicensesFactory.getTotalDisplayCount();
+
+        expect(count).to.equal(2);
+      });
     });
 
     describe('_updatePerDisplayPrice:', function() {
@@ -332,6 +340,14 @@ describe("Services: purchase licenses factory", function() {
         var count = purchaseLicensesFactory.getTotalDisplayCount();
 
         expect(count).to.equal(1);
+      });
+
+      it("should not consider change when input validation fails", function() {
+        purchaseLicensesFactory.purchase.licensesToRemove = undefined;
+
+        var count = purchaseLicensesFactory.getTotalDisplayCount();
+
+        expect(count).to.equal(2);
       });
     });
   });
