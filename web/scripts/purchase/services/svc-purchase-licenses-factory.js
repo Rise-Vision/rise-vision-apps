@@ -30,31 +30,22 @@
           factory.purchase.licensesToAdd = isRemove ? 0 : $stateParams.displayCount;
           factory.purchase.licensesToRemove = isRemove ? $stateParams.displayCount : 0;
           factory.purchase.couponCode = '';
+          factory.subscriptionId = $stateParams.subscriptionId ||
+            currentPlanFactory.currentPlan.subscriptionId;
 
-          if ($stateParams.subscriptionId) {
-            console.warn($stateParams.subscriptionId);
-            subscriptionFactory.getSubscription($stateParams.subscriptionId).then(function() {
-              factory.getEstimate();
-            });
-            // TODO: handle save subscription load errors, either here or on controller/partial
-          } else {
+          subscriptionFactory.getSubscription(factory.subscriptionId).then(function() {
             factory.getEstimate();
-          }
+          });
         };
 
         factory.getCurrentDisplayCount = function() {
-          // TODO: use subscriptionFactory or currentPlanFactory
-          return currentPlanFactory.currentPlan.playerProTotalLicenseCount;
-        };
-
-        var _getSubscriptionId = function() {
-          // TODO: use subscriptionFactory or currentPlanFactory
-          return currentPlanFactory.currentPlan.subscriptionId;
+          return subscriptionFactory.item && subscriptionFactory.item.subscription &&
+            subscriptionFactory.item.subscription.plan_quantity;
         };
 
         var _getCompanyId = function() {
-          // TODO: use subscriptionFactory or currentPlanFactory
-          return currentPlanFactory.currentPlan.billToId;
+          return subscriptionFactory.item && subscriptionFactory.item.subscription &&
+            subscriptionFactory.item.subscription.customer_id;
         };
 
         var _getChangeInLicenses = function() {
@@ -70,7 +61,7 @@
 
         var _getTrackingProperties = function () {
           return {
-            subscriptionId: _getSubscriptionId(),
+            subscriptionId: factory.subscriptionId,
             changeInLicenses: _getChangeInLicenses(),
             totalLicenses: factory.getTotalDisplayCount(),
             companyId: _getCompanyId()
@@ -104,7 +95,7 @@
 
           var couponCode = factory.purchase.couponCode;
           var displayCount = factory.getTotalDisplayCount();
-          var subscriptionId = _getSubscriptionId();
+          var subscriptionId = factory.subscriptionId;
           var companyId = _getCompanyId();
 
           return storeService.estimateSubscriptionUpdate(displayCount, subscriptionId, companyId, couponCode)
@@ -144,7 +135,7 @@
 
           var couponCode = factory.purchase.couponCode;
           var displayCount = factory.getTotalDisplayCount();
-          var subscriptionId = _getSubscriptionId();
+          var subscriptionId = factory.subscriptionId;
           var companyId = _getCompanyId();
 
           return storeService.updateSubscription(displayCount, subscriptionId, companyId, couponCode)
