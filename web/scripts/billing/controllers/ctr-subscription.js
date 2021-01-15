@@ -4,22 +4,26 @@
 
 angular.module('risevision.apps.billing.controllers')
   .controller('SubscriptionCtrl', ['$scope', '$rootScope', '$loading', 'subscriptionFactory',
-  'userState', 'creditCardFactory', 'companySettingsFactory', 'ChargebeeFactory', 'plansService',
+  'userState', 'creditCardFactory', 'companySettingsFactory', 'taxExemptionFactory', 
+  'ChargebeeFactory', 'plansService',
     function ($scope, $rootScope, $loading, subscriptionFactory, userState, creditCardFactory,
-      companySettingsFactory, ChargebeeFactory, plansService) {
+      companySettingsFactory, taxExemptionFactory, ChargebeeFactory, plansService) {
       $scope.subscriptionFactory = subscriptionFactory;
       $scope.creditCardFactory = creditCardFactory;
       $scope.companySettingsFactory = companySettingsFactory;
+      $scope.taxExemptionFactory = taxExemptionFactory;
       $scope.chargebeeFactory = new ChargebeeFactory();
       $scope.company = userState.getCopyOfSelectedCompany();
 
-      $scope.$watch('subscriptionFactory.loading', function (newValue) {
-        if (newValue) {
+      $scope.$watchGroup(['subscriptionFactory.loading', 'taxExemptionFactory.loading'], function (values) {
+        if (values[0] || values[1]) {
           $loading.start('subscription-loader');
         } else {
           $loading.stop('subscription-loader');
         }
       });
+
+      taxExemptionFactory.init();
 
       $rootScope.$on('chargebee.subscriptionChanged', subscriptionFactory.reloadSubscription);
       $rootScope.$on('chargebee.subscriptionCancelled', subscriptionFactory.reloadSubscription);

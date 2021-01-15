@@ -86,10 +86,6 @@ describe("Services: purchase factory", function() {
       getPaymentMethodId: sinon.stub().returns('paymentMethodId')
     });
 
-    $provide.value("taxExemptionFactory", {
-      init: sinon.stub().returns('taxExemption')
-    });
-
     $provide.service("purchaseFlowTracker", function() {
       return purchaseFlowTracker = {
         trackProductAdded: sinon.stub(),
@@ -100,7 +96,7 @@ describe("Services: purchase factory", function() {
 
   }));
 
-  var $rootScope, $modal, $state, $timeout, purchaseFactory, creditCardFactory, userState, storeService, taxExemptionFactory, purchaseFlowTracker, validate, RPP_ADDON_ID;
+  var $rootScope, $modal, $state, $timeout, purchaseFactory, creditCardFactory, userState, storeService, purchaseFlowTracker, validate, RPP_ADDON_ID;
 
   beforeEach(function() {
     inject(function($injector) {
@@ -111,7 +107,6 @@ describe("Services: purchase factory", function() {
       $timeout = $injector.get("$timeout");
       purchaseFactory = $injector.get("purchaseFactory");
       creditCardFactory = $injector.get("creditCardFactory");
-      taxExemptionFactory = $injector.get('taxExemptionFactory');
     });
   });
 
@@ -154,12 +149,6 @@ describe("Services: purchase factory", function() {
       expect(purchaseFactory.purchase.contact).to.not.have.property("uselessProperty");
 
       expect(purchaseFactory.purchase.estimate).to.deep.equal({});
-    });
-
-    it("should initialize tax exemption", function() {
-      purchaseFactory.init();
-      
-      taxExemptionFactory.init.should.have.been.calledWith(purchaseFactory.getEstimate);
     });
 
     it("should initialize payment methods", function(done) {

@@ -28,7 +28,8 @@ describe("controller: purchase", function() {
       };
     });
     $provide.value("taxExemptionFactory", {
-      taxExemption: {}
+      taxExemption: {},
+      init: sandbox.stub()
     });
     $provide.service("purchaseFactory", function() {
       return {
@@ -98,6 +99,10 @@ describe("controller: purchase", function() {
     expect($scope.close).to.be.a("function");
 
     purchaseFactory.init.should.have.been.called;
+  });
+
+  it("should initialize tax exemption", function() {
+    taxExemptionFactory.init.should.have.been.calledWith(purchaseFactory.getEstimate);
   });
 
   describe("$loading spinner: ", function() {

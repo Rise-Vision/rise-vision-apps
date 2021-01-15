@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: SubscriptionCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $rootScope, $scope, $loading, subscriptionFactory, plansService;
+  var $rootScope, $scope, $loading, subscriptionFactory, taxExemptionFactory, plansService;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -37,6 +37,10 @@ describe('controller: SubscriptionCtrl', function () {
         
       };
     });
+    $provide.value('taxExemptionFactory', {
+      taxExemption: {},
+      init: sandbox.stub()
+    });
     $provide.service('ChargebeeFactory', function () {
       return function() {
         return {
@@ -65,6 +69,7 @@ describe('controller: SubscriptionCtrl', function () {
     $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
     subscriptionFactory = $injector.get('subscriptionFactory');
+    taxExemptionFactory = $injector.get('taxExemptionFactory');
     plansService = $injector.get('plansService');
 
     $controller('SubscriptionCtrl', {
@@ -83,6 +88,7 @@ describe('controller: SubscriptionCtrl', function () {
     expect($scope.subscriptionFactory).to.equal(subscriptionFactory);
     expect($scope.creditCardFactory).to.be.ok;
     expect($scope.companySettingsFactory).to.be.ok;
+    expect($scope.taxExemptionFactory).to.equal(taxExemptionFactory);
     expect($scope.company).to.be.ok;
 
     expect($scope.isInvoiced).to.be.a('function');
@@ -92,6 +98,10 @@ describe('controller: SubscriptionCtrl', function () {
 
     expect($scope.editPaymentMethods).to.be.a('function');
     expect($scope.editSubscription).to.be.a('function');
+  });
+
+  it('should initialize tax exemption', function() {
+    taxExemptionFactory.init.should.have.been.called;
   });
 
   describe('$loading: ', function() {
@@ -108,6 +118,19 @@ describe('controller: SubscriptionCtrl', function () {
         done();
       }, 10);
     });
+
+    it('should start and stop spinner from taxExemptionFactory', function() {
+      taxExemptionFactory.loading = true;
+      $scope.$digest();
+
+      $loading.start.should.have.been.calledWith('subscription-loader');
+
+      taxExemptionFactory.loading = false;
+      $scope.$digest();
+
+      $loading.stop.should.have.been.calledTwice;
+    });
+
   });
 
   describe('isInvoiced', function() {

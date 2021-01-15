@@ -403,6 +403,12 @@ All utilities have a prefix u_ added to them
   flex-wrap: nowrap;
   align-items: center;
 
+  .flex-1 {
+    flex: 1;
+    align-items: center;
+    overflow: hidden;    
+  }
+
   .row-entry {
     display: flex;
     flex: 1;
