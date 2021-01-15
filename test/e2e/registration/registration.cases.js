@@ -14,12 +14,12 @@
   describe("Registration", function() {
     this.timeout(2000);// to allow for protactor to load the seperate page
 
-    var registrationScenarios = new RegistrationScenarios();
-    var trialScenarios = new TrialScenarios();
-    var checkoutScenarios = new CheckoutScenarios();
+    //var registrationScenarios = new RegistrationScenarios();
+    //var trialScenarios = new TrialScenarios();
+    //var checkoutScenarios = new CheckoutScenarios();
     var subscriptionEditScenarios = new SubscriptionEditScenarios();
-    var accountRemovalScenarios = new AccountRemovalScenarios();
-    var registrationExistingCompany = new RegistrationExistingCompanyScenarios();
+    //var accountRemovalScenarios = new AccountRemovalScenarios();
+    //var registrationExistingCompany = new RegistrationExistingCompanyScenarios();
 
   });
 
