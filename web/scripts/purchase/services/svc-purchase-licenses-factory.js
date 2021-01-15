@@ -6,9 +6,10 @@
 
   angular.module('risevision.apps.purchase')
     .factory('purchaseLicensesFactory', ['$log', '$timeout', '$stateParams',
-      'userState', 'currentPlanFactory', 'storeService', 'analyticsFactory', 'pricingFactory',
+      'userState', 'currentPlanFactory', 'storeService', 'analyticsFactory',
+      'pricingFactory', 'subscriptionFactory',
       function ($log, $timeout, $stateParams, userState, currentPlanFactory,
-        storeService, analyticsFactory, pricingFactory) {
+        storeService, analyticsFactory, pricingFactory, subscriptionFactory) {
         var factory = {};
         factory.userEmail = userState.getUserEmail();
 
@@ -30,18 +31,29 @@
           factory.purchase.licensesToRemove = isRemove ? $stateParams.displayCount : 0;
           factory.purchase.couponCode = '';
 
-          factory.getEstimate();
+          if ($stateParams.subscriptionId) {
+            console.warn($stateParams.subscriptionId);
+            subscriptionFactory.getSubscription($stateParams.subscriptionId).then(function() {
+              factory.getEstimate();
+            });
+            // TODO: handle save subscription load errors, either here or on controller/partial
+          } else {
+            factory.getEstimate();
+          }
         };
 
         factory.getCurrentDisplayCount = function() {
+          // TODO: use subscriptionFactory or currentPlanFactory
           return currentPlanFactory.currentPlan.playerProTotalLicenseCount;
         };
 
         var _getSubscriptionId = function() {
+          // TODO: use subscriptionFactory or currentPlanFactory
           return currentPlanFactory.currentPlan.subscriptionId;
         };
 
         var _getCompanyId = function() {
+          // TODO: use subscriptionFactory or currentPlanFactory
           return currentPlanFactory.currentPlan.billToId;
         };
 

@@ -11,6 +11,8 @@ angular.module('risevision.apps.purchase')
 
       purchaseLicensesFactory.init($stateParams.purchaseAction);
 
+      // TODO: should subscription loading be considered also for purchase-licenses-loader spinner ?
+
       $scope.$watch('factory.loading', function (loading) {
         if (loading) {
           $loading.start('purchase-licenses-loader');

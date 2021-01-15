@@ -85,6 +85,8 @@ angular.module('risevision.apps')
           }
         })
         .state('apps.purchase.licenses.add', {
+          // TODO: either turn to always receive subscriptionId,
+          // or add additional '/add/:subscriptionId' state
           url: '/add',
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/purchase/add-licenses.html');
@@ -102,7 +104,7 @@ angular.module('risevision.apps')
           }
         })
         .state('apps.purchase.licenses.remove', {
-          url: '/remove',
+          url: '/remove/:subscriptionId',
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/purchase/remove-licenses.html');
           }],
@@ -111,7 +113,7 @@ angular.module('risevision.apps')
           },
           controller: 'PurchaseLicensesCtrl',
           resolve: {
-            redirectTo: ['$location',
+            redirectTo: ['$location', // TODO: need to consider subscriptionId as part of path here
               function ($location) {
                 return $location.path() !== '/licenses/remove' ? $location.path() : '/';
               }
