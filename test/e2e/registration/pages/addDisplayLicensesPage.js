@@ -5,7 +5,7 @@ var HomePage = require('../../common/pages/homepage.js');
 var AddDisplayLicensesPage = function() {
   var homepage = new HomePage();
 
-  var url = homepage.getUrl() + 'licenses/add';
+  var url = homepage.getUrl() + 'licenses/add/';
 
   var loader = element(by.xpath('//div[@spinner-key="purchase-licenses-loader"]'));
   var purchaseLicensesPanel = element(by.css('.purchase-licenses-centered-panel'));
