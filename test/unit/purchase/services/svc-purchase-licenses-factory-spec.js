@@ -341,7 +341,6 @@ describe("Services: purchase licenses factory", function() {
 
         expect(count).to.equal(1);
       });
-<<<<<<< HEAD
 
       it("should not consider change when input validation fails", function() {
         purchaseLicensesFactory.purchase.licensesToRemove = undefined;
@@ -350,8 +349,6 @@ describe("Services: purchase licenses factory", function() {
 
         expect(count).to.equal(2);
       });
-=======
->>>>>>> test total display count [stage-9]
     });
   });
 
