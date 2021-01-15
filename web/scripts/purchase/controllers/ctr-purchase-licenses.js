@@ -3,18 +3,17 @@
 angular.module('risevision.apps.purchase')
 
   .controller('PurchaseLicensesCtrl', ['$scope', '$stateParams', '$loading',
-    'purchaseLicensesFactory', '$location', 'redirectTo',
+    'purchaseLicensesFactory', 'subscriptionFactory', '$location', 'redirectTo',
     function ($scope, $stateParams, $loading, purchaseLicensesFactory,
-      $location, redirectTo) {
+      subscriptionFactory, $location, redirectTo) {
       $scope.factory = purchaseLicensesFactory;
+      $scope.subscriptionFactory = subscriptionFactory;
       $scope.couponCode = null;
 
       purchaseLicensesFactory.init($stateParams.purchaseAction);
 
-      // TODO: should subscription loading be considered also for purchase-licenses-loader spinner ?
-
-      $scope.$watch('factory.loading', function (loading) {
-        if (loading) {
+      $scope.$watchGroup(['factory.loading', 'subscriptionFactory.loading'], function (values) {
+        if (values[0] || values[1]) {
           $loading.start('purchase-licenses-loader');
         } else {
           $loading.stop('purchase-licenses-loader');
