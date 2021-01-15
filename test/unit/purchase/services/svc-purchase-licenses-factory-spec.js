@@ -107,7 +107,7 @@ describe("Services: purchase licenses factory", function() {
 
   });
 
-  describe("getCurrentDisplayCount", function() {
+  describe("getCurrentDisplayCount:", function() {
     it("should return the current display count from current plan", function() {
       var count = purchaseLicensesFactory.getCurrentDisplayCount();
 
@@ -151,6 +151,22 @@ describe("Services: purchase licenses factory", function() {
       .then(null,function(e) {
         console.error(e);
         done("error");
+      });
+    });
+
+    describe('getTotalDisplayCount:', function() {
+      it("should add for the total display count", function() {
+        var count = purchaseLicensesFactory.getTotalDisplayCount();
+
+        expect(count).to.equal(7);
+      });
+
+      it("should not consider change when input validation fails", function() {
+        purchaseLicensesFactory.purchase.licensesToAdd = undefined;
+
+        var count = purchaseLicensesFactory.getTotalDisplayCount();
+
+        expect(count).to.equal(2);
       });
     });
 
@@ -316,6 +332,22 @@ describe("Services: purchase licenses factory", function() {
       .then(null,function(e) {
         console.error(e);
         done("error");
+      });
+    });
+
+    describe('getTotalDisplayCount:', function() {
+      it("should subtract for the total display count", function() {
+        var count = purchaseLicensesFactory.getTotalDisplayCount();
+
+        expect(count).to.equal(1);
+      });
+
+      it("should not consider change when input validation fails", function() {
+        purchaseLicensesFactory.purchase.licensesToRemove = undefined;
+
+        var count = purchaseLicensesFactory.getTotalDisplayCount();
+
+        expect(count).to.equal(2);
       });
     });
   });
