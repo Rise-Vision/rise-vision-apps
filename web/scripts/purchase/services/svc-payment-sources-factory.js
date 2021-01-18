@@ -3,9 +3,9 @@
 /*jshint camelcase: false */
 
 angular.module('risevision.apps.purchase')
-  .service('paymentSourcesFactory', ['$q', '$filter', '$modal', '$log', 'billing',
+  .service('paymentSourcesFactory', ['$q', '$filter', '$log', 'confirmModal', 'billing',
   'processErrorCode', 'analyticsFactory',
-    function ($q, $filter, $modal, $log, billing, processErrorCode, analyticsFactory) {
+    function ($q, $filter, $log, confirmModal, billing, processErrorCode, analyticsFactory) {
       var factory = {};
 
       var _clearMessages = function () {
@@ -57,32 +57,16 @@ angular.module('risevision.apps.purchase')
 
       factory.removePaymentMethod = function(card) {
         var description = $filter('cardDescription')(card.payment_source.card);
-
-        var modalInstance = $modal.open({
-          templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
-          controller: 'confirmModalController',
-          windowClass: 'madero-style centered-modal',
-          size: 'sm',
-          resolve: {
-            confirmationTitle: function () {
-              return 'Remove Payment Method';
-            },
-            confirmationMessage: function () {
-              return 'Are you sure you want to remove this payment method? The <strong> ' + description + '</strong> will be removed from your company.';
-            },
-            confirmationButton: function () {
-              return 'Yes, Remove';
-            },
-            cancelButton: function () {
-              return 'No';
-            }
-          }
-        });
-
-        modalInstance.result.then(function() {
-          _deletePaymentSource(card.payment_source.id);
-        });
-
+        
+        confirmModal('Remove Payment Method',
+            'Are you sure you want to remove this payment method? The <strong>' +
+            description +
+            '</strong> will be removed from your company.',
+            'Yes, Remove', 'Cancel', 'madero-style centered-modal',
+            'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
+          ).then(function() {
+            _deletePaymentSource(card.payment_source.id);
+          });
       };
 
       var _showErrorMessage = function (e) {
