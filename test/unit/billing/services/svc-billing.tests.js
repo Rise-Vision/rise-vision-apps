@@ -113,7 +113,19 @@ describe('service: billing:', function() {
                   return Q.reject('API Failed');
                 }
               })
-            }  
+            },
+            paymentSource: {
+              delete: sinon.spy(function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: 'deleted'
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              })              
+            }
           }
         });
       };
@@ -136,6 +148,7 @@ describe('service: billing:', function() {
     expect(billing.updateInvoice).to.be.a.function;
     expect(billing.getInvoicePdf).to.be.a.function;
     expect(billing.getCreditCards).to.be.a.function;
+    expect(billing.deletePaymentSource).to.be.a.function;
   });
 
   describe('getSubscriptions:', function() {
@@ -178,7 +191,7 @@ describe('service: billing:', function() {
     it('should return an subscription', function(done) {
       failedResponse = false;
 
-      billing.getSubscription('subscriptionId', 'companyId', 'token')
+      billing.getSubscription('subscriptionId')
       .then(function(result) {
         storeApi.integrations.subscription.get.should.have.been.called;
         storeApi.integrations.subscription.get.should.have.been.calledWith({
@@ -405,6 +418,38 @@ describe('service: billing:', function() {
       billing.getCreditCards({})
       .then(function(invoices) {
         done(invoices);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+
+  describe('deletePaymentSource:', function() {
+    it('should delete the payment source', function(done) {
+      failedResponse = false;
+
+      billing.deletePaymentSource('paymentSourceId')
+      .then(function(result) {
+        storeApi.integrations.paymentSource.delete.should.have.been.called;
+        storeApi.integrations.paymentSource.delete.should.have.been.calledWith({
+          paymentSourceId: 'paymentSourceId',
+          companyId: 'testId1'
+        });
+
+        expect(result).to.be.ok;
+        expect(result).to.equal('deleted');
+        done();
+      });
+    });
+
+    it('should handle failure to get subscription correctly', function(done) {
+      failedResponse = true;
+
+      billing.deletePaymentSource('paymentSourceId')
+      .then(function(subscription) {
+        done(subscription);
       })
       .then(null, function(error) {
         expect(error).to.deep.equal('API Failed');

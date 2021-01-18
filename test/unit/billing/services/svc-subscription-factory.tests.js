@@ -1,7 +1,7 @@
 'use strict';
 
 describe('service: subscriptionFactory:', function() {
-  var subscriptionFactory, billing, creditCardFactory, analyticsFactory;
+  var subscriptionFactory, billing, analyticsFactory;
 
   beforeEach(module('risevision.apps.billing.services'));
   beforeEach(module(function ($provide) {
@@ -9,11 +9,6 @@ describe('service: subscriptionFactory:', function() {
     $provide.service('billing',function() {
       return {
         getSubscription: sinon.stub().returns(Q.resolve({item: 'subscription'}))
-      };
-    });
-    $provide.service('creditCardFactory',function() {
-      return {
-        initPaymentMethods: sinon.stub()
       };
     });
     $provide.service('processErrorCode',function() {
@@ -32,7 +27,6 @@ describe('service: subscriptionFactory:', function() {
   beforeEach(function() {
     inject(function($injector){
       billing = $injector.get('billing');
-      creditCardFactory = $injector.get('creditCardFactory');
       subscriptionFactory = $injector.get('subscriptionFactory');
       analyticsFactory = $injector.get('analyticsFactory');
     });
@@ -41,34 +35,7 @@ describe('service: subscriptionFactory:', function() {
   it('should exist',function() {
     expect(subscriptionFactory).to.be.ok;
 
-    expect(subscriptionFactory.init).to.be.a('function');
     expect(subscriptionFactory.getSubscription).to.be.a('function');
-  });
-
-  describe('init:', function() {
-    it('should init payment methods and load credit cards', function() {
-      subscriptionFactory.loading = true;
-      subscriptionFactory.apiError = 'error';
-
-      subscriptionFactory.init(true);
-
-      expect(subscriptionFactory.loading).to.be.false;
-      expect(subscriptionFactory.apiError).to.not.be.ok;
-
-      creditCardFactory.initPaymentMethods.should.have.been.called;
-    });
-
-    it('should not init payment methods and load credit cards', function() {
-      subscriptionFactory.loading = true;
-      subscriptionFactory.apiError = 'error';
-
-      subscriptionFactory.init(false);
-
-      expect(subscriptionFactory.loading).to.be.false;
-      expect(subscriptionFactory.apiError).to.not.be.ok;
-
-      creditCardFactory.initPaymentMethods.should.not.have.been.called;
-    });
   });
 
   describe('getSubscription:', function() {

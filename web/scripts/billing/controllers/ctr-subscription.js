@@ -3,26 +3,28 @@
 /*jshint camelcase: false */
 
 angular.module('risevision.apps.billing.controllers')
-  .controller('SubscriptionCtrl', ['$scope', '$rootScope', '$loading', 'subscriptionFactory',
-  'userState', 'creditCardFactory', 'companySettingsFactory', 'taxExemptionFactory', 
-  'ChargebeeFactory', 'plansService',
-    function ($scope, $rootScope, $loading, subscriptionFactory, userState, creditCardFactory,
-      companySettingsFactory, taxExemptionFactory, ChargebeeFactory, plansService) {
+  .controller('SubscriptionCtrl', ['$scope', '$rootScope', '$loading',
+  'subscriptionFactory', 'userState', 'paymentSourcesFactory', 'companySettingsFactory',
+  'taxExemptionFactory', 'ChargebeeFactory', 'plansService',
+    function ($scope, $rootScope, $loading, subscriptionFactory, userState,
+      paymentSourcesFactory, companySettingsFactory, taxExemptionFactory, ChargebeeFactory, 
+      plansService) {
       $scope.subscriptionFactory = subscriptionFactory;
-      $scope.creditCardFactory = creditCardFactory;
+      $scope.paymentSourcesFactory = paymentSourcesFactory;
       $scope.companySettingsFactory = companySettingsFactory;
       $scope.taxExemptionFactory = taxExemptionFactory;
       $scope.chargebeeFactory = new ChargebeeFactory();
       $scope.company = userState.getCopyOfSelectedCompany();
 
-      $scope.$watchGroup(['subscriptionFactory.loading', 'taxExemptionFactory.loading'], function (values) {
-        if (values[0] || values[1]) {
+      $scope.$watchGroup(['subscriptionFactory.loading', 'taxExemptionFactory.loading', 'paymentSourcesFactory.loading'], function (values) {
+        if (values[0] || values[1] || values[2]) {
           $loading.start('subscription-loader');
         } else {
           $loading.stop('subscription-loader');
         }
       });
 
+      paymentSourcesFactory.init();
       taxExemptionFactory.init();
 
       $rootScope.$on('chargebee.subscriptionChanged', subscriptionFactory.reloadSubscription);
@@ -67,10 +69,6 @@ angular.module('risevision.apps.billing.controllers')
         var subscriptionId = subscription.id;
 
         $scope.chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscriptionId);
-      };
-
-      $scope.editPaymentMethods = function () {
-        $scope.chargebeeFactory.openPaymentSources(userState.getSelectedCompanyId());
       };
 
     }

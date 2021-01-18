@@ -210,6 +210,31 @@ angular.module('risevision.apps.billing.services')
             });
 
           return deferred.promise;
+        },
+        deletePaymentSource: function (paymentSourceId) {
+          var deferred = $q.defer();
+
+          var params = {
+            'paymentSourceId': paymentSourceId,
+            'companyId': userState.getSelectedCompanyId()
+          };
+
+          $log.debug('Store integrations.paymentSource.delete called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.paymentSource.delete(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.paymentSource.delete resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to delete payment source.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
         }
       };
 

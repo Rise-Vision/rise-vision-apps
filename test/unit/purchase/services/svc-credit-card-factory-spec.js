@@ -6,16 +6,7 @@ describe("Services: credit card factory", function() {
   beforeEach(module(function ($provide) {
     $provide.service("$q", function() {return Q;});
 
-    var _generateElement = function(id) {
-      return {
-        id: id,
-        mount: sinon.stub(),
-        on: sinon.stub()
-      };
-    };
-
     $provide.value("stripeService", {
-      initializeStripeElements: sinon.stub().returns(Q.resolve([_generateElement(1), _generateElement(2), _generateElement(3)])),
       createPaymentMethod: sinon.stub().returns(Q.resolve({})),
       authenticate3ds: sinon.stub().returns(Q.resolve())
     });
@@ -31,23 +22,20 @@ describe("Services: credit card factory", function() {
       authenticate: sinon.stub().returns(Q.resolve())
     });
 
-    $provide.value('billing', {
-      getCreditCards: sinon.stub().returns(Q.resolve({
-        items: []
-      }))
+    $provide.value('paymentSourcesFactory', {
+      init: sinon.stub().returns(Q.resolve())
     });
 
   }));
 
-  var $rootScope, creditCardFactory, stripeService, userState, userAuthFactory, billing;
+  var creditCardFactory, stripeService, userState, userAuthFactory, paymentSourcesFactory;
 
   beforeEach(function() {
     inject(function($injector) {
-      $rootScope = $injector.get('$rootScope');
       stripeService = $injector.get("stripeService");
       userState = $injector.get('userState');
       userAuthFactory = $injector.get('userAuthFactory');
-      billing = $injector.get('billing');
+      paymentSourcesFactory = $injector.get('paymentSourcesFactory');
       creditCardFactory = $injector.get("creditCardFactory");
     });
   });
@@ -55,75 +43,12 @@ describe("Services: credit card factory", function() {
   it("should exist", function() {
     expect(creditCardFactory).to.be.ok;
 
-    expect(creditCardFactory.initStripeElements).to.be.a("function");
-
     expect(creditCardFactory.selectNewCreditCard).to.be.a("function");
     expect(creditCardFactory.initPaymentMethods).to.be.a("function");
 
     expect(creditCardFactory.validatePaymentMethod).to.be.a("function");
     expect(creditCardFactory.getPaymentMethodId).to.be.a("function");
     expect(creditCardFactory.authenticate3ds).to.be.a("function");
-  });
-
-  describe("initStripeElements: ", function() {
-    beforeEach(function(done) {
-      creditCardFactory.initStripeElements();
-      setTimeout(function() {
-        done();
-      }, 10);
-    });
-
-    it('should initialize', function() {
-      stripeService.initializeStripeElements.should.have.been.calledWith([
-        'cardNumber',
-        'cardExpiry',
-        'cardCvc'
-      ], sinon.match.object);
-    });
-
-    it('should initialize elements and add them to the scope', function() {
-      expect(creditCardFactory.stripeElements['cardNumber']).to.be.an('object');
-      expect(creditCardFactory.stripeElements['cardExpiry']).to.be.an('object');
-      expect(creditCardFactory.stripeElements['cardCvc']).to.be.an('object');
-    });
-
-    it('should initialize handlers', function() {
-      creditCardFactory.stripeElements['cardNumber'].mount.should.have.been.calledWith('#new-card-number');
-
-      creditCardFactory.stripeElements['cardNumber'].on.should.have.been.calledTwice;
-      creditCardFactory.stripeElements['cardNumber'].on.should.have.been.calledWith('blur', sinon.match.func);
-      creditCardFactory.stripeElements['cardNumber'].on.should.have.been.calledWith('change', sinon.match.func);
-    });
-
-    it('should $digest on blur', function() {
-      sinon.spy($rootScope, '$digest');
-
-      creditCardFactory.stripeElements['cardNumber'].on.getCall(0).args[1]();
-
-      $rootScope.$digest.should.have.been.called;
-    });
-
-    it('should add dirty class and $digest on change', function() {
-      var cardElement = angular.element('<div id="new-card-number"/>').appendTo('body');
-
-      sinon.spy($rootScope, '$digest');
-
-      creditCardFactory.stripeElements['cardNumber'].on.getCall(1).args[1]();
-
-      expect(cardElement[0].className).to.contain('dirty');
-      $rootScope.$digest.should.have.been.called;
-
-      cardElement.remove();
-    });
-
-    it('should handle failure to get element', function() {
-      sinon.spy($rootScope, '$digest');
-
-      creditCardFactory.stripeElements['cardNumber'].on.getCall(1).args[1]();
-
-      $rootScope.$digest.should.have.been.called;
-    });
-
   });
 
   it("selectNewCreditCard:", function() {
@@ -143,8 +68,6 @@ describe("Services: credit card factory", function() {
       
       expect(creditCardFactory).to.be.ok;
       expect(creditCardFactory.paymentMethods).to.be.ok;
-      expect(creditCardFactory.paymentMethods.existingCreditCards).to.deep.equal([]);
-
       expect(creditCardFactory.paymentMethods.newCreditCard).to.deep.equal({
         isNew: true,
         address: {},
@@ -216,7 +139,7 @@ describe("Services: credit card factory", function() {
     it('should not load cards', function(done) {
       creditCardFactory.initPaymentMethods(false)
         .then(function() {
-          billing.getCreditCards.should.not.have.been.called;
+          paymentSourcesFactory.init.should.not.have.been.called;
 
           done();
         });
@@ -228,7 +151,7 @@ describe("Services: credit card factory", function() {
 
         creditCardFactory.initPaymentMethods(true)
           .catch(function() {
-            billing.getCreditCards.should.not.have.been.called;
+            paymentSourcesFactory.init.should.not.have.been.called;
 
             done();
           });
@@ -239,7 +162,7 @@ describe("Services: credit card factory", function() {
 
         creditCardFactory.initPaymentMethods(true)
           .then(function() {
-            billing.getCreditCards.should.not.have.been.called;
+            paymentSourcesFactory.init.should.not.have.been.called;
 
             done();
           });
@@ -248,18 +171,14 @@ describe("Services: credit card factory", function() {
       it('should retrieve cards and update list if successful', function(done) {
         creditCardFactory.initPaymentMethods(true)
           .then(function() {
-            billing.getCreditCards.should.have.been.calledWith({
-              count: 40
-            });
-
-            expect(creditCardFactory.paymentMethods.existingCreditCards).to.be.an('array');
+            paymentSourcesFactory.init.should.have.been.called;
 
             done();
           });
       });
 
       it('should set selected card to the first item if available', function(done) {
-        billing.getCreditCards.returns(Q.resolve({items: ['card1']}))
+        paymentSourcesFactory.selectedCard = 'card1';
 
         creditCardFactory.initPaymentMethods(true)
           .then(function() {

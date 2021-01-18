@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.apps.billing.services')
-  .service('subscriptionFactory', ['$q', '$log', 'billing', 'creditCardFactory',
-  'processErrorCode', 'analyticsFactory',
-    function ($q, $log, billing, creditCardFactory, processErrorCode, analyticsFactory) {
+  .service('subscriptionFactory', ['$q', '$log', 'billing', 'processErrorCode',
+  'analyticsFactory',
+    function ($q, $log, billing, processErrorCode, analyticsFactory) {
       var factory = {};
 
       var _clearMessages = function () {
@@ -12,16 +12,8 @@ angular.module('risevision.apps.billing.services')
         factory.apiError = '';
       };
 
-      factory.init = function(initCreditCards) {
-        _clearMessages();
-
-        if (initCreditCards) {
-          creditCardFactory.initPaymentMethods(true);
-        }
-      };
-
       factory.getSubscription = function (subscriptionId) {
-        factory.init(false);
+        _clearMessages();
 
         factory.item = null;
         factory.loading = true;

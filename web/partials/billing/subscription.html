@@ -63,24 +63,20 @@
       <div class="border-container subscription-card">
         <div class="panel-body">
           <label class="mb-3">Payment Method</label>
-          <span ng-show="false">
-            <div class="madero-radio align-left" ng-repeat="card in creditCardFactory.paymentMethods.existingCreditCards" ng-show="false">
-              <input type="radio" ng-change="setPaymentMethod(card.payment_source.id)" ng-model="subscriptionFactory.item.card.payment_source_id" ng-value="card.payment_source.id" name="{{card.payment_source.id}}" id="{{card.payment_source.id}}" tabindex="1">
-              <label for="{{card.payment_source.id}}">
-                <span class="u_capitalize">{{card.payment_source.card.brand}}</span>, ending in {{card.payment_source.card.last4}}.
-                <span class="pull-right"><a class="madero-link u_clickable text-danger" ng-click="creditCardFactory.removePaymentMethod(card.payment_source.id)" ng-show="subscriptionFactory.item.card.payment_source_id !== card.payment_source.id">Remove</a></span>
-              </label>
-            </div>
-            <div class="madero-radio align-left" ng-show="false && isInvoiced()">
-              <input type="radio" ng-change="setPaymentMethod()" ng-model="invoiceMe" ng-value="isInvoiced()" name="invoiceMe" id="invoiceMe" tabindex="1">
-              <label for="invoiceMe">
-                Invoice Me
-              </label>
-            </div>
-            <button id="addPaymentMethod" class="btn btn-default btn-block mt-3" ng-click="creditCardFactory.addPaymentMethod()">Add Payment Method</button>
-          </span>
-
-          <button id="editPaymentMethods" class="btn btn-default btn-block mt-3" ng-click="editPaymentMethods()">Edit Payment Methods</button>
+          <div class="madero-radio align-left" ng-repeat="card in paymentSourcesFactory.existingCreditCards">
+            <input type="radio" ng-change="setPaymentMethod(card.payment_source.id)" ng-model="subscriptionFactory.item.subscription.payment_source_id" ng-value="card.payment_source.id" name="{{card.payment_source.id}}" id="{{card.payment_source.id}}" tabindex="1">
+            <label for="{{card.payment_source.id}}">
+              {{card.payment_source.card | cardDescription}}
+              <span class="pull-right"><a class="madero-link u_clickable text-danger" ng-click="paymentSourcesFactory.removePaymentMethod(card)" ng-show="subscriptionFactory.item.subscription.payment_source_id !== card.payment_source.id">Remove</a></span>
+            </label>
+          </div>
+          <div class="madero-radio align-left" ng-show="isInvoiced()">
+            <input type="radio" ng-change="setPaymentMethod()" ng-model="invoiceMe" ng-value="isInvoiced()" name="invoiceMe" id="invoiceMe" tabindex="1">
+            <label for="invoiceMe">
+              Invoice Me
+            </label>
+          </div>
+          <button id="addPaymentMethod" class="btn btn-default btn-block mt-3" ng-click="paymentSourcesFactory.addPaymentMethod()">Add Payment Method</button>
         </div>
       </div>
     </div>
