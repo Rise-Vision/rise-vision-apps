@@ -85,7 +85,7 @@ angular.module('risevision.apps')
           }
         })
         .state('apps.purchase.licenses.add', {
-          url: '/add',
+          url: '/add/:subscriptionId',
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/purchase/add-licenses.html');
           }],
@@ -96,13 +96,13 @@ angular.module('risevision.apps')
           resolve: {
             redirectTo: ['$location',
               function ($location) {
-                return $location.path() !== '/licenses/add' ? $location.path() : '/';
+                return $location.path().indexOf('/licenses/add/') !== 0 ? $location.path() : '/';
               }
             ]
           }
         })
         .state('apps.purchase.licenses.remove', {
-          url: '/remove',
+          url: '/remove/:subscriptionId',
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/purchase/remove-licenses.html');
           }],
@@ -113,7 +113,7 @@ angular.module('risevision.apps')
           resolve: {
             redirectTo: ['$location',
               function ($location) {
-                return $location.path() !== '/licenses/remove' ? $location.path() : '/';
+                return $location.path().indexOf('/licenses/remove/') !== 0 ? $location.path() : '/';
               }
             ]
           }

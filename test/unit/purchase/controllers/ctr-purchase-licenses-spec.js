@@ -25,6 +25,9 @@ describe("controller: add-licenses", function() {
         purchase: {}
       };
     });
+    $provide.service("subscriptionFactory", function() {
+      return {};
+    });
     $provide.service("$location", function() {
       return {
         path: sandbox.stub().returns("/purchase")
@@ -32,7 +35,8 @@ describe("controller: add-licenses", function() {
     });
   }));
 
-  var sandbox, $scope, $state, $loading, validate, purchaseLicensesFactory, $location, redirectTo;
+  var sandbox, $scope, $state, $loading, validate, purchaseLicensesFactory,
+    subscriptionFactory, $location, redirectTo;
 
   beforeEach(function() {
     validate = true;
@@ -43,6 +47,7 @@ describe("controller: add-licenses", function() {
       $state = $injector.get("$state");
       $loading = $injector.get("$loading");
       purchaseLicensesFactory = $injector.get("purchaseLicensesFactory");
+      subscriptionFactory = $injector.get("subscriptionFactory");
       $location = $injector.get("$location");
       redirectTo =  '/displays/list'
 
@@ -74,15 +79,25 @@ describe("controller: add-licenses", function() {
 
   describe("$loading spinner: ", function() {
     it("should start and stop spinner", function() {
-      purchaseLicensesFactory.loading = true;
+      subscriptionFactory.loading = true;
       $scope.$digest();
 
       $loading.start.should.have.been.calledWith("purchase-licenses-loader");
 
-      purchaseLicensesFactory.loading = false;
+      subscriptionFactory.loading = false;
       $scope.$digest();
 
       $loading.stop.should.have.been.calledTwice;
+
+      purchaseLicensesFactory.loading = true;
+      $scope.$digest();
+
+      $loading.start.should.have.been.calledTwice;
+
+      purchaseLicensesFactory.loading = false;
+      $scope.$digest();
+
+      $loading.stop.should.have.been.calledThrice;
     });
   });
 

@@ -16,9 +16,7 @@ describe("Services: purchase licenses factory", function() {
     });
     $provide.value("currentPlanFactory", {
       currentPlan: {
-        playerProTotalLicenseCount: 2,
-        subscriptionId: 'subscriptionId',
-        billToId: 'billToId'
+        subscriptionId: 'subscriptionId'
       }
     });
     $provide.service("storeService", function() {
@@ -47,9 +45,22 @@ describe("Services: purchase licenses factory", function() {
       };
     });
 
+    $provide.service("subscriptionFactory", function() {
+      return {
+        getSubscription: sinon.stub().resolves(),
+        item: {
+          subscription: {
+            customer_id: 'customerId',
+            plan_quantity: 2
+          }
+        }
+      };
+    });
+
   }));
 
-  var $modal, $state, $timeout, purchaseLicensesFactory, currentPlanFactory, userState, storeService, analyticsFactory, validate;
+  var $modal, $state, $timeout, purchaseLicensesFactory, currentPlanFactory,
+    userState, storeService, analyticsFactory, subscriptionFactory, validate;
 
   beforeEach(function() {
     inject(function($injector) {
@@ -59,6 +70,7 @@ describe("Services: purchase licenses factory", function() {
       storeService = $injector.get('storeService');
       analyticsFactory = $injector.get('analyticsFactory');
       purchaseLicensesFactory = $injector.get("purchaseLicensesFactory");
+      subscriptionFactory = $injector.get("subscriptionFactory");
     });
   });
 
@@ -90,7 +102,7 @@ describe("Services: purchase licenses factory", function() {
       expect(purchaseLicensesFactory.purchase.licensesToRemove).to.equal(0);
       expect(purchaseLicensesFactory.purchase.couponCode).to.equal('')
 
-      purchaseLicensesFactory.getEstimate.should.have.been.called;
+      subscriptionFactory.getSubscription.should.have.been.calledWith('subscriptionId');
     });
 
     it("should initialize values on remove and retrieve estimate", function() {
@@ -102,7 +114,7 @@ describe("Services: purchase licenses factory", function() {
       expect(purchaseLicensesFactory.purchase.licensesToRemove).to.equal('displayCount');
       expect(purchaseLicensesFactory.purchase.couponCode).to.equal('')
 
-      purchaseLicensesFactory.getEstimate.should.have.been.called;
+      subscriptionFactory.getSubscription.should.have.been.calledWith('subscriptionId');
     });
 
   });
@@ -113,12 +125,29 @@ describe("Services: purchase licenses factory", function() {
 
       expect(count).to.equal(2);
     });
+
+    it("should return current display count as zero if subscription is not loaded", function() {
+      subscriptionFactory.item = null;
+
+      var count = purchaseLicensesFactory.getCurrentDisplayCount();
+
+      expect(count).to.equal(0);
+    });
+
+    it("should return current display count as zero if subscription item has no subscription", function() {
+      subscriptionFactory.item.subscription = null;
+
+      var count = purchaseLicensesFactory.getCurrentDisplayCount();
+
+      expect(count).to.equal(0);
+    });
   });
 
   describe("getEstimate: add:", function() {
     beforeEach(function() {
       validate = true;
 
+      purchaseLicensesFactory.subscriptionId = 'subscriptionId';
       purchaseLicensesFactory.purchase = {
         licensesToAdd: 5,
         licensesToRemove: 0,
@@ -131,7 +160,7 @@ describe("Services: purchase licenses factory", function() {
       expect(purchaseLicensesFactory.getEstimate().then).to.be.a("function");
 
       storeService.estimateSubscriptionUpdate.should.have.been.called;
-      storeService.estimateSubscriptionUpdate.should.have.been.calledWith(7, 'subscriptionId', 'billToId', 'couponCode');
+      storeService.estimateSubscriptionUpdate.should.have.been.calledWith(7, 'subscriptionId', 'customerId', 'couponCode');
     });
 
     it("should populate estimate object if call succeeds", function(done) {
@@ -143,7 +172,7 @@ describe("Services: purchase licenses factory", function() {
           subscriptionId: 'subscriptionId',
           changeInLicenses: 5,
           totalLicenses: 7,
-          companyId: 'billToId'
+          companyId: 'customerId'
         });
 
         done();
@@ -300,6 +329,7 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
+      purchaseLicensesFactory.subscriptionId = 'subscriptionId';
       purchaseLicensesFactory.purchase = {
         licensesToAdd: 0,
         licensesToRemove: 1,
@@ -312,7 +342,7 @@ describe("Services: purchase licenses factory", function() {
       expect(purchaseLicensesFactory.getEstimate().then).to.be.a("function");
 
       storeService.estimateSubscriptionUpdate.should.have.been.called;
-      storeService.estimateSubscriptionUpdate.should.have.been.calledWith(1, 'subscriptionId', 'billToId', '');
+      storeService.estimateSubscriptionUpdate.should.have.been.calledWith(1, 'subscriptionId', 'customerId', '');
     });
 
     it("should populate estimate object if call succeeds", function(done) {
@@ -324,7 +354,7 @@ describe("Services: purchase licenses factory", function() {
           subscriptionId: 'subscriptionId',
           changeInLicenses: -1,
           totalLicenses: 1,
-          companyId: 'billToId'
+          companyId: 'customerId'
         });
 
         done();
@@ -356,6 +386,7 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
+      purchaseLicensesFactory.subscriptionId = 'subscriptionId';
       purchaseLicensesFactory.purchase = {
         licensesToAdd: 5,
         licensesToRemove: 0,
@@ -380,7 +411,7 @@ describe("Services: purchase licenses factory", function() {
       expect(purchaseLicensesFactory.completePayment().then).to.be.a("function");
 
       storeService.updateSubscription.should.have.been.called;
-      storeService.updateSubscription.should.have.been.calledWith(7, 'subscriptionId', 'billToId', 'couponCode');
+      storeService.updateSubscription.should.have.been.calledWith(7, 'subscriptionId', 'customerId', 'couponCode');
     });
 
     it("should track purchase", function(done) {
@@ -391,7 +422,7 @@ describe("Services: purchase licenses factory", function() {
           subscriptionId: 'subscriptionId',
           changeInLicenses: 5,
           totalLicenses: 7,
-          companyId: 'billToId'
+          companyId: 'customerId'
         });
 
         done();
@@ -472,6 +503,7 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
+      purchaseLicensesFactory.subscriptionId = 'subscriptionId';
       purchaseLicensesFactory.purchase = {
         licensesToAdd: 0,
         licensesToRemove: 1,
@@ -483,7 +515,7 @@ describe("Services: purchase licenses factory", function() {
       expect(purchaseLicensesFactory.completePayment().then).to.be.a("function");
 
       storeService.updateSubscription.should.have.been.called;
-      storeService.updateSubscription.should.have.been.calledWith(1, 'subscriptionId', 'billToId', '');
+      storeService.updateSubscription.should.have.been.calledWith(1, 'subscriptionId', 'customerId', '');
     });
 
     it("should track purchase", function(done) {
@@ -493,7 +525,7 @@ describe("Services: purchase licenses factory", function() {
           subscriptionId: 'subscriptionId',
           changeInLicenses: -1,
           totalLicenses: 1,
-          companyId: 'billToId'
+          companyId: 'customerId'
         });
 
         done();

@@ -6,9 +6,10 @@
 
   angular.module('risevision.apps.purchase')
     .factory('purchaseLicensesFactory', ['$log', '$timeout', '$stateParams',
-      'userState', 'currentPlanFactory', 'storeService', 'analyticsFactory', 'pricingFactory',
+      'userState', 'currentPlanFactory', 'storeService', 'analyticsFactory',
+      'pricingFactory', 'subscriptionFactory',
       function ($log, $timeout, $stateParams, userState, currentPlanFactory,
-        storeService, analyticsFactory, pricingFactory) {
+        storeService, analyticsFactory, pricingFactory, subscriptionFactory) {
         var factory = {};
         factory.userEmail = userState.getUserEmail();
 
@@ -29,20 +30,25 @@
           factory.purchase.licensesToAdd = isRemove ? 0 : $stateParams.displayCount;
           factory.purchase.licensesToRemove = isRemove ? $stateParams.displayCount : 0;
           factory.purchase.couponCode = '';
+          factory.subscriptionId = $stateParams.subscriptionId ||
+            currentPlanFactory.currentPlan.subscriptionId;
 
-          factory.getEstimate();
+          subscriptionFactory.getSubscription(factory.subscriptionId).then(function() {
+            factory.getEstimate();
+          });
         };
 
         factory.getCurrentDisplayCount = function() {
-          return currentPlanFactory.currentPlan.playerProTotalLicenseCount;
-        };
+          var currentDisplayCount = subscriptionFactory.item &&
+            subscriptionFactory.item.subscription &&
+            subscriptionFactory.item.subscription.plan_quantity;
 
-        var _getSubscriptionId = function() {
-          return currentPlanFactory.currentPlan.subscriptionId;
+          return currentDisplayCount || 0;
         };
 
         var _getCompanyId = function() {
-          return currentPlanFactory.currentPlan.billToId;
+          return subscriptionFactory.item && subscriptionFactory.item.subscription &&
+            subscriptionFactory.item.subscription.customer_id;
         };
 
         var _getChangeInLicenses = function() {
@@ -58,7 +64,7 @@
 
         var _getTrackingProperties = function () {
           return {
-            subscriptionId: _getSubscriptionId(),
+            subscriptionId: factory.subscriptionId,
             changeInLicenses: _getChangeInLicenses(),
             totalLicenses: factory.getTotalDisplayCount(),
             companyId: _getCompanyId()
@@ -92,7 +98,7 @@
 
           var couponCode = factory.purchase.couponCode;
           var displayCount = factory.getTotalDisplayCount();
-          var subscriptionId = _getSubscriptionId();
+          var subscriptionId = factory.subscriptionId;
           var companyId = _getCompanyId();
 
           return storeService.estimateSubscriptionUpdate(displayCount, subscriptionId, companyId, couponCode)
@@ -132,7 +138,7 @@
 
           var couponCode = factory.purchase.couponCode;
           var displayCount = factory.getTotalDisplayCount();
-          var subscriptionId = _getSubscriptionId();
+          var subscriptionId = factory.subscriptionId;
           var companyId = _getCompanyId();
 
           return storeService.updateSubscription(displayCount, subscriptionId, companyId, couponCode)
