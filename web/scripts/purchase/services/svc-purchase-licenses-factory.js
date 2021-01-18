@@ -39,8 +39,11 @@
         };
 
         factory.getCurrentDisplayCount = function() {
-          return subscriptionFactory.item && subscriptionFactory.item.subscription &&
+          var currentDisplayCount = subscriptionFactory.item &&
+            subscriptionFactory.item.subscription &&
             subscriptionFactory.item.subscription.plan_quantity;
+
+          return currentDisplayCount || 0;
         };
 
         var _getCompanyId = function() {

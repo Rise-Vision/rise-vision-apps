@@ -125,6 +125,22 @@ describe("Services: purchase licenses factory", function() {
 
       expect(count).to.equal(2);
     });
+
+    it("should return current display count as zero if subscription is not loaded", function() {
+      subscriptionFactory.item = null;
+
+      var count = purchaseLicensesFactory.getCurrentDisplayCount();
+
+      expect(count).to.equal(0);
+    });
+
+    it("should return current display count as zero if subscription item has no subscription", function() {
+      subscriptionFactory.item.subscription = null;
+
+      var count = purchaseLicensesFactory.getCurrentDisplayCount();
+
+      expect(count).to.equal(0);
+    });
   });
 
   describe("getEstimate: add:", function() {
