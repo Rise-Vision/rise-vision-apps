@@ -5,10 +5,11 @@
   angular.module('risevision.apps.purchase')
     .constant('RPP_ADDON_ID', 'c4b368be86245bf9501baaa6e0b00df9719869fd')
     .factory('purchaseFactory', ['$rootScope', '$q', '$log', '$timeout', 'userState', 
-      'storeService', 'addressService', 'contactService', 'creditCardFactory', 'purchaseFlowTracker',
-      'RPP_ADDON_ID', 'plansService',
+      'storeService', 'addressService', 'contactService', 'creditCardFactory',
+      'purchaseFlowTracker', 'RPP_ADDON_ID', 'plansService',
       function ($rootScope, $q, $log, $timeout, userState, storeService, addressService, 
-        contactService, creditCardFactory, purchaseFlowTracker, RPP_ADDON_ID, plansService) {
+        contactService, creditCardFactory, purchaseFlowTracker, 
+        RPP_ADDON_ID, plansService) {
         var factory = {};
 
         // Stop spinner - workaround for spinner not rendering
@@ -40,7 +41,6 @@
 
           factory.purchase.contact = contactService.copyContactObj(userState.getCopyOfProfile());
 
-          factory.purchase.taxExemption = {};
           factory.purchase.estimate = {};
 
           return creditCardFactory.initPaymentMethods(false)
@@ -70,29 +70,6 @@
           }
 
           purchaseFlowTracker.trackProductAdded(factory.purchase.plan);
-        };
-
-        factory.submitTaxExemption = function () {
-          var taxExemption = factory.purchase.taxExemption;
-          taxExemption.error = null;
-
-          factory.loading = true;
-
-          return storeService.uploadTaxExemptionCertificate(taxExemption.file)
-            .then(function (blobKey) {
-              return storeService.addTaxExemption(userState.getSelectedCompanyId(), taxExemption, blobKey);
-            })
-            .then(function () {
-              taxExemption.sent = true;
-
-              factory.getEstimate();
-            })
-            .catch(function (error) {
-              factory.loading = false;
-
-              taxExemption.error = error.message || 'Something went wrong. Please try again.';
-            });
-
         };
 
         factory.preparePaymentIntent = function () {

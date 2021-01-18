@@ -68,4 +68,12 @@
     </p>    
   </div>
 </div>
-<tax-exemption></tax-exemption>
+
+<p class="mt-3" ng-show="purchase.estimate.totalTax > 0 || taxExemptionFactory.taxExemption.show">
+  &nbsp;
+  <span class="pull-right flex-row">
+    <madero-checkbox ng-click="applyTaxExemption()" ng-value="taxExemptionFactory.taxExemption.show"></madero-checkbox>
+    <span class="mr-3">I'm tax exempt.</span>
+  </span>
+</p>
+<tax-exemption class="u_margin-md-top"></tax-exemption>

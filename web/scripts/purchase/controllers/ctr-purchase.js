@@ -19,20 +19,22 @@ angular.module('risevision.apps.purchase')
   }])
 
   .controller('PurchaseCtrl', ['$scope', '$state', '$loading', 'purchaseFactory', 'addressFactory',
-    'PURCHASE_STEPS', '$location', 'redirectTo',
-    function ($scope, $state, $loading, purchaseFactory, addressFactory, PURCHASE_STEPS, $location,
-      redirectTo) {
+    'taxExemptionFactory', 'PURCHASE_STEPS', '$location', 'redirectTo',
+    function ($scope, $state, $loading, purchaseFactory, addressFactory, taxExemptionFactory,
+      PURCHASE_STEPS, $location, redirectTo) {
       $scope.form = {};
       $scope.factory = purchaseFactory;
+      $scope.taxExemptionFactory = taxExemptionFactory;
 
       purchaseFactory.init();
+      taxExemptionFactory.init(purchaseFactory.getEstimate);
 
       $scope.PURCHASE_STEPS = PURCHASE_STEPS;
       $scope.currentStep = 0;
       $scope.finalStep = false;
 
-      $scope.$watch('factory.loading', function (loading) {
-        if (loading) {
+      $scope.$watchGroup(['factory.loading', 'taxExemptionFactory.loading'], function (values) {
+        if (values[0] || values[1]) {
           $loading.start('purchase-loader');
         } else {
           $loading.stop('purchase-loader');
@@ -65,6 +67,12 @@ angular.module('risevision.apps.purchase')
               $scope.setNextStep();
             }
           });
+      };
+
+      $scope.applyTaxExemption = function () {
+        if (!taxExemptionFactory.taxExemption.sent) {
+          taxExemptionFactory.taxExemption.show = !taxExemptionFactory.taxExemption.show;
+        }
       };
 
       $scope.completePayment = function () {

@@ -1,13 +1,5 @@
-<p class="mt-3" ng-show="factory.purchase.estimate.totalTax > 0 || taxExemption.checked">
-  &nbsp;
-  <span class="pull-right flex-row">
-    <madero-checkbox ng-click="applyTaxExemption()" ng-value="taxExemption.checked"></madero-checkbox>
-    <span class="mr-3">I'm tax exempt.</span>
-  </span>
-</p>
-
-<div ng-show="taxExemption.checked && !taxExemption.sent">
-  <form id="form.taxExemptionForm" role="form" name="form.taxExemptionForm" class="u_margin-md-top" novalidate>
+<div ng-show="taxExemption.show && !taxExemption.sent">
+  <form id="form.taxExemptionForm" role="form" name="form.taxExemptionForm" novalidate>
     <div class="row">
       <div class="col-xs-12">
         <div class="form-group" ng-class="{ 'has-error': isFieldInvalid('number') }">
@@ -39,5 +31,12 @@
     {{taxExemption.error}}
   </div>
 
-  <button id="submitButton" type="submit" form="form.taxExemptionForm" ng-click="submit()" aria-label="Submit Tax Exemption" tabindex="1" class="btn btn-default btn-block u_margin-md-top" ng-show="taxExemption.file.name">Submit Tax Exemption</button>
+  <div ng-if="!showCancel">
+    <button id="submitButton" type="submit" form="form.taxExemptionForm" ng-click="submit()" aria-label="Submit Tax Exemption" tabindex="1" class="btn btn-default btn-block u_margin-md-top" ng-show="taxExemption.file.name">Submit Tax Exemption</button>
+  </div>
+
+  <div class="flex-row u_margin-md-top" ng-if="showCancel">
+    <button id="cancelButton" type="button" ng-click="taxExemption.show = false" aria-label="Cancel" tabindex="2" class="btn btn-default flex-1 mr-3">Cancel</button>
+    <button id="applyButton" type="submit" form="form.taxExemptionForm" ng-click="submit()" aria-label="Apply Tax Exemption" tabindex="1" class="btn btn-primary flex-1" ng-disabled="!taxExemption.file.name">Apply</button>
+  </div>
 </div>

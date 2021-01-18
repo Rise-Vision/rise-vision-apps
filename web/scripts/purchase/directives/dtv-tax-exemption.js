@@ -1,28 +1,23 @@
 'use strict';
 
 angular.module('risevision.apps.purchase')
-  .directive('taxExemption', ['$templateCache', 'purchaseFactory',
-    function ($templateCache, purchaseFactory) {
+  .directive('taxExemption', ['$templateCache', 'taxExemptionFactory',
+    function ($templateCache, taxExemptionFactory) {
       return {
         restrict: 'E',
-        scope: {},
+        scope: {
+          showCancel: '='
+        },
         template: $templateCache.get('partials/purchase/tax-exemption.html'),
         link: function ($scope) {
-          $scope.taxExemption = purchaseFactory.purchase.taxExemption;
-          $scope.factory = purchaseFactory;
+          $scope.taxExemption = taxExemptionFactory.taxExemption;
 
           $scope.submit = function () {
             if ($scope.form.taxExemptionForm && $scope.form.taxExemptionForm.$invalid) {
               return;
             }
 
-            purchaseFactory.submitTaxExemption();
-          };
-
-          $scope.applyTaxExemption = function () {
-            if (!purchaseFactory.purchase.taxExemption.sent) {
-              $scope.taxExemption.checked = !$scope.taxExemption.checked;
-            }
+            taxExemptionFactory.submitTaxExemption();
           };
 
           $scope.selectFile = function () {
