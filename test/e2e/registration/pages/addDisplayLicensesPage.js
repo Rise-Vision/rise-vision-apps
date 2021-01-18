@@ -5,13 +5,13 @@ var HomePage = require('../../common/pages/homepage.js');
 var AddDisplayLicensesPage = function() {
   var homepage = new HomePage();
 
-  var url = homepage.getUrl() + 'licenses';
+  var url = homepage.getUrl() + 'licenses/add/';
 
   var loader = element(by.xpath('//div[@spinner-key="purchase-licenses-loader"]'));
   var purchaseLicensesPanel = element(by.css('.purchase-licenses-centered-panel'));
   var backButton = element(by.id('backButton'));
   var payButton = element(by.id('payButton'));
-  var displayCountInput = element(by.css('input[name="displayCount"]'));
+  var displayCountInput = element(by.css('input[name="licensesToAdd"]'));
   var addCouponCodeLink = element(by.css('a[aria-label="Add Coupon Code"]'));
   var couponCodeInput = element(by.id('coupon-code'));
   var applyCouponCodeButton = element(by.id('apply-coupon-code'));

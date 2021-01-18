@@ -2,18 +2,18 @@
 
 angular.module('risevision.apps.purchase')
 
-  .controller('PurchaseLicensesCtrl', ['$scope', '$loading', 'purchaseLicensesFactory',
-    '$location', 'redirectTo', 'currentPlanFactory',
-    function ($scope, $loading, purchaseLicensesFactory, $location,
-      redirectTo, currentPlanFactory) {
+  .controller('PurchaseLicensesCtrl', ['$scope', '$stateParams', '$loading',
+    'purchaseLicensesFactory', 'subscriptionFactory', '$location', 'redirectTo',
+    function ($scope, $stateParams, $loading, purchaseLicensesFactory,
+      subscriptionFactory, $location, redirectTo) {
       $scope.factory = purchaseLicensesFactory;
-      $scope.currentPlan = currentPlanFactory.currentPlan;
+      $scope.subscriptionFactory = subscriptionFactory;
       $scope.couponCode = null;
 
-      purchaseLicensesFactory.init();
+      purchaseLicensesFactory.init($stateParams.purchaseAction);
 
-      $scope.$watch('factory.loading', function (loading) {
-        if (loading) {
+      $scope.$watchGroup(['factory.loading', 'subscriptionFactory.loading'], function (values) {
+        if (values[0] || values[1]) {
           $loading.start('purchase-licenses-loader');
         } else {
           $loading.stop('purchase-licenses-loader');

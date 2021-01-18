@@ -92,10 +92,10 @@
   .purchase-licenses-centered-panel {
     @extend .mx-auto;
 
-    max-width: 554px; 
+    max-width: 554px;
   }
 
-  .madero-style.alert.price-decrease {
+  .madero-style.alert.price-update {
     padding: 10px;
   }
 
@@ -140,7 +140,7 @@
     .btn {
       font-weight: normal;
     }
-  } 
+  }
 
   .education-discount {
     .madero-checkbox {
@@ -167,8 +167,8 @@
 
 .display-count-input {
   @extend .form-control;
-  
-  width: 75px;    
+
+  width: 75px;
   font-size: 18px;
   font-weight: bold;
   text-align: center;

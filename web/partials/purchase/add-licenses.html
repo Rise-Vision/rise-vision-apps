@@ -15,20 +15,20 @@
       <div class="checkout-gray-panel">
         <h4 class="u_margin-md-bottom mt-0 mb-4">Subscription Details</h4>
 
-        <div class="left-right-aligner" ng-class="{'has-error': purchaseLicensesForm.displayCount.$invalid }">
-          <label for="displayCount" class="control-label">Number of display licenses you want to add:</label>
-          <input class="display-count-input mt-0 pull-right" type="number" name="displayCount" ng-model="factory.purchase.displayCount" min="1" ng-pattern="/^[0-9]+$/" required ng-change="getEstimate()" ng-model-options="{ debounce: 1000 }" autofocus />
+        <div class="left-right-aligner" ng-class="{'has-error': purchaseLicensesForm.licensesToAdd.$invalid }">
+          <label for="licensesToAdd" class="control-label">Number of display licenses you want to add:</label>
+          <input class="display-count-input mt-0 pull-right" type="number" name="licensesToAdd" ng-model="factory.purchase.licensesToAdd" min="1" max="10000" ng-pattern="/^[0-9]+$/" required ng-change="getEstimate()" ng-model-options="{ debounce: 1000 }" autofocus />
         </div>
 
         <div class="border-bottom py-4 mb-4">
           <p class="left-right-aligner mb-0">
             <span class="font-weight-bold">Total number of display licenses for this subscription:</span>
             <span>
-              {{currentPlan.playerProTotalLicenseCount + factory.purchase.displayCount}}
+              {{factory.getTotalDisplayCount()}}
             </span>
           </p>
           <p class="mb-0" ng-show="factory.currentPricePerDisplay && factory.currentPricePerDisplay === factory.newPricePerDisplay">${{factory.currentPricePerDisplay | number : 2}} per display license, per month.</p>
-          <div class="madero-style alert alert-success price-decrease mt-3" ng-show="factory.currentPricePerDisplay !== factory.newPricePerDisplay">
+          <div class="madero-style alert alert-success price-update mt-3" ng-show="factory.currentPricePerDisplay !== factory.newPricePerDisplay">
             <p class="mb-0 text-success"><strong>Cost will decrease to ${{factory.newPricePerDisplay | number : 2}} per display license, per month.</strong></p>
           </div>
         </div>
@@ -88,7 +88,7 @@
     </form>
   </div>
 
-  <div ng-show="factory.purchase.completed" ng-include="'partials/purchase/purchase-licenses-success.html'"></div>
+  <div ng-show="factory.purchase.completed" ng-include="'partials/purchase/add-licenses-success.html'"></div>
 
   <div class="mt-5 border-top">
     <purchase-footer></purchase-footer>

@@ -6,9 +6,10 @@
 
   angular.module('risevision.apps.purchase')
     .factory('purchaseLicensesFactory', ['$log', '$timeout', '$stateParams',
-      'userState', 'currentPlanFactory', 'storeService', 'analyticsFactory', 'pricingFactory',
+      'userState', 'currentPlanFactory', 'storeService', 'analyticsFactory',
+      'pricingFactory', 'subscriptionFactory',
       function ($log, $timeout, $stateParams, userState, currentPlanFactory,
-        storeService, analyticsFactory, pricingFactory) {
+        storeService, analyticsFactory, pricingFactory, subscriptionFactory) {
         var factory = {};
         factory.userEmail = userState.getUserEmail();
 
@@ -19,23 +20,54 @@
           factory.apiError = '';
         };
 
-        factory.init = function () {
+        factory.init = function (purchaseAction) {
           _clearMessages();
+
+          var isRemove = purchaseAction === 'remove';
 
           factory.purchase = {};
           factory.purchase.completed = false;
-          factory.purchase.displayCount = $stateParams.displayCount;
+          factory.purchase.licensesToAdd = isRemove ? 0 : $stateParams.displayCount;
+          factory.purchase.licensesToRemove = isRemove ? $stateParams.displayCount : 0;
           factory.purchase.couponCode = '';
+          factory.subscriptionId = $stateParams.subscriptionId ||
+            currentPlanFactory.currentPlan.subscriptionId;
 
-          factory.getEstimate();
+          subscriptionFactory.getSubscription(factory.subscriptionId).then(function() {
+            factory.getEstimate();
+          });
+        };
+
+        factory.getCurrentDisplayCount = function() {
+          var currentDisplayCount = subscriptionFactory.item &&
+            subscriptionFactory.item.subscription &&
+            subscriptionFactory.item.subscription.plan_quantity;
+
+          return currentDisplayCount || 0;
+        };
+
+        var _getCompanyId = function() {
+          return subscriptionFactory.item && subscriptionFactory.item.subscription &&
+            subscriptionFactory.item.subscription.customer_id;
+        };
+
+        var _getChangeInLicenses = function() {
+          var licensesToAdd = factory.purchase.licensesToAdd || 0;
+          var licensesToRemove = factory.purchase.licensesToRemove || 0;
+
+          return licensesToAdd - licensesToRemove;
+        };
+
+        factory.getTotalDisplayCount = function () {
+          return factory.getCurrentDisplayCount() + _getChangeInLicenses();
         };
 
         var _getTrackingProperties = function () {
           return {
-            subscriptionId: currentPlanFactory.currentPlan.subscriptionId,
-            changeInLicenses: factory.purchase.displayCount,
-            totalLicenses: factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount,
-            companyId: currentPlanFactory.currentPlan.billToId
+            subscriptionId: factory.subscriptionId,
+            changeInLicenses: _getChangeInLicenses(),
+            totalLicenses: factory.getTotalDisplayCount(),
+            companyId: _getCompanyId()
           };
         };
 
@@ -44,8 +76,8 @@
             return;
           }
 
-          var currentDisplayCount = currentPlanFactory.currentPlan.playerProTotalLicenseCount;
-          var displayCount = factory.purchase.displayCount + currentDisplayCount;
+          var currentDisplayCount = factory.getCurrentDisplayCount();
+          var displayCount = factory.getTotalDisplayCount();
 
           var lineItem = factory.estimate.next_invoice_estimate.line_items[0];
           var isMonthly = lineItem.entity_id.endsWith('m');
@@ -65,9 +97,9 @@
           factory.loading = true;
 
           var couponCode = factory.purchase.couponCode;
-          var displayCount = factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount;
-          var subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
-          var companyId = currentPlanFactory.currentPlan.billToId;
+          var displayCount = factory.getTotalDisplayCount();
+          var subscriptionId = factory.subscriptionId;
+          var companyId = _getCompanyId();
 
           return storeService.estimateSubscriptionUpdate(displayCount, subscriptionId, companyId, couponCode)
             .then(function (result) {
@@ -87,15 +119,27 @@
             });
         };
 
+        factory.getCreditTotal = function() {
+          if (!factory.estimate || !factory.estimate.credit_note_estimates) {
+            return 0;
+          }
+
+          var total = factory.estimate.credit_note_estimates.reduce(function(total, note) {
+            return total + note.total;
+          }, 0);
+
+          return total / 100;
+        };
+
         factory.completePayment = function () {
           _clearMessages();
 
           factory.loading = true;
 
           var couponCode = factory.purchase.couponCode;
-          var displayCount = factory.purchase.displayCount + currentPlanFactory.currentPlan.playerProTotalLicenseCount;
-          var subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
-          var companyId = currentPlanFactory.currentPlan.billToId;
+          var displayCount = factory.getTotalDisplayCount();
+          var subscriptionId = factory.subscriptionId;
+          var companyId = _getCompanyId();
 
           return storeService.updateSubscription(displayCount, subscriptionId, companyId, couponCode)
             .then(function () {
