@@ -37,11 +37,9 @@ describe('app:', function() {
 
       sinon.spy($state, 'go');
     });
-
-    $stateParams = {};
   });
 
-  var $state, $stateParams, canAccessApps, currentPlanFactory, userState, $rootScope, messageBoxStub, $location;
+  var $state, canAccessApps, currentPlanFactory, userState, $rootScope, messageBoxStub, $location;
 
   describe('state apps.purchase.plans:',function(){
     it('should register state',function(){
@@ -202,22 +200,21 @@ describe('app:', function() {
     it('should resolve redirectTo as previous path', function() {
       sinon.stub($location, 'path').returns('/displays/list');
 
-      var redirectTo = $state.get('apps.purchase.licenses.add').resolve.redirectTo[2]($location, $stateParams);
+      var redirectTo = $state.get('apps.purchase.licenses.add').resolve.redirectTo[1]($location);
       expect(redirectTo).to.equal('/displays/list');
     });
 
     it('should resolve redirectTo as Apps home if previous path is licenses add and no subscription', function() {
       sinon.stub($location, 'path').returns('/licenses/add/');
 
-      var redirectTo = $state.get('apps.purchase.licenses.add').resolve.redirectTo[2]($location, $stateParams);
+      var redirectTo = $state.get('apps.purchase.licenses.add').resolve.redirectTo[1]($location);
       expect(redirectTo).to.equal('/');
     });
 
     it('should resolve redirectTo as Apps home if previous path is licenses add', function() {
-      $stateParams.subscriptionId = 'SUBSCRIPTIONID';
       sinon.stub($location, 'path').returns('/licenses/add/SUBSCRIPTIONID');
 
-      var redirectTo = $state.get('apps.purchase.licenses.add').resolve.redirectTo[2]($location, $stateParams);
+      var redirectTo = $state.get('apps.purchase.licenses.add').resolve.redirectTo[1]($location);
       expect(redirectTo).to.equal('/');
     });
 
@@ -288,22 +285,21 @@ describe('app:', function() {
     it('should resolve redirectTo as previous path', function() {
       sinon.stub($location, 'path').returns('/displays/list');
 
-      var redirectTo = $state.get('apps.purchase.licenses.remove').resolve.redirectTo[2]($location, $stateParams);
+      var redirectTo = $state.get('apps.purchase.licenses.remove').resolve.redirectTo[1]($location);
       expect(redirectTo).to.equal('/displays/list');
     });
 
     it('should resolve redirectTo as Apps home if previous path is licenses remove and no subscription', function() {
       sinon.stub($location, 'path').returns('/licenses/remove/');
 
-      var redirectTo = $state.get('apps.purchase.licenses.remove').resolve.redirectTo[2]($location, $stateParams);
+      var redirectTo = $state.get('apps.purchase.licenses.remove').resolve.redirectTo[1]($location);
       expect(redirectTo).to.equal('/');
     });
 
     it('should resolve redirectTo as Apps home if previous path is licenses remove', function() {
-      $stateParams.subscriptionId = 'SUBSCRIPTIONID';
       sinon.stub($location, 'path').returns('/licenses/remove/SUBSCRIPTIONID');
 
-      var redirectTo = $state.get('apps.purchase.licenses.remove').resolve.redirectTo[2]($location, $stateParams);
+      var redirectTo = $state.get('apps.purchase.licenses.remove').resolve.redirectTo[1]($location);
       expect(redirectTo).to.equal('/');
     });
   });

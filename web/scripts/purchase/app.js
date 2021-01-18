@@ -94,11 +94,9 @@ angular.module('risevision.apps')
           },
           controller: 'PurchaseLicensesCtrl',
           resolve: {
-            redirectTo: ['$location', '$stateParams',
-              function ($location, $stateParams) {
-                var subscriptionId = $stateParams.subscriptionId || '';
-
-                return $location.path() !== '/licenses/add/' + subscriptionId ? $location.path() : '/';
+            redirectTo: ['$location',
+              function ($location) {
+                return $location.path().indexOf('/licenses/add/') !== 0 ? $location.path() : '/';
               }
             ]
           }
@@ -113,11 +111,9 @@ angular.module('risevision.apps')
           },
           controller: 'PurchaseLicensesCtrl',
           resolve: {
-            redirectTo: ['$location', '$stateParams',
-              function ($location, $stateParams) {
-                var subscriptionId = $stateParams.subscriptionId || '';
-
-                return $location.path() !== '/licenses/remove/' + subscriptionId ? $location.path() : '/';
+            redirectTo: ['$location',
+              function ($location) {
+                return $location.path().indexOf('/licenses/remove/') !== 0 ? $location.path() : '/';
               }
             ]
           }
