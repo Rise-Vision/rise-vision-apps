@@ -3,10 +3,10 @@
 /*jshint camelcase: false */
 
 angular.module('risevision.apps.billing.controllers')
-  .controller('SubscriptionCtrl', ['$scope', '$rootScope', '$loading', 'subscriptionFactory',
+  .controller('SubscriptionCtrl', ['$scope', '$loading', 'subscriptionFactory',
   'userState', 'creditCardFactory', 'companySettingsFactory', 'taxExemptionFactory', 
   'ChargebeeFactory', 'plansService',
-    function ($scope, $rootScope, $loading, subscriptionFactory, userState, creditCardFactory,
+    function ($scope, $loading, subscriptionFactory, userState, creditCardFactory,
       companySettingsFactory, taxExemptionFactory, ChargebeeFactory, plansService) {
       $scope.subscriptionFactory = subscriptionFactory;
       $scope.creditCardFactory = creditCardFactory;
@@ -24,9 +24,6 @@ angular.module('risevision.apps.billing.controllers')
       });
 
       taxExemptionFactory.init();
-
-      $rootScope.$on('chargebee.subscriptionChanged', subscriptionFactory.reloadSubscription);
-      $rootScope.$on('chargebee.subscriptionCancelled', subscriptionFactory.reloadSubscription);
 
       $scope.isInvoiced = function() {
         return subscriptionFactory.item && !subscriptionFactory.item.card;
@@ -61,12 +58,6 @@ angular.module('risevision.apps.billing.controllers')
         var plan = plansService.getPlanById(subscription.plan_id);
 
         return plan && (plan.name + ' Plan') || subscription.plan_id;
-      };
-
-      $scope.editSubscription = function (subscription) {
-        var subscriptionId = subscription.id;
-
-        $scope.chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscriptionId);
       };
 
       $scope.editPaymentMethods = function () {
