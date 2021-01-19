@@ -68,6 +68,21 @@ angular.module('risevision.apps.billing.services')
           });
       };
 
+      factory.changePaymentToInvoice = function (subscriptionId, poNumber) {
+        factory.loading = true;
+
+        return billing.changePaymentToInvoice(subscriptionId, poNumber)
+          .then(function (resp) {
+            angular.extend(factory.item, resp.item);
+          })
+          .catch(function(e) {
+            _showErrorMessage(e);
+          })
+          .finally(function() {
+            factory.loading = false;
+          });
+      };
+
       var _showErrorMessage = function (e) {
         factory.apiError = processErrorCode(e);
 

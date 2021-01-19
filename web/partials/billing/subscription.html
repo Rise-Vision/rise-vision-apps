@@ -74,7 +74,7 @@
               Invoice Me
             </label>
           </div>
-          <button id="addPaymentMethod" class="btn btn-default btn-block mt-3" ng-click="paymentSourcesFactory.addPaymentMethod()">Add Payment Method</button>
+          <a id="addPaymentMethod" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.payment({subscriptionId: subscriptionFactory.item.subscription.id})">Add Payment Method</button>
         </div>
       </div>
     </div>

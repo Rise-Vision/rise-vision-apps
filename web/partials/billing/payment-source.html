@@ -1,0 +1,34 @@
+<div class="madero-style">
+  <div class="app-header u_padding-20-vertical mb-5 border-bottom">
+    <!-- App Title -->
+    <h1 class="app-header-title">Add Payment Method</h1>
+  </div>
+
+  <div rv-spinner rv-spinner-key="payment-source-loader" rv-spinner-start-active="1">
+
+  <div id="errorBox" ng-show="subscriptionFactory.apiError" class="madero-style alert alert-danger" role="alert">
+    <strong>{{subscriptionFactory.apiError}}</strong>
+  </div>
+
+  <div id="errorBox" ng-show="creditCardFactory.apiError" class="madero-style alert alert-danger" role="alert">
+    <strong>{{creditCardFactory.apiError}}</strong>
+  </div>
+
+  <h4 class="mb-4">Payment Method</h4>
+
+  <form id="form.paymentMethodsForm" role="form" name="form.paymentMethodsForm" novalidate>
+    <payment-method-form form-object="form.paymentMethodsForm" show-invoice-option="subscriptionFactory.item.subscription.billing_period_unit !== 'month'" contact-email="contactEmail"></payment-method-form>
+  </form>
+
+  <div class="button-row text-right mt-5">
+    <a id="backButton" type="button" aria-label="Go back" class="btn btn-default btn-toolbar pull-left" ui-sref="apps.billing.subscription({subscriptionId: subscriptionFactory.item.subscription.id})" translate>common.back</a>
+    <button id="addButton" type="submit" class="btn btn-primary btn-toolbar-wide" form="form.paymentMethodsForm" ng-click="addPaymentMethod(subscriptionFactory.item.subscription.id)" tabindex="1" aria-label="Add Payment Method">
+      Add Payment Method
+    </button>
+  </div>
+
+  <div class="mt-5 border-top">
+    <purchase-footer></purchase-footer>
+  </div>
+
+</div><!--container-->
