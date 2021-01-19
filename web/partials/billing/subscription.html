@@ -29,11 +29,9 @@
           <h1 ng-show="isVolumePlan(subscriptionFactory.item.subscription)">{{subscriptionFactory.item.subscription.plan_quantity}}</h1>
 
           <div ng-show="subscriptionFactory.item.subscription.status === 'active'">
-            <a id="editSubscription" class="btn btn-default btn-block mt-3" ng-click="editSubscription(subscriptionFactory.item.subscription)">Edit Subscription</a>
-
-            <span ng-show="false && isDisplayLicensePlan(subscriptionFactory.item.subscription)">
-              <a id="addLicenses" class="btn btn-default btn-block" ui-sref="apps.billing.licenses({subscriptionId: subscriptionFactory.item.subscription.id})">Add Display Licenses</a>
-              <a id="removeLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.licenses.remove({subscriptionId: subscriptionFactory.item.subscription.id})">Remove Display Licenses</a>
+            <span ng-show="isDisplayLicensePlan(subscriptionFactory.item.subscription)">
+              <a id="addLicenses" class="btn btn-default btn-block" ui-sref="apps.purchase.licenses.add({subscriptionId: subscriptionFactory.item.subscription.id})">Add Display Licenses</a>
+              <a id="removeLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.purchase.licenses.remove({subscriptionId: subscriptionFactory.item.subscription.id})">Remove Display Licenses</a>
               <a id="manageLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.licenses.manage({subscriptionId: subscriptionFactory.item.subscription.id})" ng-if="false">Manage Network Licenses</a>
             </span>
           </div>

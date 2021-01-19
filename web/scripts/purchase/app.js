@@ -26,9 +26,7 @@ angular.module('risevision.apps')
 
         .state('apps.purchase.home', {
           url: '/purchase',
-          templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get('partials/purchase/app-purchase.html');
-          }],
+          templateUrl: 'partials/purchase/app-purchase.html',
           controller: 'PurchaseCtrl',
           resolve: {
             canAccessApps: ['$state', '$stateParams', 'canAccessApps', 'currentPlanFactory',
@@ -86,9 +84,7 @@ angular.module('risevision.apps')
         })
         .state('apps.purchase.licenses.add', {
           url: '/add/:subscriptionId',
-          templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get('partials/purchase/add-licenses.html');
-          }],
+          templateUrl: 'partials/purchase/add-licenses.html',
           params: {
             purchaseAction: 'add'
           },
@@ -103,9 +99,7 @@ angular.module('risevision.apps')
         })
         .state('apps.purchase.licenses.remove', {
           url: '/remove/:subscriptionId',
-          templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get('partials/purchase/remove-licenses.html');
-          }],
+          templateUrl: 'partials/purchase/remove-licenses.html',
           params: {
             purchaseAction: 'remove'
           },
