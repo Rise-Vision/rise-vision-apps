@@ -27,9 +27,9 @@
               {{factory.getTotalDisplayCount()}}
             </span>
           </p>
-          <p class="mb-0" ng-show="factory.currentPricePerDisplay && factory.currentPricePerDisplay === factory.newPricePerDisplay">${{factory.currentPricePerDisplay | number : 2}} per display license, per month.</p>
-          <div class="madero-style alert alert-success price-update mt-3" ng-show="factory.currentPricePerDisplay !== factory.newPricePerDisplay">
-            <p class="mb-0 text-success"><strong>Cost will decrease to ${{factory.newPricePerDisplay | number : 2}} per display license, per month.</strong></p>
+          <p class="mb-0" ng-show="factory.purchase.currentPricePerDisplay && factory.purchase.currentPricePerDisplay === factory.purchase.newPricePerDisplay">${{factory.purchase.currentPricePerDisplay | number : 2}} per display license, per month.</p>
+          <div class="madero-style alert alert-success price-update mt-3" ng-show="factory.purchase.currentPricePerDisplay !== factory.purchase.newPricePerDisplay">
+            <p class="mb-0 text-success"><strong>Cost will decrease to ${{factory.purchase.newPricePerDisplay | number : 2}} per display license, per month.</strong></p>
           </div>
         </div>
 

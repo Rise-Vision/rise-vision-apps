@@ -201,13 +201,13 @@ describe("Services: purchase licenses factory", function() {
 
     describe('_updatePerDisplayPrice:', function() {
       it('should not update prices if estimate does not contain correct fields', function(done) {
-        purchaseLicensesFactory.currentPricePerDisplay = 'currentPrice';
-        purchaseLicensesFactory.newPricePerDisplay = 'newPrice';
+        purchaseLicensesFactory.purchase.currentPricePerDisplay = 'currentPrice';
+        purchaseLicensesFactory.purchase.newPricePerDisplay = 'newPrice';
 
         purchaseLicensesFactory.getEstimate()
           .then(function() {
-            expect(purchaseLicensesFactory.currentPricePerDisplay).to.equal('currentPrice');
-            expect(purchaseLicensesFactory.newPricePerDisplay).to.equal('newPrice');
+            expect(purchaseLicensesFactory.purchase.currentPricePerDisplay).to.equal('currentPrice');
+            expect(purchaseLicensesFactory.purchase.newPricePerDisplay).to.equal('newPrice');
 
             done();
           });
@@ -227,8 +227,8 @@ describe("Services: purchase licenses factory", function() {
 
         purchaseLicensesFactory.getEstimate()
           .then(function() {
-            expect(purchaseLicensesFactory.currentPricePerDisplay).to.equal('false2false');
-            expect(purchaseLicensesFactory.newPricePerDisplay).to.equal('false7false');
+            expect(purchaseLicensesFactory.purchase.currentPricePerDisplay).to.equal('false2false');
+            expect(purchaseLicensesFactory.purchase.newPricePerDisplay).to.equal('false7false');
 
             done();
           });
@@ -250,8 +250,8 @@ describe("Services: purchase licenses factory", function() {
 
         purchaseLicensesFactory.getEstimate()
           .then(function() {
-            expect(purchaseLicensesFactory.currentPricePerDisplay).to.equal('true2false');
-            expect(purchaseLicensesFactory.newPricePerDisplay).to.equal('true7false');
+            expect(purchaseLicensesFactory.purchase.currentPricePerDisplay).to.equal('true2false');
+            expect(purchaseLicensesFactory.purchase.newPricePerDisplay).to.equal('true7false');
 
             done();
           });
@@ -273,8 +273,8 @@ describe("Services: purchase licenses factory", function() {
 
         purchaseLicensesFactory.getEstimate()
           .then(function() {
-            expect(purchaseLicensesFactory.currentPricePerDisplay).to.equal('false2true');
-            expect(purchaseLicensesFactory.newPricePerDisplay).to.equal('false7true');
+            expect(purchaseLicensesFactory.purchase.currentPricePerDisplay).to.equal('false2true');
+            expect(purchaseLicensesFactory.purchase.newPricePerDisplay).to.equal('false7true');
 
             done();
           });
