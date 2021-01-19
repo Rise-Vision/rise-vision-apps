@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: SubscriptionCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $rootScope, $scope, $loading, subscriptionFactory, taxExemptionFactory, plansService;
+  var $scope, $loading, subscriptionFactory, taxExemptionFactory, plansService;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -45,7 +45,6 @@ describe('controller: SubscriptionCtrl', function () {
       return function() {
         return {
           openPaymentSources: sandbox.stub(),
-          openSubscriptionDetails: sandbox.stub()
         };
       };
     });
@@ -64,8 +63,7 @@ describe('controller: SubscriptionCtrl', function () {
 
   }));
 
-  beforeEach(inject(function($injector, _$rootScope_, $controller) {
-    $rootScope = _$rootScope_;
+  beforeEach(inject(function($injector, $rootScope, $controller) {
     $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
     subscriptionFactory = $injector.get('subscriptionFactory');
@@ -97,7 +95,6 @@ describe('controller: SubscriptionCtrl', function () {
     expect($scope.getPlanName).to.be.a('function');
 
     expect($scope.editPaymentMethods).to.be.a('function');
-    expect($scope.editSubscription).to.be.a('function');
   });
 
   it('should initialize tax exemption', function() {
@@ -232,24 +229,6 @@ describe('controller: SubscriptionCtrl', function () {
       expect($scope.chargebeeFactory.openPaymentSources).to.be.calledOnce;
       expect($scope.chargebeeFactory.openPaymentSources.getCall(0).args[0]).to.equal('testId');
     });
-  });
-
-  describe('edit subscriptions', function () {
-    it('should show Chargebee subscription details', function () {
-      $scope.editSubscription({ id: 'subs1' });
-      expect($scope.chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
-      expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
-      expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('subs1');
-    });
-  });
-
-  describe('events: ', function () {
-    it('should reload Subscription when it is updated on Customer Portal', function () {
-      $rootScope.$emit('chargebee.subscriptionChanged');
-
-      expect(subscriptionFactory.reloadSubscription).to.be.calledOnce;
-    });
-
   });
 
 });
