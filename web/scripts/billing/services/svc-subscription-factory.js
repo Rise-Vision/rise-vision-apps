@@ -1,9 +1,11 @@
 'use strict';
 
+/*jshint camelcase: false */
+
 angular.module('risevision.apps.billing.services')
-  .service('subscriptionFactory', ['$q', '$log', 'billing', 'processErrorCode',
-  'analyticsFactory',
-    function ($q, $log, billing, processErrorCode, analyticsFactory) {
+  .service('subscriptionFactory', ['$q', '$log', '$filter', 'confirmModal', 'billing', 
+  'processErrorCode',
+    function ($q, $log, $filter, confirmModal, billing, processErrorCode) {
       var factory = {};
 
       var _clearMessages = function () {
@@ -30,10 +32,36 @@ angular.module('risevision.apps.billing.services')
           });
       };
 
-      factory.reloadSubscription = function () {
-        if (factory.item && factory.item.subscription && factory.item.subscription.id) {
-          factory.getSubscription(factory.item.subscription.id);
-        }
+      var _changePaymentSource = function (subscriptionId, paymentSourceId) {
+        factory.loading = true;
+
+        return billing.changePaymentSource(subscriptionId, paymentSourceId)
+          .then(function (resp) {
+            angular.extend(factory.item, resp.item);
+          })
+          .catch(function(e) {
+            _showErrorMessage(e);
+          })
+          .finally(function() {
+            factory.loading = false;
+          });
+      };
+
+      factory.changePaymentMethod = function(event, subscription, card) {
+        // prevent the radio ng-model from being updated
+        event.preventDefault();
+
+        var description = $filter('cardDescription')(card.payment_source.card);
+        
+        confirmModal('Change Payment Method',
+            'Are you sure you want to change the payment method? The <strong>' +
+            description +
+            '</strong> will be used for this subscription.',
+            'Yes, Change', 'Cancel', 'madero-style centered-modal',
+            'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
+          ).then(function() {
+            _changePaymentSource(subscription.id, card.payment_source.id);
+          });
       };
 
       var _showErrorMessage = function (e) {

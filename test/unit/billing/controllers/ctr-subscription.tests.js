@@ -138,11 +138,15 @@ describe('controller: SubscriptionCtrl', function () {
   describe('isInvoiced', function() {
     it('should return false by default', function() {
       expect($scope.isInvoiced()).to.not.be.ok;
+      expect($scope.isInvoiced({})).to.not.be.ok;
+      expect($scope.isInvoiced({item: {}})).to.not.be.ok;
     });
 
     it('should return false if a card exists', function() {
       subscriptionFactory.item = {
-        card: 'card'
+        subscription: {
+          payment_source_id: 'payment_source_id'
+        }
       };
 
       expect($scope.isInvoiced()).to.be.false;
@@ -150,7 +154,7 @@ describe('controller: SubscriptionCtrl', function () {
 
     it('should return true if a card does not exist', function() {
       subscriptionFactory.item = {
-        card: undefined
+        subscription: {}
       };
 
       expect($scope.isInvoiced()).to.be.true;
