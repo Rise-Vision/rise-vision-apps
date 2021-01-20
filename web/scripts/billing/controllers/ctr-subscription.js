@@ -29,12 +29,10 @@ angular.module('risevision.apps.billing.controllers')
       $scope.isInvoiced = function() {
         if (subscriptionFactory.item && subscriptionFactory.item.subscription &&
           subscriptionFactory.item.subscription.auto_collection) {
-          return subscriptionFactory.item.subscription.auto_collection === 'off' ||
-            subscriptionFactory.item.subscription.auto_collection !== 'on';
+          return subscriptionFactory.item.subscription.auto_collection === 'off';
         } else if (subscriptionFactory.item && subscriptionFactory.item.customer &&
           subscriptionFactory.item.customer.auto_collection) {
-          return subscriptionFactory.item.customer.auto_collection === 'off' ||
-          subscriptionFactory.item.customer.auto_collection !== 'on';
+          return subscriptionFactory.item.customer.auto_collection === 'off';
         } else {
           return false;
         }
