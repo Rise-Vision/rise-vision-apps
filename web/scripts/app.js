@@ -192,8 +192,13 @@ angular.module('risevision.apps', [
           $state.go($state.current, null, {
             reload: true
           });
-        } else if ($state.current.name.indexOf('apps.purchase') !== -1) {
-          $state.go('apps.home');
+        } else if (($state.current.name.indexOf('apps.purchase') !== -1 ||
+          $state.current.name.indexOf('apps.billing') !== -1) &&
+          $state.current.forceAuth !== false) {
+
+          $state.go('apps.billing.home', null, {
+            reload: true
+          });
         }
       });
     }
