@@ -51,6 +51,10 @@ angular.module('risevision.apps.billing.services')
         // prevent the radio ng-model from being updated
         event.preventDefault();
 
+        if (subscription.payment_source_id === card.payment_source.id) {
+          return;
+        }
+
         var description = $filter('cardDescription')(card.payment_source.card);
         
         confirmModal('Change Payment Method',
