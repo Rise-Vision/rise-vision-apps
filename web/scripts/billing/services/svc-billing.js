@@ -57,6 +57,31 @@ angular.module('risevision.apps.billing.services')
 
           return deferred.promise;
         },
+        changePaymentSource: function (subscriptionId, paymentSourceId) {
+          var deferred = $q.defer();
+          var params = {
+            'subscriptionId': subscriptionId,
+            'paymentSourceId': paymentSourceId,
+            'companyId': userState.getSelectedCompanyId()
+          };
+
+          $log.debug('Store integrations.subscription.changePaymentSource called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.subscription.changePaymentSource(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.subscription.changePaymentSource resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to change payment source for the subscription.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
         getInvoices: function (search, cursor) {
           var deferred = $q.defer();
           var params = {

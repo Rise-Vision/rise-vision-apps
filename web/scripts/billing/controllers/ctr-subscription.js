@@ -27,7 +27,15 @@ angular.module('risevision.apps.billing.controllers')
       taxExemptionFactory.init();
 
       $scope.isInvoiced = function() {
-        return subscriptionFactory.item && !subscriptionFactory.item.card;
+        if (subscriptionFactory.item && subscriptionFactory.item.subscription &&
+          subscriptionFactory.item.subscription.auto_collection) {
+          return subscriptionFactory.item.subscription.auto_collection === 'off';
+        } else if (subscriptionFactory.item && subscriptionFactory.item.customer &&
+          subscriptionFactory.item.customer.auto_collection) {
+          return subscriptionFactory.item.customer.auto_collection === 'off';
+        } else {
+          return false;
+        }
       };
 
       $scope.isDisplayLicensePlan = function (subscription) {

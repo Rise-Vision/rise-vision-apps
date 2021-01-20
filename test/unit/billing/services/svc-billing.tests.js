@@ -40,6 +40,16 @@ describe('service: billing:', function() {
                   return Q.reject('API Failed');
                 }
               }),
+              changePaymentSource: sinon.spy(function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: 'paymentSource'
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              }),
             },
             invoice: {
               list: function() {
@@ -142,6 +152,7 @@ describe('service: billing:', function() {
     expect(billing).to.be.ok;
     expect(billing.getSubscriptions).to.be.a.function;
     expect(billing.getSubscription).to.be.a.function;
+    expect(billing.changePaymentSource).to.be.a.function;
     expect(billing.getInvoices).to.be.a.function;
     expect(billing.getUnpaidInvoices).to.be.a.function;
     expect(billing.getInvoice).to.be.a.function;
@@ -209,6 +220,39 @@ describe('service: billing:', function() {
       failedResponse = true;
 
       billing.getSubscription('subscriptionId')
+      .then(function(subscription) {
+        done(subscription);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+
+  describe('changePaymentSource:', function() {
+    it('should change the payment source', function(done) {
+      failedResponse = false;
+
+      billing.changePaymentSource('subscriptionId', 'paymentSourceId')
+      .then(function(result) {
+        storeApi.integrations.subscription.changePaymentSource.should.have.been.called;
+        storeApi.integrations.subscription.changePaymentSource.should.have.been.calledWith({
+          subscriptionId: 'subscriptionId',
+          paymentSourceId: 'paymentSourceId',
+          companyId: 'testId1'
+        });
+
+        expect(result).to.be.ok;
+        expect(result).to.equal('paymentSource');
+        done();
+      });
+    });
+
+    it('should handle failure to change payment source', function(done) {
+      failedResponse = true;
+
+      billing.changePaymentSource('subscriptionId', 'paymentSourceId')
       .then(function(subscription) {
         done(subscription);
       })
