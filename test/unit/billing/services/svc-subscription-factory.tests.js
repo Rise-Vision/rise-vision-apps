@@ -90,9 +90,33 @@ describe('service: subscriptionFactory:', function() {
       };
     });
 
+    it('should stop event propagation', function() {
+      subscriptionFactory.changePaymentMethod($event, 'subscriptionId', {
+        payment_source: {
+          id: 'paymentId'
+        }
+      });
+
+      $event.preventDefault.should.have.been.called;
+    });
+
+    it('should not update if the same payment method is selected', function() {
+      subscriptionFactory.changePaymentMethod($event, {
+        id: 'subscriptionId',
+        payment_source_id: 'paymentId'
+      }, {
+        payment_source: {
+          id: 'paymentId'
+        }
+      });
+
+      confirmModal.should.not.have.been.called;
+    });
+
     it('should prompt for change', function(done) {
       subscriptionFactory.changePaymentMethod($event, 'subscriptionId', {
         payment_source: {
+          id: 'paymentId',
           card: {}
         }
       });
@@ -130,16 +154,6 @@ describe('service: subscriptionFactory:', function() {
         sinon.stub(subscriptionFactory, 'init');
       });
 
-      it('should stop event propagation', function() {
-        subscriptionFactory.changePaymentMethod($event, 'subscriptionId', {
-          payment_source: {
-            id: 'paymentId'
-          }
-        });
-
-        $event.preventDefault.should.have.been.called;
-      });
-
       it('should merge result into item on success', function(done) {
         subscriptionFactory.item = {
           subscription: '123'
@@ -170,7 +184,9 @@ describe('service: subscriptionFactory:', function() {
         billing.changePaymentSource.returns(Q.reject('error'));
 
         subscriptionFactory.changePaymentMethod($event, 'subscriptionId', {
-          payment_source: {}
+          payment_source: {
+            id: 'paymentId'
+          }
         });
 
         setTimeout(function() {
