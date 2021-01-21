@@ -30,7 +30,7 @@ angular.module('risevision.apps.billing.controllers')
         if (creditCardFactory.paymentMethods.paymentMethod === 'invoice') {
           subscriptionFactory.changePaymentToInvoice(subscriptionId, creditCardFactory.paymentMethods.purchaseOrderNumber)
             .then(function() {
-              if (!factory.apiError) {
+              if (!creditCardFactory.apiError) {
                 $state.go('apps.billing.subscription', {
                   subscriptionId: subscriptionId
                 });
