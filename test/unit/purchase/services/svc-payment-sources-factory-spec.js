@@ -21,11 +21,6 @@ describe("Services: payment sources factory", function() {
     $provide.factory('confirmModal', function() {
       return sinon.stub().returns(Q.resolve());
     });
-    $provide.service('analyticsFactory',function() {
-      return {
-        track: sinon.stub()
-      };
-    });
   }));
 
   var paymentSourcesFactory, confirmModal, billing;

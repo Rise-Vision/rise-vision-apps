@@ -36,7 +36,195 @@ describe('service: subscriptionFactory:', function() {
   it('should exist',function() {
     expect(subscriptionFactory).to.be.ok;
 
+    expect(subscriptionFactory.getItemSubscription).to.be.a('function');
+    expect(subscriptionFactory.getItemCustomer).to.be.a('function');
+    expect(subscriptionFactory.getPaymentSourceId).to.be.a('function');
+    expect(subscriptionFactory.isInvoiced).to.be.a('function');
+
     expect(subscriptionFactory.getSubscription).to.be.a('function');
+    expect(subscriptionFactory.changePaymentMethod).to.be.a('function');
+  });
+
+  describe('getItemSubscription:', function() {
+    it('should handle null values', function() {
+      expect(subscriptionFactory.getItemSubscription()).to.deep.equal({});
+
+      subscriptionFactory.item = {};
+      expect(subscriptionFactory.getItemSubscription()).to.deep.equal({});
+    });
+
+    it('should return subscription', function() {
+      subscriptionFactory.item = {
+        subscription: 'subscription'
+      };
+
+      expect(subscriptionFactory.getItemSubscription()).to.equal('subscription');
+    });
+
+  });
+
+  describe('getItemCustomer:', function() {
+    it('should handle null values', function() {
+      expect(subscriptionFactory.getItemCustomer()).to.deep.equal({});
+
+      subscriptionFactory.item = {};
+      expect(subscriptionFactory.getItemCustomer()).to.deep.equal({});
+    });
+
+    it('should return customer', function() {
+      subscriptionFactory.item = {
+        customer: 'customer'
+      };
+
+      expect(subscriptionFactory.getItemCustomer()).to.equal('customer');
+    });
+
+  });
+
+  describe('getPaymentSourceId:', function() {
+    it('should handle null values', function() {
+      expect(subscriptionFactory.getPaymentSourceId()).to.be.null;
+
+      subscriptionFactory.item = {};
+      expect(subscriptionFactory.getPaymentSourceId()).to.be.null;
+    });
+
+    describe('subscription check:', function() {
+      it('should check payment_source_id', function() {
+        subscriptionFactory.item = {
+          subscription: {
+            payment_source_id: '123'
+          }
+        };
+
+        expect(subscriptionFactory.getPaymentSourceId()).to.equal('123');
+      });
+
+      it('should check payment_source_id undefined', function() {
+        subscriptionFactory.item = {
+          subscription: {}
+        };
+
+        expect(subscriptionFactory.getPaymentSourceId()).to.be.null;
+      });
+    });
+
+    describe('customer check:', function() {
+      it('should check primary_payment_source_id', function() {
+        subscriptionFactory.item = {
+          customer: {
+            primary_payment_source_id: '234'
+          }
+        };
+
+        expect(subscriptionFactory.getPaymentSourceId()).to.equal('234');
+      });
+
+      it('should check primary_payment_source_id undefined', function() {
+        subscriptionFactory.item = {
+          customer: {}
+        };
+
+        expect(subscriptionFactory.getPaymentSourceId()).to.be.null;
+      });
+    });
+
+    it('should use subscription value', function() {
+      subscriptionFactory.item = {
+        subscription: {
+          payment_source_id: '123'
+        },
+        customer: {
+          primary_payment_source_id: '234'
+        }
+      };
+
+      expect(subscriptionFactory.getPaymentSourceId()).to.equal('123');
+    });
+
+  });
+
+  describe('isInvoiced:', function() {
+    it('should handle null values', function() {
+      expect(subscriptionFactory.isInvoiced()).to.be.false;
+
+      subscriptionFactory.item = {};
+      expect(subscriptionFactory.isInvoiced()).to.be.false;
+    });
+
+    describe('subscription check:', function() {
+      it('should check auto_collection on', function() {
+        subscriptionFactory.item = {
+          subscription: {
+            auto_collection: 'on'
+          }
+        };
+
+        expect(subscriptionFactory.isInvoiced()).to.be.false;
+      });
+
+      it('should check auto_collection off', function() {
+        subscriptionFactory.item = {
+          subscription: {
+            auto_collection: 'off'
+          }
+        };
+
+        expect(subscriptionFactory.isInvoiced()).to.be.true;
+      });
+
+      it('should check auto_collection undefined', function() {
+        subscriptionFactory.item = {
+          subscription: {}
+        };
+
+        expect(subscriptionFactory.isInvoiced()).to.be.false;
+      });
+    });
+
+    describe('customer check:', function() {
+      it('should check auto_collection on', function() {
+        subscriptionFactory.item = {
+          customer: {
+            auto_collection: 'on'
+          }
+        };
+
+        expect(subscriptionFactory.isInvoiced()).to.be.false;
+      });
+
+      it('should check auto_collection off', function() {
+        subscriptionFactory.item = {
+          customer: {
+            auto_collection: 'off'
+          }
+        };
+
+        expect(subscriptionFactory.isInvoiced()).to.be.true;
+      });
+
+      it('should check auto_collection undefined', function() {
+        subscriptionFactory.item = {
+          customer: {}
+        };
+
+        expect(subscriptionFactory.isInvoiced()).to.be.false;
+      });
+    });
+
+    it('should use subscription value', function() {
+      subscriptionFactory.item = {
+        subscription: {
+          auto_collection: 'off'
+        },
+        customer: {
+          auto_collection: 'on'
+        }
+      };
+
+      expect(subscriptionFactory.isInvoiced()).to.be.true;
+    });
+
   });
 
   describe('getSubscription:', function() {
@@ -65,6 +253,45 @@ describe('service: subscriptionFactory:', function() {
       }, 10);
     });
 
+    describe('_updatePaymentSourceId:', function() {
+      it('should update for invoice', function(done) {
+        billing.getSubscription.returns(Q.resolve({
+          item: {
+            subscription: {
+              auto_collection: 'off'
+            }
+          }
+        }));
+
+        subscriptionFactory.getSubscription();
+
+        setTimeout(function() {
+          expect(subscriptionFactory.item.paymentSourceId).to.equal('invoice');
+
+          done();
+        }, 10);
+      });
+
+      it('should update for credit card', function(done) {
+        billing.getSubscription.returns(Q.resolve({
+          item: {
+            subscription: {
+              payment_source_id: 'paymentSource'
+            }
+          }
+        }));
+
+        subscriptionFactory.getSubscription();
+
+        setTimeout(function() {
+          expect(subscriptionFactory.item.paymentSourceId).to.equal('paymentSource');
+
+          done();
+        }, 10);
+      });
+
+    });
+
     it('should handle failure to get subscription correctly', function(done) {
       billing.getSubscription.returns(Q.reject('error'));
 
@@ -91,7 +318,7 @@ describe('service: subscriptionFactory:', function() {
     });
 
     it('should stop event propagation', function() {
-      subscriptionFactory.changePaymentMethod($event, 'subscriptionId', {
+      subscriptionFactory.changePaymentMethod($event, {
         payment_source: {
           id: 'paymentId'
         }
@@ -101,10 +328,14 @@ describe('service: subscriptionFactory:', function() {
     });
 
     it('should not update if the same payment method is selected', function() {
+      subscriptionFactory.item = {
+        subscription: {
+          id: 'subscriptionId',
+          payment_source_id: 'paymentId'
+        }
+      };
+
       subscriptionFactory.changePaymentMethod($event, {
-        id: 'subscriptionId',
-        payment_source_id: 'paymentId'
-      }, {
         payment_source: {
           id: 'paymentId'
         }
@@ -114,7 +345,7 @@ describe('service: subscriptionFactory:', function() {
     });
 
     it('should prompt for change', function(done) {
-      subscriptionFactory.changePaymentMethod($event, 'subscriptionId', {
+      subscriptionFactory.changePaymentMethod($event, {
         payment_source: {
           id: 'paymentId',
           card: {}
@@ -138,7 +369,7 @@ describe('service: subscriptionFactory:', function() {
     it('should not change if user does not confirm', function(done) {
       confirmModal.returns(Q.reject());
 
-      subscriptionFactory.changePaymentMethod($event, 'subscriptionId', {
+      subscriptionFactory.changePaymentMethod($event, {
         payment_source: {}
       });
 
@@ -156,11 +387,11 @@ describe('service: subscriptionFactory:', function() {
 
       it('should merge result into item on success', function(done) {
         subscriptionFactory.item = {
-          subscription: '123'
+          subscription: {
+            id: 'subscriptionId'
+          }
         }
         subscriptionFactory.changePaymentMethod($event, {
-          id: 'subscriptionId'
-        }, {
           payment_source: {
             id: 'paymentId'
           }
@@ -172,8 +403,11 @@ describe('service: subscriptionFactory:', function() {
           billing.changePaymentSource.should.have.been.calledWith('subscriptionId', 'paymentId');
 
           expect(subscriptionFactory.item).to.deep.equal({
-            subscription: '123',
-            payment_source: 'paymentSource'
+            subscription: {
+              id: 'subscriptionId'
+            },
+            payment_source: 'paymentSource',
+            paymentSourceId: null
           });
 
           done();
@@ -183,7 +417,7 @@ describe('service: subscriptionFactory:', function() {
       it('should stop spinner on failure', function(done) {
         billing.changePaymentSource.returns(Q.reject('error'));
 
-        subscriptionFactory.changePaymentMethod($event, 'subscriptionId', {
+        subscriptionFactory.changePaymentMethod($event, {
           payment_source: {
             id: 'paymentId'
           }

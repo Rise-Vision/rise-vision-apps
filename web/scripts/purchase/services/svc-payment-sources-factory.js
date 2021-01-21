@@ -4,8 +4,8 @@
 
 angular.module('risevision.apps.purchase')
   .service('paymentSourcesFactory', ['$q', '$filter', '$log', 'confirmModal', 'billing',
-  'processErrorCode', 'analyticsFactory',
-    function ($q, $filter, $log, confirmModal, billing, processErrorCode, analyticsFactory) {
+  'processErrorCode',
+    function ($q, $filter, $log, confirmModal, billing, processErrorCode) {
       var factory = {};
 
       var _clearMessages = function () {
