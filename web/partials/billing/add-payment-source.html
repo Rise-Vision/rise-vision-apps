@@ -10,8 +10,12 @@
     <strong>{{subscriptionFactory.apiError}}</strong>
   </div>
 
-  <div id="errorBox" ng-show="creditCardFactory.apiError" class="madero-style alert alert-danger" role="alert">
-    <strong>{{creditCardFactory.apiError}}</strong>
+  <div id="errorBox" ng-show="addPaymentSourceFactory.apiError" class="madero-style alert alert-danger" role="alert">
+    <strong>{{addPaymentSourceFactory.apiError}}</strong>
+  </div>
+
+  <div id="errorBox" ng-show="creditCardFactory.paymentMethods.tokenError" class="madero-style alert alert-danger" role="alert">
+    <strong>{{creditCardFactory.paymentMethods.tokenError}}</strong>
   </div>
 
   <h4 class="mb-4">Payment Method</h4>

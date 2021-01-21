@@ -261,6 +261,54 @@ angular.module('risevision.apps.billing.services')
 
           return deferred.promise;
         },
+        preparePaymentSource: function (paymentMethodId) {
+          var deferred = $q.defer();
+          var params = {
+            'paymentMethodId': paymentMethodId,
+            'companyId': userState.getSelectedCompanyId()
+          };
+
+          $log.debug('Store integrations.paymentSource.prepare called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.paymentSource.prepare(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.paymentSource.prepare resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to prepare payment source.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+        addPaymentSource: function (setupIntentId) {
+          var deferred = $q.defer();
+          var params = {
+            'setupIntentId': setupIntentId,
+            'companyId': userState.getSelectedCompanyId()
+          };
+
+          $log.debug('Store integrations.paymentSource.add called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.paymentSource.add(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.paymentSource.add resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to add payment source.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
         deletePaymentSource: function (paymentSourceId) {
           var deferred = $q.defer();
 

@@ -50,6 +50,16 @@ describe('service: billing:', function() {
                   return Q.reject('API Failed');
                 }
               }),
+              changePaymentToInvoice: sinon.spy(function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: 'paymentInvoice'
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              }),
             },
             invoice: {
               list: function() {
@@ -125,6 +135,26 @@ describe('service: billing:', function() {
               })
             },
             paymentSource: {
+              prepare: sinon.spy(function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: 'prepared'
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              }),
+              add: sinon.spy(function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: 'added'
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              }),
               delete: sinon.spy(function() {
                 if (!failedResponse) {
                   return Q.resolve({
@@ -134,7 +164,7 @@ describe('service: billing:', function() {
                 else {
                   return Q.reject('API Failed');
                 }
-              })              
+              })
             }
           }
         });
@@ -153,12 +183,15 @@ describe('service: billing:', function() {
     expect(billing.getSubscriptions).to.be.a.function;
     expect(billing.getSubscription).to.be.a.function;
     expect(billing.changePaymentSource).to.be.a.function;
+    expect(billing.changePaymentToInvoice).to.be.a.function;
     expect(billing.getInvoices).to.be.a.function;
     expect(billing.getUnpaidInvoices).to.be.a.function;
     expect(billing.getInvoice).to.be.a.function;
     expect(billing.updateInvoice).to.be.a.function;
     expect(billing.getInvoicePdf).to.be.a.function;
     expect(billing.getCreditCards).to.be.a.function;
+    expect(billing.preparePaymentSource).to.be.a.function;
+    expect(billing.addPaymentSource).to.be.a.function;
     expect(billing.deletePaymentSource).to.be.a.function;
   });
 
@@ -253,6 +286,39 @@ describe('service: billing:', function() {
       failedResponse = true;
 
       billing.changePaymentSource('subscriptionId', 'paymentSourceId')
+      .then(function(subscription) {
+        done(subscription);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+
+  describe('changePaymentToInvoice:', function() {
+    it('should change the payment to invoice', function(done) {
+      failedResponse = false;
+
+      billing.changePaymentToInvoice('subscriptionId', 'poNumber')
+      .then(function(result) {
+        storeApi.integrations.subscription.changePaymentToInvoice.should.have.been.called;
+        storeApi.integrations.subscription.changePaymentToInvoice.should.have.been.calledWith({
+          subscriptionId: 'subscriptionId',
+          poNumber: 'poNumber',
+          companyId: 'testId1'
+        });
+
+        expect(result).to.be.ok;
+        expect(result).to.equal('paymentInvoice');
+        done();
+      });
+    });
+
+    it('should handle failure to change payment to invoice', function(done) {
+      failedResponse = true;
+
+      billing.changePaymentToInvoice('subscriptionId', 'paymentSourceId')
       .then(function(subscription) {
         done(subscription);
       })
@@ -470,6 +536,70 @@ describe('service: billing:', function() {
     });
   });
 
+  describe('preparePaymentSource:', function() {
+    it('should prepare the payment source', function(done) {
+      failedResponse = false;
+
+      billing.preparePaymentSource('paymentMethodId')
+      .then(function(result) {
+        storeApi.integrations.paymentSource.prepare.should.have.been.called;
+        storeApi.integrations.paymentSource.prepare.should.have.been.calledWith({
+          paymentMethodId: 'paymentMethodId',
+          companyId: 'testId1'
+        });
+
+        expect(result).to.be.ok;
+        expect(result).to.equal('prepared');
+        done();
+      });
+    });
+
+    it('should handle failure to prepare the payment source', function(done) {
+      failedResponse = true;
+
+      billing.preparePaymentSource('paymentMethodId')
+      .then(function(subscription) {
+        done(subscription);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+
+  describe('addPaymentSource:', function() {
+    it('should add the payment source', function(done) {
+      failedResponse = false;
+
+      billing.addPaymentSource('setupIntentId')
+      .then(function(result) {
+        storeApi.integrations.paymentSource.add.should.have.been.called;
+        storeApi.integrations.paymentSource.add.should.have.been.calledWith({
+          setupIntentId: 'setupIntentId',
+          companyId: 'testId1'
+        });
+
+        expect(result).to.be.ok;
+        expect(result).to.equal('added');
+        done();
+      });
+    });
+
+    it('should handle failure to add the payment source correctly', function(done) {
+      failedResponse = true;
+
+      billing.addPaymentSource('setupIntentId')
+      .then(function(subscription) {
+        done(subscription);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+
   describe('deletePaymentSource:', function() {
     it('should delete the payment source', function(done) {
       failedResponse = false;
@@ -488,7 +618,7 @@ describe('service: billing:', function() {
       });
     });
 
-    it('should handle failure to get subscription correctly', function(done) {
+    it('should handle failure to delete the payment source correctly', function(done) {
       failedResponse = true;
 
       billing.deletePaymentSource('paymentSourceId')
