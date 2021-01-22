@@ -90,7 +90,7 @@
                 } else {
                   paymentMethods.intentResponse = response;
                   if (response.authenticationRequired) {
-                    return creditCardFactory.authenticate3ds(response.intentSecret);
+                    return creditCardFactory.handleCardAction(response.intentSecret);
                   } else {
                     return $q.resolve();
                   }

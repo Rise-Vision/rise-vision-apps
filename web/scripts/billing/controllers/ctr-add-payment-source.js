@@ -8,7 +8,6 @@ angular.module('risevision.apps.billing.controllers')
     function ($scope, $loading, $state, userState, subscriptionFactory, creditCardFactory,
     addPaymentSourceFactory) {
       $scope.subscriptionFactory = subscriptionFactory;
-      $scope.creditCardFactory = creditCardFactory;
       $scope.addPaymentSourceFactory = addPaymentSourceFactory;
 
       $scope.$watchGroup(['subscriptionFactory.loading', 'addPaymentSourceFactory.loading'], function (values) {

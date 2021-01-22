@@ -70,7 +70,6 @@ describe('controller: AddPaymentSourceCtrl', function () {
     expect($scope).to.be.ok;
 
     expect($scope.subscriptionFactory).to.equal(subscriptionFactory);
-    expect($scope.creditCardFactory).to.equal(creditCardFactory);
     expect($scope.addPaymentSourceFactory).to.equal(addPaymentSourceFactory);
     expect($scope.contactEmail).to.equal('userEmail');
 
