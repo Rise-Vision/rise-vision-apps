@@ -70,6 +70,21 @@ angular.module('risevision.apps.billing.services')
           });
       };
 
+      factory.changePoNumber = function () {
+        factory.loading = true;
+
+        return billing.changePoNumber(factory.getItemSubscription().id, factory.getItemSubscription().poNumber)
+          .then(function (resp) {
+            angular.extend(factory.item, resp.item);
+          })
+          .catch(function(e) {
+            _showErrorMessage(e);
+          })
+          .finally(function() {
+            factory.loading = false;
+          });
+      };
+
       var _changePaymentSource = function (subscriptionId, paymentSourceId) {
         factory.loading = true;
 

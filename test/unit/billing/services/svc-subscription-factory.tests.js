@@ -11,6 +11,7 @@ describe('service: subscriptionFactory:', function() {
     $provide.service('billing',function() {
       return {
         getSubscription: sinon.stub().returns(Q.resolve({item: 'subscription'})),
+        changePoNumber: sinon.stub().returns(Q.resolve({item: {subscription: {po_number: 'updatedPo'}}})),
         changePaymentSource: sinon.stub().returns(Q.resolve({item: {payment_source: 'paymentSource'}}))
       }
     });
@@ -42,6 +43,7 @@ describe('service: subscriptionFactory:', function() {
     expect(subscriptionFactory.isInvoiced).to.be.a('function');
 
     expect(subscriptionFactory.getSubscription).to.be.a('function');
+    expect(subscriptionFactory.changePoNumber).to.be.a('function');
     expect(subscriptionFactory.changePaymentMethod).to.be.a('function');
   });
 
@@ -308,6 +310,46 @@ describe('service: subscriptionFactory:', function() {
     });
   });
 
+  describe('changePoNumber:', function() {
+    it('should merge result into item on success', function(done) {
+      subscriptionFactory.item = {
+        subscription: {
+          id: 'subscriptionId',
+          poNumber: 'poNumber'
+        }
+      }
+
+      subscriptionFactory.changePoNumber();
+
+      setTimeout(function() {
+        expect(subscriptionFactory.loading).to.be.false;
+
+        billing.changePoNumber.should.have.been.calledWith('subscriptionId', 'poNumber');
+
+        expect(subscriptionFactory.item).to.deep.equal({
+          subscription: {
+            po_number: 'updatedPo'
+          }
+        });
+
+        done();
+      }, 10);
+    });
+
+    it('should stop spinner on failure', function(done) {
+      billing.changePoNumber.returns(Q.reject('error'));
+
+      subscriptionFactory.changePoNumber();
+
+      setTimeout(function() {
+        expect(subscriptionFactory.loading).to.be.false;
+        expect(subscriptionFactory.apiError).to.equal('processed error');
+
+        done();
+      }, 10);
+    });
+  });
+
   describe('changePaymentMethod:', function() {
     var $event;
 
@@ -381,10 +423,6 @@ describe('service: subscriptionFactory:', function() {
     });
 
     describe('_changePaymentSource:', function() {
-      beforeEach(function() {
-        sinon.stub(subscriptionFactory, 'init');
-      });
-
       it('should merge result into item on success', function(done) {
         subscriptionFactory.item = {
           subscription: {

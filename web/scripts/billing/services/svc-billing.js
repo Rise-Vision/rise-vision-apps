@@ -57,6 +57,31 @@ angular.module('risevision.apps.billing.services')
 
           return deferred.promise;
         },
+        changePoNumber: function (subscriptionId, poNumber) {
+          var deferred = $q.defer();
+          var params = {
+            'subscriptionId': subscriptionId,
+            'poNumber': poNumber,
+            'companyId': userState.getSelectedCompanyId()
+          };
+
+          $log.debug('Store integrations.subscription.changePoNumber called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.subscription.changePoNumber(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.subscription.changePoNumber resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to change po number for the subscription.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
         changePaymentSource: function (subscriptionId, paymentSourceId) {
           var deferred = $q.defer();
           var params = {
