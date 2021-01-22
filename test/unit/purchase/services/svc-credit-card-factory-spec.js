@@ -8,7 +8,7 @@ describe("Services: credit card factory", function() {
 
     $provide.value("stripeService", {
       createPaymentMethod: sinon.stub().returns(Q.resolve({})),
-      authenticate3ds: sinon.stub().returns(Q.resolve())
+      authenticate3ds: sinon.stub().returns(Q.resolve({}))
     });
 
     $provide.value("userState", {
@@ -232,7 +232,7 @@ describe("Services: credit card factory", function() {
 
         creditCardFactory.validatePaymentMethod()
         .then(function () {
-          console.log("Should not be here");
+          done("Should not be here");
         }, function() {
           stripeService.createPaymentMethod.should.have.been.called;
           done();
@@ -289,6 +289,45 @@ describe("Services: credit card factory", function() {
         assert.equal(stripeService.createPaymentMethod.getCall(0).args[2].billing_details.address.city, "test-billing-city");
       });
 
+    });
+
+  });
+
+  describe("authenticate3ds: ", function() {
+    beforeEach(function() {
+      creditCardFactory.paymentMethods = {};
+    });
+
+    it("should authenticate card", function(done) {
+      creditCardFactory.authenticate3ds('intentSecret')
+        .then(function() {
+          stripeService.authenticate3ds.should.have.been.calledWith('intentSecret');
+
+          done();
+        });
+    });
+
+    it("should validate and not proceed if there are errors", function(done) {
+      stripeService.authenticate3ds.returns(Q.resolve({error: "tokenError"}));
+
+      creditCardFactory.authenticate3ds()
+        .then(null, function() {
+          // The original error message is overwritten by the catcher
+          expect(creditCardFactory.paymentMethods.tokenError).to.be.ok;
+
+          done();
+        });
+    });
+
+    it("should handle reject errors", function(done) {
+      stripeService.authenticate3ds.returns(Q.reject({}));
+
+      creditCardFactory.authenticate3ds()
+        .then(null, function() {
+          expect(creditCardFactory.paymentMethods.tokenError).to.contain("contact support@risevision.com");
+
+          done();
+        });
     });
 
   });
