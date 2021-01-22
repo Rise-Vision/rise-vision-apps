@@ -40,6 +40,16 @@ describe('service: billing:', function() {
                   return Q.reject('API Failed');
                 }
               }),
+              changePoNumber: sinon.spy(function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: 'poNumber'
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              }),
               changePaymentSource: sinon.spy(function() {
                 if (!failedResponse) {
                   return Q.resolve({
@@ -182,6 +192,7 @@ describe('service: billing:', function() {
     expect(billing).to.be.ok;
     expect(billing.getSubscriptions).to.be.a.function;
     expect(billing.getSubscription).to.be.a.function;
+    expect(billing.changePoNumber).to.be.a.function;
     expect(billing.changePaymentSource).to.be.a.function;
     expect(billing.changePaymentToInvoice).to.be.a.function;
     expect(billing.getInvoices).to.be.a.function;
@@ -253,6 +264,39 @@ describe('service: billing:', function() {
       failedResponse = true;
 
       billing.getSubscription('subscriptionId')
+      .then(function(subscription) {
+        done(subscription);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+
+  describe('changePoNumber:', function() {
+    it('should change the po number', function(done) {
+      failedResponse = false;
+
+      billing.changePoNumber('subscriptionId', 'poNumber')
+      .then(function(result) {
+        storeApi.integrations.subscription.changePoNumber.should.have.been.called;
+        storeApi.integrations.subscription.changePoNumber.should.have.been.calledWith({
+          subscriptionId: 'subscriptionId',
+          poNumber: 'poNumber',
+          companyId: 'testId1'
+        });
+
+        expect(result).to.be.ok;
+        expect(result).to.equal('poNumber');
+        done();
+      });
+    });
+
+    it('should handle failure to change the po number', function(done) {
+      failedResponse = true;
+
+      billing.changePoNumber('subscriptionId', 'poNumber')
       .then(function(subscription) {
         done(subscription);
       })
