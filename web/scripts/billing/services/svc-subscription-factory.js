@@ -106,7 +106,7 @@ angular.module('risevision.apps.billing.services')
         // prevent the radio ng-model from being updated
         event.preventDefault();
 
-        if (factory.getPaymentSourceId() === card.payment_source.id) {
+        if (!factory.isInvoiced() && factory.getPaymentSourceId() === card.payment_source.id) {
           return;
         }
 
