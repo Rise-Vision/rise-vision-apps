@@ -70,6 +70,21 @@ angular.module('risevision.apps.billing.services')
           });
       };
 
+      factory.changePoNumber = function () {
+        factory.loading = true;
+
+        return billing.changePoNumber(factory.getItemSubscription().id, factory.getItemSubscription().poNumber)
+          .then(function (resp) {
+            angular.extend(factory.item, resp.item);
+          })
+          .catch(function(e) {
+            _showErrorMessage(e);
+          })
+          .finally(function() {
+            factory.loading = false;
+          });
+      };
+
       var _changePaymentSource = function (subscriptionId, paymentSourceId) {
         factory.loading = true;
 
@@ -105,21 +120,6 @@ angular.module('risevision.apps.billing.services')
             'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
           ).then(function() {
             _changePaymentSource(factory.getItemSubscription().id, card.payment_source.id);
-          });
-      };
-
-      factory.changePaymentToInvoice = function (subscriptionId, poNumber) {
-        factory.loading = true;
-
-        return billing.changePaymentToInvoice(subscriptionId, poNumber)
-          .then(function (resp) {
-            angular.extend(factory.item, resp.item);
-          })
-          .catch(function(e) {
-            _showErrorMessage(e);
-          })
-          .finally(function() {
-            factory.loading = false;
           });
       };
 

@@ -99,8 +99,24 @@
           }
         };
 
-        factory.authenticate3ds = function (intentSecret) {
-          return stripeService.authenticate3ds(intentSecret)
+        factory.handleCardAction = function (intentSecret) {
+          return stripeService.handleCardAction(intentSecret)
+            .then(function (result) {
+              if (result.error) {
+                factory.paymentMethods.tokenError = result.error;
+                return $q.reject(result.error);
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+              factory.paymentMethods.tokenError =
+                'Something went wrong, please retry or contact support@risevision.com';
+              return $q.reject(error);
+            });
+        };
+
+        factory.confirmCardSetup = function (intentSecret) {
+          return stripeService.confirmCardSetup(intentSecret)
             .then(function (result) {
               if (result.error) {
                 factory.paymentMethods.tokenError = result.error;

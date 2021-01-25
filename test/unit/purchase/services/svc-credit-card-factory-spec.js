@@ -8,7 +8,8 @@ describe("Services: credit card factory", function() {
 
     $provide.value("stripeService", {
       createPaymentMethod: sinon.stub().returns(Q.resolve({})),
-      authenticate3ds: sinon.stub().returns(Q.resolve())
+      handleCardAction: sinon.stub().returns(Q.resolve({})),
+      confirmCardSetup: sinon.stub().returns(Q.resolve({}))
     });
 
     $provide.value("userState", {
@@ -48,7 +49,8 @@ describe("Services: credit card factory", function() {
 
     expect(creditCardFactory.validatePaymentMethod).to.be.a("function");
     expect(creditCardFactory.getPaymentMethodId).to.be.a("function");
-    expect(creditCardFactory.authenticate3ds).to.be.a("function");
+    expect(creditCardFactory.handleCardAction).to.be.a("function");
+    expect(creditCardFactory.confirmCardSetup).to.be.a("function");
   });
 
   it("selectNewCreditCard:", function() {
@@ -232,7 +234,7 @@ describe("Services: credit card factory", function() {
 
         creditCardFactory.validatePaymentMethod()
         .then(function () {
-          console.log("Should not be here");
+          done("Should not be here");
         }, function() {
           stripeService.createPaymentMethod.should.have.been.called;
           done();
@@ -289,6 +291,88 @@ describe("Services: credit card factory", function() {
         assert.equal(stripeService.createPaymentMethod.getCall(0).args[2].billing_details.address.city, "test-billing-city");
       });
 
+    });
+
+  });
+
+  describe("handleCardAction: ", function() {
+    beforeEach(function() {
+      creditCardFactory.paymentMethods = {};
+    });
+
+    it("should authenticate card", function(done) {
+      creditCardFactory.handleCardAction('intentSecret')
+        .then(function() {
+          stripeService.handleCardAction.should.have.been.calledWith('intentSecret');
+
+          expect(creditCardFactory.paymentMethods.tokenError).to.not.be.ok;
+
+          done();
+        });
+    });
+
+    it("should validate and not proceed if there are errors", function(done) {
+      stripeService.handleCardAction.returns(Q.resolve({error: "tokenError"}));
+
+      creditCardFactory.handleCardAction()
+        .then(null, function() {
+          // The original error message is overwritten by the catcher
+          expect(creditCardFactory.paymentMethods.tokenError).to.be.ok;
+
+          done();
+        });
+    });
+
+    it("should handle reject errors", function(done) {
+      stripeService.handleCardAction.returns(Q.reject({}));
+
+      creditCardFactory.handleCardAction()
+        .then(null, function() {
+          expect(creditCardFactory.paymentMethods.tokenError).to.contain("contact support@risevision.com");
+
+          done();
+        });
+    });
+
+  });
+
+  describe("confirmCardSetup: ", function() {
+    beforeEach(function() {
+      creditCardFactory.paymentMethods = {};
+    });
+
+    it("should authenticate card", function(done) {
+      creditCardFactory.confirmCardSetup('intentSecret')
+        .then(function() {
+          stripeService.confirmCardSetup.should.have.been.calledWith('intentSecret');
+
+          expect(creditCardFactory.paymentMethods.tokenError).to.not.be.ok;
+
+          done();
+        });
+    });
+
+    it("should validate and not proceed if there are errors", function(done) {
+      stripeService.confirmCardSetup.returns(Q.resolve({error: "tokenError"}));
+
+      creditCardFactory.confirmCardSetup()
+        .then(null, function() {
+          // The original error message is overwritten by the catcher
+          expect(creditCardFactory.paymentMethods.tokenError).to.be.ok;
+
+          done();
+        });
+    });
+
+    it("should handle reject errors", function(done) {
+      stripeService.confirmCardSetup.returns(Q.reject({}));
+
+      creditCardFactory.confirmCardSetup()
+        .then(null, function() {
+          expect(creditCardFactory.paymentMethods.tokenError).to.contain("contact support@risevision.com");
+
+          done();
+        });
     });
 
   });

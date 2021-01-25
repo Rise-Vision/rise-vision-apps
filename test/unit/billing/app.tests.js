@@ -94,7 +94,7 @@ describe('app:', function() {
       var state = $state.get('apps.billing.payment');
       expect(state).to.be.ok;
       expect(state.url).to.equal('/billing/payment/:subscriptionId');
-      expect(state.controller).to.equal('PaymentSourceCtrl');
+      expect(state.controller).to.equal('AddPaymentSourceCtrl');
     });
 
     it('should open page and load subscription', function(done) {

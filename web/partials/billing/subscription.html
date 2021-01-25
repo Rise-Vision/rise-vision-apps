@@ -74,6 +74,11 @@
               Invoice Me
             </label>
           </div>
+
+          <div class="align-left mt-3" ng-show="subscriptionFactory.isInvoiced()">
+            <edit-po-number item="subscriptionFactory.item.subscription" update-function="subscriptionFactory.changePoNumber()"></edit-po-number>
+          </div>
+
           <a id="addPaymentMethod" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.payment({subscriptionId: subscriptionFactory.getItemSubscription().id})">Add Payment Method</button>
         </div>
       </div>
