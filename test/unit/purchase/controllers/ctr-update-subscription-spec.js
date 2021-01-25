@@ -51,7 +51,7 @@ describe("controller: add-licenses", function() {
       $location = $injector.get("$location");
       redirectTo =  '/displays/list'
 
-      $controller("PurchaseLicensesCtrl", {
+      $controller("UpdateSubscriptionCtrl", {
         $scope: $scope,
         $loading: $loading,
         redirectTo: redirectTo
@@ -82,7 +82,7 @@ describe("controller: add-licenses", function() {
       subscriptionFactory.loading = true;
       $scope.$digest();
 
-      $loading.start.should.have.been.calledWith("purchase-licenses-loader");
+      $loading.start.should.have.been.calledWith("update-subscription-loader");
 
       subscriptionFactory.loading = false;
       $scope.$digest();

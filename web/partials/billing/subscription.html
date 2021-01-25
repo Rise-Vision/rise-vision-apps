@@ -47,13 +47,11 @@
           <p>On {{subscriptionFactory.getItemSubscription().current_term_end * 1000 | date:'d-MMM-yyyy'}}</p>
           <p><b>Billing Frequency:</b> {{subscriptionFactory.getItemSubscription().billing_period_unit === 'month' ? 'Monthly' : subscriptionFactory.getItemSubscription().billing_period === 1 ? 'Yearly' : subscriptionFactory.getItemSubscription().billing_period + ' Years'}}</p>
 
-          <span ng-show="false">
-            <button id="switchToAnnual" class="btn btn-default btn-block my-3" ng-click="switchToAnnual()" ng-show="subscriptionFactory.getItemSubscription().billing_period_unit === 'month'">Switch To Annual Billing (Save 10%)</button>
-            <p class="mb-0">
-              Need a copy of your next invoice in advance?<br>
-              <a class="madero-link u_clickable" ng-click="factory.selectNewCreditCard()">Click here.</a>
-            </p>
-          </span>
+          <a id="switchToAnnual" class="btn btn-default btn-block my-3" ui-sref="apps.purchase.annual({subscriptionId: subscriptionFactory.getItemSubscription().id})" ng-show="subscriptionFactory.getItemSubscription().billing_period_unit === 'month'">Switch To Annual Billing (Save 10%)</a>
+          <p class="mb-0" ng-show="false">
+            Need a copy of your next invoice in advance?<br>
+            <a class="madero-link u_clickable" ng-click="factory.requestInvoice()">Click here.</a>
+          </p>
         </div>
       </div>
     </div>

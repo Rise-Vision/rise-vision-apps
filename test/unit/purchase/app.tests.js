@@ -141,7 +141,7 @@ describe('app:', function() {
       expect(state).to.be.ok;
       expect(state.url).to.equal('/add/:subscriptionId');
       expect(state.params).to.deep.equal({purchaseAction: 'add'});
-      expect(state.controller).to.equal('PurchaseLicensesCtrl')
+      expect(state.controller).to.equal('UpdateSubscriptionCtrl')
     });
 
     it('should go to Purchase page if company is not subscribed to a plan', function(done) {
@@ -226,7 +226,7 @@ describe('app:', function() {
       expect(state).to.be.ok;
       expect(state.url).to.equal('/remove/:subscriptionId');
       expect(state.params).to.deep.equal({purchaseAction: 'remove'});
-      expect(state.controller).to.equal('PurchaseLicensesCtrl');
+      expect(state.controller).to.equal('UpdateSubscriptionCtrl');
     });
 
     it('should go to Purchase page if company is not subscribed to a plan', function(done) {

@@ -48,10 +48,12 @@ angular.module('risevision.apps')
             ]
           }
         })
+
         .state('apps.purchase.licenses', {
           url: '/licenses',
           abstract: true,
-          template: '<div ui-view></div>',
+          templateUrl: 'partials/purchase/update-subscription.html',
+          controller: 'UpdateSubscriptionCtrl',
           resolve: {
             canAccessApps: ['$q', '$state', 'canAccessApps', 'currentPlanFactory', 'messageBox',
               function ($q, $state, canAccessApps, currentPlanFactory, messageBox) {
@@ -79,35 +81,43 @@ angular.module('risevision.apps')
                     }
                   });
               }
+            ],
+            redirectTo: ['$location',
+              function ($location) {
+                return $location.path().indexOf('/licenses') !== 0 ? $location.path() : '';
+              }
             ]
           }
         })
         .state('apps.purchase.licenses.add', {
           url: '/add/:subscriptionId',
-          templateUrl: 'partials/purchase/add-licenses.html',
           params: {
             purchaseAction: 'add'
-          },
-          controller: 'PurchaseLicensesCtrl',
-          resolve: {
-            redirectTo: ['$location',
-              function ($location) {
-                return $location.path().indexOf('/licenses/add/') !== 0 ? $location.path() : '/';
-              }
-            ]
           }
         })
         .state('apps.purchase.licenses.remove', {
           url: '/remove/:subscriptionId',
-          templateUrl: 'partials/purchase/remove-licenses.html',
           params: {
             purchaseAction: 'remove'
+          }
+        })
+        
+        .state('apps.purchase.frequency', {
+          url: '/frequency/:subscriptionId',
+          templateUrl: 'partials/purchase/update-subscription.html',
+          controller: 'UpdateSubscriptionCtrl',
+          params: {
+            purchaseAction: 'annual'
           },
-          controller: 'PurchaseLicensesCtrl',
           resolve: {
+            canAccessApps: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
+              }
+            ],
             redirectTo: ['$location',
               function ($location) {
-                return $location.path().indexOf('/licenses/remove/') !== 0 ? $location.path() : '/';
+                return $location.path().indexOf('/frequency') !== 0 ? $location.path() : '';
               }
             ]
           }

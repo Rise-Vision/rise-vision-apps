@@ -7,7 +7,7 @@ var AddDisplayLicensesPage = function() {
 
   var url = homepage.getUrl() + 'licenses/add/';
 
-  var loader = element(by.xpath('//div[@spinner-key="purchase-licenses-loader"]'));
+  var loader = element(by.xpath('//div[@spinner-key="update-subscription-loader"]'));
   var purchaseLicensesPanel = element(by.css('.purchase-licenses-centered-panel'));
   var backButton = element(by.id('backButton'));
   var payButton = element(by.id('payButton'));

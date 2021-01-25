@@ -2,21 +2,22 @@
 
 angular.module('risevision.apps.purchase')
 
-  .controller('PurchaseLicensesCtrl', ['$scope', '$stateParams', '$loading',
+  .controller('UpdateSubscriptionCtrl', ['$scope', '$state', '$loading',
     'purchaseLicensesFactory', 'subscriptionFactory', '$location', 'redirectTo',
-    function ($scope, $stateParams, $loading, purchaseLicensesFactory,
+    function ($scope, $state, $loading, purchaseLicensesFactory,
       subscriptionFactory, $location, redirectTo) {
       $scope.factory = purchaseLicensesFactory;
       $scope.subscriptionFactory = subscriptionFactory;
       $scope.couponCode = null;
+      $scope.purchaseAction = $state.current.params.purchaseAction;
 
-      purchaseLicensesFactory.init($stateParams.purchaseAction);
+      purchaseLicensesFactory.init($scope.purchaseAction);
 
       $scope.$watchGroup(['factory.loading', 'subscriptionFactory.loading'], function (values) {
         if (values[0] || values[1]) {
-          $loading.start('purchase-licenses-loader');
+          $loading.start('update-subscription-loader');
         } else {
-          $loading.stop('purchase-licenses-loader');
+          $loading.stop('update-subscription-loader');
         }
       });
 
@@ -69,7 +70,13 @@ angular.module('risevision.apps.purchase')
       };
 
       $scope.close = function () {
-        $location.path(redirectTo);
+        if (redirectTo) {
+          $location.path(redirectTo);
+        } else {
+          $state.go('apps.billing.subscription', {
+            subscriptionId: $state.params.subscriptionId
+          });
+        }
       };
 
     }
