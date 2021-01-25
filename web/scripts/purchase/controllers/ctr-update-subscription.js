@@ -3,15 +3,15 @@
 angular.module('risevision.apps.purchase')
 
   .controller('UpdateSubscriptionCtrl', ['$scope', '$state', '$loading',
-    'purchaseLicensesFactory', 'subscriptionFactory', '$location', 'redirectTo',
-    function ($scope, $state, $loading, purchaseLicensesFactory,
+    'updateSubscriptionFactory', 'subscriptionFactory', '$location', 'redirectTo',
+    function ($scope, $state, $loading, updateSubscriptionFactory,
       subscriptionFactory, $location, redirectTo) {
-      $scope.factory = purchaseLicensesFactory;
+      $scope.factory = updateSubscriptionFactory;
       $scope.subscriptionFactory = subscriptionFactory;
       $scope.couponCode = null;
-      $scope.purchaseAction = $state.current.params.purchaseAction;
+      $scope.purchaseAction = $state.params.purchaseAction;
 
-      purchaseLicensesFactory.init($scope.purchaseAction);
+      updateSubscriptionFactory.init($scope.purchaseAction);
 
       $scope.$watchGroup(['factory.loading', 'subscriptionFactory.loading'], function (values) {
         if (values[0] || values[1]) {
@@ -58,7 +58,7 @@ angular.module('risevision.apps.purchase')
           return;
         }
 
-        return purchaseLicensesFactory.getEstimate();
+        return updateSubscriptionFactory.getEstimate();
       };
 
       $scope.completePayment = function () {
@@ -66,7 +66,7 @@ angular.module('risevision.apps.purchase')
           return;
         }
 
-        return purchaseLicensesFactory.completePayment();
+        return updateSubscriptionFactory.completePayment();
       };
 
       $scope.close = function () {

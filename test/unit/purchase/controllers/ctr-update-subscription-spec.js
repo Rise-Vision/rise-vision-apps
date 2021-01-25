@@ -17,7 +17,7 @@ describe("controller: add-licenses", function() {
     $provide.value("$stateParams", {
       purchaseAction: 'add'
     });
-    $provide.service("purchaseLicensesFactory", function() {
+    $provide.service("updateSubscriptionFactory", function() {
       return {
         completePayment: sandbox.stub().returns(Q.resolve()),
         init: sandbox.stub(),
@@ -35,7 +35,7 @@ describe("controller: add-licenses", function() {
     });
   }));
 
-  var sandbox, $scope, $state, $loading, validate, purchaseLicensesFactory,
+  var sandbox, $scope, $state, $loading, validate, updateSubscriptionFactory,
     subscriptionFactory, $location, redirectTo;
 
   beforeEach(function() {
@@ -46,7 +46,7 @@ describe("controller: add-licenses", function() {
       $scope = $rootScope.$new();
       $state = $injector.get("$state");
       $loading = $injector.get("$loading");
-      purchaseLicensesFactory = $injector.get("purchaseLicensesFactory");
+      updateSubscriptionFactory = $injector.get("updateSubscriptionFactory");
       subscriptionFactory = $injector.get("subscriptionFactory");
       $location = $injector.get("$location");
       redirectTo =  '/displays/list'
@@ -66,7 +66,7 @@ describe("controller: add-licenses", function() {
   });
 
   it("should initialize",function() {
-    expect($scope.factory).to.equal(purchaseLicensesFactory);
+    expect($scope.factory).to.equal(updateSubscriptionFactory);
 
     expect($scope.applyCouponCode).to.be.a("function");
     expect($scope.clearCouponCode).to.be.a("function");
@@ -74,7 +74,7 @@ describe("controller: add-licenses", function() {
     expect($scope.completePayment).to.be.a("function");
     expect($scope.close).to.be.a("function");
 
-    purchaseLicensesFactory.init.should.have.been.called;
+    updateSubscriptionFactory.init.should.have.been.called;
   });
 
   describe("$loading spinner: ", function() {
@@ -89,12 +89,12 @@ describe("controller: add-licenses", function() {
 
       $loading.stop.should.have.been.calledTwice;
 
-      purchaseLicensesFactory.loading = true;
+      updateSubscriptionFactory.loading = true;
       $scope.$digest();
 
       $loading.start.should.have.been.calledTwice;
 
-      purchaseLicensesFactory.loading = false;
+      updateSubscriptionFactory.loading = false;
       $scope.$digest();
 
       $loading.stop.should.have.been.calledThrice;
@@ -105,7 +105,7 @@ describe("controller: add-licenses", function() {
     it("should not get estimate if there's no coupon code", function() {
       $scope.applyCouponCode();
 
-      purchaseLicensesFactory.getEstimate.should.not.have.been.called;
+      updateSubscriptionFactory.getEstimate.should.not.have.been.called;
     });
 
     it("should not get estimate if form is not valid", function() {
@@ -115,7 +115,7 @@ describe("controller: add-licenses", function() {
 
       $scope.applyCouponCode();
 
-      purchaseLicensesFactory.getEstimate.should.not.have.been.called;
+      updateSubscriptionFactory.getEstimate.should.not.have.been.called;
     });
 
     it("should not get estimate if coupon code is not set", function() {
@@ -124,7 +124,7 @@ describe("controller: add-licenses", function() {
 
       $scope.applyCouponCode();
 
-      purchaseLicensesFactory.getEstimate.should.not.have.been.called;
+      updateSubscriptionFactory.getEstimate.should.not.have.been.called;
     });
 
     it("should get estimate and unset addCoupon flag if there's no API error", function(done) {
@@ -133,7 +133,7 @@ describe("controller: add-licenses", function() {
 
       $scope.applyCouponCode();
 
-      purchaseLicensesFactory.getEstimate.should.have.been.called;
+      updateSubscriptionFactory.getEstimate.should.have.been.called;
 
       setTimeout(function() {
         expect($scope.factory.purchase.couponCode).to.equal('SAVE50');
@@ -150,7 +150,7 @@ describe("controller: add-licenses", function() {
 
       $scope.applyCouponCode();
 
-      purchaseLicensesFactory.getEstimate.should.have.been.called;
+      updateSubscriptionFactory.getEstimate.should.have.been.called;
 
       setTimeout(function() {
         expect($scope.factory.purchase.couponCode).to.equal('SAVE50');
@@ -171,7 +171,7 @@ describe("controller: add-licenses", function() {
       expect($scope.addCoupon).to.be.false;
       expect($scope.couponCode).to.be.null;
       expect($scope.factory.purchase.couponCode).to.be.null;
-      purchaseLicensesFactory.getEstimate.should.not.have.been.called;
+      updateSubscriptionFactory.getEstimate.should.not.have.been.called;
     });
 
     it("should clear coupon code and estimate if there's API error", function() {
@@ -184,7 +184,7 @@ describe("controller: add-licenses", function() {
       expect($scope.addCoupon).to.be.false;
       expect($scope.couponCode).to.be.null;
       expect($scope.factory.purchase.couponCode).to.be.null;
-      purchaseLicensesFactory.getEstimate.should.have.been.called;
+      updateSubscriptionFactory.getEstimate.should.have.been.called;
     });
   });
 
@@ -196,7 +196,7 @@ describe("controller: add-licenses", function() {
 
       $scope.getEstimate();
 
-      purchaseLicensesFactory.getEstimate.should.have.been.called;
+      updateSubscriptionFactory.getEstimate.should.have.been.called;
     });
 
     it("should not get estimate if form is not valid", function() {
@@ -206,7 +206,7 @@ describe("controller: add-licenses", function() {
 
       $scope.getEstimate();
 
-      purchaseLicensesFactory.getEstimate.should.not.have.been.called;
+      updateSubscriptionFactory.getEstimate.should.not.have.been.called;
     });
   });
 
@@ -219,7 +219,7 @@ describe("controller: add-licenses", function() {
 
       $scope.completePayment();
 
-      purchaseLicensesFactory.completePayment.should.have.been.called;
+      updateSubscriptionFactory.completePayment.should.have.been.called;
     });
 
     it("should not complete payment if form is not valid", function() {
@@ -229,7 +229,7 @@ describe("controller: add-licenses", function() {
 
       $scope.completePayment();
 
-      purchaseLicensesFactory.completePayment.should.not.have.been.called;
+      updateSubscriptionFactory.completePayment.should.not.have.been.called;
     });
   });
 

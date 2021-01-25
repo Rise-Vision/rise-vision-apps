@@ -5,7 +5,7 @@
   'use strict';
 
   angular.module('risevision.apps.purchase')
-    .factory('purchaseLicensesFactory', ['$log', '$timeout', '$stateParams',
+    .factory('updateSubscriptionFactory', ['$log', '$timeout', '$stateParams',
       'userState', 'currentPlanFactory', 'storeService', 'analyticsFactory',
       'pricingFactory', 'subscriptionFactory',
       function ($log, $timeout, $stateParams, userState, currentPlanFactory,
@@ -23,17 +23,22 @@
         factory.init = function (purchaseAction) {
           _clearMessages();
 
-          var isRemove = purchaseAction === 'remove';
-
           factory.purchase = {};
           factory.purchase.completed = false;
-          factory.purchase.licensesToAdd = isRemove ? 0 : $stateParams.displayCount;
-          factory.purchase.licensesToRemove = isRemove ? $stateParams.displayCount : 0;
+          factory.purchase.licensesToAdd = purchaseAction === 'add' ? $stateParams.displayCount : 0;
+          factory.purchase.licensesToRemove = purchaseAction === 'remove' ? $stateParams.displayCount : 0;
           factory.purchase.couponCode = '';
           factory.subscriptionId = $stateParams.subscriptionId ||
             currentPlanFactory.currentPlan.subscriptionId;
 
           subscriptionFactory.getSubscription(factory.subscriptionId).then(function() {
+            // factory.purchase.planId = subscriptionFactory.getItemSubscription().plan_id;
+
+            // if (factory.purchase.planId && purchaseAction === 'annual') {
+            if (subscriptionFactory.getItemSubscription().plan_id && purchaseAction === 'annual') {
+              factory.purchase.planId = subscriptionFactory.getItemSubscription().plan_id.replace('1m', '1y');
+            }
+
             factory.getEstimate();
           });
         };
@@ -100,8 +105,9 @@
           var displayCount = factory.getTotalDisplayCount();
           var subscriptionId = factory.subscriptionId;
           var companyId = _getCompanyId();
+          var planId = factory.purchase.planId;
 
-          return storeService.estimateSubscriptionUpdate(displayCount, subscriptionId, companyId, couponCode)
+          return storeService.estimateSubscriptionUpdate(displayCount, subscriptionId, planId, companyId, couponCode)
             .then(function (result) {
               factory.estimate = result.item;
 

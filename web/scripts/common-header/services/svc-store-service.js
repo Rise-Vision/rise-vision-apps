@@ -255,13 +255,14 @@
             });
             return deferred.promise;
           },
-          estimateSubscriptionUpdate: function (displayCount, subscriptionId, companyId, couponCode) {
+          estimateSubscriptionUpdate: function (displayCount, subscriptionId, planId, companyId, couponCode) {
             var deferred = $q.defer();
 
             var obj = {
               displayCount: displayCount,
               subscriptionId: subscriptionId,
               companyId: companyId,
+              planId: planId,
               couponCode: couponCode
             };
 
