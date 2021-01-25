@@ -291,9 +291,9 @@ describe("controller: purchase", function() {
 
     describe('validatePaymentMethod:', function() {
       it("should validate and proceed", function(done) {
-        $scope.completeCardPayment('cardElement');
+        $scope.completeCardPayment();
 
-        purchaseFactory.validatePaymentMethod.should.have.been.calledWith('cardElement');
+        purchaseFactory.validatePaymentMethod.should.have.been.calledWith();
 
         setTimeout(function() {
           purchaseFactory.preparePaymentIntent.should.have.been.called;
@@ -324,7 +324,7 @@ describe("controller: purchase", function() {
 
     describe('preparePaymentIntent:', function() {
       it("should prepare intent and proceed", function(done) {
-        $scope.completeCardPayment('cardElement');
+        $scope.completeCardPayment();
 
         setTimeout(function() {
           purchaseFactory.preparePaymentIntent.should.have.been.called;

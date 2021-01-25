@@ -52,8 +52,8 @@ angular.module('risevision.apps')
 
         .state('apps.billing.payment', {
           url: '/billing/payment/:subscriptionId',
-          templateUrl: 'partials/billing/payment-source.html',
-          controller: 'PaymentSourceCtrl',
+          templateUrl: 'partials/billing/add-payment-source.html',
+          controller: 'AddPaymentSourceCtrl',
           resolve: {
             invoiceInfo: ['canAccessApps', 'subscriptionFactory', '$stateParams',
               function (canAccessApps, subscriptionFactory, $stateParams) {

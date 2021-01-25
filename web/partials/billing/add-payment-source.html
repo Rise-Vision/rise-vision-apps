@@ -10,14 +10,14 @@
     <strong>{{subscriptionFactory.apiError}}</strong>
   </div>
 
-  <div id="errorBox" ng-show="creditCardFactory.apiError" class="madero-style alert alert-danger" role="alert">
-    <strong>{{creditCardFactory.apiError}}</strong>
+  <div id="errorBox" ng-show="addPaymentSourceFactory.apiError" class="madero-style alert alert-danger" role="alert">
+    <strong>{{addPaymentSourceFactory.apiError}}</strong>
   </div>
 
   <h4 class="mb-4">Payment Method</h4>
 
   <form id="form.paymentMethodsForm" role="form" name="form.paymentMethodsForm" novalidate>
-    <payment-method-form form-object="form.paymentMethodsForm" show-invoice-option="subscriptionFactory.item.subscription.billing_period_unit !== 'month'" contact-email="contactEmail"></payment-method-form>
+    <payment-method-form form-object="form.paymentMethodsForm" show-invoice-option="subscriptionFactory.item.subscription.billing_period_unit !== 'month' && !subscriptionFactory.isInvoiced()" contact-email="contactEmail"></payment-method-form>
   </form>
 
   <div class="button-row text-right mt-5">

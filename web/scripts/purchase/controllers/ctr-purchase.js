@@ -84,12 +84,12 @@ angular.module('risevision.apps.purchase')
           });
       };
 
-      $scope.completeCardPayment = function (element) {
+      $scope.completeCardPayment = function () {
         if (!_isFormValid()) {
           return;
         }
 
-        purchaseFactory.validatePaymentMethod(element)
+        purchaseFactory.validatePaymentMethod()
           .then(purchaseFactory.preparePaymentIntent)
           .then($scope.completePayment);
       };

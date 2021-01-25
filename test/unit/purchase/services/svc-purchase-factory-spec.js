@@ -81,7 +81,7 @@ describe("Services: purchase factory", function() {
     $provide.value("creditCardFactory", {
       initPaymentMethods: sinon.stub().returns(Q.resolve()),
       validatePaymentMethod: sinon.stub().returns(Q.resolve({})),
-      authenticate3ds: sinon.stub().returns(Q.resolve()),
+      handleCardAction: sinon.stub().returns(Q.resolve()),
       paymentMethods: {
         newCreditCard: {}
       },
@@ -481,7 +481,7 @@ describe("Services: purchase factory", function() {
         .then(function() {
           expect(purchaseFactory.loading).to.be.false;
 
-          creditCardFactory.authenticate3ds.should.not.have.been.called;
+          creditCardFactory.handleCardAction.should.not.have.been.called;
 
           expect(creditCardFactory.paymentMethods.intentResponse).to.equal('intentResponse');
 
@@ -513,8 +513,8 @@ describe("Services: purchase factory", function() {
         });
     });
 
-    describe('authenticate3ds:', function() {
-      it('should authenticate3ds if authentication is required', function(done) {
+    describe('handleCardAction:', function() {
+      it('should handleCardAction if authentication is required', function(done) {
         storeService.preparePurchase.returns(Q.resolve({
           authenticationRequired: true,
           intentSecret: 'intentSecret'
@@ -522,18 +522,18 @@ describe("Services: purchase factory", function() {
 
         purchaseFactory.preparePaymentIntent()
           .then(function() {
-            creditCardFactory.authenticate3ds.should.have.been.calledWith('intentSecret');
+            creditCardFactory.handleCardAction.should.have.been.calledWith('intentSecret');
 
             done();
           });
       });
 
-      it('should handle failure to authenticate3ds', function(done) {
+      it('should handle failure to handleCardAction', function(done) {
         storeService.preparePurchase.returns(Q.resolve({
           authenticationRequired: true,
           intentSecret: 'intentSecret'
         }));
-        creditCardFactory.authenticate3ds.returns(Q.reject({message: 'error'}));
+        creditCardFactory.handleCardAction.returns(Q.reject({message: 'error'}));
 
         purchaseFactory.preparePaymentIntent()
           .catch(function() {

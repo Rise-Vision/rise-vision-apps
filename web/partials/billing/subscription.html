@@ -15,9 +15,9 @@
   </div>
 
   <h4 class="mb-4">
-    {{subscriptionFactory.item.subscription | subscriptionDescription}} — 
-    <span class="u_capitalize" ng-class="{ 'text-success': subscriptionFactory.item.subscription.status === 'active', 'text-danger': subscriptionFactory.item.subscription.status === 'suspended' || subscriptionFactory.item.subscription.status === 'cancelled' }">
-      {{subscriptionFactory.item.subscription.status}}
+    {{subscriptionFactory.getItemSubscription() | subscriptionDescription}} — 
+    <span class="u_capitalize" ng-class="{ 'text-success': subscriptionFactory.getItemSubscription().status === 'active', 'text-danger': subscriptionFactory.getItemSubscription().status === 'suspended' || subscriptionFactory.getItemSubscription().status === 'cancelled' }">
+      {{subscriptionFactory.getItemSubscription().status}}
     </span>
   </h4>
 
@@ -25,14 +25,14 @@
     <div class="col-md-4 col-xs-12">
       <div class="border-container subscription-card">
         <div class="panel-body">
-          <label>{{getPlanName(subscriptionFactory.item.subscription)}}</label>
-          <h1 ng-show="isVolumePlan(subscriptionFactory.item.subscription)">{{subscriptionFactory.item.subscription.plan_quantity}}</h1>
+          <label>{{getPlanName(subscriptionFactory.getItemSubscription())}}</label>
+          <h1 ng-show="isVolumePlan(subscriptionFactory.getItemSubscription())">{{subscriptionFactory.getItemSubscription().plan_quantity}}</h1>
 
-          <div ng-show="subscriptionFactory.item.subscription.status === 'active'">
-            <span ng-show="isDisplayLicensePlan(subscriptionFactory.item.subscription)">
-              <a id="addLicenses" class="btn btn-default btn-block" ui-sref="apps.purchase.licenses.add({subscriptionId: subscriptionFactory.item.subscription.id})">Add Display Licenses</a>
-              <a id="removeLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.purchase.licenses.remove({subscriptionId: subscriptionFactory.item.subscription.id})">Remove Display Licenses</a>
-              <a id="manageLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.licenses.manage({subscriptionId: subscriptionFactory.item.subscription.id})" ng-if="false">Manage Network Licenses</a>
+          <div ng-show="subscriptionFactory.getItemSubscription().status === 'active'">
+            <span ng-show="isDisplayLicensePlan(subscriptionFactory.getItemSubscription())">
+              <a id="addLicenses" class="btn btn-default btn-block" ui-sref="apps.purchase.licenses.add({subscriptionId: subscriptionFactory.getItemSubscription().id})">Add Display Licenses</a>
+              <a id="removeLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.purchase.licenses.remove({subscriptionId: subscriptionFactory.getItemSubscription().id})">Remove Display Licenses</a>
+              <a id="manageLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.licenses.manage({subscriptionId: subscriptionFactory.getItemSubscription().id})" ng-if="false">Manage Network Licenses</a>
             </span>
           </div>
         </div>
@@ -41,14 +41,14 @@
     <div class="col-md-4 col-xs-12">
       <div class="border-container subscription-card">
         <div class="panel-body">
-          <label ng-show="isInvoiced()">Next Invoice</label>
-          <label ng-show="!isInvoiced()">Next Payment</label>
-          <h1>${{subscriptionFactory.item.subscription.plan_amount / 100 | number:2}}</h1>
-          <p>On {{subscriptionFactory.item.subscription.current_term_end * 1000 | date:'d-MMM-yyyy'}}</p>
-          <p><b>Billing Frequency:</b> {{subscriptionFactory.item.subscription.billing_period_unit === 'month' ? 'Monthly' : subscriptionFactory.item.subscription.billing_period === 1 ? 'Yearly' : subscriptionFactory.item.subscription.billing_period + ' Years'}}</p>
+          <label ng-show="subscriptionFactory.isInvoiced()">Next Invoice</label>
+          <label ng-show="!subscriptionFactory.isInvoiced()">Next Payment</label>
+          <h1>${{subscriptionFactory.getItemSubscription().plan_amount / 100 | number:2}}</h1>
+          <p>On {{subscriptionFactory.getItemSubscription().current_term_end * 1000 | date:'d-MMM-yyyy'}}</p>
+          <p><b>Billing Frequency:</b> {{subscriptionFactory.getItemSubscription().billing_period_unit === 'month' ? 'Monthly' : subscriptionFactory.getItemSubscription().billing_period === 1 ? 'Yearly' : subscriptionFactory.getItemSubscription().billing_period + ' Years'}}</p>
 
           <span ng-show="false">
-            <button id="switchToAnnual" class="btn btn-default btn-block my-3" ng-click="switchToAnnual()" ng-show="subscriptionFactory.item.subscription.billing_period_unit === 'month'">Switch To Annual Billing (Save 10%)</button>
+            <button id="switchToAnnual" class="btn btn-default btn-block my-3" ng-click="switchToAnnual()" ng-show="subscriptionFactory.getItemSubscription().billing_period_unit === 'month'">Switch To Annual Billing (Save 10%)</button>
             <p class="mb-0">
               Need a copy of your next invoice in advance?<br>
               <a class="madero-link u_clickable" ng-click="factory.selectNewCreditCard()">Click here.</a>
@@ -62,19 +62,24 @@
         <div class="panel-body">
           <label class="mb-3">Payment Method</label>
           <div class="madero-radio align-left" ng-repeat="card in paymentSourcesFactory.existingCreditCards">
-            <input type="radio" ng-click="subscriptionFactory.changePaymentMethod($event, subscriptionFactory.item.subscription, card)" ng-model="subscriptionFactory.item.subscription.payment_source_id" ng-value="card.payment_source.id" name="{{card.payment_source.id}}" id="{{card.payment_source.id}}" tabindex="1">
+            <input type="radio" ng-click="subscriptionFactory.changePaymentMethod($event, card)" ng-model="subscriptionFactory.item.paymentSourceId" ng-value="card.payment_source.id" name="{{card.payment_source.id}}" id="{{card.payment_source.id}}" tabindex="1">
             <label for="{{card.payment_source.id}}">
               {{card.payment_source.card | cardDescription}}
-              <span class="pull-right"><a class="madero-link u_clickable text-danger" ng-click="paymentSourcesFactory.removePaymentMethod(card)" ng-show="subscriptionFactory.item.subscription.payment_source_id !== card.payment_source.id">Remove</a></span>
+              <span class="pull-right"><a class="madero-link u_clickable text-danger" ng-click="paymentSourcesFactory.removePaymentMethod(card)" ng-show="subscriptionFactory.getItemSubscription().payment_source_id !== card.payment_source.id">Remove</a></span>
             </label>
           </div>
-          <div class="madero-radio align-left" ng-show="isInvoiced()">
-            <input type="radio" ng-change="setPaymentMethod()" ng-model="invoiceMe" ng-value="isInvoiced()" name="invoiceMe" id="invoiceMe" tabindex="1">
+          <div class="madero-radio align-left" ng-show="subscriptionFactory.isInvoiced()">
+            <input type="radio" ng-change="setPaymentMethod()" ng-model="subscriptionFactory.item.paymentSourceId" value="invoice" name="invoiceMe" id="invoiceMe" tabindex="1">
             <label for="invoiceMe">
               Invoice Me
             </label>
           </div>
-          <a id="addPaymentMethod" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.payment({subscriptionId: subscriptionFactory.item.subscription.id})">Add Payment Method</button>
+
+          <div class="align-left mt-3" ng-show="subscriptionFactory.isInvoiced()">
+            <edit-po-number item="subscriptionFactory.item.subscription" update-function="subscriptionFactory.changePoNumber()"></edit-po-number>
+          </div>
+
+          <a id="addPaymentMethod" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.payment({subscriptionId: subscriptionFactory.getItemSubscription().id})">Add Payment Method</button>
         </div>
       </div>
     </div>
@@ -88,12 +93,12 @@
           <span class="pull-right"><a class="madero-link u_clickable" ng-click="companySettingsFactory.openCompanySettings()">Edit</a></span>
 
           <div class="align-left">
-            <div class="row mb-3" ng-show="subscriptionFactory.item.customer.billing_address.first_name || subscriptionFactory.item.customer.billing_address.last_name">
+            <div class="row mb-3" ng-show="subscriptionFactory.getItemCustomer().billing_address.first_name || subscriptionFactory.getItemCustomer().billing_address.last_name">
               <div class="col-md-3">
                 <label class="mb-0">Name:</label>
               </div>
               <div class="col-md-9">
-                {{subscriptionFactory.item.customer.billing_address.first_name}} {{subscriptionFactory.item.customer.billing_address.last_name}}
+                {{subscriptionFactory.getItemCustomer().billing_address.first_name}} {{subscriptionFactory.getItemCustomer().billing_address.last_name}}
               </div>
             </div>
             <div class="row mb-3">
@@ -131,9 +136,9 @@
       <div class="border-container subscription-card">
         <div class="panel-body">
           <label class="mb-3">Tax Exemption</label>
-          <p ng-show="subscriptionFactory.item.customer.taxability !== 'taxable' || taxExemptionFactory.taxExemption.sent">Tax exemption applied.</p>
+          <p ng-show="subscriptionFactory.getItemCustomer().taxability !== 'taxable' || taxExemptionFactory.taxExemption.sent">Tax exemption applied.</p>
 
-          <button id="addTaxExemption" class="btn btn-default btn-block" ng-click="taxExemptionFactory.taxExemption.show = true" ng-show="subscriptionFactory.item.customer.taxability === 'taxable' && !taxExemptionFactory.taxExemption.show">I'm Tax Exempt</button>
+          <button id="addTaxExemption" class="btn btn-default btn-block" ng-click="taxExemptionFactory.taxExemption.show = true" ng-show="subscriptionFactory.getItemCustomer().taxability === 'taxable' && !taxExemptionFactory.taxExemption.show">I'm Tax Exempt</button>
           <tax-exemption class="align-left" show-cancel="true"></tax-exemption>
         </div>
       </div>
