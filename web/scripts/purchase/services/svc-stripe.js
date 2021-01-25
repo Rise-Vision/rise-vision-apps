@@ -12,9 +12,15 @@ angular.module('risevision.apps.purchase')
         });
       };
 
-      this.authenticate3ds = function (secret) {
+      this.handleCardAction = function (clientSecret) {
         return stripeLoader().then(function (stripeClient) {
-          return stripeClient.handleCardAction(secret);
+          return stripeClient.handleCardAction(clientSecret);
+        });
+      };
+
+      this.confirmCardSetup = function (clientSecret) {
+        return stripeLoader().then(function (stripeClient) {
+          return stripeClient.confirmCardSetup(clientSecret);
         });
       };
 

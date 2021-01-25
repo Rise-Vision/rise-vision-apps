@@ -30,7 +30,7 @@ describe('service: addPaymentSourceFactory:', function() {
     $provide.value("creditCardFactory", {
       initPaymentMethods: sinon.stub().returns(Q.resolve()),
       validatePaymentMethod: sinon.stub().returns(Q.resolve({})),
-      authenticate3ds: sinon.stub().returns(Q.resolve()),
+      confirmCardSetup: sinon.stub().returns(Q.resolve()),
       paymentMethods: {
         newCreditCard: {}
       },
@@ -165,7 +165,7 @@ describe('service: addPaymentSourceFactory:', function() {
         addPaymentSourceFactory.changePaymentSource()
           .then(function() {
             billing.preparePaymentSource.should.have.been.calledWith('paymentMethodId');
-            creditCardFactory.authenticate3ds.should.not.have.been.called;
+            creditCardFactory.confirmCardSetup.should.not.have.been.called;
 
             expect(creditCardFactory.paymentMethods.intentResponse).to.equal('intentResponse');
 
@@ -187,8 +187,8 @@ describe('service: addPaymentSourceFactory:', function() {
           });
       });
 
-      describe('authenticate3ds:', function() {
-        it('should authenticate3ds if authentication is required', function(done) {
+      describe('confirmCardSetup:', function() {
+        it('should confirmCardSetup if authentication is required', function(done) {
           billing.preparePaymentSource.returns(Q.resolve({
             authenticationRequired: true,
             intentSecret: 'intentSecret'
@@ -196,18 +196,18 @@ describe('service: addPaymentSourceFactory:', function() {
 
           addPaymentSourceFactory.changePaymentSource()
             .then(function() {
-              creditCardFactory.authenticate3ds.should.have.been.calledWith('intentSecret');
+              creditCardFactory.confirmCardSetup.should.have.been.calledWith('intentSecret');
 
               done();
             });
         });
 
-        it('should handle failure to authenticate3ds', function(done) {
+        it('should handle failure to confirmCardSetup', function(done) {
           billing.preparePaymentSource.returns(Q.resolve({
             authenticationRequired: true,
             intentSecret: 'intentSecret'
           }));
-          creditCardFactory.authenticate3ds.returns(Q.reject('error'));
+          creditCardFactory.confirmCardSetup.returns(Q.reject('error'));
 
           addPaymentSourceFactory.changePaymentSource()
             .catch(function() {

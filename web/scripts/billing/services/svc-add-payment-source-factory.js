@@ -47,7 +47,7 @@ angular.module('risevision.apps.billing.services')
             creditCardFactory.paymentMethods.intentResponse = response;
 
             if (response.authenticationRequired) {
-              return creditCardFactory.authenticate3ds(response.intentSecret);
+              return creditCardFactory.confirmCardSetup(response.intentSecret);
             } else {
               return $q.resolve();
             }

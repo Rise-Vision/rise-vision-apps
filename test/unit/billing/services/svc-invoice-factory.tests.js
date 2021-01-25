@@ -34,7 +34,7 @@ describe('service: invoiceFactory:', function() {
         initPaymentMethods: sinon.stub(),
         getPaymentMethodId: sinon.stub().returns('paymentMethodId'),
         validatePaymentMethod: sinon.stub().returns(Q.resolve()),
-        authenticate3ds: sinon.stub().returns(Q.resolve({item: 'invoice'})),
+        handleCardAction: sinon.stub().returns(Q.resolve({item: 'invoice'})),
         paymentMethods: {}
       };
     });
@@ -333,12 +333,12 @@ describe('service: invoiceFactory:', function() {
         }, 10);
       });
 
-      describe('authenticate3ds:', function() {
+      describe('handleCardAction:', function() {
         it('should not authenticate if its not needed', function(done) {
           invoiceFactory.payInvoice();
 
           setTimeout(function() {
-            creditCardFactory.authenticate3ds.should.not.have.been.called;
+            creditCardFactory.handleCardAction.should.not.have.been.called;
 
             done();
           }, 10);
@@ -353,7 +353,7 @@ describe('service: invoiceFactory:', function() {
           invoiceFactory.payInvoice();
 
           setTimeout(function() {
-            creditCardFactory.authenticate3ds.should.have.been.calledWith('intentSecret');
+            creditCardFactory.handleCardAction.should.have.been.calledWith('intentSecret');
 
             expect(invoiceFactory.invoice.status).to.equal('paid');
 
@@ -366,7 +366,7 @@ describe('service: invoiceFactory:', function() {
             authenticationRequired: true,
             intentSecret: 'intentSecret'
           }));
-          creditCardFactory.authenticate3ds.returns(Q.reject('error'));
+          creditCardFactory.handleCardAction.returns(Q.reject('error'));
 
           invoiceFactory.payInvoice();
 
