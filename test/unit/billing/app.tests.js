@@ -88,6 +88,28 @@ describe('app:', function() {
 
   });
 
+  describe('state apps.billing.payment:',function(){
+
+    it('should register state',function(){
+      var state = $state.get('apps.billing.payment');
+      expect(state).to.be.ok;
+      expect(state.url).to.equal('/billing/payment/:subscriptionId');
+      expect(state.controller).to.equal('AddPaymentSourceCtrl');
+    });
+
+    it('should open page and load subscription', function(done) {
+      $stateParams.subscriptionId = 'subscriptionId';
+      $state.get('apps.billing.payment').resolve.invoiceInfo[3](canAccessApps, subscriptionFactory, $stateParams);
+      setTimeout(function() {
+        canAccessApps.should.have.been.called.once;
+        subscriptionFactory.getSubscription.should.have.been.calledWith('subscriptionId');
+
+        done();
+      }, 10);
+    });
+
+  });
+
   describe('state apps.billing.unpaid:',function(){
 
     it('should register state',function(){

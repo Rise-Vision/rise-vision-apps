@@ -50,6 +50,21 @@ angular.module('risevision.apps')
           }
         })
 
+        .state('apps.billing.payment', {
+          url: '/billing/payment/:subscriptionId',
+          templateUrl: 'partials/billing/add-payment-source.html',
+          controller: 'AddPaymentSourceCtrl',
+          resolve: {
+            invoiceInfo: ['canAccessApps', 'subscriptionFactory', '$stateParams',
+              function (canAccessApps, subscriptionFactory, $stateParams) {
+                return canAccessApps().then(function () {
+                  subscriptionFactory.getSubscription($stateParams.subscriptionId);
+                });
+              }
+            ]
+          }
+        })
+
         .state('apps.billing.invoice', {
           url: '/billing/invoice/:invoiceId?:token',
           templateUrl: 'partials/billing/invoice.html',

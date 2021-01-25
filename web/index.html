@@ -331,18 +331,20 @@
   <!-- billing -->
   <script src="scripts/billing/app.js"></script>
 
-  <script src="scripts/billing/services/svc-chargebee-factory.js"></script>
   <script src="scripts/billing/services/svc-billing.js"></script>
   <script src="scripts/billing/services/svc-subscription-factory.js"></script>
+  <script src="scripts/billing/services/svc-add-payment-source-factory.js"></script>
   <script src="scripts/billing/services/svc-invoice-factory.js"></script>
 
   <script src="scripts/billing/directives/dtv-share-url-button.js"></script>
-  
+  <script src="scripts/billing/directives/dtv-edit-po-number.js"></script>
+
   <script src="scripts/billing/filters/ftr-subscription-description.js"></script>
 
   <script src="scripts/billing/controllers/ctr-billing.js"></script>
   <script src="scripts/billing/controllers/ctr-unpaid-invoices.js"></script>
   <script src="scripts/billing/controllers/ctr-subscription.js"></script>
+  <script src="scripts/billing/controllers/ctr-add-payment-source.js"></script>
   <script src="scripts/billing/controllers/ctr-invoice.js"></script>
   <script src="scripts/billing/controllers/ctr-share-url.js"></script>
 
@@ -354,6 +356,7 @@
   <script src="scripts/purchase/directives/dtv-billing-address.js"></script>
   <script src="scripts/purchase/directives/dtv-checkout-success.js"></script>
   <script src="scripts/purchase/directives/dtv-payment-methods.js"></script>
+  <script src="scripts/purchase/directives/dtv-payment-method-form.js"></script>
   <script src="scripts/purchase/directives/dtv-credit-card-form.js"></script>
   <script src="scripts/purchase/directives/dtv-plan-picker.js"></script>
   <script src="scripts/purchase/directives/dtv-province-validator.js"></script>
@@ -610,7 +613,6 @@
   <!-- endbuild -->
 
   <!-- external libraries -->
-  <script src="https://js.chargebee.com/v2/chargebee.js" async></script>
   <script src="https://js.stripe.com/v3/" async></script>
 </body>
 </html>

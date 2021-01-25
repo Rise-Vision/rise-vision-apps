@@ -83,7 +83,6 @@ describe('controller: SubscriptionCtrl', function () {
     expect($scope.taxExemptionFactory).to.equal(taxExemptionFactory);
     expect($scope.company).to.be.ok;
 
-    expect($scope.isInvoiced).to.be.a('function');
     expect($scope.isDisplayLicensePlan).to.be.a('function');
     expect($scope.isVolumePlan).to.be.a('function');
     expect($scope.getPlanName).to.be.a('function');
@@ -131,89 +130,6 @@ describe('controller: SubscriptionCtrl', function () {
       $scope.$digest();
 
       $loading.stop.should.have.been.calledTwice;
-    });
-
-  });
-
-  describe('isInvoiced:', function() {
-    it('should handle null values', function() {
-      expect($scope.isInvoiced()).to.be.false;
-
-      subscriptionFactory.item = {};
-      expect($scope.isInvoiced()).to.be.false;
-    });
-
-    describe('subscription check:', function() {
-      it('should check subscription auto_collection on', function() {
-        subscriptionFactory.item = {
-          subscription: {
-            auto_collection: 'on'
-          }
-        };
-
-        expect($scope.isInvoiced()).to.be.false;
-      });
-
-      it('should check subscription auto_collection off', function() {
-        subscriptionFactory.item = {
-          subscription: {
-            auto_collection: 'off'
-          }
-        };
-
-        expect($scope.isInvoiced()).to.be.true;
-      });
-
-      it('should check subscription auto_collection undefined', function() {
-        subscriptionFactory.item = {
-          subscription: {}
-        };
-
-        expect($scope.isInvoiced()).to.be.false;
-      });
-    });
-
-    describe('customer check:', function() {
-      it('should check subscription auto_collection on', function() {
-        subscriptionFactory.item = {
-          customer: {
-            auto_collection: 'on'
-          }
-        };
-
-        expect($scope.isInvoiced()).to.be.false;
-      });
-
-      it('should check subscription auto_collection off', function() {
-        subscriptionFactory.item = {
-          customer: {
-            auto_collection: 'off'
-          }
-        };
-
-        expect($scope.isInvoiced()).to.be.true;
-      });
-
-      it('should check subscription auto_collection undefined', function() {
-        subscriptionFactory.item = {
-          customer: {}
-        };
-
-        expect($scope.isInvoiced()).to.be.false;
-      });
-    });
-
-    it('should use subscription value', function() {
-      subscriptionFactory.item = {
-        subscription: {
-          auto_collection: 'off'
-        },
-        customer: {
-          auto_collection: 'on'
-        }
-      };
-
-      expect($scope.isInvoiced()).to.be.true;
     });
 
   });

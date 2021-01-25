@@ -15,7 +15,6 @@ describe('controller: InvoiceCtrl', function () {
 
     $provide.value('invoiceFactory', {
       payInvoice: sandbox.spy(),
-      updateInvoice: sandbox.stub().returns(Q.resolve()),
       invoice: {}
     });
 
@@ -46,8 +45,6 @@ describe('controller: InvoiceCtrl', function () {
     expect($scope.invoiceFactory).to.be.ok;
 
     expect($scope.completeCardPayment).to.be.a('function');
-    expect($scope.updatePoNumber).to.be.a('function');
-    expect($scope.hideEditForm).to.be.a('function');
   });
   
   describe('$loading: ', function() {
@@ -80,50 +77,6 @@ describe('controller: InvoiceCtrl', function () {
 
       invoiceFactory.payInvoice.should.have.been.called;
     });
-  });
-
-  describe('updatePoNumber:', function() {
-    it('should set poNumber to blank string if null', function() {
-      $scope.updatePoNumber();
-
-      expect(invoiceFactory.invoice.poNumber).to.equal('');
-    });
-
-    it('should update the invoice and hide the edit form', function(done) {
-      $scope.editPoNumber = true;
-      $scope.updatePoNumber();
-
-      invoiceFactory.updateInvoice.should.have.been.called;
-
-      setTimeout(function() {
-        expect($scope.editPoNumber).to.be.false;
-
-        done();
-      }, 10);
-    });
-
-    it('should not hide the edit form on errors', function(done) {
-      invoiceFactory.updateInvoice.returns(Q.reject());
-      $scope.editPoNumber = true;
-      $scope.updatePoNumber();
-
-      invoiceFactory.updateInvoice.should.have.been.called;
-
-      setTimeout(function() {
-        expect($scope.editPoNumber).to.be.true;
-
-        done();
-      }, 10);
-    });
-
-  });
-
-  it('hideEditForm:', function() {
-    $scope.editPoNumber = true;
-
-    $scope.hideEditForm();
-
-    expect($scope.editPoNumber).to.be.false;
   });
 
 });

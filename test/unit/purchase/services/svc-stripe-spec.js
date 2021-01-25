@@ -14,6 +14,7 @@ describe("Services: stripe service", function() {
         return Q.resolve(stripeClient = {
           createPaymentMethod: sinon.stub().returns(Q.resolve()),
           handleCardAction: sinon.stub().returns(Q.resolve()),
+          confirmCardSetup: sinon.stub().returns(Q.resolve()),
           elements: sinon.stub().returns(elements)
         });
       };
@@ -33,7 +34,8 @@ describe("Services: stripe service", function() {
   it("should exist", function() {
     expect(stripeService).to.be.ok;
     expect(stripeService.createPaymentMethod).to.be.a('function');
-    expect(stripeService.authenticate3ds).to.be.a('function');
+    expect(stripeService.handleCardAction).to.be.a('function');
+    expect(stripeService.confirmCardSetup).to.be.a('function');
     expect(stripeService.initializeStripeElements).to.be.a('function');
   });
 
@@ -46,10 +48,19 @@ describe("Services: stripe service", function() {
       });
   });
 
-  it('authenticate3ds', function(done) {
-    stripeService.authenticate3ds('secret')
+  it('handleCardAction', function(done) {
+    stripeService.handleCardAction('secret')
       .then(function() {
         stripeClient.handleCardAction.should.have.been.calledWith('secret');
+
+        done();
+      });
+  });
+
+  it('confirmCardSetup', function(done) {
+    stripeService.confirmCardSetup('secret')
+      .then(function() {
+        stripeClient.confirmCardSetup.should.have.been.calledWith('secret');
 
         done();
       });
