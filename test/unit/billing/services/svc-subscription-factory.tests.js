@@ -386,6 +386,24 @@ describe('service: subscriptionFactory:', function() {
       confirmModal.should.not.have.been.called;
     });
 
+    it('should update if the subscription is invoiced', function() {
+      subscriptionFactory.item = {
+        subscription: {
+          id: 'subscriptionId',
+          payment_source_id: 'paymentId',
+          auto_collection: 'off'
+        }
+      };
+
+      subscriptionFactory.changePaymentMethod($event, {
+        payment_source: {
+          id: 'paymentId'
+        }
+      });
+
+      confirmModal.should.have.been.called;
+    });
+
     it('should prompt for change', function(done) {
       subscriptionFactory.changePaymentMethod($event, {
         payment_source: {
