@@ -177,26 +177,6 @@
               });
             return deferred.promise;
           },
-          createSession: function (companyId) {
-            var deferred = $q.defer();
-
-            var obj = {
-              'companyId': companyId
-            };
-
-            storeAPILoader().then(function (storeApi) {
-                return storeApi.customer_portal.createSession(obj);
-              })
-              .then(function (resp) {
-                $log.debug('customer_portal.createSession resp', resp);
-                deferred.resolve(JSON.parse(resp.result.result));
-              })
-              .then(null, function (e) {
-                console.error('Failed to create Customer Portal Session.', e);
-                deferred.reject(e);
-              });
-            return deferred.promise;
-          },
           addTaxExemption: function (companyId, taxExemption, blobKey) {
             var deferred = $q.defer();
             // var expiryDateString = $filter('date')(taxExemption.expiryDate, 'yyyy-MM-dd');
