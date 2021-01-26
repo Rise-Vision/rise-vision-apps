@@ -41,7 +41,7 @@
     "jshint": "^2.10.3",
     "jshint-stylish": "^2.0.1",
     "run-sequence": "^1.1.1",
-    "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git",
+    "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git#fix/email-challenge",
     "widget-tester": "git://github.com/Rise-Vision/widget-tester.git"
   },
   "repository": {
