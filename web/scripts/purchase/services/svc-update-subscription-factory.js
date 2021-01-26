@@ -32,9 +32,6 @@
             currentPlanFactory.currentPlan.subscriptionId;
 
           subscriptionFactory.getSubscription(factory.subscriptionId).then(function() {
-            // factory.purchase.planId = subscriptionFactory.getItemSubscription().plan_id;
-
-            // if (factory.purchase.planId && purchaseAction === 'annual') {
             if (subscriptionFactory.getItemSubscription().plan_id && purchaseAction === 'annual') {
               factory.purchase.planId = subscriptionFactory.getItemSubscription().plan_id.replace('1m', '1y');
             }
@@ -146,8 +143,9 @@
           var displayCount = factory.getTotalDisplayCount();
           var subscriptionId = factory.subscriptionId;
           var companyId = _getCompanyId();
+          var planId = factory.purchase.planId;
 
-          return storeService.updateSubscription(displayCount, subscriptionId, companyId, couponCode)
+          return storeService.updateSubscription(displayCount, subscriptionId, planId, companyId, couponCode)
             .then(function () {
               analyticsFactory.track('Subscription Updated', _getTrackingProperties());
 

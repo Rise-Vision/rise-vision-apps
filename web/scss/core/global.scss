@@ -345,6 +345,16 @@ ul.social {
   }
 }
 
+.stack-sm-sideways-panels {
+  display: flex;
+  flex-flow: column;
+
+  @media (min-width: $screen-sm) {
+    display: flex;
+    flex-flow: row;
+  }
+}
+
 .sideways-panels {
   display: flex;
   

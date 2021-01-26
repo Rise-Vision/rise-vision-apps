@@ -29,8 +29,8 @@
           <input class="display-count-input mt-0 pull-right" type="number" name="licensesToRemove" ng-model="factory.purchase.licensesToRemove" min="1" max="{{factory.getCurrentDisplayCount()-1}}" ng-pattern="/^[0-9]+$/" required ng-change="getEstimate()" ng-model-options="{ debounce: 1000 }" autofocus />
         </div>
 
-        <div class="border-bottom py-4 mb-4">
-          <p class="left-right-aligner mb-0" ng-show="purchaseAction !== 'annual'">
+        <div class="border-bottom py-4 mb-4" ng-show="purchaseAction !== 'annual'">
+          <p class="left-right-aligner mb-0">
             <span class="font-weight-bold">Total number of display licenses for this subscription:</span>
             <span>
               {{factory.getTotalDisplayCount()}}
@@ -45,7 +45,25 @@
           <div class="madero-style alert alert-danger price-update mt-3" ng-show="factory.purchase.currentPricePerDisplay < factory.purchase.newPricePerDisplay">
             <p class="mb-0 text-success"><strong>Cost will increase to ${{factory.purchase.newPricePerDisplay | number : 2}} per display license, per month.</strong></p>
           </div>
+        </div>
 
+        <div class="border-bottom stack-sm-sideways-panels py-4 mb-4" ng-show="purchaseAction === 'annual'" ng-init="billingPeriod = 'annually'">
+          <div class="mb-2 mb-md-0">
+            <span class="font-weight-bold">Choose payment frequency:</span><br />
+            Save 10% by paying annually!
+          </div>
+          <div class="btn-group btn-group-justified billing-period-select ml-auto" ng-click="billingPeriod = (billingPeriod === 'monthly' ? 'annually' : 'monthly')">
+            <button type="button" class="btn"
+              ng-class="{'btn-toggle-blue-off' : billingPeriod !== 'monthly', 'btn-toggle-blue-on' : billingPeriod === 'monthly'}">
+              Pay Monthly
+              <streamline-icon name="checkmark" ng-show="billingPeriod === 'monthly'"></streamline-icon>
+            </button>
+            <button type="button" class="btn"
+              ng-class="{'btn-toggle-blue-off' : billingPeriod !== 'annually', 'btn-toggle-blue-on' : billingPeriod === 'annually'}">
+              Pay Annually
+              <streamline-icon name="checkmark" ng-show="billingPeriod === 'annually'"></streamline-icon>
+            </button>
+          </div>
         </div>
 
         <p class="mb-0" ng-show="!addCoupon && !couponCode && purchaseAction !== 'remove'">
@@ -103,13 +121,13 @@
       </div>
 
       <div class="flex-row u_margin-md-top mb-5">
-        <button id="backButton" type="button" aria-label="Go back to Billing Address" class="btn btn-default btn-toolbar pull-left" ng-click="close()" translate>common.cancel</button>
+        <button id="backButton" type="button" aria-label="Go back" class="btn btn-default btn-toolbar pull-left" ng-click="close()" translate>common.cancel</button>
 
-        <button id="payButton" type="submit" class="btn btn-primary ml-4 w-100" tabindex="1" aria-label="Complete Payment" ng-disabled="purchaseLicensesForm.$invalid" ng-if="factory.estimate.invoice_estimate.amount_due > 0">
+        <button id="payButton" type="submit" class="btn btn-primary ml-4 w-100" tabindex="1" aria-label="Complete Payment" ng-disabled="purchaseLicensesForm.$invalid || billingPeriod === 'monthly'" ng-if="factory.estimate.invoice_estimate.amount_due > 0">
           <span id="invoiceLabel">Pay ${{factory.estimate.invoice_estimate.amount_due/100 | number:2}} Now</span>
         </button>
 
-        <button id="updateButton" type="submit" class="btn btn-primary ml-4 w-100" tabindex="1" aria-label="Update Subscription" ng-disabled="purchaseLicensesForm.$invalid" ng-if="!factory.estimate.invoice_estimate.amount_due">
+        <button id="updateButton" type="submit" class="btn btn-primary ml-4 w-100" tabindex="1" aria-label="Update Subscription" ng-disabled="purchaseLicensesForm.$invalid || billingPeriod === 'monthly'" ng-if="!factory.estimate.invoice_estimate.amount_due">
           <span id="invoiceLabel">Update Subscription</span>
         </button>
 

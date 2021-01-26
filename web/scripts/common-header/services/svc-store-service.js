@@ -261,8 +261,8 @@
             var obj = {
               displayCount: displayCount,
               subscriptionId: subscriptionId,
-              companyId: companyId,
               planId: planId,
+              companyId: companyId,
               couponCode: couponCode
             };
 
@@ -282,12 +282,13 @@
               });
             return deferred.promise;
           },
-          updateSubscription: function (displayCount, subscriptionId, companyId, couponCode) {
+          updateSubscription: function (displayCount, subscriptionId, planId, companyId, couponCode) {
             var deferred = $q.defer();
 
             var obj = {
               displayCount: displayCount,
               subscriptionId: subscriptionId,
+              planId: planId,
               companyId: companyId,
               couponCode: couponCode
             };
