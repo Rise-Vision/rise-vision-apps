@@ -5,90 +5,27 @@
   /*jshint camelcase: false */
 
   angular.module('risevision.apps.purchase')
-    .factory('creditCardFactory', ['$rootScope', '$q', 'stripeService', 'userState',
-      'userAuthFactory', 'billing', 'addressService',
-      function ($rootScope, $q, stripeService, userState, userAuthFactory, billing, addressService) {
-        var factory = {
-          stripeElements: {}
-        };
-
-        var elementOptions = {
-          style: {
-            base: {
-              backgroundColor: '#FFF',
-              color: '#020620',
-              fontFamily: 'Helvetica,Arial,sans-serif',
-              fontSize: '14px',
-              fontSmoothing: 'antialiased',
-              fontWeight: 400,
-              iconColor: '#020620',
-              '::placeholder': {
-                color: '#777',
-              },
-            },
-            invalid: {
-              iconColor: '#020620',
-              color: '#020620',
-            }
-          },
-        };
-
-        var stripeElements = [
-          'cardNumber',
-          'cardExpiry',
-          'cardCvc'
-        ];
-
-        var stripeElementSelectors = [
-          '#new-card-number',
-          '#new-card-expiry',
-          '#new-card-cvc'
-        ];
-
-        factory.initStripeElements = function() {
-          stripeService.initializeStripeElements(stripeElements, elementOptions)
-            .then(function (elements) {
-              elements.forEach(function (el, idx) {
-                factory.stripeElements[stripeElements[idx]] = el;
-                el.mount(stripeElementSelectors[idx]);
-
-                el.on('blur', function () {
-                  $rootScope.$digest();
-                });
-
-                el.on('change', function (event) {
-                  var element = document.querySelector(stripeElementSelectors[idx]);
-
-                  if (element) {
-                    element.classList.add('dirty');
-                  }
-
-                  $rootScope.$digest();
-                });
-              });
-            });  
-        };
+    .factory('creditCardFactory', ['$q', 'stripeService', 'userState',
+      'userAuthFactory', 'paymentSourcesFactory', 'stripeElementsFactory', 'addressService',
+      function ($q, stripeService, userState, userAuthFactory, paymentSourcesFactory,
+        stripeElementsFactory, addressService) {
+        var factory = {};
 
         factory.selectNewCreditCard = function() {
           factory.paymentMethods.selectedCard = factory.paymentMethods.newCreditCard;
         };
 
         var _loadCreditCards = function() {
-          billing.getCreditCards({
-            count: 40
-          })
-          .then(function(result) {
-            factory.paymentMethods.existingCreditCards = result.items;
-            
-            if (result.items[0]) {
-              factory.paymentMethods.selectedCard = result.items[0];
-            }
-          });
+          paymentSourcesFactory.init()
+            .then(function() {
+              if (paymentSourcesFactory.selectedCard) {
+                factory.paymentMethods.selectedCard = paymentSourcesFactory.selectedCard;                
+              }
+            });
         };
 
         factory.initPaymentMethods = function(loadExistingCards) {
           factory.paymentMethods = {
-            existingCreditCards: [],
             newCreditCard: {
               isNew: true,
               address: {},
@@ -119,7 +56,7 @@
           if (!factory.paymentMethods.selectedCard.isNew) {
             return $q.resolve();
           } else {
-            var element = factory.stripeElements.cardNumber;
+            var element = stripeElementsFactory.stripeElements.cardNumber;
             var address = factory.paymentMethods.newCreditCard && factory.paymentMethods.newCreditCard.address;
             if (factory.paymentMethods.newCreditCard && factory.paymentMethods.newCreditCard.useBillingAddress) {
               address = factory.paymentMethods.newCreditCard.billingAddress;
@@ -162,8 +99,24 @@
           }
         };
 
-        factory.authenticate3ds = function (intentSecret) {
-          return stripeService.authenticate3ds(intentSecret)
+        factory.handleCardAction = function (intentSecret) {
+          return stripeService.handleCardAction(intentSecret)
+            .then(function (result) {
+              if (result.error) {
+                factory.paymentMethods.tokenError = result.error;
+                return $q.reject(result.error);
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+              factory.paymentMethods.tokenError =
+                'Something went wrong, please retry or contact support@risevision.com';
+              return $q.reject(error);
+            });
+        };
+
+        factory.confirmCardSetup = function (intentSecret) {
+          return stripeService.confirmCardSetup(intentSecret)
             .then(function (result) {
               if (result.error) {
                 factory.paymentMethods.tokenError = result.error;

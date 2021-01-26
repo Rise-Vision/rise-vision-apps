@@ -1,0 +1,45 @@
+<div class="flex-row mb-4" ng-show="showInvoiceOption">
+  <div class="btn-group btn-group-justified payment-method-select" ng-click="paymentMethods.paymentMethod = (paymentMethods.paymentMethod === 'card' ? 'invoice' : 'card')">
+    <button type="button" class="btn"
+      ng-class="{'btn-toggle-blue-off' : paymentMethods.paymentMethod !== 'card', 'btn-toggle-blue-on' : paymentMethods.paymentMethod === 'card'}">
+      Pay With Credit Card
+      <streamline-icon name="checkmark" ng-show="paymentMethods.paymentMethod === 'card'"></streamline-icon>
+    </button>
+    <button type="button" class="btn"
+      ng-class="{'btn-toggle-blue-off' : paymentMethods.paymentMethod !== 'invoice', 'btn-toggle-blue-on' : paymentMethods.paymentMethod === 'invoice'}">
+      Invoice Me
+      <streamline-icon name="checkmark" ng-show="paymentMethods.paymentMethod === 'invoice'"></streamline-icon>
+    </button>
+  </div>
+</div>
+
+<credit-card-form form-object="formObject" ng-show="paymentMethods.paymentMethod === 'card'"></credit-card-form>
+
+<!-- //GENERATE INVOICE FORM -->
+<div id="generateInvoice" ng-show="paymentMethods.paymentMethod === 'invoice'">
+  <p>Please enter a purchase order number if applicable. Your invoice will be sent to 
+    <b>{{contactEmail}}</b> with net 30 day terms. Invoice is payable by check, wire transfer, or credit card.</p>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="form-group">
+        <label for="invoice-po-number" class="control-label">
+          Purchase Order Number (optional):
+        </label>
+        <input id="invoice-po-number" type="text" class="form-control" name="purchaseOrder" ng-model="paymentMethods.purchaseOrderNumber" />
+      </div>
+    </div>
+  </div>
+
+  <div id="generateInvoiceOverdue" class="hidden">
+    <p class="text-danger">You have overdue invoice payments on your account.</p>
+    <p>In order to complete this purchase by invoice, please pay your outstanding invoices <a href="#">here</a>.</p>
+  </div>
+</div>
+
+<div id="errorBox" class="madero-style alert alert-danger u_margin-md-top" role="alert" ng-show="paymentMethods.newCreditCard.validationErrors.length">
+  <strong>Card Validation Error<span ng-show="paymentMethods.newCreditCard.validationErrors.length > 1">s</span></strong>
+  <ul>
+    <li ng-repeat="error in paymentMethods.newCreditCard.validationErrors">{{error}}</li>
+  </ul>
+</div>

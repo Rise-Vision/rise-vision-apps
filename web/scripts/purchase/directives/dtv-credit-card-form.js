@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('risevision.apps.purchase')
-  .directive('creditCardForm', ['$templateCache', 'creditCardFactory',
-    function ($templateCache, creditCardFactory) {
+  .directive('creditCardForm', ['$templateCache', 'creditCardFactory', 'paymentSourcesFactory',
+  'stripeElementsFactory',
+    function ($templateCache, creditCardFactory, paymentSourcesFactory, stripeElementsFactory) {
       return {
         restrict: 'E',
         scope: {
@@ -10,13 +11,10 @@ angular.module('risevision.apps.purchase')
         },
         template: $templateCache.get('partials/purchase/credit-card-form.html'),
         link: function ($scope) {
-          creditCardFactory.initStripeElements();
+          $scope.creditCardFactory = creditCardFactory;
+          $scope.paymentSourcesFactory = paymentSourcesFactory;
 
-          $scope.factory = creditCardFactory;
-
-          $scope.getCardDescription = function (card) {
-            return '***-' + card.last4 + ', ' + card.cardType + (card.isDefault ? ' (default)' : '');
-          };
+          stripeElementsFactory.init();
 
           $scope.stripeElementError = function (elementId) {
             var element = document.getElementById(elementId);

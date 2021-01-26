@@ -1,23 +1,11 @@
 <div id="credit-card-form">
-  <!-- SELECTOR - Hidden -->
-  <div class="row" ng-if="false">
-    <div class="col-md-12">
-      <div class="form-group">
-        <label for="credit-card-select" class="hidden">Add New Credit Card</label>
-        <select id="credit-card-select" class="form-control selectpicker" ng-model="factory.paymentMethods.selectedCard" ng-options="c as getCardDescription(c) for c in factory.paymentMethods.existingCreditCards track by c.id">
-          <option value="">Add New Credit Card</option>
-        </select>
-      </div>
-    </div>
-  </div>
-
   <!-- NEW CREDIT CARD -->
-  <div id="new-credit-card-form" ng-show="factory.paymentMethods.selectedCard.isNew">
-    <div class="row" ng-if="factory.paymentMethods.selectedCard.isNew">
+  <div id="new-credit-card-form" ng-show="creditCardFactory.paymentMethods.selectedCard.isNew">
+    <div class="row" ng-if="creditCardFactory.paymentMethods.selectedCard.isNew">
       <div class="col-md-12">
         <div class="form-group" ng-class="{ 'has-error': (formObject.cardholderName.$dirty || formObject.$submitted) && formObject.cardholderName.$invalid }">
           <label for="new-card-name" class="control-label">Cardholder Name: *</label>
-          <input id="new-card-name" aria-required="true" type="text" class="form-control" name="cardholderName" data-stripe="name" ng-model="factory.paymentMethods.newCreditCard.name" autocomplete="cc-name" required>
+          <input id="new-card-name" aria-required="true" type="text" class="form-control" name="cardholderName" data-stripe="name" ng-model="creditCardFactory.paymentMethods.newCreditCard.name" autocomplete="cc-name" required>
           <p class="text-danger" ng-show="(formObject.cardholderName.$dirty || formObject.$submitted) && formObject.cardholderName.$invalid">
             Choose a Cardholder Name.
           </p>
@@ -60,8 +48,8 @@
       <div class="col-md-12">
         <div class="form-group">
           <label for="toggleMatchBillingAddress" class="control-label mb-0">Cardholder Billing Address: *</label>
-          <div class="flex-row" ng-if="factory.paymentMethods.newCreditCard.billingAddress">
-            <madero-checkbox id="toggleMatchBillingAddress" ng-model="factory.paymentMethods.newCreditCard.useBillingAddress"></madero-checkbox>
+          <div class="flex-row" ng-if="creditCardFactory.paymentMethods.newCreditCard.billingAddress">
+            <madero-checkbox id="toggleMatchBillingAddress" ng-model="creditCardFactory.paymentMethods.newCreditCard.useBillingAddress"></madero-checkbox>
             <span class="mr-3">Use Company Billing Address</span>
           </div>
         </div>
@@ -71,7 +59,7 @@
     <!-- NEW CC ADDRESS -->
     <div id="new-card-address">
 
-      <address-form form-object="formObject" address-object="factory.paymentMethods.newCreditCard.address" hide-company-name="true" ng-if="!factory.paymentMethods.newCreditCard.useBillingAddress"></address-form>
+      <address-form form-object="formObject" address-object="creditCardFactory.paymentMethods.newCreditCard.address" hide-company-name="true" ng-if="!creditCardFactory.paymentMethods.newCreditCard.useBillingAddress"></address-form>
 
     </div>
     <!--  END NEW CC ADDRESS -->
@@ -79,18 +67,18 @@
   <!-- END NEW CC -->
 
   <!-- EXISTING CREDIT CARD -->
-  <div id="existing-credit-card-form" ng-if="!factory.paymentMethods.selectedCard.isNew">
+  <div id="existing-credit-card-form" ng-if="!creditCardFactory.paymentMethods.selectedCard.isNew">
     <div class="row">
       <div class="col-md-12">
         <label>Choose Payment Method:</label><br>
-        <div class="madero-radio" ng-repeat="card in factory.paymentMethods.existingCreditCards">
-          <input type="radio" ng-model="factory.paymentMethods.selectedCard" ng-value="card" name="{{card.payment_source.id}}" id="{{card.payment_source.id}}" tabindex="1">
+        <div class="madero-radio" ng-repeat="card in paymentSourcesFactory.existingCreditCards">
+          <input type="radio" ng-model="creditCardFactory.paymentMethods.selectedCard" ng-value="card" name="{{card.payment_source.id}}" id="{{card.payment_source.id}}" tabindex="1">
           <label for="{{card.payment_source.id}}" class="font-weight-normal">
-            <span class="u_capitalize">{{card.payment_source.card.brand}}</span>, ending in {{card.payment_source.card.last4}}.
+            {{card.payment_source.card | cardDescription}}
           </label>
         </div>
         <div class="mt-4">
-          <a class="madero-link u_clickable" ng-click="factory.selectNewCreditCard()">Use A Different Payment Method</a>
+          <a class="madero-link u_clickable" ng-click="creditCardFactory.selectNewCreditCard()">Use A Different Payment Method</a>
         <div>
       </div>
     </div>

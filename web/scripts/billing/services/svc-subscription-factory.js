@@ -1,9 +1,11 @@
 'use strict';
 
+/*jshint camelcase: false */
+
 angular.module('risevision.apps.billing.services')
-  .service('subscriptionFactory', ['$q', '$log', 'billing', 'creditCardFactory',
-  'processErrorCode', 'analyticsFactory',
-    function ($q, $log, billing, creditCardFactory, processErrorCode, analyticsFactory) {
+  .service('subscriptionFactory', ['$q', '$log', '$filter', 'confirmModal', 'billing', 
+  'processErrorCode',
+    function ($q, $log, $filter, confirmModal, billing, processErrorCode) {
       var factory = {};
 
       var _clearMessages = function () {
@@ -12,16 +14,44 @@ angular.module('risevision.apps.billing.services')
         factory.apiError = '';
       };
 
-      factory.init = function(initCreditCards) {
-        _clearMessages();
+      factory.getItemSubscription = function () {
+        return factory.item && factory.item.subscription || {};
+      };
 
-        if (initCreditCards) {
-          creditCardFactory.initPaymentMethods(true);
+      factory.getItemCustomer = function () {
+        return factory.item && factory.item.customer || {};
+      };
+
+      factory.isInvoiced = function() {
+        if (factory.getItemSubscription().auto_collection) {
+          return factory.getItemSubscription().auto_collection === 'off';
+        } else if (factory.getItemCustomer().auto_collection) {
+          return factory.getItemCustomer().auto_collection === 'off';
+        } else {
+          return false;
+        }
+      };
+
+      factory.getPaymentSourceId = function() {
+        if (factory.getItemSubscription().payment_source_id) {
+          return factory.getItemSubscription().payment_source_id;
+        } else if (factory.getItemCustomer().primary_payment_source_id) {
+          return factory.getItemCustomer().primary_payment_source_id;
+        } else {
+          return null;
+        }
+      };
+
+      var _updatePaymentSourceId = function () {
+        if (factory.isInvoiced()) {
+          factory.item.paymentSourceId = 'invoice';
+        } else {
+          factory.item.paymentSourceId = factory.getPaymentSourceId();
         }
       };
 
       factory.getSubscription = function (subscriptionId) {
-        factory.init(false);
+        _clearMessages();
 
         factory.item = null;
         factory.loading = true;
@@ -29,6 +59,8 @@ angular.module('risevision.apps.billing.services')
         return billing.getSubscription(subscriptionId)
           .then(function (resp) {
             factory.item = resp.item;
+
+            _updatePaymentSourceId();
           })
           .catch(function(e) {
             _showErrorMessage(e);
@@ -38,10 +70,57 @@ angular.module('risevision.apps.billing.services')
           });
       };
 
-      factory.reloadSubscription = function () {
-        if (factory.item && factory.item.subscription && factory.item.subscription.id) {
-          factory.getSubscription(factory.item.subscription.id);
+      factory.changePoNumber = function () {
+        factory.loading = true;
+
+        return billing.changePoNumber(factory.getItemSubscription().id, factory.getItemSubscription().poNumber)
+          .then(function (resp) {
+            angular.extend(factory.item, resp.item);
+          })
+          .catch(function(e) {
+            _showErrorMessage(e);
+          })
+          .finally(function() {
+            factory.loading = false;
+          });
+      };
+
+      var _changePaymentSource = function (subscriptionId, paymentSourceId) {
+        factory.loading = true;
+
+        return billing.changePaymentSource(subscriptionId, paymentSourceId)
+          .then(function (resp) {
+            angular.extend(factory.item, resp.item);
+
+            _updatePaymentSourceId();
+          })
+          .catch(function(e) {
+            _showErrorMessage(e);
+          })
+          .finally(function() {
+            factory.loading = false;
+          });
+      };
+
+      factory.changePaymentMethod = function(event, card) {
+        // prevent the radio ng-model from being updated
+        event.preventDefault();
+
+        if (!factory.isInvoiced() && factory.getPaymentSourceId() === card.payment_source.id) {
+          return;
         }
+
+        var description = $filter('cardDescription')(card.payment_source.card);
+        
+        confirmModal('Change Payment Method',
+            'Are you sure you want to change the payment method? The <strong>' +
+            description +
+            '</strong> will be used for this subscription.',
+            'Yes, Change', 'Cancel', 'madero-style centered-modal',
+            'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
+          ).then(function() {
+            _changePaymentSource(factory.getItemSubscription().id, card.payment_source.id);
+          });
       };
 
       var _showErrorMessage = function (e) {

@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: SubscriptionCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $scope, $loading, subscriptionFactory, taxExemptionFactory, plansService;
+  var $scope, $loading, subscriptionFactory, taxExemptionFactory, paymentSourcesFactory, plansService;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -32,21 +32,14 @@ describe('controller: SubscriptionCtrl', function () {
         reloadSubscription: sandbox.spy()
       };
     });
-    $provide.service('creditCardFactory', function() {
+    $provide.service('paymentSourcesFactory', function() {
       return {
-        
+        init: sinon.stub()
       };
     });
     $provide.value('taxExemptionFactory', {
       taxExemption: {},
       init: sandbox.stub()
-    });
-    $provide.service('ChargebeeFactory', function () {
-      return function() {
-        return {
-          openPaymentSources: sandbox.stub(),
-        };
-      };
     });
     $provide.service('plansService', function () {
       return {
@@ -68,6 +61,7 @@ describe('controller: SubscriptionCtrl', function () {
     $loading = $injector.get('$loading');
     subscriptionFactory = $injector.get('subscriptionFactory');
     taxExemptionFactory = $injector.get('taxExemptionFactory');
+    paymentSourcesFactory = $injector.get('paymentSourcesFactory');
     plansService = $injector.get('plansService');
 
     $controller('SubscriptionCtrl', {
@@ -84,21 +78,19 @@ describe('controller: SubscriptionCtrl', function () {
     expect($scope).to.be.ok;
 
     expect($scope.subscriptionFactory).to.equal(subscriptionFactory);
-    expect($scope.creditCardFactory).to.be.ok;
+    expect($scope.paymentSourcesFactory).to.be.ok;
     expect($scope.companySettingsFactory).to.be.ok;
     expect($scope.taxExemptionFactory).to.equal(taxExemptionFactory);
     expect($scope.company).to.be.ok;
 
-    expect($scope.isInvoiced).to.be.a('function');
     expect($scope.isDisplayLicensePlan).to.be.a('function');
     expect($scope.isVolumePlan).to.be.a('function');
     expect($scope.getPlanName).to.be.a('function');
-
-    expect($scope.editPaymentMethods).to.be.a('function');
   });
 
-  it('should initialize tax exemption', function() {
+  it('should initialize factories', function() {
     taxExemptionFactory.init.should.have.been.called;
+    paymentSourcesFactory.init.should.have.been.called;
   });
 
   describe('$loading: ', function() {
@@ -128,27 +120,16 @@ describe('controller: SubscriptionCtrl', function () {
       $loading.stop.should.have.been.calledTwice;
     });
 
-  });
+    it('should start and stop spinner from paymentSourcesFactory', function() {
+      paymentSourcesFactory.loading = true;
+      $scope.$digest();
 
-  describe('isInvoiced', function() {
-    it('should return false by default', function() {
-      expect($scope.isInvoiced()).to.not.be.ok;
-    });
+      $loading.start.should.have.been.calledWith('subscription-loader');
 
-    it('should return false if a card exists', function() {
-      subscriptionFactory.item = {
-        card: 'card'
-      };
+      paymentSourcesFactory.loading = false;
+      $scope.$digest();
 
-      expect($scope.isInvoiced()).to.be.false;
-    });
-
-    it('should return true if a card does not exist', function() {
-      subscriptionFactory.item = {
-        card: undefined
-      };
-
-      expect($scope.isInvoiced()).to.be.true;
+      $loading.stop.should.have.been.calledTwice;
     });
 
   });
@@ -221,14 +202,6 @@ describe('controller: SubscriptionCtrl', function () {
       })).to.equal('planId');
     });
 
-  });
-
-  describe('payment methods', function () {
-    it('should show Chargebee payment methods', function () {
-      $scope.editPaymentMethods();
-      expect($scope.chargebeeFactory.openPaymentSources).to.be.calledOnce;
-      expect($scope.chargebeeFactory.openPaymentSources.getCall(0).args[0]).to.equal('testId');
-    });
   });
 
 });

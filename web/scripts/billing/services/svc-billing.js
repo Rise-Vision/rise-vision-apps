@@ -57,6 +57,81 @@ angular.module('risevision.apps.billing.services')
 
           return deferred.promise;
         },
+        changePoNumber: function (subscriptionId, poNumber) {
+          var deferred = $q.defer();
+          var params = {
+            'subscriptionId': subscriptionId,
+            'poNumber': poNumber,
+            'companyId': userState.getSelectedCompanyId()
+          };
+
+          $log.debug('Store integrations.subscription.changePoNumber called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.subscription.changePoNumber(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.subscription.changePoNumber resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to change po number for the subscription.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+        changePaymentSource: function (subscriptionId, paymentSourceId) {
+          var deferred = $q.defer();
+          var params = {
+            'subscriptionId': subscriptionId,
+            'paymentSourceId': paymentSourceId,
+            'companyId': userState.getSelectedCompanyId()
+          };
+
+          $log.debug('Store integrations.subscription.changePaymentSource called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.subscription.changePaymentSource(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.subscription.changePaymentSource resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to change payment source for the subscription.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+        changePaymentToInvoice: function (subscriptionId, poNumber) {
+          var deferred = $q.defer();
+          var params = {
+            'subscriptionId': subscriptionId,
+            'poNumber': poNumber,
+            'companyId': userState.getSelectedCompanyId()
+          };
+
+          $log.debug('Store integrations.subscription.changePaymentToInvoice called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.subscription.changePaymentToInvoice(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.subscription.changePaymentToInvoice resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to change payment to invoice for the subscription.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
         getInvoices: function (search, cursor) {
           var deferred = $q.defer();
           var params = {
@@ -206,6 +281,79 @@ angular.module('risevision.apps.billing.services')
             })
             .then(null, function (e) {
               console.error('Failed to get company\'s cards.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+        preparePaymentSource: function (paymentMethodId) {
+          var deferred = $q.defer();
+          var params = {
+            'paymentMethodId': paymentMethodId,
+            'companyId': userState.getSelectedCompanyId()
+          };
+
+          $log.debug('Store integrations.paymentSource.prepare called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.paymentSource.prepare(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.paymentSource.prepare resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to prepare payment source.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+        addPaymentSource: function (setupIntentId) {
+          var deferred = $q.defer();
+          var params = {
+            'setupIntentId': setupIntentId,
+            'companyId': userState.getSelectedCompanyId()
+          };
+
+          $log.debug('Store integrations.paymentSource.add called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.paymentSource.add(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.paymentSource.add resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to add payment source.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+        deletePaymentSource: function (paymentSourceId) {
+          var deferred = $q.defer();
+
+          var params = {
+            'paymentSourceId': paymentSourceId,
+            'companyId': userState.getSelectedCompanyId()
+          };
+
+          $log.debug('Store integrations.paymentSource.delete called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.paymentSource.delete(params);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.paymentSource.delete resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to delete payment source.', e);
               deferred.reject(e);
             });
 

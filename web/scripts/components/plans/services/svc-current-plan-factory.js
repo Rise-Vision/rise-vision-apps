@@ -112,14 +112,6 @@
           _loadCurrentPlan();
         });
 
-        $rootScope.$on('chargebee.subscriptionChanged', function () {
-          _reloadCurrentPlan();
-        });
-
-        $rootScope.$on('chargebee.subscriptionCancelled', function () {
-          _reloadCurrentPlan();
-        });
-
         return _factory;
       }
     ]);

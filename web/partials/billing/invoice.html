@@ -139,33 +139,8 @@
                 {{invoiceFactory.invoice.line_items[0].date_to * 1000 | date:'d-MMM-yyyy'}}
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-4">
-                <label class="mb-0">PO:</label>
-              </div>
-              <div class="col-md-8">
-                <span ng-show="!invoiceFactory.invoice.po_number && !editPoNumber">
-                  <a aria-label="Add PO Number" class="madero-link u_clickable" tabindex="1" ng-click="editPoNumber = true">Add</a>
-                </span>
-                <span ng-show="invoiceFactory.invoice.po_number && !editPoNumber">
-                  <span class="mr-2">
-                  {{invoiceFactory.invoice.po_number}}
-                  </span>
-                  <a aria-label="Edit PO Number" class="madero-link u_clickable" tabindex="1" ng-click="editPoNumber = true">Edit</a>
-                </span>
-                <span ng-show="editPoNumber">
-                  <a aria-label="Cancel PO Number" class="madero-link u_clickable" ng-click="hideEditForm()" tabindex="1">Cancel</a>
-                </span>
-              </div>
-            </div>
-            <div class="row" ng-if="editPoNumber">
-              <div class="col-md-12">
-                <div class="flex-row">
-                  <input id="po-number" aria-required="false" type="text" class="form-control mr-3" name="poNumber" ng-model="invoiceFactory.invoice.poNumber" ng-value="invoiceFactory.invoice.po_number">
-                  <button id="update-po-number" type="button" aria-label="Update PO Number" class="btn btn-default" ng-click="updatePoNumber()">Update</button>
-                </div>
-              </div>
-            </div>
+
+            <edit-po-number item="invoiceFactory.invoice" update-function="invoiceFactory.updateInvoice()"></edit-po-number>
 
           </div>
         </div>

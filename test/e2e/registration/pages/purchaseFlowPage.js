@@ -26,7 +26,7 @@ var PurchaseFlowPage = function() {
   var newCreditCardForm = element(by.id('new-credit-card-form'));
   var generateInvoiceForm = element(by.id('generateInvoice'));
 
-  var paymentMethod = element(by.id('payment-method-select'));
+  var paymentMethod = element(by.css('.payment-method-select'));
   var paymentMethodInvoiceMe = paymentMethod.element(by.cssContainingText('button', 'Credit Card'));
   var paymentMethodCreditCard = paymentMethod.element(by.cssContainingText('button', 'Invoice'));
 

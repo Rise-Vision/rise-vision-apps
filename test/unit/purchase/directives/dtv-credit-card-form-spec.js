@@ -12,16 +12,18 @@ describe("directive: credit card form", function() {
       };
     }; 
 
-    $provide.value("creditCardFactory", {
-      initStripeElements: sinon.stub()
+    $provide.value("creditCardFactory", {});
+    $provide.value("paymentSourcesFactory", {});
+    $provide.value("stripeElementsFactory", {
+      init: sinon.stub()
     });
 
   }));
 
-  var $scope, element, creditCardFactory;
+  var $scope, element, stripeElementsFactory;
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
-    creditCardFactory = $injector.get('creditCardFactory');
+    stripeElementsFactory = $injector.get('stripeElementsFactory');
 
     $templateCache.put("partials/purchase/credit-card-form.html", "<p>mock</p>");
     $rootScope.form = {
@@ -40,29 +42,15 @@ describe("directive: credit card form", function() {
   it("should initialize scope", function() {
     expect($scope).to.be.an("object");
 
-    expect($scope.factory).to.be.an('object');
+    expect($scope.creditCardFactory).to.be.an('object');
+    expect($scope.paymentSourcesFactory).to.be.an('object');
     expect($scope.formObject).to.be.an('object');
 
-    expect($scope.getCardDescription).to.be.a("function");
     expect($scope.stripeElementError).to.be.a("function");
   });
 
-  it('initStripeElements', function() {
-    creditCardFactory.initStripeElements.should.have.been.called;
-  });
-
-  it("getCardDescription: ", function() {
-    var card = {
-      last4: "2345",
-      cardType: "Visa",
-      isDefault: false
-    };
-
-    expect($scope.getCardDescription(card)).to.equal("***-2345, Visa");
-
-    card.isDefault = true;
-
-    expect($scope.getCardDescription(card)).to.equal("***-2345, Visa (default)");
+  it('stripeElementsFactory init', function() {
+    stripeElementsFactory.init.should.have.been.called;
   });
 
   describe('stripeElementError:', function() {

@@ -186,8 +186,7 @@ angular.module('risevision.apps', [
           $state.current.name === 'apps.displays.list' ||
           $state.current.name === 'apps.displays.alerts' ||
           $state.current.name === 'apps.storage.home' ||
-          $state.current.name === 'apps.home' ||
-          $state.current.name === 'apps.billing.home') {
+          $state.current.name === 'apps.home') {
 
           $state.go($state.current, null, {
             reload: true

@@ -67,6 +67,7 @@ describe("Services: purchase factory", function() {
             return Q.reject();
           }
         }),
+        preparePurchase: sinon.stub().returns(Q.resolve('intentResponse')),
         purchase: sinon.spy(function() {
           if (validate) {
             return Q.resolve("success");
@@ -80,6 +81,7 @@ describe("Services: purchase factory", function() {
     $provide.value("creditCardFactory", {
       initPaymentMethods: sinon.stub().returns(Q.resolve()),
       validatePaymentMethod: sinon.stub().returns(Q.resolve({})),
+      handleCardAction: sinon.stub().returns(Q.resolve()),
       paymentMethods: {
         newCreditCard: {}
       },
@@ -435,6 +437,116 @@ describe("Services: purchase factory", function() {
     });
 
   });
+
+  describe('preparePaymentIntent:', function() {
+    beforeEach(function() {
+      purchaseFactory.purchase = {
+        billingAddress: {},
+        plan: {
+          productCode: "productCode",
+        },
+        estimate: {}
+      };
+
+      creditCardFactory.paymentMethods = {
+        paymentMethod: "card",
+        selectedCard: {
+          id: "cardId",
+        },
+      };
+
+    });
+
+    it('should resolve right away for invoice', function(done) {
+      creditCardFactory.paymentMethods.paymentMethod = "invoice";
+
+      purchaseFactory.preparePaymentIntent()
+        .then(function() {
+          storeService.preparePurchase.should.not.have.been.calledWith(sinon.match.string);
+
+          done();
+        });
+    });
+
+    it('should call api, show spinner and reset errors', function() {
+      purchaseFactory.preparePaymentIntent();
+
+      storeService.preparePurchase.should.have.been.called;
+
+      expect(purchaseFactory.loading).to.be.true;
+    });
+
+    it('should prepare payment intent, and resolve', function(done) {
+      purchaseFactory.preparePaymentIntent()
+        .then(function() {
+          expect(purchaseFactory.loading).to.be.false;
+
+          creditCardFactory.handleCardAction.should.not.have.been.called;
+
+          expect(creditCardFactory.paymentMethods.intentResponse).to.equal('intentResponse');
+
+          done();
+        });
+    });
+
+    it('should handle failure to prepare payment intent', function(done) {
+      storeService.preparePurchase.returns(Q.resolve({error: {message: 'errorMessage'}}));
+
+      purchaseFactory.preparePaymentIntent()
+        .catch(function() {
+          expect(purchaseFactory.loading).to.be.false;
+          expect(purchaseFactory.purchase.checkoutError).to.equal('errorMessage');
+
+          done();
+        });
+    });
+
+    it('should handle rejection to prepare payment intent', function(done) {
+      storeService.preparePurchase.returns(Q.reject('error'));
+
+      purchaseFactory.preparePaymentIntent()
+        .catch(function() {
+          expect(purchaseFactory.loading).to.be.false;
+          expect(purchaseFactory.purchase.checkoutError).to.contain('please retry');
+
+          done();
+        });
+    });
+
+    describe('handleCardAction:', function() {
+      it('should handleCardAction if authentication is required', function(done) {
+        storeService.preparePurchase.returns(Q.resolve({
+          authenticationRequired: true,
+          intentSecret: 'intentSecret'
+        }));
+
+        purchaseFactory.preparePaymentIntent()
+          .then(function() {
+            creditCardFactory.handleCardAction.should.have.been.calledWith('intentSecret');
+
+            done();
+          });
+      });
+
+      it('should handle failure to handleCardAction', function(done) {
+        storeService.preparePurchase.returns(Q.resolve({
+          authenticationRequired: true,
+          intentSecret: 'intentSecret'
+        }));
+        creditCardFactory.handleCardAction.returns(Q.reject({message: 'error'}));
+
+        purchaseFactory.preparePaymentIntent()
+          .catch(function() {
+            expect(purchaseFactory.loading).to.be.false;
+            expect(purchaseFactory.purchase.checkoutError).to.equal('error');
+
+            done();
+          });
+      });
+    });
+
+  });
+
 
   describe("completePayment: ", function() {
     beforeEach(function() {
