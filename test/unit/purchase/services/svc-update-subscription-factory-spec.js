@@ -5,8 +5,16 @@ describe("Services: purchase licenses factory", function() {
   beforeEach(module("risevision.apps.purchase"));
   beforeEach(module(function ($provide) {
     $provide.service("$q", function() {return Q;});
-    $provide.value("$stateParams", {
-      displayCount: 'displayCount'
+    $provide.value("$state", {
+      params: {
+        displayCount: 'displayCount',
+        subscriptionId: 'subscriptionId'
+      }
+    });
+    $provide.service('processErrorCode',function() {
+      return function(err) {
+        return 'processed ' + err;
+      };
     });
     $provide.service("userState", function() {
       return {
@@ -14,19 +22,14 @@ describe("Services: purchase licenses factory", function() {
         getUserEmail: sinon.stub().returns('userEmail')
       };
     });
-    $provide.value("currentPlanFactory", {
-      currentPlan: {
-        subscriptionId: 'subscriptionId'
-      }
-    });
-    $provide.service("storeService", function() {
+    $provide.service("billing", function() {
       return {
         estimateSubscriptionUpdate: sinon.stub().returns(Q.resolve({item: 'estimateResponse'})),
         updateSubscription: sinon.spy(function() {
           if (validate) {
             return Q.resolve("success");
           } else {
-            return Q.reject();
+            return Q.reject('error');
           }
         })
       };
@@ -48,26 +51,25 @@ describe("Services: purchase licenses factory", function() {
     $provide.service("subscriptionFactory", function() {
       return {
         getSubscription: sinon.stub().resolves(),
-        item: {
-          subscription: {
-            customer_id: 'customerId',
-            plan_quantity: 2
-          }
-        }
+        getItemSubscription: sinon.stub().returns({
+          id: 'subscriptionId',
+          customer_id: 'customerId',
+          plan_quantity: 2,
+          plan_id: 'somePlanId-1m'
+        })
       };
     });
 
   }));
 
-  var $modal, $state, $timeout, updateSubscriptionFactory, currentPlanFactory,
-    userState, storeService, analyticsFactory, subscriptionFactory, validate;
+  var $modal, $timeout, updateSubscriptionFactory,
+    userState, billing, analyticsFactory, subscriptionFactory, validate;
 
   beforeEach(function() {
     inject(function($injector) {
       $timeout = $injector.get("$timeout");
       userState = $injector.get('userState');
-      currentPlanFactory = $injector.get('currentPlanFactory');
-      storeService = $injector.get('storeService');
+      billing = $injector.get('billing');
       analyticsFactory = $injector.get('analyticsFactory');
       updateSubscriptionFactory = $injector.get("updateSubscriptionFactory");
       subscriptionFactory = $injector.get("subscriptionFactory");
@@ -117,6 +119,28 @@ describe("Services: purchase licenses factory", function() {
       subscriptionFactory.getSubscription.should.have.been.calledWith('subscriptionId');
     });
 
+    it('should update the plan id and get an estimate', function(done) {
+      updateSubscriptionFactory.init('remove');
+
+      setTimeout(function() {
+        expect(updateSubscriptionFactory.purchase.planId).to.equal('somePlanId-1m')
+
+        updateSubscriptionFactory.getEstimate.should.have.been.called;
+
+        done();
+      }, 10);
+    });
+
+    it('should update the plan id to annual', function(done) {
+      updateSubscriptionFactory.init('annual');
+
+      setTimeout(function() {
+        expect(updateSubscriptionFactory.purchase.planId).to.equal('somePlanId-1y')
+
+        done();
+      }, 10);
+    });
+
   });
 
   describe("getCurrentDisplayCount:", function() {
@@ -126,16 +150,8 @@ describe("Services: purchase licenses factory", function() {
       expect(count).to.equal(2);
     });
 
-    it("should return current display count as zero if subscription is not loaded", function() {
-      subscriptionFactory.item = null;
-
-      var count = updateSubscriptionFactory.getCurrentDisplayCount();
-
-      expect(count).to.equal(0);
-    });
-
     it("should return current display count as zero if subscription item has no subscription", function() {
-      subscriptionFactory.item.subscription = null;
+      subscriptionFactory.getItemSubscription.returns({});
 
       var count = updateSubscriptionFactory.getCurrentDisplayCount();
 
@@ -147,8 +163,8 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
-      updateSubscriptionFactory.subscriptionId = 'subscriptionId';
       updateSubscriptionFactory.purchase = {
+        planId: 'planId',
         licensesToAdd: 5,
         licensesToRemove: 0,
         couponCode: 'couponCode'
@@ -159,8 +175,8 @@ describe("Services: purchase licenses factory", function() {
     it("should call estimateSubscriptionUpdate api and return a promise", function() {
       expect(updateSubscriptionFactory.getEstimate().then).to.be.a("function");
 
-      storeService.estimateSubscriptionUpdate.should.have.been.called;
-      storeService.estimateSubscriptionUpdate.should.have.been.calledWith(7, 'subscriptionId', 'customerId', 'couponCode');
+      billing.estimateSubscriptionUpdate.should.have.been.called;
+      billing.estimateSubscriptionUpdate.should.have.been.calledWith(7, 'subscriptionId', 'planId', 'customerId', 'couponCode');
     });
 
     it("should populate estimate object if call succeeds", function(done) {
@@ -214,7 +230,7 @@ describe("Services: purchase licenses factory", function() {
       });
 
       it('should update prices for yearly subscriptions', function(done) {
-        storeService.estimateSubscriptionUpdate.returns(Q.resolve({
+        billing.estimateSubscriptionUpdate.returns(Q.resolve({
           item: {
             next_invoice_estimate: {
               line_items: [{
@@ -235,7 +251,7 @@ describe("Services: purchase licenses factory", function() {
       });
 
       it('should update prices for monthly subscriptions', function(done) {
-        storeService.estimateSubscriptionUpdate.returns(Q.resolve({
+        billing.estimateSubscriptionUpdate.returns(Q.resolve({
           item: {
             next_invoice_estimate: {
               line_items: [{
@@ -258,7 +274,7 @@ describe("Services: purchase licenses factory", function() {
       });
 
       it('should detect education discount', function(done) {
-        storeService.estimateSubscriptionUpdate.returns(Q.resolve({
+        billing.estimateSubscriptionUpdate.returns(Q.resolve({
           item: {
             next_invoice_estimate: {
               line_items: [{
@@ -283,11 +299,11 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should show estimate error if call fails", function(done) {
-      storeService.estimateSubscriptionUpdate.returns(Q.reject());
+      billing.estimateSubscriptionUpdate.returns(Q.reject('error'));
 
       updateSubscriptionFactory.getEstimate()
       .then(function() {
-        expect(updateSubscriptionFactory.apiError).to.equal("An unexpected error has occurred. Please try again.");
+        expect(updateSubscriptionFactory.apiError).to.equal("processed error");
 
         done();
       })
@@ -297,7 +313,7 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should not clear previous estimate on error", function(done) {
-      storeService.estimateSubscriptionUpdate.returns(Q.reject());
+      billing.estimateSubscriptionUpdate.returns(Q.reject());
       updateSubscriptionFactory.estimate = 'previousEstimate';
 
       updateSubscriptionFactory.getEstimate()
@@ -329,8 +345,8 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
-      updateSubscriptionFactory.subscriptionId = 'subscriptionId';
       updateSubscriptionFactory.purchase = {
+        planId: 'planId',
         licensesToAdd: 0,
         licensesToRemove: 1,
         couponCode: ''
@@ -341,8 +357,8 @@ describe("Services: purchase licenses factory", function() {
     it("should call estimateSubscriptionUpdate api and return a promise", function() {
       expect(updateSubscriptionFactory.getEstimate().then).to.be.a("function");
 
-      storeService.estimateSubscriptionUpdate.should.have.been.called;
-      storeService.estimateSubscriptionUpdate.should.have.been.calledWith(1, 'subscriptionId', 'customerId', '');
+      billing.estimateSubscriptionUpdate.should.have.been.called;
+      billing.estimateSubscriptionUpdate.should.have.been.calledWith(1, 'subscriptionId', 'planId', 'customerId', '');
     });
 
     it("should populate estimate object if call succeeds", function(done) {
@@ -386,8 +402,8 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
-      updateSubscriptionFactory.subscriptionId = 'subscriptionId';
       updateSubscriptionFactory.purchase = {
+        planId: 'planId',
         licensesToAdd: 5,
         licensesToRemove: 0,
         couponCode: 'couponCode'
@@ -410,8 +426,8 @@ describe("Services: purchase licenses factory", function() {
     it("should call updateSubscription api and return a promise", function() {
       expect(updateSubscriptionFactory.completePayment().then).to.be.a("function");
 
-      storeService.updateSubscription.should.have.been.called;
-      storeService.updateSubscription.should.have.been.calledWith(7, 'subscriptionId', 'customerId', 'couponCode');
+      billing.updateSubscription.should.have.been.called;
+      billing.updateSubscription.should.have.been.calledWith(7, 'subscriptionId', 'planId', 'customerId', 'couponCode');
     });
 
     it("should track purchase", function(done) {
@@ -486,7 +502,7 @@ describe("Services: purchase licenses factory", function() {
 
       updateSubscriptionFactory.completePayment()
         .then(function() {
-          expect(updateSubscriptionFactory.apiError).to.equal("There was an unknown error with the payment.");
+          expect(updateSubscriptionFactory.apiError).to.equal('processed error');
           expect(updateSubscriptionFactory.purchase.completed).to.not.be.ok;
           expect(updateSubscriptionFactory.loading).to.be.false;
 
@@ -503,8 +519,8 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
-      updateSubscriptionFactory.subscriptionId = 'subscriptionId';
       updateSubscriptionFactory.purchase = {
+        planId: 'planId',
         licensesToAdd: 0,
         licensesToRemove: 1,
         couponCode: ''
@@ -514,8 +530,8 @@ describe("Services: purchase licenses factory", function() {
     it("should call updateSubscription api and return a promise", function() {
       expect(updateSubscriptionFactory.completePayment().then).to.be.a("function");
 
-      storeService.updateSubscription.should.have.been.called;
-      storeService.updateSubscription.should.have.been.calledWith(1, 'subscriptionId', 'customerId', '');
+      billing.updateSubscription.should.have.been.called;
+      billing.updateSubscription.should.have.been.calledWith(1, 'subscriptionId', 'planId', 'customerId', '');
     });
 
     it("should track purchase", function(done) {

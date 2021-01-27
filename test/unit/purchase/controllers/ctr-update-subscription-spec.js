@@ -1,6 +1,6 @@
 "use strict";
 
-describe("controller: add-licenses", function() {
+describe("controller: update subscription", function() {
   beforeEach(module("risevision.apps.purchase"));
   beforeEach(module(function ($provide) {
     $provide.service("$loading", function() {
@@ -11,11 +11,12 @@ describe("controller: add-licenses", function() {
     });
     $provide.service("$state", function() {
       return {
-        go: sandbox.spy()
+        go: sandbox.spy(),
+        params: {
+          purchaseAction: 'add',
+          subscriptionId: 'subscriptionId'
+        }
       }
-    });
-    $provide.value("$stateParams", {
-      purchaseAction: 'add'
     });
     $provide.service("updateSubscriptionFactory", function() {
       return {
@@ -35,7 +36,7 @@ describe("controller: add-licenses", function() {
     });
   }));
 
-  var sandbox, $scope, $state, $loading, validate, updateSubscriptionFactory,
+  var sandbox, _compile, $scope, $state, $loading, validate, updateSubscriptionFactory,
     subscriptionFactory, $location, redirectTo;
 
   beforeEach(function() {
@@ -51,13 +52,16 @@ describe("controller: add-licenses", function() {
       $location = $injector.get("$location");
       redirectTo =  '/displays/list'
 
-      $controller("UpdateSubscriptionCtrl", {
-        $scope: $scope,
-        $loading: $loading,
-        redirectTo: redirectTo
-      });
+      _compile = function() {
+        $controller("UpdateSubscriptionCtrl", {
+          $scope: $scope,
+          redirectTo: redirectTo
+        });
 
-      $scope.$digest();
+        $scope.$digest();
+      };
+
+      _compile($controller);
     });
   });
 
@@ -234,10 +238,24 @@ describe("controller: add-licenses", function() {
   });
 
   describe("close: ", function() {
-    it("should close modal and redirect to provided path", function() {
+    it("should close and redirect to provided path", function() {
       $scope.close();
 
       $location.path.should.have.been.calledWith(redirectTo);
+      $state.go.should.not.have.been.called;
+    });
+
+    it("should close and redirect to the subscription page", function() {
+      redirectTo = '';
+
+      _compile();
+
+      $scope.close();
+
+      $location.path.should.not.have.been.called;
+      $state.go.should.have.been.calledWith('apps.billing.subscription', {
+        subscriptionId: 'subscriptionId'
+      });
     });
 
   });
