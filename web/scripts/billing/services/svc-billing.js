@@ -57,6 +57,59 @@ angular.module('risevision.apps.billing.services')
 
           return deferred.promise;
         },
+        estimateSubscriptionUpdate: function (displayCount, subscriptionId, planId, companyId, couponCode) {
+          var deferred = $q.defer();
+
+          var obj = {
+            displayCount: displayCount,
+            subscriptionId: subscriptionId,
+            planId: planId,
+            companyId: companyId,
+            couponCode: couponCode
+          };
+
+          $log.debug('Store integrations.subscription.estimate called with', obj);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.subscription.estimate(obj);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.subscription.estimate resp', resp);
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to retrieve subscription estimate.', e);
+              deferred.reject(e);
+            });
+          return deferred.promise;
+        },
+        updateSubscription: function (displayCount, subscriptionId, planId, companyId, couponCode) {
+          var deferred = $q.defer();
+
+          var obj = {
+            displayCount: displayCount,
+            subscriptionId: subscriptionId,
+            planId: planId,
+            companyId: companyId,
+            couponCode: couponCode
+          };
+
+          $log.debug('Store integrations.subscription.update called with', obj);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.subscription.update(obj);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.subscription.update resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to retrieve subscription update.', e);
+              deferred.reject(e);
+            });
+          return deferred.promise;
+        },
         changePoNumber: function (subscriptionId, poNumber) {
           var deferred = $q.defer();
           var params = {

@@ -6,10 +6,11 @@
 
   angular.module('risevision.apps.purchase')
     .factory('updateSubscriptionFactory', ['$log', '$timeout', '$stateParams',
-      'userState', 'currentPlanFactory', 'storeService', 'analyticsFactory',
-      'pricingFactory', 'subscriptionFactory',
+      'userState', 'currentPlanFactory', 'billing', 'analyticsFactory',
+      'pricingFactory', 'subscriptionFactory', 'processErrorCode',
       function ($log, $timeout, $stateParams, userState, currentPlanFactory,
-        storeService, analyticsFactory, pricingFactory, subscriptionFactory) {
+        billing, analyticsFactory, pricingFactory, subscriptionFactory,
+        processErrorCode) {
         var factory = {};
         factory.userEmail = userState.getUserEmail();
 
@@ -32,8 +33,10 @@
             currentPlanFactory.currentPlan.subscriptionId;
 
           subscriptionFactory.getSubscription(factory.subscriptionId).then(function() {
-            if (subscriptionFactory.getItemSubscription().plan_id && purchaseAction === 'annual') {
-              factory.purchase.planId = subscriptionFactory.getItemSubscription().plan_id.replace('1m', '1y');
+            factory.purchase.planId = subscriptionFactory.getItemSubscription().plan_id;
+
+            if (factory.purchase.planId && purchaseAction === 'annual') {
+              factory.purchase.planId = factory.purchase.planId.replace('1m', '1y');
             }
 
             factory.getEstimate();
@@ -41,16 +44,13 @@
         };
 
         factory.getCurrentDisplayCount = function() {
-          var currentDisplayCount = subscriptionFactory.item &&
-            subscriptionFactory.item.subscription &&
-            subscriptionFactory.item.subscription.plan_quantity;
+          var currentDisplayCount = subscriptionFactory.getItemSubscription().plan_quantity;
 
           return currentDisplayCount || 0;
         };
 
         var _getCompanyId = function() {
-          return subscriptionFactory.item && subscriptionFactory.item.subscription &&
-            subscriptionFactory.item.subscription.customer_id;
+          return subscriptionFactory.getItemSubscription().customer_id;
         };
 
         var _getChangeInLicenses = function() {
@@ -104,7 +104,7 @@
           var companyId = _getCompanyId();
           var planId = factory.purchase.planId;
 
-          return storeService.estimateSubscriptionUpdate(displayCount, subscriptionId, planId, companyId, couponCode)
+          return billing.estimateSubscriptionUpdate(displayCount, subscriptionId, planId, companyId, couponCode)
             .then(function (result) {
               factory.estimate = result.item;
 
@@ -112,10 +112,9 @@
 
               analyticsFactory.track('Subscription Update Estimated', _getTrackingProperties());
             })
-            .catch(function (result) {
+            .catch(function (e) {
               factory.errorMessage = 'Something went wrong.';
-              factory.apiError = result && result.message ? result.message :
-                'An unexpected error has occurred. Please try again.';
+              factory.apiError = processErrorCode(e);
             })
             .finally(function () {
               factory.loading = false;
@@ -145,7 +144,7 @@
           var companyId = _getCompanyId();
           var planId = factory.purchase.planId;
 
-          return storeService.updateSubscription(displayCount, subscriptionId, planId, companyId, couponCode)
+          return billing.updateSubscription(displayCount, subscriptionId, planId, companyId, couponCode)
             .then(function () {
               analyticsFactory.track('Subscription Updated', _getTrackingProperties());
 
@@ -159,10 +158,9 @@
                   $log.debug('Failed to reload company', err);
                 });
             })
-            .catch(function (result) {
+            .catch(function (e) {
               factory.errorMessage = 'Something went wrong.';
-              factory.apiError = result && result.message ? result.message :
-                 'There was an unknown error with the payment.';
+              factory.apiError = processErrorCode(e);
             })
             .finally(function () {
               factory.loading = false;
