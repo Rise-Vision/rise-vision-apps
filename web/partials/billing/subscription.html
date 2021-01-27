@@ -31,7 +31,7 @@
           <div ng-show="subscriptionFactory.getItemSubscription().status === 'active'">
             <span ng-show="isDisplayLicensePlan(subscriptionFactory.getItemSubscription())">
               <a id="addLicenses" class="btn btn-default btn-block" ui-sref="apps.purchase.licenses.add({subscriptionId: subscriptionFactory.getItemSubscription().id})">Add Display Licenses</a>
-              <a id="removeLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.purchase.licenses.remove({subscriptionId: subscriptionFactory.getItemSubscription().id})">Remove Display Licenses</a>
+              <a id="removeLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.purchase.licenses.remove({subscriptionId: subscriptionFactory.getItemSubscription().id})" ng-hide="subscriptionFactory.getItemSubscription().plan_quantity < 2">Remove Display Licenses</a>
               <a id="manageLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.licenses.manage({subscriptionId: subscriptionFactory.getItemSubscription().id})" ng-if="false">Manage Network Licenses</a>
             </span>
           </div>
@@ -148,7 +148,7 @@
       <streamline-icon name="help" width="20" height="20"></streamline-icon>
       Need to cancel or pause your subscription?
     </label>
-    <p>Please email us at <a class="madero-link" href="mailto:support@risevision.com" target="_blank">support@risevision.com</a>.</p>
+    <p><a class="madero-link" href="mailto:support@risevision.com" target="_blank">Contact Us</a></p>
   </div>
 
 </div><!--container-->
