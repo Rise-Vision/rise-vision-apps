@@ -3,9 +3,10 @@
 /*jshint camelcase: false */
 
 angular.module('risevision.apps.billing.services')
-  .service('subscriptionFactory', ['$q', '$log', '$filter', 'confirmModal', 'billing', 
-  'processErrorCode',
-    function ($q, $log, $filter, confirmModal, billing, processErrorCode) {
+  .service('subscriptionFactory', ['$q', '$log', '$filter', 'confirmModal', 'billing',
+    'currentPlanFactory', 'processErrorCode',
+    function ($q, $log, $filter, confirmModal, billing, currentPlanFactory,
+      processErrorCode) {
       var factory = {};
 
       var _clearMessages = function () {
@@ -51,6 +52,10 @@ angular.module('risevision.apps.billing.services')
       };
 
       factory.getSubscription = function (subscriptionId) {
+        if (!subscriptionId) {
+          subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
+        }
+
         _clearMessages();
 
         factory.item = null;
