@@ -7,6 +7,16 @@ var AddPaymentMethodPage = function() {
   var cardName = element(by.id('new-card-name'));
 
   var addButton = element(by.id('addButton'));
+
+  function _inputOnIframe(value, iframeSelector, elementName) {
+    protractor.promise.controlFlow().execute(function(){
+      browser.ignoreSynchronization = true;
+      browser.switchTo().frame(browser.driver.findElement(protractor.By.css(iframeSelector)));
+      browser.findElement(by.name(elementName)).sendKeys(value);
+      browser.switchTo().defaultContent();
+      browser.ignoreSynchronization = false;
+    });
+  }
   
   this.getLoader = function() {
     return loader;
@@ -21,33 +31,15 @@ var AddPaymentMethodPage = function() {
   };
 
   this.enterCardNumber = function(value) {
-  	protractor.promise.controlFlow().execute(function(){
-	    browser.ignoreSynchronization = true;
-	    browser.switchTo().frame(browser.driver.findElement(protractor.By.css('#new-card-number iframe')));
-	    browser.findElement(by.name('cardnumber')).sendKeys(value);
-	    browser.switchTo().defaultContent();
-	    browser.ignoreSynchronization = false;
-	  });
+    _inputOnIframe(value, '#new-card-number iframe', 'cardnumber');
   };
 
   this.enterCardExpiration = function(value) {
-    protractor.promise.controlFlow().execute(function(){
-      browser.ignoreSynchronization = true;
-      browser.switchTo().frame(browser.driver.findElement(protractor.By.css('#new-card-expiry iframe')));
-      browser.findElement(by.name('exp-date')).sendKeys(value);
-      browser.switchTo().defaultContent();
-      browser.ignoreSynchronization = false;
-    });
+    _inputOnIframe(value, '#new-card-expiry iframe', 'exp-date');    
   };
 
   this.enterCardCvc = function(value) {
-    protractor.promise.controlFlow().execute(function(){
-      browser.ignoreSynchronization = true;
-      browser.switchTo().frame(browser.driver.findElement(protractor.By.css('#new-card-cvc iframe')));
-      browser.findElement(by.name('cvc')).sendKeys(value);
-      browser.switchTo().defaultContent();
-      browser.ignoreSynchronization = false;
-    });
+    _inputOnIframe(value, '#new-card-cvc iframe', 'cvc');    
   };
 };
 
