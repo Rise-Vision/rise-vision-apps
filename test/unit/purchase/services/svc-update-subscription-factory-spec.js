@@ -164,7 +164,7 @@ describe("Services: purchase licenses factory", function() {
       validate = true;
 
       updateSubscriptionFactory.purchase = {
-        planId: 'planId',
+        planId: 'planId-1y',
         licensesToAdd: 5,
         licensesToRemove: 0,
         couponCode: 'couponCode'
@@ -176,7 +176,7 @@ describe("Services: purchase licenses factory", function() {
       expect(updateSubscriptionFactory.getEstimate().then).to.be.a("function");
 
       billing.estimateSubscriptionUpdate.should.have.been.called;
-      billing.estimateSubscriptionUpdate.should.have.been.calledWith(7, 'subscriptionId', 'planId', 'customerId', 'couponCode');
+      billing.estimateSubscriptionUpdate.should.have.been.calledWith(7, 'subscriptionId', 'planId-1y', 'customerId', 'couponCode');
     });
 
     it("should populate estimate object if call succeeds", function(done) {
@@ -186,6 +186,7 @@ describe("Services: purchase licenses factory", function() {
 
         expect(analyticsFactory.track).to.have.been.calledWith('Subscription Update Estimated', {
           subscriptionId: 'subscriptionId',
+          paymentTerm: 'yearly',
           changeInLicenses: 5,
           totalLicenses: 7,
           companyId: 'customerId'
@@ -346,7 +347,7 @@ describe("Services: purchase licenses factory", function() {
       validate = true;
 
       updateSubscriptionFactory.purchase = {
-        planId: 'planId',
+        planId: 'planId-1m',
         licensesToAdd: 0,
         licensesToRemove: 1,
         couponCode: ''
@@ -358,7 +359,7 @@ describe("Services: purchase licenses factory", function() {
       expect(updateSubscriptionFactory.getEstimate().then).to.be.a("function");
 
       billing.estimateSubscriptionUpdate.should.have.been.called;
-      billing.estimateSubscriptionUpdate.should.have.been.calledWith(1, 'subscriptionId', 'planId', 'customerId', '');
+      billing.estimateSubscriptionUpdate.should.have.been.calledWith(1, 'subscriptionId', 'planId-1m', 'customerId', '');
     });
 
     it("should populate estimate object if call succeeds", function(done) {
@@ -368,6 +369,7 @@ describe("Services: purchase licenses factory", function() {
 
         expect(analyticsFactory.track).to.have.been.calledWith('Subscription Update Estimated', {
           subscriptionId: 'subscriptionId',
+          paymentTerm: 'monthly',
           changeInLicenses: -1,
           totalLicenses: 1,
           companyId: 'customerId'
@@ -436,6 +438,7 @@ describe("Services: purchase licenses factory", function() {
       setTimeout(function() {
         analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
           subscriptionId: 'subscriptionId',
+          paymentTerm: 'yearly',
           changeInLicenses: 5,
           totalLicenses: 7,
           companyId: 'customerId'
@@ -539,6 +542,7 @@ describe("Services: purchase licenses factory", function() {
       setTimeout(function() {
         analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
           subscriptionId: 'subscriptionId',
+          paymentTerm: 'yearly',
           changeInLicenses: -1,
           totalLicenses: 1,
           companyId: 'customerId'
