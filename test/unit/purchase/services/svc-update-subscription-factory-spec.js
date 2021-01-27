@@ -5,8 +5,11 @@ describe("Services: purchase licenses factory", function() {
   beforeEach(module("risevision.apps.purchase"));
   beforeEach(module(function ($provide) {
     $provide.service("$q", function() {return Q;});
-    $provide.value("$stateParams", {
-      displayCount: 'displayCount'
+    $provide.value("$state", {
+      params: {
+        displayCount: 'displayCount',
+        subscriptionId: 'subscriptionId'
+      }
     });
     $provide.service('processErrorCode',function() {
       return function(err) {
@@ -18,11 +21,6 @@ describe("Services: purchase licenses factory", function() {
         reloadSelectedCompany: sinon.stub().returns(Q.resolve("success")),
         getUserEmail: sinon.stub().returns('userEmail')
       };
-    });
-    $provide.value("currentPlanFactory", {
-      currentPlan: {
-        subscriptionId: 'subscriptionId'
-      }
     });
     $provide.service("billing", function() {
       return {
@@ -54,6 +52,7 @@ describe("Services: purchase licenses factory", function() {
       return {
         getSubscription: sinon.stub().resolves(),
         getItemSubscription: sinon.stub().returns({
+          id: 'subscriptionId',
           customer_id: 'customerId',
           plan_quantity: 2,
           plan_id: 'somePlanId-1m'
@@ -63,14 +62,13 @@ describe("Services: purchase licenses factory", function() {
 
   }));
 
-  var $modal, $state, $timeout, updateSubscriptionFactory, currentPlanFactory,
+  var $modal, $timeout, updateSubscriptionFactory,
     userState, billing, analyticsFactory, subscriptionFactory, validate;
 
   beforeEach(function() {
     inject(function($injector) {
       $timeout = $injector.get("$timeout");
       userState = $injector.get('userState');
-      currentPlanFactory = $injector.get('currentPlanFactory');
       billing = $injector.get('billing');
       analyticsFactory = $injector.get('analyticsFactory');
       updateSubscriptionFactory = $injector.get("updateSubscriptionFactory");
@@ -165,7 +163,6 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
-      updateSubscriptionFactory.subscriptionId = 'subscriptionId';
       updateSubscriptionFactory.purchase = {
         planId: 'planId',
         licensesToAdd: 5,
@@ -348,7 +345,6 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
-      updateSubscriptionFactory.subscriptionId = 'subscriptionId';
       updateSubscriptionFactory.purchase = {
         planId: 'planId',
         licensesToAdd: 0,
@@ -406,7 +402,6 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
-      updateSubscriptionFactory.subscriptionId = 'subscriptionId';
       updateSubscriptionFactory.purchase = {
         planId: 'planId',
         licensesToAdd: 5,
@@ -524,7 +519,6 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
-      updateSubscriptionFactory.subscriptionId = 'subscriptionId';
       updateSubscriptionFactory.purchase = {
         planId: 'planId',
         licensesToAdd: 0,

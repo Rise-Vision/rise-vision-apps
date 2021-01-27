@@ -238,14 +238,14 @@ describe("controller: update subscription", function() {
   });
 
   describe("close: ", function() {
-    it("should close modal and redirect to provided path", function() {
+    it("should close and redirect to provided path", function() {
       $scope.close();
 
       $location.path.should.have.been.calledWith(redirectTo);
       $state.go.should.not.have.been.called;
     });
 
-    it("should close modal and redirect to provided path", function() {
+    it("should close and redirect to the subscription page", function() {
       redirectTo = '';
 
       _compile();

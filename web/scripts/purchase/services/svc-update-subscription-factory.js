@@ -5,12 +5,11 @@
   'use strict';
 
   angular.module('risevision.apps.purchase')
-    .factory('updateSubscriptionFactory', ['$log', '$timeout', '$stateParams',
-      'userState', 'currentPlanFactory', 'billing', 'analyticsFactory',
-      'pricingFactory', 'subscriptionFactory', 'processErrorCode',
-      function ($log, $timeout, $stateParams, userState, currentPlanFactory,
-        billing, analyticsFactory, pricingFactory, subscriptionFactory,
-        processErrorCode) {
+    .factory('updateSubscriptionFactory', ['$log', '$timeout', '$state', 'userState',
+      'billing', 'analyticsFactory', 'pricingFactory', 'subscriptionFactory',
+      'processErrorCode',
+      function ($log, $timeout, $state, userState, billing, analyticsFactory,
+        pricingFactory, subscriptionFactory, processErrorCode) {
         var factory = {};
         factory.userEmail = userState.getUserEmail();
 
@@ -26,13 +25,11 @@
 
           factory.purchase = {};
           factory.purchase.completed = false;
-          factory.purchase.licensesToAdd = purchaseAction === 'add' ? $stateParams.displayCount : 0;
-          factory.purchase.licensesToRemove = purchaseAction === 'remove' ? $stateParams.displayCount : 0;
+          factory.purchase.licensesToAdd = purchaseAction === 'add' ? $state.params.displayCount : 0;
+          factory.purchase.licensesToRemove = purchaseAction === 'remove' ? $state.params.displayCount : 0;
           factory.purchase.couponCode = '';
-          factory.subscriptionId = $stateParams.subscriptionId ||
-            currentPlanFactory.currentPlan.subscriptionId;
 
-          subscriptionFactory.getSubscription(factory.subscriptionId).then(function() {
+          subscriptionFactory.getSubscription($state.params.subscriptionId).then(function() {
             factory.purchase.planId = subscriptionFactory.getItemSubscription().plan_id;
 
             if (factory.purchase.planId && purchaseAction === 'annual') {
@@ -66,7 +63,7 @@
 
         var _getTrackingProperties = function () {
           return {
-            subscriptionId: factory.subscriptionId,
+            subscriptionId: subscriptionFactory.getItemSubscription().id,
             changeInLicenses: _getChangeInLicenses(),
             totalLicenses: factory.getTotalDisplayCount(),
             companyId: _getCompanyId()
@@ -100,7 +97,7 @@
 
           var couponCode = factory.purchase.couponCode;
           var displayCount = factory.getTotalDisplayCount();
-          var subscriptionId = factory.subscriptionId;
+          var subscriptionId = subscriptionFactory.getItemSubscription().id;
           var companyId = _getCompanyId();
           var planId = factory.purchase.planId;
 
@@ -140,7 +137,7 @@
 
           var couponCode = factory.purchase.couponCode;
           var displayCount = factory.getTotalDisplayCount();
-          var subscriptionId = factory.subscriptionId;
+          var subscriptionId = subscriptionFactory.getItemSubscription().id;
           var companyId = _getCompanyId();
           var planId = factory.purchase.planId;
 
