@@ -2,7 +2,7 @@
 
 var SubscriptionDetailsPage = function() {
 
-  var loader = element(by.xpath('//div[@spinner-key="update-subscription-loader"]'));
+  var loader = element(by.xpath('//div[@spinner-key="subscription-loader"]'));
   var descriptionText = element(by.css('.billing-app h4'));
 
   var addLicensesButton = element(by.id('addLicenses'));
@@ -10,6 +10,7 @@ var SubscriptionDetailsPage = function() {
   var addPaymentMethodButton = element(by.id('addPaymentMethod'));
 
   var invoiceMeItem = element(by.xpath('//label[@for="invoiceMe"]'));
+  var creditCardItems = element.all(by.repeater('card in paymentSourcesFactory.existingCreditCards'));  
   
   this.getLoader = function() {
     return loader;
@@ -33,6 +34,10 @@ var SubscriptionDetailsPage = function() {
 
   this.getInvoiceMeItem = function() {
     return invoiceMeItem;
+  };
+
+  this.getCreditCardItems = function () {
+    return creditCardItems;
   };
 };
 

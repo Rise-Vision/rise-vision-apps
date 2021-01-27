@@ -14,6 +14,7 @@
   var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
   var AddDisplayLicensesPage = require('./../pages/addDisplayLicensesPage.js');
   var SubscriptionDetailsPage = require('./../pages/subscriptionDetailsPage.js');
+  var AddPaymentMethodPage = require('./../pages/addPaymentMethodPage.js');
   var PurchaseLicensesSuccessPage = require('./../pages/purchaseLicensesSuccessPage.js');
 
   var SubscriptionEdit = function() {
@@ -25,6 +26,7 @@
         presentationListPage,
         addDisplayLicensesPage,
         subscriptionDetailsPage,
+        addPaymentMethodPage,
         purchaseLicensesSuccessPage,
         currentNextInvoice;
 
@@ -35,6 +37,7 @@
         presentationListPage = new PresentationListPage();
         addDisplayLicensesPage = new AddDisplayLicensesPage();
         subscriptionDetailsPage = new SubscriptionDetailsPage();
+        addPaymentMethodPage = new AddPaymentMethodPage();
         purchaseLicensesSuccessPage = new PurchaseLicensesSuccessPage();
 
         homepage.getDefaultSubscription();
@@ -43,13 +46,13 @@
 
       describe("Subscription Details page", function() {
         it("should load subscription details", function() {
-          helper.wait(subscriptionDetailsPage.getLoader(), 'Subscription Details Page Loader', 5000)
+          helper.wait(subscriptionDetailsPage.getLoader(), "Subscription Details Page Loader", 5000)
             .catch(function (err) {
               console.log(err);
             });
-          helper.waitDisappear(subscriptionDetailsPage.getLoader(), 'Subscription Details Page Loader');
+          helper.waitDisappear(subscriptionDetailsPage.getLoader(), "Subscription Details Page Loader");
 
-          expect(subscriptionDetailsPage.getDescriptionText().getText()).to.eventually.contain('5 x Display Licenses Yearly Plan');
+          expect(subscriptionDetailsPage.getDescriptionText().getText()).to.eventually.contain("5 x Display Licenses Yearly Plan");
         });
 
         it("should show subscription actions", function() {
@@ -59,7 +62,8 @@
         });
 
         it("should show Invoice Me as payment method", function() {
-          expect(subscriptionDetailsPage.getInvoiceMeItem().isDisplayed()).to.eventually.be.true;         
+          expect(subscriptionDetailsPage.getInvoiceMeItem().isDisplayed()).to.eventually.be.true;  
+          expect(subscriptionDetailsPage.getCreditCardItems().count()).to.eventually.equal(0);
         });
       });
 
@@ -205,6 +209,42 @@
           helper.waitDisappear(subscriptionDetailsPage.getLoader(), 'Subscription Details Page Loader');
 
           expect(subscriptionDetailsPage.getDescriptionText().getText()).to.eventually.contain('7 x Display Licenses Yearly Plan');
+        });
+      });
+
+      describe("Add Payment Method:", function() {
+        it("should load Add Payment Method page", function() {
+          subscriptionDetailsPage.getAddPaymentMethodButton().click();
+
+          helper.wait(addPaymentMethodPage.getLoader(), "Add Payment Method Page Loader", 5000).catch(function (err) {console.log(err);});
+          helper.waitDisappear(addPaymentMethodPage.getLoader(), "Add Payment Method Page Loader");
+
+          expect(addPaymentMethodPage.getAddButton().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should allow entering credit card details", function() {
+          expect(addPaymentMethodPage.getCardName().isDisplayed()).to.eventually.be.true;
+
+          addPaymentMethodPage.getCardName().sendKeys("Test");          
+          addPaymentMethodPage.enterCardNumber("4242424242424242");
+          addPaymentMethodPage.enterCardExpiration("12/34");
+          addPaymentMethodPage.enterCardCvc("123");
+        });
+
+        it("should Save credit card and navigate to Subscription Details", function() {
+          addPaymentMethodPage.getAddButton().click();
+
+          helper.wait(subscriptionDetailsPage.getLoader(), "Subscription Details Page Loader", 5000)
+            .catch(function (err) {
+              console.log(err);
+            });
+          helper.waitDisappear(subscriptionDetailsPage.getLoader(), "Subscription Details Page Loader");
+
+          expect(subscriptionDetailsPage.getAddPaymentMethodButton().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should list the newly added card", function() {
+          expect(subscriptionDetailsPage.getCreditCardItems().count()).to.eventually.equal(1);
         });
       });
 
