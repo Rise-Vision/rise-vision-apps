@@ -131,7 +131,44 @@ describe('app:', function() {
       var state = $state.get('apps.purchase.licenses');
       expect(state).to.be.ok;
       expect(state.url).to.equal('/licenses');
+      expect(state.templateUrl).to.equal('partials/purchase/update-subscription.html');
+      expect(state.controller).to.equal('UpdateSubscriptionCtrl');
       expect(state.abstract).to.be.true;
+    });
+
+    it('should resolve redirectTo as previous path', function() {
+      sinon.stub($location, 'path').returns('/displays/list');
+
+      var redirectTo = $state.get('apps.purchase.licenses').resolve.redirectTo[1]($location);
+      expect(redirectTo).to.equal('/displays/list');
+    });
+
+    it('should resolve redirectTo as blank if previous path is licenses add and no subscription', function() {
+      sinon.stub($location, 'path').returns('/licenses/add/');
+
+      var redirectTo = $state.get('apps.purchase.licenses').resolve.redirectTo[1]($location);
+      expect(redirectTo).to.equal('');
+    });
+
+    it('should resolve redirectTo as blank if previous path is licenses remove and no subscription', function() {
+      sinon.stub($location, 'path').returns('/licenses/remove/');
+
+      var redirectTo = $state.get('apps.purchase.licenses').resolve.redirectTo[1]($location);
+      expect(redirectTo).to.equal('');
+    });
+
+    it('should resolve redirectTo as blank if previous path is licenses add', function() {
+      sinon.stub($location, 'path').returns('/licenses/add/SUBSCRIPTIONID');
+
+      var redirectTo = $state.get('apps.purchase.licenses').resolve.redirectTo[1]($location);
+      expect(redirectTo).to.equal('');
+    });
+
+    it('should resolve redirectTo as blank if previous path is licenses remove', function() {
+      sinon.stub($location, 'path').returns('/licenses/remove/SUBSCRIPTIONID');
+
+      var redirectTo = $state.get('apps.purchase.licenses').resolve.redirectTo[1]($location);
+      expect(redirectTo).to.equal('');
     });
   });
 
@@ -141,7 +178,6 @@ describe('app:', function() {
       expect(state).to.be.ok;
       expect(state.url).to.equal('/add/:subscriptionId');
       expect(state.params).to.deep.equal({purchaseAction: 'add'});
-      expect(state.controller).to.equal('PurchaseLicensesCtrl')
     });
 
     it('should go to Purchase page if company is not subscribed to a plan', function(done) {
@@ -196,28 +232,6 @@ describe('app:', function() {
         done();
       },10);
     });
-
-    it('should resolve redirectTo as previous path', function() {
-      sinon.stub($location, 'path').returns('/displays/list');
-
-      var redirectTo = $state.get('apps.purchase.licenses.add').resolve.redirectTo[1]($location);
-      expect(redirectTo).to.equal('/displays/list');
-    });
-
-    it('should resolve redirectTo as Apps home if previous path is licenses add and no subscription', function() {
-      sinon.stub($location, 'path').returns('/licenses/add/');
-
-      var redirectTo = $state.get('apps.purchase.licenses.add').resolve.redirectTo[1]($location);
-      expect(redirectTo).to.equal('/');
-    });
-
-    it('should resolve redirectTo as Apps home if previous path is licenses add', function() {
-      sinon.stub($location, 'path').returns('/licenses/add/SUBSCRIPTIONID');
-
-      var redirectTo = $state.get('apps.purchase.licenses.add').resolve.redirectTo[1]($location);
-      expect(redirectTo).to.equal('/');
-    });
-
   });
 
   describe('state apps.purchase.licenses.remove:',function(){
@@ -226,7 +240,6 @@ describe('app:', function() {
       expect(state).to.be.ok;
       expect(state.url).to.equal('/remove/:subscriptionId');
       expect(state.params).to.deep.equal({purchaseAction: 'remove'});
-      expect(state.controller).to.equal('PurchaseLicensesCtrl');
     });
 
     it('should go to Purchase page if company is not subscribed to a plan', function(done) {
@@ -281,27 +294,46 @@ describe('app:', function() {
         done();
       },10);
     });
+  });
+
+  describe('state apps.purchase.frequency:',function(){
+    it('should register state',function(){
+      var state = $state.get('apps.purchase.frequency');
+      expect(state).to.be.ok;
+      expect(state.url).to.equal('/frequency/:subscriptionId');
+      expect(state.templateUrl).to.equal('partials/purchase/update-subscription.html');
+      expect(state.controller).to.equal('UpdateSubscriptionCtrl');
+      expect(state.params).to.deep.equal({purchaseAction: 'annual'});
+    });
+
+    it('should check apps access', function() {
+      $state.go('apps.purchase.frequency');
+      $rootScope.$digest();
+
+      canAccessApps.should.have.been.called;
+    });
 
     it('should resolve redirectTo as previous path', function() {
       sinon.stub($location, 'path').returns('/displays/list');
 
-      var redirectTo = $state.get('apps.purchase.licenses.remove').resolve.redirectTo[1]($location);
+      var redirectTo = $state.get('apps.purchase.frequency').resolve.redirectTo[1]($location);
       expect(redirectTo).to.equal('/displays/list');
     });
 
-    it('should resolve redirectTo as Apps home if previous path is licenses remove and no subscription', function() {
-      sinon.stub($location, 'path').returns('/licenses/remove/');
+    it('should resolve redirectTo as blank if previous path is annual and no subscription', function() {
+      sinon.stub($location, 'path').returns('/frequency');
 
-      var redirectTo = $state.get('apps.purchase.licenses.remove').resolve.redirectTo[1]($location);
-      expect(redirectTo).to.equal('/');
+      var redirectTo = $state.get('apps.purchase.frequency').resolve.redirectTo[1]($location);
+      expect(redirectTo).to.equal('');
     });
 
-    it('should resolve redirectTo as Apps home if previous path is licenses remove', function() {
-      sinon.stub($location, 'path').returns('/licenses/remove/SUBSCRIPTIONID');
+    it('should resolve redirectTo as blank if previous path is annual', function() {
+      sinon.stub($location, 'path').returns('/frequency/SUBSCRIPTIONID');
 
-      var redirectTo = $state.get('apps.purchase.licenses.remove').resolve.redirectTo[1]($location);
-      expect(redirectTo).to.equal('/');
+      var redirectTo = $state.get('apps.purchase.frequency').resolve.redirectTo[1]($location);
+      expect(redirectTo).to.equal('');
     });
+
   });
 
 });

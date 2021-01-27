@@ -234,58 +234,6 @@
               });
             });
             return deferred.promise;
-          },
-          estimateSubscriptionUpdate: function (displayCount, subscriptionId, companyId, couponCode) {
-            var deferred = $q.defer();
-
-            var obj = {
-              displayCount: displayCount,
-              subscriptionId: subscriptionId,
-              companyId: companyId,
-              couponCode: couponCode
-            };
-
-            $log.debug('integrations.subscription.estimate request:', obj);
-
-            storeAPILoader().then(function (storeApi) {
-                return storeApi.integrations.subscription.estimate(obj);
-              })
-              .then(function (resp) {
-                $log.debug('integrations.subscription.estimate resp', resp);
-                deferred.resolve(resp.result);
-              })
-              .then(null, function (resp) {
-                console.error('Failed to retrieve subscription estimate.', resp);
-
-                deferred.reject(resp && resp.result && resp.result.error);
-              });
-            return deferred.promise;
-          },
-          updateSubscription: function (displayCount, subscriptionId, companyId, couponCode) {
-            var deferred = $q.defer();
-
-            var obj = {
-              displayCount: displayCount,
-              subscriptionId: subscriptionId,
-              companyId: companyId,
-              couponCode: couponCode
-            };
-
-            $log.debug('integrations.subscription.update request:', obj);
-
-            storeAPILoader().then(function (storeApi) {
-                return storeApi.integrations.subscription.update(obj);
-              })
-              .then(function (resp) {
-                $log.debug('integrations.subscription.update resp', resp);
-                deferred.resolve(resp.result);
-              })
-              .then(null, function (resp) {
-                console.error('Failed to retrieve subscription update.', resp);
-
-                deferred.reject(resp && resp.result && resp.result.error);
-              });
-            return deferred.promise;
           }
         };
 

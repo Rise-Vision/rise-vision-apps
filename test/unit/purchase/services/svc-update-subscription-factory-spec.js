@@ -5,8 +5,16 @@ describe("Services: purchase licenses factory", function() {
   beforeEach(module("risevision.apps.purchase"));
   beforeEach(module(function ($provide) {
     $provide.service("$q", function() {return Q;});
-    $provide.value("$stateParams", {
-      displayCount: 'displayCount'
+    $provide.value("$state", {
+      params: {
+        displayCount: 'displayCount',
+        subscriptionId: 'subscriptionId'
+      }
+    });
+    $provide.service('processErrorCode',function() {
+      return function(err) {
+        return 'processed ' + err;
+      };
     });
     $provide.service("userState", function() {
       return {
@@ -14,19 +22,14 @@ describe("Services: purchase licenses factory", function() {
         getUserEmail: sinon.stub().returns('userEmail')
       };
     });
-    $provide.value("currentPlanFactory", {
-      currentPlan: {
-        subscriptionId: 'subscriptionId'
-      }
-    });
-    $provide.service("storeService", function() {
+    $provide.service("billing", function() {
       return {
         estimateSubscriptionUpdate: sinon.stub().returns(Q.resolve({item: 'estimateResponse'})),
         updateSubscription: sinon.spy(function() {
           if (validate) {
             return Q.resolve("success");
           } else {
-            return Q.reject();
+            return Q.reject('error');
           }
         })
       };
@@ -48,96 +51,109 @@ describe("Services: purchase licenses factory", function() {
     $provide.service("subscriptionFactory", function() {
       return {
         getSubscription: sinon.stub().resolves(),
-        item: {
-          subscription: {
-            customer_id: 'customerId',
-            plan_quantity: 2
-          }
-        }
+        getItemSubscription: sinon.stub().returns({
+          id: 'subscriptionId',
+          customer_id: 'customerId',
+          plan_quantity: 2,
+          plan_id: 'somePlanId-1m'
+        })
       };
     });
 
   }));
 
-  var $modal, $state, $timeout, purchaseLicensesFactory, currentPlanFactory,
-    userState, storeService, analyticsFactory, subscriptionFactory, validate;
+  var $modal, $timeout, updateSubscriptionFactory,
+    userState, billing, analyticsFactory, subscriptionFactory, validate;
 
   beforeEach(function() {
     inject(function($injector) {
       $timeout = $injector.get("$timeout");
       userState = $injector.get('userState');
-      currentPlanFactory = $injector.get('currentPlanFactory');
-      storeService = $injector.get('storeService');
+      billing = $injector.get('billing');
       analyticsFactory = $injector.get('analyticsFactory');
-      purchaseLicensesFactory = $injector.get("purchaseLicensesFactory");
+      updateSubscriptionFactory = $injector.get("updateSubscriptionFactory");
       subscriptionFactory = $injector.get("subscriptionFactory");
     });
   });
 
   it("should exist", function() {
-    expect(purchaseLicensesFactory).to.be.ok;
-    expect(purchaseLicensesFactory.init).to.be.a("function");
-    expect(purchaseLicensesFactory.getCurrentDisplayCount).to.be.a("function");
-    expect(purchaseLicensesFactory.getEstimate).to.be.a("function");
-    expect(purchaseLicensesFactory.completePayment).to.be.a("function");
+    expect(updateSubscriptionFactory).to.be.ok;
+    expect(updateSubscriptionFactory.init).to.be.a("function");
+    expect(updateSubscriptionFactory.getCurrentDisplayCount).to.be.a("function");
+    expect(updateSubscriptionFactory.getEstimate).to.be.a("function");
+    expect(updateSubscriptionFactory.completePayment).to.be.a("function");
 
-    expect(purchaseLicensesFactory.userEmail).to.equal('userEmail');
+    expect(updateSubscriptionFactory.userEmail).to.equal('userEmail');
   });
 
   describe("init: ", function() {
     beforeEach(function() {
-      sinon.stub(purchaseLicensesFactory, 'getEstimate');
+      sinon.stub(updateSubscriptionFactory, 'getEstimate');
     });
 
     afterEach(function() {
-      purchaseLicensesFactory.getEstimate.restore();
+      updateSubscriptionFactory.getEstimate.restore();
     });
 
     it("should initialize values on add and retrieve estimate", function() {
-      purchaseLicensesFactory.init('add');
+      updateSubscriptionFactory.init('add');
 
-      expect(purchaseLicensesFactory.purchase).to.be.ok;
-      expect(purchaseLicensesFactory.purchase.completed).to.be.false;
-      expect(purchaseLicensesFactory.purchase.licensesToAdd).to.equal('displayCount');
-      expect(purchaseLicensesFactory.purchase.licensesToRemove).to.equal(0);
-      expect(purchaseLicensesFactory.purchase.couponCode).to.equal('')
+      expect(updateSubscriptionFactory.purchase).to.be.ok;
+      expect(updateSubscriptionFactory.purchase.completed).to.be.false;
+      expect(updateSubscriptionFactory.purchase.licensesToAdd).to.equal('displayCount');
+      expect(updateSubscriptionFactory.purchase.licensesToRemove).to.equal(0);
+      expect(updateSubscriptionFactory.purchase.couponCode).to.equal('')
 
       subscriptionFactory.getSubscription.should.have.been.calledWith('subscriptionId');
     });
 
     it("should initialize values on remove and retrieve estimate", function() {
-      purchaseLicensesFactory.init('remove');
+      updateSubscriptionFactory.init('remove');
 
-      expect(purchaseLicensesFactory.purchase).to.be.ok;
-      expect(purchaseLicensesFactory.purchase.completed).to.be.false;
-      expect(purchaseLicensesFactory.purchase.licensesToAdd).to.equal(0);
-      expect(purchaseLicensesFactory.purchase.licensesToRemove).to.equal('displayCount');
-      expect(purchaseLicensesFactory.purchase.couponCode).to.equal('')
+      expect(updateSubscriptionFactory.purchase).to.be.ok;
+      expect(updateSubscriptionFactory.purchase.completed).to.be.false;
+      expect(updateSubscriptionFactory.purchase.licensesToAdd).to.equal(0);
+      expect(updateSubscriptionFactory.purchase.licensesToRemove).to.equal('displayCount');
+      expect(updateSubscriptionFactory.purchase.couponCode).to.equal('')
 
       subscriptionFactory.getSubscription.should.have.been.calledWith('subscriptionId');
+    });
+
+    it('should update the plan id and get an estimate', function(done) {
+      updateSubscriptionFactory.init('remove');
+
+      setTimeout(function() {
+        expect(updateSubscriptionFactory.purchase.planId).to.equal('somePlanId-1m')
+
+        updateSubscriptionFactory.getEstimate.should.have.been.called;
+
+        done();
+      }, 10);
+    });
+
+    it('should update the plan id to annual', function(done) {
+      updateSubscriptionFactory.init('annual');
+
+      setTimeout(function() {
+        expect(updateSubscriptionFactory.purchase.planId).to.equal('somePlanId-1y')
+
+        done();
+      }, 10);
     });
 
   });
 
   describe("getCurrentDisplayCount:", function() {
     it("should return the current display count from current plan", function() {
-      var count = purchaseLicensesFactory.getCurrentDisplayCount();
+      var count = updateSubscriptionFactory.getCurrentDisplayCount();
 
       expect(count).to.equal(2);
     });
 
-    it("should return current display count as zero if subscription is not loaded", function() {
-      subscriptionFactory.item = null;
-
-      var count = purchaseLicensesFactory.getCurrentDisplayCount();
-
-      expect(count).to.equal(0);
-    });
-
     it("should return current display count as zero if subscription item has no subscription", function() {
-      subscriptionFactory.item.subscription = null;
+      subscriptionFactory.getItemSubscription.returns({});
 
-      var count = purchaseLicensesFactory.getCurrentDisplayCount();
+      var count = updateSubscriptionFactory.getCurrentDisplayCount();
 
       expect(count).to.equal(0);
     });
@@ -147,8 +163,8 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
-      purchaseLicensesFactory.subscriptionId = 'subscriptionId';
-      purchaseLicensesFactory.purchase = {
+      updateSubscriptionFactory.purchase = {
+        planId: 'planId',
         licensesToAdd: 5,
         licensesToRemove: 0,
         couponCode: 'couponCode'
@@ -157,16 +173,16 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should call estimateSubscriptionUpdate api and return a promise", function() {
-      expect(purchaseLicensesFactory.getEstimate().then).to.be.a("function");
+      expect(updateSubscriptionFactory.getEstimate().then).to.be.a("function");
 
-      storeService.estimateSubscriptionUpdate.should.have.been.called;
-      storeService.estimateSubscriptionUpdate.should.have.been.calledWith(7, 'subscriptionId', 'customerId', 'couponCode');
+      billing.estimateSubscriptionUpdate.should.have.been.called;
+      billing.estimateSubscriptionUpdate.should.have.been.calledWith(7, 'subscriptionId', 'planId', 'customerId', 'couponCode');
     });
 
     it("should populate estimate object if call succeeds", function(done) {
-      purchaseLicensesFactory.getEstimate()
+      updateSubscriptionFactory.getEstimate()
       .then(function() {
-        expect(purchaseLicensesFactory.estimate).to.equal('estimateResponse');
+        expect(updateSubscriptionFactory.estimate).to.equal('estimateResponse');
 
         expect(analyticsFactory.track).to.have.been.calledWith('Subscription Update Estimated', {
           subscriptionId: 'subscriptionId',
@@ -185,15 +201,15 @@ describe("Services: purchase licenses factory", function() {
 
     describe('getTotalDisplayCount:', function() {
       it("should add for the total display count", function() {
-        var count = purchaseLicensesFactory.getTotalDisplayCount();
+        var count = updateSubscriptionFactory.getTotalDisplayCount();
 
         expect(count).to.equal(7);
       });
 
       it("should not consider change when input validation fails", function() {
-        purchaseLicensesFactory.purchase.licensesToAdd = undefined;
+        updateSubscriptionFactory.purchase.licensesToAdd = undefined;
 
-        var count = purchaseLicensesFactory.getTotalDisplayCount();
+        var count = updateSubscriptionFactory.getTotalDisplayCount();
 
         expect(count).to.equal(2);
       });
@@ -201,20 +217,20 @@ describe("Services: purchase licenses factory", function() {
 
     describe('_updatePerDisplayPrice:', function() {
       it('should not update prices if estimate does not contain correct fields', function(done) {
-        purchaseLicensesFactory.purchase.currentPricePerDisplay = 'currentPrice';
-        purchaseLicensesFactory.purchase.newPricePerDisplay = 'newPrice';
+        updateSubscriptionFactory.purchase.currentPricePerDisplay = 'currentPrice';
+        updateSubscriptionFactory.purchase.newPricePerDisplay = 'newPrice';
 
-        purchaseLicensesFactory.getEstimate()
+        updateSubscriptionFactory.getEstimate()
           .then(function() {
-            expect(purchaseLicensesFactory.purchase.currentPricePerDisplay).to.equal('currentPrice');
-            expect(purchaseLicensesFactory.purchase.newPricePerDisplay).to.equal('newPrice');
+            expect(updateSubscriptionFactory.purchase.currentPricePerDisplay).to.equal('currentPrice');
+            expect(updateSubscriptionFactory.purchase.newPricePerDisplay).to.equal('newPrice');
 
             done();
           });
       });
 
       it('should update prices for yearly subscriptions', function(done) {
-        storeService.estimateSubscriptionUpdate.returns(Q.resolve({
+        billing.estimateSubscriptionUpdate.returns(Q.resolve({
           item: {
             next_invoice_estimate: {
               line_items: [{
@@ -225,17 +241,17 @@ describe("Services: purchase licenses factory", function() {
           }
         }));
 
-        purchaseLicensesFactory.getEstimate()
+        updateSubscriptionFactory.getEstimate()
           .then(function() {
-            expect(purchaseLicensesFactory.purchase.currentPricePerDisplay).to.equal('false2false');
-            expect(purchaseLicensesFactory.purchase.newPricePerDisplay).to.equal('false7false');
+            expect(updateSubscriptionFactory.purchase.currentPricePerDisplay).to.equal('false2false');
+            expect(updateSubscriptionFactory.purchase.newPricePerDisplay).to.equal('false7false');
 
             done();
           });
       });
 
       it('should update prices for monthly subscriptions', function(done) {
-        storeService.estimateSubscriptionUpdate.returns(Q.resolve({
+        billing.estimateSubscriptionUpdate.returns(Q.resolve({
           item: {
             next_invoice_estimate: {
               line_items: [{
@@ -248,17 +264,17 @@ describe("Services: purchase licenses factory", function() {
           }
         }));
 
-        purchaseLicensesFactory.getEstimate()
+        updateSubscriptionFactory.getEstimate()
           .then(function() {
-            expect(purchaseLicensesFactory.purchase.currentPricePerDisplay).to.equal('true2false');
-            expect(purchaseLicensesFactory.purchase.newPricePerDisplay).to.equal('true7false');
+            expect(updateSubscriptionFactory.purchase.currentPricePerDisplay).to.equal('true2false');
+            expect(updateSubscriptionFactory.purchase.newPricePerDisplay).to.equal('true7false');
 
             done();
           });
       });
 
       it('should detect education discount', function(done) {
-        storeService.estimateSubscriptionUpdate.returns(Q.resolve({
+        billing.estimateSubscriptionUpdate.returns(Q.resolve({
           item: {
             next_invoice_estimate: {
               line_items: [{
@@ -271,10 +287,10 @@ describe("Services: purchase licenses factory", function() {
           }
         }));
 
-        purchaseLicensesFactory.getEstimate()
+        updateSubscriptionFactory.getEstimate()
           .then(function() {
-            expect(purchaseLicensesFactory.purchase.currentPricePerDisplay).to.equal('false2true');
-            expect(purchaseLicensesFactory.purchase.newPricePerDisplay).to.equal('false7true');
+            expect(updateSubscriptionFactory.purchase.currentPricePerDisplay).to.equal('false2true');
+            expect(updateSubscriptionFactory.purchase.newPricePerDisplay).to.equal('false7true');
 
             done();
           });
@@ -283,11 +299,11 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should show estimate error if call fails", function(done) {
-      storeService.estimateSubscriptionUpdate.returns(Q.reject());
+      billing.estimateSubscriptionUpdate.returns(Q.reject('error'));
 
-      purchaseLicensesFactory.getEstimate()
+      updateSubscriptionFactory.getEstimate()
       .then(function() {
-        expect(purchaseLicensesFactory.apiError).to.equal("An unexpected error has occurred. Please try again.");
+        expect(updateSubscriptionFactory.apiError).to.equal("processed error");
 
         done();
       })
@@ -297,12 +313,12 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should not clear previous estimate on error", function(done) {
-      storeService.estimateSubscriptionUpdate.returns(Q.reject());
-      purchaseLicensesFactory.estimate = 'previousEstimate';
+      billing.estimateSubscriptionUpdate.returns(Q.reject());
+      updateSubscriptionFactory.estimate = 'previousEstimate';
 
-      purchaseLicensesFactory.getEstimate()
+      updateSubscriptionFactory.getEstimate()
       .then(function() {
-        expect(purchaseLicensesFactory.estimate).to.equal("previousEstimate");
+        expect(updateSubscriptionFactory.estimate).to.equal("previousEstimate");
 
         done();
       })
@@ -312,12 +328,12 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should start and stop spinner", function(done) {
-      purchaseLicensesFactory.getEstimate();
+      updateSubscriptionFactory.getEstimate();
 
-      expect(purchaseLicensesFactory.loading).to.be.true;
+      expect(updateSubscriptionFactory.loading).to.be.true;
 
       setTimeout(function() {
-        expect(purchaseLicensesFactory.loading).to.be.false;
+        expect(updateSubscriptionFactory.loading).to.be.false;
 
         done();
       }, 10);
@@ -329,8 +345,8 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
-      purchaseLicensesFactory.subscriptionId = 'subscriptionId';
-      purchaseLicensesFactory.purchase = {
+      updateSubscriptionFactory.purchase = {
+        planId: 'planId',
         licensesToAdd: 0,
         licensesToRemove: 1,
         couponCode: ''
@@ -339,16 +355,16 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should call estimateSubscriptionUpdate api and return a promise", function() {
-      expect(purchaseLicensesFactory.getEstimate().then).to.be.a("function");
+      expect(updateSubscriptionFactory.getEstimate().then).to.be.a("function");
 
-      storeService.estimateSubscriptionUpdate.should.have.been.called;
-      storeService.estimateSubscriptionUpdate.should.have.been.calledWith(1, 'subscriptionId', 'customerId', '');
+      billing.estimateSubscriptionUpdate.should.have.been.called;
+      billing.estimateSubscriptionUpdate.should.have.been.calledWith(1, 'subscriptionId', 'planId', 'customerId', '');
     });
 
     it("should populate estimate object if call succeeds", function(done) {
-      purchaseLicensesFactory.getEstimate()
+      updateSubscriptionFactory.getEstimate()
       .then(function() {
-        expect(purchaseLicensesFactory.estimate).to.equal('estimateResponse');
+        expect(updateSubscriptionFactory.estimate).to.equal('estimateResponse');
 
         expect(analyticsFactory.track).to.have.been.calledWith('Subscription Update Estimated', {
           subscriptionId: 'subscriptionId',
@@ -367,15 +383,15 @@ describe("Services: purchase licenses factory", function() {
 
     describe('getTotalDisplayCount:', function() {
       it("should subtract for the total display count", function() {
-        var count = purchaseLicensesFactory.getTotalDisplayCount();
+        var count = updateSubscriptionFactory.getTotalDisplayCount();
 
         expect(count).to.equal(1);
       });
 
       it("should not consider change when input validation fails", function() {
-        purchaseLicensesFactory.purchase.licensesToRemove = undefined;
+        updateSubscriptionFactory.purchase.licensesToRemove = undefined;
 
-        var count = purchaseLicensesFactory.getTotalDisplayCount();
+        var count = updateSubscriptionFactory.getTotalDisplayCount();
 
         expect(count).to.equal(2);
       });
@@ -386,8 +402,8 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
-      purchaseLicensesFactory.subscriptionId = 'subscriptionId';
-      purchaseLicensesFactory.purchase = {
+      updateSubscriptionFactory.purchase = {
+        planId: 'planId',
         licensesToAdd: 5,
         licensesToRemove: 0,
         couponCode: 'couponCode'
@@ -396,26 +412,26 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should reset previous messages and start spinner", function() {
-      purchaseLicensesFactory.loading = false;
-      purchaseLicensesFactory.apiError = "apiError";
-      purchaseLicensesFactory.errorMessage = "error";
+      updateSubscriptionFactory.loading = false;
+      updateSubscriptionFactory.apiError = "apiError";
+      updateSubscriptionFactory.errorMessage = "error";
 
-      purchaseLicensesFactory.completePayment();
+      updateSubscriptionFactory.completePayment();
 
-      expect(purchaseLicensesFactory.loading).to.be.true;
-      expect(purchaseLicensesFactory.apiError).to.not.be.ok;
-      expect(purchaseLicensesFactory.errorMessage).to.not.be.ok;
+      expect(updateSubscriptionFactory.loading).to.be.true;
+      expect(updateSubscriptionFactory.apiError).to.not.be.ok;
+      expect(updateSubscriptionFactory.errorMessage).to.not.be.ok;
     });
 
     it("should call updateSubscription api and return a promise", function() {
-      expect(purchaseLicensesFactory.completePayment().then).to.be.a("function");
+      expect(updateSubscriptionFactory.completePayment().then).to.be.a("function");
 
-      storeService.updateSubscription.should.have.been.called;
-      storeService.updateSubscription.should.have.been.calledWith(7, 'subscriptionId', 'customerId', 'couponCode');
+      billing.updateSubscription.should.have.been.called;
+      billing.updateSubscription.should.have.been.calledWith(7, 'subscriptionId', 'planId', 'customerId', 'couponCode');
     });
 
     it("should track purchase", function(done) {
-      purchaseLicensesFactory.completePayment();
+      updateSubscriptionFactory.completePayment();
 
       setTimeout(function() {
         analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
@@ -430,10 +446,10 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should not reload company right away", function(done) {
-      purchaseLicensesFactory.completePayment();
+      updateSubscriptionFactory.completePayment();
 
       setTimeout(function() {
-        expect(purchaseLicensesFactory.purchase.completed).to.not.be.ok;
+        expect(updateSubscriptionFactory.purchase.completed).to.not.be.ok;
         userState.reloadSelectedCompany.should.not.have.been.called;
 
         done();
@@ -441,12 +457,12 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should reloadSelectedCompany on purchase", function(done) {
-      purchaseLicensesFactory.completePayment()
+      updateSubscriptionFactory.completePayment()
         .then(function() {
           userState.reloadSelectedCompany.should.have.been.called;
-          expect(purchaseLicensesFactory.purchase.completed).to.be.true;
+          expect(updateSubscriptionFactory.purchase.completed).to.be.true;
 
-          expect(purchaseLicensesFactory.loading).to.be.false;
+          expect(updateSubscriptionFactory.loading).to.be.false;
 
           done();
         })
@@ -462,12 +478,12 @@ describe("Services: purchase licenses factory", function() {
 
     it("should handle failure to reloadSelectedCompany", function(done) {
       userState.reloadSelectedCompany.returns(Q.reject());
-      purchaseLicensesFactory.completePayment()
+      updateSubscriptionFactory.completePayment()
         .then(function() {
           userState.reloadSelectedCompany.should.have.been.called;
-          expect(purchaseLicensesFactory.purchase.completed).to.be.true;
+          expect(updateSubscriptionFactory.purchase.completed).to.be.true;
 
-          expect(purchaseLicensesFactory.loading).to.be.false;
+          expect(updateSubscriptionFactory.loading).to.be.false;
 
           done();
         })
@@ -484,11 +500,11 @@ describe("Services: purchase licenses factory", function() {
     it("should show payment error if call fails", function(done) {
       validate = false;
 
-      purchaseLicensesFactory.completePayment()
+      updateSubscriptionFactory.completePayment()
         .then(function() {
-          expect(purchaseLicensesFactory.apiError).to.equal("There was an unknown error with the payment.");
-          expect(purchaseLicensesFactory.purchase.completed).to.not.be.ok;
-          expect(purchaseLicensesFactory.loading).to.be.false;
+          expect(updateSubscriptionFactory.apiError).to.equal('processed error');
+          expect(updateSubscriptionFactory.purchase.completed).to.not.be.ok;
+          expect(updateSubscriptionFactory.loading).to.be.false;
 
           done();
         })
@@ -503,8 +519,8 @@ describe("Services: purchase licenses factory", function() {
     beforeEach(function() {
       validate = true;
 
-      purchaseLicensesFactory.subscriptionId = 'subscriptionId';
-      purchaseLicensesFactory.purchase = {
+      updateSubscriptionFactory.purchase = {
+        planId: 'planId',
         licensesToAdd: 0,
         licensesToRemove: 1,
         couponCode: ''
@@ -512,14 +528,14 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should call updateSubscription api and return a promise", function() {
-      expect(purchaseLicensesFactory.completePayment().then).to.be.a("function");
+      expect(updateSubscriptionFactory.completePayment().then).to.be.a("function");
 
-      storeService.updateSubscription.should.have.been.called;
-      storeService.updateSubscription.should.have.been.calledWith(1, 'subscriptionId', 'customerId', '');
+      billing.updateSubscription.should.have.been.called;
+      billing.updateSubscription.should.have.been.calledWith(1, 'subscriptionId', 'planId', 'customerId', '');
     });
 
     it("should track purchase", function(done) {
-      purchaseLicensesFactory.completePayment();
+      updateSubscriptionFactory.completePayment();
       setTimeout(function() {
         analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
           subscriptionId: 'subscriptionId',
@@ -534,25 +550,25 @@ describe("Services: purchase licenses factory", function() {
 
     describe("getCreditTotal:", function() {
       it("should get credit total 0 if there are no credit notes", function() {
-        var total = purchaseLicensesFactory.getCreditTotal();
+        var total = updateSubscriptionFactory.getCreditTotal();
 
         expect(total).to.equal(0);
       });
 
       it("should get credit total for a single credit note", function() {
-        purchaseLicensesFactory.estimate = {
+        updateSubscriptionFactory.estimate = {
           credit_note_estimates: [
             { total: 1000 }
           ]
         };
 
-        var total = purchaseLicensesFactory.getCreditTotal();
+        var total = updateSubscriptionFactory.getCreditTotal();
 
         expect(total).to.equal(10);
       });
 
       it("should get credit total for multiple credit notes", function() {
-        purchaseLicensesFactory.estimate = {
+        updateSubscriptionFactory.estimate = {
           credit_note_estimates: [
             { total: 1000 },
             { total: 2000 },
@@ -560,7 +576,7 @@ describe("Services: purchase licenses factory", function() {
           ]
         };
 
-        var total = purchaseLicensesFactory.getCreditTotal();
+        var total = updateSubscriptionFactory.getCreditTotal();
 
         expect(total).to.equal(60);
       });

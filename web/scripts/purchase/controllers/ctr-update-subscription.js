@@ -2,21 +2,22 @@
 
 angular.module('risevision.apps.purchase')
 
-  .controller('PurchaseLicensesCtrl', ['$scope', '$stateParams', '$loading',
-    'purchaseLicensesFactory', 'subscriptionFactory', '$location', 'redirectTo',
-    function ($scope, $stateParams, $loading, purchaseLicensesFactory,
+  .controller('UpdateSubscriptionCtrl', ['$scope', '$state', '$loading',
+    'updateSubscriptionFactory', 'subscriptionFactory', '$location', 'redirectTo',
+    function ($scope, $state, $loading, updateSubscriptionFactory,
       subscriptionFactory, $location, redirectTo) {
-      $scope.factory = purchaseLicensesFactory;
+      $scope.factory = updateSubscriptionFactory;
       $scope.subscriptionFactory = subscriptionFactory;
       $scope.couponCode = null;
+      $scope.purchaseAction = $state.params.purchaseAction;
 
-      purchaseLicensesFactory.init($stateParams.purchaseAction);
+      updateSubscriptionFactory.init($scope.purchaseAction);
 
       $scope.$watchGroup(['factory.loading', 'subscriptionFactory.loading'], function (values) {
         if (values[0] || values[1]) {
-          $loading.start('purchase-licenses-loader');
+          $loading.start('update-subscription-loader');
         } else {
-          $loading.stop('purchase-licenses-loader');
+          $loading.stop('update-subscription-loader');
         }
       });
 
@@ -57,7 +58,7 @@ angular.module('risevision.apps.purchase')
           return;
         }
 
-        return purchaseLicensesFactory.getEstimate();
+        return updateSubscriptionFactory.getEstimate();
       };
 
       $scope.completePayment = function () {
@@ -65,11 +66,17 @@ angular.module('risevision.apps.purchase')
           return;
         }
 
-        return purchaseLicensesFactory.completePayment();
+        return updateSubscriptionFactory.completePayment();
       };
 
       $scope.close = function () {
-        $location.path(redirectTo);
+        if (redirectTo) {
+          $location.path(redirectTo);
+        } else {
+          $state.go('apps.billing.subscription', {
+            subscriptionId: $state.params.subscriptionId
+          });
+        }
       };
 
     }

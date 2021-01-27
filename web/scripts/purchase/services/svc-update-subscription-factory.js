@@ -5,11 +5,11 @@
   'use strict';
 
   angular.module('risevision.apps.purchase')
-    .factory('purchaseLicensesFactory', ['$log', '$timeout', '$stateParams',
-      'userState', 'currentPlanFactory', 'storeService', 'analyticsFactory',
-      'pricingFactory', 'subscriptionFactory',
-      function ($log, $timeout, $stateParams, userState, currentPlanFactory,
-        storeService, analyticsFactory, pricingFactory, subscriptionFactory) {
+    .factory('updateSubscriptionFactory', ['$log', '$timeout', '$state', 'userState',
+      'billing', 'analyticsFactory', 'pricingFactory', 'subscriptionFactory',
+      'processErrorCode',
+      function ($log, $timeout, $state, userState, billing, analyticsFactory,
+        pricingFactory, subscriptionFactory, processErrorCode) {
         var factory = {};
         factory.userEmail = userState.getUserEmail();
 
@@ -23,32 +23,31 @@
         factory.init = function (purchaseAction) {
           _clearMessages();
 
-          var isRemove = purchaseAction === 'remove';
-
           factory.purchase = {};
           factory.purchase.completed = false;
-          factory.purchase.licensesToAdd = isRemove ? 0 : $stateParams.displayCount;
-          factory.purchase.licensesToRemove = isRemove ? $stateParams.displayCount : 0;
+          factory.purchase.licensesToAdd = purchaseAction === 'add' ? $state.params.displayCount : 0;
+          factory.purchase.licensesToRemove = purchaseAction === 'remove' ? $state.params.displayCount : 0;
           factory.purchase.couponCode = '';
-          factory.subscriptionId = $stateParams.subscriptionId ||
-            currentPlanFactory.currentPlan.subscriptionId;
 
-          subscriptionFactory.getSubscription(factory.subscriptionId).then(function() {
+          subscriptionFactory.getSubscription($state.params.subscriptionId).then(function() {
+            factory.purchase.planId = subscriptionFactory.getItemSubscription().plan_id;
+
+            if (factory.purchase.planId && purchaseAction === 'annual') {
+              factory.purchase.planId = factory.purchase.planId.replace('1m', '1y');
+            }
+
             factory.getEstimate();
           });
         };
 
         factory.getCurrentDisplayCount = function() {
-          var currentDisplayCount = subscriptionFactory.item &&
-            subscriptionFactory.item.subscription &&
-            subscriptionFactory.item.subscription.plan_quantity;
+          var currentDisplayCount = subscriptionFactory.getItemSubscription().plan_quantity;
 
           return currentDisplayCount || 0;
         };
 
         var _getCompanyId = function() {
-          return subscriptionFactory.item && subscriptionFactory.item.subscription &&
-            subscriptionFactory.item.subscription.customer_id;
+          return subscriptionFactory.getItemSubscription().customer_id;
         };
 
         var _getChangeInLicenses = function() {
@@ -64,7 +63,7 @@
 
         var _getTrackingProperties = function () {
           return {
-            subscriptionId: factory.subscriptionId,
+            subscriptionId: subscriptionFactory.getItemSubscription().id,
             changeInLicenses: _getChangeInLicenses(),
             totalLicenses: factory.getTotalDisplayCount(),
             companyId: _getCompanyId()
@@ -98,10 +97,11 @@
 
           var couponCode = factory.purchase.couponCode;
           var displayCount = factory.getTotalDisplayCount();
-          var subscriptionId = factory.subscriptionId;
+          var subscriptionId = subscriptionFactory.getItemSubscription().id;
           var companyId = _getCompanyId();
+          var planId = factory.purchase.planId;
 
-          return storeService.estimateSubscriptionUpdate(displayCount, subscriptionId, companyId, couponCode)
+          return billing.estimateSubscriptionUpdate(displayCount, subscriptionId, planId, companyId, couponCode)
             .then(function (result) {
               factory.estimate = result.item;
 
@@ -109,10 +109,9 @@
 
               analyticsFactory.track('Subscription Update Estimated', _getTrackingProperties());
             })
-            .catch(function (result) {
+            .catch(function (e) {
               factory.errorMessage = 'Something went wrong.';
-              factory.apiError = result && result.message ? result.message :
-                'An unexpected error has occurred. Please try again.';
+              factory.apiError = processErrorCode(e);
             })
             .finally(function () {
               factory.loading = false;
@@ -138,10 +137,11 @@
 
           var couponCode = factory.purchase.couponCode;
           var displayCount = factory.getTotalDisplayCount();
-          var subscriptionId = factory.subscriptionId;
+          var subscriptionId = subscriptionFactory.getItemSubscription().id;
           var companyId = _getCompanyId();
+          var planId = factory.purchase.planId;
 
-          return storeService.updateSubscription(displayCount, subscriptionId, companyId, couponCode)
+          return billing.updateSubscription(displayCount, subscriptionId, planId, companyId, couponCode)
             .then(function () {
               analyticsFactory.track('Subscription Updated', _getTrackingProperties());
 
@@ -155,10 +155,9 @@
                   $log.debug('Failed to reload company', err);
                 });
             })
-            .catch(function (result) {
+            .catch(function (e) {
               factory.errorMessage = 'Something went wrong.';
-              factory.apiError = result && result.message ? result.message :
-                 'There was an unknown error with the payment.';
+              factory.apiError = processErrorCode(e);
             })
             .finally(function () {
               factory.loading = false;

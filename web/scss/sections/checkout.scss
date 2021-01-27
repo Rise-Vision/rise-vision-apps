@@ -65,7 +65,7 @@
 }
 
 .btn-group-justified.payment-method-select {
-  @extend .mb-0;
+  @extend .btn-group-justified.stacking;
 
   width: 400px;
 
@@ -74,24 +74,19 @@
     font-weight: normal;
   }
 
-  @media(max-width: $screen-xs-max) {
-    width: 100%;
+  streamline-icon {
+    @extend .ml-3;
+  }
+}
 
-    button {
-      width: 100%;
-    }
+.btn-group-justified.billing-period-select {
+  @extend .btn-group-justified.stacking;
 
-    .btn:first-child {
-      border-top-right-radius: 4px !important;
-      border-bottom-left-radius: 0;
-    }
+  width: 300px;
 
-    .btn:last-child {
-      margin-left: 0;
-      margin-top: -1px;
-      border-top-right-radius: 0;
-      border-bottom-left-radius: 4px;
-    }
+  button {
+    width: 150px;
+    font-weight: normal;
   }
 
   streamline-icon {

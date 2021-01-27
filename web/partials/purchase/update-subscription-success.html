@@ -1,0 +1,40 @@
+<div id="checkout-success" class="checkout-centered-panel">
+  <span>
+    <h4 class="u_margin-md-bottom">
+      <span ng-if="purchaseAction === 'add'">A great big thank you!</span>
+      <span ng-if="purchaseAction === 'remove'">Display licenses have been removed.</span>
+      <span ng-if="purchaseAction === 'annual'">Billing frequency has been adjusted.</span>
+    </h4>
+    <p class="u_margin-md-bottom">
+      We’ve sent a confirmation email to <b>{{factory.userEmail}}</b>.
+    </p>
+
+    <p>
+      <b>Details:</b><br />
+      <span ng-if="purchaseAction === 'add'">
+        You’ve added <b>{{factory.purchase.licensesToAdd}} display license{{ factory.purchase.licensesToAdd > 1 ? 's' : '' }}</b> to your subscription.<br/>
+      </span>
+      <span ng-if="purchaseAction === 'remove'">
+        You’ve removed <b>{{factory.purchase.licensesToRemove}} display license{{ factory.purchase.licensesToRemove > 1 ? 's' : '' }}</b> from your subscription.<br/>
+      </span>
+      <span ng-if="purchaseAction === 'annual'">
+        You’ve changed your billing frequency to <b>Annual</b>.
+      </span>
+
+      <span ng-if="factory.estimate.invoice_estimate.amount_due && !factory.getCreditTotal()">
+        You will be charged <b>${{factory.estimate.invoice_estimate.amount_due/100 | number:2}}</b>.
+      </span>
+      <span ng-if="factory.getCreditTotal() && !factory.estimate.invoice_estimate.amount_due">
+        You will be credited <b>${{factory.getCreditTotal() | number:2}}</b>.
+      </span>
+      <span ng-if="factory.estimate.invoice_estimate.amount_due && factory.getCreditTotal()">
+        You will be credited <b>${{factory.getCreditTotal() | number:2}}</b> and charged <b>${{factory.estimate.invoice_estimate.amount_due/100 | number:2}}</b>.
+      </span>
+    </p>
+
+  </span>
+
+  <div class="button-row mt-5">
+    <button id="doneButton" class="btn btn-primary btn-block" ng-click="close()" aria-label="Done" tabindex="1">Continue</button>
+  </div>
+</div>

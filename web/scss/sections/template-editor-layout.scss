@@ -991,12 +991,36 @@ $short-phone-height: 570px;
 
   .btn-toggle-blue-off {
     color: $madero-light-blue;
-    background-color: transparent;
+    background-color: $white;
     border-color: $madero-light-blue;
     &:hover, &:active, &:focus {
-      background-color: transparent;
+      background-color: $white;
     }
   } 
+
+  .btn-group-justified.stacking {
+    @extend .mb-0;
+
+    @media(max-width: $screen-xs-max) {
+      width: 100%;
+
+      button {
+        width: 100%;
+      }
+
+      .btn:first-child {
+        border-top-right-radius: 4px !important;
+        border-bottom-left-radius: 0;
+      }
+
+      .btn:last-child {
+        margin-left: 0;
+        margin-top: -1px;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 4px;
+      }
+    }
+  }
 
   .btn-icon {
     cursor: pointer;

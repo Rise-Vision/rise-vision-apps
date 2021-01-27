@@ -31,7 +31,7 @@
           <div ng-show="subscriptionFactory.getItemSubscription().status === 'active'">
             <span ng-show="isDisplayLicensePlan(subscriptionFactory.getItemSubscription())">
               <a id="addLicenses" class="btn btn-default btn-block" ui-sref="apps.purchase.licenses.add({subscriptionId: subscriptionFactory.getItemSubscription().id})">Add Display Licenses</a>
-              <a id="removeLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.purchase.licenses.remove({subscriptionId: subscriptionFactory.getItemSubscription().id})">Remove Display Licenses</a>
+              <a id="removeLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.purchase.licenses.remove({subscriptionId: subscriptionFactory.getItemSubscription().id})" ng-hide="subscriptionFactory.getItemSubscription().plan_quantity < 2">Remove Display Licenses</a>
               <a id="manageLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.licenses.manage({subscriptionId: subscriptionFactory.getItemSubscription().id})" ng-if="false">Manage Network Licenses</a>
             </span>
           </div>
@@ -47,13 +47,11 @@
           <p>On {{subscriptionFactory.getItemSubscription().current_term_end * 1000 | date:'d-MMM-yyyy'}}</p>
           <p><b>Billing Frequency:</b> {{subscriptionFactory.getItemSubscription().billing_period_unit === 'month' ? 'Monthly' : subscriptionFactory.getItemSubscription().billing_period === 1 ? 'Yearly' : subscriptionFactory.getItemSubscription().billing_period + ' Years'}}</p>
 
-          <span ng-show="false">
-            <button id="switchToAnnual" class="btn btn-default btn-block my-3" ng-click="switchToAnnual()" ng-show="subscriptionFactory.getItemSubscription().billing_period_unit === 'month'">Switch To Annual Billing (Save 10%)</button>
-            <p class="mb-0">
-              Need a copy of your next invoice in advance?<br>
-              <a class="madero-link u_clickable" ng-click="factory.selectNewCreditCard()">Click here.</a>
-            </p>
-          </span>
+          <a id="switchToAnnual" class="btn btn-default btn-block my-3" ui-sref="apps.purchase.frequency({subscriptionId: subscriptionFactory.getItemSubscription().id})" ng-show="subscriptionFactory.getItemSubscription().billing_period_unit === 'month'">Switch To Annual Billing (Save 10%)</a>
+          <p class="mb-0" ng-show="false">
+            Need a copy of your next invoice in advance?<br>
+            <a class="madero-link u_clickable" ng-click="factory.requestInvoice()">Click here.</a>
+          </p>
         </div>
       </div>
     </div>
@@ -150,7 +148,7 @@
       <streamline-icon name="help" width="20" height="20"></streamline-icon>
       Need to cancel or pause your subscription?
     </label>
-    <p>Please email us at <a class="madero-link" href="mailto:support@risevision.com" target="_blank">support@risevision.com</a>.</p>
+    <p><a class="madero-link" href="mailto:support@risevision.com" target="_blank">Contact Us</a></p>
   </div>
 
 </div><!--container-->

@@ -42,10 +42,13 @@
         before(function() {
           addDisplayLicensesPage.get();
 
+          helper.wait(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader', 5000)
+            .catch(function (err) {
+              console.log(err);
+            });
           helper.waitDisappear(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
-          helper.wait(addDisplayLicensesPage.getDisplayCountInput(), 'Display count input');
 
-          browser.sleep(500);
+          helper.wait(addDisplayLicensesPage.getPayButton(), 'Pay now button');
         });
 
         it("should show display count input", function() {
@@ -70,10 +73,6 @@
       });
 
       describe("update display licenses: ", function() {
-        before(function() {
-          browser.sleep(2000); // give some time to actual totals to be displayed. Otherwise, just '$' is detected.
-        });
-
         it("should show prorated amount total output", function() {
           expect(addDisplayLicensesPage.getProratedAmountTotal().isDisplayed()).to.eventually.be.true;
         });

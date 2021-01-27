@@ -18,6 +18,11 @@ describe('service: subscriptionFactory:', function() {
     $provide.factory('confirmModal', function() {
       return sinon.stub().returns(Q.resolve());
     });
+    $provide.value("currentPlanFactory", {
+      currentPlan: {
+        subscriptionId: 'currentSubscriptionId'
+      }
+    });
     $provide.service('processErrorCode',function() {
       return function(err) {
         return 'processed ' + err;
@@ -241,6 +246,12 @@ describe('service: subscriptionFactory:', function() {
       expect(subscriptionFactory.apiError).to.not.be.ok;
       expect(subscriptionFactory.item).to.not.be.ok;
       expect(subscriptionFactory.loading).to.be.true;
+    });
+
+    it('should retrieve subscription from currentPlan if id is missing', function() {
+      subscriptionFactory.getSubscription();
+
+      billing.getSubscription.should.have.been.calledWith('currentSubscriptionId');
     });
 
     it('should retrieve subscription', function(done) {

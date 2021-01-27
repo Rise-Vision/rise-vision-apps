@@ -40,6 +40,26 @@ describe('service: billing:', function() {
                   return Q.reject('API Failed');
                 }
               }),
+              estimate: sinon.spy(function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: 'subscription estimate'
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              }),
+              update: sinon.spy(function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: 'subscription updated'
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              }),
               changePoNumber: sinon.spy(function() {
                 if (!failedResponse) {
                   return Q.resolve({
@@ -192,6 +212,8 @@ describe('service: billing:', function() {
     expect(billing).to.be.ok;
     expect(billing.getSubscriptions).to.be.a.function;
     expect(billing.getSubscription).to.be.a.function;
+    expect(billing.estimateSubscriptionUpdate).to.be.a.function;
+    expect(billing.updateSubscription).to.be.a.function;
     expect(billing.changePoNumber).to.be.a.function;
     expect(billing.changePaymentSource).to.be.a.function;
     expect(billing.changePaymentToInvoice).to.be.a.function;
@@ -264,6 +286,76 @@ describe('service: billing:', function() {
       failedResponse = true;
 
       billing.getSubscription('subscriptionId')
+      .then(function(subscription) {
+        done(subscription);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+
+  describe('estimateSubscriptionUpdate:', function() {
+    it('should return a subscription estimate', function(done) {
+      failedResponse = false;
+
+      billing.estimateSubscriptionUpdate('displayCount', 'subscriptionId', 'planId', 'companyId', 'couponCode')
+      .then(function(result) {
+        storeApi.integrations.subscription.estimate.should.have.been.called;
+        storeApi.integrations.subscription.estimate.should.have.been.calledWith({
+          displayCount: 'displayCount',
+          subscriptionId: 'subscriptionId',
+          planId: 'planId',
+          companyId: 'companyId',
+          couponCode: 'couponCode'
+        });
+
+        expect(result).to.be.ok;
+        expect(result).to.equal('subscription estimate');
+        done();
+      });
+    });
+
+    it('should handle failure to estimate subscription correctly', function(done) {
+      failedResponse = true;
+
+      billing.estimateSubscriptionUpdate('displayCount', 'subscriptionId', 'planId', 'companyId', 'couponCode')
+      .then(function(subscription) {
+        done(subscription);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+
+  describe('updateSubscription:', function() {
+    it('should update the subscription', function(done) {
+      failedResponse = false;
+
+      billing.updateSubscription('displayCount', 'subscriptionId', 'planId', 'companyId', 'couponCode')
+      .then(function(result) {
+        storeApi.integrations.subscription.update.should.have.been.called;
+        storeApi.integrations.subscription.update.should.have.been.calledWith({
+          displayCount: 'displayCount',
+          subscriptionId: 'subscriptionId',
+          planId: 'planId',
+          companyId: 'companyId',
+          couponCode: 'couponCode'
+        });
+
+        expect(result).to.be.ok;
+        expect(result).to.equal('subscription updated');
+        done();
+      });
+    });
+
+    it('should handle failure to update the subscription correctly', function(done) {
+      failedResponse = true;
+
+      billing.updateSubscription('displayCount', 'subscriptionId', 'planId', 'companyId', 'couponCode')
       .then(function(subscription) {
         done(subscription);
       })
