@@ -9,10 +9,11 @@
   var assert = require('rv-common-e2e').assert;
   var helper = require('rv-common-e2e').helper;
   var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
-  var HomePage = require('./../../common-header/pages/homepage.js');
+  var HomePage = require('./../../common/pages/homepage.js');
   var SignInPage = require('./../../common/pages/signInPage.js');
   var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
   var AddDisplayLicensesPage = require('./../pages/addDisplayLicensesPage.js');
+  var SubscriptionDetailsPage = require('./../pages/subscriptionDetailsPage.js');
   var PurchaseLicensesSuccessPage = require('./../pages/purchaseLicensesSuccessPage.js');
 
   var SubscriptionEdit = function() {
@@ -23,6 +24,7 @@
         signInPage,
         presentationListPage,
         addDisplayLicensesPage,
+        subscriptionDetailsPage,
         purchaseLicensesSuccessPage,
         currentNextInvoice;
 
@@ -32,15 +34,38 @@
         signInPage = new SignInPage();
         presentationListPage = new PresentationListPage();
         addDisplayLicensesPage = new AddDisplayLicensesPage();
+        subscriptionDetailsPage = new SubscriptionDetailsPage();
         purchaseLicensesSuccessPage = new PurchaseLicensesSuccessPage();
 
-        homepage.getEditor();
-        signInPage.signIn();
+        homepage.getDefaultSubscription();
+        signInPage.customAuthSignIn(commonHeaderPage.getStageEmailAddress(), commonHeaderPage.getPassword());
       });
 
-      describe("estimate page: ", function() {
-        before(function() {
-          addDisplayLicensesPage.get();
+      describe("Subscription Details page", function() {
+        it("should load subscription details", function() {
+          helper.wait(subscriptionDetailsPage.getLoader(), 'Subscription Details Page Loader', 5000)
+            .catch(function (err) {
+              console.log(err);
+            });
+          helper.waitDisappear(subscriptionDetailsPage.getLoader(), 'Subscription Details Page Loader');
+
+          expect(subscriptionDetailsPage.getDescriptionText().getText()).to.eventually.contain('5 x Display Licenses Yearly Plan');
+        });
+
+        it("should show subscription actions", function() {
+          expect(subscriptionDetailsPage.getAddLicensesButton().isDisplayed()).to.eventually.be.true;
+          expect(subscriptionDetailsPage.getRemoveLicensesButton().isDisplayed()).to.eventually.be.true;
+          expect(subscriptionDetailsPage.getAddPaymentMethodButton().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should show Invoice Me as payment method", function() {
+          expect(subscriptionDetailsPage.getInvoiceMeItem().isDisplayed()).to.eventually.be.true;         
+        });
+      });
+
+      describe("Add Display Licenses:", function() {
+        it("should navigate to Add Display Licenses page", function() {
+          subscriptionDetailsPage.getAddLicensesButton().click();
 
           helper.wait(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader', 5000)
             .catch(function (err) {
@@ -49,7 +74,12 @@
           helper.waitDisappear(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
 
           helper.wait(addDisplayLicensesPage.getPayButton(), 'Pay now button');
+
+          expect(addDisplayLicensesPage.getPayButton().isDisplayed()).to.eventually.be.true;
         });
+      });
+
+      describe("estimate page: ", function() {
 
         it("should show display count input", function() {
           expect(addDisplayLicensesPage.getDisplayCountInput().isDisplayed()).to.eventually.be.true;
@@ -164,6 +194,17 @@
 
         it("should show Purchase success panel", function() {
           expect(purchaseLicensesSuccessPage.getPurchaseSuccessPanel().isDisplayed()).to.eventually.be.true;
+        });
+
+        it("should navigate back to subscription when done", function() {
+          purchaseLicensesSuccessPage.getDoneButton().click();
+          helper.wait(subscriptionDetailsPage.getLoader(), 'Subscription Details Page Loader', 5000)
+            .catch(function (err) {
+              console.log(err);
+            });
+          helper.waitDisappear(subscriptionDetailsPage.getLoader(), 'Subscription Details Page Loader');
+
+          expect(subscriptionDetailsPage.getDescriptionText().getText()).to.eventually.contain('7 x Display Licenses Yearly Plan');
         });
       });
 
