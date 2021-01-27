@@ -32,10 +32,6 @@ describe("Services: storeService", function() {
         };
 
         deferred.resolve(storeApi = {
-          customer_portal: {
-            getUrl: storeApiResponse,
-            createSession: storeApiResponse
-          },
           company: {
             validateAddress: function(obj){
               expect(obj).to.not.have.property("junkProperty");
@@ -104,29 +100,6 @@ describe("Services: storeService", function() {
     inject(function($injector){
       storeService = $injector.get("storeService");
       $httpBackend = $injector.get("$httpBackend");
-    });
-  });
-
-  describe("createSession: ", function() {
-    it("should exist", function() {
-      expect(storeService.createSession).to.be.ok;
-      expect(storeService.createSession).to.be.a("function");
-    });
-
-    it("should succeed", function(done) {
-      storeService.createSession().then(function() {
-        done();
-      })
-      .then(null, done);
-    });
-
-    it("should fail", function(done) {
-      storeApiFailure = true;
-      storeService.createSession().then(function() {
-        done("success");
-      }, function() {
-        done();
-      });
     });
   });
 
