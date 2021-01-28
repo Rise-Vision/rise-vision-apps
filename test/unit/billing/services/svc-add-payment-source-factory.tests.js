@@ -11,7 +11,8 @@ describe('service: addPaymentSourceFactory:', function() {
       return {
         changePaymentToInvoice: sinon.stub().returns(Q.resolve({item: 'subscription'})),
         preparePaymentSource: sinon.stub().returns(Q.resolve('intentResponse')),
-        addPaymentSource: sinon.stub().returns(Q.resolve({}))
+        addPaymentSource: sinon.stub().returns(Q.resolve({item: {payment_source: {id: 'paymentSourceId'}}})),
+        changePaymentSource: sinon.stub().returns(Q.resolve({}))
       }
     });
     $provide.factory('addressService', function() {
@@ -223,7 +224,7 @@ describe('service: addPaymentSourceFactory:', function() {
     });
 
     describe('_addPaymentSource:', function() {
-      it('should add payment source, and resolve', function(done) {
+      it('should add payment source, and return the id', function(done) {
         billing.preparePaymentSource.returns(Q.resolve({
           intentId: 'intentId'
         }));
@@ -238,6 +239,29 @@ describe('service: addPaymentSourceFactory:', function() {
 
       it('should handle failure to add payment source', function(done) {
         billing.preparePaymentSource.returns(Q.reject('error'));
+
+        addPaymentSourceFactory.changePaymentSource()
+          .catch(function() {
+            expect(addPaymentSourceFactory.loading).to.be.false;
+            expect(addPaymentSourceFactory.apiError).to.equal('processed error');
+
+            done();
+          });
+      });
+    });
+
+    describe('_changePaymentSource:', function() {
+      it('should change the payment source, and resolve', function(done) {
+        addPaymentSourceFactory.changePaymentSource('subscriptionId')
+          .then(function() {
+            billing.changePaymentSource.should.have.been.calledWith('subscriptionId', 'paymentSourceId');
+
+            done();
+          });
+      });
+
+      it('should handle failure to add payment source', function(done) {
+        billing.changePaymentSource.returns(Q.reject('error'));
 
         addPaymentSourceFactory.changePaymentSource()
           .catch(function() {

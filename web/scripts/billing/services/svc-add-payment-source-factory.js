@@ -58,7 +58,15 @@ angular.module('risevision.apps.billing.services')
         var intentId = creditCardFactory.paymentMethods.intentResponse ? 
           creditCardFactory.paymentMethods.intentResponse.intentId : null;
 
-        return billing.addPaymentSource(intentId);
+        return billing.addPaymentSource(intentId)
+          .then(function (response) {
+            return response && response.item && response.item.payment_source &&
+              response.item.payment_source.id;
+          });
+      };
+
+      var _changePaymentSource = function (subscriptionId, paymentSourceId) {
+        return billing.changePaymentSource(subscriptionId, paymentSourceId);
       };
 
       factory.changePaymentSource = function(subscriptionId) {
@@ -69,8 +77,8 @@ angular.module('risevision.apps.billing.services')
         return creditCardFactory.validatePaymentMethod()
           .then(_preparePaymentSource)
           .then(_addPaymentSource)
-          .then(function() {
-            // Change Payment Source
+          .then(function(paymentSourceId) {
+            return _changePaymentSource(subscriptionId, paymentSourceId);
           })
           .catch(function (e) {
             _showErrorMessage(e);
