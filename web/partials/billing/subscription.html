@@ -59,12 +59,14 @@
       <div class="border-container subscription-card">
         <div class="panel-body">
           <label class="mb-3">Payment Method</label>
-          <div class="madero-radio align-left mb-3" ng-repeat="card in paymentSourcesFactory.existingCreditCards">
-            <input type="radio" ng-click="subscriptionFactory.changePaymentMethod($event, card)" ng-model="subscriptionFactory.item.paymentSourceId" ng-value="card.payment_source.id" name="{{card.payment_source.id}}" id="{{card.payment_source.id}}" tabindex="1">
-            <label for="{{card.payment_source.id}}">
-              {{card.payment_source.card | cardDescription}}
-              <span class="pull-right"><a class="madero-link u_clickable text-danger" ng-click="paymentSourcesFactory.removePaymentMethod(card)" ng-show="subscriptionFactory.getItemSubscription().payment_source_id !== card.payment_source.id">Remove</a></span>
-            </label>
+          <div class="flex-row madero-radio align-left mb-3" ng-repeat="card in paymentSourcesFactory.existingCreditCards">
+            <div class="row-entry">
+              <input type="radio" ng-click="subscriptionFactory.changePaymentMethod($event, card)" ng-model="subscriptionFactory.item.paymentSourceId" ng-value="card.payment_source.id" name="{{card.payment_source.id}}" id="{{card.payment_source.id}}" tabindex="1">
+              <label for="{{card.payment_source.id}}" class="mr-auto u_text-ellipsis mb-0">
+                {{card.payment_source.card | cardDescription}}
+              </label>
+              <a class="madero-link u_clickable text-danger font-weight-bold" ng-click="paymentSourcesFactory.removePaymentMethod(card)" ng-show="subscriptionFactory.getItemSubscription().payment_source_id !== card.payment_source.id">Remove</a>
+            </div>
           </div>
           <div class="madero-radio align-left" ng-show="subscriptionFactory.isInvoiced()">
             <input type="radio" ng-change="setPaymentMethod()" ng-model="subscriptionFactory.item.paymentSourceId" value="invoice" name="invoiceMe" id="invoiceMe" tabindex="1">
