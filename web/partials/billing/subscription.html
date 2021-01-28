@@ -43,7 +43,7 @@
         <div class="panel-body">
           <label ng-show="subscriptionFactory.isInvoiced()">Next Invoice</label>
           <label ng-show="!subscriptionFactory.isInvoiced()">Next Payment</label>
-          <h1>${{subscriptionFactory.getItemSubscription().plan_amount / 100 | number:2}}</h1>
+          <h1 class="mb-4">${{subscriptionFactory.getItemSubscription().plan_amount / 100 | number:2}}</h1>
           <p>On {{subscriptionFactory.getItemSubscription().current_term_end * 1000 | date:'d-MMM-yyyy'}}</p>
           <p><b>Billing Frequency:</b> {{subscriptionFactory.getItemSubscription().billing_period_unit === 'month' ? 'Monthly' : subscriptionFactory.getItemSubscription().billing_period === 1 ? 'Yearly' : subscriptionFactory.getItemSubscription().billing_period + ' Years'}}</p>
 
@@ -59,7 +59,7 @@
       <div class="border-container subscription-card">
         <div class="panel-body">
           <label class="mb-3">Payment Method</label>
-          <div class="madero-radio align-left" ng-repeat="card in paymentSourcesFactory.existingCreditCards">
+          <div class="madero-radio align-left mb-3" ng-repeat="card in paymentSourcesFactory.existingCreditCards">
             <input type="radio" ng-click="subscriptionFactory.changePaymentMethod($event, card)" ng-model="subscriptionFactory.item.paymentSourceId" ng-value="card.payment_source.id" name="{{card.payment_source.id}}" id="{{card.payment_source.id}}" tabindex="1">
             <label for="{{card.payment_source.id}}">
               {{card.payment_source.card | cardDescription}}
