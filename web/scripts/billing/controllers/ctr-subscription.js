@@ -5,14 +5,15 @@
 angular.module('risevision.apps.billing.controllers')
   .controller('SubscriptionCtrl', ['$scope', '$loading', 'subscriptionFactory',
   'userState', 'paymentSourcesFactory', 'companySettingsFactory',
-  'taxExemptionFactory', 'plansService',
+  'taxExemptionFactory', 'plansService', 'helpWidgetFactory',
     function ($scope, $loading, subscriptionFactory, userState,
       paymentSourcesFactory, companySettingsFactory, taxExemptionFactory, 
-      plansService) {
+      plansService, helpWidgetFactory) {
       $scope.subscriptionFactory = subscriptionFactory;
       $scope.paymentSourcesFactory = paymentSourcesFactory;
       $scope.companySettingsFactory = companySettingsFactory;
       $scope.taxExemptionFactory = taxExemptionFactory;
+      $scope.helpWidgetFactory = helpWidgetFactory;
       $scope.company = userState.getCopyOfSelectedCompany();
 
       $scope.$watchGroup(['subscriptionFactory.loading', 'taxExemptionFactory.loading', 'paymentSourcesFactory.loading'], function (values) {
