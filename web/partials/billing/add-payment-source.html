@@ -14,13 +14,13 @@
     <strong>{{addPaymentSourceFactory.apiError}}</strong>
   </div>
 
-  <h4 class="mb-4">Payment Method</h4>
+  <h4 class="u_margin-md-bottom">Payment Method</h4>
 
   <form id="form.paymentMethodsForm" role="form" name="form.paymentMethodsForm" novalidate>
     <payment-method-form form-object="form.paymentMethodsForm" show-invoice-option="subscriptionFactory.getItemSubscription().billing_period_unit !== 'month' && !subscriptionFactory.isInvoiced()" contact-email="contactEmail"></payment-method-form>
   </form>
 
-  <div class="button-row text-right mt-5">
+  <div class="button-row text-right mt-4">
     <a id="backButton" type="button" aria-label="Go back" class="btn btn-default btn-toolbar pull-left" ui-sref="apps.billing.subscription({subscriptionId: subscriptionFactory.getItemSubscription().id})" translate>common.back</a>
     <button id="addButton" type="submit" class="btn btn-primary btn-toolbar-wide" form="form.paymentMethodsForm" ng-click="addPaymentMethod(subscriptionFactory.getItemSubscription().id)" tabindex="1" aria-label="Add Payment Method">
       Add Payment Method

@@ -14,7 +14,7 @@
     <strong>{{paymentSourcesFactory.apiError}}</strong>
   </div>
 
-  <h4 class="mb-4">
+  <h4 class="u_margin-md-bottom">
     {{subscriptionFactory.getItemSubscription() | subscriptionDescription}} — 
     <span class="u_capitalize" ng-class="{ 'text-success': subscriptionFactory.getItemSubscription().status === 'active', 'text-danger': subscriptionFactory.getItemSubscription().status === 'suspended' || subscriptionFactory.getItemSubscription().status === 'cancelled' }">
       {{subscriptionFactory.getItemSubscription().status}}
@@ -43,12 +43,12 @@
         <div class="panel-body">
           <label ng-show="subscriptionFactory.isInvoiced()">Next Invoice</label>
           <label ng-show="!subscriptionFactory.isInvoiced()">Next Payment</label>
-          <h1>${{subscriptionFactory.getItemSubscription().plan_amount / 100 | number:2}}</h1>
+          <h1 class="mb-4">${{subscriptionFactory.getItemSubscription().plan_amount / 100 | number:2}}</h1>
           <p>On {{subscriptionFactory.getItemSubscription().current_term_end * 1000 | date:'d-MMM-yyyy'}}</p>
           <p><b>Billing Frequency:</b> {{subscriptionFactory.getItemSubscription().billing_period_unit === 'month' ? 'Monthly' : subscriptionFactory.getItemSubscription().billing_period === 1 ? 'Yearly' : subscriptionFactory.getItemSubscription().billing_period + ' Years'}}</p>
 
-          <a id="switchToAnnual" class="btn btn-default btn-block my-3" ui-sref="apps.purchase.frequency({subscriptionId: subscriptionFactory.getItemSubscription().id})" ng-show="subscriptionFactory.getItemSubscription().billing_period_unit === 'month'">Switch To Annual Billing (Save 10%)</a>
-          <p class="mb-0" ng-show="false">
+          <a id="switchToAnnual" class="btn btn-default btn-block mt-3" ui-sref="apps.purchase.frequency({subscriptionId: subscriptionFactory.getItemSubscription().id})" ng-show="subscriptionFactory.getItemSubscription().billing_period_unit === 'month'">Switch To Annual Billing (Save 10%)</a>
+          <p class="mt-3 mb-0" ng-show="false">
             Need a copy of your next invoice in advance?<br>
             <a class="madero-link u_clickable" ng-click="factory.requestInvoice()">Click here.</a>
           </p>
@@ -59,12 +59,14 @@
       <div class="border-container subscription-card">
         <div class="panel-body">
           <label class="mb-3">Payment Method</label>
-          <div class="madero-radio align-left" ng-repeat="card in paymentSourcesFactory.existingCreditCards">
-            <input type="radio" ng-click="subscriptionFactory.changePaymentMethod($event, card)" ng-model="subscriptionFactory.item.paymentSourceId" ng-value="card.payment_source.id" name="{{card.payment_source.id}}" id="{{card.payment_source.id}}" tabindex="1">
-            <label for="{{card.payment_source.id}}">
-              {{card.payment_source.card | cardDescription}}
-              <span class="pull-right"><a class="madero-link u_clickable text-danger" ng-click="paymentSourcesFactory.removePaymentMethod(card)" ng-show="subscriptionFactory.getItemSubscription().payment_source_id !== card.payment_source.id">Remove</a></span>
-            </label>
+          <div class="flex-row madero-radio align-left mb-3" ng-repeat="card in paymentSourcesFactory.existingCreditCards">
+            <div class="row-entry">
+              <input type="radio" ng-click="subscriptionFactory.changePaymentMethod($event, card)" ng-model="subscriptionFactory.item.paymentSourceId" ng-value="card.payment_source.id" name="{{card.payment_source.id}}" id="{{card.payment_source.id}}" tabindex="1">
+              <label for="{{card.payment_source.id}}" class="mr-auto u_text-ellipsis mb-0">
+                {{card.payment_source.card | cardDescription}}
+              </label>
+              <a class="madero-link u_clickable text-danger font-weight-bold" ng-click="paymentSourcesFactory.removePaymentMethod(card)" ng-show="subscriptionFactory.getItemSubscription().payment_source_id !== card.payment_source.id">Remove</a>
+            </div>
           </div>
           <div class="madero-radio align-left" ng-show="subscriptionFactory.isInvoiced()">
             <input type="radio" ng-change="setPaymentMethod()" ng-model="subscriptionFactory.item.paymentSourceId" value="invoice" name="invoiceMe" id="invoiceMe" tabindex="1">
@@ -77,7 +79,7 @@
             <edit-po-number item="subscriptionFactory.item.subscription" update-function="subscriptionFactory.changePoNumber()"></edit-po-number>
           </div>
 
-          <a id="addPaymentMethod" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.payment({subscriptionId: subscriptionFactory.getItemSubscription().id})">Add Payment Method</button>
+          <a id="addPaymentMethod" class="btn btn-default btn-block mt-4" ui-sref="apps.billing.payment({subscriptionId: subscriptionFactory.getItemSubscription().id})">Add Payment Method</button>
         </div>
       </div>
     </div>
