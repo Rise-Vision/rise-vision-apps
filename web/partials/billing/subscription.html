@@ -14,7 +14,7 @@
     <strong>{{paymentSourcesFactory.apiError}}</strong>
   </div>
 
-  <h4 class="mb-4">
+  <h4 class="u_margin-md-bottom">
     {{subscriptionFactory.getItemSubscription() | subscriptionDescription}} — 
     <span class="u_capitalize" ng-class="{ 'text-success': subscriptionFactory.getItemSubscription().status === 'active', 'text-danger': subscriptionFactory.getItemSubscription().status === 'suspended' || subscriptionFactory.getItemSubscription().status === 'cancelled' }">
       {{subscriptionFactory.getItemSubscription().status}}
