@@ -39,15 +39,29 @@
         $locationProvider.hashPrefix('/');
 
         $urlRouterProvider
-          .when(/\/.*&id_token=.*&client_id=.*/, function () {
-            console.log('Google Auth result received');
-          })
+          .when(/\/.*(id_token|access_token)=.*/, ['$window', 'userAuthFactory', 'openidConnect',
+            function ($window, userAuthFactory, openidConnect) {
+              console.log('Google Auth result received');
+
+              var location = $window.location.href;
+              location = location.replace('#/', '#');
+
+              openidConnect.signinRedirectCallback(location)
+                .then(function(user) {
+                  $window.location.hash = '';
+
+                  return userAuthFactory.authenticate(true);
+                })
+                .catch(function() {
+                  $window.location.hash = '';
+                });
+            }
+          ])
           .when('/', ['$location', 'userAuthFactory', 'openidConnect',
             function ($location, userAuthFactory, openidConnect) {
               var hash = $location.hash();
 
-              if ($location.search().code ||
-                (hash && (hash.match(/.*id_token=.*/) || hash.match(/access_token=.*/)))) {
+              if (hash && hash.match(/.*(id_token|access_token)=.*/)) {
                 console.log('Google Auth result received');
 
                 openidConnect.signinRedirectCallback()
@@ -96,11 +110,7 @@
           })
 
           .state('common.auth.createaccount', {
-            templateProvider: ['$templateCache',
-              function ($templateCache) {
-                return $templateCache.get('partials/components/userstate/create-account.html');
-              }
-            ],
+            templateUrl: 'partials/components/userstate/create-account.html',
             url: '/createaccount/:state',
             controller: 'LoginCtrl',
             params: {
@@ -110,11 +120,7 @@
           })
 
           .state('common.auth.joinaccount', {
-            templateProvider: ['$templateCache',
-              function ($templateCache) {
-                return $templateCache.get('partials/components/userstate/create-account.html');
-              }
-            ],
+            templateUrl: 'partials/components/userstate/create-account.html',
             url: '/joinaccount/:companyName',
             controller: 'LoginCtrl',
             params: {
@@ -124,9 +130,7 @@
           })
 
           .state('common.auth.unregistered', {
-            templateProvider: ['$templateCache', function ($templateCache) {
-              return $templateCache.get('partials/components/userstate/signup.html');
-            }],
+            templateUrl: 'partials/components/userstate/signup.html',
             url: '/unregistered/:state',
             controller: 'RegistrationCtrl',
             resolve: {
@@ -151,33 +155,19 @@
           })
 
           .state('common.auth.requestpasswordreset', {
-            templateProvider: ['$templateCache',
-              function ($templateCache) {
-                return $templateCache.get(
-                  'partials/components/userstate/request-password-reset.html');
-              }
-            ],
+            templateUrl: 'partials/components/userstate/request-password-reset.html',
             url: '/requestpasswordreset',
             controller: 'RequestPasswordResetCtrl'
           })
 
           .state('common.auth.resetpassword', {
-            templateProvider: ['$templateCache',
-              function ($templateCache) {
-                return $templateCache.get(
-                  'partials/components/userstate/reset-password-confirm.html');
-              }
-            ],
+            templateUrl: 'partials/components/userstate/reset-password-confirm.html',
             url: '/resetpassword/:user/:token',
             controller: 'ResetPasswordConfirmCtrl'
           })
 
           .state('common.auth.unsubscribe', {
-            templateProvider: ['$templateCache',
-              function ($templateCache) {
-                return $templateCache.get('partials/components/userstate/unsubscribe.html');
-              }
-            ],
+            templateUrl: 'partials/components/userstate/unsubscribe.html',
             url: '/unsubscribe',
             controller: ['$scope', '$location',
               function ($scope, $location) {

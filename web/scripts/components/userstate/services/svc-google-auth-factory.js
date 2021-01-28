@@ -13,7 +13,7 @@
         var _setToken = function (user) {
           return gapiLoader().then(function (gApi) {
             var token = {
-              access_token: user.id_token,
+              access_token: user.access_token,
               expires_in: '3600',
               token_type: 'Bearer'
             };

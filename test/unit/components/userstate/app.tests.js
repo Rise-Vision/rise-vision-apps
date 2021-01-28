@@ -53,24 +53,68 @@ describe("app:", function() {
       expect(stateProvider.state).to.have.been.called;
     });
 
-    it("validates google auth rule", function() {
-      var goooleRegex = urlRouterProvider.when.getCall(0).args[0];
+    describe('google auth:', function() {
+      it("validates google auth rule", function() {
+        var goooleRegex = urlRouterProvider.when.getCall(0).args[0];
 
-      expect(
-        goooleRegex.test('/page?x=1&id_token=1234&client_id=A1223')
-      ).to.be.true;
-      expect(
-        goooleRegex.test('/page?x=1&id_token=1234')
-      ).to.be.false;
-      expect(
-        goooleRegex.test('/page?x=1&client_id=A1223')
-      ).to.be.false;
-      expect(
-        goooleRegex.test('/page?x=1')
-      ).to.be.false;
-      expect(
-        goooleRegex.test('/page')
-      ).to.be.false;
+        expect(
+          goooleRegex.test('/page?x=1&id_token=1234&access_token=A1223')
+        ).to.be.true;
+        expect(
+          goooleRegex.test('/page?x=1&id_token=1234')
+        ).to.be.true;
+        expect(
+          goooleRegex.test('/page?x=1&access_token=A1223')
+        ).to.be.true;
+        expect(
+          goooleRegex.test('/page?x=1')
+        ).to.be.false;
+        expect(
+          goooleRegex.test('/page')
+        ).to.be.false;
+      });
+
+      describe('matcher:', function() {
+        var $window, userAuthFactory, openidConnect, rootMatcher;
+
+        beforeEach(function () {
+          $window = {
+            location: {
+              href: 'https://apps.risevision.com/#/id_token=1234&client_id=A1223'
+            }
+          };
+          userAuthFactory = { authenticate: sinon.stub() };
+          openidConnect = { signinRedirectCallback: sinon.stub().returns(Q.resolve()) };
+
+          var args = urlRouterProvider.when.getCall(0).args[1];
+          rootMatcher = args[3];
+        });
+
+        it("should signin redirect callback", function(done) {
+          rootMatcher($window, userAuthFactory, openidConnect);
+
+          setTimeout(function() {
+            openidConnect.signinRedirectCallback.should.have.been.calledWith('https://apps.risevision.com/#id_token=1234&client_id=A1223');
+            userAuthFactory.authenticate.should.have.been.calledWith(true);
+            expect($window.location.hash).to.equal('');
+
+            done();
+          }, 10);
+        });
+
+        it("should clear hash even if there's an issue with signing redirect", function(done) {
+          openidConnect.signinRedirectCallback.returns(Q.reject());
+          rootMatcher($window, userAuthFactory, openidConnect); // force a null pointer error
+
+          setTimeout(function() {
+            openidConnect.signinRedirectCallback.should.have.been.calledOnce;
+            expect($window.location.hash).to.equal('');
+
+            done();
+          }, 10);
+        });
+
+      });
     });
 
     it("validates root hash matcher", function() {
@@ -86,13 +130,10 @@ describe("app:", function() {
 
     describe("root matcher: ", function() {
       var location, userAuthFactory, openidConnect, rootMatcher;
-      var searchOutput;
 
       beforeEach(function () {
-        searchOutput = {};
         location = {
-          hash: function() { return null },
-          search: function() { return searchOutput; }
+          hash: function() { return null }
         };
         userAuthFactory = { authenticate: sinon.stub() };
         openidConnect = { signinRedirectCallback: sinon.stub().resolves() };
@@ -145,24 +186,8 @@ describe("app:", function() {
         }, 10);
       });
 
-      it("should signin redirect callback if there's a search code value", function(done) {
-        window.location.hash = 'some_hash';
-        searchOutput.code = 'xyz';
-
-        rootMatcher(location, userAuthFactory, openidConnect);
-
-        setTimeout(function() {
-          openidConnect.signinRedirectCallback.should.have.been.calledOnce;
-          userAuthFactory.authenticate.should.have.been.calledWith(true);
-          expect(window.location.hash).to.equal('');
-
-          done();
-        }, 10);
-      });
-
       it("should clear hash even if there's an issue with signing redirect", function(done) {
-        window.location.hash = 'some_hash';
-        searchOutput.code = 'xyz';
+        location.hash = function() { return '&access_token=1234' };
 
         rootMatcher(location, null, openidConnect); // force a null pointer error
 
@@ -334,6 +359,5 @@ describe("app:", function() {
 
     });
   });
-
 
 });
