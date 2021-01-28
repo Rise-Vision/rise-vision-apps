@@ -46,10 +46,6 @@
           return currentDisplayCount || 0;
         };
 
-        var _getCompanyId = function() {
-          return subscriptionFactory.getItemSubscription().customer_id;
-        };
-
         var _getChangeInLicenses = function() {
           var licensesToAdd = factory.purchase.licensesToAdd || 0;
           var licensesToRemove = factory.purchase.licensesToRemove || 0;
@@ -64,9 +60,10 @@
         var _getTrackingProperties = function () {
           return {
             subscriptionId: subscriptionFactory.getItemSubscription().id,
+            paymentTerm: factory.purchase.planId.endsWith('m') ? 'monthly' : 'yearly',
             changeInLicenses: _getChangeInLicenses(),
             totalLicenses: factory.getTotalDisplayCount(),
-            companyId: _getCompanyId()
+            companyId: subscriptionFactory.getItemSubscription().customer_id
           };
         };
 
@@ -98,7 +95,7 @@
           var couponCode = factory.purchase.couponCode;
           var displayCount = factory.getTotalDisplayCount();
           var subscriptionId = subscriptionFactory.getItemSubscription().id;
-          var companyId = _getCompanyId();
+          var companyId = subscriptionFactory.getItemSubscription().customer_id;
           var planId = factory.purchase.planId;
 
           return billing.estimateSubscriptionUpdate(displayCount, subscriptionId, planId, companyId, couponCode)
@@ -138,7 +135,7 @@
           var couponCode = factory.purchase.couponCode;
           var displayCount = factory.getTotalDisplayCount();
           var subscriptionId = subscriptionFactory.getItemSubscription().id;
-          var companyId = _getCompanyId();
+          var companyId = subscriptionFactory.getItemSubscription().customer_id;
           var planId = factory.purchase.planId;
 
           return billing.updateSubscription(displayCount, subscriptionId, planId, companyId, couponCode)
