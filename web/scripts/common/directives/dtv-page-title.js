@@ -57,6 +57,13 @@ angular.module('risevision.apps.directives')
             case 'apps.billing.invoice':
               return 'Invoice';
 
+            case 'apps.purchase.licenses.add':
+            case 'apps.purchase.licenses.remove':
+            case 'apps.purchase.frequency':
+            case 'apps.billing.subscription':
+            case 'apps.billing.payment':
+              return 'Subscription';
+
             case 'apps.schedules':
             case 'apps.schedules.list':
               return 'Schedules';

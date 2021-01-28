@@ -85,10 +85,17 @@ describe('directive: page title', function() {
     checkState('apps.purchase.plans', 'Subscribe');
     checkState('apps.purchase.home', 'Subscribe');
 
+    checkState('apps.purchase.licenses.add', 'Subscription');
+    checkState('apps.purchase.licenses.remove', 'Subscription');
+    checkState('apps.purchase.frequency', 'Subscription');
+
     checkState('apps.billing', 'Billing');
     checkState('apps.billing.home', 'Billing');
     checkState('apps.billing.unpaid', 'Unpaid Invoices');
     checkState('apps.billing.invoice', 'Invoice');
+
+    checkState('apps.billing.subscription', 'Subscription');
+    checkState('apps.billing.payment', 'Subscription');
 
     checkState('apps.schedules', 'Schedules');
     checkState('apps.schedules.list', 'Schedules');
