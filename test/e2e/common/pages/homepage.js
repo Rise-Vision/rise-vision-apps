@@ -10,6 +10,7 @@ var HomePage = function() {
   var editorUrl = config.rootUrl + '/editor/list';
   var schedulesUrl = config.rootUrl + '/schedules/list';
   var storageUrl = config.rootUrl + '/storage';
+  var defaultSubscriptionUrl = config.rootUrl + '/billing/subscription/';
 
   var displaysLink = element(by.css('.nav.navbar-nav #DisplaysLink'));
   var editorLink = element(by.css('.nav.navbar-nav #PresentationsLink'));
@@ -60,6 +61,10 @@ var HomePage = function() {
 
   this.getStorage = function() {
     this.confirmGet(storageUrl);
+  };
+
+  this.getDefaultSubscription = function() {
+    this.confirmGet(defaultSubscriptionUrl);
   };
 
   this.getUrl = function() {
