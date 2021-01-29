@@ -69,7 +69,7 @@
             </td>
           </tr>
 
-          <tr class="table-body__row" ng-repeat="item in (filteredSubscriptions = (subscriptions.items.list | filter: { subscription: { current_term_end: '!!' }}))">
+          <tr class="table-body__row" ng-repeat="item in subscriptions.items.list">
             <td class="table-body__cell font-weight-bold">
               <a class="madero-link u_clickable" ui-sref="apps.billing.subscription({subscriptionId: item.subscription.id})" ng-if="showSubscriptionLink(item.subscription)">{{item.subscription | subscriptionDescription}}</a>
               <span ng-if="!showSubscriptionLink(item.subscription)">{{item.subscription | subscriptionDescription}}</span>
