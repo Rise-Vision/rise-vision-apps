@@ -942,7 +942,8 @@ $short-phone-height: 570px;
 
     &.btn-hg {
       padding: 9px 24px;
-      margin-top: 4px;      
+      margin-top: 0px;
+      line-height: 26px;
     }
 
     &[disabled] {
