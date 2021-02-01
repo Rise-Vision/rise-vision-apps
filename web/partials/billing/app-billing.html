@@ -69,7 +69,7 @@
             </td>
           </tr>
 
-          <tr class="table-body__row" ng-repeat="item in (filteredSubscriptions = (subscriptions.items.list | filter: { subscription: { current_term_end: '!!' }}))">
+          <tr class="table-body__row" ng-repeat="item in subscriptions.items.list">
             <td class="table-body__cell font-weight-bold">
               <a class="madero-link u_clickable" ui-sref="apps.billing.subscription({subscriptionId: item.subscription.id})" ng-if="showSubscriptionLink(item.subscription)">{{item.subscription | subscriptionDescription}}</a>
               <span ng-if="!showSubscriptionLink(item.subscription)">{{item.subscription | subscriptionDescription}}</span>
@@ -90,7 +90,7 @@
             </td>
           </tr>
 
-          <tr ng-show="filteredSubscriptions.length === 0 && !currentPlan.isPurchasedByParent">
+          <tr ng-show="subscriptions.items.list.length === 0 && !currentPlan.isPurchasedByParent">
             <td colspan="5" class="text-center"><span translate>You haven't Subscribed to any Products yet.</span></td>
           </tr>
         </tbody>
