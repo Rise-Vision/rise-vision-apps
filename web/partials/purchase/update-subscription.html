@@ -120,17 +120,19 @@
 
       </div>
 
-      <div class="flex-row u_margin-md-top mb-5">
-        <button id="backButton" type="button" aria-label="Go back" class="btn btn-default btn-toolbar pull-left" ng-click="close()" translate>common.cancel</button>
+      <div class="row u_margin-md-top mb-5">
+        <div class="col-md-4 mb-2">
+          <button id="backButton" type="button" aria-label="Go back" class="btn btn-default btn-hg btn-block" ng-click="close()" translate>common.cancel</button>
+        </div>
 
-        <button id="payButton" type="submit" class="btn btn-primary ml-4 w-100" tabindex="1" aria-label="Complete Payment" ng-disabled="purchaseLicensesForm.$invalid || billingPeriod === 'monthly'" ng-if="factory.estimate.invoice_estimate.amount_due > 0">
-          <span id="invoiceLabel">Pay ${{factory.estimate.invoice_estimate.amount_due/100 | number:2}} Now</span>
-        </button>
-
-        <button id="updateButton" type="submit" class="btn btn-primary ml-4 w-100" tabindex="1" aria-label="Update Subscription" ng-disabled="purchaseLicensesForm.$invalid || billingPeriod === 'monthly'" ng-if="!factory.estimate.invoice_estimate.amount_due">
-          <span id="invoiceLabel">Update Subscription</span>
-        </button>
-
+        <div class="col-md-8">
+          <button id="payButton" type="submit" class="btn btn-primary btn-hg btn-block" tabindex="1" aria-label="Complete Payment" ng-disabled="purchaseLicensesForm.$invalid || billingPeriod === 'monthly'" ng-if="factory.estimate.invoice_estimate.amount_due > 0">
+            <span id="invoiceLabel">Pay ${{factory.estimate.invoice_estimate.amount_due/100 | number:2}} Now</span>
+          </button>
+          <button id="updateButton" type="submit" class="btn btn-primary btn-hg btn-block" tabindex="1" aria-label="Update Subscription" ng-disabled="purchaseLicensesForm.$invalid || billingPeriod === 'monthly'" ng-if="!factory.estimate.invoice_estimate.amount_due">
+            <span id="invoiceLabel">Update Subscription</span>
+          </button>
+        </div>
       </div>
     </form>
   </div>
