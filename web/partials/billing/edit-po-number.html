@@ -6,8 +6,8 @@
     <span ng-show="!item.po_number && !editPoNumber">
       <a aria-label="Add PO Number" class="madero-link u_clickable" tabindex="1" ng-click="editPoNumber = true">Add</a>
     </span>
-    <span ng-show="item.po_number && !editPoNumber">
-      <span class="mr-2">
+    <span ng-show="item.po_number && !editPoNumber" class="flex-row">
+      <span class="mr-2 u_ellipsis">
       {{item.po_number}}
       </span>
       <a aria-label="Edit PO Number" class="madero-link u_clickable" tabindex="1" ng-click="editPoNumber = true">Edit</a>
@@ -20,7 +20,7 @@
 <div class="row" ng-if="editPoNumber">
   <div class="col-md-12">
     <div class="flex-row">
-      <input id="po-number" aria-required="false" type="text" class="form-control mr-3" name="poNumber" ng-model="item.poNumber" ng-value="item.po_number">
+      <input id="po-number" aria-required="false" type="text" class="form-control mr-3" name="poNumber" ng-model="item.poNumber" ng-value="item.po_number" maxlength="100">
       <button id="update-po-number" type="button" aria-label="Update PO Number" class="btn btn-default" ng-click="updatePoNumber()">Update</button>
     </div>
   </div>
