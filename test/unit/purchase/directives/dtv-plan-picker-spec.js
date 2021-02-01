@@ -14,7 +14,7 @@ describe("directive: plan picker", function() {
       updatePlan: sinon.stub()
     });
     $provide.value("userState", {
-      isEducationCustomer: sinon.stub().returns(true)
+      isDiscountCustomer: sinon.stub().returns(true)
     });
   }));
 
@@ -37,7 +37,7 @@ describe("directive: plan picker", function() {
     expect($scope.sliderOptions).to.be.an("object");
     expect($scope.displayCount).to.equal(5);
     expect($scope.periodMonthly).to.be.false;
-    expect($scope.applyEducationDiscount).to.be.true;
+    expect($scope.applyDiscount).to.be.true;
 
     expect($scope.updatePlan).to.be.a("function");
 

@@ -21,7 +21,7 @@ angular.module('risevision.apps.purchase')
 
             $scope.displayCount = purchaseFactory.purchase.plan.displays;
             $scope.periodMonthly = purchaseFactory.purchase.plan.isMonthly;
-            $scope.applyEducationDiscount = userState.isEducationCustomer();
+            $scope.applyDiscount = userState.isDiscountCustomer();
 
             $scope.$watchGroup(['displayCount', 'periodMonthly'], function () {
               if (!$scope.displayCount) {
@@ -30,8 +30,8 @@ angular.module('risevision.apps.purchase')
 
               $scope.basePricePerDisplay = pricingFactory.getBasePricePerDisplay($scope.displayCount);
 
-              $scope.pricePerDisplay = pricingFactory.getPricePerDisplay($scope.periodMonthly, $scope.displayCount, $scope.applyEducationDiscount);
-              $scope.totalPrice = pricingFactory.getTotalPrice($scope.periodMonthly, $scope.displayCount, $scope.applyEducationDiscount);
+              $scope.pricePerDisplay = pricingFactory.getPricePerDisplay($scope.periodMonthly, $scope.displayCount, $scope.applyDiscount);
+              $scope.totalPrice = pricingFactory.getTotalPrice($scope.periodMonthly, $scope.displayCount, $scope.applyDiscount);
 
               $scope.yearlySavings = ($scope.basePricePerDisplay * $scope.displayCount * 12) - $scope.totalPrice;
             });
