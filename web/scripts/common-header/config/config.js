@@ -30,7 +30,6 @@
       'https://store-dot-rvaserver2.appspot.com/_ah/api')
     .value('STORAGE_ENDPOINT_URL',
       'https://storage-dot-rvaserver2.appspot.com/_ah/api')
-    .value('GSFP_URL', 'https://gsfp-dot-rvaserver2.appspot.com/fp')
     .value('APPS_URL', 'https://apps.risevision.com')
     .value('STRIPE_PROD_KEY', 'pk_live_31dWkTWQU125m2RcWpK4HQBR')
     .value('STRIPE_TEST_KEY', 'pk_test_GrMIAHSoqhaik4tcHepsxjOR');
