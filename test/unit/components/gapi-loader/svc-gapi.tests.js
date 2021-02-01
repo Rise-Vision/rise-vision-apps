@@ -8,7 +8,6 @@ describe("Services: gapi loader", function() {
     //stub services
     $provide.service("$q", function() {return Q;});
     $provide.value("CORE_URL", "coreUrl");
-    $provide.value("MONITORING_SERVICE_URL", "");
     $provide.value("STORE_ENDPOINT_URL", "storeUrl");
     $provide.value("STORAGE_ENDPOINT_URL", "storageUrl");
     
@@ -368,31 +367,6 @@ describe("Services: gapi loader", function() {
         }, 10);
       });
     });
-  });
-
-  describe("discoveryAPILoader", function () {
-    it("should load", function(done) {
-        inject(function (discoveryAPILoader) {
-            expect(done).to.be.ok;
-            discoveryAPILoader().then(function () {
-                expect($window.gapi.client.discovery).to.be.ok;
-                done();
-            })
-            .then(null,done);
-        });
-    });
-  });
-
-  describe("monitoringAPILoader", function () {
-      it("should load", function(done) {
-          inject(function (monitoringAPILoader) {
-              expect(done).to.be.ok;
-              monitoringAPILoader().then(function () {
-                  expect($window.gapi.client.monitoring).to.be.ok;
-                  done();
-              }, done);
-          });
-      });
   });
 
 });
