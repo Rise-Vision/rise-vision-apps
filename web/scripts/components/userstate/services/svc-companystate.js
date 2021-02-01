@@ -3,9 +3,22 @@
   'use strict';
 
   angular.module('risevision.common.components.userstate')
+    .constant('EDUCATION_INDUSTRIES', [
+      'PRIMARY_SECONDARY_EDUCATION',
+      'HIGHER_EDUCATION'
+    ])
+    .constant('DISCOUNT_INDUSTRIES', [
+      'PRIMARY_SECONDARY_EDUCATION',
+      'HIGHER_EDUCATION',
+      'LIBRARIES',
+      'PHILANTHROPY',
+      'NON_PROFIT_ORGANIZATION_MANAGEMENT',
+      'RELIGIOUS_INSTITUTIONS'
+    ])
     .factory('companyState', ['$location', '$state', 'getCompany', 'objectHelper',
-      '$rootScope', '$log', '$q',
-      function ($location, $state, getCompany, objectHelper, $rootScope, $log, $q) {
+      '$rootScope', '$log', '$q', 'EDUCATION_INDUSTRIES', 'DISCOUNT_INDUSTRIES',
+      function ($location, $state, getCompany, objectHelper, $rootScope, $log, $q,
+        EDUCATION_INDUSTRIES, DISCOUNT_INDUSTRIES) {
         var pendingSelectedCompany;
 
         var _state = {
@@ -175,8 +188,12 @@
           isEducationCustomer: function (checkUserCompany) {
             var company = checkUserCompany ? _state.userCompany : _state.selectedCompany;
 
-            return company && (company.companyIndustry === 'PRIMARY_SECONDARY_EDUCATION' ||
-              company.companyIndustry === 'HIGHER_EDUCATION');
+            return company && EDUCATION_INDUSTRIES.indexOf(company.companyIndustry) !== -1;
+          },
+          isDiscountCustomer: function (checkUserCompany) {
+            var company = checkUserCompany ? _state.userCompany : _state.selectedCompany;
+
+            return company && DISCOUNT_INDUSTRIES.indexOf(company.companyIndustry) !== -1;
           }
         };
 
