@@ -113,56 +113,60 @@ angular.module('risevision.common.gapi', [
     }
   ])
 
-  .factory('coreAPILoader', ['CORE_URL', 'gapiClientLoaderGenerator',
-    '$location',
-    function (CORE_URL, gapiClientLoaderGenerator, $location) {
-      var baseUrl = $location.search().core_api_base_url ?
-        $location.search().core_api_base_url + '/_ah/api' : CORE_URL;
-      return gapiClientLoaderGenerator('core', 'v1', baseUrl);
+  .factory('DedupingGenerator', ['gapiClientLoaderGenerator',
+    function(gapiClientLoaderGenerator) {
+      return function() {
+        var generator;
+        var args = arguments;
+
+        return function() {
+          if (generator) {
+            return generator;
+          }
+
+          generator = gapiClientLoaderGenerator.apply(null, args)()
+            .finally(function () {
+              generator = undefined;
+            });
+
+          return generator;
+        };        
+      };
     }
   ])
 
-  .factory('riseAPILoader', ['CORE_URL', 'gapiClientLoaderGenerator',
-    '$location',
-    function (CORE_URL, gapiClientLoaderGenerator, $location) {
+  .factory('coreAPILoader', ['CORE_URL', 'DedupingGenerator', '$location',
+    function (CORE_URL, DedupingGenerator, $location) {
       var baseUrl = $location.search().core_api_base_url ?
         $location.search().core_api_base_url + '/_ah/api' : CORE_URL;
-      return gapiClientLoaderGenerator('rise', 'v0', baseUrl);
+
+      return new DedupingGenerator('core', 'v1', baseUrl);
     }
   ])
 
-  .factory('storeAPILoader', ['STORE_ENDPOINT_URL', 'gapiClientLoaderGenerator',
-    '$location',
-    function (STORE_ENDPOINT_URL, gapiClientLoaderGenerator, $location) {
+  .factory('riseAPILoader', ['CORE_URL', 'DedupingGenerator', '$location',
+    function (CORE_URL, DedupingGenerator, $location) {
+      var baseUrl = $location.search().core_api_base_url ?
+        $location.search().core_api_base_url + '/_ah/api' : CORE_URL;
+
+      return new DedupingGenerator('rise', 'v0', baseUrl);
+    }
+  ])
+
+  .factory('storeAPILoader', ['STORE_ENDPOINT_URL', 'DedupingGenerator', '$location',
+    function (STORE_ENDPOINT_URL, DedupingGenerator, $location) {
       var baseUrl = $location.search().store_api_base_url ?
         $location.search().store_api_base_url + '/_ah/api' : STORE_ENDPOINT_URL;
-      return gapiClientLoaderGenerator('store', 'v0.01', baseUrl);
+
+      return new DedupingGenerator('store', 'v0.01', baseUrl);
     }
   ])
 
-  .factory('storageAPILoader', ['STORAGE_ENDPOINT_URL',
-    'gapiClientLoaderGenerator', '$location',
-    function (STORAGE_ENDPOINT_URL, gapiClientLoaderGenerator, $location) {
+  .factory('storageAPILoader', ['STORAGE_ENDPOINT_URL', 'DedupingGenerator', '$location',
+    function (STORAGE_ENDPOINT_URL, DedupingGenerator, $location) {
       var baseUrl = $location.search().storage_api_base_url ?
         $location.search().storage_api_base_url + '/_ah/api' : STORAGE_ENDPOINT_URL;
-      return gapiClientLoaderGenerator('storage', 'v0.02', baseUrl);
-    }
-  ])
 
-  .factory('discoveryAPILoader', ['CORE_URL', 'gapiClientLoaderGenerator',
-    '$location',
-    function (CORE_URL, gapiClientLoaderGenerator, $location) {
-      var baseUrl = $location.search().core_api_base_url ?
-        $location.search().core_api_base_url + '/_ah/api' : CORE_URL;
-      return gapiClientLoaderGenerator('discovery', 'v1', baseUrl);
-    }
-  ])
-
-  .factory('monitoringAPILoader', ['MONITORING_SERVICE_URL',
-    'gapiClientLoaderGenerator', '$location',
-    function (MONITORING_SERVICE_URL, gapiClientLoaderGenerator, $location) {
-      var baseUrl = $location.search().core_api_base_url ?
-        $location.search().core_api_base_url + '/_ah/api' : MONITORING_SERVICE_URL;
-      return gapiClientLoaderGenerator('monitoring', 'v0', baseUrl);
+      return new DedupingGenerator('storage', 'v0.02', baseUrl);
     }
   ]);
