@@ -129,10 +129,10 @@
             });
         };
 
-        service.signinRedirectCallback = function() {
+        service.signinRedirectCallback = function(location) {
           return openidConnectLoader()
             .then(function(client) {
-              return client.signinRedirectCallback();
+              return client.signinRedirectCallback(location);
             })
             .then(function(user) {
               console.log('signin redirect response', user);
