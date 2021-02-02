@@ -69,7 +69,7 @@ describe('directive: artboard-placeholder', function() {
       expect(element.css('left')).to.equal(placeholder.left+placeholder.leftUnits);
       expect(element.css('width')).to.equal(placeholder.width+placeholder.widthUnits);
       expect(element.css('height')).to.equal(placeholder.height+placeholder.heightUnits);
-      expect(element.css('background')).to.equal(placeholder.backgroundStyle);
+      expect(element.css('background')).to.contain(placeholder.backgroundStyle);
       expect(element.css('backgroundSize')).to.equal('contain');
       expect(parseInt(element.css('z-index'))).to.equal(placeholder.zIndex);    
     });
@@ -88,7 +88,7 @@ describe('directive: artboard-placeholder', function() {
       expect(element.css('left')).to.equal(placeholder.left+placeholder.leftUnits);
       expect(element.css('width')).to.equal(placeholder.width+placeholder.widthUnits);
       expect(element.css('height')).to.equal(placeholder.height+placeholder.heightUnits);
-      expect(element.css('background')).to.equal(placeholder.backgroundStyle);
+      expect(element.css('background')).to.contain(placeholder.backgroundStyle);
       expect(element.css('backgroundSize')).to.equal('contain');
       expect(parseInt(element.css('z-index'))).to.equal(placeholder.zIndex);        
     });

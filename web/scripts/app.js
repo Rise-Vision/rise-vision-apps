@@ -148,7 +148,7 @@ angular.module('risevision.apps', [
   ])
   .run(['$window',
     function ($window) {
-      if ($window.Stretchy) {
+      if ($window.Stretchy && $window.Stretchy.selectors) {
         $window.Stretchy.selectors.filter = '.input-stretchy, .input-stretchy *';
       }
     }
