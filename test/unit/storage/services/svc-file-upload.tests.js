@@ -122,7 +122,7 @@ describe('Services: uploader', function() {
     });
 
     it('should invoke onAddingFiles and onAfterAddingFile', function() {
-      var fileItem = { file: { name: 'test1.jpg', size: 200 }, domFileItem: { slice: function() {} } };
+      var fileItem = { file: { name: 'test1.jpg', size: 200 }, domFileItem: new Blob([]) };
       var onAddingFilesSpy = sinon.spy(uploader,'onAddingFiles');
       var spy = sinon.spy(uploader,'onAfterAddingFile');
 
@@ -157,7 +157,7 @@ describe('Services: uploader', function() {
 
   describe('uploadItem:',function() {
     it('should invoke onBeforeUploadItem', function(done) {
-      var fileItem = { file: { name: 'test1.jpg', size: 200 }, domFileItem: { slice: function() {} } };
+      var fileItem = { file: { name: 'test1.jpg', size: 200 }, domFileItem: new Blob([]) };
       var spy = sinon.spy(uploader,'onBeforeUploadItem');
 
       uploader.addToQueue([ fileItem ]);
@@ -172,7 +172,7 @@ describe('Services: uploader', function() {
 
     describe('Content-Range header: ', function() {
       it('should set correct header', function() {
-        var fileItem = { file: { name: 'test1.jpg', size: 200 }, domFileItem: { slice: function() {} } };
+        var fileItem = { file: { name: 'test1.jpg', size: 200 }, domFileItem: new Blob([]) };
         uploader.addToQueue([ fileItem ]);
 
         lastAddedFileItem.chunkSize = 10000;
@@ -182,7 +182,7 @@ describe('Services: uploader', function() {
       });
 
       it('should handle 0 byte file', function() {
-        var fileItem = { file: { name: 'test1.jpg', size: 0, type: 'JPEG' }, domFileItem: { slice: function() {} } };
+        var fileItem = { file: { name: 'test1.jpg', size: 0, type: 'JPEG' }, domFileItem: new Blob([]) };
         uploader.addToQueue([ fileItem ]);
 
         lastAddedFileItem.chunkSize = 10000;
@@ -192,7 +192,7 @@ describe('Services: uploader', function() {
       });
 
       it('should chunk large file', function() {
-        var fileItem = { file: { name: 'test1.jpg', size: 10000, type: 'JPEG'}, domFileItem: { slice: function() {} } };
+        var fileItem = { file: { name: 'test1.jpg', size: 10000, type: 'JPEG'}, domFileItem: new Blob([]) };
         uploader.addToQueue([ fileItem ]);
 
         lastAddedFileItem.chunkSize = 1000;
@@ -211,7 +211,7 @@ describe('Services: uploader', function() {
         uploader.notifySuccessItem = sinon.spy();
         uploader.notifyCompleteItem = sinon.spy();
 
-        fileItem = { file: { name: 'test1.jpg', size: 200}, domFileItem: { slice: function() {} } };
+        fileItem = { file: { name: 'test1.jpg', size: 200}, domFileItem: new Blob([]) };
         uploader.addToQueue([ fileItem ]);
 
         lastAddedFileItem.chunkSize = 10000;
@@ -334,7 +334,7 @@ describe('Services: uploader', function() {
         uploader.notifySuccessItem = sinon.spy();
         uploader.notifyCompleteItem = sinon.spy();
 
-        fileItem = { taskToken: "abc", file: { name: 'test1.mp4', size: 200}, domFileItem: { slice: function() {} } };
+        fileItem = { taskToken: "abc", file: { name: 'test1.mp4', size: 200}, domFileItem: new Blob([]) };
         uploader.addToQueue([ fileItem ]);
       });
 
