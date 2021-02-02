@@ -109,6 +109,11 @@ var ScheduleAddScenarios = function() {
         expect(shareSchedulePopoverPage.getCopyLinkButton().isDisplayed()).to.eventually.be.true;
       });
 
+      it('should provide a link accepted by Rise Chrome Extension', function() {
+        //It needs to use widgets.risevision.com subdomain to be accepted by Rise Chrome Extension. In case it ever changes again, we need to update it in both places.
+        expect(shareSchedulePopoverPage.getCopyLinkInput().getAttribute('value')).to.eventually.contain('https://widgets.risevision.com/');
+      });
+
       it('should show Social Media sharing buttons', function() {
         expect(shareSchedulePopoverPage.getTwitterShareButton().isDisplayed()).to.eventually.be.true;
       });

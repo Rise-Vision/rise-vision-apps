@@ -9,6 +9,7 @@ var ShareSchedulePopoverPage = function() {
   var chromeExtensionTabLink = element(by.css('.tooltip.tooltip-share-options #extensionButton')); 
 
   var copyLinkButton = element(by.css('.tooltip.tooltip-share-options #copyUrlButton'));
+  var copyLinkInput = element(by.css('.tooltip.tooltip-share-options input.copy-text-box'));
   var copyEmbedCodeButton = element(by.css('.tooltip.tooltip-share-options #copyEmbedCodeButton'));
 
   var twitterShareButton = element(by.css('.tooltip.tooltip-share-options #twitterShareButton'));
@@ -38,6 +39,10 @@ var ShareSchedulePopoverPage = function() {
 
   this.getCopyLinkButton = function() {
     return copyLinkButton;
+  };
+
+  this.getCopyLinkInput = function() {
+    return copyLinkInput;
   };
 
   this.getCopyEmbedCodeButton = function() {
