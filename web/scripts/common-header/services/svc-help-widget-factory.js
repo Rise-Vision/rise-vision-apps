@@ -53,11 +53,21 @@
           }
         }
 
+        function showContactUs() {
+          if ($window._elev && widgetScriptLoaded) {
+            $window._elev.openHome();
+            $window._elev.openModule('2'); //defined in elev.io
+          } else {
+            $window.open(HELP_URL, '_blank');
+          }
+        }
+
         return {
           initializeWidget: initializeWidget,
           showWidgetButton: showWidgetButton,
           hideWidgetButton: hideWidgetButton,
-          showHelpWidget: showHelpWidget
+          showHelpWidget: showHelpWidget,
+          showContactUs: showContactUs
         };
 
       }

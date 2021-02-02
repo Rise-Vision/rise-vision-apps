@@ -2,7 +2,7 @@
 
 describe("Services: helpWidgetFactory", function() {
   var sandbox = sinon.sandbox.create();
-  var $window, factory;
+  var $window, factory, element;
 
   beforeEach(module("risevision.common.support"));
 
@@ -26,6 +26,7 @@ describe("Services: helpWidgetFactory", function() {
         on: sandbox.stub(),
         setSettings: sandbox.stub(),
         openHome: sandbox.stub(),
+        openModule: sandbox.stub()
       };
 
       $window.open = sandbox.stub();
@@ -36,6 +37,31 @@ describe("Services: helpWidgetFactory", function() {
     sandbox.restore();
   });
 
+  function stubCreateElement() {
+    element = $window.document.createElement('script');
+    element.innerText = "ToBeChanged";
+
+    sandbox.stub($window.document,"createElement", function() {
+      return element;
+    });
+  }
+
+  function restoreCreateElement() {
+    $window.document.createElement.restore();
+  }
+
+  function loadHelpScript() {
+    factory.initializeWidget();
+    $window._elev.on.should.have.been.calledWith('load');
+
+    var loadCallback = $window._elev.on.getCall(0).args[1];
+    expect(loadCallback).to.be.a("function");
+
+    // simulating that the script loads and the load callback is called
+    loadCallback($window._elev)
+    $window._elev.setSettings.should.have.been.calledWith({hideLauncher: true});
+  }
+
   it("should exist", function() {
     expect(factory.initializeWidget).to.be.a("function");
     expect(factory.showWidgetButton).to.be.a("function");
@@ -44,19 +70,13 @@ describe("Services: helpWidgetFactory", function() {
   });
 
   describe("initializeWidget:", function() {
-    var element;
 
     beforeEach(function() {
-      element = $window.document.createElement('script');
-      element.innerText = "ToBeChanged";
-
-      sandbox.stub($window.document,"createElement", function() {
-        return element;
-      });
+      stubCreateElement();
     });
 
     afterEach(function() {
-      $window.document.createElement.restore();
+      restoreCreateElement();
     });
 
     it("should run the script and initialize widget settings", function() {
@@ -96,31 +116,17 @@ describe("Services: helpWidgetFactory", function() {
   });
 
   describe("showHelpWidget:", function() {
-    var element;
 
     beforeEach(function() {
-      element = $window.document.createElement('script');
-      element.innerText = "ToBeChanged";
-
-      sandbox.stub($window.document,"createElement", function() {
-        return element;
-      });
+      stubCreateElement();
     });
 
     afterEach(function() {
-      $window.document.createElement.restore();
+      restoreCreateElement();
     });
 
     it("should open help widget and not open failback help screen if help script was loaded", function() {
-      factory.initializeWidget();
-      $window._elev.on.should.have.been.calledWith('load');
-
-      var loadCallback = $window._elev.on.getCall(0).args[1];
-      expect(loadCallback).to.be.a("function");
-
-      // simulating that the script loads and the load callback is called
-      loadCallback($window._elev)
-      $window._elev.setSettings.should.have.been.calledWith({hideLauncher: true});
+      loadHelpScript();
 
       factory.showHelpWidget();
       $window._elev.openHome.should.have.been.called;
@@ -134,6 +140,39 @@ describe("Services: helpWidgetFactory", function() {
 
       factory.showHelpWidget();
       $window._elev.openHome.should.not.have.been.called;
+      $window.open.should.have.been.calledWith('https://help.risevision.com/', '_blank');
+    });
+  });
+
+  describe("showContactUs:", function() {
+
+    beforeEach(function() {
+      stubCreateElement();
+    });
+
+    afterEach(function() {
+      restoreCreateElement();
+    });
+
+    it("should open help widget on Create Ticket module if help script is loaded", function() {
+      loadHelpScript();
+
+      factory.showContactUs();
+      $window._elev.openHome.should.have.been.called;
+      $window._elev.openModule.should.have.been.calledWith('2');
+
+      $window.open.should.not.have.been.called;
+    });
+
+    it("should not open Create Ticket and open failback help screen if script was not loaded", function() {
+      factory.initializeWidget();
+      $window._elev.on.should.have.been.calledWith('load');
+      $window._elev.setSettings.should.not.have.been.called;
+
+      factory.showContactUs();
+      $window._elev.openHome.should.not.have.been.called;
+      $window._elev.openModule.should.not.have.been.called;
+
       $window.open.should.have.been.calledWith('https://help.risevision.com/', '_blank');
     });
   });
