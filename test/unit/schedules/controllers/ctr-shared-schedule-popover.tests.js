@@ -124,12 +124,10 @@ describe('controller: SharedSchedulePopoverController', function() {
   describe('copyToClipboard:', function() {
     beforeEach(function() {
       //phantomJS does not provide navigator.clipboard, so we are mocking it
-      $window.navigator.clipboard = {
-        writeText: sinon.stub()
-      };
+      sinon.stub($window.navigator.clipboard, 'writeText');
     });
     afterEach(function() {
-      delete $window.navigator.clipboard;
+      $window.navigator.clipboard.writeText.restore();
     });
 
     it('should copy to clipboard', function(){
