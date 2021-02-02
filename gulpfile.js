@@ -1,18 +1,17 @@
 'use strict';
 var gulp        = require('gulp');
 var browserSync = require('browser-sync');
-var bower       = require('gulp-bower');
 var modRewrite  = require('connect-modrewrite');
 var prettify    = require('gulp-jsbeautifier');
 var jshint      = require('gulp-jshint');
 var rimraf      = require("gulp-rimraf");
 var uglify      = require("gulp-uglify-es").default;
 var usemin      = require("gulp-usemin");
-var minifyCss   = require('gulp-minify-css');
+var cleanCSS    = require('gulp-clean-css');
 var minifyHtml  = require('gulp-minify-html');
 var ngHtml2Js   = require("gulp-ng-html2js");
 var concat      = require("gulp-concat");
-var gutil       = require("gulp-util");
+var log         = require("fancy-log");
 var rename      = require('gulp-rename');
 var sourcemaps  = require('gulp-sourcemaps');
 var runSequence = require('run-sequence');
@@ -95,6 +94,7 @@ var unitTestFiles = [
 gulp.task('browser-sync', function() {
   browserSync({
     startPath: '/index.html',
+    files: ['./web/tmp/partials.js', './web/scripts/**/*.js', './dist/css/*.css', './web/index.html'],
     server: {
       baseDir: './web',
       middleware: [
@@ -103,43 +103,13 @@ gulp.task('browser-sync', function() {
         ])
       ]
     },
+    reloadDebounce: 2000,
+    reloadDelay: 2000,
     logLevel: "debug",
     port: 8000,
     open: false
   });
 });
-
-gulp.task('browser-sync-reload', function() {
-  console.log('browser-sync-reload');
-  browserSync.reload();
-});
-
-//------------------------- Bower --------------------------------
-
-/**
- * Install bower dependencies
- */
-gulp.task('bower-install', ['bower-rm'], function(cb){
-  return bower().on('error', function(err) {
-    console.log(err);
-    cb();
-  });
-});
-
-
-/**
- *  Remove all bower dependencies
- */
-gulp.task('bower-rm', function(){
-  return gulp.src('assets/components', {read: false})
-    .pipe(rimraf());
-});
-
-/**
- * Do a bower clean install
- */
-gulp.task('bower-clean-install', ['bower-rm', 'bower-install']);
-
 
 //------------------------- Watch --------------------------------
 /**
@@ -148,10 +118,8 @@ gulp.task('bower-clean-install', ['bower-rm', 'bower-install']);
  */
 gulp.task('watch', function () {
   gulp.watch(partialsHTMLFiles, ['html2js']);
-  gulp.watch(['./web/tmp/partials.js', './web/scripts/**/*.js', './web/tmp/css/*.css', './web/index.html'], ['browser-sync-reload']);
   gulp.watch(unitTestFiles, ['test:unit']);
 });
-
 
 //------------------------ Tooling --------------------------
 
@@ -196,7 +164,7 @@ gulp.task("lint", function() {
 function buildHtml(path) {
   return gulp.src([path])
     .pipe(usemin({
-      css: [minifyCss, 'concat'],
+      css: [cleanCSS, 'concat'],
       html: [function() {return minifyHtml({empty: true})} ],
       js: [
         sourcemaps.init({largeFile: true}),
@@ -293,7 +261,7 @@ gulp.task("static-html", function() {
 
 gulp.task("config", function() {
   var env = process.env.NODE_ENV || "dev";
-  gutil.log("Environment is", env);
+  log("Environment is", env);
 
   return gulp.src(["./web/scripts/config/" + env + ".js"])
     .pipe(rename("config.js"))
@@ -312,7 +280,7 @@ gulp.task('build', function (cb) {
 
 gulp.task("config-e2e", function() {
   var env = process.env.E2E_ENV || "dev";
-  gutil.log("Environment is", env);
+  log("Environment is", env);
 
   return gulp.src(["test/e2e/config/" + env + ".json"])
     .pipe(rename("config.json"))

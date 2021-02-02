@@ -3,7 +3,7 @@
 
 var gulp = require("gulp");
 var sass = require("gulp-sass");
-var minifyCSS = require("gulp-minify-css");
+var cleanCSS = require("gulp-clean-css");
 var rename = require("gulp-rename");
 var colors = require("colors");
 
@@ -32,7 +32,7 @@ gulp.task("css-build-alignment", function () {
     .pipe(sass({
       errLogToConsole: true
     }))
-    .pipe(minifyCSS({ keepBreaks: true }))
+    .pipe(cleanCSS({ format: 'keep-breaks' }))
     .pipe(rename("alignment.min.css"))
     .pipe(gulp.dest(paths.tmpCss))
     .pipe(gulp.dest(paths.distCss));
@@ -47,7 +47,7 @@ gulp.task("css-build", ["css-build-alignment", "fonts-copy"], function() {
     .pipe(rename("rise.css"))
     .pipe(gulp.dest(paths.tmpCss))
     .pipe(gulp.dest(paths.distCss))
-    .pipe(minifyCSS())
+    .pipe(cleanCSS())
     .pipe(rename("rise.min.css"))
     .pipe(gulp.dest(paths.tmpCss))
     .pipe(gulp.dest(paths.distCss))
