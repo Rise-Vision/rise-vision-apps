@@ -21,7 +21,7 @@
 
         <div class="left-right-aligner" ng-class="{'has-error': purchaseLicensesForm.licensesToAdd.$invalid }" ng-if="purchaseAction === 'add'">
           <label for="licensesToAdd" class="control-label">Number of display licenses you want to add:</label>
-          <input class="display-count-input mt-0 pull-right" type="number" name="licensesToAdd" ng-model="factory.purchase.licensesToAdd" min="1" max="10000" ng-pattern="/^[0-9]+$/" required ng-change="getEstimate()" ng-model-options="{ debounce: 1000 }" autofocus />
+          <input class="display-count-input text-md mt-0 pull-right" type="number" name="licensesToAdd" ng-model="factory.purchase.licensesToAdd" min="1" max="10000" ng-pattern="/^[0-9]+$/" required ng-change="getEstimate()" ng-model-options="{ debounce: 1000 }" autofocus />
         </div>
 
         <div class="left-right-aligner" ng-class="{'has-error': purchaseLicensesForm.licensesToRemove.$invalid }" ng-if="purchaseAction === 'remove'">

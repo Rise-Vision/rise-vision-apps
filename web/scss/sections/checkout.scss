@@ -166,6 +166,11 @@
   font-weight: bold;
   text-align: center;
   display: inline;
+
+  &.text-md {
+    @extend .text-md;
+    font-weight: normal;
+  }
 }
 
 
