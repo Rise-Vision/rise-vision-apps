@@ -41,8 +41,8 @@
     "jshint": "^2.10.3",
     "jshint-stylish": "^2.0.1",
     "run-sequence": "^1.1.1",
-    "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git#chore/clean-deps",
-    "widget-tester": "git://github.com/Rise-Vision/widget-tester.git#chore/update-mocha"
+    "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git",
+    "widget-tester": "git://github.com/Rise-Vision/widget-tester.git#chore/npm-updates"
   },
   "repository": {
     "type": "git",
