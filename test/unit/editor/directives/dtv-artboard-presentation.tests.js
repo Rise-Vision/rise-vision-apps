@@ -72,7 +72,7 @@ describe('directive: artboard-presentation', function() {
       $scope.$apply();
       expect(element.css('transform')).to.equal('scale(0.5)');
       expect(element.css('transform-origin')).to.equal('0% 0%');
-      expect(element.css('transition')).to.equal('all 0.4s');
+      expect(element.css('transition')).to.contain('all 0.4s');
     });
 
     it('should re-scale when zoom changes',function(){
@@ -122,11 +122,11 @@ describe('directive: artboard-presentation', function() {
       $scope.$digest();
       expect(element.css('width')).to.equal((presentation.width + widthIncrement)+presentation.widthUnits);
       expect(element.css('height')).to.equal((presentation.height + heightIncrement)+presentation.heightUnits);
-      expect(element.css('background')).to.equal(presentation.backgroundStyle);
+      expect(element.css('background')).to.contain(presentation.backgroundStyle);
       expect(element.css('backgroundSize')).to.equal('contain');
     });
 
-    it('should apply presentation properties when they cahnge',function(){
+    it('should apply presentation properties when they change',function(){
       var element = $compile("<artboard-presentation></artboard-presentation>")($scope);
       $scope.$apply();
       presentation.width = 100;
@@ -134,7 +134,7 @@ describe('directive: artboard-presentation', function() {
       $scope.$apply();
       expect(element.css('width')).to.equal((presentation.width + widthIncrement)+presentation.widthUnits);
       expect(element.css('height')).to.equal((presentation.height+ heightIncrement)+presentation.heightUnits);
-      expect(element.css('background')).to.equal(presentation.backgroundStyle);  
+      expect(element.css('background')).to.contain(presentation.backgroundStyle);  
       expect(element.css('backgroundSize')).to.equal('contain');  
     });
   });
