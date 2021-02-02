@@ -49,7 +49,6 @@ var unitTestFiles = [
   "web/bower_components/checklist-model/checklist-model.js",
   "web/bower_components/ngstorage/ngStorage.js",
   "web/bower_components/angular-spinner/dist/angular-spinner.js",
-  "web/bower_components/spin.js/spin.js",
   "web/bower_components/angular-cookies/angular-cookies.js",
   "web/bower_components/lodash/dist/lodash.js",
   "web/bower_components/ng-csv/build/ng-csv.js",
@@ -71,17 +70,16 @@ var unitTestFiles = [
   "node_modules/widget-tester/mocks/translate-mock.js",
   "web/tmp/partials.js",
   "web/scripts/components/**/*.js",
+  "web/scripts/common-header/*.js",
   "web/scripts/common-header/**/*.js",
   "web/scripts/storage-selector-app.js",
   "web/scripts/app.js",
-  "web/scripts/plans/**/*.js",
   "web/scripts/purchase/**/*.js",
   "web/scripts/billing/**/*.js",
   "web/scripts/common/**/*.js",
   "web/scripts/config/test.js",
   "web/scripts/displays/**/*.js",
   "web/scripts/editor/**/*.js",
-  "web/scripts/launcher/**/*.js",
   "web/scripts/schedules/**/*.js",
   "web/scripts/storage/**/*.js",
   "web/scripts/template-editor/**/*.js",
@@ -322,11 +320,13 @@ gulp.task("config-e2e", function() {
 });
 
 gulp.task("test:unit:nocoverage", factory.testUnitAngular({
-    testFiles: unitTestFiles
+    testFiles: unitTestFiles,
+    basePath: '../..'
 }));
 
 gulp.task("test:unit", factory.testUnitAngular({
-    coverageFiles: "../../web/scripts/**/*.js",
+    coverageFiles: "web/scripts/**/*.js",
+    basePath: '../..',
     testFiles: unitTestFiles
 }));
 
