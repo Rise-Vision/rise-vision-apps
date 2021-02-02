@@ -6,12 +6,13 @@
 
   <div rv-spinner rv-spinner-key="payment-source-loader" rv-spinner-start-active="1"></div>
 
-  <div id="errorBox" ng-show="subscriptionFactory.apiError" class="madero-style alert alert-danger" role="alert">
+  <div id="errorBox" ng-show="subscriptionFactory.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
     <strong>{{subscriptionFactory.apiError}}</strong>
   </div>
 
-  <div id="errorBox" ng-show="addPaymentSourceFactory.apiError" class="madero-style alert alert-danger" role="alert">
+  <div id="errorBox" ng-show="addPaymentSourceFactory.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
     <strong>{{addPaymentSourceFactory.apiError}}</strong>
+    <br/>If you need help please email us at support@risevision.com.
   </div>
 
   <div class="row">
