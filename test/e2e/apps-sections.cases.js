@@ -5,6 +5,7 @@
   var SigninGoogleScenarios = require('./common/cases/signin-google.js');
   var SigninCustomScenarios = require('./common/cases/signin-custom.js');
   var WeeklyTemplatesScenarios = require('./common/cases/weekly-templates.js');
+  var DismissModalScenarios = require('./common/cases/dismiss-modal.js');
 
   var CompanySettingsScenarios = require("./common-header/cases/company-settings.js");
   var CompanySubcompaniesScenarios = require("./common-header/cases/company-subcompanies.js");
@@ -21,13 +22,13 @@
   var DownloadScenarios = require('./storage/cases/download.js');
   var TrashScenarios = require('./storage/cases/trash.js');
   var IframeScenarios = require('./storage/cases/iframe.js');
-  var DismissModalScenarios = require('./storage/cases/dismiss-modal.js');
 
   describe('Apps Common', function () {
     var homepageScenarios = new HomepageScenarios();
     var signinGoogleScenarios = new SigninGoogleScenarios();
     var signinCustomScenarios = new SigninCustomScenarios();
     var weeklyTemplatesScenarios = new WeeklyTemplatesScenarios();
+    var dismissModalScenarios = new DismissModalScenarios();
   });
 
   describe('Common Header', function () {
@@ -50,7 +51,6 @@
     var downloadScenarios = new DownloadScenarios();
     var trashScenarios = new TrashScenarios();
     var iframeScenarios = new IframeScenarios();
-    var dismissModalScenarios = new DismissModalScenarios();
   });
 
 })();
