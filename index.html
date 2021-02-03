@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html ng-app="risevision.apps" itemscope itemtype="http://schema.org/WebApplication" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
+<html itemscope itemtype="http://schema.org/WebApplication" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
 <head lang="en">
-  <base href="/">
+  <base href="/web/">
   <meta name="fragment" content="!">
   <meta charset="UTF-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
@@ -49,6 +49,17 @@
   <link rel="stylesheet" type="text/css" href="bower_components/ng-tags-input/ng-tags-input.bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/angularjs-slider/dist/rzslider.css"/>
   <!-- endbuild -->
+
+<script src="/node_modules/core-js/client/shim.min.js"></script>
+<script src="/node_modules/zone.js/dist/zone.js"></script>
+<script src="/node_modules/systemjs/dist/system.src.js"></script>
+<script src="/systemjs.config.js"></script>
+<script>
+  System.import('/web/app.module.js');
+</script>
+<script>
+  System.import('/web/src/main.js');
+</script>
 </head>
 <body ng-class="{'gray-bg': !showWhiteBackground}">
   <!-- Common Header -->
@@ -300,7 +311,7 @@
 
   <!-- app js -->
   <script src="scripts/config/config.js"></script>
-  <script src="scripts/app.js"></script>
+  <script src="scripts/app.module.ajs.js"></script>
 
   <!-- common -->
   <script src="scripts/common/app.js"></script>

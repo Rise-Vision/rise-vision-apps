@@ -27,7 +27,7 @@ require("./css-build");
 //--------------------- Variables --------------------------------------
 
 var appJSFiles = [
-  "./web/scripts/app.js",
+  "./web/scripts/app.module.ajs.js",
   "./web/scripts/**/*.js"
 ];
 
@@ -94,7 +94,7 @@ var unitTestFiles = [
 gulp.task('browser-sync', function() {
   browserSync({
     startPath: '/index.html',
-    files: ['./web/tmp/partials.js', './web/scripts/**/*.js', './dist/css/*.css', './web/index.html'],
+    files: ['./web/tmp/partials.js', './web/scripts/**/*.ts', './dist/css/*.css', './web/index.html'],
     server: {
       baseDir: './web',
       middleware: [

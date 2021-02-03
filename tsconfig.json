@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
+    // "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
@@ -18,6 +18,10 @@
     // "target": "es2015",
     // "module": "es2020",
     
+
+    //fix "Can't resolve all parameters for AppModule" error
+    "emitDecoratorMetadata": true,
+
     "lib": [
       "es2018",
       "dom"

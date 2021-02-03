@@ -9,6 +9,10 @@ dist
 tmp
 web/tmp
 web/scripts/config/config.js
+web/scripts/*.js
+web/scripts/*.map
+web/scripts/**/*.js
+web/scripts/**/*.map
 web/vendor/tus
 web/vendor/compressor
 test/e2e/config/config.json
