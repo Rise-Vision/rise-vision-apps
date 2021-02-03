@@ -254,8 +254,8 @@ gulp.task("vendor", function () {
     })
 });
 
-gulp.task("static-html", function() {
-  return gulp.src(['./web/loading-preview.html', './web/user-manager-silent.html'])
+gulp.task("static-files", function() {
+  return gulp.src(['./web/loading-preview.html', './web/user-manager-silent.html', './web/robots.txt'])
     .pipe(gulp.dest('dist/'));
 })
 
@@ -273,7 +273,7 @@ gulp.task('build-pieces', function (cb) {
 });
 
 gulp.task('build', function (cb) {
-  runSequence(["clean", ], ['build-pieces', 'pretty'], ["html", "static-html", "images", "vendor"], cb);
+  runSequence(["clean", ], ['build-pieces', 'pretty'], ["html", "static-files", "images", "vendor"], cb);
 });
 
 /*---- testing ----*/
