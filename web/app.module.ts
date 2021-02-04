@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-// import { AppComponent } from './src/app/app.module.js';
+import { AppComponent } from './src/app/app.component.js';
 import { HiComponent } from './hi.component.js';
-// import { AppComponent } from './src/app/app.module.js';
 
 @NgModule({
   imports: [
@@ -11,10 +10,12 @@ import { HiComponent } from './hi.component.js';
     UpgradeModule,
   ],
   declarations: [
-  	HiComponent
+  	HiComponent,
+  	AppComponent
   ],
   entryComponents: [
-  	HiComponent
+  	HiComponent,
+  	AppComponent
   ],
   providers: [],
   bootstrap: []

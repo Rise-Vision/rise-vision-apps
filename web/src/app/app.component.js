@@ -10,13 +10,13 @@ var AppComponent = /** @class */ (function () {
     }
     AppComponent = tslib_1.__decorate([
         core_1.Component({
-            selector: 'my-app',
-            template: "<h1>Hello {{name}}</h1>",
+            selector: 'app-my',
+            template: "<h5>My {{name}}-<app-hi></app-hi>-</h5>",
         })
     ], AppComponent);
     return AppComponent;
 }());
 exports.AppComponent = AppComponent;
 angular.module('risevision.apps')
-    .directive('app-my', static_1.downgradeComponent({ component: AppComponent }));
+    .directive('appMy', static_1.downgradeComponent({ component: AppComponent }));
 //# sourceMappingURL=app.component.js.map
