@@ -11,7 +11,7 @@ var AppComponent = /** @class */ (function () {
     AppComponent = tslib_1.__decorate([
         core_1.Component({
             selector: 'app-my',
-            template: "<h5>My {{name}}-<app-hi></app-hi>-</h5>",
+            template: "<h5>My {{name}} h: <hero-detail></hero-detail> --</h5>",
         })
     ], AppComponent);
     return AppComponent;

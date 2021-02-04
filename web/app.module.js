@@ -7,6 +7,7 @@ var platform_browser_1 = require("@angular/platform-browser");
 var static_1 = require("@angular/upgrade/static");
 var app_component_js_1 = require("./src/app/app.component.js");
 var hi_component_js_1 = require("./hi.component.js");
+var hero_detail_component_js_1 = require("./hero-detail.component.js");
 var AppModule = /** @class */ (function () {
     function AppModule(upgrade) {
         this.upgrade = upgrade;
@@ -23,7 +24,8 @@ var AppModule = /** @class */ (function () {
             ],
             declarations: [
                 hi_component_js_1.HiComponent,
-                app_component_js_1.AppComponent
+                app_component_js_1.AppComponent,
+                hero_detail_component_js_1.HeroDetailDirective
             ],
             entryComponents: [
                 hi_component_js_1.HiComponent,

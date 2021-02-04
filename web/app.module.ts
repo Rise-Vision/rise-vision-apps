@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { AppComponent } from './src/app/app.component.js';
 import { HiComponent } from './hi.component.js';
+import { HeroDetailDirective } from './hero-detail.component.js';
 
 @NgModule({
   imports: [
@@ -11,7 +12,8 @@ import { HiComponent } from './hi.component.js';
   ],
   declarations: [
   	HiComponent,
-  	AppComponent
+  	AppComponent,
+  	HeroDetailDirective
   ],
   entryComponents: [
   	HiComponent,

@@ -1,5 +1,11 @@
 'use strict';
 
+var heroDetail = {
+  template: '<h4>Hero detail!</h4>',
+  controller: function HeroDetailController() {
+  }
+};
+
 angular.module('risevision.apps', [
     'ui.router',
     'ngTouch',
@@ -60,6 +66,7 @@ angular.module('risevision.apps', [
     'risevision.template-editor.directives',
     'risevision.template-editor.controllers'
   ])
+  .component('heroDetail',heroDetail)
   // Set up our mappings between URLs, templates, and controllers
   .config(['$stateProvider',
     function storeRouteConfig($stateProvider) {
