@@ -11,6 +11,7 @@ var HomePage = function() {
   var schedulesUrl = config.rootUrl + '/schedules/list';
   var storageUrl = config.rootUrl + '/storage';
   var defaultSubscriptionUrl = config.rootUrl + '/billing/subscription/';
+  var usersAddUrl = config.rootUrl + '/users/add';
 
   var displaysLink = element(by.css('.nav.navbar-nav #DisplaysLink'));
   var editorLink = element(by.css('.nav.navbar-nav #PresentationsLink'));
@@ -65,6 +66,10 @@ var HomePage = function() {
 
   this.getDefaultSubscription = function() {
     this.confirmGet(defaultSubscriptionUrl);
+  };
+
+  this.getUsersAdd = function() {
+    this.confirmGet(usersAddUrl);
   };
 
   this.getUrl = function() {
