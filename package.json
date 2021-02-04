@@ -22,7 +22,7 @@
     "@angular/platform-browser": "~4.3.4",
     "@angular/platform-browser-dynamic": "~4.3.4",
     "@angular/router": "~4.3.4",
-    "@angular/upgrade": "^11.1.1",
+    "@angular/upgrade": "^4.0.0",
     "@shopify/draggable": "1.0.0-beta.8",
     "angular-in-memory-web-api": "~0.3.0",
     "bower": "^1.8.12",

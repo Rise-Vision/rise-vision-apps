@@ -5,7 +5,9 @@ var tslib_1 = require("tslib");
 var core_1 = require("@angular/core");
 var platform_browser_1 = require("@angular/platform-browser");
 var static_1 = require("@angular/upgrade/static");
+// import { AppComponent } from './src/app/app.module.js';
 var hi_component_js_1 = require("./hi.component.js");
+// import { AppComponent } from './src/app/app.module.js';
 var AppModule = /** @class */ (function () {
     function AppModule(upgrade) {
         this.upgrade = upgrade;
@@ -25,7 +27,9 @@ var AppModule = /** @class */ (function () {
             ],
             entryComponents: [
                 hi_component_js_1.HiComponent
-            ]
+            ],
+            providers: [],
+            bootstrap: []
         }),
         tslib_1.__metadata("design:paramtypes", [static_1.UpgradeModule])
     ], AppModule);

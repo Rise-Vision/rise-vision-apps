@@ -9,9 +9,14 @@ declare var angular: angular.IAngularStatic;
  })
  
  export class HiComponent {
-    content: string = 'Books are here';
+    content: string = 'Hi Angular 2';
  }
 
- angular.module('risevision.apps')
-    .directive('app-hi', 
-    downgradeComponent({component: HiComponent}) as angular.IDirectiveFactory
+
+angular.module('risevision.apps')
+  .directive(
+    'appHi', 
+    downgradeComponent({
+      component: HiComponent
+    }) as angular.IDirectiveFactory
+  );

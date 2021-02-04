@@ -6,7 +6,7 @@ var core_1 = require("@angular/core");
 var static_1 = require("@angular/upgrade/static");
 var HiComponent = /** @class */ (function () {
     function HiComponent() {
-        this.content = 'Books are here';
+        this.content = 'Hi Angular 2';
     }
     HiComponent = tslib_1.__decorate([
         core_1.Component({
@@ -19,5 +19,7 @@ var HiComponent = /** @class */ (function () {
 }());
 exports.HiComponent = HiComponent;
 angular.module('risevision.apps')
-    .directive('app-hi', static_1.downgradeComponent({ component: HiComponent }));
+    .directive('appHi', static_1.downgradeComponent({
+    component: HiComponent
+}));
 //# sourceMappingURL=hi.component.js.map

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppComponent = void 0;
 var tslib_1 = require("tslib");
+var static_1 = require("@angular/upgrade/static");
 var core_1 = require("@angular/core");
 var AppComponent = /** @class */ (function () {
     function AppComponent() {
@@ -16,4 +17,6 @@ var AppComponent = /** @class */ (function () {
     return AppComponent;
 }());
 exports.AppComponent = AppComponent;
+angular.module('risevision.apps')
+    .directive('app-my', static_1.downgradeComponent({ component: AppComponent }));
 //# sourceMappingURL=app.component.js.map
