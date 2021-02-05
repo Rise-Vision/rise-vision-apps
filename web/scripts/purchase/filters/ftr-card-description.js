@@ -9,7 +9,7 @@ angular.module('risevision.apps.purchase')
       };
 
       var _toTitleCase = function(string) {
-        return string.replace(/(^|\s)\S/g, function(t) { return t.toUpperCase() });
+        return string.replace(/(^|\s)\S/g, function(t) { return t.toUpperCase(); });
       };
 
       return function (card) {
