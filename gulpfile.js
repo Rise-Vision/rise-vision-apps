@@ -99,7 +99,7 @@ gulp.task('browser-sync', function() {
     startPath: '/index.html',
     files: ['./web/tmp/partials.js', './web/scripts/**/*.ts', './dist/css/*.css', './web/index.html'],
     server: {
-      baseDir: './dist',
+      baseDir: './web',
       middleware: [
         modRewrite([
           '!\\.\\w+$ /index.html [L]'
