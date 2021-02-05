@@ -3,6 +3,7 @@
  * Adjust as necessary for your application needs.
  */
 (function (global) {
+  // @ts-ignore
   System.config({
     paths: {
       // paths serve as alias
