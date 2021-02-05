@@ -1,6 +1,6 @@
 'use strict';
 
-describe('controller: Store Content Modal', function() {
+describe('controller: Store Products Modal', function() {
   beforeEach(module('risevision.common.components.store-products'));
   beforeEach(module(function ($provide) {
     $provide.service('ScrollingListService', function() {
