@@ -8,9 +8,11 @@ reports
 dist
 tmp
 web/tmp
-web/scripts/config/config.js
-web/scripts/*.js
-web/scripts/*.map
+web/scripts/config/config.*
+web/*.js
+web/*.map
+web/src/**/*.js
+web/src/**/*.map
 web/scripts/**/*.js
 web/scripts/**/*.map
 web/vendor/tus
