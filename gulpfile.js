@@ -20,6 +20,9 @@ var factory     = require("widget-tester").gulpTaskFactory;
 var fs          = require('fs');
 var os          = require('os');
 
+var Builder     = require('systemjs-builder');
+var inject      = require('gulp-inject');
+
 require("./ch-build");
 require("./i18n-build");
 require("./css-build");
@@ -96,7 +99,7 @@ gulp.task('browser-sync', function() {
     startPath: '/index.html',
     files: ['./web/tmp/partials.js', './web/scripts/**/*.ts', './dist/css/*.css', './web/index.html'],
     server: {
-      baseDir: './web',
+      baseDir: './dist',
       middleware: [
         modRewrite([
           '!\\.\\w+$ /index.html [L]'
@@ -199,7 +202,7 @@ function buildHtml(path) {
 }
 
 gulp.task("html-index", function () {
-  return buildHtml("./web/index.html");
+  return buildHtml("./web/index_raw.html");
 });
 
 gulp.task("html-selector", function () {
@@ -246,14 +249,6 @@ gulp.task("images", function () {
     })
 });
 
-gulp.task("angular2", function () {
-  return gulp.src(['./web/src/**/*.*'])
-    .pipe(gulp.dest("dist/src"))
-    .on('error',function(e){
-      console.error(String(e));
-    })
-});
-
 gulp.task("vendor", function () {
   return gulp.src(['./web/vendor/**/*.*'])
     .pipe(gulp.dest("dist/vendor"))
@@ -276,12 +271,52 @@ gulp.task("config", function() {
     .pipe(gulp.dest("./web/scripts/config"));
 });
 
+gulp.task("angular2-src", function () {
+  return gulp.src(['./web/src/**/*.js'])
+    .pipe(gulp.dest("dist/src"))
+    .on('error',function(e){
+      console.error(String(e));
+    })
+});
+
+gulp.task("index-rename", function() {
+  return gulp.src('./dist/index_raw.html')
+    .pipe(rename("index.html"))
+    .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('bundle-angular-deps', function() {
+  // optional constructor options
+  // sets the baseURL and loads the configuration file
+  var builder = new Builder('', 'web/systemjs.config.js');
+
+  return builder
+    .bundle('web/src/main.js - [web/src/**/*.js]', 'web/angular2-deps.js', {}) //{ minify: true, sourceMaps: true })
+    .then(function() {
+      console.log('Build complete');
+    })
+    .catch(function(err) {
+      console.log('Build error');
+      console.log(err);
+    });
+});
+
+gulp.task('angular2-inject', function () {
+  // It's not necessary to read the files (will speed up things), we're only after their paths:
+  var srcStream = gulp.src(['./web/angular2-deps.js'], {read: false});
+
+  return gulp.src('./web/index.html')
+    .pipe(rename("index_raw.html"))
+    .pipe(inject(srcStream, {relative: true}))
+    .pipe(gulp.dest('./web'));
+});
+
 gulp.task('build-pieces', function (cb) {
   runSequence(["clean"], ['config', 'i18n-build', 'css-build', 'html2js', 'tus', 'jpgcompressor'], cb);
 });
 
 gulp.task('build', function (cb) {
-  runSequence(["clean", ], ['build-pieces', 'pretty'], ["html", "static-html", "images", "vendor", "angular2"], cb);
+  runSequence(["clean", "bundle-angular-deps"], ['angular2-inject'], ['build-pieces'], ["html", "static-html", "images", "vendor", "angular2-src"], ["index-rename"], cb);
 });
 
 /*---- testing ----*/
