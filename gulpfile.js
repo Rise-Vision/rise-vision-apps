@@ -246,6 +246,14 @@ gulp.task("images", function () {
     })
 });
 
+gulp.task("angular2", function () {
+  return gulp.src(['./web/src/**/*.*'])
+    .pipe(gulp.dest("dist/src"))
+    .on('error',function(e){
+      console.error(String(e));
+    })
+});
+
 gulp.task("vendor", function () {
   return gulp.src(['./web/vendor/**/*.*'])
     .pipe(gulp.dest("dist/vendor"))
@@ -273,7 +281,7 @@ gulp.task('build-pieces', function (cb) {
 });
 
 gulp.task('build', function (cb) {
-  runSequence(["clean", ], ['build-pieces', 'pretty'], ["html", "static-html", "images", "vendor"], cb);
+  runSequence(["clean", ], ['build-pieces', 'pretty'], ["html", "static-html", "images", "vendor", "angular2"], cb);
 });
 
 /*---- testing ----*/
