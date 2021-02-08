@@ -105,12 +105,12 @@ angular.module('risevision.editor.services')
         presentationTracker('Add Content', editorFactory.presentation.id,
           editorFactory.presentation.name);
         var modalInstance = $modal.open({
-          templateUrl: 'partials/editor/store-products-modal.html',
+          templateUrl: 'partials/components/store-products/store-content-modal.html',
           size: 'lg',
-          controller: 'storeProductsModal',
+          controller: 'storeContentModal',
           resolve: {
-            category: function () {
-              return 'Content';
+            addWidgetByUrl: function () {
+              return factory.addWidgetByUrl;
             }
           }
         });

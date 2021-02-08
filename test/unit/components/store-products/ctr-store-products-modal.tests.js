@@ -1,9 +1,7 @@
 'use strict';
 
 describe('controller: Store Products Modal', function() {
-  beforeEach(module('risevision.editor.controllers'));
-  beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranslate()));
+  beforeEach(module('risevision.common.components.store-products'));
   beforeEach(module(function ($provide) {
     $provide.service('ScrollingListService', function() {
       return function() {
@@ -26,6 +24,9 @@ describe('controller: Store Products Modal', function() {
         }
       }
     });
+    $provide.factory("$filter", function() {
+      return function() { return sinon.stub(); };
+    });
     $provide.service('$modalInstance',function(){
       return {
         close : function(){
@@ -36,7 +37,7 @@ describe('controller: Store Products Modal', function() {
         }
       }
     });
-    $provide.value('category', 'Templates');
+    $provide.value('addWidgetByUrl', playlistItemAddWidgetByUrlSpy = sinon.spy());
     $provide.service('$modal',function(){
       return {
         open: function(func){
@@ -51,30 +52,12 @@ describe('controller: Store Products Modal', function() {
         }
       };
     });
-    $provide.service('playlistItemFactory',function(){
-      return {
-        addWidgetByUrl : function(){}
-      }
-    });
-    $provide.service('templateCategoryFilter', function() {
-      return function(list, category) {
-        return category;
-      };
-    });
-    $provide.service('userState',function(){
-      return {
-        isEducationCustomer : function(){ return isEducationCustomer; },
-        _restoreState: function(){}
-      }
-    });
     
   }));
   
   var $scope, $loading, $loadingStartSpy, $loadingStopSpy;
   var $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, $q;
   var $modal, playlistItemAddWidgetByUrlSpy, scrollingListService;
-  var isEducationCustomer = false;
-
 
   function initController(paymentTerms) {
     scrollingListService = {
@@ -93,16 +76,13 @@ describe('controller: Store Products Modal', function() {
       $modal = $injector.get('$modal');
       $modalInstanceDismissSpy = sinon.spy($modalInstance, 'dismiss');
       $modalInstanceCloseSpy = sinon.spy($modalInstance, 'close');
-      var playlistItemFactory = $injector.get('playlistItemFactory');
-      playlistItemAddWidgetByUrlSpy = sinon.spy(playlistItemFactory, 'addWidgetByUrl');
       $loading = $injector.get('$loading');
       $loadingStartSpy = sinon.spy($loading, 'start');
       $loadingStopSpy = sinon.spy($loading, 'stop');
-      $controller('storeProductsModal', {
+      $controller('storeContentModal', {
         $scope : $scope,
         $modalInstance : $modalInstance,
         productsFactory: $injector.get('productsFactory'),
-        category: $injector.get('category'),
         ScrollingListService: $injector.get('ScrollingListService'),
         $loading: $loading
       });
@@ -118,9 +98,7 @@ describe('controller: Store Products Modal', function() {
     expect($scope.factory.loadingItems).to.be.false;
     expect($scope.search).to.be.ok;
     expect($scope.filterConfig).to.be.ok;
-    expect($scope.isEducationCustomer).to.be.false;
 
-    expect($scope.getTemplatesFilter).to.be.a('function');
     expect($scope.select).to.be.a('function');
     expect($scope.dismiss).to.be.a('function');
     expect($scope.addWidgetByUrl).to.be.a('function');
@@ -133,20 +111,6 @@ describe('controller: Store Products Modal', function() {
     expect($scope.search.count).to.equal(1000);
     // mocks search function for client side search
     expect($scope.search.doSearch).to.be.a('function');
-  });
-
-  describe('isEducationCustomer:',function(){   
-    it('should return userstate isEducationCustomer response for education customers',function(){
-      isEducationCustomer = true;
-      initController();
-      expect($scope.isEducationCustomer).to.be.true;
-    });
-
-    it('should return userstate isEducationCustomer response for non-education customers',function(){
-      isEducationCustomer = false;
-      initController();
-      expect($scope.isEducationCustomer).to.be.false;
-    });
   });
 
   describe('$loading: ', function() {
@@ -167,45 +131,6 @@ describe('controller: Store Products Modal', function() {
         done();
       }, 10);
     });
-
-    describe('templateCategories:', function() {
-      it('should not populate categories if list is empty', function() {
-        expect($scope.categoryFilters).to.not.be.ok;
-      });
-
-      it('should populate categories when list is loaded', function(done) {
-        $scope.factory.items.list = ['product'];
-        $scope.factory.loadingItems = null;
-        $scope.$digest();
-        setTimeout(function() {
-          expect($scope.categoryFilters).to.deep.equal({
-            templateCategories: 'templateCategories',
-            templateLocations: 'templateLocations',
-            templateContentTypes: 'templateContentTypes'
-          });
-
-          done();
-        }, 10);
-      });
-    });
-
-  });
-
-  describe('getTemplatesFilter:', function() {
-    it('should return a filter object with the category and value selected', function() {
-      $scope.search.templatesFilter = 'templateCategories|sampleCategory';
-
-      expect($scope.getTemplatesFilter()).to.deep.equal({
-        templateCategories: 'sampleCategory'
-      });
-    });
-
-    it('should return a blank filter if nothing is selected', function() {
-      $scope.search.templatesFilter = null;
-
-      expect($scope.getTemplatesFilter()).to.deep.equal({});
-    });
-
   });
 
   describe('$modalInstance functionality: ', function() {
@@ -218,27 +143,6 @@ describe('controller: Store Products Modal', function() {
       
       expect($scope.select).to.be.a('function');
       expect($scope.dismiss).to.be.a('function');
-    });
-
-    it('quickSelect: should close modal when clicked',function(done){
-      var product = {paymentTerms: 'free'};
-      $scope.quickSelect(product);
-
-      setTimeout(function() {
-        $modalInstanceCloseSpy.should.have.been.calledWith(product);
-        done();
-      }, 0);
-    });
-
-    it('select: should show Template details',function(){
-      var modalOpenSpy = sinon.spy($modal, 'open');
-      var product = {paymentTerms: 'free'};
-      $scope.select(product);
-
-      modalOpenSpy.should.have.been.called;
-     
-      expect(modalOpenSpy.getCall(0).args[0].templateUrl).to.equal('partials/editor/product-details-modal.html');
-      expect(modalOpenSpy.getCall(0).args[0].controller).to.equal('ProductDetailsModalController');
     });
 
     it('select: should close modal and pass product when return',function(){
