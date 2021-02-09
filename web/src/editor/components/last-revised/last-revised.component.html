@@ -1,7 +1,7 @@
 <span class="text-muted">
   <small>
-    <span ng-class="{'text-success':revisionStatus === 0, 'text-danger':revisionStatus === 1}">
-      {{status}}
+    <span>
+      {{revisionStatusName}}
     </span> 
     {{changeDate | date:'d-MMM-yyyy h:mm a'}} by {{changedBy | username}}
   </small>

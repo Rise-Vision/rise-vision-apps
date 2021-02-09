@@ -10,32 +10,7 @@ declare var angular: angular.IAngularStatic;
  export class LastRevisedComponent {
   @Input() changeDate: Date;
   @Input() changedBy: string;
-  @Input() revisionStatus: number;
-
-  // link: function ($scope) {
-  //   $scope.$watch('revisionStatusName', function (newVal) {
-  //     if (newVal === 'Published') {
-  //       $scope.status = $filter('translate')(
-  //         'editor-app.details.published');
-  //     } else if (newVal === 'Revised') {
-  //       $scope.status = $filter('translate')(
-  //         'editor-app.details.revised');
-  //     } else {
-  //       $scope.status = $filter('translate')(
-  //         'editor-app.details.saved');
-  //     }
-  //   });
-  //   var _initializing = true;
-  //   $scope.$watch('changedBy', function (newVal) {
-  //     if (_initializing) {
-  //       _initializing = false;
-  //     } else {
-  //       $scope.changedBy = newVal ? newVal : 'N/A';
-  //     }
-  //   });
-  // } //link()
-
-
+  @Input() revisionStatusName: string;
  }
 
 
