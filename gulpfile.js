@@ -331,7 +331,7 @@ gulp.task("test", gulp.series("build-pieces", "test:unit", "coveralls"));
 
 //------------------------ Global ---------------------------------
 
-gulp.task('default', function(done) {
+gulp.task('info', function(done) {
   console.log('***********************'.yellow);
   console.log('  gulp dev: start a server in the  root folder and watch dev files'.yellow);
   console.log('  gulp test: run unit tests'.yellow);
@@ -348,4 +348,4 @@ exports.dev = gulp.parallel('lint', 'build-pieces', 'browser-sync', 'watch');
 /**
  * Default task, running just `gulp` will compile the sass, launch BrowserSync & watch files.
  */
-// module.default = gulp.series('dev');
+module.default = gulp.series('dev');
