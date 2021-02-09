@@ -4,12 +4,14 @@ angular.module('risevision.apps.purchase')
   .filter('cardDescription', [
 
     function () {
-      var _convertSnakeCase = function(string) {
+      var _convertSnakeCase = function (string) {
         return string.replace(/[\W_]+/g, ' ');
       };
 
-      var _toTitleCase = function(string) {
-        return string.replace(/(^|\s)\S/g, function(t) { return t.toUpperCase(); });
+      var _toTitleCase = function (string) {
+        return string.replace(/(^|\s)\S/g, function (t) {
+          return t.toUpperCase();
+        });
       };
 
       return function (card) {

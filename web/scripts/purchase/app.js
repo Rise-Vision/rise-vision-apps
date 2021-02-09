@@ -61,7 +61,8 @@ angular.module('risevision.apps')
                   .then(function () {
                     if (!currentPlanFactory.isSubscribed()) {
                       $state.go('apps.purchase.home');
-                    } else if (currentPlanFactory.isParentPlan() || currentPlanFactory.currentPlan.isPurchasedByParent) {
+                    } else if (currentPlanFactory.isParentPlan() || currentPlanFactory.currentPlan
+                      .isPurchasedByParent) {
                       var contactInfo = currentPlanFactory.currentPlan.parentPlanContactEmail ? ' at ' +
                         currentPlanFactory.currentPlan.parentPlanContactEmail : '';
 
@@ -101,7 +102,7 @@ angular.module('risevision.apps')
             purchaseAction: 'remove'
           }
         })
-        
+
         .state('apps.purchase.frequency', {
           url: '/frequency/:subscriptionId',
           templateUrl: 'partials/purchase/update-subscription.html',

@@ -157,7 +157,7 @@
                   <week-dropdown week="recurrence.monthly.relative.recurrenceWeekOfMonth"></week-dropdown>
                   <weekday-dropdown weekday="recurrence.monthly.relative.recurrenceDayOfWeek"></weekday-dropdown>
                   <label class="control-label">of Every</label>
-                  <input type="number" class="form-control input-short" name="monthlyRelativeRecurrenceFrequency" ng-model="recurrence.monthly.relative.recurrenceFrequency" min="1" max="999" ng-required="timeline.recurrenceType === 'Monthly' && !recurrence.monthly.recurrenceAbsolute"
+                  <input type="number" class="form-control input-short" name="monthlyRelativeRecurrenceFrequency" ng-model="recurrence.monthly.relative.recurrenceFrequency" min="1" max="999" ng-required="timeline.recurrenceType === 'Monthly' && !recurrence.monthly.recurrenceAbsolute">
                   <label class="control-label">Month(s)</label>
                 </fieldset>
                 <p class="text-danger" ng-show="timelineDetails.monthlyRelativeRecurrenceFrequency.$invalid">

@@ -42,7 +42,8 @@ angular.module('risevision.schedules.directives')
                 tooltipButton.trigger('hide');
               } else {
                 isTooltipOpen = true;
-                outsideClickHandler.bind('share-schedule', '#share-schedule-button, #share-schedule-popover', $scope.toggleTooltip);
+                outsideClickHandler.bind('share-schedule', '#share-schedule-button, #share-schedule-popover',
+                  $scope.toggleTooltip);
                 tooltipButton.trigger('show');
               }
             });

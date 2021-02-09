@@ -52,7 +52,7 @@
               return _switchCompany(selectedCompanyId);
             })
             .then(null, function () {
-              if ($state.current.forceAuth !== false) {                
+              if ($state.current.forceAuth !== false) {
                 _companyState.resetCompany();
               }
             })

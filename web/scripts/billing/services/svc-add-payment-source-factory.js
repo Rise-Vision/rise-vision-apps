@@ -4,7 +4,7 @@
 
 angular.module('risevision.apps.billing.services')
   .service('addPaymentSourceFactory', ['$q', '$log', 'userState', 'creditCardFactory',
-  'billing', 'addressService', 'processErrorCode',
+    'billing', 'addressService', 'processErrorCode',
     function ($q, $log, userState, creditCardFactory, billing, addressService,
       processErrorCode) {
       var factory = {};
@@ -14,14 +14,15 @@ angular.module('risevision.apps.billing.services')
 
         factory.apiError = '';
       };
-      
-      factory.init = function() {
+
+      factory.init = function () {
         _clearMessages();
 
         creditCardFactory.initPaymentMethods(false)
-          .finally(function() {
+          .finally(function () {
             creditCardFactory.paymentMethods.paymentMethod = 'card';
-            creditCardFactory.paymentMethods.newCreditCard.billingAddress = addressService.copyAddress(userState.getCopyOfSelectedCompany());
+            creditCardFactory.paymentMethods.newCreditCard.billingAddress = addressService.copyAddress(userState
+              .getCopyOfSelectedCompany());
           });
       };
 
@@ -31,12 +32,12 @@ angular.module('risevision.apps.billing.services')
         factory.loading = true;
 
         return billing.changePaymentToInvoice(subscriptionId, poNumber)
-          .catch(function(e) {
+          .catch(function (e) {
             _showErrorMessage(e);
 
             return $q.reject(e);
           })
-          .finally(function() {
+          .finally(function () {
             factory.loading = false;
           });
       };
@@ -55,7 +56,7 @@ angular.module('risevision.apps.billing.services')
       };
 
       var _addPaymentSource = function () {
-        var intentId = creditCardFactory.paymentMethods.intentResponse ? 
+        var intentId = creditCardFactory.paymentMethods.intentResponse ?
           creditCardFactory.paymentMethods.intentResponse.intentId : null;
 
         return billing.addPaymentSource(intentId)
@@ -69,7 +70,7 @@ angular.module('risevision.apps.billing.services')
         return billing.changePaymentSource(subscriptionId, paymentSourceId);
       };
 
-      factory.changePaymentSource = function(subscriptionId) {
+      factory.changePaymentSource = function (subscriptionId) {
         _clearMessages();
 
         factory.loading = true;
@@ -77,7 +78,7 @@ angular.module('risevision.apps.billing.services')
         return creditCardFactory.validatePaymentMethod()
           .then(_preparePaymentSource)
           .then(_addPaymentSource)
-          .then(function(paymentSourceId) {
+          .then(function (paymentSourceId) {
             return _changePaymentSource(subscriptionId, paymentSourceId);
           })
           .catch(function (e) {
@@ -96,6 +97,6 @@ angular.module('risevision.apps.billing.services')
         $log.error(factory.apiError, e);
       };
 
-      return factory;        
+      return factory;
     }
   ]);

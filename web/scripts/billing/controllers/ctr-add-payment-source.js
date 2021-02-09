@@ -4,9 +4,9 @@
 
 angular.module('risevision.apps.billing.controllers')
   .controller('AddPaymentSourceCtrl', ['$scope', '$loading', '$state', 'userState',
-  'subscriptionFactory', 'creditCardFactory', 'addPaymentSourceFactory',
+    'subscriptionFactory', 'creditCardFactory', 'addPaymentSourceFactory',
     function ($scope, $loading, $state, userState, subscriptionFactory, creditCardFactory,
-    addPaymentSourceFactory) {
+      addPaymentSourceFactory) {
       $scope.subscriptionFactory = subscriptionFactory;
       $scope.addPaymentSourceFactory = addPaymentSourceFactory;
 
@@ -22,18 +22,18 @@ angular.module('risevision.apps.billing.controllers')
 
       addPaymentSourceFactory.init();
 
-      var _goToSubscriptionPage = function(subscriptionId) {
+      var _goToSubscriptionPage = function (subscriptionId) {
         $state.go('apps.billing.subscription', {
           subscriptionId: subscriptionId
         });
       };
 
-      $scope.addPaymentMethod = function(subscriptionId) {
+      $scope.addPaymentMethod = function (subscriptionId) {
         if (creditCardFactory.paymentMethods.paymentMethod === 'invoice') {
           var purchaseOrderNumber = creditCardFactory.paymentMethods.purchaseOrderNumber;
 
           addPaymentSourceFactory.changePaymentToInvoice(subscriptionId, purchaseOrderNumber)
-            .then(function() {
+            .then(function () {
               _goToSubscriptionPage(subscriptionId);
             });
         } else {
@@ -42,7 +42,7 @@ angular.module('risevision.apps.billing.controllers')
           }
 
           addPaymentSourceFactory.changePaymentSource(subscriptionId)
-            .then(function() {
+            .then(function () {
               _goToSubscriptionPage(subscriptionId);
             });
         }
