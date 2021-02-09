@@ -21,7 +21,8 @@
 
           return storeService.uploadTaxExemptionCertificate(factory.taxExemption.file)
             .then(function (blobKey) {
-              return storeService.addTaxExemption(userState.getSelectedCompanyId(), factory.taxExemption, blobKey);
+              return storeService.addTaxExemption(userState.getSelectedCompanyId(), factory.taxExemption,
+                blobKey);
             })
             .then(function () {
               factory.taxExemption.sent = true;
@@ -33,7 +34,7 @@
             .catch(function (error) {
               factory.taxExemption.error = error.message || 'Something went wrong. Please try again.';
             })
-            .finally(function() {
+            .finally(function () {
               factory.loading = false;
             });
         };

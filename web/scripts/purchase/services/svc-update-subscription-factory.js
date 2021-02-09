@@ -29,7 +29,7 @@
           factory.purchase.licensesToRemove = purchaseAction === 'remove' ? $state.params.displayCount : 0;
           factory.purchase.couponCode = '';
 
-          subscriptionFactory.getSubscription($state.params.subscriptionId).then(function() {
+          subscriptionFactory.getSubscription($state.params.subscriptionId).then(function () {
             factory.purchase.planId = subscriptionFactory.getItemSubscription().plan_id;
 
             if (factory.purchase.planId && purchaseAction === 'annual') {
@@ -40,13 +40,13 @@
           });
         };
 
-        factory.getCurrentDisplayCount = function() {
+        factory.getCurrentDisplayCount = function () {
           var currentDisplayCount = subscriptionFactory.getItemSubscription().plan_quantity;
 
           return currentDisplayCount || 0;
         };
 
-        var _getChangeInLicenses = function() {
+        var _getChangeInLicenses = function () {
           var licensesToAdd = factory.purchase.licensesToAdd || 0;
           var licensesToRemove = factory.purchase.licensesToRemove || 0;
 
@@ -83,8 +83,10 @@
           });
           var isEducation = !!educationDiscount;
 
-          factory.purchase.currentPricePerDisplay = pricingFactory.getPricePerDisplay(isMonthly, currentDisplayCount, isEducation);
-          factory.purchase.newPricePerDisplay = pricingFactory.getPricePerDisplay(isMonthly, displayCount, isEducation);
+          factory.purchase.currentPricePerDisplay = pricingFactory.getPricePerDisplay(isMonthly,
+            currentDisplayCount, isEducation);
+          factory.purchase.newPricePerDisplay = pricingFactory.getPricePerDisplay(isMonthly, displayCount,
+            isEducation);
         };
 
         factory.getEstimate = function () {
@@ -115,12 +117,12 @@
             });
         };
 
-        factory.getCreditTotal = function() {
+        factory.getCreditTotal = function () {
           if (!factory.estimate || !factory.estimate.credit_note_estimates) {
             return 0;
           }
 
-          var total = factory.estimate.credit_note_estimates.reduce(function(total, note) {
+          var total = factory.estimate.credit_note_estimates.reduce(function (total, note) {
             return total + note.total;
           }, 0);
 

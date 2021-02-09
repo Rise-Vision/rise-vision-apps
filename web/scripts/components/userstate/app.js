@@ -47,12 +47,12 @@
               location = location.replace('#/', '#');
 
               openidConnect.signinRedirectCallback(location)
-                .then(function(user) {
+                .then(function (user) {
                   $window.location.hash = '';
 
                   return userAuthFactory.authenticate(true);
                 })
-                .catch(function() {
+                .catch(function () {
                   $window.location.hash = '';
                 });
             }
@@ -65,10 +65,10 @@
                 console.log('Google Auth result received');
 
                 openidConnect.signinRedirectCallback()
-                  .then(function(user) {
+                  .then(function (user) {
                     return userAuthFactory.authenticate(true);
                   })
-                  .finally(function() {
+                  .finally(function () {
                     window.location.hash = '';
                   });
               } else {

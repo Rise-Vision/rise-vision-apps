@@ -1,7 +1,7 @@
 (function (angular) {
 
   'use strict';
-  
+
   angular.module('risevision.apps.purchase')
     .factory('stripeElementsFactory', ['$rootScope', 'stripeService',
       function ($rootScope, stripeService) {
@@ -42,7 +42,7 @@
           '#new-card-cvc'
         ];
 
-        factory.init = function() {
+        factory.init = function () {
           stripeService.initializeStripeElements(stripeElements, elementOptions)
             .then(function (elements) {
               elements.forEach(function (el, idx) {
@@ -63,7 +63,7 @@
                   $rootScope.$digest();
                 });
               });
-            });  
+            });
         };
 
         return factory;

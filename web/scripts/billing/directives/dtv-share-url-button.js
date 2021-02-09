@@ -27,7 +27,8 @@ angular.module('risevision.apps.billing.directives')
                 element.trigger('hide');
               } else {
                 isTooltipOpen = true;
-                outsideClickHandler.bind('share-url-button', '#share-url-button, #share-url-popover', $scope.toggleTooltip);
+                outsideClickHandler.bind('share-url-button', '#share-url-button, #share-url-popover', $scope
+                  .toggleTooltip);
                 element.trigger('show');
               }
             });

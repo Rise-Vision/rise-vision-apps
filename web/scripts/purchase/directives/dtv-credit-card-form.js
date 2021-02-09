@@ -2,7 +2,7 @@
 
 angular.module('risevision.apps.purchase')
   .directive('creditCardForm', ['$templateCache', 'creditCardFactory', 'paymentSourcesFactory',
-  'stripeElementsFactory',
+    'stripeElementsFactory',
     function ($templateCache, creditCardFactory, paymentSourcesFactory, stripeElementsFactory) {
       return {
         restrict: 'E',

@@ -91,7 +91,8 @@
 
                 var item = resp.result.item;
                 if (item) {
-                  item.lastActivityDate = item.onlineStatus === 'online' ? new Date() : (item.lastActivityDate ?
+                  item.lastActivityDate = item.onlineStatus === 'online' ? new Date() : (item
+                    .lastActivityDate ?
                     new Date(item.lastActivityDate) : '');
 
                   $rootScope.$broadcast('displaysLoaded', [item]);

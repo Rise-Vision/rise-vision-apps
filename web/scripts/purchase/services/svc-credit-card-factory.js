@@ -1,7 +1,7 @@
 (function (angular) {
 
   'use strict';
-  
+
   /*jshint camelcase: false */
 
   angular.module('risevision.apps.purchase')
@@ -11,20 +11,20 @@
         stripeElementsFactory, addressService) {
         var factory = {};
 
-        factory.selectNewCreditCard = function() {
+        factory.selectNewCreditCard = function () {
           factory.paymentMethods.selectedCard = factory.paymentMethods.newCreditCard;
         };
 
-        var _loadCreditCards = function() {
+        var _loadCreditCards = function () {
           paymentSourcesFactory.init()
-            .then(function() {
+            .then(function () {
               if (paymentSourcesFactory.selectedCard) {
-                factory.paymentMethods.selectedCard = paymentSourcesFactory.selectedCard;                
+                factory.paymentMethods.selectedCard = paymentSourcesFactory.selectedCard;
               }
             });
         };
 
-        factory.initPaymentMethods = function(loadExistingCards) {
+        factory.initPaymentMethods = function (loadExistingCards) {
           factory.paymentMethods = {
             newCreditCard: {
               isNew: true,

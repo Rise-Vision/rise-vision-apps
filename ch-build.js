@@ -17,7 +17,7 @@ var gulp = require("gulp"),
     path = require("path"),
     fs = require("fs"),
     ngHtml2Js = require("gulp-ng-html2js"),
-    minifyHtml = require("gulp-minify-html"),
+    minifyHtml = require("gulp-htmlmin"),
     colors = require("colors");
 
     var commonHeaderSrcFiles = ["./tmp/partials/partials.js",
@@ -143,9 +143,9 @@ gulp.task("build-components", gulp.series("components-html2js", "components-dist
 gulp.task("ch-html2js", function() {
   return gulp.src("web/partials/common-header/*.html")
     .pipe(minifyHtml({
-      empty: true,
-      spare: true,
-      quotes: true
+      collapseWhitespace: true,
+      conservativeCollapse: true,
+      removeComments: true
     }))
     .pipe(ngHtml2Js({
       moduleName: "risevision.apps.partials",

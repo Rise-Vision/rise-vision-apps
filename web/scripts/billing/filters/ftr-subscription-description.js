@@ -5,7 +5,7 @@
 angular.module('risevision.apps.billing.filters')
   .filter('subscriptionDescription', ['plansService',
     function (plansService) {
-      var _getPeriod = function(subscription) {
+      var _getPeriod = function (subscription) {
         if (subscription.billing_period > 1) {
           return (subscription.billing_period + ' ' + (subscription.billing_period_unit === 'month' ?
             'Month' : 'Year'));

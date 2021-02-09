@@ -15,7 +15,7 @@ angular.module('risevision.apps.billing.directives')
             $scope.item.poNumber = $scope.item.poNumber || '';
 
             $scope.updateFunction()
-              .then(function() {
+              .then(function () {
                 $scope.hideEditForm();
               });
           };

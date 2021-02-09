@@ -9,7 +9,7 @@ angular.module('risevision.common.components.store-products')
       $scope.search = {
         category: 'content',
         count: defaultCount,
-        doSearch: function() {}
+        doSearch: function () {}
       };
 
       $scope.factory = new ScrollingListService(productsFactory.loadProducts,
@@ -36,7 +36,7 @@ angular.module('risevision.common.components.store-products')
         $scope.addWidgetByUrl = function () {
           $modalInstance.dismiss();
           addWidgetByUrl();
-        };        
+        };
       }
 
       $scope.dismiss = function () {
