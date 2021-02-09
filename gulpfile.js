@@ -348,4 +348,4 @@ exports.dev = gulp.parallel('lint', 'build-pieces', 'browser-sync', 'watch');
 /**
  * Default task, running just `gulp` will compile the sass, launch BrowserSync & watch files.
  */
-module.default = gulp.series('dev');
+exports.default = exports.dev;
