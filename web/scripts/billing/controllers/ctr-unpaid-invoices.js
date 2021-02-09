@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.apps.billing.controllers')
-  .controller('UnpaidInvoicesCtrl', ['$scope', '$loading', '$stateParams', 
+  .controller('UnpaidInvoicesCtrl', ['$scope', '$loading', '$stateParams',
     'billing', 'invoiceFactory', 'ScrollingListService',
     function ($scope, $loading, $stateParams, billing, invoiceFactory, ScrollingListService) {
 

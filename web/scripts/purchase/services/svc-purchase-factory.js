@@ -4,11 +4,11 @@
 
   angular.module('risevision.apps.purchase')
     .constant('RPP_ADDON_ID', 'c4b368be86245bf9501baaa6e0b00df9719869fd')
-    .factory('purchaseFactory', ['$rootScope', '$q', '$log', '$timeout', 'userState', 
+    .factory('purchaseFactory', ['$rootScope', '$q', '$log', '$timeout', 'userState',
       'storeService', 'addressService', 'contactService', 'creditCardFactory',
       'purchaseFlowTracker', 'RPP_ADDON_ID', 'plansService',
-      function ($rootScope, $q, $log, $timeout, userState, storeService, addressService, 
-        contactService, creditCardFactory, purchaseFlowTracker, 
+      function ($rootScope, $q, $log, $timeout, userState, storeService, addressService,
+        contactService, creditCardFactory, purchaseFlowTracker,
         RPP_ADDON_ID, plansService) {
         var factory = {};
 
@@ -44,10 +44,10 @@
           factory.purchase.estimate = {};
 
           return creditCardFactory.initPaymentMethods(false)
-            .finally(function() {
+            .finally(function () {
               creditCardFactory.paymentMethods.paymentMethod = 'card';
               creditCardFactory.paymentMethods.newCreditCard.billingAddress = factory.purchase.billingAddress;
-              
+
               var invoiceDate = new Date();
               invoiceDate.setDate(invoiceDate.getDate() + 30);
               creditCardFactory.paymentMethods.invoiceDate = invoiceDate;

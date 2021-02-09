@@ -53,7 +53,7 @@ angular.module('risevision.apps.purchase')
         }
       };
 
-      $scope.getEstimate = function() {
+      $scope.getEstimate = function () {
         if (!_isFormValid()) {
           return;
         }

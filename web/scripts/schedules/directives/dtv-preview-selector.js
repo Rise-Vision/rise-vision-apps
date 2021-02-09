@@ -42,12 +42,13 @@ angular.module('risevision.schedules.directives')
               selected = $scope.ngModel;
 
               $timeout(function () {
-                outsideClickHandler.bind('preview-selector', '#preview-selector, #preview-selector-tooltip', $scope.toggleTooltip);
+                outsideClickHandler.bind('preview-selector', '#preview-selector, #preview-selector-tooltip',
+                  $scope.toggleTooltip);
                 tooltipElement.trigger('show');
               });
             } else {
               $timeout(function () {
-                outsideClickHandler.unbind('preview-selector');                
+                outsideClickHandler.unbind('preview-selector');
                 tooltipElement.trigger('hide');
               });
             }

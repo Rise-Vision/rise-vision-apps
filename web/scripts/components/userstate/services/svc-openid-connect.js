@@ -40,7 +40,9 @@
           filterProtocolClaims: true,
           loadUserInfo: true,
 
-          userStore: new Oidc.WebStorageStateStore({ store: $window.localStorage }),
+          userStore: new Oidc.WebStorageStateStore({
+            store: $window.localStorage
+          }),
           extraQueryParams: {
             access_type: 'online'
           }
@@ -49,7 +51,7 @@
 
         var _signinSilent = client.signinSilent.bind(client);
 
-        client.signinSilent = function(params) {
+        client.signinSilent = function (params) {
           if (!params) {
             params = {
               login_hint: userState.getUsername()
@@ -70,111 +72,115 @@
         var service = {};
 
         openidConnectLoader()
-          .then(function(client) {
-            var trackOpenidEvent = function(openidEventType, eventProperties) {
+          .then(function (client) {
+            var trackOpenidEvent = function (openidEventType, eventProperties) {
               return client.getUser()
-                .then(function(user) {
+                .then(function (user) {
                   openidTracker(openidEventType, user ? user.profile : {}, eventProperties);
                 });
             };
 
-            client.events.addUserLoaded(function(user) {
+            client.events.addUserLoaded(function (user) {
               openidTracker('user loaded', user.profile);
             });
-            client.events.addUserUnloaded(function() {
+            client.events.addUserUnloaded(function () {
               trackOpenidEvent('user unloaded');
             });
-            client.events.addAccessTokenExpiring(function() {
+            client.events.addAccessTokenExpiring(function () {
               trackOpenidEvent('access token expiring');
             });
             // Temporarily removed to avoid sending too many events
             // client.events.addAccessTokenExpired(function() {
             //   trackOpenidEvent('access token expired');
             // });
-            client.events.addSilentRenewError(function(error) {
-              trackOpenidEvent('silent renew error', {errorMessage: error.message});
+            client.events.addSilentRenewError(function (error) {
+              trackOpenidEvent('silent renew error', {
+                errorMessage: error.message
+              });
             });
-            client.events.addUserSignedOut(function() {
+            client.events.addUserSignedOut(function () {
               trackOpenidEvent('user signed out');
             });
           });
 
-        service.getUser = function() {
+        service.getUser = function () {
           return openidConnectLoader()
-            .then(function(client) {
+            .then(function (client) {
               return client.getUser();
             })
-            .then(function(user) {
+            .then(function (user) {
               console.log('get user response', user);
 
               return user;
-            }).catch(function(err) {
+            }).catch(function (err) {
               console.log(err);
 
               throw err;
             });
         };
 
-        service.signinRedirect = function(state) {
+        service.signinRedirect = function (state) {
           return openidConnectLoader()
-            .then(function(client) {
+            .then(function (client) {
               openidTracker('sign in redirect started');
-              return client.signinRedirect({ state: state });
+              return client.signinRedirect({
+                state: state
+              });
             })
-            .then(function(resp) {
+            .then(function (resp) {
               console.log('signin redirect response', resp);
-            }).catch(function(err) {
+            }).catch(function (err) {
               console.log(err);
 
               throw err;
             });
         };
 
-        service.signinRedirectCallback = function(location) {
+        service.signinRedirectCallback = function (location) {
           return openidConnectLoader()
-            .then(function(client) {
+            .then(function (client) {
               return client.signinRedirectCallback(location);
             })
-            .then(function(user) {
+            .then(function (user) {
               console.log('signin redirect response', user);
 
               return user;
-            }).catch(function(err) {
+            }).catch(function (err) {
               $log.error('Authentication Error from Redirect: ', err);
 
               throw err;
             });
         };
 
-        service.signinPopup = function() {
+        service.signinPopup = function () {
           return $q.reject('Not implemented');
         };
 
-        service.signinSilent = function(username) {
+        service.signinSilent = function (username) {
           if (!username) {
             return $q.reject('Missing user id');
           }
 
           return openidConnectLoader()
-            .then(function(client) {
-              return client.signinSilent({ 
+            .then(function (client) {
+              return client.signinSilent({
                 login_hint: username
               });
             })
-           .then(function(user) {
+            .then(function (user) {
               console.log('signin silent response', user);
 
               return user;
-            }).catch(function(err) {
+            }).catch(function (err) {
               console.log(err);
 
               throw err;
             });
         };
 
-        service.removeUser = function() {
+        service.removeUser = function () {
           return openidConnectLoader()
-            .then(function(client) {
+            .then(function (client) {
               return client.removeUser();
             });
         };
