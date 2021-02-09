@@ -1,22 +1,26 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
 var helper = require('rv-common-e2e').helper;
-var StorageSelectorModalPage = require('./../pages/storageSelectorModalPage.js');
-var NewFolderModalPage = require('./../pages/newFolderModalPage.js');
+var HomePage = require('./../pages/homepage.js');
+var StorageSelectorModalPage = require('./../../storage/pages/storageSelectorModalPage.js');
+var NewFolderModalPage = require('./../../storage/pages/newFolderModalPage.js');
 var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
-var StorageHelper = require('./../pages/helper.js');
-var StorageHomePage = require('./../pages/storageHomePage.js');
-var FilesListPage = require('./../pages/filesListPage.js');
-
+var UserSettingsModalPage = require('./../../common-header/pages/userSettingsModalPage.js');
+var StorageHelper = require('./../../storage/pages/helper.js');
+var StorageHomePage = require('./../../storage/pages/storageHomePage.js');
+var FilesListPage = require('./../../storage/pages/filesListPage.js');
 
 var DismissModalScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
   describe('Dismiss Modal', function () {
+    var homepage = new HomePage();
+
     var storageSelectorModalPage = new StorageSelectorModalPage();
     var newFolderModalPage = new NewFolderModalPage();
 
     var commonHeaderPage = new CommonHeaderPage();
+    var userSettingsModalPage = new UserSettingsModalPage();
     var storageHomePage = new StorageHomePage();
     var filesListPage = new FilesListPage();
 
@@ -47,6 +51,19 @@ var DismissModalScenarios = function() {
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
       });
       describe('Dismiss Modal:', describeNewFolder);
+    });
+
+    describe('User Add', function() {
+      before(function () {        
+        homepage.getUsersAdd();
+        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+      });
+      
+      it('should show the user add modal', function() {
+        helper.wait(userSettingsModalPage.getUserSettingsModal(), 'User Settings Modal');
+
+        expect(userSettingsModalPage.getUserSettingsModal().isPresent()).to.eventually.be.true;
+      });
     });
 
   });

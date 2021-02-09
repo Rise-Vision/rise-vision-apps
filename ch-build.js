@@ -9,7 +9,6 @@
 // ************************
 
 var gulp = require("gulp"),
-    runSequence = require("run-sequence"),
     concat = require("gulp-concat"),
     rename = require("gulp-rename"),
     es = require("event-stream"),
@@ -42,10 +41,9 @@ var gulp = require("gulp"),
     "./dist/js/components/message-box.js",
     "./dist/js/components/confirm-modal.js",
     "./dist/js/components/svg-icon.js",
-    "./dist/js/components/subscription-status.js",
     "./dist/js/components/plans.js",
-    "./dist/js/components/purchase-flow.js",
-    "./dist/js/components/password-input.js"
+    "./dist/js/components/password-input.js",
+    "./dist/js/components/store-products.js"
     ],
     dependencySrcFiles = ["./web/bower_components/jquery/dist/jquery.js",
     "./web/bower_components/angular/angular.js",
@@ -56,10 +54,11 @@ var gulp = require("gulp"),
     "./web/bower_components/angular-ui-router/release/angular-ui-router.js",
     "./web/bower_components/angular-translate/angular-translate.js",
     "./web/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js",
+    "./web/bower_components/angular-truncate/src/truncate.js",
+    "./web/bower_components/angular-slugify/angular-slugify.js",
     "./web/bower_components/checklist-model/checklist-model.js",
     "./web/bower_components/ngstorage/ngStorage.js",
     "./web/bower_components/angular-spinner/dist/angular-spinner.js",
-    "./web/bower_components/spin.js/spin.js",
     "./web/bower_components/angular-cookies/angular-cookies.js",
     "./web/bower_components/lodash/dist/lodash.js",
     "./web/bower_components/ng-csv/build/ng-csv.js",
@@ -108,7 +107,7 @@ gulp.task("components-html2js", function() {
     .pipe(gulp.dest("./tmp/partials/"));
 });
 
-gulp.task("components-dist", function () { //copy angular files
+gulp.task("components-dist", function (done) { //copy angular files
   var tasks = folders.map(function(folder) {
     return gulp.src([
       path.join(componentsPath, folder, "**/app.js"),
@@ -124,21 +123,18 @@ gulp.task("components-dist", function () { //copy angular files
     .pipe(rename(folder + ".min.js"))
     .pipe(gulp.dest("dist/js/components"));
   });
-  return es.concat.apply(null, tasks);
+  return es.concat.apply(null, tasks)
+    .on('end', done);
 });
 
-gulp.task("components-watch", function(cb) {
-  gulp.watch({glob: "web/partials/components/**/*.html"}, function() {
-    return runSequence("components-html2js");
-  });
-  gulp.watch({glob: ["web/scripts/components/**/*", "tmp/partials/*/*"]}, function () {
-    return runSequence("components-dist");
-  });
+gulp.task("components-watch", function(done) {
+  gulp.watch({glob: "web/partials/components/**/*.html"}, gulp.series("components-html2js"));
+  gulp.watch({glob: ["web/scripts/components/**/*", "tmp/partials/*/*"]}, gulp.series("components-dist"));
+
+  done();
 });
 
-gulp.task("build-components", function (cb) {
-  runSequence("components-html2js", "components-dist", cb);
-});
+gulp.task("build-components", gulp.series("components-html2js", "components-dist"));
 
 // End - Components build
 
@@ -178,12 +174,8 @@ gulp.task("common-header-dist", function () { //copy angular files
     .pipe(gulp.dest("dist/js"));
 });
 
-gulp.task("build-dist", function (cb) {
-  runSequence(["dependencies-dist", "common-header-dist"], cb);
-});
+gulp.task("build-dist", gulp.series("dependencies-dist", "common-header-dist"));
 
 // End - Dist build
 
-gulp.task("ch-build", function (cb) {
-  runSequence(["ch-html2js", "build-components"], "build-dist", cb);
-});
+gulp.task("ch-build", gulp.series(gulp.parallel("ch-html2js", "build-components"), "build-dist"));

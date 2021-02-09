@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "./web",
     // "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -9,6 +9,7 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "skipLibCheck": true,
     
     // basedon text and from quickstart app
     "target": "es5",

@@ -29,6 +29,7 @@
           client_id: CLIENT_ID,
           response_type: 'token id_token',
           scope: OAUTH2_SCOPES,
+          prompt: 'select_account',
           redirect_uri: loc,
           post_logout_redirect_uri: loc + 'oidc-client-sample.html',
 

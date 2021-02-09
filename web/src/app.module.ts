@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-import { AppComponent } from './src/app/app.component.js';
+import { AppComponent } from './app/app.component.js';
 import { HiComponent } from './hi.component.js';
 import { HeroDetailDirective } from './hero-detail.component.js';
 

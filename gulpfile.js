@@ -14,11 +14,13 @@ var concat      = require("gulp-concat");
 var log         = require("fancy-log");
 var rename      = require('gulp-rename');
 var sourcemaps  = require('gulp-sourcemaps');
-var runSequence = require('run-sequence');
 var colors      = require("colors");
 var factory     = require("widget-tester").gulpTaskFactory;
 var fs          = require('fs');
 var os          = require('os');
+
+var Builder     = require('systemjs-builder');
+var inject      = require('gulp-inject');
 
 require("./ch-build");
 require("./i18n-build");
@@ -72,7 +74,7 @@ var unitTestFiles = [
   "web/scripts/common-header/*.js",
   "web/scripts/common-header/**/*.js",
   "web/scripts/storage-selector-app.js",
-  "web/scripts/app.js",
+  "web/scripts/app.module.ajs.js",
   "web/scripts/purchase/**/*.js",
   "web/scripts/billing/**/*.js",
   "web/scripts/common/**/*.js",
@@ -116,9 +118,11 @@ gulp.task('browser-sync', function() {
  * Watch scss files for changes & recompile
  * Watch html/md files, run jekyll & reload BrowserSync
  */
-gulp.task('watch', function () {
-  gulp.watch(partialsHTMLFiles, ['html2js']);
-  gulp.watch(unitTestFiles, ['test:unit']);
+gulp.task('watch', function (done) {
+  gulp.watch(partialsHTMLFiles, gulp.series('html2js'));
+  gulp.watch(unitTestFiles, gulp.series('test:unit'));
+
+  done();
 });
 
 //------------------------ Tooling --------------------------
@@ -133,16 +137,16 @@ gulp.task('pretty', function() {
 });
 
 gulp.task("clean-dist", function () {
-  return gulp.src("dist", {read: false})
+  return gulp.src("dist", {read: false, allowEmpty: true})
     .pipe(rimraf());
 });
 
 gulp.task("clean-tmp", function () {
-  return gulp.src("tmp", {read: false})
+  return gulp.src("tmp", {read: false, allowEmpty: true})
     .pipe(rimraf());
 });
 
-gulp.task("clean", ["clean-dist", "clean-tmp"]);
+gulp.task("clean", gulp.parallel("clean-dist", "clean-tmp"));
 
 gulp.task("lint", function() {
   let lintError;
@@ -199,7 +203,7 @@ function buildHtml(path) {
 }
 
 gulp.task("html-index", function () {
-  return buildHtml("./web/index.html");
+  return buildHtml("./web/index_raw.html");
 });
 
 gulp.task("html-selector", function () {
@@ -210,7 +214,7 @@ gulp.task("html-user-manager-silent", function () {
   return buildHtml("./web/user-manager-silent.html");
 });
 
-gulp.task("html", ["lint", "html-index", "html-selector", "html-user-manager-silent"]);
+gulp.task("html", gulp.parallel("lint", "html-index", "html-selector", "html-user-manager-silent"));
 
 gulp.task("jpgcompressor", function() {
   return gulp.src("node_modules/compressorjs/dist/compressor.min.js")
@@ -254,8 +258,8 @@ gulp.task("vendor", function () {
     })
 });
 
-gulp.task("static-html", function() {
-  return gulp.src(['./web/loading-preview.html', './web/user-manager-silent.html'])
+gulp.task("static-files", function() {
+  return gulp.src(['./web/loading-preview.html', './web/user-manager-silent.html', './web/robots.txt'])
     .pipe(gulp.dest('dist/'));
 })
 
@@ -268,13 +272,49 @@ gulp.task("config", function() {
     .pipe(gulp.dest("./web/scripts/config"));
 });
 
-gulp.task('build-pieces', function (cb) {
-  runSequence(["clean"], ['config', 'i18n-build', 'css-build', 'html2js', 'tus', 'jpgcompressor'], cb);
+gulp.task("angular2-src", function () {
+  return gulp.src(['./web/src/**/*.js'])
+    .pipe(gulp.dest("dist/src"))
+    .on('error',function(e){
+      console.error(String(e));
+    })
 });
 
-gulp.task('build', function (cb) {
-  runSequence(["clean", ], ['build-pieces', 'pretty'], ["html", "static-html", "images", "vendor"], cb);
+gulp.task("index-rename", function() {
+  return gulp.src('./dist/index_raw.html')
+    .pipe(rename("index.html"))
+    .pipe(gulp.dest('./dist'));
 });
+
+gulp.task('bundle-angular-deps', function() {
+  // optional constructor options
+  // sets the baseURL and loads the configuration file
+  var builder = new Builder('', 'web/systemjs.config.js');
+
+  return builder
+    .bundle('web/src/main.js - [web/src/**/*.js]', 'web/angular2-deps.js', {}) //{ minify: true, sourceMaps: true })
+    .then(function() {
+      console.log('Build complete');
+    })
+    .catch(function(err) {
+      console.log('Build error');
+      console.log(err);
+    });
+});
+
+gulp.task('angular2-inject', function () {
+  // It's not necessary to read the files (will speed up things), we're only after their paths:
+  var srcStream = gulp.src(['./web/angular2-deps.js'], {read: false});
+
+  return gulp.src('./web/index.html')
+    .pipe(rename("index_raw.html"))
+    .pipe(inject(srcStream, {relative: true}))
+    .pipe(gulp.dest('./web'));
+});
+
+gulp.task('build-pieces', gulp.series("clean", gulp.parallel('config', 'i18n-build', 'css-build', 'html2js', 'tus', 'jpgcompressor')));
+
+gulp.task('build', gulp.series(gulp.parallel("clean", "bundle-angular-deps"), 'angular2-inject', gulp.parallel('build-pieces'), gulp.parallel("html", "static-files", "images", "vendor", "angular2-src"), "index-rename"));
 
 /*---- testing ----*/
 
@@ -310,7 +350,7 @@ gulp.task("test:webdriver_update", factory.webdriverUpdateSpecific({
     webdriverManagerArgs: ["--versions.chrome=" + (process.env.CHROME_VERSION || "latest")]
   }
 ));
-gulp.task("test:e2e:core", ["test:webdriver_update"],factory.testE2EAngular({
+gulp.task("test:e2e:core", gulp.series("test:webdriver_update", factory.testE2EAngular({
   browser: "chrome",
   loginUser: process.env.E2E_USER,
   loginPass: process.env.E2E_PASS,
@@ -326,18 +366,15 @@ gulp.task("test:e2e:core", ["test:webdriver_update"],factory.testE2EAngular({
       return process.env.TEST_FILES
     }
   }()
-}));
-gulp.task("test:e2e", function (cb) {
-  runSequence(["build-pieces", "config-e2e"], "server", "test:e2e:core", "server-close", cb);
-});
+})));
 
-gulp.task("test",  function (cb) {
-  runSequence(["build-pieces"], "test:unit", "coveralls", cb);
-});
+gulp.task("test:e2e", gulp.series(gulp.parallel("build-pieces", "config-e2e"), "server", "test:e2e:core", "server-close"));
+
+gulp.task("test", gulp.series("build-pieces", "test:unit", "coveralls"));
 
 //------------------------ Global ---------------------------------
 
-gulp.task('default', [], function() {
+gulp.task('info', function(done) {
   console.log('***********************'.yellow);
   console.log('  gulp dev: start a server in the  root folder and watch dev files'.yellow);
   console.log('  gulp test: run unit tests'.yellow);
@@ -345,12 +382,13 @@ gulp.task('default', [], function() {
   console.log('  gulp build: hint, lint, and minify files into ./dist '.yellow);
   console.log('  gulp bower-clean-install: clean bower install'.yellow);
   console.log('***********************'.yellow);
-  return true;
+  
+  done();
 });
 
-gulp.task('dev', ['lint', 'build-pieces', 'browser-sync', 'watch']);
+exports.dev = gulp.parallel('lint', 'build-pieces', 'browser-sync', 'watch');
 
 /**
  * Default task, running just `gulp` will compile the sass, launch BrowserSync & watch files.
  */
-gulp.task('default', ['dev']);
+exports.default = exports.dev;

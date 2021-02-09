@@ -47,7 +47,10 @@ so building and reloading the browser after a change
 gulp
 ```
 
-* If browser hasn't opened, you can open it on http://localhost:8000
+For info on some other useful tasks
+```bash
+gulp info
+```
 
 ### Staging summary
 

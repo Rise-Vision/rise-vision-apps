@@ -167,7 +167,7 @@ describe('service: playlistItemFactory:', function() {
       playlistItemFactory.addContent();
 
       expect(trackedEvent).to.equal('Add Content');
-      expect(openModal).to.equal('storeProductsModal');
+      expect(openModal).to.equal('storeContentModal');
       expect(currentItem).to.not.be.ok;
 
       setTimeout(function() {
@@ -200,7 +200,7 @@ describe('service: playlistItemFactory:', function() {
       playlistItemFactory.addContent();
 
       expect(trackedEvent).to.equal('Add Content');
-      expect(openModal).to.equal('storeProductsModal');
+      expect(openModal).to.equal('storeContentModal');
       expect(currentItem).to.not.be.ok;
 
       setTimeout(function() {
@@ -228,7 +228,7 @@ describe('service: playlistItemFactory:', function() {
       playlistItemFactory.addContent();
 
       expect(trackedEvent).to.equal('Add Content');
-      expect(openModal).to.equal('storeProductsModal');
+      expect(openModal).to.equal('storeContentModal');
       expect(currentItem).to.not.be.ok;
 
       setTimeout(function() {

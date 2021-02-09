@@ -21,10 +21,16 @@ describe("filter: cardDescription", function() {
     expect(cardDescription({})).to.equal("Credit Card ending in ****");
   });
 
-  it("should deal card brand", function() {
+  it("should deal with card brand", function() {
     expect(cardDescription({
       brand: 'visa'
     })).to.equal("Visa ending in ****");
+  });
+
+  it("should deal with snake_case card brand", function() {
+    expect(cardDescription({
+      brand: 'american_express'
+    })).to.equal("American Express ending in ****");
   });
 
   it("should deal with last4", function() {

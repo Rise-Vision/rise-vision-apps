@@ -15,6 +15,8 @@ angular.module('risevision.common.header.directives')
         },
         template: $templateCache.get('partials/common-header/emails-field.html'),
         link: function ($scope, elem, attr, ngModel) {
+          $scope.placeholderText = 'example1@email.com, example2@email.com';
+
           var updatingEmails = false;
           var validationError = false;
 
@@ -33,7 +35,7 @@ angular.module('risevision.common.header.directives')
             inputField.keyup(function () {
               // Needed to wait an extra cycle
               $timeout(function () {
-                if (spanField.text() === 'Add an email') {
+                if (spanField.text() === $scope.placeholderText) {
                   _setValid(true);
                   _checkRequireEmailsOnChange();
                   $scope.$digest();

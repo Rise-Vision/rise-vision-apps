@@ -7,14 +7,15 @@ reports
 *.log
 dist
 tmp
+web/index_raw.html
 web/tmp
 web/scripts/config/config.*
 web/*.js
 web/*.map
 web/src/**/*.js
 web/src/**/*.map
-web/scripts/**/*.js
-web/scripts/**/*.map
+web/scripts/*.ajs.js
+web/scripts/*.ajs.js.map
 web/vendor/tus
 web/vendor/compressor
 test/e2e/config/config.json

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html itemscope itemtype="http://schema.org/WebApplication" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
 <head lang="en">
-  <base href="/web/">
+  <base href="/">
   <meta name="fragment" content="!">
   <meta charset="UTF-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
@@ -50,13 +50,26 @@
   <link rel="stylesheet" type="text/css" href="bower_components/angularjs-slider/dist/rzslider.css"/>
   <!-- endbuild -->
 
-<script src="/node_modules/core-js/client/shim.min.js"></script>
-<script src="/node_modules/zone.js/dist/zone.js"></script>
-<script src="/node_modules/systemjs/dist/system.src.js"></script>
-<script src="/systemjs.config.js"></script>
-<script>
-  System.import('/web/src/main.js');
-</script>
+  <!-- build:ng2 js/angular2.min.js -->
+
+  <!-- angular2 dependencies -->
+  <script src="/node_modules/core-js/client/shim.min.js"></script>
+  <script src="/node_modules/zone.js/dist/zone.js"></script>
+  <script src="/node_modules/systemjs/dist/system.src.js"></script>
+
+  <script src="/systemjs.config.js"></script>
+
+  <!-- inject:js -->
+  <!-- endinject -->
+
+  <!-- endbuild -->
+
+
+
+  <script>
+    System.import('/src/main.js');
+  </script>
+
 </head>
 <body ng-class="{'gray-bg': !showWhiteBackground}">
   <!-- Common Header -->
@@ -67,6 +80,7 @@
   hi2: <app-hi></app-hi>
 
   <!-- build:js js/website.min.js -->
+
   <!-- common-header dependencies -->
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/angular/angular.js"></script>
@@ -260,6 +274,9 @@
   <script src="scripts/components/message-box/svc-message-box.js"></script>
 
   <script src="scripts/components/svg-icon/dtv-svg-icon.js"></script>
+
+  <script src="scripts/components/store-products/app.js"></script>
+  <script src="scripts/components/store-products/ctr-store-content-modal.js"></script>
 
   <!-- apps components -->
   <script src="scripts/components/search-filter/dtv-search-filter.js"></script>
@@ -477,7 +494,7 @@
   <script src="scripts/editor/services/svc-gadget.js"></script>
   <script src="scripts/editor/services/svc-gadget-factory.js"></script>
   <script src="scripts/editor/services/svc-products-factory.js"></script>
-  <script src="scripts/editor/controllers/ctr-store-products-modal.js"></script>
+  <script src="scripts/editor/controllers/ctr-store-templates-modal.js"></script>
   <script src="scripts/editor/services/svc-settings-factory.js"></script>
   <script src="scripts/editor/services/svc-widget-modal-factory.js"></script>
   <script src="scripts/editor/services/svc-widget-utils.js"></script>

@@ -80,6 +80,7 @@ describe("Services: openidConnectLoader", function() {
         expect(client).to.be.ok;
         expect(client.settings).to.be.ok;
         expect(client.settings.authority).to.equal('https://accounts.google.com/');
+        expect(client.settings.prompt).to.equal('select_account');
 
         expect(client.signinSilent).to.be.ok;
         expect(client.signinSilent).to.be.a("function");

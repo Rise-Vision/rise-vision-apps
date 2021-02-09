@@ -3,6 +3,7 @@
  * Adjust as necessary for your application needs.
  */
 (function (global) {
+  // @ts-ignore
   System.config({
     paths: {
       // paths serve as alias
@@ -40,9 +41,9 @@
           // 'systemjs-angular-loader.js': {
           //   loader: false
           // },
-          './*.js': {
-            loader: 'systemjs-angular-loader.js'
-          }
+          // './*.js': {
+          //   loader: 'systemjs-angular-loader.js'
+          // }
         }
       },
       rxjs: {

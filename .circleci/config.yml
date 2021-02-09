@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  browser-tools: circleci/browser-tools@1.1.1
+
 commands:
   run_e2e_cases:
     description: "Runs a specific cases file as a workflow step"
@@ -10,12 +13,9 @@ commands:
     steps:
       - attach_workspace:
           at: ~/
-      - run: echo $CHROME_INSTANCES
       # Install latest chrome
-      - run: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-      - run: echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a /etc/apt/sources.list
-      - run: sudo apt-get update -qq
-      - run: sudo apt-get install -y google-chrome-stable
+      - browser-tools/install-chrome
+      - run: npm run tsc
       - run:
           name: e2e_tests
           command: |
@@ -34,7 +34,7 @@ jobs:
   dependencies:
     working_directory: ~/rise-vision-apps
     docker: &BUILDIMAGE
-      - image: jenkinsrise/apps-node:8.9.4-stretch
+      - image: jenkinsrise/apps-node:10.23.2-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD 
@@ -72,10 +72,8 @@ jobs:
       - attach_workspace:
           at: ~/
       # Install latest chrome
-      - run: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-      - run: echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a /etc/apt/sources.list
-      - run: sudo apt-get update -qq
-      - run: sudo apt-get install -y google-chrome-stable
+      - browser-tools/install-chrome
+      - run: npm run tsc
       - run: 
           name: test_build
           command: NODE_ENV=test npm run ci-build
@@ -133,6 +131,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - run: npm run tsc
       - run: NODE_ENV=stage npm run ci-build
       - run: ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
       # We have 10 stage environments, apps-stage-0.risevision.com to apps-stage-9.risevision.com
@@ -153,6 +152,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - run: npm run tsc
       - run: NODE_ENV=beta npm run ci-build
       - run: ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
       - run: 
@@ -169,6 +169,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - run: npm run tsc
       - run: NODE_ENV=prod npm run ci-build
       # It deploys to production server 2.
       - run: echo "deploying to production webserver1.risevision.com";
