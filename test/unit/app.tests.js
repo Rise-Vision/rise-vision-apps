@@ -13,7 +13,21 @@ describe('app:', function() {
 
       $provide.service('$modal', function() {
         return {
-          open: sinon.stub().returns({result: Q.resolve()})
+          open: sinon.stub().returns({result: Q.defer().promise})
+        }
+      });
+
+      $provide.service('$modalStack', function() {
+        return {
+          dismissAll: sinon.spy()
+        }
+      });
+
+      $provide.service('userState', function() {
+        return {
+          getSelectedCompanyId: sinon.stub().returns('selectedCompanyId'),
+          isRiseVisionUser: sinon.stub().returns(true),
+          _restoreState: function() {}
         }
       });
 
@@ -28,11 +42,12 @@ describe('app:', function() {
       $rootScope = $injector.get('$rootScope');
       $location = $injector.get('$location');
       $modal = $injector.get('$modal');
+      $modalStack = $injector.get('$modalStack');
       $exceptionHandler = $injector.get('$exceptionHandler');
     });
   });
 
-  var $state, canAccessApps, plansFactory, userState, $rootScope, $location, $modal, $exceptionHandler;
+  var $state, canAccessApps, plansFactory, userState, $rootScope, $location, $modal, $modalStack, $exceptionHandler;
 
   it('$stateChangeError:', function() {
     $rootScope.$broadcast('$stateChangeError', '', '', '', '', 'error');
@@ -40,11 +55,63 @@ describe('app:', function() {
     $exceptionHandler.should.have.been.calledWith('error', 'UI Router Error.', true);
   });
 
+  describe('dismiss modals:',function(){
+    it('should close any open and rendered modals when changing state', function() {
+      $rootScope.$broadcast('$stateChangeStart');
+
+      $modalStack.dismissAll.should.have.been.called;
+    });
+
+    it('should not close if the user is not registered', function() {
+      userState.isRiseVisionUser.returns(false);
+
+      $rootScope.$broadcast('$stateChangeStart');
+
+      $modalStack.dismissAll.should.not.have.been.called;
+    });
+
+    it('should not close if the add user modal is open', function(done) {
+      $state.go('apps.users.add');
+      $rootScope.$digest();
+
+      setTimeout(function() {
+        canAccessApps.should.have.been.called;
+        $modal.open.should.have.been.called;
+
+        $modalStack.dismissAll.reset();
+        $rootScope.$broadcast('$stateChangeStart');
+
+        $modalStack.dismissAll.should.not.have.been.called;
+
+        done();
+      }, 10);
+    });
+
+    it('should close modals again after user add modal was closed', function(done) {
+      $modal.open.returns({result: Q.resolve()});
+
+      $state.go('apps.users.add');
+      $rootScope.$digest();
+
+      setTimeout(function() {
+        canAccessApps.should.have.been.called;
+        $modal.open.should.have.been.called;
+
+        $modalStack.dismissAll.reset();
+        $rootScope.$broadcast('$stateChangeStart');
+
+        $modalStack.dismissAll.should.have.been.called;
+
+        done();
+      }, 10);
+
+    });
+  });
+  
   describe('state apps.users.add:',function(){
     it('should register parent',function(){
       var state = $state.get('apps.users');
       expect(state).to.be.ok;
-      expect(state.url).to.equal('?cid');
       expect(state.abstract).to.be.true;
       expect(state.template).to.equal('<div ui-view></div>');
     });
@@ -74,12 +141,7 @@ describe('app:', function() {
       }, 10);
     });
 
-  });
-
-  describe('onboarding links', function() {
     it('should check next state and show add user modal', function(done) {
-      sinon.stub(userState, 'getSelectedCompanyId').returns('selectedCompanyId');
-
       $state.go('apps.users.add');
       $rootScope.$digest();
 

@@ -19,7 +19,7 @@
           <input id="inputExemption" type="file" accept="application/pdf,image/*" onchange="angular.element(this).scope().setFile(this)" style="display:none">
           <div class="flex-row" ng-show="taxExemption.file.name">
             <div class="u_ellipsis">{{taxExemption.file.name}}</div>
-            <div class="ml-auto"><a aria-label="Remove Tax Exemption File" class="madero-link u_clickable text-danger text-sm font-weight-bold" ng-click="removeFile()" tabindex="1">Remove</a></div>
+            <div class="ml-auto"><a aria-label="Remove Tax Exemption File" class="madero-link u_clickable text-danger font-weight-bold" ng-click="removeFile()" tabindex="1">Remove</a></div>
           </div>
           <button name="selectFile" id="selectFile" type="button" ng-click="selectFile()" aria-label="Attach Tax Exemption File" tabindex="1" class="btn btn-default btn-block" ng-show="!taxExemption.file.name">Attach File</button>
         </div>

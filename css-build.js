@@ -23,7 +23,8 @@ var cssBuild = {};
 gulp.task("fonts-copy", function () {
   console.log("[COPY] copying over fonts".yellow);
 
-  gulp.src(paths.fonts)
+  return gulp.src(paths.fonts)
+    .pipe(gulp.dest(paths.tmpFonts))
     .pipe(gulp.dest(paths.distFonts));
 });
 
@@ -38,9 +39,9 @@ gulp.task("css-build-alignment", function () {
     .pipe(gulp.dest(paths.distCss));
 });
 
-gulp.task("css-build", ["css-build-alignment", "fonts-copy"], function() {
-  console.log("[SASS] recompiling".yellow);
-  gulp.src(paths.appSass)
+gulp.task("css-build", gulp.series(gulp.parallel("css-build-alignment", "fonts-copy"), function() {
+  console.log("[SASS] recompiling & minifying".yellow);
+  return gulp.src(paths.appSass)
     .pipe(sass({
       errLogToConsole: true
     }))
@@ -50,18 +51,15 @@ gulp.task("css-build", ["css-build-alignment", "fonts-copy"], function() {
     .pipe(cleanCSS())
     .pipe(rename("rise.min.css"))
     .pipe(gulp.dest(paths.tmpCss))
-    .pipe(gulp.dest(paths.distCss))
-  console.log("[CSS] minifying".yellow);
+    .pipe(gulp.dest(paths.distCss));
+}));
 
-  gulp.src(paths.fonts)
-    .pipe(gulp.dest(paths.tmpFonts))
-    .pipe(gulp.dest(paths.distFonts));
-});
-
-gulp.task("css-watch", ["css-build"], function() {
+gulp.task("css-watch", gulp.series("css-build", function(done) {
   // Watch Less files for changes
-  gulp.watch(paths.sass, ["css-build"]);
+  gulp.watch(paths.sass, gulp.series("css-build"));
   console.log("[SASS] Watching for changes in SASS files".yellow);
-});
+
+  done();
+}));
 
 module.exports = cssBuild;

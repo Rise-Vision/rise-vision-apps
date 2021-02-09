@@ -3,15 +3,11 @@
     <button type="button" class="close" ng-click="dismiss()" aria-hidden="true">
       <i class="fa fa-times"></i>
     </button>
-    <h3 id="storeModalTitle" class="modal-title">{{ 'editor-app.storeProduct.' + (factory.search.category === 'Content' ? 'content' : 'templates') + '.title' | translate }}</h3>
+    <h3 id="storeModalTitle" class="modal-title">{{ 'editor-app.storeProduct.templates.title' | translate }}</h3>
   </div>
   <div class="modal-body u_padding-lg" stop-event="touchend">
     
-    <div class="u_margin-md-bottom" ng-if="!categoryFilters">
-      <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch"></search-filter>
-    </div>
-
-    <div class="row" ng-if="categoryFilters">
+    <div class="row">
       <div class="col-md-8 u_margin-sm-bottom">
         <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch"></search-filter>
       </div>
@@ -73,7 +69,7 @@
                 <div class="text-muted text-center u_padding-lg"><span translate>editor-app.storeProduct.content.noResults</span></div>
               </div>
 
-              <div id="suggestTemplate" class="col-sm-12 text-center" ng-if="factory.search.category === 'Templates' && isEducationCustomer && !factory.loadingItems">
+              <div id="suggestTemplate" class="col-sm-12 text-center" ng-if="isEducationCustomer && !factory.loadingItems">
                 <h3 translate>editor-app.storeProduct.templates.cantFind</h3>
                 <a translate href="https://docs.google.com/forms/d/1slHKxGxywkiSakMukDr4dMGLmhzhYhoU0F2BHP8FSd4/viewform" target="_blank">
                   editor-app.storeProduct.templates.suggest
@@ -87,9 +83,5 @@
 
     </section>
 
-    <a id="addWidgetByUrl" class="btn btn-default" href="#" ng-click="addWidgetByUrl()" ng-if="factory.search.category === 'Content'">
-      {{'editor-app.addWidget.title' | translate}} <i class="fa fa-code icon-right"></i>
-    </a>    
-    
   </div>
 </div>

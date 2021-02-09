@@ -404,14 +404,9 @@ angular.module('risevision.editor.services')
         presentationTracker('Add Presentation');
 
         var modalInstance = $modal.open({
-          templateUrl: 'partials/editor/store-products-modal.html',
+          templateUrl: 'partials/editor/store-templates-modal.html',
           size: 'lg',
-          controller: 'storeProductsModal',
-          resolve: {
-            category: function () {
-              return 'Templates';
-            }
-          }
+          controller: 'storeTemplatesModal',
         });
 
         modalInstance.result.then(factory.addFromProduct);

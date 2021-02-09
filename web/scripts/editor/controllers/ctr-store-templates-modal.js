@@ -1,17 +1,15 @@
 'use strict';
 angular.module('risevision.editor.controllers')
-  .controller('storeProductsModal', ['$scope', '$loading', '$filter', '$modal', '$modalInstance',
-    'userState', 'ScrollingListService', 'productsFactory', 'playlistItemFactory', 'templateCategoryFilter',
-    'category', 'TEMPLATES_TYPE',
+  .controller('storeTemplatesModal', ['$scope', '$loading', '$filter', '$modal', '$modalInstance',
+    'userState', 'ScrollingListService', 'productsFactory', 'templateCategoryFilter',
     function ($scope, $loading, $filter, $modal, $modalInstance,
-      userState, ScrollingListService, productsFactory, playlistItemFactory, templateCategoryFilter,
-      category, TEMPLATES_TYPE) {
+      userState, ScrollingListService, productsFactory, templateCategoryFilter) {
       var defaultCount = 1000;
 
       $scope.isEducationCustomer = userState.isEducationCustomer();
 
       $scope.search = {
-        category: category,
+        category: 'Templates',
         count: defaultCount,
         doSearch: function() {}
       };
@@ -21,8 +19,7 @@ angular.module('risevision.editor.controllers')
 
       $scope.filterConfig = {
         placeholder: $filter('translate')(
-          'editor-app.storeProduct.' + (category === TEMPLATES_TYPE ?
-            'templates' : 'content') + '.search'),
+          'editor-app.storeProduct.templates.search'),
         id: 'storeProductsSearchInput'
       };
 
@@ -38,7 +35,7 @@ angular.module('risevision.editor.controllers')
       };
 
       var _updateProductFilters = function () {
-        if (category === TEMPLATES_TYPE && !$scope.categoryFilters && $scope.factory.items.list.length) {
+        if (!$scope.categoryFilters && $scope.factory.items.list.length) {
           $scope.categoryFilters = {
             templateCategories: templateCategoryFilter($scope.factory.items.list, 'templateCategories'),
             templateLocations: templateCategoryFilter($scope.factory.items.list, 'templateLocations'),
@@ -58,33 +55,24 @@ angular.module('risevision.editor.controllers')
       });
 
       $scope.select = function (product) {
-        if (category === TEMPLATES_TYPE) {
-          var productDetailsModal = $modal.open({
-            templateUrl: 'partials/editor/product-details-modal.html',
-            size: 'lg',
-            windowClass: 'product-preview-modal',
-            controller: 'ProductDetailsModalController',
-            resolve: {
-              product: function () {
-                return product;
-              }
+        var productDetailsModal = $modal.open({
+          templateUrl: 'partials/editor/product-details-modal.html',
+          size: 'lg',
+          windowClass: 'product-preview-modal',
+          controller: 'ProductDetailsModalController',
+          resolve: {
+            product: function () {
+              return product;
             }
-          });
-          productDetailsModal.result.then(function () {
-            $modalInstance.close(product);
-          });
-        } else {
+          }
+        });
+        productDetailsModal.result.then(function () {
           $modalInstance.close(product);
-        }
+        });
       };
 
       $scope.quickSelect = function (product) {
         $modalInstance.close(product);
-      };
-
-      $scope.addWidgetByUrl = function () {
-        $modalInstance.dismiss();
-        playlistItemFactory.addWidgetByUrl();
       };
 
       $scope.dismiss = function () {

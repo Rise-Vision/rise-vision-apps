@@ -30,6 +30,7 @@ angular.module('risevision.apps', [
     'risevision.common.components.distribution-selector',
     'risevision.common.components.background-image-setting',
     'risevision.common.components.message-box',
+    'risevision.common.components.store-products',
     'risevision.common.i18n',
     'risevision.apps.partials',
     'risevision.apps.config',
@@ -93,7 +94,6 @@ angular.module('risevision.apps', [
 
         .state('apps.users', {
           abstract: true,
-          url: '?cid',
           template: '<div ui-view></div>'
         })
         .state('apps.users.add', {
@@ -160,17 +160,11 @@ angular.module('risevision.apps', [
       }
     }
   ])
-  .run(['$rootScope', '$state', '$modalStack', 'userState', '$window', '$exceptionHandler',
-    function ($rootScope, $state, $modalStack, userState, $window, $exceptionHandler) {
+  .run(['$rootScope', '$state', '$exceptionHandler',
+    function ($rootScope, $state, $exceptionHandler) {
 
       $rootScope.$on('risevision.user.signedOut', function () {
         $state.go('common.auth.unauthorized');
-      });
-
-      $rootScope.$on('$stateChangeStart', function (event) {
-        if (userState.isRiseVisionUser()) {
-          $modalStack.dismissAll();
-        }
       });
 
       $rootScope.$on('$stateChangeSuccess', function (event, toState) {
@@ -209,12 +203,20 @@ angular.module('risevision.apps', [
       });
     }
   ])
-  .run(['$rootScope', '$modal', 'canAccessApps', 'userState',
-    function ($rootScope, $modal, canAccessApps, userState) {
+  .run(['$rootScope', '$modal', '$modalStack', 'canAccessApps', 'userState',
+    function ($rootScope, $modal, $modalStack, canAccessApps, userState) {
+      var $modalInstance;
+      
+      $rootScope.$on('$stateChangeStart', function (event) {
+        if (userState.isRiseVisionUser() && !$modalInstance) {
+          $modalStack.dismissAll();
+        }
+      });
+
       $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         if (toState.name === 'apps.users.add') {
           canAccessApps().then(function () {
-            $modal.open({
+            $modalInstance = $modal.open({
               templateUrl: 'partials/common-header/user-settings-modal.html',
               controller: 'AddUserModalCtrl',
               resolve: {
@@ -222,6 +224,9 @@ angular.module('risevision.apps', [
                   return userState.getSelectedCompanyId();
                 }
               }
+            })
+            .result.finally(function() {
+              $modalInstance = null;
             });
           });
 

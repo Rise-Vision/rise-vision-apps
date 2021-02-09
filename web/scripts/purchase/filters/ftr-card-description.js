@@ -4,12 +4,12 @@ angular.module('risevision.apps.purchase')
   .filter('cardDescription', [
 
     function () {
-      var _capitalizeFirstLetter = function(string) {
-        if (!string) {
-          return '';
-        }
+      var _convertSnakeCase = function(string) {
+        return string.replace(/[\W_]+/g, ' ');
+      };
 
-        return string.charAt(0).toUpperCase() + string.slice(1);
+      var _toTitleCase = function(string) {
+        return string.replace(/(^|\s)\S/g, function(t) { return t.toUpperCase(); });
       };
 
       return function (card) {
@@ -17,7 +17,9 @@ angular.module('risevision.apps.purchase')
           return '';
         }
 
-        var brand = _capitalizeFirstLetter(card.brand) || 'Credit Card';
+        var brand = card.brand || '';
+        brand = _convertSnakeCase(brand);
+        brand = _toTitleCase(brand) || 'Credit Card';
         var last4 = card.last4 || '****';
 
         return brand + ' ending in ' + last4;
