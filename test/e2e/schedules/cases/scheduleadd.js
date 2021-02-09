@@ -119,18 +119,18 @@ var ScheduleAddScenarios = function() {
       });
 
       it('should navigate to Embed Code and show Copy Embed Code button', function() {
-        shareSchedulePopoverPage.getEmbedCodeTabLink().click();
+        helper.clickOverIFrame(shareSchedulePopoverPage.getEmbedCodeTabLink(), 'Embed Code link');
         expect(shareSchedulePopoverPage.getCopyEmbedCodeButton().isDisplayed()).to.eventually.be.true;
         expect(shareSchedulePopoverPage.getGoBackButton().isDisplayed()).to.eventually.be.true;
       });
 
       it('should navigate back to main tab', function() {
-        shareSchedulePopoverPage.getGoBackButton().click();
+        helper.clickOverIFrame(shareSchedulePopoverPage.getGoBackButton(), 'Back button');
         expect(shareSchedulePopoverPage.getCopyLinkButton().isDisplayed()).to.eventually.be.true;
       });
 
       it('should navigate to Chrome Extension and show Extension link', function() {
-        shareSchedulePopoverPage.getChromeExtensionTabLink().click();
+        helper.clickOverIFrame(shareSchedulePopoverPage.getChromeExtensionTabLink(), 'Chrome Extension link');
         expect(shareSchedulePopoverPage.getChromeExtensionLink().isDisplayed()).to.eventually.be.true;
         expect(shareSchedulePopoverPage.getChromeExtensionLink().getAttribute('href')).to.eventually.equal('https://chrome.google.com/webstore/detail/rise-vision-anywhere/dkoohkdagjpgjheoaaegomjhdccfbcle');
       });
