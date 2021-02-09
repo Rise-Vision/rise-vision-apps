@@ -32,7 +32,8 @@ angular.module('risevision.schedules.directives')
           $scope.$watch('showTooltip', function () {
             if ($scope.showTooltip) {
               $timeout(function () {
-                outsideClickHandler.bind('schedule-selector', '#schedule-selector, #schedule-selector-tooltip', $scope.toggleTooltip);
+                outsideClickHandler.bind('schedule-selector',
+                  '#schedule-selector, #schedule-selector-tooltip', $scope.toggleTooltip);
                 tooltipElement.trigger('show');
 
                 $scope.factory.load();

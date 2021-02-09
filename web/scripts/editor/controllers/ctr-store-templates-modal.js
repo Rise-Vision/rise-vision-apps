@@ -11,7 +11,7 @@ angular.module('risevision.editor.controllers')
       $scope.search = {
         category: 'Templates',
         count: defaultCount,
-        doSearch: function() {}
+        doSearch: function () {}
       };
 
       $scope.factory = new ScrollingListService(productsFactory.loadProducts,

@@ -44,7 +44,7 @@
          */
         var authenticate = function () {
           return openidConnect.getUser()
-            .then(function(user) {
+            .then(function (user) {
               if (user) {
                 // Silent means we actually perform the check with API
                 if (user.expires_in < 60) {
@@ -58,7 +58,7 @@
                 return $q.reject('No user');
               }
             })
-            .then(function(user) {
+            .then(function (user) {
               _setToken(user);
 
               if (userState._state.redirectState) {
@@ -97,7 +97,7 @@
           }
         };
 
-        var signOut = function(signOutGoogle) {
+        var signOut = function (signOutGoogle) {
           if (signOutGoogle) {
             $window.logoutFrame.location = 'https://accounts.google.com/Logout';
           }

@@ -1,7 +1,7 @@
 (function (angular) {
 
   'use strict';
-  
+
   /*jshint camelcase: false */
 
   angular.module('risevision.apps.purchase')
@@ -231,7 +231,7 @@
           return _getTierPrice(true, displayCount);
         };
 
-        factory.getPricePerDisplay = function(isMonthly, displayCount, isEducation) {
+        factory.getPricePerDisplay = function (isMonthly, displayCount, isEducation) {
           var tierPrice = _getTierPrice(isMonthly, displayCount);
           var pricePerDisplay = isMonthly ? tierPrice : tierPrice / 12;
 
@@ -242,7 +242,7 @@
           return pricePerDisplay;
         };
 
-        factory.getTotalPrice = function(isMonthly, displayCount, isEducation) {
+        factory.getTotalPrice = function (isMonthly, displayCount, isEducation) {
           var pricePerDisplay = _getTierPrice(isMonthly, displayCount);
           if (isEducation) {
             pricePerDisplay = pricePerDisplay * 0.9;

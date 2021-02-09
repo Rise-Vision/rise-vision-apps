@@ -8,7 +8,7 @@ var rimraf      = require("gulp-rimraf");
 var uglify      = require("gulp-uglify-es").default;
 var usemin      = require("gulp-usemin");
 var cleanCSS    = require('gulp-clean-css');
-var minifyHtml  = require('gulp-minify-html');
+var minifyHtml  = require('gulp-htmlmin');
 var ngHtml2Js   = require("gulp-ng-html2js");
 var concat      = require("gulp-concat");
 var log         = require("fancy-log");
@@ -169,7 +169,13 @@ function buildHtml(path) {
   return gulp.src([path])
     .pipe(usemin({
       css: [cleanCSS, 'concat'],
-      html: [function() {return minifyHtml({empty: true})} ],
+      html: [function() {
+        return minifyHtml({
+          collapseWhitespace: true,
+          conservativeCollapse: true,
+          removeComments: true
+        })
+      }],
       js: [
         sourcemaps.init({largeFile: true}),
         'concat',
@@ -229,10 +235,9 @@ gulp.task("tus", function() {
 gulp.task("html2js", function() {
   return gulp.src(partialsHTMLFiles)
     .pipe(minifyHtml({
-      empty: true,
-      spare: true,
-      quotes: true,
-      loose: true
+      collapseWhitespace: true,
+      conservativeCollapse: true,
+      removeComments: true
     }))
     .pipe(ngHtml2Js({
       moduleName: "risevision.apps.partials",

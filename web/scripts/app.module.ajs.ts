@@ -177,7 +177,7 @@ angular.module('risevision.apps', [
         }
       });
 
-      $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, err) {
+      $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, err) {
         $exceptionHandler(err, 'UI Router Error.', true);
       });
 
@@ -193,7 +193,7 @@ angular.module('risevision.apps', [
             reload: true
           });
         } else if (($state.current.name.indexOf('apps.purchase') !== -1 ||
-          $state.current.name.indexOf('apps.billing') !== -1) &&
+            $state.current.name.indexOf('apps.billing') !== -1) &&
           $state.current.forceAuth !== false) {
 
           $state.go('apps.billing.home', null, {
@@ -206,7 +206,7 @@ angular.module('risevision.apps', [
   .run(['$rootScope', '$modal', '$modalStack', 'canAccessApps', 'userState',
     function ($rootScope, $modal, $modalStack, canAccessApps, userState) {
       var $modalInstance;
-      
+
       $rootScope.$on('$stateChangeStart', function (event) {
         if (userState.isRiseVisionUser() && !$modalInstance) {
           $modalStack.dismissAll();
@@ -217,17 +217,17 @@ angular.module('risevision.apps', [
         if (toState.name === 'apps.users.add') {
           canAccessApps().then(function () {
             $modalInstance = $modal.open({
-              templateUrl: 'partials/common-header/user-settings-modal.html',
-              controller: 'AddUserModalCtrl',
-              resolve: {
-                companyId: function () {
-                  return userState.getSelectedCompanyId();
+                templateUrl: 'partials/common-header/user-settings-modal.html',
+                controller: 'AddUserModalCtrl',
+                resolve: {
+                  companyId: function () {
+                    return userState.getSelectedCompanyId();
+                  }
                 }
-              }
-            })
-            .result.finally(function() {
-              $modalInstance = null;
-            });
+              })
+              .result.finally(function () {
+                $modalInstance = null;
+              });
           });
 
           if (fromState.name) {

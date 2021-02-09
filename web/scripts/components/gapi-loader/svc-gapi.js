@@ -114,12 +114,12 @@ angular.module('risevision.common.gapi', [
   ])
 
   .factory('DedupingGenerator', ['gapiClientLoaderGenerator',
-    function(gapiClientLoaderGenerator) {
-      return function() {
+    function (gapiClientLoaderGenerator) {
+      return function () {
         var generator;
         var args = arguments;
 
-        return function() {
+        return function () {
           if (generator) {
             return generator;
           }
@@ -130,7 +130,7 @@ angular.module('risevision.common.gapi', [
             });
 
           return generator;
-        };        
+        };
       };
     }
   ])

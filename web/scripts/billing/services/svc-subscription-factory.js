@@ -23,7 +23,7 @@ angular.module('risevision.apps.billing.services')
         return factory.item && factory.item.customer || {};
       };
 
-      factory.isInvoiced = function() {
+      factory.isInvoiced = function () {
         if (factory.getItemSubscription().auto_collection) {
           return factory.getItemSubscription().auto_collection === 'off';
         } else if (factory.getItemCustomer().auto_collection) {
@@ -33,7 +33,7 @@ angular.module('risevision.apps.billing.services')
         }
       };
 
-      factory.getPaymentSourceId = function() {
+      factory.getPaymentSourceId = function () {
         if (factory.getItemSubscription().payment_source_id) {
           return factory.getItemSubscription().payment_source_id;
         } else if (factory.getItemCustomer().primary_payment_source_id) {
@@ -67,10 +67,10 @@ angular.module('risevision.apps.billing.services')
 
             _updatePaymentSourceId();
           })
-          .catch(function(e) {
+          .catch(function (e) {
             _showErrorMessage(e);
           })
-          .finally(function() {
+          .finally(function () {
             factory.loading = false;
           });
       };
@@ -82,10 +82,10 @@ angular.module('risevision.apps.billing.services')
           .then(function (resp) {
             angular.extend(factory.item, resp.item);
           })
-          .catch(function(e) {
+          .catch(function (e) {
             _showErrorMessage(e);
           })
-          .finally(function() {
+          .finally(function () {
             factory.loading = false;
           });
       };
@@ -99,15 +99,15 @@ angular.module('risevision.apps.billing.services')
 
             _updatePaymentSourceId();
           })
-          .catch(function(e) {
+          .catch(function (e) {
             _showErrorMessage(e);
           })
-          .finally(function() {
+          .finally(function () {
             factory.loading = false;
           });
       };
 
-      factory.changePaymentMethod = function(event, card) {
+      factory.changePaymentMethod = function (event, card) {
         // prevent the radio ng-model from being updated
         event.preventDefault();
 
@@ -116,16 +116,16 @@ angular.module('risevision.apps.billing.services')
         }
 
         var description = $filter('cardDescription')(card.payment_source.card);
-        
+
         confirmModal('Change Payment Method',
-            'Are you sure you want to change the payment method? The <strong>' +
-            description +
-            '</strong> will be used for this subscription.',
-            'Yes, Change', 'Cancel', 'madero-style centered-modal',
-            'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
-          ).then(function() {
-            _changePaymentSource(factory.getItemSubscription().id, card.payment_source.id);
-          });
+          'Are you sure you want to change the payment method? The <strong>' +
+          description +
+          '</strong> will be used for this subscription.',
+          'Yes, Change', 'Cancel', 'madero-style centered-modal',
+          'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
+        ).then(function () {
+          _changePaymentSource(factory.getItemSubscription().id, card.payment_source.id);
+        });
       };
 
       var _showErrorMessage = function (e) {
@@ -134,6 +134,6 @@ angular.module('risevision.apps.billing.services')
         $log.error(factory.apiError, e);
       };
 
-      return factory;        
+      return factory;
     }
   ]);

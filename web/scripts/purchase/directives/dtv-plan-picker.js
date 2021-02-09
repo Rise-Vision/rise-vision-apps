@@ -30,10 +30,13 @@ angular.module('risevision.apps.purchase')
 
               $scope.basePricePerDisplay = pricingFactory.getBasePricePerDisplay($scope.displayCount);
 
-              $scope.pricePerDisplay = pricingFactory.getPricePerDisplay($scope.periodMonthly, $scope.displayCount, $scope.applyDiscount);
-              $scope.totalPrice = pricingFactory.getTotalPrice($scope.periodMonthly, $scope.displayCount, $scope.applyDiscount);
+              $scope.pricePerDisplay = pricingFactory.getPricePerDisplay($scope.periodMonthly, $scope
+                .displayCount, $scope.applyDiscount);
+              $scope.totalPrice = pricingFactory.getTotalPrice($scope.periodMonthly, $scope.displayCount, $scope
+                .applyDiscount);
 
-              $scope.yearlySavings = ($scope.basePricePerDisplay * $scope.displayCount * 12) - $scope.totalPrice;
+              $scope.yearlySavings = ($scope.basePricePerDisplay * $scope.displayCount * 12) - $scope
+              .totalPrice;
             });
 
             $scope.updatePlan = function () {

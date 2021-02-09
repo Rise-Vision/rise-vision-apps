@@ -120,7 +120,8 @@ angular.module('risevision.storage.services')
       return fileUploaderFactory();
     }
   ])
-  .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'encoding', 'ExifStripper', '$timeout', 'TUSFactory', 'JPGCompressor',
+  .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'encoding', 'ExifStripper', '$timeout',
+    'TUSFactory', 'JPGCompressor',
     function ($rootScope, $q, XHRFactory, encoding, ExifStripper, $timeout, TUSFactory, JPGCompressor) {
       return function () {
         var svc = {};
@@ -304,7 +305,7 @@ angular.module('risevision.storage.services')
 
           svc.notifyBeforeUploadItem(item);
 
-          item.tusAbort = function() {
+          item.tusAbort = function () {
             tusUpload.abort();
             svc.notifyCancelItem(item);
             svc.notifyCompleteItem(item);
@@ -316,7 +317,9 @@ angular.module('risevision.storage.services')
         svc.cancelItem = function (value) {
           var index = svc.getIndexOfItem(value);
           var item = svc.queue[index];
-          if (!item || !item.isUploading) { return; }
+          if (!item || !item.isUploading) {
+            return;
+          }
 
           return item.tusAbort ? item.tusAbort() : item.xhr.abort();
         };
