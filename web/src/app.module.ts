@@ -2,28 +2,24 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 
-import { LastRevisedComponent } from './editor/components/last-revised/last-revised.component.js'
-import { UsernamePipe } from './editor/pipes/username.pipe.js';
+import { EditorModule } from './editor/editor.module.js';
 
 import { AppComponent } from './app/app.component.js';
 import { HiComponent } from './hi.component.js';
 import { HeroDetailDirective } from './hero-detail.component.js';
 
-
 @NgModule({
   imports: [
     BrowserModule,
     UpgradeModule,
+    EditorModule
   ],
   declarations: [
-    LastRevisedComponent,
-    UsernamePipe,
   	HiComponent,
   	AppComponent,
   	HeroDetailDirective
   ],
   entryComponents: [
-    LastRevisedComponent,
   	HiComponent,
   	AppComponent
   ],
