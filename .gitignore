@@ -55,6 +55,7 @@ web/index_raw.html
 web/tmp
 src/tmp
 web/scripts/config/config.*
+src/scripts/config/config.*
 web/*.js
 web/*.map
 web/src/**/*.js

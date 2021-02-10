@@ -19,9 +19,6 @@ var factory     = require("widget-tester").gulpTaskFactory;
 var fs          = require('fs');
 var os          = require('os');
 
-var Builder     = require('systemjs-builder');
-var inject      = require('gulp-inject');
-
 require("./ch-build");
 require("./i18n-build");
 require("./css-build");
@@ -208,10 +205,6 @@ function buildHtml(path) {
     });
 }
 
-gulp.task("html-index", function () {
-  return buildHtml("./web/index_raw.html");
-});
-
 gulp.task("html-selector", function () {
   return buildHtml("./web/storage-selector.html");
 });
@@ -220,17 +213,7 @@ gulp.task("html-user-manager-silent", function () {
   return buildHtml("./web/user-manager-silent.html");
 });
 
-gulp.task("html", gulp.parallel("lint", "html-index", "html-selector", "html-user-manager-silent"));
-
-gulp.task("jpgcompressor", function() {
-  return gulp.src("node_modules/compressorjs/dist/compressor.min.js")
-    .pipe(gulp.dest("web/vendor/compressor"));
-});
-
-gulp.task("tus", function() {
-  return gulp.src("node_modules/tus-js-client/dist/tus.min.js")
-    .pipe(gulp.dest("web/vendor/tus"));
-});
+gulp.task("html", gulp.parallel("lint", "html-selector", "html-user-manager-silent"));
 
 gulp.task("html2js", function() {
   return gulp.src(partialsHTMLFiles)
@@ -244,20 +227,13 @@ gulp.task("html2js", function() {
       prefix: "partials/"
     }))
     .pipe(concat("partials.js"))
-    .pipe(gulp.dest("./web/tmp/"));
+    .pipe(gulp.dest("./web/tmp/"))
+    .pipe(gulp.dest("./dist/tmp/"));
 });
 
 gulp.task("images", function () {
   return gulp.src(['./web/images/**/*.*'])
     .pipe(gulp.dest("dist/images"))
-    .on('error',function(e){
-      console.error(String(e));
-    })
-});
-
-gulp.task("vendor", function () {
-  return gulp.src(['./web/vendor/**/*.*'])
-    .pipe(gulp.dest("dist/vendor"))
     .on('error',function(e){
       console.error(String(e));
     })
@@ -274,52 +250,15 @@ gulp.task("config", function() {
 
   return gulp.src(["./web/scripts/config/" + env + ".js"])
     .pipe(rename("config.js"))
-    .pipe(gulp.dest("./web/scripts/config"));
+    .pipe(gulp.dest("./web/scripts/config"))
+    .pipe(gulp.dest("./src/scripts/config"));
 });
 
-gulp.task("angular2-src", function () {
-  return gulp.src(['./web/src/**/*.js'])
-    .pipe(gulp.dest("dist/src"))
-    .on('error',function(e){
-      console.error(String(e));
-    })
-});
+gulp.task('build-pieces', gulp.series("clean", gulp.parallel('config', 'i18n-build', 'css-build', 'html2js')));
 
-gulp.task("index-rename", function() {
-  return gulp.src('./dist/index_raw.html')
-    .pipe(rename("index.html"))
-    .pipe(gulp.dest('./dist'));
-});
+gulp.task('build', gulp.series(gulp.parallel("clean"), gulp.parallel('build-pieces'), gulp.parallel("html", "static-files")));
 
-gulp.task('bundle-angular-deps', function() {
-  // optional constructor options
-  // sets the baseURL and loads the configuration file
-  var builder = new Builder('', 'web/systemjs.config.js');
-
-  return builder
-    .bundle('web/src/main.js - [web/src/**/*.js]', 'web/angular2-deps.js', {}) //{ minify: true, sourceMaps: true })
-    .then(function() {
-      console.log('Build complete');
-    })
-    .catch(function(err) {
-      console.log('Build error');
-      console.log(err);
-    });
-});
-
-gulp.task('angular2-inject', function () {
-  // It's not necessary to read the files (will speed up things), we're only after their paths:
-  var srcStream = gulp.src(['./web/angular2-deps.js'], {read: false});
-
-  return gulp.src('./web/index.html')
-    .pipe(rename("index_raw.html"))
-    .pipe(inject(srcStream, {relative: true}))
-    .pipe(gulp.dest('./web'));
-});
-
-gulp.task('build-pieces', gulp.series("clean", gulp.parallel('config', 'i18n-build', 'css-build', 'html2js', 'tus', 'jpgcompressor')));
-
-gulp.task('build', gulp.series(gulp.parallel("clean", "bundle-angular-deps"), 'angular2-inject', gulp.parallel('build-pieces'), gulp.parallel("html", "static-files", "images", "vendor", "angular2-src"), "index-rename"));
+gulp.task('build-cli', gulp.series('clean', gulp.parallel('config', 'i18n-build', 'html2js'), "html"));
 
 /*---- testing ----*/
 

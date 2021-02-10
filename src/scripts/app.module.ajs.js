@@ -1,9 +1,5 @@
 'use strict';
-var heroDetail = {
-    template: '<h4>Hero detail!</h4>',
-    controller: function HeroDetailController() {
-    }
-};
+
 angular.module('risevision.apps', [
     'ui.router',
     'ngTouch',
@@ -64,182 +60,173 @@ angular.module('risevision.apps', [
     'risevision.template-editor.services',
     'risevision.template-editor.directives',
     'risevision.template-editor.controllers'
-])
-    .component('heroDetail', heroDetail)
-    // Set up our mappings between URLs, templates, and controllers
-    .config(['$stateProvider',
+  ])
+  // Set up our mappings between URLs, templates, and controllers
+  .config(['$stateProvider',
     function storeRouteConfig($stateProvider) {
-        // Use $stateProvider to configure states.
-        $stateProvider
-            .state('apps', {
-            url: '?cid',
-            abstract: true,
-            template: '<div ui-view></div>'
+
+      // Use $stateProvider to configure states.
+      $stateProvider
+        .state('apps', {
+          url: '?cid',
+          abstract: true,
+          template: '<div ui-view></div>'
         })
-            .state('apps.home', {
-            url: '/',
-            controller: ['$location', '$state', 'canAccessApps',
-                function ($location, $state, canAccessApps) {
-                    return canAccessApps().then(function () {
-                        $location.replace();
-                        $state.go('apps.editor.home');
-                    });
+
+        .state('apps.home', {
+          url: '/',
+          controller: ['$location', '$state', 'canAccessApps',
+            function ($location, $state, canAccessApps) {
+              return canAccessApps().then(function () {
+                $location.replace();
+                $state.go('apps.editor.home');
+              });
+            }
+          ]
+        })
+
+        .state('apps.users', {
+          abstract: true,
+          template: '<div ui-view></div>'
+        })
+        .state('apps.users.add', {
+          url: '/users/add',
+          controller: ['$location', '$state',
+            function ($location, $state) {
+              $location.replace();
+              $state.go('apps.home');
+            }
+          ]
+        })
+
+        .state('common.auth.signup', {
+          url: '/signup',
+          controller: ['$location', '$state', 'canAccessApps',
+            function ($location, $state, canAccessApps) {
+              // jshint camelcase:false
+              var showProduct = $location.search().show_product;
+              // jshint camelcase:true
+
+              return canAccessApps(true).then(function () {
+                $location.replace();
+                if (showProduct) {
+                  $state.go('apps.purchase.plans');
+                } else {
+                  $state.go('apps.home');
                 }
-            ]
+              });
+            }
+          ]
         })
-            .state('apps.users', {
-            abstract: true,
-            template: '<div ui-view></div>'
-        })
-            .state('apps.users.add', {
-            url: '/users/add',
-            controller: ['$location', '$state',
-                function ($location, $state) {
-                    $location.replace();
-                    $state.go('apps.home');
-                }
-            ]
-        })
-            .state('common.auth.signup', {
-            url: '/signup',
-            controller: ['$location', '$state', 'canAccessApps',
-                function ($location, $state, canAccessApps) {
-                    // jshint camelcase:false
-                    var showProduct = $location.search().show_product;
-                    // jshint camelcase:true
-                    return canAccessApps(true).then(function () {
-                        $location.replace();
-                        if (showProduct) {
-                            $state.go('apps.purchase.plans');
-                        }
-                        else {
-                            $state.go('apps.home');
-                        }
-                    });
-                }
-            ]
-        })
-            .state('common.auth.signin', {
-            url: '/signin',
-            controller: ['$state', 'canAccessApps', '$location',
-                function ($state, canAccessApps, $location) {
-                    canAccessApps().then(function () {
-                        $location.replace();
-                        $state.go('apps.home');
-                    });
-                }
-            ]
+
+        .state('common.auth.signin', {
+          url: '/signin',
+          controller: ['$state', 'canAccessApps', '$location',
+            function ($state, canAccessApps, $location) {
+              canAccessApps().then(function () {
+                $location.replace();
+                $state.go('apps.home');
+              });
+            }
+          ]
         });
+
     }
-])
-    .config(['$tooltipProvider',
+  ])
+  .config(['$tooltipProvider',
     function storeRouteConfig($tooltipProvider) {
-        $tooltipProvider.setTriggers({
-            'show': 'hide'
-        });
+      $tooltipProvider.setTriggers({
+        'show': 'hide'
+      });
     }
-])
-    .config(['$localStorageProvider', '$sessionStorageProvider',
+  ])
+  .config(['$localStorageProvider', '$sessionStorageProvider',
     function ($localStorageProvider, $sessionStorageProvider) {
-        $localStorageProvider.setKeyPrefix('RiseVision-');
-        $sessionStorageProvider.setKeyPrefix('RiseVision-');
+      $localStorageProvider.setKeyPrefix('RiseVision-');
+      $sessionStorageProvider.setKeyPrefix('RiseVision-');
     }
-])
-    .run(['$window',
+  ])
+  .run(['$window',
     function ($window) {
-        if ($window.Stretchy && $window.Stretchy.selectors) {
-            $window.Stretchy.selectors.filter = '.input-stretchy, .input-stretchy *';
-        }
+      if ($window.Stretchy && $window.Stretchy.selectors) {
+        $window.Stretchy.selectors.filter = '.input-stretchy, .input-stretchy *';
+      }
     }
-])
-    .run(['$rootScope', '$state', '$exceptionHandler',
+  ])
+  .run(['$rootScope', '$state', '$exceptionHandler',
     function ($rootScope, $state, $exceptionHandler) {
-        $rootScope.$on('risevision.user.signedOut', function () {
-            $state.go('common.auth.unauthorized');
-        });
-        $rootScope.$on('$stateChangeSuccess', function (event, toState) {
-            if (toState.name === 'apps.displays.alerts' ||
-                toState.name.indexOf('apps.editor.workspace') !== -1 ||
-                toState.name.indexOf('apps.storage') !== -1) {
-                $rootScope.showWhiteBackground = false;
-            }
-            else {
-                $rootScope.showWhiteBackground = true;
-            }
-        });
-        $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, err) {
-            $exceptionHandler(err, 'UI Router Error.', true);
-        });
-        $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
-            if ($state.current.name === 'apps.schedules.list' ||
-                $state.current.name === 'apps.editor.list' ||
-                $state.current.name === 'apps.displays.list' ||
-                $state.current.name === 'apps.displays.alerts' ||
-                $state.current.name === 'apps.storage.home' ||
-                $state.current.name === 'apps.home') {
-                $state.go($state.current, null, {
-                    reload: true
-                });
-            }
-            else if (($state.current.name.indexOf('apps.purchase') !== -1 ||
-                $state.current.name.indexOf('apps.billing') !== -1) &&
-                $state.current.forceAuth !== false) {
-                $state.go('apps.billing.home', null, {
-                    reload: true
-                });
-            }
-        });
+
+      $rootScope.$on('risevision.user.signedOut', function () {
+        $state.go('common.auth.unauthorized');
+      });
+
+      $rootScope.$on('$stateChangeSuccess', function (event, toState) {
+        if (toState.name === 'apps.displays.alerts' ||
+          toState.name.indexOf('apps.editor.workspace') !== -1 ||
+          toState.name.indexOf('apps.storage') !== -1) {
+          $rootScope.showWhiteBackground = false;
+        } else {
+          $rootScope.showWhiteBackground = true;
+        }
+      });
+
+      $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, err) {
+        $exceptionHandler(err, 'UI Router Error.', true);
+      });
+
+      $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
+        if ($state.current.name === 'apps.schedules.list' ||
+          $state.current.name === 'apps.editor.list' ||
+          $state.current.name === 'apps.displays.list' ||
+          $state.current.name === 'apps.displays.alerts' ||
+          $state.current.name === 'apps.storage.home' ||
+          $state.current.name === 'apps.home') {
+
+          $state.go($state.current, null, {
+            reload: true
+          });
+        } else if (($state.current.name.indexOf('apps.purchase') !== -1 ||
+            $state.current.name.indexOf('apps.billing') !== -1) &&
+          $state.current.forceAuth !== false) {
+
+          $state.go('apps.billing.home', null, {
+            reload: true
+          });
+        }
+      });
     }
-])
-    .config(function ($provide) {
-    // function isUnderProtractor() {
-    // 	var nav = window.navigator;
-    // 	var lowercasedUserAgent = nav.userAgent;
-    // 	return !lowercasedUserAgent || lowercasedUserAgent.indexOf('protractor') > -1;
-    // }
-    // if (isUnderProtractor()) {
-    $provide.decorator('$timeout', ['$interval', '$delegate', function ($interval, $delegate) {
-            var newTimeout = function (fn, delay, invokeApply, pass) {
-                if (!delay)
-                    return $interval(fn, delay, 1, invokeApply, pass);
-                else
-                    return $delegate(fn, delay, invokeApply, pass);
-            };
-            newTimeout.cancel = $delegate.cancel;
-            console.error('mocked timeout');
-            return newTimeout;
-        }]);
-    // }
-})
-    .run(['$rootScope', '$modal', '$modalStack', 'canAccessApps', 'userState',
+  ])
+  .run(['$rootScope', '$modal', '$modalStack', 'canAccessApps', 'userState',
     function ($rootScope, $modal, $modalStack, canAccessApps, userState) {
-        var $modalInstance;
-        $rootScope.$on('$stateChangeStart', function (event) {
-            if (userState.isRiseVisionUser() && !$modalInstance) {
-                $modalStack.dismissAll();
-            }
-        });
-        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-            if (toState.name === 'apps.users.add') {
-                canAccessApps().then(function () {
-                    $modalInstance = $modal.open({
-                        templateUrl: 'partials/common-header/user-settings-modal.html',
-                        controller: 'AddUserModalCtrl',
-                        resolve: {
-                            companyId: function () {
-                                return userState.getSelectedCompanyId();
-                            }
-                        }
-                    })
-                        .result.finally(function () {
-                        $modalInstance = null;
-                    });
-                });
-                if (fromState.name) {
-                    event.preventDefault();
+      var $modalInstance;
+
+      $rootScope.$on('$stateChangeStart', function (event) {
+        if (userState.isRiseVisionUser() && !$modalInstance) {
+          $modalStack.dismissAll();
+        }
+      });
+
+      $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+        if (toState.name === 'apps.users.add') {
+          canAccessApps().then(function () {
+            $modalInstance = $modal.open({
+                templateUrl: 'partials/common-header/user-settings-modal.html',
+                controller: 'AddUserModalCtrl',
+                resolve: {
+                  companyId: function () {
+                    return userState.getSelectedCompanyId();
+                  }
                 }
-            }
-        });
+              })
+              .result.finally(function () {
+                $modalInstance = null;
+              });
+          });
+
+          if (fromState.name) {
+            event.preventDefault();
+          }
+        }
+      });
     }
-]);
-//# sourceMappingURL=app.module.ajs.js.map
+  ]);

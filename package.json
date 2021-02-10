@@ -5,12 +5,14 @@
   "main": "gulpfile.js",
   "scripts": {
     "ng": "ng",
-    "ng-start": "ng serve",
-    "ng-build": "ng build --prod",
+    "preng-start": "gulp config",
+    "ng-start": "ng serve --port 8000",
+    "preng-build": "gulp build-cli",
+    "ng-build": "ng build --prod --delete-output-path false",
     "ng-test": "ng test",
     "ng-lint": "ng lint",
     "ng-e2e": "ng e2e",
-    "ng-dist": "http-server ./dist",
+    "ng-dist": "http-server ./dist/ -a localhost -p 8000 -c-1",
     "ci-build": "gulp build",
     "test": "gulp test",
     "test-e2e": "gulp test:e2e",
@@ -39,7 +41,6 @@
     "angular-in-memory-web-api": "~0.3.0",
     "bower": "^1.8.12",
     "compressorjs": "^1.0.6",
-    "systemjs": "0.19.40",
     "tus-js-client": "^2.0.0-1"
   },
   "devDependencies": {
@@ -71,7 +72,6 @@
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-folders-4x": "^1.0.1",
-    "gulp-inject": "^5.0.5",
     "gulp-htmlmin": "5.0.1",
     "gulp-jsbeautifier": "^3.0.1",
     "gulp-jshint": "^2.1.0",
@@ -103,7 +103,6 @@
     "typescript": "~3.8.3",
     "rimraf": "^2.5.4",
     "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git",
-    "systemjs-builder": "^0.16.15",
     "widget-tester": "git://github.com/Rise-Vision/widget-tester.git#feature/angular-2"
   },
   "repository": {

@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/rise-vision-apps",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -62,7 +62,7 @@
               "src/bower_components/angularjs-slider/dist/rzslider.min.js",
               "src/bower_components/oidc-client/dist/oidc-client.js",
 
-              "src/vendor/@shopify/draggable/draggable.bundle.js",
+              "node_modules/@shopify/draggable/lib/draggable.bundle.js",
               "src/bower_components/stretchy/stretchy.js",
               "src/bower_components/xmlToJSON.js/lib/xmlToJSON.js",
 
@@ -534,8 +534,8 @@
               "src/scripts/storage/services/svc-file-retriever.js",
               "src/scripts/storage/services/svc-pending-operations-factory.js",
               "src/scripts/storage/services/svc-encoding.js",
-              "src/vendor/tus/tus.min.js",
-              "src/vendor/compressor/compressor.min.js",
+              "node_modules/tus-js-client/dist/tus.min.js",
+              "node_modules/compressorjs/dist/compressor.min.js",
 
               "src/scripts/storage/filters/ftr-filters.js",
               "src/scripts/storage/directives/dtv-storage-selector.js",
