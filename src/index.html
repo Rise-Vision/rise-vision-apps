@@ -39,19 +39,6 @@
   <meta name="twitter:image:src" content="https://s3.amazonaws.com/Rise-Images/landing-page/rv-image.png">
   <meta name="twitter:url" content="https://apps.risevision.com">
 
-  <!-- angular2 dependencies -->
-  <script src="/node_modules/core-js/client/shim.min.js"></script>
-  <script src="/node_modules/zone.js/dist/zone.js"></script>
-  <script src="/node_modules/systemjs/dist/system.src.js"></script>
-
-  <script src="/systemjs.config.js"></script>
-
-  
-
-  <script>
-    System.import('/src/main.js');
-  </script>
-
 </head>
 <body ng-class="{'gray-bg': !showWhiteBackground}">
   <!-- Common Header -->
@@ -60,8 +47,6 @@
   <div ui-view></div>
 
   <app-root></app-root>
-
-  <app-hi></app-hi>
 
 
   <!-- external libraries -->

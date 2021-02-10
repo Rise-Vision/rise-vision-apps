@@ -1,0 +1,669 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "rise-vision-apps": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/rise-vision-apps",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/images"
+            ],
+            "styles": [
+              "src/scss/app.scss",
+              "src/bower_components/angular-bootstrap-colorpicker/css/colorpicker.css",
+              "src/bower_components/codemirror/lib/codemirror.css",
+              "src/bower_components/codemirror/theme/twilight.css",
+              "src/bower_components/ng-tags-input/ng-tags-input.min.css",
+              "src/bower_components/ng-tags-input/ng-tags-input.bootstrap.min.css",
+              "src/bower_components/angularjs-slider/dist/rzslider.css"
+            ],
+            "scripts": [
+              "src/bower_components/jquery/dist/jquery.js",
+              "src/bower_components/angular/angular.js",
+              "src/bower_components/angular-sanitize/angular-sanitize.js",
+              "src/bower_components/angular-animate/angular-animate.js",
+              "src/bower_components/angular-touch/angular-touch.js",
+              "src/bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
+              "src/bower_components/angular-ui-router/release/angular-ui-router.js",
+              "src/bower_components/angular-translate/angular-translate.js",
+              "src/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js",
+              "src/bower_components/checklist-model/checklist-model.js",
+              "src/bower_components/ngstorage/ngStorage.js",
+              "src/bower_components/angular-spinner/dist/angular-spinner.js",
+              "src/bower_components/angular-cookies/angular-cookies.js",
+              "src/bower_components/lodash/dist/lodash.js",
+              "src/bower_components/ng-csv/build/ng-csv.js",
+              "src/bower_components/ng-tags-input/ng-tags-input.js",
+              "src/bower_components/oclazyload/dist/ocLazyLoad.js",
+              "src/bower_components/angular-md5/angular-md5.min.js",
+              "src/bower_components/angular-local-storage/dist/angular-local-storage.js",
+              "src/bower_components/angular-messages/angular-messages.js",
+              "src/bower_components/moment/moment.js",
+              "src/bower_components/angularjs-slider/dist/rzslider.min.js",
+              "src/bower_components/oidc-client/dist/oidc-client.js",
+
+              "src/vendor/@shopify/draggable/draggable.bundle.js",
+              "src/bower_components/stretchy/stretchy.js",
+              "src/bower_components/xmlToJSON.js/lib/xmlToJSON.js",
+
+              "src/bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
+
+              "src/bower_components/codemirror/lib/codemirror.js",
+              "src/bower_components/codemirror/mode/xml/xml.js",
+              "src/bower_components/codemirror/mode/javascript/javascript.js",
+              "src/bower_components/codemirror/mode/css/css.js",
+              "src/bower_components/codemirror/mode/htmlmixed/htmlmixed.js",
+
+              "src/bower_components/angular-ui-codemirror/ui-codemirror.js",
+
+              "src/bower_components/jszip/dist/jszip.js",
+
+              "src/bower_components/angular-truncate/src/truncate.js",
+
+              "src/bower_components/angular-slugify/angular-slugify.js",
+
+              "src/tmp/partials.js",
+
+              "src/scripts/common-header/dtv-common-header.js",
+              "src/scripts/common-header/config/config.js",
+
+              "src/scripts/common-header/controllers/ctr-auth-buttons.js",
+              "src/scripts/common-header/controllers/ctr-close-frame.js",
+              "src/scripts/common-header/controllers/ctr-company-buttons.js",
+              "src/scripts/common-header/controllers/ctr-company-icp-modal.js",
+              "src/scripts/common-header/controllers/ctr-company-role-modal.js",
+              "src/scripts/common-header/controllers/ctr-company-settings-modal.js",
+              "src/scripts/common-header/controllers/ctr-company-users-modal.js",
+              "src/scripts/common-header/controllers/ctr-global-alerts.js",
+              "src/scripts/common-header/controllers/ctr-move-company-modal.js",
+              "src/scripts/common-header/controllers/ctr-plan-banner.js",
+              "src/scripts/common-header/controllers/ctr-register-button.js",
+              "src/scripts/common-header/controllers/ctr-safe-delete-modal.js",
+              "src/scripts/common-header/controllers/ctr-signout-button.js",
+              "src/scripts/common-header/controllers/ctr-signout-modal.js",
+              "src/scripts/common-header/controllers/ctr-subcompany-banner.js",
+              "src/scripts/common-header/controllers/ctr-subcompany-modal.js",
+              "src/scripts/common-header/controllers/ctr-subcompany-selector-modal.js",
+              "src/scripts/common-header/controllers/ctr-test-company-banner.js",
+              "src/scripts/common-header/controllers/ctr-user-add-modal.js",
+              "src/scripts/common-header/controllers/ctr-user-settings-modal.js",
+
+              "src/scripts/common-header/directives/dtv-common-header-height.js",
+              "src/scripts/common-header/directives/dtv-company-buttons.js",
+              "src/scripts/common-header/directives/dtv-emails-field.js",
+              "src/scripts/common-header/directives/dtv-empty-select-parser.js",
+              "src/scripts/common-header/directives/dtv-integer-parser.js",
+              "src/scripts/common-header/directives/dtv-link-cid.js",
+              "src/scripts/common-header/directives/dtv-require-role.js",
+              "src/scripts/common-header/directives/dtv-website-validator.js",
+              "src/scripts/common-header/directives/dtv-email-validator.js",
+
+              "src/scripts/common-header/filters/ftr-supress-zero.js",
+
+              "src/scripts/common-header/services/svc-account.js",
+              "src/scripts/common-header/services/svc-company-icp.js",
+              "src/scripts/common-header/services/svc-company-settings-factory.js",
+              "src/scripts/common-header/services/svc-cookie-tester.js",
+              "src/scripts/common-header/services/svc-data-gadgets.js",
+              "src/scripts/common-header/services/svc-geodata.js",
+              "src/scripts/common-header/services/svc-registration.js",
+              "src/scripts/common-header/services/svc-store-service.js",
+              "src/scripts/common-header/services/svc-help-widget-factory.js",
+              "src/scripts/common-header/services/svc-address-factory.js",
+              "src/scripts/common-header/services/svc-address.js",
+              "src/scripts/common-header/services/svc-contact.js",
+
+              "src/scripts/components/action-sheet.js",
+              "src/scripts/components/off-canvas-nav.js",
+
+              "src/scripts/components/i18n/app.js",
+
+              "src/scripts/components/gapi-loader/svc-gapi.js",
+              "src/scripts/components/gapi-loader/svc-util.js",
+
+              "src/scripts/components/core-api-client/svc-call-endpoint.js",
+              "src/scripts/components/core-api-client/svc-company.js",
+              "src/scripts/components/core-api-client/svc-core-util.js",
+              "src/scripts/components/core-api-client/svc-countries.js",
+              "src/scripts/components/core-api-client/svc-display.js",
+              "src/scripts/components/core-api-client/svc-store-authorization.js",
+              "src/scripts/components/core-api-client/svc-store-product.js",
+              "src/scripts/components/core-api-client/svc-user.js",
+
+              "src/scripts/components/ui-flow/app.js",
+              "src/scripts/components/ui-flow/svc-ui-flow.js",
+
+              "src/scripts/components/logging/app.js",
+              "src/scripts/components/logging/svc-external-logging.js",
+              "src/scripts/components/logging/svc-batch-operations-tracker.js",
+              "src/scripts/components/logging/svc-big-query-logging.js",
+              "src/scripts/components/logging/svc-analytics-factory.js",
+              "src/scripts/components/logging/svc-hubspot.js",
+              "src/scripts/components/logging/svc-exception-handler.js",
+              "src/scripts/components/logging/svc-company-tracker.js",
+              "src/scripts/components/logging/svc-user-tracker.js",
+              "src/scripts/components/logging/svc-launcher-tracker.js",
+              "src/scripts/components/logging/svc-schedule-tracker.js",
+              "src/scripts/components/logging/svc-display-tracker.js",
+              "src/scripts/components/logging/svc-presentation-tracker.js",
+              "src/scripts/components/logging/svc-purchase-flow-tracker.js",
+              "src/scripts/components/logging/svc-openid-tracker.js",
+
+              "src/scripts/components/userstate/app.js",
+              "src/scripts/components/userstate/controllers/ctr-login.js",
+              "src/scripts/components/userstate/controllers/ctr-request-password-reset.js",
+              "src/scripts/components/userstate/controllers/ctr-reset-password-confirm.js",
+              "src/scripts/components/userstate/controllers/ctr-registration.js",
+              "src/scripts/components/userstate/services/svc-access.js",
+              "src/scripts/components/userstate/services/svc-companystate.js",
+              "src/scripts/components/userstate/services/svc-custom-auth-factory.js",
+              "src/scripts/components/userstate/services/svc-google-auth-factory.js",
+              "src/scripts/components/userstate/services/svc-rv-token-store.js",
+              "src/scripts/components/userstate/services/svc-selected-company-url-handler.js",
+              "src/scripts/components/userstate/services/svc-url-state.js",
+              "src/scripts/components/userstate/services/svc-user-auth-factory.js",
+              "src/scripts/components/userstate/services/svc-userauth.js",
+              "src/scripts/components/userstate/services/svc-userstate.js",
+              "src/scripts/components/userstate/services/svc-openid-connect.js",
+
+              "src/scripts/components/last-modified/dtv-last-modified.js",
+              "src/scripts/components/last-modified/ftr-username.js",
+
+              "src/scripts/components/loading/app.js",
+              "src/scripts/components/loading/dtv-global-spinner.js",
+              "src/scripts/components/loading/dtv-loading.js",
+              "src/scripts/components/loading/svc-loading.js",
+
+              "src/scripts/components/plans/app.js",
+              "src/scripts/components/plans/directives/dtv-rv-on.js",
+              "src/scripts/components/plans/services/svc-currency.js",
+              "src/scripts/components/plans/services/svc-plans.js",
+              "src/scripts/components/plans/services/svc-current-plan-factory.js",
+              "src/scripts/components/plans/services/svc-plans-factory.js",
+
+              "src/scripts/components/password-input/dtv-password-input.js",
+
+              "src/scripts/components/search-filter/dtv-search-filter.js",
+
+              "src/scripts/components/scrolling-list/app.js",
+
+              "src/scripts/components/scrolling-list/directives/dtv-scroll-event.js",
+              "src/scripts/components/scrolling-list/directives/dtv-scrolling-list.js",
+              "src/scripts/components/scrolling-list/directives/dtv-batch-operations.js",
+
+              "src/scripts/components/scrolling-list/controllers/ctr-bulk-delete-modal.js",
+
+              "src/scripts/components/scrolling-list/services/svc-get-error.js",
+              "src/scripts/components/scrolling-list/services/svc-process-error-code.js",
+              "src/scripts/components/scrolling-list/services/svc-batch-operations.js",
+              "src/scripts/components/scrolling-list/services/svc-scrolling-list-service.js",
+
+              "src/scripts/components/stop-event/dtv-stop-event.js",
+
+              "src/scripts/components/message-box/ctr-message-box.js",
+              "src/scripts/components/message-box/svc-message-box.js",
+
+              "src/scripts/components/svg-icon/dtv-svg-icon.js",
+
+              "src/scripts/components/store-products/app.js",
+              "src/scripts/components/store-products/ctr-store-content-modal.js",
+
+              "src/scripts/components/search-filter/dtv-search-filter.js",
+
+              "src/scripts/components/focus-me/dtv-focus-me.js",
+
+              "src/scripts/components/confirm-modal/ctr-confirm-modal.js",
+              "src/scripts/components/confirm-modal/svc-confirm-modal.js",
+
+              "src/scripts/components/stop-event/dtv-stop-event.js",
+
+              "src/scripts/components/timeline/app.js",
+              "src/scripts/components/timeline/ctr-timeline-modal.js",
+              "src/scripts/components/timeline/dtv-date-compare.js",
+              "src/scripts/components/timeline/dtv-datepicker-localdate.js",
+              "src/scripts/components/timeline/dtv-month-dropdown.js",
+              "src/scripts/components/timeline/dtv-timeline-textbox.js",
+              "src/scripts/components/timeline/dtv-week-dropdown.js",
+              "src/scripts/components/timeline/dtv-weekday-dropdown.js",
+              "src/scripts/components/timeline/svc-timeline-description.js",
+              "src/scripts/components/timeline/svc-timeline-factory.js",
+
+              "src/scripts/components/timeline-basic/app.js",
+              "src/scripts/components/timeline-basic/ctr-timeline-modal.js",
+              "src/scripts/components/timeline-basic/dtv-timeline-textbox.js",
+              "src/scripts/components/timeline-basic/svc-timeline-description.js",
+              "src/scripts/components/timeline-basic/svc-timeline-factory.js",
+
+              "src/scripts/components/distribution-selector/app.js",
+              "src/scripts/components/distribution-selector/ctr-distribution-list.js",
+              "src/scripts/components/distribution-selector/ctr-select-distribution-modal.js",
+              "src/scripts/components/distribution-selector/dtv-distribution-selector.js",
+              "src/scripts/components/distribution-selector/svc-display.js",
+
+              "src/scripts/components/background-image-setting/dtv-background-image-setting.js",
+              "src/scripts/components/background-image-setting/dtv-background-image.js",
+              "src/scripts/components/background-image-setting/dtv-repeat-setting.js",
+
+              "src/scripts/components/position-setting/dtv-position-setting.js",
+
+              "src/scripts/components/url-field/dtv-url-field.js",
+              "src/scripts/components/url-field/dtv-file-type-validator.js",
+              "src/scripts/components/url-field/dtv-response-header-validator.js",
+              "src/scripts/components/url-field/dtv-url-pattern-validator.js",
+              "src/scripts/components/url-field/dtv-http-validator.js",
+              "src/scripts/components/url-field/svc-insecure-url.js",
+              "src/scripts/components/url-field/svc-response-header-analyzer.js",
+
+              "src/scripts/config/config.js",
+              "src/scripts/app.module.ajs.js",
+
+              "src/scripts/common/app.js",
+              "src/scripts/common/controllers/ctr-app.js",
+              "src/scripts/common/controllers/ctr-bulk-edit-modal.js",
+
+              "src/scripts/common/directives/dtv-page-title.js",
+              "src/scripts/common/directives/dtv-rv-sortable.js",
+              "src/scripts/common/directives/dtv-guid-validator.js",
+              "src/scripts/common/directives/dtv-tooltip-digest-on-resize.js",
+              "src/scripts/common/directives/dtv-stretchy-input.js",
+              "src/scripts/common/directives/dtv-yes-no-toggle.js",
+              "src/scripts/common/directives/dtv-madero-checkbox.js",
+              "src/scripts/common/directives/dtv-weekly-templates.js",
+
+              "src/scripts/common/services/svc-cached-request.js",
+              "src/scripts/common/services/svc-gadgets-api.js",
+              "src/scripts/common/services/svc-resource-loader.js",
+              "src/scripts/common/services/svc-company-assets-factory.js",
+              "src/scripts/common/services/svc-outside-click-handler.js",
+
+              "src/scripts/billing/app.js",
+
+              "src/scripts/billing/services/svc-billing.js",
+              "src/scripts/billing/services/svc-subscription-factory.js",
+              "src/scripts/billing/services/svc-add-payment-source-factory.js",
+              "src/scripts/billing/services/svc-invoice-factory.js",
+
+              "src/scripts/billing/directives/dtv-share-url-button.js",
+              "src/scripts/billing/directives/dtv-edit-po-number.js",
+
+              "src/scripts/billing/filters/ftr-subscription-description.js",
+
+              "src/scripts/billing/controllers/ctr-billing.js",
+              "src/scripts/billing/controllers/ctr-unpaid-invoices.js",
+              "src/scripts/billing/controllers/ctr-subscription.js",
+              "src/scripts/billing/controllers/ctr-add-payment-source.js",
+              "src/scripts/billing/controllers/ctr-invoice.js",
+              "src/scripts/billing/controllers/ctr-share-url.js",
+
+              "src/scripts/purchase/app.js",
+
+              "src/scripts/purchase/controllers/ctr-purchase.js",
+              "src/scripts/purchase/controllers/ctr-update-subscription.js",
+
+              "src/scripts/purchase/directives/dtv-address-form.js",
+              "src/scripts/purchase/directives/dtv-billing-address.js",
+              "src/scripts/purchase/directives/dtv-checkout-success.js",
+              "src/scripts/purchase/directives/dtv-payment-methods.js",
+              "src/scripts/purchase/directives/dtv-payment-method-form.js",
+              "src/scripts/purchase/directives/dtv-credit-card-form.js",
+              "src/scripts/purchase/directives/dtv-plan-picker.js",
+              "src/scripts/purchase/directives/dtv-province-validator.js",
+              "src/scripts/purchase/directives/dtv-purchase-summary.js",
+              "src/scripts/purchase/directives/dtv-purchase-footer.js",
+              "src/scripts/purchase/directives/dtv-tax-exemption.js",
+              "src/scripts/purchase/directives/dtv-suggest-general-delivery.js",
+              "src/scripts/purchase/directives/dtv-year-selector.js",
+
+              "src/scripts/purchase/filters/ftr-card-description.js",
+              "src/scripts/purchase/filters/ftr-country-name.js",
+              "src/scripts/purchase/filters/ftr-padded-month.js",
+
+              "src/scripts/purchase/services/svc-pricing-factory.js",
+              "src/scripts/purchase/services/svc-tax-exemption-factory.js",
+              "src/scripts/purchase/services/svc-purchase-factory.js",
+              "src/scripts/purchase/services/svc-update-subscription-factory.js",
+              "src/scripts/purchase/services/svc-credit-card-factory.js",
+              "src/scripts/purchase/services/svc-payment-sources-factory.js",
+              "src/scripts/purchase/services/svc-stripe-elements-factory.js",
+              "src/scripts/purchase/services/svc-stripe-loader.js",
+              "src/scripts/purchase/services/svc-stripe.js",
+
+              "src/scripts/schedules/app.js",
+              "src/scripts/schedules/services/svc-schedule.js",
+              "src/scripts/schedules/services/svc-schedule-factory.js",
+              "src/scripts/schedules/services/svc-playlist-factory.js",
+              "src/scripts/schedules/services/svc-create-first-schedule.js",
+              "src/scripts/schedules/services/svc-schedule-selector-factory.js",
+
+              "src/scripts/schedules/directives/dtv-schedule-fields.js",
+              "src/scripts/schedules/directives/dtv-schedule-selector.js",
+              "src/scripts/schedules/directives/dtv-preview-selector.js",
+              "src/scripts/schedules/directives/dtv-share-schedule-button.js",
+              "src/scripts/schedules/directives/dtv-playlist.js",
+              "src/scripts/schedules/controllers/ctr-add-to-schedule-modal.js",
+              "src/scripts/schedules/controllers/ctr-schedules-list.js",
+              "src/scripts/schedules/controllers/ctr-schedule-details.js",
+              "src/scripts/schedules/controllers/ctr-schedule-add.js",
+              "src/scripts/schedules/controllers/ctr-schedule-picker-modal.js",
+              "src/scripts/schedules/controllers/ctr-playlist-item-modal.js",
+              "src/scripts/schedules/controllers/ctr-shared-schedule-popover.js",
+
+              "src/scripts/displays/app.js",
+              "src/scripts/displays/services/svc-display.js",
+              "src/scripts/displays/services/svc-display-factory.js",
+              "src/scripts/displays/services/svc-display-list-operations.js",
+              "src/scripts/displays/services/svc-display-activation-tracker.js",
+              "src/scripts/displays/services/svc-display-summary-factory.js",
+              "src/scripts/displays/services/svc-player-actions-factory.js",
+              "src/scripts/displays/services/svc-screenshot-factory.js",
+              "src/scripts/displays/services/svc-screenshot-requester.js",
+              "src/scripts/displays/services/svc-player-pro-factory.js",
+              "src/scripts/displays/services/svc-player-license-factory.js",
+              "src/scripts/displays/services/svc-display-control-factory.js",
+              "src/scripts/displays/services/svc-display-email.js",
+              "src/scripts/displays/services/svc-time-parser.js",
+              "src/scripts/displays/services/svc-alerts-factory.js",
+              "src/vendor/primus/Primus.js",
+              "src/scripts/displays/services/svc-primus.js",
+
+              "src/scripts/displays/filters/ftr-status.js",
+              "src/scripts/displays/filters/ftr-resolution.js",
+
+              "src/scripts/displays/directives/dtv-display-email.js",
+              "src/scripts/displays/directives/dtv-display-fields.js",
+              "src/scripts/displays/directives/dtv-display-address.js",
+              "src/scripts/displays/directives/dtv-select-on-focus.js",
+              "src/scripts/displays/directives/dtv-screenshot.js",
+              "src/scripts/displays/directives/dtv-restart-time-picker.js",
+
+              "src/scripts/displays/controllers/ctr-displays-list.js",
+              "src/scripts/displays/controllers/ctr-display-details.js",
+              "src/scripts/displays/controllers/ctr-display-add.js",
+              "src/scripts/displays/controllers/ctr-alerts.js",
+              "src/scripts/displays/controllers/ctr-bulk-display-control-modal.js",
+              "src/scripts/displays/controllers/ctr-display-control-modal.js",
+
+              "src/scripts/editor/app.js",
+              "src/scripts/editor/services/svc-presentation.js",
+              "src/scripts/editor/services/svc-presentation-factory.js",
+              "src/scripts/editor/services/svc-html-parser.js",
+              "src/scripts/editor/services/svc-presentation-parser.js",
+              "src/scripts/editor/services/svc-distribution-parser.js",
+              "src/scripts/editor/services/svc-background-parser.js",
+
+              "src/scripts/editor/controllers/ctr-presentation-list.js",
+              "src/scripts/editor/controllers/ctr-shared-templates-modal.js",
+              "src/scripts/editor/controllers/ctr-presentation-selector-modal.js",
+              "src/scripts/editor/controllers/ctr-presentation-multi-selector-modal.js",
+
+              "src/scripts/editor/services/svc-artboard-factory.js",
+              "src/scripts/editor/services/svc-editor-factory.js",
+              "src/scripts/editor/services/svc-placeholder-playlist-factory.js",
+              "src/scripts/editor/services/svc-placeholders-factory.js",
+              "src/scripts/editor/services/svc-placeholder-factory.js",
+              "src/scripts/editor/services/svc-playlist-item-factory.js",
+              "src/scripts/editor/services/svc-presentation-properties-factory.js",
+              "src/scripts/editor/services/svc-presentation-utils.js",
+              "src/scripts/editor/services/svc-show-legacy-warning.js",
+              "src/scripts/editor/services/svc-template.js",
+              "src/scripts/editor/controllers/ctr-workspace.js",
+              "src/scripts/editor/controllers/ctr-artboard.js",
+              "src/scripts/editor/controllers/ctr-html-editor.js",
+              "src/scripts/editor/controllers/ctr-presentation-properties-modal.js",
+              "src/scripts/editor/controllers/ctr-widget-item-modal.js",
+              "src/scripts/editor/controllers/ctr-playlist-item-modal.js",
+
+              "src/scripts/editor/services/svc-gadget.js",
+              "src/scripts/editor/services/svc-gadget-factory.js",
+              "src/scripts/editor/services/svc-products-factory.js",
+              "src/scripts/editor/controllers/ctr-store-templates-modal.js",
+              "src/scripts/editor/services/svc-settings-factory.js",
+              "src/scripts/editor/services/svc-widget-modal-factory.js",
+              "src/scripts/editor/services/svc-widget-utils.js",
+              "src/scripts/editor/services/svc-widget-renderer.js",
+              "src/scripts/editor/services/svc-widget-professional-list.js",
+              "src/scripts/editor/controllers/ctr-widget-modal.js",
+              "src/scripts/editor/controllers/ctr-product-details-modal.js",
+              "src/scripts/editor/controllers/ctr-unsaved-changes-modal.js",
+              "src/scripts/editor/controllers/ctr-presentation-item-modal.js",
+
+              "src/scripts/editor/filters/ftr-presentation-status.js",
+              "src/scripts/editor/filters/ftr-presentation-link.js",
+              "src/scripts/editor/filters/ftr-template-category.js",
+
+              "src/scripts/editor/directives/dtv-toolbar.js",
+              "src/scripts/editor/directives/dtv-sidebar.js",
+              "src/scripts/editor/directives/dtv-footer.js",
+              "src/scripts/editor/directives/dtv-placeholders-list.js",
+              "src/scripts/editor/directives/dtv-placeholder-playlist.js",
+              "src/scripts/editor/directives/dtv-placeholder-settings.js",
+              "src/scripts/editor/directives/dtv-placeholder-name-validator.js",
+              "src/scripts/editor/directives/dtv-last-revised.js",
+              "src/scripts/editor/directives/dtv-resolution-selector.js",
+              "src/scripts/editor/directives/dtv-workspace-element.js",
+              "src/scripts/editor/directives/dtv-artboard-presentation.js",
+              "src/scripts/editor/directives/dtv-artboard-placeholder.js",
+              "src/scripts/editor/directives/dtv-placeholder-drag.js",
+              "src/scripts/editor/directives/dtv-placeholder-resize.js",
+              "src/scripts/editor/directives/dtv-presentation-name.js",
+
+              "src/scripts/template-editor/app.js",
+              "src/scripts/template-editor/services/svc-template-editor-factory.js",
+              "src/scripts/template-editor/services/svc-template-editor-utils.js",
+              "src/scripts/template-editor/services/svc-auto-save-service.js",
+              "src/scripts/template-editor/services/svc-blueprint-factory.js",
+              "src/scripts/template-editor/services/svc-basic-storage-selector-factory.js",
+              "src/scripts/template-editor/services/svc-financial-license-factory.js",
+
+              "src/scripts/template-editor/components/services/svc-branding-factory.js",
+              "src/scripts/template-editor/components/services/svc-instrument-search.js",
+              "src/scripts/template-editor/components/services/svc-logo-image-factory.js",
+              "src/scripts/template-editor/components/services/svc-base-image-factory.js",
+              "src/scripts/template-editor/components/services/svc-slides-url-validation.js",
+              "src/scripts/template-editor/components/services/svc-rss-feed-validation.js",
+              "src/scripts/template-editor/components/services/svc-file-existence-check.js",
+              "src/scripts/template-editor/components/services/svc-file-metadata-utils.js",
+              "src/scripts/template-editor/components/services/svc-component-utils.js",
+              "src/scripts/template-editor/components/services/svc-timezones.js",
+              "src/scripts/template-editor/components/services/svc-twitter-credentials-validation.js",
+
+              "src/scripts/template-editor/controllers/ctr-template-editor.js",
+
+              "src/scripts/template-editor/filters/ftr-encode-link.js",
+
+              "src/scripts/template-editor/directives/dtv-attribute-editor.js",
+              "src/scripts/template-editor/directives/dtv-attribute-list.js",
+              "src/scripts/template-editor/directives/dtv-editor-preview-holder.js",
+              "src/scripts/template-editor/directives/dtv-footer.js",
+              "src/scripts/template-editor/directives/dtv-toolbar.js",
+              "src/scripts/template-editor/directives/dtv-component.js",
+              "src/scripts/template-editor/directives/dtv-component-icon.js",
+              "src/scripts/template-editor/directives/dtv-basic-storage-selector.js",
+              "src/scripts/template-editor/directives/dtv-basic-uploader.js",
+              "src/scripts/template-editor/directives/dtv-file-entry.js",
+              "src/scripts/template-editor/directives/dtv-empty-file-list.js",
+              "src/scripts/template-editor/directives/dtv-streamline-icon.js",
+              "src/scripts/template-editor/directives/dtv-time-picker.js",
+
+              "src/scripts/template-editor/components/directives/dtv-component-branding.js",
+              "src/scripts/template-editor/components/directives/dtv-component-schedules.js",
+              "src/scripts/template-editor/components/directives/dtv-branding-colors.js",
+              "src/scripts/template-editor/components/directives/dtv-component-financial.js",
+              "src/scripts/template-editor/components/directives/dtv-component-image.js",
+              "src/scripts/template-editor/components/directives/dtv-component-slides.js",
+              "src/scripts/template-editor/components/directives/dtv-component-text.js",
+              "src/scripts/template-editor/components/directives/dtv-component-video.js",
+              "src/scripts/template-editor/components/directives/dtv-component-rss.js",
+              "src/scripts/template-editor/components/directives/dtv-component-counter.js",
+              "src/scripts/template-editor/components/directives/dtv-component-time-date.js",
+              "src/scripts/template-editor/components/directives/dtv-component-colors.js",
+              "src/scripts/template-editor/components/directives/dtv-component-twitter.js",
+              "src/scripts/template-editor/components/directives/dtv-component-weather.js",
+              "src/scripts/template-editor/components/directives/dtv-component-playlist.js",
+
+              "src/scripts/storage/app.js",
+              "src/scripts/storage/services/svc-storage-factory.js",
+              "src/scripts/storage/services/svc-storage-utils.js",
+              "src/scripts/storage/services/svc-file-actions-factory.js",
+              "src/scripts/storage/services/svc-file-upload.js",
+              "src/scripts/storage/services/svc-files-factory.js",
+              "src/scripts/storage/services/svc-storage.js",
+              "src/scripts/storage/services/svc-upload-uri.js",
+              "src/scripts/storage/services/svc-upload-overwrite-warning.js",
+              "src/scripts/storage/services/svc-download-factory.js",
+              "src/scripts/storage/services/svc-file-retriever.js",
+              "src/scripts/storage/services/svc-pending-operations-factory.js",
+              "src/scripts/storage/services/svc-encoding.js",
+              "src/vendor/tus/tus.min.js",
+              "src/vendor/compressor/compressor.min.js",
+
+              "src/scripts/storage/filters/ftr-filters.js",
+              "src/scripts/storage/directives/dtv-storage-selector.js",
+              "src/scripts/storage/directives/dtv-storage-file-select.js",
+              "src/scripts/storage/directives/dtv-storage-breadcrumb.js",
+              "src/scripts/storage/directives/dtv-file-actions.js",
+              "src/scripts/storage/directives/dtv-upload.js",
+              "src/scripts/storage/directives/dtv-pending-operations.js",
+              "src/scripts/storage/directives/dtv-selected-files-count.js",
+              "src/scripts/storage/directives/dtv-empty-state.js",
+              "src/scripts/storage/directives/dtv-thumbnail-image.js",
+
+              "src/scripts/storage/controllers/ctr-files-list.js",
+              "src/scripts/storage/controllers/ctr-storage-selector-modal.js",
+              "src/scripts/storage/controllers/ctr-folder-selector-modal.js",
+              "src/scripts/storage/controllers/ctr-new-folder-modal.js",
+              "src/scripts/storage/controllers/ctr-copy-url-modal.js",
+              "src/scripts/storage/controllers/ctr-break-link-warning-modal.js",
+              "src/scripts/storage/controllers/ctr-rename-modal.js",
+
+              "src/scripts/widgets/app.js",
+              "src/scripts/widgets/common/services/svc-common-settings.js",
+              "src/scripts/widgets/common/services/svc-settings-utils.js",
+              "src/scripts/widgets/common/services/svc-oauthio.js",
+              "src/scripts/widgets/common/services/svc-oauth.js",
+
+              "src/scripts/widgets/common/controllers/ctr-widget-settings-modal.js",
+              "src/scripts/widgets/common/directives/dtv-scroll-on-alerts.js",
+              "src/scripts/widgets/common/directives/dtv-widget-button-toolbar.js",
+
+              "src/scripts/widgets/twitter/app.js",
+              "src/scripts/widgets/twitter/services/svc-twitter-oauth.js",
+              "src/scripts/widgets/twitter/controllers/ctr-twitter-settings.js",
+
+              "src/bower_components/oauthio-web/dist/oauth.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "rise-vision-apps:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "rise-vision-apps:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "rise-vision-apps:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "tsconfig.app.json",
+              "tsconfig.spec.json",
+              "e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "rise-vision-apps:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "rise-vision-apps:serve:production"
+            }
+          }
+        }
+      }
+    }},
+  "defaultProject": "rise-vision-apps"
+}
