@@ -1,0 +1,125 @@
+.pricing-table {
+  display: grid;
+  grid-template-areas: 
+  "planHeader"
+  "planFeatures" 
+  "planFooter";
+  grid-template-columns: 100%;
+  border: 1px solid #CCC;
+  border-radius: 5px;
+}
+#planFeatures {
+  grid-area: planFeatures;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+#planHeader {
+  grid-area: planHeader;
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+  flex-wrap: nowrap;
+}
+
+.planColumn {
+  flex-grow: 1;
+  flex-basis: auto;
+  text-align: center;
+  padding: 1em;
+  border-right: 1px solid #CCC;
+  border-bottom: 1px solid #CCC;
+  display: flex;
+  flex-flow: column;
+  position: relative;
+  box-sizing: border-box;
+}
+.planColumn .planSavings {
+  min-height: 2.5em;
+  line-height: 1.5em;
+  font-weight: 800;
+  color: #1ebb53;
+}
+.planColumn:last-child {
+  border-right: 0;
+}
+.planColumn.currentPlan {
+  box-shadow: 0 0 0 4px #4ab667;
+  border: 0;
+  z-index: 1;
+}
+.planColumn .currentPlanLabel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: #FFF;
+  background: #4ab667;
+  padding: .3em 0;
+}
+.planColumnPrice span {
+  text-decoration:  line-through;
+  opacity: .6;
+  margin-right: .2em;
+}
+.planFeatureColumn {
+  -webkit-column-count: 2; /* Chrome, Safari, Opera */
+  -moz-column-count: 2; /* Firefox */
+  column-count: 2;
+  column-fill: balance;
+  padding: 1em;
+}
+.planFeatureColumnTitle {
+  padding: .8em;
+  text-align: center;
+}
+.planFeatureColumnTitle span {
+  display: block;
+}
+.planFeature {
+  display: inline-block;
+  min-width: 100%;
+  position: relative;
+}
+.featureTitle {
+  padding: .5em 1.5em;
+}
+.featureDescription {
+  display: none;
+}
+
+.planColumnFree .planColumnPrice {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  #planHeader, #planFeatures, #planFooter {
+    flex-direction: row;
+  }
+  #planFooter {
+    grid-area: planFooter;
+    display: flex;
+    align-content: stretch;
+    flex-wrap: nowrap;
+    border-top: 1px solid #CCC;
+  }
+  .planColumn {
+    flex-basis: 0;
+  }
+  .planFeatureColumn {
+    flex-grow: 0;
+    flex-basis: 20%;
+    -webkit-column-count: 1; /* Chrome, Safari, Opera */
+    -moz-column-count: 1; /* Firefox */
+    column-count: 1;
+    border-right: 1px solid #CCC;
+    column-fill: balance;
+  }
+  .planFeatureColumn:last-child {
+    flex-grow: 1;
+    -webkit-column-count: 3; /* Chrome, Safari, Opera */
+    -moz-column-count: 3; /* Firefox */
+    column-count: 3;
+    border-right: 0;
+  }
+}

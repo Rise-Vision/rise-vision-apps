@@ -1,0 +1,61 @@
+.alert
+{
+    &.alert-premium
+    {
+        @include alert-variant($alert-premium-bg, $alert-premium-border, $alert-premium-text);
+    }
+    &.alert-plan
+    {
+        font-size: 13px;
+        margin: 0 !important;
+        padding: 6px;
+        color: #020621;
+        border-radius: 0;
+
+        &.plan-active
+        {
+            border-color: #d6e9c6;
+            background-color: #dff0d8;
+        }
+        &.plan-suspended
+        {
+            background-color: #fcf8e3;
+            border-color: #faebcc;
+        }
+    }
+    &.alert-lighter-gray
+    {
+        @include alert-variant($lighter-gray, $lighter-gray, $text-color);
+    }
+}
+
+.madero-style {
+    &.alert {
+        background-color: white;
+        padding: 20px;
+
+        &.alert-danger {
+            border-color: $danger;
+
+            strong {
+                color: $danger;
+            }
+        }
+
+        &.alert-warning {
+            border-color: $state-warning-text;
+
+            strong {
+                color: $state-warning-text;
+            }
+        }
+
+        &.alert-success {
+            border-color: $madero-green;
+
+            strong {
+                color: $madero-green;
+            }
+        }
+    }
+}

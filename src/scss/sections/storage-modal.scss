@@ -1,0 +1,170 @@
+.storage-modal {
+  .scrollable-list {
+    max-height: calc(100vh - 140px);
+  }
+  .selector-header {
+    margin-bottom: 10px;
+    margin-top: 15px;
+    overflow: hidden;
+    p {
+      line-height: 16px;
+      margin: 0;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+      display: inline-block;
+      vertical-align: middle;
+        &:first-child {
+          display:block;
+        }
+      }
+    }
+
+  /* ==========================================================================
+     Buttons
+     ========================================================================== */
+  .commands {
+    position: relative;
+  }
+
+  .storage-used-info {
+    font-size: 10px;
+    text-align: right;
+    float: right;
+  }
+
+  .current-folder-icon .fa::before {
+    color: $rise-green;
+  }
+
+  #store-modal {
+    .overlay {
+    z-index: $storage-store-overlay-zindex;
+    background-color: #ffffff;
+    }
+  }
+
+  /* ==========================================================================
+     Uploader
+     ========================================================================== */
+  .inline-progress {
+      margin-bottom: 0px;
+  }
+
+  .inline-cancel {
+    float: right; 
+    width: auto; 
+    padding-left: 10px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  tbody tr:first-child td {
+    border-top: none;
+  }
+
+  .panel table {
+    margin-bottom: 0px !important;
+  }
+
+  .panel-heading {
+    cursor: pointer;
+  }
+
+  /* ==========================================================================
+  Thumbnail View
+  ========================================================================== */
+  /**
+   * Single-column layout at mobile resolutions.
+   */
+  .thumbnails {
+    display: none;
+    cursor: pointer;
+  }
+
+  /* Clearfix */
+  .thumbnails:after {
+    clear: both;
+    display: block;
+    content: "";
+  }
+
+  .thumbnail .caption {
+    font-size: 12px;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .thumbnail:hover, .thumbnail.active {
+    background-color: #f5f5f5;
+  }
+
+  .thumbnail.active:hover {
+    background-color: #e8e8e8;
+  }
+
+  /* Media queries
+  ========================================================================== */
+  /**
+   * Three-column layout at tablet resolutions.
+   */
+  @media (min-width: $screen-sm) {
+    .thumbnail {
+      /* Positioning */
+      float: left;
+      /* Display & Box Model */
+      width: 33.33333%;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+    .thumbnail:nth-child(3n+1) {
+      clear: left;
+    }
+  }
+
+  /**
+   * Six-column layout at desktop resolutions.
+   */
+  @media (min-width: $screen-md) {
+    .thumbnail {
+      width: 16.66667%;
+    }
+    .thumbnail:nth-child(3n+1) {
+      clear: none;
+    }
+    .thumbnail:nth-child(6n) {
+      padding-right: 0;
+    }
+    .thumbnail:nth-child(6n+1) {
+      /* Positioning */
+      clear: left;
+      /* Display & Box Model */
+      padding-left: 0;
+    }
+  }
+  
+  .current-folder {
+    line-height: 43px;
+  }
+  .form-group {
+    margin-bottom: 10px;
+  }
+  .non-clickable-file {
+    cursor: default;
+    text-decoration: none;
+  }
+}
+
+tr.blocked-file {
+  position: relative;
+  >td {
+  background: #f7f7f7;
+  cursor: pointer;
+  position: relative;
+    .callout {
+      top:35px;
+      left: 10px;
+    }
+  }
+}

@@ -1,0 +1,35 @@
+.background-group .panel {
+  height: 34px;
+  overflow: hidden;
+  width: 123px;
+  float: right;
+}
+.background-group .control-label, .settings-group .control-label {
+  line-height: 34px;
+  margin: 0;
+  display: block;
+}
+.background-group span {
+  height: 33px;
+  display: block;
+  border-radius: 4px;
+}
+.color-wheel, .color-wheel:hover {
+  background: url("//s3.amazonaws.com/Rise-Images/UI/color_wheel.png") no-repeat center;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 0 4px 4px 0 !important;
+  border-left: none;
+}
+.image-placeholder {
+  width: 123px;
+  height: 123px;
+  background: url('//s3.amazonaws.com/Rise-Images/UI/transp_bg.png') repeat;
+  margin-right: 10px;
+  border-radius: 4px;
+  text-align: center;
+  padding-top:45px;
+  font-size: 32px;
+  border: 1px solid #CCC;
+  line-height: 0px;
+}

@@ -1,0 +1,21 @@
+.counter-container {
+  --date-picker-width: 275px;
+  --radio-group-offset: 29px;
+
+  height: 600px;
+
+  .radio-nested-input-group {
+    width: calc(100% - var(--radio-group-offset));
+    left: var(--radio-group-offset);
+  }
+
+  .rise-date-picker {
+    > ul {
+      left: calc(100% - var(--date-picker-width)) !important;
+    }
+  }
+
+  .radio {
+    margin-bottom: 5px;
+  }
+}

@@ -1,0 +1,21 @@
+@media print {
+  .hidden-print {
+    display: none!important;
+  }
+
+  .visible-print {
+    display: block!important;
+  }
+
+  table.visible-print {
+    display: table;
+  }
+
+  th.visible-print,td.visible-print {
+    display: table-cell!important;
+  }
+
+  tr.visible-print {
+    display: table-row!important;
+  }
+}

@@ -1,0 +1,93 @@
+.storage-selector-backdrop {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: #e7e7e7;
+  opacity: 0.9
+}
+
+.storage-selector-iframe {
+  width: 90%;
+  height: 500px;
+  position: absolute;
+  top: 20%;
+  left: 5%;
+  box-shadow: 0px 5px 15px rgba(0,0,0,.5);
+  border-style: ridge;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,.2);
+  padding: 5px;
+  background-color: #f4f4f4;
+}
+
+.storage-selector-iframe-full {
+  width: 100%;
+  max-height: 100%;
+  position: absolute;
+  border: 0px;
+  padding: 0px 0px 50px;
+  margin-top: 0;
+  overflow: auto;
+  @media (max-width: $screen-sm) {
+    position: relative;
+    padding: 0px;
+  }
+}
+
+.table.filetable td {
+  max-width: 200px; /* Customise it accordingly */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  color: #888;
+}
+
+.table.filetable .check-col, .table-2 .check-col {
+  width: 30px;
+}
+
+.table.filetable .type-col, .table-2 .type-col {
+  width: 130px;
+}
+
+.table.filetable .filesize-col, .table-2 .filesize-col {
+  width: 130px;
+}
+
+.table.filetable .datemod-col, .table-2 .datemod-col {
+  width: 180px;
+}
+
+.table.filetable {
+  input {
+    margin:0;
+  }
+  .copy-url {
+    width: 1px;
+    .btn-link {
+      padding: 0;
+      font-size: 16px;
+    }
+  }
+  .file-name {
+    a {
+      color: #444;
+      .fa::before {
+        margin-right: 5px;
+        font-size: 20px;
+        vertical-align: middle;
+        color: #d4d4d4;
+      }
+    }
+    &.folder-type {
+      a {
+        .fa-folder::before {
+        color: $rise-green;
+        }
+      }
+    }
+  }
+}

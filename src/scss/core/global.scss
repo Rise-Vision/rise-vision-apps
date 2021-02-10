@@ -1,0 +1,453 @@
+/* ==========================================================================
+   Standard tags
+   ========================================================================== */
+html{
+  height: 100%;
+  -ms-overflow-style: scrollbar; 
+  overflow-y: scroll;
+}
+body {
+  min-height: 100%;
+  overflow: auto;
+}
+
+html,
+body {
+  --scrollbar-size : 5px;
+  overflow: auto;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+body::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+}
+
+body::-webkit-scrollbar-track {
+  background: #cccccc;
+  border-radius: var(--scrollbar-size);
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: var(--scrollbar-size);
+  background: gray;
+}
+
+body.gray-bg {
+  background-color: #F7F7F9;
+}
+
+/**    
+* Start of workaround for Bootstrap bug where content shifts when modal   
+* is opened.
+
+* https://github.com/twbs/bootstrap/issues/9855   
+*/
+
+body.modal-open {
+    overflow: hidden;
+}    
+
+/* Resets */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* Image
+   ========================================================================== */
+
+/* Company Users
+   ========================================================================== */
+.company-users {
+  .action-bar {
+    margin-bottom: 10px;
+
+    .sort {
+      > a {
+        color: #333;
+      }
+
+      > a:not(:first-child) {
+        margin-left: 15px;
+      }
+    }
+  }
+
+  .edit {
+    text-align: right;
+  }
+}
+
+
+/* Payment Methods */
+.payment-methods {
+  .list-group-item {
+    padding: 10px 0;
+  }
+  .expiry {
+    color: $gray;
+  }
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/* Input field focus */
+textarea, input, div, input:focus {
+  outline: none;
+}
+
+/* Turn off number input spinners in WebKit. */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+/* Close button
+   ========================================================================== */
+.close {
+  opacity: 1;
+
+  .fa::before , .glyphicons::before{ color: $gray; }
+  &:hover .fa::before ,&:hover .glyphicons::before { color: $dark-gray; }
+}
+
+/* Sticky buttons
+   ========================================================================== */
+.sticky-buttons {
+  /* Positioning */
+  z-index: 10;
+
+  /* Display & Box Model */
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  /* Visual */
+  background-color: #fff;
+
+  > button {
+    /* Display & Box Model */
+    margin-bottom: 10px;
+  }
+
+  > a[type="button"] {
+    /* Display & Box Model */
+    margin-bottom: 10px;
+  }
+}
+
+/* Toggle buttons (http://www.bootstrap-switch.org/)
+   ========================================================================== */
+.has-switch {
+  /* Visual */
+  border-radius: 8px;
+  border-color: $light-border-color;
+
+  /* Display & Box Model */
+  min-width: 120px;
+  margin-top: -1px;
+
+  > div {
+    > label,
+    > span {
+      /* Display & Box Model */
+      padding-bottom: 7px;
+      padding-top: 7px;
+
+      /* Visual */
+      font-size: 16px;
+    }
+  }
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.footer {
+  /* Display & Box Model */
+  padding-top: 25px;
+  padding-bottom: 25px;
+  border-top: $dark-border;
+
+  /* Visual */
+  background-color: #fff;
+}
+
+.social-text {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+ul.social {
+  display: inline-block;
+
+  li {
+    a {
+      /* Display & Box Model */
+      display: block;
+      width: 24px;
+      height: 24px;
+
+      /* Visual */
+      text-indent: -9999em;
+      background: url("http://s3.amazonaws.com/Common-Test/css/images/social.png") 0 0 no-repeat;
+    }
+  }
+
+  li.twit {
+    a {
+      background-position: -24px 0;
+    }
+  }
+
+  li.in {
+    a {
+      background-position: -48px 0;
+    }
+  }
+
+  li.gplus {
+    a {
+      background-position: -72px 0;
+    }
+  }
+
+  li.email {
+    a {
+      background-position: -96px 0;
+    }
+  }
+}
+
+.button-row {
+  overflow: hidden;
+  margin: 40px 0 40px;
+}
+
+/* Media queries
+   ========================================================================== */
+@media (min-width: $screen-sm) {
+  .copyright {
+    text-align: right;
+  }
+}
+
+/* Buttons
+   ========================================================================== */
+
+.button-badge {
+  margin-right: -20px;
+  float: right;
+  margin-top: -10px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 7px;
+}
+
+.btn-github {
+  @extend .btn-sm;
+}
+
+.btn-remove .fa::before,
+.btn-remove .glyphicons::before {
+  color: #d9534f;
+  font-size: 16px;
+}
+
+.btn-all {
+  background: #fff;
+  border-color: #fff;
+
+  .fa, .glyphicons {
+    margin-top: -5px;
+  }
+}
+
+.btn-back:hover .fa-back,
+.btn-back:hover .glyphicons-back {
+  background: url('//s3.amazonaws.com/rise-common-test/images/glyphicons-back-active.png') center no-repeat;
+}
+
+/* Sign In button */
+.btn-sign-in {
+  @extend .btn-success;
+
+  .log_in { color: #fff; }
+}
+
+.sign-in,.top-auth-button {
+  background: none;
+  height: 32px;
+  line-height: 32px;
+  padding: 0;
+  border: 0;
+  color: #777;
+  font-weight: 500;
+  
+
+  &:hover,
+  &:active {
+    text-decoration: none;
+    color: $brand-primary;
+  }
+}
+
+.top-auth-button {
+  img {
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    margin-left: 3px;
+    vertical-align: top;
+    margin-top: 2px;
+  }
+}
+
+ /* SVG CLASSES */
+
+.btn svg {
+  width: 20px;
+  height: 20px;
+  vertical-align: top;
+}
+.btn-default svg {
+  margin-left: 5px;
+}
+
+/* Horizontal rule
+   ========================================================================== */
+.hr-thick {
+  border-top: 2px solid #cbcbcb;
+}
+
+.hr-dashed {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-top: 2px dashed #cbcbcb;
+}
+
+/* Panels
+   ========================================================================== */
+.stack-md-sideways-panels {
+  display: flex;
+  flex-flow: column;
+
+  @media (min-width: $screen-md) {
+    display: flex;
+    flex-flow: row;
+  }
+}
+
+.stack-sm-sideways-panels {
+  display: flex;
+  flex-flow: column;
+
+  @media (min-width: $screen-sm) {
+    display: flex;
+    flex-flow: row;
+  }
+}
+
+.sideways-panels {
+  display: flex;
+  
+  .panel {
+    flex: 1;
+    @extend .u_margin-right;
+    &:last-child{
+      @extend .u_remove-right;
+    }
+  }
+}
+
+.panel {
+  &.panel-thick-shadow {
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.05), 0 6px 6px 0 rgba(0, 0, 0, 0.13);
+  }
+}
+
+/* Other
+   ========================================================================== */
+.title {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+.dropdown-title {
+  color: $dark-gray;
+  font-weight: bold;
+}
+
+.qty {
+  width: 40px;
+  height: 28px;
+}
+
+.danger {
+  color: $danger;
+}
+
+.text-subtle {
+  color: #5b5b5b;
+}
+
+.icon-left { margin-right: 10px; }
+.icon-right { margin-left: 10px; }
+.icon-sm-left { margin-right: 5px; }
+.icon-sm-right { margin-left: 5px; }
+
+.list-separator {
+  border-bottom: 1px solid #eee;
+  width: auto;
+}
+
+.btn-google-drive,
+.btn-google-drive:active
+.btn-google-drive.active {
+  width: 30px;
+  height: 30px;
+  border: none !important;
+  background-repeat: no-repeat;
+  background-color: transparent !important;
+  background-image: url(http://s3.amazonaws.com/Rise-Images/Icons/widget-icon-drive.png);
+  @include background-image-retina('http://s3.amazonaws.com/Rise-Images/Icons/widget-icon-drive', 'png', 30px, 30px);
+}
+
+
+.btn-widget-icon-link,
+.btn-widget-icon-link:active
+.btn-widget-icon-link.active {
+  width: 30px;
+  height: 30px;
+  border: none !important;
+  background-repeat: no-repeat;
+  background-color: transparent !important;
+  background-image: url(http://s3.amazonaws.com/Rise-Images/Icons/widget-icon-link.png);
+  @include background-image-retina('http://s3.amazonaws.com/Rise-Images/Icons/widget-icon-link', 'png', 30px, 30px);
+}
+
+
+.btn-widget-icon-storage,
+.btn-widget-icon-storage:active
+.btn-widget-icon-storage.active {
+  width: 30px;
+  height: 30px;
+  border: none !important;
+  background-repeat: no-repeat;
+  background-color: transparent !important;
+  background-image: url(http://s3.amazonaws.com/Rise-Images/Icons/widget-icon-storage.png);
+  @include background-image-retina('http://s3.amazonaws.com/Rise-Images/Icons/widget-icon-storage', 'png', 30px, 30px);
+}
+
+
+
+/* ==========================================================================
+   Small devices (tablets, 768px and up)
+   ========================================================================== */

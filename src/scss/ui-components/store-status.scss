@@ -1,0 +1,40 @@
+.store-status-2 { 
+  display: inline-block;
+  border-radius: 3px;
+  background: #FFF;
+  padding:0;
+  height: 24px;
+  .btn {
+    margin: 0;
+    vertical-align: top;
+    height: 24px;
+  }
+  h3 {
+    margin:0;
+    padding: 0 8px;
+    font-size: 13px;
+    line-height: 23px;
+    font-weight: normal;
+    vertical-align: top;
+    display: inline-block;
+    color: $gray;
+    .fa:before {
+      color: $rise-green;
+    }
+    &.warning {
+      .fa:before {
+        color: #e6bf00;
+      }
+    }
+    &.expired {
+      .fa:before {
+        color: $light-gray;
+      }
+    }
+    a {
+      color: $rise-green;
+      font-weight: bold;
+      margin-left: 3px;
+    }
+  }
+}

@@ -1,0 +1,257 @@
+/* Modal scrollable list
+   ========================================================================== */
+.scrollable-list {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: calc(100vh - 240px);
+  min-height: 240px;
+}
+
+.scrollable-list::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+.scrollable-list::-webkit-scrollbar:vertical {
+  width: 11px;
+}
+
+.scrollable-list::-webkit-scrollbar:horizontal {
+  height: 11px;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  border: 2px solid $lighter-gray;
+  /* should match background, can't be transparent */
+  background-color: rgba(50, 50, 50, .5);
+}
+
+.scrollable-list::-webkit-scrollbar-track {
+  background-color: $lighter-gray;
+  border-radius: 2px;
+}
+
+
+/* List-Group
+   ========================================================================== */
+
+
+/* List-Group
+   ========================================================================== */
+
+.list-group {
+  margin-bottom: 0;
+}
+
+.list-group-item {
+  background-color: none;
+  border: none;
+  border-bottom: 1px solid $lighter-gray;
+}
+
+.select-subcompany-modal .list-group {
+  @extend .panel;
+}
+
+
+/* Box list
+   ========================================================================== */
+
+.box-list-container {
+  background-color: #fff;
+  margin-bottom: 20px;
+  border-radius: $border-radius-small;
+  border: 1px solid #ccc;
+  overflow: hidden;
+}
+
+.box-list {
+  color: #333;
+  margin-top: 0;
+  padding: 15px;
+  &:not(:last-child) {
+    border-bottom: 1px solid #e5e5e5;
+  }
+  &:hover,
+  &:active {
+    background-color: #fafafa;
+  }
+  .title {
+    margin: 0;
+    line-height: 1.5;
+    @extend .u_ellipsis-md;
+  }
+  p {
+    @extend .u_ellipsis-md;
+    font-size: 85%;
+    line-height: 1.1;
+    margin: 5px 0 0 0;
+  }
+  .meta {
+    color: $text-muted;
+  }
+  .box-list-body {
+    padding-right: 40px;
+    @extend .u_ellipsis-md;
+  }
+  .box-list-aside {
+    float: right;
+    @extend .u_ellipsis-md;
+  }
+}
+
+
+/* Grid List
+   ========================================================================== */
+.grid-list {
+  h4 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 30px;
+    margin-bottom: 0;
+    width: 100%;
+  }
+  .grid-list-image {
+    background: $light-gray;
+    max-width: 100%;
+    height: 180px;
+    text-align: center;
+    font-size: 0;
+    overflow: hidden;
+    position: relative;
+    & > * {
+      display: inline-block;
+    }
+    img {
+      height: 100%;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+  .grid-list-image-featured {
+    height: 280px;
+    img {
+      height: auto;
+    }
+  }
+  .grid-list-text {
+    color: #333;
+    min-height: 180px;
+    overflow: hidden;
+  }
+  .panel {
+    margin: 4px;
+    padding: 12px;
+    -webkit-box-shadow: inset 0 -1px 0 #d5d1cb, 0 1px 4px rgba(113, 108, 102, .1), transparent 0 0 0;
+    box-shadow: inset 0 -1px 0 #d5d1cb, 0 1px 4px rgba(113, 108, 102, .1), transparent 0 0 0;
+    cursor: pointer;
+    -o-transition: border .2s ease-out;
+    -ms-transition: border .2s ease-out;
+    -moz-transition: border .2s ease-out;
+    -webkit-transition: border .2s ease-out;
+    transition: border .2s ease-out;
+    & .product-pricing {
+      position: absolute;
+      bottom: 4px;
+      span {
+        color: #3C7BDA;
+        font-weight: bold;
+      }
+    }
+    & .product-description {
+      min-height: 130px;
+       @media (max-width: $screen-md) {
+          min-height: 40px;
+      }
+    }
+    & .info {
+      position: absolute;
+      top:0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      background: rgba(122, 122, 182, .7) url() center no-repeat;
+      -o-transition: opacity .2s ease-in;
+      -ms-transition: opacity .2s ease-in;
+      -moz-transition: opacity .2s ease-in;
+      -webkit-transition: opacity .2s ease-in;
+      transition: opacity .2s ease-in;
+    }
+    &:hover {
+      border: 1px solid #8E8E8E;
+      box-shadow: inset 0 -1px 0 #9A9895, 2px 3px 6px rgba(113, 108, 102, .3), rgba(0, 0, 0, 0) 0 0 0;
+      .info {
+        opacity: 1;
+      }
+    }
+  }
+  @media only screen and (max-width: $screen-md) {
+    .grid-list-image {
+      height: 200px;
+    }
+  }
+  @media (max-width: $screen-sm) {
+    h4 {
+      font-size: 14px;
+    }
+  }
+}
+
+/* Bullet List
+   ========================================================================== */
+.bullet-list ul li {
+    list-style-type: disc;
+    margin-left: 30px;
+
+      &:first-child {
+        margin-top: 12px;
+      }
+}
+
+
+/* rvSortable List
+   ========================================================================== */
+.draggable-mirror {
+  left: 10px !important;
+  top: 10px !important;
+}
+
+
+// For RV Store Only
+.store.grid-list {
+  /* Small devices  */
+  @media (min-width: $screen-sm-min) {
+    .grid-list-text {
+      min-height: 160px;
+    }
+  }
+  /* Medium devices  */
+  @media (min-width: $screen-md-min) {
+    .grid-list-text {
+      min-height: 200px;
+    }
+  }
+  /* Large devices  */
+  @media (min-width: $screen-lg-min) {
+    .grid-list-text {
+      min-height: 160px;
+    }
+  }
+}
+
+.submit-product-cta {
+  .panel-default {
+    background-color: lighten($rise-green, 35%);
+    border: 1px solid $rise-green;
+  }
+  h3 {
+    margin-top: 10px;
+  }
+  &:hover {
+    color: #FFF;
+    text-decoration: none;
+  }
+  color: #FFF;
+}

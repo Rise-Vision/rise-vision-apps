@@ -1,0 +1,136 @@
+/* ==========================================================================
+   Widgets
+   ========================================================================== */
+/* Legacy, supporting old widgets */
+.widget-overlay {
+  /* Positioning */
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  /* Visual */
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* Legacy, supporting old widgets */
+.widget-wrapper {
+  /* Positioning */
+  z-index: 2;
+
+  /* Display & Box Model */
+  height: 90%;
+  padding-bottom: 100px;
+  margin: 40px auto 0;
+  overflow: auto;
+
+  > .modal-header {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* Widget Settings */
+/* Size for Storage Icon */
+.storage-selector-icon {
+  height:14px;
+}
+
+/* Storage Input Field*/
+.clear-file:not(:first-child):not(:last-child) {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-left:none;
+}
+
+.preview-file {
+  padding:0; 
+  padding-left:10px;
+  background:transparent; 
+  border:none;
+}
+
+/* Storage Subscription Status */
+.storage-status {
+  text-align: left;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.widget {
+  height: 100%;
+
+  .overlay {
+    /* Positioning */
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+  }
+  .settings {
+    /* Positioning */
+    position: relative;
+
+    /* Display & Box Model */
+    height: 100%;
+  }
+
+  .settings-center {
+    /* Positioning */
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+
+    /* Display & Box Model */
+    width: 100%;
+    max-height: 90%;
+    overflow: auto;
+    margin: auto;
+    padding: 15px;
+  }
+
+  .wrapper {
+    /* Positioning */
+    z-index: 1000;
+
+    /* Display & Box Model */
+    height: 99%;
+    padding-bottom: 25px;
+    margin: 0 auto;
+    overflow: auto;
+
+    > .modal-header {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  .section {
+    /* Display & Box Model */
+    padding: 10px;
+    margin-bottom: 30px;
+
+    /* Visual */
+    border: 1px solid $light-border-color;
+    border-radius: 6px;
+
+    > h5:first-of-type {
+      margin-top: -17px;
+      color: $rise-blue;
+    }
+  }
+}
+
+.date-range {
+  * {
+    display: inline-block;
+    margin-right: 4px;
+  }
+  .form-control {
+    width: 80px;
+  }
+}

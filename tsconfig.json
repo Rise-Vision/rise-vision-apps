@@ -1,8 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./web",
-    // "outDir": "./dist/out-tsc",
+    // "baseUrl": "./web",
+    "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
@@ -23,8 +23,11 @@
     //fix "Can't resolve all parameters for AppModule" error
     "emitDecoratorMetadata": true,
 
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "lib": [
-      "es2018",
+      "es2017",
       "dom"
     ]
   }

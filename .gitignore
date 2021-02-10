@@ -1,14 +1,57 @@
-.idea/
-.vscode/
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
+/dist-server
+/tmp
+/out-tsc
+
+# dependencies
+/node_modules
+/web/bower_components
+/src/bower_components
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Original
 *.iml
-node_modules
-web/bower_components
 reports
 *.log
-dist
-tmp
 web/index_raw.html
 web/tmp
+src/tmp
 web/scripts/config/config.*
 web/*.js
 web/*.map
@@ -16,8 +59,8 @@ web/src/**/*.js
 web/src/**/*.map
 web/scripts/*.ajs.js
 web/scripts/*.ajs.js.map
+src/vendor/tus
+src/vendor/compressor
 web/vendor/tus
 web/vendor/compressor
 test/e2e/config/config.json
-.DS_Store
-.project
