@@ -272,7 +272,7 @@ gulp.task("coveralls", factory.coveralls());
 
 gulp.task("server", factory.testServer({
   html5mode: true,
-  rootPath: "./web"
+  rootPath: "./dist"
 }));
 gulp.task("server-close", factory.testServerClose());
 gulp.task("test:webdriver_update", factory.webdriverUpdateSpecific({
@@ -298,7 +298,7 @@ gulp.task("test:e2e:core", gulp.series("test:webdriver_update", factory.testE2EA
   }()
 })));
 
-gulp.task("test:e2e", gulp.series(gulp.parallel("build-pieces", "config-e2e"), "server", "test:e2e:core", "server-close"));
+gulp.task("test:e2e", gulp.series(gulp.parallel("config-e2e"), "server", "test:e2e:core", "server-close"));
 
 gulp.task("test", gulp.series("build-pieces", "test:unit", "coveralls"));
 
