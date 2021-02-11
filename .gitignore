@@ -9,7 +9,6 @@
 
 # dependencies
 /node_modules
-/web/bower_components
 /src/bower_components
 
 # profiling files
@@ -51,19 +50,6 @@ Thumbs.db
 *.iml
 reports
 *.log
-web/index_raw.html
-web/tmp
 src/tmp
-web/scripts/config/config.*
 src/scripts/config/config.*
-web/*.js
-web/*.map
-web/src/**/*.js
-web/src/**/*.map
-web/scripts/*.ajs.js
-web/scripts/*.ajs.js.map
-src/vendor/tus
-src/vendor/compressor
-web/vendor/tus
-web/vendor/compressor
 test/e2e/config/config.json
