@@ -244,7 +244,7 @@ gulp.task('build-pieces', gulp.series("clean", gulp.parallel('config', 'i18n-bui
 
 gulp.task('build', gulp.series('build-pieces', "html"));
 
-gulp.task('build-cli', gulp.series('clean', gulp.parallel('config', 'i18n-build', 'html2js'), "html"));
+gulp.task('build-cli', gulp.series('clean', gulp.parallel('config', 'i18n-build', 'css-build', 'html2js'), "html"));
 
 /*---- testing ----*/
 
