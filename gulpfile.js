@@ -93,9 +93,9 @@ var unitTestFiles = [
 gulp.task('browser-sync', function() {
   browserSync({
     startPath: '/index.html',
-    files: ['./src/tmp/partials.js', './src/scripts/**/*.ts', './dist/css/*.css', './src/index.html'],
+    files: ['./src/tmp/partials.js', './src/scripts/**/*.js', './dist/css/*.css', './src/index.html'],
     server: {
-      baseDir: './web',
+      baseDir: './src',
       middleware: [
         modRewrite([
           '!\\.\\w+$ /index.html [L]'
