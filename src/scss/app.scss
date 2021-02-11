@@ -9,11 +9,11 @@
 
 /* Bootstrap Core
    ========================================================================== */
-@import "./web/bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap";
+@import "./src/bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap";
 
 /* FontAwesome
    ========================================================================== */
-@import "./web/bower_components/font-awesome/scss/font-awesome";
+@import "./src/bower_components/font-awesome/scss/font-awesome";
 
 /* Bootstrap Overwrites
    ========================================================================== */
@@ -55,9 +55,9 @@
 @import "ui-components/column-settings";
 @import "ui-components/font-size-picker";
 @import "ui-components/font-setting";
-@import "/web/bower_components/select2/select2.css";
-@import "/web/bower_components/spectrum/spectrum.css";
-@import "/web/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css";
+@import "/src/bower_components/select2/select2.css";
+@import "/src/bower_components/spectrum/spectrum.css";
+@import "/src/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css";
 @import "ui-components/loading-spinner";
 @import "ui-components/ui-components-overwrites";
 @import "ui-components/off-canvas";

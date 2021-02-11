@@ -41,7 +41,7 @@
     "jshint": "^2.12.0",
     "jshint-stylish": "^2.2.1",
     "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git",
-    "widget-tester": "git://github.com/Rise-Vision/widget-tester.git"
+    "widget-tester": "git://github.com/Rise-Vision/widget-tester.git#feature/src-folder"
   },
   "repository": {
     "type": "git",
