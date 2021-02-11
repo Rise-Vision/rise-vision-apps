@@ -24,11 +24,10 @@
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
-              "src/robots.txt",
-              "src/loading-preview.html",
-              "src/assets",
-              "src/images",
-              "src/vendor"
+              "src/bower_components/oidc-client/dist/oidc-client.js",
+              "src/scripts/user-manager-silent.js",
+              "src/user-manager-silent.html",
+              "src/tmp/locales/translation_en.json"
             ],
             "styles": [
               "src/scss/app.scss",
@@ -577,6 +576,13 @@
           },
           "configurations": {
             "production": {
+              "assets": [
+                "src/robots.txt",
+                "src/loading-preview.html",
+                "src/assets",
+                "src/images",
+                "src/vendor"
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -608,14 +614,8 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "assets": [
-            "src/bower_components/oidc-client/dist/oidc-client.js",
-            "src/scripts/user-manager-silent.js",
-            "src/user-manager-silent.html",
-            "src/tmp/locales"
-          ],
           "options": {
-            "browserTarget": "rise-vision-apps:build"
+            "browserTarget": "rise-vision-apps:build",
           },
           "configurations": {
             "production": {
