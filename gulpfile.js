@@ -242,7 +242,7 @@ gulp.task("config", function() {
 
 gulp.task('build-pieces', gulp.series("clean", gulp.parallel('config', 'i18n-build', 'css-build', 'html2js')));
 
-gulp.task('build', gulp.series(gulp.parallel("clean"), gulp.parallel('build-pieces'), gulp.parallel("html")));
+gulp.task('build', gulp.series('build-pieces', "html"));
 
 gulp.task('build-cli', gulp.series('clean', gulp.parallel('config', 'i18n-build', 'html2js'), "html"));
 

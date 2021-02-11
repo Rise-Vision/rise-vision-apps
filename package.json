@@ -5,7 +5,7 @@
   "main": "gulpfile.js",
   "scripts": {
     "ng": "ng",
-    "preng-start": "gulp config",
+    "preng-start": "gulp build-cli",
     "ng-start": "ng serve --port 8000",
     "preng-build": "gulp build-cli",
     "ng-build": "ng build --prod --delete-output-path false",

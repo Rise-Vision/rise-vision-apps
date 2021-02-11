@@ -39,7 +39,7 @@ gulp.task("css-build-alignment", function () {
     .pipe(gulp.dest(paths.distCss));
 });
 
-gulp.task("css-build", gulp.series(gulp.parallel("css-build-alignment", "fonts-copy"), function() {
+gulp.task("css-compile", function() {
   console.log("[SASS] recompiling & minifying".yellow);
   return gulp.src(paths.appSass)
     .pipe(sass({
@@ -52,7 +52,9 @@ gulp.task("css-build", gulp.series(gulp.parallel("css-build-alignment", "fonts-c
     .pipe(rename("rise.min.css"))
     .pipe(gulp.dest(paths.tmpCss))
     .pipe(gulp.dest(paths.distCss));
-}));
+});
+
+gulp.task("css-build", gulp.series(gulp.parallel("css-build-alignment", "fonts-copy"), "css-compile"));
 
 gulp.task("css-watch", gulp.series("css-build", function(done) {
   // Watch Less files for changes
