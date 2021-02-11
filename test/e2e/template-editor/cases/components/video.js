@@ -49,7 +49,7 @@ var VideoComponentScenarios = function () {
       it('should upload a file and show the corresponding upload panel', function () {
         browser.driver.executeScript('sessionStorage.setItem("bypass-upload-encoding", true)');
 
-        var uploadFilePath = process.cwd() + '/web/videos/e2e-upload-video-1.mp4';
+        var uploadFilePath = process.cwd() + '/src/videos/e2e-upload-video-1.mp4';
         videoComponentPage.getUploadInputMain().sendKeys(uploadFilePath);
 
         expect(videoComponentPage.getUploadPanelMain().isDisplayed()).to.eventually.be.true;
@@ -83,7 +83,7 @@ var VideoComponentScenarios = function () {
 
       describe('upload', function () {
         it('should upload a file and show the corresponding upload panel', function () {
-          var uploadFilePath = process.cwd() + '/web/videos/e2e-upload-video-2.webm';
+          var uploadFilePath = process.cwd() + '/src/videos/e2e-upload-video-2.webm';
           videoComponentPage.getUploadInputStorage().sendKeys(uploadFilePath);
 
           expect(videoComponentPage.getUploadPanelStorage().isDisplayed()).to.eventually.be.true;

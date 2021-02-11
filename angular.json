@@ -24,7 +24,8 @@
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
-              "src/favicon.ico",
+              "src/robots.txt",
+              "src/loading-preview.html",
               "src/assets",
               "src/images"
             ],
@@ -606,6 +607,12 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "assets": [
+            "src/bower_components/oidc-client/dist/oidc-client.js",
+            "src/scripts/user-manager-silent.js",
+            "src/user-manager-silent.html",
+            "src/tmp/locales"
+          ],
           "options": {
             "browserTarget": "rise-vision-apps:build"
           },

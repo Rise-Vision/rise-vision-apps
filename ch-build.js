@@ -21,12 +21,12 @@ var gulp = require("gulp"),
     colors = require("colors");
 
     var commonHeaderSrcFiles = ["./tmp/partials/partials.js",
-    "./web/scripts/common-header/dtv-common-header.js",
-    "./web/scripts/common-header/directives/*.js",
-    "./web/scripts/common-header/filters/*.js",
-    "./web/scripts/common-header/controllers/*.js",
-    "./web/scripts/common-header/services/*.js",
-    "./web/scripts/components/*.js",
+    "./src/scripts/common-header/dtv-common-header.js",
+    "./src/scripts/common-header/directives/*.js",
+    "./src/scripts/common-header/filters/*.js",
+    "./src/scripts/common-header/controllers/*.js",
+    "./src/scripts/common-header/services/*.js",
+    "./src/scripts/components/*.js",
     "./dist/js/components/i18n.js",
     "./dist/js/components/gapi-loader.js",
     "./dist/js/components/core-api-client.js",
@@ -45,27 +45,27 @@ var gulp = require("gulp"),
     "./dist/js/components/password-input.js",
     "./dist/js/components/store-products.js"
     ],
-    dependencySrcFiles = ["./web/bower_components/jquery/dist/jquery.js",
-    "./web/bower_components/angular/angular.js",
-    "./web/bower_components/angular-sanitize/angular-sanitize.js",
-    "./web/bower_components/angular-animate/angular-animate.js",
-    "./web/bower_components/angular-touch/angular-touch.js",
-    "./web/bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
-    "./web/bower_components/angular-ui-router/release/angular-ui-router.js",
-    "./web/bower_components/angular-translate/angular-translate.js",
-    "./web/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js",
-    "./web/bower_components/angular-truncate/src/truncate.js",
-    "./web/bower_components/angular-slugify/angular-slugify.js",
-    "./web/bower_components/checklist-model/checklist-model.js",
-    "./web/bower_components/ngstorage/ngStorage.js",
-    "./web/bower_components/angular-spinner/dist/angular-spinner.js",
-    "./web/bower_components/angular-cookies/angular-cookies.js",
-    "./web/bower_components/lodash/dist/lodash.js",
-    "./web/bower_components/ng-csv/build/ng-csv.js",
-    "./web/bower_components/ng-tags-input/ng-tags-input.js",
-    "./web/bower_components/angular-md5/angular-md5.min.js",
-    "./web/bower_components/angular-local-storage/dist/angular-local-storage.js",
-    "./web/bower_components/oclazyload/dist/ocLazyLoad.js"],
+    dependencySrcFiles = ["./src/bower_components/jquery/dist/jquery.js",
+    "./src/bower_components/angular/angular.js",
+    "./src/bower_components/angular-sanitize/angular-sanitize.js",
+    "./src/bower_components/angular-animate/angular-animate.js",
+    "./src/bower_components/angular-touch/angular-touch.js",
+    "./src/bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
+    "./src/bower_components/angular-ui-router/release/angular-ui-router.js",
+    "./src/bower_components/angular-translate/angular-translate.js",
+    "./src/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js",
+    "./src/bower_components/angular-truncate/src/truncate.js",
+    "./src/bower_components/angular-slugify/angular-slugify.js",
+    "./src/bower_components/checklist-model/checklist-model.js",
+    "./src/bower_components/ngstorage/ngStorage.js",
+    "./src/bower_components/angular-spinner/dist/angular-spinner.js",
+    "./src/bower_components/angular-cookies/angular-cookies.js",
+    "./src/bower_components/lodash/dist/lodash.js",
+    "./src/bower_components/ng-csv/build/ng-csv.js",
+    "./src/bower_components/ng-tags-input/ng-tags-input.js",
+    "./src/bower_components/angular-md5/angular-md5.min.js",
+    "./src/bower_components/angular-local-storage/dist/angular-local-storage.js",
+    "./src/bower_components/oclazyload/dist/ocLazyLoad.js"],
     injectorGenerator = function (srcFiles, id) {
       return gulpInject(
         gulp.src(srcFiles,
@@ -81,7 +81,7 @@ gulp.task("clean", function () {
 
 
 // Components build
-var componentsPath = "./web/scripts/components/";
+var componentsPath = "./src/scripts/components/";
 
 var folders = fs.readdirSync(componentsPath)
   .filter(function(file) {
@@ -89,7 +89,7 @@ var folders = fs.readdirSync(componentsPath)
   });
 
 gulp.task("components-html2js", function() {
-  return gulp.src("./web/partials/components/**/*.html")
+  return gulp.src("./src/partials/components/**/*.html")
     .pipe(minifyHtml({
       empty: true,
       spare: true,
@@ -128,8 +128,8 @@ gulp.task("components-dist", function (done) { //copy angular files
 });
 
 gulp.task("components-watch", function(done) {
-  gulp.watch({glob: "web/partials/components/**/*.html"}, gulp.series("components-html2js"));
-  gulp.watch({glob: ["web/scripts/components/**/*", "tmp/partials/*/*"]}, gulp.series("components-dist"));
+  gulp.watch({glob: "src/partials/components/**/*.html"}, gulp.series("components-html2js"));
+  gulp.watch({glob: ["src/scripts/components/**/*", "tmp/partials/*/*"]}, gulp.series("components-dist"));
 
   done();
 });
@@ -141,7 +141,7 @@ gulp.task("build-components", gulp.series("components-html2js", "components-dist
 
 // Dist build
 gulp.task("ch-html2js", function() {
-  return gulp.src("web/partials/common-header/*.html")
+  return gulp.src("src/partials/common-header/*.html")
     .pipe(minifyHtml({
       collapseWhitespace: true,
       conservativeCollapse: true,
@@ -166,7 +166,7 @@ gulp.task("dependencies-dist", function () { //copy angular files
 });
 
 gulp.task("common-header-dist", function () { //copy angular files
-  return gulp.src(commonHeaderSrcFiles.concat(["./web/scripts/common-header/config/config.js"]))
+  return gulp.src(commonHeaderSrcFiles.concat(["./src/scripts/common-header/config/config.js"]))
     .pipe(concat("common-header.js"))
     .pipe(gulp.dest("dist/js"))
     .pipe(uglify())

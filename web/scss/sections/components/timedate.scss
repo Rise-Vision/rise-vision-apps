@@ -1,8 +1,0 @@
-.time-date-container {
-  --timezone-group-offset: 29px;
-
-  .timezone-input-group {
-    width: calc(100% - var(--timezone-group-offset));
-    margin-left: var(--timezone-group-offset);
-  }
-}

@@ -26,62 +26,62 @@ require("./css-build");
 //--------------------- Variables --------------------------------------
 
 var appJSFiles = [
-  "./web/scripts/app.module.ajs.js",
-  "./web/scripts/**/*.js"
+  "./src/scripts/app.module.ajs.js",
+  "./src/scripts/**/*.js"
 ];
 
 var partialsHTMLFiles = [
-  "./web/partials/**/*.html"
+  "./src/partials/**/*.html"
 ];
 
 var unitTestFiles = [
-  "web/bower_components/jquery/dist/jquery.js",
-  "web/bower_components/angular/angular.js",
-  "web/bower_components/angular-sanitize/angular-sanitize.js",
-  "web/bower_components/angular-animate/angular-animate.js",
-  "web/bower_components/angular-touch/angular-touch.js",
-  "web/bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
-  "web/bower_components/angular-ui-router/release/angular-ui-router.js",
-  "web/bower_components/angular-translate/angular-translate.js",
-  "web/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js",
-  "web/bower_components/checklist-model/checklist-model.js",
-  "web/bower_components/ngstorage/ngStorage.js",
-  "web/bower_components/angular-spinner/dist/angular-spinner.js",
-  "web/bower_components/angular-cookies/angular-cookies.js",
-  "web/bower_components/lodash/dist/lodash.js",
-  "web/bower_components/ng-csv/build/ng-csv.js",
-  "web/bower_components/ng-tags-input/ng-tags-input.js",
-  "web/bower_components/angular-md5/angular-md5.min.js",
-  "web/bower_components/angular-local-storage/dist/angular-local-storage.js",
-  "web/bower_components/angular-messages/angular-messages.js",
-  "web/bower_components/angular-mocks/angular-mocks.js",
-  "web/bower_components/q/q.js",
-  "web/bower_components/angular-ui-codemirror/ui-codemirror.js",
-  "web/bower_components/angular-truncate/src/truncate.js",
-  "web/bower_components/angular-slugify/angular-slugify.js",
-  'web/bower_components/oclazyload/dist/ocLazyLoad.js',
-  'web/bower_components/Sortable/Sortable.js',
-  "web/bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
-  "web/bower_components/moment/moment.js",
-  "web/bower_components/angularjs-slider/dist/rzslider.min.js",
-  "web/bower_components/oidc-client/dist/oidc-client.js",
+  "src/bower_components/jquery/dist/jquery.js",
+  "src/bower_components/angular/angular.js",
+  "src/bower_components/angular-sanitize/angular-sanitize.js",
+  "src/bower_components/angular-animate/angular-animate.js",
+  "src/bower_components/angular-touch/angular-touch.js",
+  "src/bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
+  "src/bower_components/angular-ui-router/release/angular-ui-router.js",
+  "src/bower_components/angular-translate/angular-translate.js",
+  "src/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js",
+  "src/bower_components/checklist-model/checklist-model.js",
+  "src/bower_components/ngstorage/ngStorage.js",
+  "src/bower_components/angular-spinner/dist/angular-spinner.js",
+  "src/bower_components/angular-cookies/angular-cookies.js",
+  "src/bower_components/lodash/dist/lodash.js",
+  "src/bower_components/ng-csv/build/ng-csv.js",
+  "src/bower_components/ng-tags-input/ng-tags-input.js",
+  "src/bower_components/angular-md5/angular-md5.min.js",
+  "src/bower_components/angular-local-storage/dist/angular-local-storage.js",
+  "src/bower_components/angular-messages/angular-messages.js",
+  "src/bower_components/angular-mocks/angular-mocks.js",
+  "src/bower_components/q/q.js",
+  "src/bower_components/angular-ui-codemirror/ui-codemirror.js",
+  "src/bower_components/angular-truncate/src/truncate.js",
+  "src/bower_components/angular-slugify/angular-slugify.js",
+  'src/bower_components/oclazyload/dist/ocLazyLoad.js',
+  'src/bower_components/Sortable/Sortable.js',
+  "src/bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
+  "src/bower_components/moment/moment.js",
+  "src/bower_components/angularjs-slider/dist/rzslider.min.js",
+  "src/bower_components/oidc-client/dist/oidc-client.js",
   "node_modules/widget-tester/mocks/translate-mock.js",
-  "web/tmp/partials.js",
-  "web/scripts/components/**/*.js",
-  "web/scripts/common-header/*.js",
-  "web/scripts/common-header/**/*.js",
-  "web/scripts/storage-selector-app.js",
-  "web/scripts/app.module.ajs.js",
-  "web/scripts/purchase/**/*.js",
-  "web/scripts/billing/**/*.js",
-  "web/scripts/common/**/*.js",
-  "web/scripts/config/test.js",
-  "web/scripts/displays/**/*.js",
-  "web/scripts/editor/**/*.js",
-  "web/scripts/schedules/**/*.js",
-  "web/scripts/storage/**/*.js",
-  "web/scripts/template-editor/**/*.js",
-  "web/scripts/widgets/**/*.js",
+  "src/tmp/partials.js",
+  "src/scripts/components/**/*.js",
+  "src/scripts/common-header/*.js",
+  "src/scripts/common-header/**/*.js",
+  "src/scripts/storage-selector-app.js",
+  "src/scripts/app.module.ajs.js",
+  "src/scripts/purchase/**/*.js",
+  "src/scripts/billing/**/*.js",
+  "src/scripts/common/**/*.js",
+  "src/scripts/config/test.js",
+  "src/scripts/displays/**/*.js",
+  "src/scripts/editor/**/*.js",
+  "src/scripts/schedules/**/*.js",
+  "src/scripts/storage/**/*.js",
+  "src/scripts/template-editor/**/*.js",
+  "src/scripts/widgets/**/*.js",
   "test/unit/**/mocks/*.js",
   "test/unit/**/*.tests.js",
   "test/unit/**/*-spec.js",
@@ -93,7 +93,7 @@ var unitTestFiles = [
 gulp.task('browser-sync', function() {
   browserSync({
     startPath: '/index.html',
-    files: ['./web/tmp/partials.js', './web/scripts/**/*.ts', './dist/css/*.css', './web/index.html'],
+    files: ['./src/tmp/partials.js', './src/scripts/**/*.ts', './dist/css/*.css', './src/index.html'],
     server: {
       baseDir: './web',
       middleware: [
@@ -127,7 +127,7 @@ gulp.task('watch', function (done) {
 gulp.task('pretty', function() {
   return gulp.src(appJSFiles)
     .pipe(prettify({config: '.jsbeautifyrc', mode: 'VERIFY_AND_WRITE'}))
-    .pipe(gulp.dest('./web/scripts'))
+    .pipe(gulp.dest('./src/scripts'))
     .on('error', function (error) {
       console.error(String(error));
     });
@@ -206,11 +206,11 @@ function buildHtml(path) {
 }
 
 gulp.task("html-selector", function () {
-  return buildHtml("./web/storage-selector.html");
+  return buildHtml("./src/storage-selector.html");
 });
 
 gulp.task("html-user-manager-silent", function () {
-  return buildHtml("./web/user-manager-silent.html");
+  return buildHtml("./src/user-manager-silent.html");
 });
 
 gulp.task("html", gulp.parallel("lint", "html-selector", "html-user-manager-silent"));
@@ -227,36 +227,22 @@ gulp.task("html2js", function() {
       prefix: "partials/"
     }))
     .pipe(concat("partials.js"))
-    .pipe(gulp.dest("./web/tmp/"))
+    .pipe(gulp.dest("./src/tmp/"))
     .pipe(gulp.dest("./dist/tmp/"));
 });
-
-gulp.task("images", function () {
-  return gulp.src(['./web/images/**/*.*'])
-    .pipe(gulp.dest("dist/images"))
-    .on('error',function(e){
-      console.error(String(e));
-    })
-});
-
-gulp.task("static-files", function() {
-  return gulp.src(['./web/loading-preview.html', './web/user-manager-silent.html', './web/robots.txt'])
-    .pipe(gulp.dest('dist/'));
-})
 
 gulp.task("config", function() {
   var env = process.env.NODE_ENV || "dev";
   log("Environment is", env);
 
-  return gulp.src(["./web/scripts/config/" + env + ".js"])
+  return gulp.src(["./src/scripts/config/" + env + ".js"])
     .pipe(rename("config.js"))
-    .pipe(gulp.dest("./web/scripts/config"))
     .pipe(gulp.dest("./src/scripts/config"));
 });
 
 gulp.task('build-pieces', gulp.series("clean", gulp.parallel('config', 'i18n-build', 'css-build', 'html2js')));
 
-gulp.task('build', gulp.series(gulp.parallel("clean"), gulp.parallel('build-pieces'), gulp.parallel("html", "static-files")));
+gulp.task('build', gulp.series(gulp.parallel("clean"), gulp.parallel('build-pieces'), gulp.parallel("html")));
 
 gulp.task('build-cli', gulp.series('clean', gulp.parallel('config', 'i18n-build', 'html2js'), "html"));
 
@@ -277,7 +263,7 @@ gulp.task("test:unit:nocoverage", factory.testUnitAngular({
 }));
 
 gulp.task("test:unit", factory.testUnitAngular({
-    coverageFiles: "web/scripts/**/*.js",
+    coverageFiles: "src/scripts/**/*.js",
     basePath: '../..',
     testFiles: unitTestFiles
 }));
