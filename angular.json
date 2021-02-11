@@ -27,7 +27,8 @@
               "src/robots.txt",
               "src/loading-preview.html",
               "src/assets",
-              "src/images"
+              "src/images",
+              "src/vendor"
             ],
             "styles": [
               "src/scss/app.scss",
@@ -384,7 +385,7 @@
               "src/scripts/displays/services/svc-display-email.js",
               "src/scripts/displays/services/svc-time-parser.js",
               "src/scripts/displays/services/svc-alerts-factory.js",
-              "src/vendor/primus/Primus.js",
+              "node_modules/primus/dist/primus.js",
               "src/scripts/displays/services/svc-primus.js",
 
               "src/scripts/displays/filters/ftr-status.js",
