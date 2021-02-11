@@ -70,7 +70,7 @@ var UploadScenarios = function() {
       before(function () {
         intervalHandle = storageSelectorModalPage.clickRetryOnFailure();
         StorageHelper.setupStorageHomeWithEncoding();
-        uploadFilePath = process.cwd() + '/web/videos/e2e-upload-video-1.mp4';
+        uploadFilePath = process.cwd() + '/src/videos/e2e-upload-video-1.mp4';
       });
 
       after(function () {

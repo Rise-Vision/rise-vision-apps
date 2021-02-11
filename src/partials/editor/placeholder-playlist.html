@@ -1,0 +1,54 @@
+<div class="workspace-sidebar-header">
+  <div class="btn-group btn-group-justified">
+    <a href="#" id="addImageButton" class="btn btn-default" ng-click="playlistItemFactory.selectFiles('images')">
+      <svg-icon p="riseWidgetImageMulti"></svg-icon>
+      <span translate="editor-app.playlistItem.add-image"></span>
+    </a>
+    <a href="#" id="addVideoButton" class="btn btn-default" ng-click="playlistItemFactory.selectFiles('videos')">
+      <svg-icon p="riseWidgetVideo"></svg-icon>
+      <span translate="editor-app.playlistItem.add-video"></span>
+    </a>
+    <a href="#" id="addTextButton" class="btn btn-default" ng-click="playlistItemFactory.addTextWidget()">
+      <svg-icon p="riseWidgetText"></svg-icon>
+      <span translate="editor-app.playlistItem.add-text"></span>
+    </a>
+    <a href="#" id="addContentButton" class="btn btn-default" ng-click="playlistItemFactory.addContent()">
+      <svg-icon p="riseWidgetMore"></svg-icon>
+      <span translate="editor-app.playlistItem.add-widgets"></span>
+    </a>
+  </div>
+</div>
+
+<div rv-sortable on-sort="sortItem(evt)" append-to=".workspace-sidebar" class="editor-playlist sortable-list workspace-sidebar-body">
+  <!-- Item Playlist -->
+  <div class="editor-playlist-item rv-sortable-item" ng-repeat="item in factory.getItems() track by $index" ng-show="factory.getItems().length">
+    <div class="list-grip rv-sortable-handle">
+      <i class="fa fa-grip-large fa-rotate-grip grip-indicator"></i>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-xs btn-default editPlaylistItem" ng-click="playlistItemFactory.edit(item)" tooltip-placement="left" tooltip-append-to-body="true" tooltip="{{getDurationTooltip(item)}}">
+        <i class="fa fa-clock-o icon-sm-left"></i>
+        <span class="playlist-item-duration" ng-if="item.playUntilDone" translate="editor-app.playlistItem.playUntilDone-short"></span>
+        <span class="playlist-item-duration" ng-if="!item.playUntilDone">{{item.duration}}{{'editor-app.playlistItem.seconds-short' | translate}}</span>
+      </button>
+      <button class="btn btn-xs btn-default" id="duplicateButton" ng-click="factory.duplicateItem(item)" tooltip-placement="left"  tooltip-append-to-body="true" tooltip="{{'editor-app.playlistItem.duplicate' | translate}}"><i class="fa fa-copy"></i></button>
+      <button class="btn btn-xs btn-default" id="removeButton" ng-click="remove(item)" tooltip-placement="left" tooltip-append-to-body="true" tooltip="{{'editor-app.playlistItem.delete' | translate}}"><i class="fa fa-trash-o"></i></button>
+    </div>
+
+    <div class="name-container">
+      <p ng-click="showSettingsModal(item)" ng-if="isEditable(item)">
+        <span>
+          <svg-icon p="{{widgetUtils.getSvgIcon(item)}}"></svg-icon>
+        </span>
+        <span class="playlist-item-name">{{item.name}}</span>
+      </p>
+      <p class="playlist-item-name" ng-if="!isEditable(item)">{{item.name}}</p>
+    </div>
+  </div>
+  <!-- End Item Playlist-->
+
+  <!-- Empty State -->
+  <div ng-hide="factory.getItems().length">
+    <p class="text-muted text-center u_remove-bottom" translate="editor-app.playlistItem.no-playlistItem"></p>
+  </div>
+</div><!--editor-playlist-->

@@ -9,8 +9,8 @@ var folders = require("gulp-folders-4x");
 var colors = require("colors");
 
 var paths = {
-  localesJson: "./web/locales",
-  tmpLocales: "./web/tmp/locales",
+  localesJson: "./src/locales",
+  tmpLocales: "./src/tmp/locales",
   distLocales: "./dist/locales"
 };
 

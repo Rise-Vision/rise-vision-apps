@@ -100,7 +100,7 @@ var BrandingComponentScenarios = function () {
 
       describe('upload', function () {
         it('should upload a file and show the corresponding upload panel', function () {
-          var uploadFilePath = process.cwd() + '/web/images/e2e-upload-image-1.png';
+          var uploadFilePath = process.cwd() + '/src/images/e2e-upload-image-1.png';
           imageComponentPage.getUploadInputMain().sendKeys(uploadFilePath);
 
           expect(imageComponentPage.getUploadPanelMain().isDisplayed()).to.eventually.be.true;
@@ -128,7 +128,7 @@ var BrandingComponentScenarios = function () {
 
       describe('subsequent upload - should list a single file', function () {
         it('should upload a file and show the corresponding upload panel', function () {
-          var uploadFilePath = process.cwd() + '/web/images/e2e-upload-image-2.png';
+          var uploadFilePath = process.cwd() + '/src/images/e2e-upload-image-2.png';
           imageComponentPage.getUploadInputMain().sendKeys(uploadFilePath);
 
           expect(imageComponentPage.getUploadPanelMain().isDisplayed()).to.eventually.be.true;

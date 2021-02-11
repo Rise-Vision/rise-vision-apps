@@ -1,31 +1,23 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./web",
-    // "outDir": "./dist/out-tsc",
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
+    "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
-    "skipLibCheck": true,
-    
-    // basedon text and from quickstart app
-    "target": "es5",
-    "module": "commonjs",
-
-    //original from Typescrip documentation
-    // "target": "es2015",
-    // "module": "es2020",
-    
-
-    //fix "Can't resolve all parameters for AppModule" error
-    "emitDecoratorMetadata": true,
-
+    "target": "es2015",
     "lib": [
       "es2018",
       "dom"
     ]
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
   }
 }

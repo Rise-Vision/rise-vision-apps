@@ -8,14 +8,14 @@ var rename = require("gulp-rename");
 var colors = require("colors");
 
 var paths = {
-  sass: ["./web/scss/**/*.scss", "./web/scss/*.scss"],
-  appSass: "./web/scss/app.scss",
-  alignmentSass: "./web/scss/ui-components/alignment.scss",
-  tmpFonts: "./web/tmp/fonts",
-  tmpCss: "./web/tmp/css",
+  sass: ["./src/scss/**/*.scss", "./src/scss/*.scss"],
+  appSass: "./src/scss/app.scss",
+  alignmentSass: "./src/scss/ui-components/alignment.scss",
+  tmpFonts: "./src/tmp/fonts",
+  tmpCss: "./src/tmp/css",
   distFonts: "./dist/fonts",
   distCss: "./dist/css",
-  fonts: ["./web/bower_components/font-awesome/fonts/*.*","./web/bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*.*"]
+  fonts: ["./src/bower_components/font-awesome/fonts/*.*","./src/bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*.*"]
 };
 
 var cssBuild = {};
@@ -39,7 +39,7 @@ gulp.task("css-build-alignment", function () {
     .pipe(gulp.dest(paths.distCss));
 });
 
-gulp.task("css-build", gulp.series(gulp.parallel("css-build-alignment", "fonts-copy"), function() {
+gulp.task("css-compile", function() {
   console.log("[SASS] recompiling & minifying".yellow);
   return gulp.src(paths.appSass)
     .pipe(sass({
@@ -52,7 +52,9 @@ gulp.task("css-build", gulp.series(gulp.parallel("css-build-alignment", "fonts-c
     .pipe(rename("rise.min.css"))
     .pipe(gulp.dest(paths.tmpCss))
     .pipe(gulp.dest(paths.distCss));
-}));
+});
+
+gulp.task("css-build", gulp.series(gulp.parallel("css-build-alignment", "fonts-copy"), "css-compile"));
 
 gulp.task("css-watch", gulp.series("css-build", function(done) {
   // Watch Less files for changes
