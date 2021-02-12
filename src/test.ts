@@ -14,6 +14,10 @@ declare const require: {
   };
 };
 
+//TODO: Refactor
+declare var angular: any;
+angular.module('risevision.editor.directives',[])
+
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,

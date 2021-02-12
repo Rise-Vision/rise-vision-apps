@@ -639,10 +639,10 @@
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": []
+            "styles": [],
+            "scripts": [
+              "node_modules/angular/angular.js"
+            ]
           }
         },
         "lint": {
