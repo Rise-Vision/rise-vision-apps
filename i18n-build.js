@@ -6,7 +6,6 @@ var path = require("path");
 var jsoncombine = require("gulp-jsoncombine");
 var jsonminify = require("gulp-jsonminify");
 var folders = require("gulp-folders-4x");
-var colors = require("colors");
 
 var paths = {
   localesJson: "./src/locales",
