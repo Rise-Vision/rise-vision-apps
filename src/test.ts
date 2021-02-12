@@ -7,6 +7,8 @@ import {
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
 
+import * as angular from 'angular';
+
 declare const require: {
   context(path: string, deep?: boolean, filter?: RegExp): {
     keys(): string[];
@@ -14,8 +16,6 @@ declare const require: {
   };
 };
 
-//TODO: Refactor
-declare var angular: any;
 angular.module('risevision.editor.directives',[])
 
 // First, initialize the Angular testing environment.

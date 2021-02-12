@@ -640,9 +640,7 @@
               "src/assets"
             ],
             "styles": [],
-            "scripts": [
-              "node_modules/angular/angular.js"
-            ]
+            "scripts": []
           }
         },
         "lint": {
