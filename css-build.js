@@ -5,7 +5,6 @@ var gulp = require("gulp");
 var sass = require("gulp-sass");
 var cleanCSS = require("gulp-clean-css");
 var rename = require("gulp-rename");
-var colors = require("colors");
 
 var paths = {
   sass: ["./src/scss/**/*.scss", "./src/scss/*.scss"],

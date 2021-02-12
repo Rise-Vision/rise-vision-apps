@@ -98,6 +98,12 @@ var ScheduleAddScenarios = function() {
     });
 
     describe('Share Schedule cases:', function() {
+      before(function(){
+        // Workaround as protactor seems to get stuck
+        // on waitForAngular
+        browser.ignoreSynchronization = true;
+      });
+
       it('should open Share Schedule modal', function() {
         scheduleAddPage.getShareScheduleButton().click();
         helper.wait(shareSchedulePopoverPage.getShareSchedulePopover(), 'Shared Schedule Modal');
@@ -119,18 +125,18 @@ var ScheduleAddScenarios = function() {
       });
 
       it('should navigate to Embed Code and show Copy Embed Code button', function() {
-        helper.clickOverIFrame(shareSchedulePopoverPage.getEmbedCodeTabLink(), 'Embed Code link');
+        shareSchedulePopoverPage.getEmbedCodeTabLink().click();
         expect(shareSchedulePopoverPage.getCopyEmbedCodeButton().isDisplayed()).to.eventually.be.true;
         expect(shareSchedulePopoverPage.getGoBackButton().isDisplayed()).to.eventually.be.true;
       });
 
       it('should navigate back to main tab', function() {
-        helper.clickOverIFrame(shareSchedulePopoverPage.getGoBackButton(), 'Back button');
+        shareSchedulePopoverPage.getGoBackButton().click()
         expect(shareSchedulePopoverPage.getCopyLinkButton().isDisplayed()).to.eventually.be.true;
       });
 
       it('should navigate to Chrome Extension and show Extension link', function() {
-        helper.clickOverIFrame(shareSchedulePopoverPage.getChromeExtensionTabLink(), 'Chrome Extension link');
+        shareSchedulePopoverPage.getChromeExtensionTabLink().click();
         expect(shareSchedulePopoverPage.getChromeExtensionLink().isDisplayed()).to.eventually.be.true;
         expect(shareSchedulePopoverPage.getChromeExtensionLink().getAttribute('href')).to.eventually.equal('https://chrome.google.com/webstore/detail/rise-vision-anywhere/dkoohkdagjpgjheoaaegomjhdccfbcle');
       });
@@ -139,6 +145,11 @@ var ScheduleAddScenarios = function() {
         shareSchedulePopoverPage.getCloseButton().click();
 
         expect(shareSchedulePopoverPage.getShareSchedulePopover().isPresent()).to.eventually.be.false; 
+      });
+
+      after(function(){
+        //revert workaround
+        browser.ignoreSynchronization = false;
       });
     });
 
