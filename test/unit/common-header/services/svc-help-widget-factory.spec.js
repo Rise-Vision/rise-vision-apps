@@ -29,7 +29,7 @@ describe("Services: helpWidgetFactory", function() {
         openModule: sandbox.stub()
       };
 
-      $window.open = sandbox.stub();
+      sandbox.stub($window, 'open');
     });
   });
 
