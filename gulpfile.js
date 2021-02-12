@@ -1,4 +1,5 @@
 'use strict';
+
 var gulp        = require('gulp');
 var browserSync = require('browser-sync');
 var modRewrite  = require('connect-modrewrite');
@@ -14,7 +15,6 @@ var concat      = require("gulp-concat");
 var log         = require("fancy-log");
 var rename      = require('gulp-rename');
 var sourcemaps  = require('gulp-sourcemaps');
-var colors      = require("colors");
 var factory     = require("widget-tester").gulpTaskFactory;
 var fs          = require('fs');
 var os          = require('os');
@@ -133,18 +133,6 @@ gulp.task('pretty', function() {
     });
 });
 
-gulp.task("clean-dist", function () {
-  return gulp.src("dist", {read: false, allowEmpty: true})
-    .pipe(rimraf());
-});
-
-gulp.task("clean-tmp", function () {
-  return gulp.src("tmp", {read: false, allowEmpty: true})
-    .pipe(rimraf());
-});
-
-gulp.task("clean", gulp.parallel("clean-dist", "clean-tmp"));
-
 gulp.task("lint", function() {
   let lintError;
 
@@ -161,6 +149,20 @@ gulp.task("lint", function() {
       }
     });
 });
+
+gulp.task("clean-dist", function () {
+  return gulp.src("dist", {read: false, allowEmpty: true})
+    .pipe(rimraf());
+});
+
+gulp.task("clean-tmp", function () {
+  return gulp.src("tmp", {read: false, allowEmpty: true})
+    .pipe(rimraf());
+});
+
+gulp.task("clean", gulp.parallel("clean-dist", "clean-tmp"));
+
+//------------------------ Build --------------------------
 
 function buildHtml(path) {
   return gulp.src([path])
@@ -242,11 +244,9 @@ gulp.task("config", function() {
 
 gulp.task('build-pieces', gulp.series("clean", gulp.parallel('config', 'i18n-build', 'css-build', 'html2js')));
 
-gulp.task('build', gulp.series('build-pieces', "html"));
+gulp.task('build-cli', gulp.series('build-pieces', "html"));
 
-gulp.task('build-cli', gulp.series('clean', gulp.parallel('config', 'i18n-build', 'css-build', 'html2js'), "html"));
-
-/*---- testing ----*/
+/*---- Unit testing ----*/
 
 gulp.task("config-e2e", function() {
   var env = process.env.E2E_ENV || "dev";
@@ -269,6 +269,16 @@ gulp.task("test:unit", factory.testUnitAngular({
 }));
 
 gulp.task("coveralls", factory.coveralls());
+
+gulp.task("test", gulp.series("build-pieces", "test:unit", "coveralls"));
+
+/*---- e2e testing ----*/
+
+gulp.task("dist-server", factory.testServer({
+  html5mode: true,
+  rootPath: "./dist",
+  port: 8000
+}));
 
 gulp.task("server", factory.testServer({
   html5mode: true,
@@ -300,25 +310,19 @@ gulp.task("test:e2e:core", gulp.series("test:webdriver_update", factory.testE2EA
 
 gulp.task("test:e2e", gulp.series(gulp.parallel("config-e2e"), "server", "test:e2e:core", "server-close"));
 
-gulp.task("test", gulp.series("build-pieces", "test:unit", "coveralls"));
-
 //------------------------ Global ---------------------------------
 
-gulp.task('info', function(done) {
+gulp.task('default', function(done) {
   console.log('***********************'.yellow);
-  console.log('  gulp dev: start a server in the  root folder and watch dev files'.yellow);
-  console.log('  gulp test: run unit tests'.yellow);
-  console.log('  gulp test:e2e: run e2e tests'.yellow);
-  console.log('  gulp build: hint, lint, and minify files into ./dist '.yellow);
-  console.log('  gulp bower-clean-install: clean bower install'.yellow);
+  console.log('  npm run ng-start: start a server at port 8000 and watch angular files'.yellow);
+  console.log('  npm run ng-build: build angular & angularjs to the dist folder'.yellow);
+  console.log('  gulp dist-server: start a server at port 8000 for the dist folder'.yellow);  
+  console.log('***********************'.yellow);
+  console.log('  gulp build: build angularjs to dist'.yellow);
+  console.log('  gulp watch: watch angularjs tests & partials'.yellow);
+  console.log('  gulp test: run unit tests (angularjs)'.yellow);
+  console.log('  gulp test:e2e: run e2e tests (angularjs)'.yellow);
   console.log('***********************'.yellow);
   
   done();
 });
-
-exports.dev = gulp.parallel('lint', 'build-pieces', 'browser-sync', 'watch');
-
-/**
- * Default task, running just `gulp` will compile the sass, launch BrowserSync & watch files.
- */
-exports.default = exports.dev;
