@@ -10,9 +10,10 @@ import { UsernamePipe } from './pipes/username.pipe';
   declarations: [
     LastRevisedComponent, 
     UsernamePipe
-  ],
-  entryComponents: [
-    LastRevisedComponent
   ]
 })
-export class EditorModule { }
+export class EditorModule {
+  //workaround for including downgraded components into build files
+  //https://github.com/angular/angular/issues/35314#issuecomment-584821399
+  static entryComponents = [LastRevisedComponent]
+}
