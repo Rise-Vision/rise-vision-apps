@@ -15,5 +15,5 @@ import { UsernamePipe } from './pipes/username.pipe';
 export class EditorModule {
   //workaround for including downgraded components into build files
   //https://github.com/angular/angular/issues/35314#issuecomment-584821399
-  static entryComponents = [LastRevisedComponent]
+  static entryComponents = [ LastRevisedComponent ]
 }
