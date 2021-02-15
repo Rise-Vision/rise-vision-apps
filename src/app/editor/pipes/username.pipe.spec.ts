@@ -16,6 +16,7 @@ describe('UsernamePipe', () => {
   });
 
   it('should return simple usernames', () => {
+    fail();
     expect(pipe.transform('user')).toEqual('user');
   });
 });

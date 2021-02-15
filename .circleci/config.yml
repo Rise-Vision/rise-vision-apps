@@ -73,7 +73,10 @@ jobs:
       # Install latest chrome
       - browser-tools/install-chrome
       - run: 
-          name: unit_tests
+          name: Angular unit tests
+          command: NODE_ENV=test npm run ng-test-headless      
+      - run: 
+          name: Angular JS unit tests
           command: NODE_ENV=test npm run test
       - store_test_results:
           path: ~/rise-vision-apps/reports
