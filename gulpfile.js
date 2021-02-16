@@ -15,6 +15,7 @@ var concat      = require("gulp-concat");
 var log         = require("fancy-log");
 var rename      = require('gulp-rename');
 var sourcemaps  = require('gulp-sourcemaps');
+var colors      = require("colors");
 var factory     = require("widget-tester").gulpTaskFactory;
 var fs          = require('fs');
 var os          = require('os');
