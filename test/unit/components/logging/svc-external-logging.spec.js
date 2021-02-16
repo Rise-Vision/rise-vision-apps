@@ -36,6 +36,10 @@ describe("Services: externalLogging", function() {
       externalLogging = $injector.get("externalLogging");
     });
   });
+  
+  afterEach(function(){
+    clock.restore();
+  });
 
   it("should exist",function() {
     expect(externalLogging.logEvent).to.be.a("function");
@@ -72,7 +76,7 @@ describe("Services: externalLogging", function() {
         expect(postData.rows[0].json.event).to.equal("eventName");
         expect(postData.rows[0].json.event_details).to.equal("details");
         expect(postData.rows[0].json.event_value).to.equal(1);
-        clock.restore();
+
         done();
       }).then(null,done);
     });
@@ -102,9 +106,5 @@ describe("Services: externalLogging", function() {
       }).then(null,done);
     });
   }); 
-
-  afterEach(function(){
-    clock.restore();
-  });
 
 });
