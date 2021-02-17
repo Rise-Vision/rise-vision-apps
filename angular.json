@@ -384,7 +384,7 @@
               "src/scripts/displays/services/svc-display-email.js",
               "src/scripts/displays/services/svc-time-parser.js",
               "src/scripts/displays/services/svc-alerts-factory.js",
-              "node_modules/primus/dist/primus.js",
+              "src/vendor/primus/primus.js",
               "src/scripts/displays/services/svc-primus.js",
 
               "src/scripts/displays/filters/ftr-status.js",
