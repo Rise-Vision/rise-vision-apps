@@ -131,7 +131,7 @@ var ScheduleAddScenarios = function() {
       });
 
       it('should navigate back to main tab', function() {
-        shareSchedulePopoverPage.getGoBackButton().click()
+        shareSchedulePopoverPage.getGoBackButton().click();
         expect(shareSchedulePopoverPage.getCopyLinkButton().isDisplayed()).to.eventually.be.true;
       });
 
