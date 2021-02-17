@@ -24,6 +24,11 @@
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
+              "src/robots.txt",
+              "src/loading-preview.html",
+              "src/assets",
+              "src/images",
+              "src/vendor",
               "src/bower_components/oidc-client/dist/oidc-client.js",
               "src/scripts/user-manager-silent.js",
               "src/user-manager-silent.html",
