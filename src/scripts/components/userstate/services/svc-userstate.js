@@ -19,7 +19,7 @@
           user: {}, //Google user
           roleMap: {},
           userToken: rvTokenStore.read(),
-          inRVAFrame: angular.isDefined($location.search().inRVA),
+          inRVAFrame: angular.isDefined($location.search() && $location.search().inRVA),
           isRiseAuthUser: false
         };
 

@@ -32,7 +32,7 @@
           $log.debug('Company state has been reset.');
         };
 
-        if ($location.search().cid) {
+        if ($location.search() && $location.search().cid) {
           $log.debug('cid', $location.search().cid,
             'saved for later processing.');
           pendingSelectedCompany = $location.search().cid;

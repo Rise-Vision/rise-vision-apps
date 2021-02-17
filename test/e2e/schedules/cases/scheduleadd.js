@@ -98,6 +98,12 @@ var ScheduleAddScenarios = function() {
     });
 
     describe('Share Schedule cases:', function() {
+      before(function(){
+        // Workaround as protactor seems to get stuck
+        // on waitForAngular
+        browser.ignoreSynchronization = true;
+      });
+
       it('should open Share Schedule modal', function() {
         scheduleAddPage.getShareScheduleButton().click();
         helper.wait(shareSchedulePopoverPage.getShareSchedulePopover(), 'Shared Schedule Modal');
@@ -139,6 +145,11 @@ var ScheduleAddScenarios = function() {
         shareSchedulePopoverPage.getCloseButton().click();
 
         expect(shareSchedulePopoverPage.getShareSchedulePopover().isPresent()).to.eventually.be.false; 
+      });
+
+      after(function(){
+        //revert workaround
+        browser.ignoreSynchronization = false;
       });
     });
 

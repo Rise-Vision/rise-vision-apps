@@ -1,4 +1,5 @@
 'use strict';
+
 var gulp        = require('gulp');
 var browserSync = require('browser-sync');
 var modRewrite  = require('connect-modrewrite');
@@ -26,7 +27,7 @@ require("./css-build");
 //--------------------- Variables --------------------------------------
 
 var appJSFiles = [
-  "./src/scripts/app.js",
+  "./src/scripts/app.module.ajs.js",
   "./src/scripts/**/*.js"
 ];
 
@@ -71,7 +72,7 @@ var unitTestFiles = [
   "src/scripts/common-header/*.js",
   "src/scripts/common-header/**/*.js",
   "src/scripts/storage-selector-app.js",
-  "src/scripts/app.js",
+  "src/scripts/app.module.ajs.js",
   "src/scripts/purchase/**/*.js",
   "src/scripts/billing/**/*.js",
   "src/scripts/common/**/*.js",
@@ -132,18 +133,6 @@ gulp.task('pretty', function() {
     });
 });
 
-gulp.task("clean-dist", function () {
-  return gulp.src("dist", {read: false, allowEmpty: true})
-    .pipe(rimraf());
-});
-
-gulp.task("clean-tmp", function () {
-  return gulp.src("tmp", {read: false, allowEmpty: true})
-    .pipe(rimraf());
-});
-
-gulp.task("clean", gulp.parallel("clean-dist", "clean-tmp"));
-
 gulp.task("lint", function() {
   let lintError;
 
@@ -160,6 +149,20 @@ gulp.task("lint", function() {
       }
     });
 });
+
+gulp.task("clean-dist", function () {
+  return gulp.src("dist", {read: false, allowEmpty: true})
+    .pipe(rimraf());
+});
+
+gulp.task("clean-tmp", function () {
+  return gulp.src("tmp", {read: false, allowEmpty: true})
+    .pipe(rimraf());
+});
+
+gulp.task("clean", gulp.parallel("clean-dist", "clean-tmp"));
+
+//------------------------ Build --------------------------
 
 function buildHtml(path) {
   return gulp.src([path])
@@ -204,10 +207,6 @@ function buildHtml(path) {
     });
 }
 
-gulp.task("html-index", function () {
-  return buildHtml("./src/index.html");
-});
-
 gulp.task("html-selector", function () {
   return buildHtml("./src/storage-selector.html");
 });
@@ -216,17 +215,7 @@ gulp.task("html-user-manager-silent", function () {
   return buildHtml("./src/user-manager-silent.html");
 });
 
-gulp.task("html", gulp.parallel("lint", "html-index", "html-selector", "html-user-manager-silent"));
-
-gulp.task("jpgcompressor", function() {
-  return gulp.src("node_modules/compressorjs/dist/compressor.min.js")
-    .pipe(gulp.dest("src/vendor/compressor"));
-});
-
-gulp.task("tus", function() {
-  return gulp.src("node_modules/tus-js-client/dist/tus.min.js")
-    .pipe(gulp.dest("src/vendor/tus"));
-});
+gulp.task("html", gulp.parallel("lint", "html-selector", "html-user-manager-silent"));
 
 gulp.task("html2js", function() {
   return gulp.src(partialsHTMLFiles)
@@ -240,29 +229,9 @@ gulp.task("html2js", function() {
       prefix: "partials/"
     }))
     .pipe(concat("partials.js"))
-    .pipe(gulp.dest("./src/tmp/"));
+    .pipe(gulp.dest("./src/tmp/"))
+    .pipe(gulp.dest("./dist/tmp/"));
 });
-
-gulp.task("images", function () {
-  return gulp.src(['./src/images/**/*.*'])
-    .pipe(gulp.dest("dist/images"))
-    .on('error',function(e){
-      console.error(String(e));
-    })
-});
-
-gulp.task("vendor", function () {
-  return gulp.src(['./src/vendor/**/*.*'])
-    .pipe(gulp.dest("dist/vendor"))
-    .on('error',function(e){
-      console.error(String(e));
-    })
-});
-
-gulp.task("static-files", function() {
-  return gulp.src(['./src/loading-preview.html', './src/user-manager-silent.html', './src/robots.txt'])
-    .pipe(gulp.dest('dist/'));
-})
 
 gulp.task("config", function() {
   var env = process.env.NODE_ENV || "dev";
@@ -273,11 +242,11 @@ gulp.task("config", function() {
     .pipe(gulp.dest("./src/scripts/config"));
 });
 
-gulp.task('build-pieces', gulp.series("clean", gulp.parallel('config', 'i18n-build', 'css-build', 'html2js', 'tus', 'jpgcompressor')));
+gulp.task('build-pieces', gulp.series("clean", gulp.parallel('config', 'i18n-build', 'css-build', 'html2js')));
 
-gulp.task('build', gulp.series("clean", gulp.parallel('build-pieces', 'pretty'), gulp.parallel("html", "static-files", "images", "vendor")));
+gulp.task('build', gulp.series('build-pieces', "html"));
 
-/*---- testing ----*/
+/*---- Unit testing ----*/
 
 gulp.task("config-e2e", function() {
   var env = process.env.E2E_ENV || "dev";
@@ -301,9 +270,19 @@ gulp.task("test:unit", factory.testUnitAngular({
 
 gulp.task("coveralls", factory.coveralls());
 
+gulp.task("test", gulp.series("build-pieces", "test:unit", "coveralls"));
+
+/*---- e2e testing ----*/
+
+gulp.task("dist-server", factory.testServer({
+  html5mode: true,
+  rootPath: "./dist",
+  port: 8000
+}));
+
 gulp.task("server", factory.testServer({
   html5mode: true,
-  rootPath: "./src"
+  rootPath: "./dist"
 }));
 gulp.task("server-close", factory.testServerClose());
 gulp.task("test:webdriver_update", factory.webdriverUpdateSpecific({
@@ -329,27 +308,21 @@ gulp.task("test:e2e:core", gulp.series("test:webdriver_update", factory.testE2EA
   }()
 })));
 
-gulp.task("test:e2e", gulp.series(gulp.parallel("build-pieces", "config-e2e"), "server", "test:e2e:core", "server-close"));
-
-gulp.task("test", gulp.series("build-pieces", "test:unit", "coveralls"));
+gulp.task("test:e2e", gulp.series(gulp.parallel("config-e2e"), "server", "test:e2e:core", "server-close"));
 
 //------------------------ Global ---------------------------------
 
-gulp.task('info', function(done) {
+gulp.task('default', function(done) {
   console.log('***********************'.yellow);
-  console.log('  gulp dev: start a server in the  root folder and watch dev files'.yellow);
-  console.log('  gulp test: run unit tests'.yellow);
-  console.log('  gulp test:e2e: run e2e tests'.yellow);
-  console.log('  gulp build: hint, lint, and minify files into ./dist '.yellow);
-  console.log('  gulp bower-clean-install: clean bower install'.yellow);
+  console.log('  npm run ng-start: start a server at port 8000 and watch angular files'.yellow);
+  console.log('  npm run ng-build: build angular & angularjs to the dist folder'.yellow);
+  console.log('  gulp dist-server: start a server at port 8000 for the dist folder'.yellow);  
+  console.log('***********************'.yellow);
+  console.log('  gulp build: build angularjs to dist'.yellow);
+  console.log('  gulp watch: watch angularjs tests & partials'.yellow);
+  console.log('  gulp test: run unit tests (angularjs)'.yellow);
+  console.log('  gulp test:e2e: run e2e tests (angularjs)'.yellow);
   console.log('***********************'.yellow);
   
   done();
 });
-
-exports.dev = gulp.parallel('lint', 'build-pieces', 'browser-sync', 'watch');
-
-/**
- * Default task, running just `gulp` will compile the sass, launch BrowserSync & watch files.
- */
-exports.default = exports.dev;

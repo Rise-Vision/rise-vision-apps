@@ -73,10 +73,10 @@ jobs:
       # Install latest chrome
       - browser-tools/install-chrome
       - run: 
-          name: test_build
-          command: NODE_ENV=test npm run ci-build
+          name: Angular unit tests
+          command: NODE_ENV=test npm run ng-test-headless      
       - run: 
-          name: unit_tests
+          name: Angular JS unit tests
           command: NODE_ENV=test npm run test
       - store_test_results:
           path: ~/rise-vision-apps/reports
@@ -129,7 +129,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: NODE_ENV=stage npm run ci-build
+      - run: NODE_ENV=stage npm run ng-build
       - run: ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
       # We have 10 stage environments, apps-stage-0.risevision.com to apps-stage-9.risevision.com
       # To deploy to one of these environments a tag must be added to the commit message. For instance, [stage-0] for apps-stage-0.risevision.com.
@@ -149,7 +149,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: NODE_ENV=beta npm run ci-build
+      - run: NODE_ENV=beta npm run ng-build
       - run: ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
       - run: 
           name: Deploy to beta
@@ -165,7 +165,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: NODE_ENV=prod npm run ci-build
+      - run: NODE_ENV=prod npm run ng-build
       # It deploys to production server 2.
       - run: echo "deploying to production webserver1.risevision.com";
       - run: ssh -o StrictHostKeyChecking=no apps@webserver1.risevision.com 'mkdir -p /rise-front-end/apps';
@@ -184,7 +184,7 @@ jobs:
               echo "Beta branch exists ($BETA_BRANCH), skipping beta deployment";
             fi;
             if [ "$BETA_BRANCH" == '' ]; then
-              NODE_ENV=beta npm run ci-build
+              NODE_ENV=beta npm run ng-build
               echo "Beta branch missing, updating beta environment";
               ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
               rsync -rptz -e ssh --delete dist apps@webserver-stage.risevision.com:/rise-front-end/apps/stage-beta;

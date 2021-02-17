@@ -187,7 +187,7 @@ describe("Services: purchase factory", function() {
           .then(function() {
             expect(creditCardFactory.paymentMethods.invoiceDate).to.be.ok;
             expect(creditCardFactory.paymentMethods.invoiceDate).to.be.a("date");
-            expect(creditCardFactory.paymentMethods.invoiceDate - currentDate).to .equal(30 * 24 * 60 * 60 * 1000);
+            expect(creditCardFactory.paymentMethods.invoiceDate - currentDate).to.equal(30 * 24 * 60 * 60 * 1000);
             done();            
           });
       });
