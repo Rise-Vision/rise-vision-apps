@@ -43,7 +43,7 @@ gulp
 
 ### Run Local
 
-#### Angular
+#### Angular 
 
 * Start a server at port 8000 and watch angular files
 ```bash
