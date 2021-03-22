@@ -43,6 +43,7 @@ describe("directive: templateComponentPlaylist", function() {
     };
 
     sampleSelectedTemplates = [{
+      "tagName": "rise-embedded-template",
       "duration": 20,
       "play-until-done": true,
       "transition-type": "fadeIn",

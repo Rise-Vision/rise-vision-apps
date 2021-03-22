@@ -526,6 +526,8 @@
               "src/scripts/template-editor/components/directives/dtv-component-weather.js",
               "src/scripts/template-editor/components/directives/dtv-component-playlist.js",
 
+              "src/scripts/template-editor/components/controllers/ctr-playlist-item-json-modal.js",
+
               "src/scripts/storage/app.js",
               "src/scripts/storage/services/svc-storage-factory.js",
               "src/scripts/storage/services/svc-storage-utils.js",

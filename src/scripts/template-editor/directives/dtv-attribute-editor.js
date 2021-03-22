@@ -197,7 +197,14 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _handleMessageFromTemplate(event) {
-            var data = JSON.parse(event.data);
+            var data = event.data;
+
+            if ('string' === typeof event.data) {
+              try {
+                data = JSON.parse(event.data);
+              }
+              catch(e) {}
+            }
 
             if (data.type === 'editComponent') {
               $scope.editHighlightedComponent(data.value);

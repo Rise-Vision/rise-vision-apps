@@ -3,9 +3,9 @@
 angular.module('risevision.template-editor.directives')
   .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
   .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$loading',
-    '$q', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
+    '$q', '$modal', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
     function (templateEditorFactory, presentation, $loading,
-      $q, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory) {
+      $q, $modal, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -48,41 +48,48 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
+          var _mapItemToEditorFormat = function (item) {
+            return {
+              'duration': item.duration,
+              'play-until-done': item['play-until-done'],
+              'transition-type': item['transition-type'],
+              'tagName': item.element && item.element.tagName ? item.element.tagName : undefined,
+              'id': item.element && item.element.attributes ? item.element.attributes['presentation-id'] :
+                undefined,
+              'productCode': item.element && item.element.attributes ? item.element.attributes[
+                'template-id'] : undefined,
+              'attributes': item.element.attributes || {}
+            };
+          };
+
           $scope.jsonToSelectedTemplates = function (playlistItems) {
             var result = [];
 
             if (Array.isArray(playlistItems)) {
-              result = _.map(playlistItems, function (item) {
-                return {
-                  'duration': item.duration,
-                  'play-until-done': item['play-until-done'],
-                  'transition-type': item['transition-type'],
-                  'id': item.element && item.element.attributes ? item.element.attributes['presentation-id'] :
-                    undefined,
-                  'productCode': item.element && item.element.attributes ? item.element.attributes[
-                    'template-id'] : undefined
-                };
-              });
+              result = _.map(playlistItems, _mapItemToEditorFormat);
             }
 
             return result;
           };
 
+          var _mapEditorToItemFormat = function (item) {
+            var updatedItem = {
+              'duration': item.duration,
+              'play-until-done': item['play-until-done'],
+              'transition-type': item['transition-type'],
+              'element': {
+                'tagName': item.tagName || 'rise-embedded-template',
+                'attributes': item.attributes || {}
+              }
+            };
+            updatedItem.element.attributes['template-id'] = item.productCode;
+            updatedItem.element.attributes['presentation-id'] = item.id;
+
+            return updatedItem;
+          };
+
           $scope.selectedTemplatesToJson = function () {
-            var playlistItems = _.map($scope.selectedTemplates, function (item) {
-              return {
-                'duration': item.duration,
-                'play-until-done': item['play-until-done'],
-                'transition-type': item['transition-type'],
-                'element': {
-                  'tagName': 'rise-embedded-template',
-                  'attributes': {
-                    'template-id': item.productCode,
-                    'presentation-id': item.id
-                  }
-                }
-              };
-            });
+            var playlistItems = _.map($scope.selectedTemplates, _mapEditorToItemFormat);
 
             return playlistItems;
           };
@@ -101,15 +108,26 @@ angular.module('risevision.template-editor.directives')
             $scope.view = 'edit';
           };
 
+          $scope.isEmbeddedTemplate = function (item) {
+            return item.tagName === 'rise-embedded-template' || !item.tagName;
+          };
+
           $scope.loadTemplateNames = function (templates) {
 
             if (!templates || !templates.length) {
               return;
             }
 
-            var presentationIds = _.map(templates, function (item) {
-              return 'id:' + item.id;
-            });
+            var presentationIds = _.map(_.filter(templates, $scope.isEmbeddedTemplate), 
+              function (item) {
+                return 'id:' + item.id;
+              });
+
+            if (!presentationIds.length) {
+              $scope.selectedTemplates = templates;
+
+              return;
+            }
 
             var search = {
               filter: presentationIds.join(' OR ')
@@ -133,7 +151,7 @@ angular.module('risevision.template-editor.directives')
                     });
                   }
 
-                  if (!found) {
+                  if (!found && $scope.isEmbeddedTemplate(template)) {
                     template.name = 'Unknown';
                     template.revisionStatusName = 'Template not found.';
                     template.removed = true;
@@ -280,6 +298,51 @@ angular.module('risevision.template-editor.directives')
             item['transition-type'] = $scope.selectedItem['transition-type'];
 
             $scope.save();
+          };
+
+          $scope.addItemJson = function () {
+            var item = {
+              'duration': 10,
+              'play-until-done': false,
+              'transition-type': 'normal',
+              'element': {
+                'tagName': 'rise-text',
+                'attributes': {
+                  'id': '1',
+                  'value': 'Example'
+                }
+              }
+            };
+
+            return $modal.open({
+              templateUrl: 'partials/template-editor/components/playlist-item-json-modal.html',
+              size: 'lg',
+              controller: 'PlaylistItemJsonController',
+              resolve: {
+                item: function() {
+                  return item;
+                }
+              }
+            }).result.then(function(result) {
+              $scope.selectedTemplates.push(_mapItemToEditorFormat(result));
+              $scope.save();
+            });
+          };
+
+          $scope.editItemJson = function (key) {
+            return $modal.open({
+              templateUrl: 'partials/template-editor/components/playlist-item-json-modal.html',
+              size: 'lg',
+              controller: 'PlaylistItemJsonController',
+              resolve: {
+                item: function() {
+                  return _mapEditorToItemFormat($scope.selectedTemplates[key]);
+                }
+              }
+            }).result.then(function(result) {
+              $scope.selectedTemplates[key] = _mapItemToEditorFormat(result);
+              $scope.save();
+            });
           };
 
           $scope.createNewTemplate = function () {

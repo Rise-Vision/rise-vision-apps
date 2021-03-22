@@ -115,6 +115,10 @@ gulp.task('browser-sync', function() {
  * Watch scss files for changes & recompile
  * Watch html/md files, run jekyll & reload BrowserSync
  */
+ gulp.task('watch-html', function () {
+   return gulp.watch(partialsHTMLFiles, gulp.series('html2js'));
+ });
+
 gulp.task('watch', function (done) {
   gulp.watch(partialsHTMLFiles, gulp.series('html2js'));
   gulp.watch(unitTestFiles, gulp.series('test:unit'));
