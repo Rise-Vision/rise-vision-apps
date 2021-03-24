@@ -4,8 +4,10 @@ angular.module('risevision.template-editor.directives')
   .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
   .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$loading',
     '$q', '$modal', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
+    'ENV_NAME',
     function (templateEditorFactory, presentation, $loading,
-      $q, $modal, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory) {
+      $q, $modal, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory,
+      ENV_NAME) {
       return {
         restrict: 'E',
         scope: true,
@@ -18,6 +20,7 @@ angular.module('risevision.template-editor.directives')
             sortBy: 'changeDate',
             reverse: true
           };
+          $scope.showJsonOption = !!ENV_NAME;
 
           function _load() {
             var itemsJson = $scope.getAvailableAttributeData($scope.componentId, 'items');
@@ -300,6 +303,20 @@ angular.module('risevision.template-editor.directives')
             $scope.save();
           };
 
+          var _editJsonModal = function (item) {
+            return $modal.open({
+              templateUrl: 'partials/template-editor/components/playlist-item-json-modal.html',
+              windowClass: 'madero-style',
+              size: 'md',
+              controller: 'PlaylistItemJsonController',
+              resolve: {
+                item: function() {
+                  return item;
+                }
+              }
+            }).result;
+          };
+
           $scope.addItemJson = function () {
             var item = {
               'duration': 10,
@@ -314,32 +331,16 @@ angular.module('risevision.template-editor.directives')
               }
             };
 
-            return $modal.open({
-              templateUrl: 'partials/template-editor/components/playlist-item-json-modal.html',
-              size: 'lg',
-              controller: 'PlaylistItemJsonController',
-              resolve: {
-                item: function() {
-                  return item;
-                }
-              }
-            }).result.then(function(result) {
+            return _editJsonModal(item).then(function(result) {
               $scope.selectedTemplates.push(_mapItemToEditorFormat(result));
               $scope.save();
             });
           };
 
           $scope.editItemJson = function (key) {
-            return $modal.open({
-              templateUrl: 'partials/template-editor/components/playlist-item-json-modal.html',
-              size: 'lg',
-              controller: 'PlaylistItemJsonController',
-              resolve: {
-                item: function() {
-                  return _mapEditorToItemFormat($scope.selectedTemplates[key]);
-                }
-              }
-            }).result.then(function(result) {
+            var item = _mapEditorToItemFormat($scope.selectedTemplates[key]);
+
+            return _editJsonModal(item).then(function(result) {
               $scope.selectedTemplates[key] = _mapItemToEditorFormat(result);
               $scope.save();
             });

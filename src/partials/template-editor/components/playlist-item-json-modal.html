@@ -1,23 +1,27 @@
 <div id="playlist-item-json-modal">
   <div class="modal-header">
-    <button id="dismissButton" type="button" class="close" ng-click="dismiss()">
-      <i class="fa fa-times"></i>
+    <button type="button" class="close" ng-click="dismiss()" data-dismiss="modal" aria-hidden="true">
+      <streamline-icon name="close" width="12" height="12"></streamline-icon>
     </button>
-    <h3 class="modal-title">Modify Playlist Item JSON</h3>
   </div>
-  <div class="modal-body">	
-    <textarea class="form-control u_margin-md-top" rows="12" ng-model="formData.playlistItemJson"></textarea>
+  <div class="modal-body" stop-event="touchend">
+    <h4 class="modal-title">Modify Playlist Item JSON</h4>
+
+    <textarea class="form-control" rows="6" ng-model="formData.playlistItemJson"></textarea>
   </div>
 
   <div class="modal-footer">
-    <button id="saveButton" type="submit" class="btn btn-primary" ng-click="save()">
-      {{'common.save' | translate}}
-      <i class="fa fa-check icon-right"></i>
-    </button>
-
-    <button id="cancelButton" class="btn btn-default" ng-click="dismiss()">
-      {{'common.cancel' | translate}}
-      <i class="fa fa-times icon-right"></i>
-    </button>
+    <div class="row">
+      <div class="col-xs-6">
+        <button id="cancelButton" class="btn btn-default w-100" ng-click="dismiss()">
+          Cancel
+        </button>
+      </div>
+      <div class="col-xs-6">
+        <button id="saveButton" type="submit" class="btn btn-primary w-100" ng-click="save()">
+          Save
+        </button>
+      </div>
+    </div>
   </div>
 </div>
