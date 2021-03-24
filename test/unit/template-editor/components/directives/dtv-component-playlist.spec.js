@@ -566,7 +566,7 @@ describe("directive: templateComponentPlaylist", function() {
 
       directive.show();
 
-      $scope.addItemJson(0)
+      $scope.addItemJson()
         .then(function() {
           expect($scope.selectedTemplates.length).to.equal(2);
           expect($scope.selectedTemplates[1]["duration"]).to.equal(20);
