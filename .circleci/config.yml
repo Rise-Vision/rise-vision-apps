@@ -16,9 +16,6 @@ commands:
       # Install latest chrome
       - browser-tools/install-chrome
       - run:
-          name: Clean reports directory
-          command: rm -r reports
-      - run:
           name: e2e_tests
           command: |
             export STAGE_ENV=$(cat stage.txt)
@@ -88,6 +85,9 @@ jobs:
           path: ~/rise-vision-apps/reports
       - store_artifacts:
           path: ~/rise-vision-apps/reports
+      - run:
+          name: Clean reports directory
+          command: rm -r reports
       - persist_to_workspace:
           root: ~/
           paths:
