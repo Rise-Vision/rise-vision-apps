@@ -270,7 +270,7 @@ gulp.task("test:unit", factory.testUnitAngular({
 
 gulp.task("coveralls", factory.coveralls());
 
-gulp.task("test", gulp.series("build-pieces", "test:unit", "coveralls"));
+gulp.task("test", gulp.series("config", "test:unit", "coveralls"));
 
 /*---- e2e testing ----*/
 
