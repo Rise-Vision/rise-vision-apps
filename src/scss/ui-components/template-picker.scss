@@ -1,6 +1,6 @@
 .product-grid {
 
-  .panel {
+  >.panel {
     max-height: calc(100vh - 275px);
     overflow-y: auto;
   }
@@ -51,6 +51,10 @@
    ========================================================================== */
    
 @media (min-width: 992px) {
+  .product-grid >.panel {
+    max-height: calc(100vh - 225px);
+  }
+
   .product-grid {
     .product-grid_image {
       height: 180px;
