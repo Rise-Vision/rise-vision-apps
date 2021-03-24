@@ -169,6 +169,32 @@
       productCode: '356ab5e0541a41e96e4ef0b45ecac9f72af454ac',
       // cannot use type 'volume', it may interfere with the other plan
       type: 'volume for financial',
+    }, {
+      name: 'C-Scape iCandy LED Ticker License',
+      productCode: '2374db80249aa3b862df6feea177a55e97015319'
+    }, {
+      name: 'LED Ticker License',
+      // productCode: 'led-ticker-license',
+      productCode: 'led',
+      type: 'volume for led ticker'
+    },
+    // Archived:
+    {
+      name: 'Premium Financial MarketWall',
+      productCode: '0c583c663655c246c3e7b3c1be0ec05a442211aa',
+      type: 'volume for premium marketwall'
+    }, {
+      name: 'Basic Financial MarketWall',
+      productCode: '0dbb19f8394612730c2673b092d811e46413b132',
+      type: 'volume for basic marketwall'
+    }, {
+      name: 'Premium LED Ticker License',
+      productCode: 'c91e5b9762036cb6f0f0d7b93032c11897a9da1b',
+      type: 'volume for premium ticker'
+    }, {
+      name: 'Basic LED Ticker License',
+      productCode: '74eb12a1c0ade021f875213bf796b2ef8b174753',
+      type: 'volume for basic ticker'  
     }])
     .factory('plansService', ['PLANS_LIST',
       function (PLANS_LIST) {
