@@ -16,7 +16,8 @@
     "ng-e2e": "ng e2e",
     "test": "gulp test",
     "pretest-e2e": "npm run ng-build",
-    "test-e2e": "gulp test:e2e"
+    "test-e2e": "gulp test:e2e",
+    "test-e2e-ci": "gulp test:e2e"
   },
   "private": true,
   "license": "GNU",

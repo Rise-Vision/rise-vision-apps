@@ -23,7 +23,7 @@ commands:
             export CHROME_VERSION=$(google-chrome --version | grep -iE "[0-9.]{10,20}")
             echo "Chrome version $CHROME_VERSION";
             TEST_FILES=$(circleci tests glob "<< parameters.casesfile >>" | circleci tests split)
-            NODE_ENV=test XUNIT_FILE=~/rise-vision-apps/reports/angular-xunit.xml PROSHOT_DIR=~/rise-vision-apps/reports/screenshots DBUS_SESSION_BUS_ADDRESS=/dev/null xvfb-run -a --server-args="-screen 0 1280x800x24" node run-test.js $TEST_FILES
+            XUNIT_FILE=~/rise-vision-apps/reports/angular-xunit.xml PROSHOT_DIR=~/rise-vision-apps/reports/screenshots DBUS_SESSION_BUS_ADDRESS=/dev/null xvfb-run -a --server-args="-screen 0 1280x800x24" node run-test.js $TEST_FILES
       - store_test_results:
           path: ~/rise-vision-apps/reports
       - store_artifacts:
@@ -78,10 +78,20 @@ jobs:
       - run: 
           name: Angular JS unit tests
           command: NODE_ENV=test npm run test
+      - run: 
+          name: Build app for e2e tests
+          command: NODE_ENV=test npm run ng-build
       - store_test_results:
           path: ~/rise-vision-apps/reports
       - store_artifacts:
           path: ~/rise-vision-apps/reports
+      - run:
+          name: Clean reports directory
+          command: rm -r reports
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - rise-vision-apps/*
   e2e_apps_sections:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE

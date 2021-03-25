@@ -6,4 +6,4 @@ console.log(txt);
 
 fs.writeFileSync('/tmp/testFiles.txt', txt);
 
-require('child_process').execSync('npm run test-e2e', {stdio:[0,1,2]});
+require('child_process').execSync('npm run test-e2e-ci', {stdio:[0,1,2]});
