@@ -4,6 +4,7 @@ describe("directive: templateComponentPlaylist", function() {
   var sandbox = sinon.sandbox.create(),
       $scope,
       $loading,
+      $modal,
       element,
       factory,
       editorFactory,
@@ -38,17 +39,46 @@ describe("directive: templateComponentPlaylist", function() {
           },
           "play-until-done": true,
           "transition-type": "fadeIn"
+        },
+        {
+          "duration": 10,
+          "element": {
+            "attributes": {
+              "id": "text1",
+              "value": "Sample"
+            },
+            "tagName": "rise-text"
+          },
+          "play-until-done": false,
+          "transition-type": "fadeIn"
         }
       ]
     };
 
-    sampleSelectedTemplates = [{
-      "duration": 20,
-      "play-until-done": true,
-      "transition-type": "fadeIn",
-      "id": "presentation-id-1",
-      "productCode": "template-id-1"
-    }];
+    sampleSelectedTemplates = [
+      {
+        "tagName": "rise-embedded-template",
+        "duration": 20,
+        "play-until-done": true,
+        "transition-type": "fadeIn",
+        "id": "presentation-id-1",
+        "productCode": "template-id-1",
+        "attributes": {
+          "presentation-id": "old-presentation-id-1",
+          "template-id": "old-template-id-1"
+        }
+      }, 
+      {
+        "tagName": "rise-text",
+        "duration": 10,
+        "play-until-done": false,
+        "transition-type": "fadeIn",
+        "attributes": {
+          "id": "text1",
+          "value": "sample"
+        }
+      }
+    ];
 
     sampleTemplatesFactory = {
       items: {
@@ -146,14 +176,35 @@ describe("directive: templateComponentPlaylist", function() {
 
     setTimeout(function() {
 
-      expect($scope.selectedTemplates.length).to.equal(1);
+      expect($scope.selectedTemplates.length).to.equal(2);
       expect($scope.selectedTemplates[0]["duration"]).to.equal(10);
-      expect($scope.selectedTemplates[0]["play-until-done"]).to.equal(true);
+      expect($scope.selectedTemplates[0]["play-until-done"]).to.be.true;
       expect($scope.selectedTemplates[0]["transition-type"]).to.equal("fadeIn");
       expect($scope.selectedTemplates[0]["id"]).to.equal("presentation-id-1");
       expect($scope.selectedTemplates[0]["productCode"]).to.equal("template-id-1");
       //check if name is loaded from server
       expect($scope.selectedTemplates[0]["name"]).to.equal("some name");
+      
+      expect($scope.selectedTemplates[0]["removed"]).to.be.false;
+
+      expect($scope.selectedTemplates[0]["tagName"]).to.equal("rise-embedded-template");
+      expect($scope.selectedTemplates[0].attributes).to.deep.equal({
+        "presentation-id": "presentation-id-1",
+        "template-id": "template-id-1"
+      });
+
+      expect($scope.selectedTemplates[1]["duration"]).to.equal(10);
+      expect($scope.selectedTemplates[1]["play-until-done"]).to.be.false;
+      expect($scope.selectedTemplates[1]["transition-type"]).to.equal("fadeIn");
+      expect($scope.selectedTemplates[1]["id"]).to.not.be.ok;
+      expect($scope.selectedTemplates[1]["productCode"]).to.not.be.ok;
+      expect($scope.selectedTemplates[1]["name"]).to.not.be.ok;
+
+      expect($scope.selectedTemplates[1]["tagName"]).to.equal("rise-text");
+      expect($scope.selectedTemplates[1].attributes).to.deep.equal({
+        "id": "text1",
+        "value": "Sample"
+      });
 
       done();
     }, 10);
@@ -185,14 +236,48 @@ describe("directive: templateComponentPlaylist", function() {
     directive.show();
 
     setTimeout(function() {
-      expect($scope.selectedTemplates[1]["id"]).to.equal("presentation-id-2");
-      expect($scope.selectedTemplates[1]["productCode"]).to.equal("template-id-2");
-      expect($scope.selectedTemplates[1]["name"]).to.equal("Unknown");
-      expect($scope.selectedTemplates[1]["revisionStatusName"]).to.equal("Template not found.");
-      expect($scope.selectedTemplates[1]["removed"]).to.be.true;
+      expect($scope.selectedTemplates[2]["id"]).to.equal("presentation-id-2");
+      expect($scope.selectedTemplates[2]["productCode"]).to.equal("template-id-2");
+      expect($scope.selectedTemplates[2]["name"]).to.equal("Unknown");
+      expect($scope.selectedTemplates[2]["revisionStatusName"]).to.equal("Template not found.");
+      expect($scope.selectedTemplates[2]["removed"]).to.be.true;
 
       done();
     }, 10);
+  });
+
+  it("should load attribute data correctly even without embedded templates", function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+    var copySampleAttributeData = {
+      items: [
+        sampleAttributeData.items[1]
+      ]
+    };
+
+    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+      return copySampleAttributeData[attributeName];
+    };
+
+    $scope.selectedTemplates = sampleSelectedTemplates; //some garbage data from past session
+
+    directive.show();
+
+    expect($scope.componentId).to.equal("TEST-ID");
+
+    expect($scope.selectedTemplates.length).to.equal(1);
+    expect($scope.selectedTemplates[0]["duration"]).to.equal(10);
+    expect($scope.selectedTemplates[0]["play-until-done"]).to.be.false;
+    expect($scope.selectedTemplates[0]["transition-type"]).to.equal("fadeIn");
+    expect($scope.selectedTemplates[0]["id"]).to.not.be.ok;
+    expect($scope.selectedTemplates[0]["productCode"]).to.not.be.ok;
+    expect($scope.selectedTemplates[0]["name"]).to.not.be.ok;
+
+    expect($scope.selectedTemplates[0]["tagName"]).to.equal("rise-text");
+    expect($scope.selectedTemplates[0].attributes).to.deep.equal({
+      "id": "text1",
+      "value": "Sample"
+    });
+
   });
 
   it("should save items to attribute data", function() {
@@ -211,13 +296,20 @@ describe("directive: templateComponentPlaylist", function() {
     $scope.selectedTemplates = sampleSelectedTemplates;
     var items = $scope.selectedTemplatesToJson();
 
-    expect(items.length).to.equal(1);
+    expect(items.length).to.equal(2);
     expect(items[0]["play-until-done"]).to.equal(true);
     expect(items[0]["duration"]).to.equal(20);
     expect(items[0]["transition-type"]).to.equal("fadeIn");
     expect(items[0].element["tagName"]).to.equal("rise-embedded-template");
     expect(items[0].element.attributes["template-id"]).to.equal("template-id-1");
     expect(items[0].element.attributes["presentation-id"]).to.equal("presentation-id-1");
+
+    expect(items[1]["play-until-done"]).to.equal(false);
+    expect(items[1]["duration"]).to.equal(10);
+    expect(items[1]["transition-type"]).to.equal("fadeIn");
+    expect(items[1].element["tagName"]).to.equal("rise-text");
+    expect(items[1].element.attributes["id"]).to.equal("text1");
+    expect(items[1].element.attributes["value"]).to.equal("sample");
   });
 
   it("should show spinner when templates factory is initializing", function(done) {
@@ -346,7 +438,7 @@ describe("directive: templateComponentPlaylist", function() {
 
     $scope.removeTemplate(0);
 
-    expect($scope.selectedTemplates.length).to.equal(0);
+    expect($scope.selectedTemplates.length).to.equal(1);
   });
 
   it("calling sortItem should move item in playlist", function() {

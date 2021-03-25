@@ -15,8 +15,12 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
           </div>
           <div class="col-xs-10 pl-0 pr-0">
             <span class="playlist-item-name">
-              <div class="templates-name">{{ value.name }}</div>
-              <div class="templates-status templates-status-inline" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised' || value.removed}">{{ value.revisionStatusName }}</div>
+              <div class="templates-name" ng-show="isEmbeddedTemplate(value)">{{ value.name }}</div>
+              <div class="templates-name" ng-hide="isEmbeddedTemplate(value)">{{ value.tagName }}</div>
+              <div class="templates-status templates-status-inline" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised' || value.removed}" ng-show="isEmbeddedTemplate(value)">{{ value.revisionStatusName }}</div>
+              <div class="templates-status templates-status-inline" ng-hide="isEmbeddedTemplate(value)">
+                
+              </div>
               <div class="templates-status templates-status-inline" ng-hide="value.removed"> • {{ durationToText(value) }}</div>
             </span>
           </div>
