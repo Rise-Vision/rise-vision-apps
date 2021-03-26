@@ -36,6 +36,13 @@ angular.module('risevision.common.gapi', [
           var fileref = document.createElement('script');
           fileref.setAttribute('type', 'text/javascript');
           fileref.setAttribute('src', src);
+
+          fileref.onerror = function(error) {
+            console.log('gapi load error', error);
+            deferred.reject(error);
+            $window.removeEventListener('gapi.loaded', gapiLoaded, false);
+          };
+
           if (typeof fileref !== 'undefined') {
             document.getElementsByTagName('body')[0].appendChild(fileref);
           }
@@ -72,6 +79,8 @@ angular.module('risevision.common.gapi', [
               }
             });
           }
+        }).catch(function(err) {
+          deferred.reject(err);
         });
         return deferred.promise;
       };
@@ -106,6 +115,8 @@ angular.module('risevision.common.gapi', [
                   deferred.reject(err || errMsg);
                 });
             }
+          }).catch(function(err) {
+            deferred.reject(err);
           });
           return deferred.promise;
         };
