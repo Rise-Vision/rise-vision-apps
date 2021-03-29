@@ -47,18 +47,25 @@ describe("controller: Log In", function() {
       return sinon.spy();
     });
 
+    $provide.value("$sce", {
+      trustAsHtml: sinon.stub().callsFake(function(message) {
+        return message;
+      })
+    });
+
     $provide.value("translateFilter", function(key){
       return "translated " + key;
     });
 
   }));
-  var $scope, $loading, uiFlowManager, urlStateService, customAuthFactory, userAuthFactory, googleAuthFactory;
+  var $scope, $loading, $sce, uiFlowManager, urlStateService, customAuthFactory, userAuthFactory, googleAuthFactory;
   beforeEach(function () {
     
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
 
       $loading = $injector.get("$loading");
+      $sce = $injector.get("$sce");
       uiFlowManager = $injector.get("uiFlowManager");
       customAuthFactory = $injector.get("customAuthFactory");
       userAuthFactory = $injector.get("userAuthFactory");
@@ -187,6 +194,16 @@ describe("controller: Log In", function() {
           expect($scope.errors.genericError).to.be.falsey;
           expect($scope.errors.userAccountLockoutError).to.be.falsey;
           expect($scope.messages.isGoogleAccount).to.be.falsey;
+
+          done();
+        },10);
+      });
+
+      it("should sanitize error message", function(done) {
+        $scope.customLogin("endStatus");
+
+        setTimeout(function(){
+          $sce.trustAsHtml.should.have.been.calledWith('Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.');
 
           done();
         },10);
