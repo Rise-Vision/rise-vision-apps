@@ -47,13 +47,21 @@
 
         var _cancelAccessTokenAutoRefresh = function () {};
 
-        var _resetUserState = function () {
+        var _resetUserState = function (signOutGoogle) {
+          var promise = $q.resolve();
+
+          if (!userState.isRiseAuthUser()) {
+            promise = googleAuthFactory.signOut(signOutGoogle);
+          }
+
           $log.debug('Clearing user token...');
           _cancelAccessTokenAutoRefresh();
 
           _deleteUserToken();
 
           userState._resetState();
+
+          return promise;
         };
 
         var _detectUserOrAuthChange = function () {
@@ -219,7 +227,7 @@
               userState._setIsRiseAuthUser(isRiseAuthUser);
               authenticateDeferred.resolve();
             })
-            .then(null, function (err) {
+            .catch(function (err) {
               $log.debug('Authentication Error: ', err);
 
               _resetUserState();
@@ -238,22 +246,16 @@
         };
 
         var signOut = function (signOutGoogle) {
-          var promise = $q.resolve();
-          if (!userState.isRiseAuthUser()) {
-            promise = googleAuthFactory.signOut(signOutGoogle);
-          }
-
           _authenticateDeferred = null;
 
           // The flag the indicates a user is potentially
           // authenticated already, must be destroyed.
-          _resetUserState();
-
-          //call google api to sign out
-          $rootScope.$broadcast('risevision.user.signedOut');
-          $log.debug('User is signed out.');
-
-          return promise;
+          return _resetUserState(signOutGoogle)
+            .finally(function() {
+              //call google api to sign out
+              $rootScope.$broadcast('risevision.user.signedOut');
+              $log.debug('User is signed out.');              
+            });
         };
 
         var userAuthFactory = {

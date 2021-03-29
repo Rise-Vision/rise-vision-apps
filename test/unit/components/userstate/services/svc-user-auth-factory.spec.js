@@ -198,8 +198,20 @@ describe("Services: userAuthFactory", function() {
           expect(userState._state.userToken).to.be.undefined;
           rvTokenStore.clear.should.have.been.called;
           userState._resetState.should.have.been.calledOnce;
+          googleAuthFactory.signOut.should.have.been.called;
 
           $broadcastSpy.should.not.have.been.calledWith("risevision.user.authorized");
+
+          done();
+        })
+        .then(null,done);
+      });
+
+      it("should not sign user out if not using rise auth", function(done) {
+        isRiseAuthUser = true;
+
+        userAuthFactory.authenticate(true).then(done, function(msg) {
+          googleAuthFactory.signOut.should.not.have.been.called;
 
           done();
         })
