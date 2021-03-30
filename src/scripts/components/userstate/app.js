@@ -39,8 +39,8 @@
         $locationProvider.hashPrefix('/');
 
         $urlRouterProvider
-          .when(/\/.*(id_token|access_token)=.*/, ['$window', 'userAuthFactory', 'openidConnect',
-            function ($window, userAuthFactory, openidConnect) {
+          .when(/\/.*(id_token|access_token)=.*/, ['$window', '$state', 'userAuthFactory', 'openidConnect',
+            function ($window, $state, userAuthFactory, openidConnect) {
               console.log('Google Auth result received');
 
               var location = $window.location.href;
@@ -50,15 +50,20 @@
                 .then(function (user) {
                   $window.location.hash = '';
 
-                  return userAuthFactory.authenticate(true);
+                  return userAuthFactory.authenticate(true)
+                    .catch(function(e) {
+                      return $state.go('common.auth.unauthorized', {
+                        authError: e
+                      });
+                    });
                 })
                 .catch(function () {
                   $window.location.hash = '';
                 });
             }
           ])
-          .when('/', ['$location', 'userAuthFactory', 'openidConnect',
-            function ($location, userAuthFactory, openidConnect) {
+          .when('/', ['$location', '$state', 'userAuthFactory', 'openidConnect',
+            function ($location, $state, userAuthFactory, openidConnect) {
               var hash = $location.hash();
 
               if (hash && hash.match(/.*(id_token|access_token)=.*/)) {
@@ -66,7 +71,12 @@
 
                 openidConnect.signinRedirectCallback()
                   .then(function (user) {
-                    return userAuthFactory.authenticate(true);
+                    return userAuthFactory.authenticate(true)
+                      .catch(function(e) {
+                        return $state.go('common.auth.unauthorized', {
+                          authError: e
+                        });
+                      });
                   })
                   .finally(function () {
                     window.location.hash = '';
@@ -105,7 +115,8 @@
             controller: 'LoginCtrl',
             params: {
               isSignUp: false,
-              passwordReset: null
+              passwordReset: null,
+              authError: null
             }
           })
 
