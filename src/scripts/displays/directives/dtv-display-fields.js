@@ -24,7 +24,7 @@ angular.module('risevision.displays.directives')
               displayFactory.display.playerProAuthorized = false;
               plansFactory.confirmAndPurchase();
             } else {
-              playerLicenseFactory.updateDisplayLicenseLocal();
+              playerLicenseFactory.updateDisplayLicenseLocal(displayFactory.display);
             }
           };
 
