@@ -56,44 +56,14 @@ angular.module('risevision.common.gapi', [
     }
   ])
 
-  .factory('clientAPILoader', ['$q', '$log', 'gapiLoader',
-    function ($q, $log, gapiLoader) {
-      return function () {
-        return gapiLoader()
-          .then(function (gApi) {
-            var deferred = $q.defer();
-
-            if (gApi.client) {
-              //already loaded. return right away
-              return gApi;
-            }
-
-            gApi.load('client', function (err) {
-              if (gApi.client) {
-                $log.debug('client API Loaded');
-
-                deferred.resolve(gApi);
-              } else {
-                var errMsg = 'client API Load Failed';
-                $log.error(errMsg, err);
-                return deferred.reject(err || errMsg);
-              }
-            });
-
-            return deferred.promise;
-          });
-      };
-    }
-  ])
-
   //abstract method for creading a loader factory service that loads any
   //custom Google Client API library
 
-  .factory('gapiClientLoaderGenerator', ['$q', '$log', 'clientAPILoader',
-    function ($q, $log, clientAPILoader) {
+  .factory('gapiClientLoaderGenerator', ['$q', '$log', 'gapiLoader',
+    function ($q, $log, gapiLoader) {
       return function (libName, libVer, baseUrl) {
         return function () {
-          return clientAPILoader()
+          return gapiLoader()
             .then(function (gApi) {
               if (gApi.client[libName]) {
                 // already loaded. return right away

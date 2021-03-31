@@ -35,26 +35,17 @@ describe("Services: gapi", function() {
         $window = $injector.get("$window");
         $location = $injector.get("$location");
 
-        var gapiClient = {
-          load: sinon.spy(function(path, version, cb, url) {
-            if (loadApi) {
-              $window.gapi.client[path] = {version: version};
-              return Q.resolve();
-            } else {
-              return Q.reject({});
-            }
-          })
-        };
-
-        $window.gapi = {};
-        
-        $window.gapi.load = function(path, cb) {
-          if (path === "client") {
-            $window.gapi[path] = gapiClient;
-          } else {
-            $window.gapi[path] = {};
+        $window.gapi = {
+          client: {
+            load: sinon.spy(function(path, version, cb, url) {
+              if (loadApi) {
+                $window.gapi.client[path] = {version: version};
+                return Q.resolve();
+              } else {
+                return Q.reject({});
+              }
+            })
           }
-          cb();
         };
 
         $window.handleClientJSLoad();
@@ -68,18 +59,6 @@ describe("Services: gapi", function() {
           gapiLoader().then(function () {
             done();
           });
-        });
-      });
-    });
-    
-    describe("clientAPILoader", function () {
-      it("should load", function(done) {
-        inject(function (clientAPILoader) {
-          expect(clientAPILoader).to.be.ok;
-          clientAPILoader().then(function () {
-            expect($window.gapi.client).to.be.ok;
-            done();
-          }, done);
         });
       });
     });
@@ -319,114 +298,6 @@ describe("Services: gapi", function() {
 
   });
 
-  describe("clientAPILoader:", function() {
-    beforeEach(module(function ($provide) {
-      gApi = {
-        load: sinon.stub().callsFake(function(client, cb) {
-          gApi.client = "API";
-
-          cb();
-        })
-      };
-
-      $provide.service("$q", function() {return Q;});
-      $provide.service("gapiLoader", function() {
-        return sinon.stub().returns(Q.resolve(gApi));
-      });
-    }));
-
-    var clientAPILoader, gapiLoader, gApi;
-
-    beforeEach(function() {
-      inject(function($injector) {
-        clientAPILoader = $injector.get("clientAPILoader");
-        gapiLoader = $injector.get("gapiLoader");
-      });
-    });
-
-    it("should exist", function() {
-      expect(clientAPILoader).to.be.ok;      
-      expect(clientAPILoader).to.be.a('function');
-    });
-
-    it("should load a gapi client", function (done) {
-      clientAPILoader()
-        .then(function (clientAPI) {
-          gApi.load.should.have.been.called;
-          gApi.load.should.have.been.calledWith("client", sinon.match.func);
-
-          expect(clientAPI).to.equal(gApi);
-
-          done();
-        }, done);
-    });
-
-    it("should return gapi client if existing", function (done) {
-      gApi.client = "existingAPI";
-
-      clientAPILoader()
-        .then(function (clientAPI) {
-          gApi.load.should.not.have.been.called;
-
-          expect(clientAPI).to.equal(gApi);
-
-          done();
-        }, done);
-    });
-
-    it("should handle failure to load a gapi client", function (done) {
-      gApi.load.callsFake(function(client, cb) {
-        cb();
-      });
-
-      clientAPILoader()
-        .then(done)
-        .catch(function(err) {
-          gApi.load.should.have.been.called;
-
-          expect(gApi.client).to.not.be.ok;
-
-          expect(err).to.be.ok;
-          expect(err).to.equal('client API Load Failed');
-
-          done();
-        });
-    });
-
-    it("should return gapi client error", function (done) {
-      gApi.load.callsFake(function(client, cb) {
-        cb("error");
-      });
-
-      clientAPILoader()
-        .then(done)
-        .catch(function(err) {
-          expect(err).to.be.ok;
-          expect(err).to.equal("error");
-
-          done();
-        });
-    });
-
-    it("should handle gapiLoader failures", function (done) {
-      gapiLoader.returns(Q.reject("failure"));
-
-      clientAPILoader()
-        .then(done)
-        .catch(function(err) {
-          gApi.load.should.not.have.been.called;
-
-          expect(gApi.client).to.not.be.ok;
-
-          expect(err).to.be.ok;
-          expect(err).to.equal('failure');
-
-          done();
-        });
-    });
-
-  });
-
   describe("gapiClientLoaderGenerator:", function() {
     beforeEach(module(function ($provide) {
       gApi = {
@@ -439,17 +310,17 @@ describe("Services: gapi", function() {
       };
 
       $provide.service("$q", function() {return Q;});
-      $provide.service("clientAPILoader", function() {
+      $provide.service("gapiLoader", function() {
         return sinon.stub().returns(Q.resolve(gApi));
       });
     }));
 
-    var gapiClientLoaderGenerator, clientAPILoader, gApi;
+    var gapiClientLoaderGenerator, gapiLoader, gApi;
 
     beforeEach(function() {
       inject(function($injector) {
         gapiClientLoaderGenerator = $injector.get("gapiClientLoaderGenerator");
-        clientAPILoader = $injector.get("clientAPILoader");
+        gapiLoader = $injector.get("gapiLoader");
       });
     });
 
@@ -518,8 +389,8 @@ describe("Services: gapi", function() {
       });
     });
 
-    it("should handle clientAPILoader failures", function (done) {
-      clientAPILoader.returns(Q.reject("failure"));
+    it("should handle gapiLoader failures", function (done) {
+      gapiLoader.returns(Q.reject("failure"));
 
       var loaderFn = gapiClientLoaderGenerator("custom", "v0", "someUrls");
       loaderFn().then(done)
