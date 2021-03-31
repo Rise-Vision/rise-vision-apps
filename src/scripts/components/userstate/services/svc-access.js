@@ -15,7 +15,7 @@ angular.module('risevision.common.components.userstate')
               return $q.reject();
             }
           })
-          .then(null, function () {
+          .catch(function () {
             var newState;
 
             if (!userState.isLoggedIn()) {

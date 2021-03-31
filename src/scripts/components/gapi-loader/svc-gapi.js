@@ -3,16 +3,13 @@
 'use strict';
 
 /* jshint ignore:start */
-var gapiLoadingStatus = null;
-var handleClientJSLoad = function () {
-  gapiLoadingStatus = 'loaded';
+window.gapiLoadingStatus = null;
+window.handleClientJSLoad = function () {
+  window.gapiLoadingStatus = 'loaded';
+
   console.debug('ClientJS is loaded.');
-  //Ready: create a generic event
-  var evt = document.createEvent('Events');
-  //Aim: initialize it to be the event we want
-  evt.initEvent('gapi.loaded', true, true);
-  //FIRE!
-  window.dispatchEvent(evt);
+
+  window.dispatchEvent(new CustomEvent('gapi.loaded'));
 };
 /* jshint ignore:end */
 
@@ -33,19 +30,27 @@ angular.module('risevision.common.gapi', [
 
           var src = $window.gapiSrc ||
             '//apis.google.com/js/client.js?onload=handleClientJSLoad';
-          var fileref = document.createElement('script');
+          var fileref = $window.document.createElement('script');
           fileref.setAttribute('type', 'text/javascript');
           fileref.setAttribute('src', src);
+
+          fileref.onerror = function(error) {
+            console.log('gapi load error', error);
+            deferred.reject(error);
+            $window.removeEventListener('gapi.loaded', gapiLoaded, false);
+          };
+
           if (typeof fileref !== 'undefined') {
-            document.getElementsByTagName('body')[0].appendChild(fileref);
+            $window.document.getElementsByTagName('body')[0].appendChild(fileref);
           }
 
           gapiLoaded = function () {
             deferred.resolve($window.gapi);
-            $window.removeEventListener('gapi.loaded', gapiLoaded, false);
+            $window.removeEventListener('gapi.loaded', gapiLoaded);
           };
-          $window.addEventListener('gapi.loaded', gapiLoaded, false);
+          $window.addEventListener('gapi.loaded', gapiLoaded);
         }
+
         return deferred.promise;
       };
     }
@@ -54,12 +59,15 @@ angular.module('risevision.common.gapi', [
   .factory('clientAPILoader', ['$q', '$log', 'gapiLoader',
     function ($q, $log, gapiLoader) {
       return function () {
-        var deferred = $q.defer();
-        gapiLoader().then(function (gApi) {
-          if (gApi.client) {
-            //already loaded. return right away
-            deferred.resolve(gApi);
-          } else {
+        return gapiLoader()
+          .then(function (gApi) {
+            var deferred = $q.defer();
+
+            if (gApi.client) {
+              //already loaded. return right away
+              return gApi;
+            }
+
             gApi.load('client', function (err) {
               if (gApi.client) {
                 $log.debug('client API Loaded');
@@ -68,12 +76,12 @@ angular.module('risevision.common.gapi', [
               } else {
                 var errMsg = 'client API Load Failed';
                 $log.error(errMsg, err);
-                deferred.reject(err || errMsg);
+                return deferred.reject(err || errMsg);
               }
             });
-          }
-        });
-        return deferred.promise;
+
+            return deferred.promise;
+          });
       };
     }
   ])
@@ -85,17 +93,19 @@ angular.module('risevision.common.gapi', [
     function ($q, $log, clientAPILoader) {
       return function (libName, libVer, baseUrl) {
         return function () {
-          var deferred = $q.defer();
-          clientAPILoader().then(function (gApi) {
-            if (gApi.client[libName]) {
-              // already loaded. return right away
-              deferred.resolve(gApi.client[libName]);
-            } else {
-              gApi.client.load(libName, libVer, null, baseUrl)
+          return clientAPILoader()
+            .then(function (gApi) {
+              if (gApi.client[libName]) {
+                // already loaded. return right away
+                return gApi.client[libName];
+              }
+
+              return gApi.client.load(libName, libVer, null, baseUrl)
                 .then(function () {
                   if (gApi.client[libName]) {
                     $log.debug(libName + '.' + libVer + ' Loaded');
-                    deferred.resolve(gApi.client[libName]);
+
+                    return gApi.client[libName];
                   } else {
                     return $q.reject();
                   }
@@ -103,11 +113,9 @@ angular.module('risevision.common.gapi', [
                 .catch(function (err) {
                   var errMsg = libName + '.' + libVer + ' Load Failed';
                   $log.error(errMsg, err);
-                  deferred.reject(err || errMsg);
+                  return $q.reject(err || errMsg);
                 });
-            }
-          });
-          return deferred.promise;
+            });
         };
       };
     }

@@ -36,6 +36,14 @@ angular.module('risevision.common.components.userstate')
         }
       };
 
+      var _init = function () {
+        if ($stateParams.authError && $stateParams.authError !== 'No user') {
+          _processErrorCode($stateParams.authError, 'in');
+        }
+      };
+
+      _init();
+
       $scope.googleLogin = function (endStatus) {
         $loading.startGlobal('auth-buttons-login');
         googleAuthFactory.forceAuthenticate()
