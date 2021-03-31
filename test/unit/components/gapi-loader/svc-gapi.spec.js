@@ -1,7 +1,7 @@
 /* jshint expr:true */
 "use strict";
 
-describe("Services: gapi", function() {
+describe.only("Services: gapi", function() {
   beforeEach(module("risevision.common.gapi"));
 
   describe("gapi loader (old)", function() {
@@ -217,16 +217,70 @@ describe("Services: gapi", function() {
   });
 
   // NEW
+  describe("rejectOnTimeout:", function() {
+    var $timeout, $log, rejectOnTimeout;
+    
+    beforeEach(function () {
+      inject(function($injector) {
+        $timeout = $injector.get("$timeout");
+        $log = $injector.get("$log");
+        rejectOnTimeout = $injector.get("rejectOnTimeout");
+
+        sinon.stub($log, 'error');
+      });
+    });
+
+    it("should reject if the timeout expires", function(done) {
+      var deferred = Q.defer();
+
+      deferred.promise
+        .then(done)
+        .catch(function(error) {
+          expect(error).to.equal('api Load Timeout');
+
+          $log.error.should.have.been.calledWith('api Load Timeout');
+
+          done();
+        });
+
+      rejectOnTimeout(deferred, 'api');
+
+      $timeout.flush();
+    });
+
+    it("should not reject if the promise is resolved", function(done) {
+      var deferred = Q.defer();
+
+      deferred.promise
+        .catch(done)
+        .finally(function() {
+          $timeout.verifyNoPendingTasks();
+
+          $log.error.should.not.have.been.called;
+
+          done();            
+        });
+
+      rejectOnTimeout(deferred, 'api');
+
+      deferred.resolve();
+    });
+
+  });  
+
   describe("gapiLoader:", function() {
     beforeEach(module(function ($provide) {
       $provide.service("$q", function() {return Q;});
+
+      $provide.value("rejectOnTimeout", sinon.stub());
     }));
     
-    var $window, gapiLoader, element;
+    var $window, rejectOnTimeout, gapiLoader, element;
     
     beforeEach(function () {
       inject(function($injector) {
         $window = $injector.get("$window");
+        rejectOnTimeout = $injector.get("rejectOnTimeout");
         gapiLoader = $injector.get("gapiLoader");
 
         element = $window.document.createElement('script');
@@ -260,6 +314,23 @@ describe("Services: gapi", function() {
       gapiLoader();
 
       expect($window.gapiLoadingStatus).to.equal("loading");
+
+      rejectOnTimeout.should.have.been.calledWith(sinon.match.object, "gapi");
+    });
+
+    it("should return window.gapi object if already exists", function(done) {
+      $window.gapiLoadingStatus = "loaded";
+      $window.gapi = {};
+
+      gapiLoader().then(function (gApi) {
+        expect(gApi).to.equal($window.gapi);
+
+        element.setAttribute.should.not.have.been.called;
+
+        rejectOnTimeout.should.not.have.been.called;
+
+        done();
+      });
     });
 
     it("should initialize and add script element", function() {
@@ -313,14 +384,16 @@ describe("Services: gapi", function() {
       $provide.service("gapiLoader", function() {
         return sinon.stub().returns(Q.resolve(gApi));
       });
+      $provide.value("rejectOnTimeout", sinon.stub());
     }));
 
-    var gapiClientLoaderGenerator, gapiLoader, gApi;
+    var gapiClientLoaderGenerator, gapiLoader, rejectOnTimeout, gApi;
 
     beforeEach(function() {
       inject(function($injector) {
         gapiClientLoaderGenerator = $injector.get("gapiClientLoaderGenerator");
         gapiLoader = $injector.get("gapiLoader");
+        rejectOnTimeout = $injector.get("rejectOnTimeout");
       });
     });
 
@@ -336,6 +409,8 @@ describe("Services: gapi", function() {
         gApi.client.load.should.have.been.called;
         gApi.client.load.should.have.been.calledWith("custom", "v0", null, "someUrls");
 
+        rejectOnTimeout.should.have.been.calledWith(sinon.match.object, "custom.v0");
+
         expect(clientAPI).to.equal("API");
 
         done();
@@ -348,6 +423,8 @@ describe("Services: gapi", function() {
 
       loaderFn().then(function (clientAPI) {
         gApi.client.load.should.not.have.been.called;
+
+        rejectOnTimeout.should.not.have.been.called;
 
         expect(clientAPI).to.equal("existingAPI");
 
