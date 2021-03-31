@@ -21,58 +21,12 @@ angular.module('risevision.displays.directives')
 
           $scope.updatingRPP = false;
 
-          var _updateDisplayLicenseLocal = function () {
-            var playerProAuthorized = displayFactory.display.playerProAuthorized;
-            var company = userState.getCopyOfSelectedCompany(true);
-
-            displayFactory.display.playerProAssigned = playerProAuthorized;
-            displayFactory.display.playerProAuthorized = company.playerProAvailableLicenseCount > 0 &&
-              playerProAuthorized;
-          };
-
-          var _updateDisplayLicense = function () {
-            var apiParams = {};
-            var playerProAuthorized = displayFactory.display.playerProAuthorized;
-
-            $scope.errorUpdatingRPP = false;
-            $scope.updatingRPP = true;
-            apiParams[displayFactory.display.id] = playerProAuthorized;
-
-            enableCompanyProduct(displayFactory.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
-              .then(function (resp) {
-                var resultDisplays = resp && resp.item && resp.item.displays;
-                if (resultDisplays && resultDisplays[displayFactory.display.id] === apiParams[displayFactory
-                    .display.id]) {
-                  _updateDisplayLicenseLocal();
-                  playerLicenseFactory.toggleDisplayLicenseLocal(displayFactory.display.playerProAuthorized);
-                } else {
-                  throw new Error('License could not be updated. Please try again.');
-                }
-              })
-              .catch(function (err) {
-                $scope.errorUpdatingRPP = processErrorCode(err);
-
-                displayFactory.display.playerProAuthorized = !playerProAuthorized;
-              })
-              .finally(function () {
-                if (!playerProAuthorized) {
-                  displayFactory.display.monitoringEnabled = false;
-                }
-
-                $scope.updatingRPP = false;
-              });
-          };
-
           $scope.toggleProAuthorized = function () {
             if (!playerLicenseFactory.isProAvailable(displayFactory.display)) {
               displayFactory.display.playerProAuthorized = false;
               plansFactory.confirmAndPurchase();
             } else {
-              if (displayFactory.display.id) {
-                _updateDisplayLicense();
-              } else {
-                _updateDisplayLicenseLocal();
-              }
+              playerLicenseFactory.updateDisplayLicenseLocal();
             }
           };
 

@@ -47,6 +47,45 @@ angular.module('risevision.displays.services')
         return factory.getProLicenseCount() > 0 && allProLicensesUsed;
       };
 
+      factory.updateDisplayLicenseLocal = function (display) {
+        var playerProAuthorized = display.playerProAuthorized;
+        var company = userState.getCopyOfSelectedCompany(true);
+
+        display.playerProAssigned = playerProAuthorized;
+        display.playerProAuthorized = company.playerProAvailableLicenseCount > 0 && playerProAuthorized;
+      };
+
+      factory.updateDisplayLicense = function (display) {
+        factory.apiError = '';
+        factory.updatingLicense = true;
+
+        var apiParams = {};
+        var playerProAuthorized = display.playerProAuthorized;
+        apiParams[display.id] = playerProAuthorized;
+
+        return enableCompanyProduct(display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
+          .then(function (resp) {
+            var resultDisplays = resp && resp.item && resp.item.displays;
+            if (resultDisplays && resultDisplays[display.id] === apiParams[display.id]) {
+              factory.updateDisplayLicenseLocal(display);
+              factory.toggleDisplayLicenseLocal(display.playerProAuthorized);
+            } else {
+              throw new Error('License could not be updated. Please try again.');
+            }
+          })
+          .catch(function (e) {
+            factory.apiError = processErrorCode(e);
+            $log.error(factory.apiError, e);
+            return $q.reject(e);
+          })
+          .finally(function () {
+            factory.updatingLicense = false;
+            if (!playerProAuthorized) {
+              display.monitoringEnabled = false;
+            }
+          });
+      };
+
       factory.toggleDisplayLicenseLocal = function (playerProAuthorized, displaysCount) {
         var count = displaysCount || 1;
         var company = userState.getCopyOfSelectedCompany(true);
