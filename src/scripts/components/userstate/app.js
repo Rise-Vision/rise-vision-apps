@@ -39,8 +39,8 @@
         $locationProvider.hashPrefix('/');
 
         $urlRouterProvider
-          .when(/\/.*(id_token|access_token)=.*/, ['$window', '$state', 'userAuthFactory', 'openidConnect',
-            function ($window, $state, userAuthFactory, openidConnect) {
+          .when(/\/.*(id_token|access_token)=.*/, ['$window', 'userAuthFactory', 'openidConnect',
+            function ($window, userAuthFactory, openidConnect) {
               console.log('Google Auth result received');
 
               var location = $window.location.href;
@@ -50,12 +50,7 @@
                 .then(function (user) {
                   $window.location.hash = '';
 
-                  return userAuthFactory.authenticate(true)
-                    .catch(function(e) {
-                      return $state.go('common.auth.unauthorized', {
-                        authError: e
-                      });
-                    });
+                  return userAuthFactory.authenticate(true);
                 })
                 .catch(function () {
                   $window.location.hash = '';
@@ -71,15 +66,15 @@
 
                 openidConnect.signinRedirectCallback()
                   .then(function (user) {
-                    return userAuthFactory.authenticate(true)
-                      .catch(function(e) {
-                        return $state.go('common.auth.unauthorized', {
-                          authError: e
-                        });
-                      });
+                    return userAuthFactory.authenticate(true);
                   })
-                  .finally(function () {
+                  .then(function () {
                     window.location.hash = '';
+                  })
+                  .catch(function(e) {
+                    return $state.go('common.auth.unauthorized', {
+                      authError: e
+                    });
                   });
               } else {
                 return false;

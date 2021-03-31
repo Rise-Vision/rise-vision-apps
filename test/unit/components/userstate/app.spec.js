@@ -87,11 +87,11 @@ describe("app:", function() {
           openidConnect = { signinRedirectCallback: sinon.stub().returns(Q.resolve()) };
 
           var args = urlRouterProvider.when.getCall(0).args[1];
-          rootMatcher = args[4];
+          rootMatcher = args[3];
         });
 
         it("should signin redirect callback", function(done) {
-          rootMatcher($window, $state, userAuthFactory, openidConnect);
+          rootMatcher($window, userAuthFactory, openidConnect);
 
           setTimeout(function() {
             openidConnect.signinRedirectCallback.should.have.been.calledWith('https://apps.risevision.com/#id_token=1234&client_id=A1223');
@@ -104,7 +104,7 @@ describe("app:", function() {
 
         it("should clear hash even if there's an issue with signing redirect", function(done) {
           openidConnect.signinRedirectCallback.returns(Q.reject());
-          rootMatcher($window, $state, userAuthFactory, openidConnect); // force a null pointer error
+          rootMatcher($window, userAuthFactory, openidConnect); // force a null pointer error
 
           setTimeout(function() {
             openidConnect.signinRedirectCallback.should.have.been.calledOnce;
@@ -135,11 +135,13 @@ describe("app:", function() {
         location = {
           hash: function() { return null }
         };
-        userAuthFactory = { authenticate: sinon.stub() };
+        userAuthFactory = { authenticate: sinon.stub().resolves() };
         openidConnect = { signinRedirectCallback: sinon.stub().resolves() };
 
         var args = urlRouterProvider.when.getCall(1).args[1];
         rootMatcher = args[4];
+
+        sinon.stub($state, "go");
       });
 
       it("should return false if there's no hash and no search code", function() {
@@ -186,18 +188,36 @@ describe("app:", function() {
         }, 10);
       });
 
-      it("should clear hash even if there's an issue with signing redirect", function(done) {
+      it("should redirect to unauthorized page on signing redirect callback failure", function(done) {
         location.hash = function() { return '&access_token=1234' };
+        openidConnect.signinRedirectCallback.returns(Q.reject('error'));
 
-        rootMatcher(location, $state, null, openidConnect); // force a null pointer error
+        rootMatcher(location, $state, userAuthFactory, openidConnect);
 
         setTimeout(function() {
-          openidConnect.signinRedirectCallback.should.have.been.calledOnce;
-          expect(window.location.hash).to.equal('');
+          $state.go.should.have.been.calledWith('common.auth.unauthorized', {
+            authError: 'error'
+          });
 
           done();
         }, 10);
       });
+
+      it("should redirect to unauthorized page on authenticate failure", function(done) {
+        location.hash = function() { return '&access_token=1234' };
+        userAuthFactory.authenticate.returns(Q.reject('authError'));
+
+        rootMatcher(location, $state, userAuthFactory, openidConnect);
+
+        setTimeout(function() {
+          $state.go.should.have.been.calledWith('common.auth.unauthorized', {
+            authError: 'authError'
+          });
+
+          done();
+        }, 10);
+      });
+
     });
   });
 
