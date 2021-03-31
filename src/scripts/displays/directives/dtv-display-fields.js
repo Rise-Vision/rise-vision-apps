@@ -19,8 +19,6 @@ angular.module('risevision.displays.directives')
           $scope.playerProFactory = playerProFactory;
           $scope.playerActionsFactory = playerActionsFactory;
 
-          $scope.updatingRPP = false;
-
           $scope.toggleProAuthorized = function () {
             if (!playerLicenseFactory.isProAvailable(displayFactory.display)) {
               displayFactory.display.playerProAuthorized = false;
