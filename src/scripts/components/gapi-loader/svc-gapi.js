@@ -16,13 +16,14 @@ window.handleClientJSLoad = function () {
 angular.module('risevision.common.gapi', [
     'risevision.common.components.util'
   ])
-  .factory('rejectOnTimeout', ['$log', '$timeout',
-    function($log, $timeout) {
+  .factory('rejectOnTimeout', ['$timeout',
+    function($timeout) {
       return function(deferred, entry) {
         var rejectTimeout = $timeout(function() {
-          var err = entry + ' Load Timeout';
-
-          $log.error(err);
+          var err = {
+            code: -1,
+            message: entry + ' Load Timeout'
+          };
 
           deferred.reject(err);
         }, 60 * 1000);
@@ -35,9 +36,16 @@ angular.module('risevision.common.gapi', [
     }
   ])
 
-  .factory('gapiLoader', ['$q', '$window', 'rejectOnTimeout',
-    function ($q, $window, rejectOnTimeout) {
+  .factory('gapiLoader', ['$q', '$window', '$exceptionHandler', 'rejectOnTimeout',
+    function ($q, $window, $exceptionHandler, rejectOnTimeout) {
       var deferred = $q.defer();
+
+      deferred.promise
+        .catch(function(err) {
+          $exceptionHandler(err, 'gapiLoader Error.', true);
+
+          return $q.reject(err);
+        });
 
       return function () {
         var gapiLoaded;
@@ -56,8 +64,8 @@ angular.module('risevision.common.gapi', [
           fileref.setAttribute('src', src);
 
           fileref.onerror = function(error) {
-            console.log('gapi load error', error);
             deferred.reject(error);
+
             $window.removeEventListener('gapi.loaded', gapiLoaded, false);
           };
 
@@ -80,8 +88,9 @@ angular.module('risevision.common.gapi', [
   //abstract method for creading a loader factory service that loads any
   //custom Google Client API library
 
-  .factory('gapiClientLoaderGenerator', ['$q', '$log', 'gapiLoader', 'rejectOnTimeout',
-    function ($q, $log, gapiLoader, rejectOnTimeout) {
+  .factory('gapiClientLoaderGenerator', ['$q', '$log', '$exceptionHandler', 'gapiLoader',
+    'rejectOnTimeout',
+    function ($q, $log, $exceptionHandler, gapiLoader, rejectOnTimeout) {
       return function (libName, libVer, baseUrl) {
         return function () {
           return gapiLoader()
@@ -102,16 +111,21 @@ angular.module('risevision.common.gapi', [
 
                     deferred.resolve(gApi.client[libName]);
                   } else {
-                    return $q.reject();
+                    deferred.reject();
                   }
                 })
-                .catch(function (err) {
-                  var errMsg = libName + '.' + libVer + ' Load Failed';
-                  $log.error(errMsg, err);
-                  deferred.reject(err || errMsg);
+                .catch(function(err) {
+                  deferred.reject(err);
                 });
 
-              return deferred.promise;
+              return deferred.promise
+                .catch(function(err) {
+                  var errMsg = libName + '.' + libVer + ' Load Failed';
+
+                  $exceptionHandler(err, errMsg, true);
+
+                  return $q.reject(err || errMsg);
+                });
             });
         };
       };

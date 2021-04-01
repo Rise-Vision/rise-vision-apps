@@ -131,9 +131,9 @@
               _setUserToken(authenticatedUser);
 
               userState.refreshProfile()
-                .then(null, function (err) {
+                .catch(function (err) {
                   if (err && err.code !== 403) {
-                    _authorizeDeferred.reject('Refresh Profile Error');
+                    _authorizeDeferred.reject(err);
 
                     _authorizeDeferred = undefined;
 
