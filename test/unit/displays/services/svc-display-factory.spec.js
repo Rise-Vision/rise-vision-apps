@@ -82,7 +82,8 @@ describe('service: displayFactory:', function() {
         toggleDisplayLicenseLocal: sinon.stub(),
         getProLicenseCount: sinon.stub(),
         areAllProLicensesUsed: sinon.stub().returns(true),
-        isProAvailable: sinon.stub().returns(false)
+        isProAvailable: sinon.stub().returns(false),
+        updateDisplayLicense: sinon.stub().returns(Q.resolve())
       };
     });
     $provide.factory('plansFactory', function() {
@@ -210,6 +211,7 @@ describe('service: displayFactory:', function() {
       .then(function() {
         expect(displayFactory.display).to.be.ok;
         expect(displayFactory.display.name).to.equal("some display");
+        expect(displayFactory.display.originalPlayerProAuthorized).to.equal(displayFactory.display.playerProAuthorized);
 
         setTimeout(function() {
           expect(displayFactory.loadingDisplay).to.be.false;
@@ -413,6 +415,51 @@ describe('service: displayFactory:', function() {
         expect(displayFactory.loadingDisplay).to.be.false;
 
         expect(displayFactory.apiError).to.be.ok;
+        done();
+      },10);
+    });
+
+    it('should update license if changed', function(done) {
+      updateDisplay = true;
+      displayFactory.display.originalPlayerProAuthorized = false;
+      displayFactory.display.playerProAuthorized = true;
+
+      displayFactory.updateDisplay();
+      
+      setTimeout(function(){
+        expect(playerLicenseFactory.updateDisplayLicense).to.have.been.called;
+        expect(displayFactory.display.originalPlayerProAuthorized).to.be.true;
+
+        expect(displayFactory.apiError).to.not.be.ok;
+        done();
+      },10);
+    });
+
+    it('should not update license if not changed', function(done) {
+      updateDisplay = true;
+      displayFactory.display.originalPlayerProAuthorized = true;
+      displayFactory.display.playerProAuthorized = true;
+
+      displayFactory.updateDisplay();
+      
+      setTimeout(function(){
+        expect(playerLicenseFactory.updateDisplayLicense).to.not.have.been.called;
+        expect(displayFactory.apiError).to.not.be.ok;
+        done();
+      },10);
+    });
+
+    it('should handle error on updating license', function(done) {
+      updateDisplay = true;
+      displayFactory.display.originalPlayerProAuthorized = false;
+      displayFactory.display.playerProAuthorized = true;
+
+      playerLicenseFactory.updateDisplayLicense.returns(Q.reject());
+
+      displayFactory.updateDisplay();
+      
+      setTimeout(function(){        
+        expect(displayFactory.apiError).to.equal('error');  
         done();
       },10);
     });

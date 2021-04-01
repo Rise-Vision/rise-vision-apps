@@ -3,13 +3,10 @@
 angular.module('risevision.displays.directives')
   .directive('displayFields', ['$sce', 'userState', 'display', 'displayFactory', 'playerLicenseFactory',
     'playerProFactory', 'displayControlFactory', 'playerActionsFactory', 'scheduleFactory',
-    'enableCompanyProduct', 'plansFactory',
-    'processErrorCode', 'messageBox', 'confirmModal',
-    'SHARED_SCHEDULE_URL', 'PLAYER_PRO_PRODUCT_CODE',
+    'plansFactory', 'messageBox', 'confirmModal', 'SHARED_SCHEDULE_URL',
     function ($sce, userState, display, displayFactory, playerLicenseFactory, playerProFactory,
-      displayControlFactory, playerActionsFactory, scheduleFactory, enableCompanyProduct, plansFactory,
-      processErrorCode, messageBox, confirmModal,
-      SHARED_SCHEDULE_URL, PLAYER_PRO_PRODUCT_CODE) {
+      displayControlFactory, playerActionsFactory, scheduleFactory, plansFactory,
+      messageBox, confirmModal, SHARED_SCHEDULE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/display-fields.html',

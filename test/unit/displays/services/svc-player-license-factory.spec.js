@@ -301,6 +301,110 @@ describe('Services: playerLicenseFactory', function() {
 
   });
 
+  describe('updateDisplayLicenseLocal:', function() {
+    it('should update playerProAssigned and playerProAuthorized', function() {
+      sandbox.stub(userState, 'getCopyOfSelectedCompany').returns({
+        playerProAvailableLicenseCount: 1
+      });
+      var display = { playerProAuthorized: true };
+
+      playerLicenseFactory.updateDisplayLicenseLocal(display);
+
+      expect(display.playerProAssigned).to.be.true;
+      expect(display.playerProAuthorized).to.be.true;
+    });
+
+    it('should assigne but not authorize if there are no licenses available', function() {
+      sandbox.stub(userState, 'getCopyOfSelectedCompany').returns({
+        playerProAvailableLicenseCount: 0
+      });
+      var display = { playerProAuthorized: true };
+
+      playerLicenseFactory.updateDisplayLicenseLocal(display);
+
+      expect(display.playerProAssigned).to.be.true;
+      expect(display.playerProAuthorized).to.be.false;
+    });
+
+    it('should authorize even if 0 license are available if display was originally assigned', function() {
+      sandbox.stub(userState, 'getCopyOfSelectedCompany').returns({
+        playerProAvailableLicenseCount: 0
+      });
+      var display = { 
+        playerProAuthorized: true,
+        originalPlayerProAuthorized: true
+      };
+
+      playerLicenseFactory.updateDisplayLicenseLocal(display);
+
+      expect(display.playerProAssigned).to.be.true;
+      expect(display.playerProAuthorized).to.be.true;
+    });
+  });
+
+  describe('updateDisplayLicense:', function() {
+    it('should license display', function(done) {
+      var display = { id: 'displayId', playerProAuthorized: true };
+      sandbox.stub(playerLicenseFactory, 'updateDisplayLicenseLocal');
+      sandbox.stub(playerLicenseFactory, 'toggleDisplayLicenseLocal');
+
+      playerLicenseFactory.updateDisplayLicense(display);
+
+      expect(playerLicenseFactory.apiError).to.equal('');
+      expect(playerLicenseFactory.updatingLicense).to.be.true;
+
+      setTimeout(function() {
+        expect(playerLicenseFactory.updateDisplayLicenseLocal).to.have.been.calledWith(display);
+        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(display.playerProAuthorized);
+
+        expect(playerLicenseFactory.apiError).to.equal('');
+        expect(playerLicenseFactory.updatingLicense).to.be.false;
+
+        done();
+      });
+    });
+
+    it('should handle license update failure', function(done) {
+      var display = { id: 'displayId', playerProAuthorized: true };
+      enableCompanyProduct.returns(Q.reject());
+
+      playerLicenseFactory.updateDisplayLicense(display)
+        .catch(function() {
+          expect(playerLicenseFactory.apiError).to.equal('processedError');
+          expect(playerLicenseFactory.updatingLicense).to.be.false;
+
+          done();
+        });
+    });
+
+    it('should fail if display id is not on the returned list from server', function(done) {
+      var display = { id: 'OTHER_displayId', playerProAuthorized: true };
+      sandbox.stub(playerLicenseFactory, 'updateDisplayLicenseLocal');
+      sandbox.stub(playerLicenseFactory, 'toggleDisplayLicenseLocal');
+
+      playerLicenseFactory.updateDisplayLicense(display)
+        .catch(function() {
+          expect(playerLicenseFactory.apiError).to.equal('processedError');
+          expect(playerLicenseFactory.updatingLicense).to.be.false;
+
+          done();
+        });
+    });
+
+    it('should toggle monitoring off when not licensed', function(done) {
+      var display = { id: 'displayId', playerProAuthorized: false, monitoringEnabled: true };
+      enableCompanyProduct.returns(Q.resolve({ 
+        item: { displays: { 'displayId': false } }
+      }));
+
+      playerLicenseFactory.updateDisplayLicense(display)
+        .then(function() {
+          expect(display.monitoringEnabled).to.be.false;
+          done();
+        });
+    });
+  });
+
   describe('toggleDisplayLicenseLocal: ', function() {
     it('should decrease Available License count if a Display is added', function() {
       sandbox.stub(userState, 'getCopyOfSelectedCompany').returns({
