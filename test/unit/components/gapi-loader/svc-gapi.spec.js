@@ -219,21 +219,20 @@ describe("Services: gapi", function() {
 
   // NEW
   describe("rejectOnTimeout:", function() {
-    var $timeout, $log, rejectOnTimeout;
+    var $timeout, rejectOnTimeout, deferred;
     
     beforeEach(function () {
       inject(function($injector) {
         $timeout = $injector.get("$timeout");
-        $log = $injector.get("$log");
         rejectOnTimeout = $injector.get("rejectOnTimeout");
 
-        sinon.stub($log, 'error');
+        deferred = Q.defer();
+        
+        sinon.spy(deferred, 'reject');
       });
     });
 
     it("should reject if the timeout expires", function(done) {
-      var deferred = Q.defer();
-
       deferred.promise
         .then(done)
         .catch(function(error) {
@@ -242,7 +241,7 @@ describe("Services: gapi", function() {
             message: 'api Load Timeout'
           });
 
-          $log.error.should.have.been.called;
+          deferred.reject.should.have.been.calledWith(error);
 
           done();
         });
@@ -253,14 +252,12 @@ describe("Services: gapi", function() {
     });
 
     it("should not reject if the promise is resolved", function(done) {
-      var deferred = Q.defer();
-
       deferred.promise
         .catch(done)
         .finally(function() {
           $timeout.verifyNoPendingTasks();
 
-          $log.error.should.not.have.been.called;
+          deferred.reject.should.not.have.been.called;
 
           done();            
         });

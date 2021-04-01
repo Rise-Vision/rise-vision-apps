@@ -5,11 +5,10 @@
     // constants (you can override them in your app as needed)
     .value('PROFILE_PICTURE_URL',
       'https://www.gravatar.com/avatar/{emailMD5}?d=mm')
-    .factory('userState', [
-      '$q', '$rootScope', '$window', '$log', '$location',
+    .factory('userState', ['$rootScope', '$window', '$log', '$location',
       'getUserProfile', 'companyState', 'objectHelper',
       'localStorageService', 'rvTokenStore', 'md5', 'PROFILE_PICTURE_URL',
-      function ($q, $rootScope, $window, $log, $location,
+      function ($rootScope, $window, $log, $location,
         getUserProfile, companyState, objectHelper,
         localStorageService, rvTokenStore, md5, PROFILE_PICTURE_URL) {
         //singleton factory that represents userState throughout application
@@ -24,21 +23,14 @@
         };
 
         var refreshProfile = function () {
-          var deferred = $q.defer();
-
           //populate profile if the current user is a rise vision user
-          getUserProfile(_state.user.username, true)
+          return getUserProfile(_state.user.username, true)
             .then(function (profile) {
               userState.updateUserProfile(profile);
 
               //populate company info
               return companyState.init();
-            })
-            .then(function () {
-              deferred.resolve();
-            }, deferred.reject);
-
-          return deferred.promise;
+            });
         };
 
         var isLoggedIn = function () {

@@ -16,16 +16,14 @@ window.handleClientJSLoad = function () {
 angular.module('risevision.common.gapi', [
     'risevision.common.components.util'
   ])
-  .factory('rejectOnTimeout', ['$log', '$timeout',
-    function($log, $timeout) {
+  .factory('rejectOnTimeout', ['$timeout',
+    function($timeout) {
       return function(deferred, entry) {
         var rejectTimeout = $timeout(function() {
           var err = {
             code: -1,
             message: entry + ' Load Timeout'
           };
-
-          $log.error(err);
 
           deferred.reject(err);
         }, 60 * 1000);
