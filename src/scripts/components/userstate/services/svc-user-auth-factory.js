@@ -86,47 +86,22 @@
         };
 
         var _visibilityListener = function () {
-          var visibilityState;
           var document = $document[0];
-          if (typeof document.hidden !== 'undefined') {
-            visibilityState = 'visibilityState';
-          } else if (typeof document.mozHidden !== 'undefined') {
-            visibilityState = 'mozVisibilityState';
-          } else if (typeof document.msHidden !== 'undefined') {
-            visibilityState = 'msVisibilityState';
-          } else if (typeof document.webkitHidden !== 'undefined') {
-            visibilityState = 'webkitVisibilityState';
-          }
-          $log.debug('visibility: ' + document[visibilityState]);
-          if ('visible' === document[visibilityState]) {
+
+          $log.debug('visibility: ' + document.visibilityState);
+
+          if ('visible' === document.visibilityState) {
             _detectUserOrAuthChange();
             $rootScope.$broadcast('risevision.page.visible', true);
           }
         };
 
-        var _getVisibilityChangeName = function () {
-          var visibilityChange;
-          var document = $document[0];
-          if (typeof document.hidden !== 'undefined') {
-            visibilityChange = 'visibilitychange';
-          } else if (typeof document.mozHidden !== 'undefined') {
-            visibilityChange = 'mozvisibilitychange';
-          } else if (typeof document.msHidden !== 'undefined') {
-            visibilityChange = 'msvisibilitychange';
-          } else if (typeof document.webkitHidden !== 'undefined') {
-            visibilityChange = 'webkitvisibilitychange';
-          }
-          return visibilityChange;
-        };
-
         var _addEventListenerVisibilityAPI = function () {
-          document.addEventListener(_getVisibilityChangeName(),
-            _visibilityListener);
+          document.addEventListener('visibilitychange', _visibilityListener);
         };
 
         var _removeEventListenerVisibilityAPI = function () {
-          document.removeEventListener(_getVisibilityChangeName(),
-            _visibilityListener);
+          document.removeEventListener('visibilitychange', _visibilityListener);
         };
 
         /*
