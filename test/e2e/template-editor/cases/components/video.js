@@ -63,11 +63,6 @@ var VideoComponentScenarios = function () {
       it('should list uploaded file only, with sample files removed', function() {
         expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(1);
       });
-
-      it('should auto-save the Presentation after updating the video list', function () {
-        //wait for presentation to be auto-saved
-        templateEditorPage.waitForAutosave();
-      });
     });
 
     describe('storage', function () {
@@ -172,11 +167,6 @@ var VideoComponentScenarios = function () {
         expect(videoComponentPage.getVolumeValue().getText()).to.eventually.equal('1');
       });
 
-      it('should auto-save the Presentation after updating volume', function () {
-        //wait for presentation to be auto-saved
-        templateEditorPage.waitForAutosave();
-      });
-
       it('should remove a video row', function () {
         var removeLink = videoComponentPage.getRemoveLinkFor('Beach-Ball.mp4');
 
@@ -185,11 +175,6 @@ var VideoComponentScenarios = function () {
 
         expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(1);
         expect(videoComponentPage.getVolumeComponent().isDisplayed()).to.eventually.be.true;
-      });
-
-      it('should auto-save the Presentation after removing a row', function () {
-        //wait for presentation to be auto-saved
-        templateEditorPage.waitForAutosave();
       });
 
       it('should remove another video row and hide volume', function () {
