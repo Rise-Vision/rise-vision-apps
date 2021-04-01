@@ -90,7 +90,7 @@ var SignInPage = function() {
         _this.getPasswordTextBox().clear();
         _this.getPasswordTextBox().sendKeys(password + enter);
 
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Custom Sign In');
+        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Custom Sign In', 60000);
       }
     });
   };
