@@ -18,6 +18,7 @@ describe("Services: gapi", function() {
           return "protocol";
         }
       });
+      $provide.value("$exceptionHandler", sinon.stub());
       $provide.service("getBaseDomain", function() {
         return function() {
           return "domain";
@@ -236,9 +237,12 @@ describe("Services: gapi", function() {
       deferred.promise
         .then(done)
         .catch(function(error) {
-          expect(error).to.equal('api Load Timeout');
+          expect(error).to.deep.equal({
+            code: -1,
+            message: 'api Load Timeout'
+          });
 
-          $log.error.should.have.been.calledWith('api Load Timeout');
+          $log.error.should.have.been.called;
 
           done();
         });
@@ -272,14 +276,16 @@ describe("Services: gapi", function() {
     beforeEach(module(function ($provide) {
       $provide.service("$q", function() {return Q;});
 
+      $provide.value("$exceptionHandler", sinon.stub());
       $provide.value("rejectOnTimeout", sinon.stub());
     }));
     
-    var $window, rejectOnTimeout, gapiLoader, element;
+    var $window, $exceptionHandler, rejectOnTimeout, gapiLoader, element;
     
     beforeEach(function () {
       inject(function($injector) {
         $window = $injector.get("$window");
+        $exceptionHandler = $injector.get("$exceptionHandler");
         rejectOnTimeout = $injector.get("rejectOnTimeout");
         gapiLoader = $injector.get("gapiLoader");
 
@@ -343,6 +349,13 @@ describe("Services: gapi", function() {
       expect(element.onerror).to.be.a("function");
     });
 
+    it("should only create script once", function() {
+      gapiLoader();
+      gapiLoader();
+
+      element.setAttribute.should.have.been.calledTwice;
+    });
+
     it("should load gapi", function(done) {
       $window.gapi = {};
 
@@ -350,6 +363,8 @@ describe("Services: gapi", function() {
 
       gapiLoader().then(function (gApi) {
         expect(gApi).to.equal($window.gapi);
+
+        $exceptionHandler.should.not.have.been.called;
 
         done();
       });
@@ -360,6 +375,8 @@ describe("Services: gapi", function() {
         .then(done)
         .catch(function (error) {
           expect(error).to.equal("loadError");
+
+          $exceptionHandler.should.have.been.calledWith('loadError', 'gapiLoader Error.', true);
 
           done();
         });
@@ -381,16 +398,21 @@ describe("Services: gapi", function() {
       };
 
       $provide.service("$q", function() {return Q;});
+
+      $provide.value("$exceptionHandler", sinon.stub());
+
       $provide.service("gapiLoader", function() {
         return sinon.stub().returns(Q.resolve(gApi));
       });
+
       $provide.value("rejectOnTimeout", sinon.stub());
     }));
 
-    var gapiClientLoaderGenerator, gapiLoader, rejectOnTimeout, gApi;
+    var $exceptionHandler, gapiClientLoaderGenerator, gapiLoader, rejectOnTimeout, gApi;
 
     beforeEach(function() {
       inject(function($injector) {
+        $exceptionHandler = $injector.get("$exceptionHandler");
         gapiClientLoaderGenerator = $injector.get("gapiClientLoaderGenerator");
         gapiLoader = $injector.get("gapiLoader");
         rejectOnTimeout = $injector.get("rejectOnTimeout");
@@ -411,6 +433,8 @@ describe("Services: gapi", function() {
 
         rejectOnTimeout.should.have.been.calledWith(sinon.match.object, "custom.v0");
 
+        $exceptionHandler.should.not.have.been.called;
+
         expect(clientAPI).to.equal("API");
 
         done();
@@ -425,6 +449,8 @@ describe("Services: gapi", function() {
         gApi.client.load.should.not.have.been.called;
 
         rejectOnTimeout.should.not.have.been.called;
+
+        $exceptionHandler.should.not.have.been.called;
 
         expect(clientAPI).to.equal("existingAPI");
 
@@ -445,6 +471,8 @@ describe("Services: gapi", function() {
         expect(err).to.be.ok;
         expect(err).to.equal('custom.v0 Load Failed');
 
+        $exceptionHandler.should.have.been.calledWith(undefined, 'custom.v0 Load Failed', true);
+
         done();
       });
     });
@@ -462,7 +490,30 @@ describe("Services: gapi", function() {
         expect(err).to.be.ok;
         expect(err).to.equal('error');
 
+        $exceptionHandler.should.have.been.calledWith('error', 'custom.v0 Load Failed', true);
+
         done();
+      });
+    });
+
+    it("should handle timeout failure", function (done) {
+      gApi.client.load.returns(Q.defer().promise);
+
+      var loaderFn = gapiClientLoaderGenerator("custom", "v0", "someUrls");
+      loaderFn().then(done)
+      .catch(function(err) {
+        gApi.client.load.should.have.been.called;
+
+        expect(err).to.be.ok;
+        expect(err).to.equal('timeout');
+
+        $exceptionHandler.should.have.been.calledWith('timeout', 'custom.v0 Load Failed', true);
+
+        done();
+      });
+
+      setTimeout(function() {
+        rejectOnTimeout.getCall(0).args[0].reject('timeout')
       });
     });
 
@@ -478,6 +529,8 @@ describe("Services: gapi", function() {
 
         expect(err).to.be.ok;
         expect(err).to.equal('failure');
+
+        $exceptionHandler.should.not.have.been.called;
 
         done();
       });
