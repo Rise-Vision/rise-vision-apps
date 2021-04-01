@@ -66,9 +66,6 @@ var CounterComponentScenarios = function () {
         counterComponentPage.getDateTimePickerButton().click();
 
         expect(counterComponentPage.getTargetDateTime().getAttribute('value')).to.eventually.equal('03:59 AM');
-
-        //wait for presentation to be auto-saved
-        templateEditorPage.waitForAutosave();
       });
 
       it('should select a time', function () {
@@ -90,9 +87,6 @@ var CounterComponentScenarios = function () {
         counterComponentPage.getTimePickerButton().click();
 
         expect(counterComponentPage.getTargetTime().getAttribute('value')).to.eventually.equal('01:57 AM');
-
-        //wait for presentation to be auto-saved
-        templateEditorPage.waitForAutosave();
       });
 
       it('should enter the completion message', function () {
