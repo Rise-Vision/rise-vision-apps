@@ -1,7 +1,7 @@
 /* jshint expr:true */
 "use strict";
 
-describe.only("Services: gapi", function() {
+describe("Services: gapi", function() {
   beforeEach(module("risevision.common.gapi"));
 
   describe("gapi loader (old)", function() {
