@@ -2,11 +2,13 @@
 
 describe('Services: playerLicenseFactory', function() {
   var storeApiFailure;
+  var PLAYER_PRO_PRODUCT_CODE = 'PLAYER_PRO_PRODUCT_CODE';
 
   beforeEach(module('risevision.displays.services'));
   beforeEach(module(function ($provide) {
     storeApiFailure = false;
 
+    $provide.value('PLAYER_PRO_PRODUCT_CODE', PLAYER_PRO_PRODUCT_CODE)
     $provide.service('$q', function() {return Q;});
     $provide.service('userState', function () {
       return {
@@ -354,6 +356,8 @@ describe('Services: playerLicenseFactory', function() {
       expect(playerLicenseFactory.updatingLicense).to.be.true;
 
       setTimeout(function() {
+        enableCompanyProduct.should.have.been.calledWithMatch(display.companyId, PLAYER_PRO_PRODUCT_CODE, { 'displayId': display.playerProAuthorized });
+
         expect(playerLicenseFactory.updateDisplayLicenseLocal).to.have.been.calledWith(display);
         expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(display.playerProAuthorized);
 
@@ -370,6 +374,8 @@ describe('Services: playerLicenseFactory', function() {
 
       playerLicenseFactory.updateDisplayLicense(display)
         .catch(function() {
+          enableCompanyProduct.should.have.been.calledWithMatch(display.companyId, PLAYER_PRO_PRODUCT_CODE, { 'displayId': display.playerProAuthorized });
+
           expect(playerLicenseFactory.apiError).to.equal('processedError');
           expect(playerLicenseFactory.updatingLicense).to.be.false;
 
@@ -384,6 +390,8 @@ describe('Services: playerLicenseFactory', function() {
 
       playerLicenseFactory.updateDisplayLicense(display)
         .catch(function() {
+          enableCompanyProduct.should.have.been.calledWithMatch(display.companyId, PLAYER_PRO_PRODUCT_CODE, { 'OTHER_displayId': display.playerProAuthorized });
+
           expect(playerLicenseFactory.apiError).to.equal('processedError');
           expect(playerLicenseFactory.updatingLicense).to.be.false;
 
@@ -399,6 +407,8 @@ describe('Services: playerLicenseFactory', function() {
 
       playerLicenseFactory.updateDisplayLicense(display)
         .then(function() {
+          enableCompanyProduct.should.have.been.calledWithMatch(display.companyId, PLAYER_PRO_PRODUCT_CODE, { 'displayId': display.playerProAuthorized });
+          
           expect(display.monitoringEnabled).to.be.false;
           done();
         });
