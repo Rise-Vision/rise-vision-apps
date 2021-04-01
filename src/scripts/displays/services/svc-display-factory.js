@@ -56,6 +56,7 @@ angular.module('risevision.displays.services')
         display.get(displayId)
           .then(function (result) {
             factory.display = result.item;
+            factory.display.originalPlayerProAuthorized = factory.display.playerProAuthorized;
 
             deferred.resolve();
           })
@@ -131,16 +132,15 @@ angular.module('risevision.displays.services')
         factory.savingDisplay = true;
 
         _update(factory.display.id, factory.display)
-          .then(function (displayId) {
+          .then(_updateLicenseIfNeeded)
+          .then(function () {
             return scheduleFactory.addToDistribution(factory.display, selectedSchedule)
-              .then(function () {
-                deferred.resolve();
-              })
               .catch(function () {
                 factory.apiError = scheduleFactory.apiError;
                 deferred.reject();
               });
-          }, function (e) {
+          })
+          .catch(function (e) {
             _showErrorMessage('update', e);
             deferred.reject();
           })
@@ -157,6 +157,21 @@ angular.module('risevision.displays.services')
           displayTracker('Display Updated', displayId, fields && fields.name);
           return result;
         });
+      };
+
+      var _updateLicenseIfNeeded = function() {
+        if (factory.display.playerProAuthorized !== factory.display.originalPlayerProAuthorized) {
+          return playerLicenseFactory.updateDisplayLicense(factory.display)
+            .then(function() {
+              factory.display.originalPlayerProAuthorized = factory.display.playerProAuthorized;
+            })
+            .catch(function(err) {
+              factory.apiError = playerLicenseFactory.apiError;
+              return $q.reject(err);
+            });
+        } else {
+          return $q.resolve();
+        }
       };
 
       factory.applyFields = function (display, fields) {
