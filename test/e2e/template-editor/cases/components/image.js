@@ -58,11 +58,6 @@ var ImageComponentScenarios = function () {
       it('should have a thumbnail', function() {
         expect(imageComponentPage.getThumbnails().count()).to.eventually.equal(1);
       });
-
-      it('should auto-save the Presentation after updating the image list', function () {
-        //wait for presentation to be auto-saved
-        templateEditorPage.waitForAutosave();
-      });
     });
 
     describe('storage', function () {
@@ -179,11 +174,6 @@ var ImageComponentScenarios = function () {
         helper.clickWhenClickable(removeLink, 'Image Row Remove');
 
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(3);
-      });
-
-      it('should auto-save the Presentation after removing a row', function () {
-        //wait for presentation to be auto-saved
-        templateEditorPage.waitForAutosave();
       });
     });
 

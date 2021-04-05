@@ -119,11 +119,6 @@ var BrandingComponentScenarios = function () {
           expect(imageComponentPage.getThumbnails().count()).to.eventually.equal(1);
         });
 
-        it('should auto-save the Branding after adding file from storage', function () {
-          //wait for presentation to be auto-saved
-          templateEditorPage.waitForAutosave();
-        });
-
       });
 
       describe('subsequent upload - should list a single file', function () {
@@ -143,11 +138,6 @@ var BrandingComponentScenarios = function () {
           expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(1);
         });
 
-        it('should auto-save the Branding after adding file from storage', function () {
-          //wait for presentation to be auto-saved
-          templateEditorPage.waitForAutosave();
-        });
-
       });
 
       describe('storage',function(){
@@ -165,11 +155,6 @@ var BrandingComponentScenarios = function () {
           helper.clickWhenClickable(imageComponentPage.getStorageAddSelected(), 'Storage Add Selected');
           browser.sleep(1000);
           expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(1);
-        });
-
-        it('should auto-save the Branding after adding file from storage', function () {
-          //wait for presentation to be auto-saved
-          templateEditorPage.waitForAutosave();
         });
 
       });
