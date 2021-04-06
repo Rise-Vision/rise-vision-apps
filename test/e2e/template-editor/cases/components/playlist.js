@@ -45,12 +45,7 @@ var PlaylistComponentScenarios = function () {
         //search for something that returns no results
         playlistComponentPage.getSearchInput().sendKeys("purple unicorn" + protractor.Key.ENTER);
 
-        helper.wait(playlistComponentPage.getTemplatesLoaderSpinner(), 'Spinner', 5000)
-        .catch(function(err) {
-          console.log('Templates loader never appeared; assume it already disappeared.', err);
-        });
-
-        helper.waitDisappear(playlistComponentPage.getTemplatesLoaderSpinner(), 'Spinner');
+        helper.waitAppearDisappear(playlistComponentPage.getTemplatesLoaderSpinner(), 'Spinner');
         browser.sleep(1000);
 
         expect(playlistComponentPage.getAddTemplateButton().isDisplayed()).to.eventually.be.true;
