@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentHtml', ['$timeout', '$window', 'templateEditorFactory', 'templateEditorUtils',
-    function ($timeout, $window, templateEditorFactory, templateEditorUtils) {
+  .directive('templateComponentHtml', ['templateEditorFactory',
+    function (templateEditorFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -14,10 +14,6 @@ angular.module('risevision.template-editor.directives')
             var html = $scope.getAvailableAttributeData($scope.componentId, 'html');
 
             $scope.html = html;
-
-            $timeout(function () {
-              $window.dispatchEvent(new Event('resize'));
-            }, 400);
           }
 
           $scope.save = function () {
