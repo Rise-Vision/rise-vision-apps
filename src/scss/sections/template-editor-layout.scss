@@ -1534,6 +1534,10 @@ $short-phone-height: 570px;
   .display-id {
     font-size: 18px;
   }
+
+  .cm-s-default.CodeMirror {
+    @extend .border-round;
+  }
 }
 
 .madero-link {

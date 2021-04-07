@@ -3,7 +3,9 @@
     <label>HTML:</label>
     <div class="row">
       <div class="col-xs-12">
-        ​<textarea id="html-input" class="form-control resize-vertical" rows="4" ng-model="html" placeholder="Enter your HTML" ng-change="save()"></textarea>
+        <ui-codemirror id="codemirror-html-input" placeholder="Enter your HTML" ng-model="html" ng-model-options="{ debounce: 1000 }" ng-change="save()" ui-codemirror-opts="codemirrorOptions"></ui-codemirror>
+
+        <!-- ​<textarea id="html-input" class="form-control resize-vertical" rows="4" ng-model="html" ng-model-options="{ debounce: 1000 }" placeholder="Enter your HTML" ng-change="save()"></textarea> -->
       </div>
     </div>
   </div>
