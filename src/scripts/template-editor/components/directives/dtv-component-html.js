@@ -10,12 +10,7 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
 
-          $scope.codemirrorOptions = {
-            lineNumbers: true,
-            theme: 'default',
-            lineWrapping: false,
-            mode: 'htmlmixed'
-          };
+          $scope.codemirrorOptions = {};
 
           function _load() {
             var html = $scope.getAvailableAttributeData($scope.componentId, 'html');
@@ -23,7 +18,12 @@ angular.module('risevision.template-editor.directives')
             $scope.html = html;
 
             $timeout(function () {
-              $window.dispatchEvent(new Event('resize'));
+              $scope.codemirrorOptions = {
+                lineNumbers: true,
+                theme: 'default',
+                lineWrapping: false,
+                mode: 'htmlmixed'
+              };
             }, 400);
           }
 
