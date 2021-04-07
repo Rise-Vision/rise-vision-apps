@@ -32,32 +32,49 @@ var HtmlComponentScenarios = function () {
     });
 
     describe('basic operations', function () {
-      it('should open properties of Html Component', function () {
+      it('should open properties of Html Component', function (done) {
         templateEditorPage.selectComponent(componentLabel);
 
-        expect(htmlComponentPage.getTextArea().getAttribute('value')).to.eventually.contain("Hello World");
+        helper.wait(htmlComponentPage.getCodeMirrorElement(), 'HTML component editor');
+
+        browser.sleep(1000);
+
+        htmlComponentPage.getCodeMirrorText()
+          .then(function (text) {
+            expect(text).to.contain("Hello World");
+            
+            done();
+          });
       });
 
       it('should clear and update the component html', function () {
         // Note: Disconnect from Angular to prevent Autosave timeout from interrupting edits
         browser.waitForAngularEnabled(false);
-        helper.wait(htmlComponentPage.getTextArea(), 'Text component Text Area');
-        browser.sleep(500);
-        htmlComponentPage.getTextArea().clear();
-        browser.sleep(500);
-        htmlComponentPage.getTextArea().sendKeys("Changed Text");
+
+        htmlComponentPage.updateCodeMirrorText('Changed Text');
+
         browser.waitForAngularEnabled(true);
 
         //wait for presentation to be auto-saved
         templateEditorPage.waitForAutosave();
       });
 
-      it('should reload the Presentation, and validate changes were saved', function () {
+      it('should reload the Presentation, and validate changes were saved', function (done) {
         presentationsListPage.loadPresentation(presentationName);
 
         templateEditorPage.selectComponent(componentLabel);
-        expect(htmlComponentPage.getTextArea().isEnabled()).to.eventually.be.true;
-        expect(htmlComponentPage.getTextArea().getAttribute('value')).to.eventually.equal("Changed Text");
+
+        helper.wait(htmlComponentPage.getCodeMirrorElement(), 'HTML component editor');
+
+        browser.sleep(1000);
+
+        htmlComponentPage.getCodeMirrorText()
+          .then(function (text) {
+            expect(text).to.contain("Changed Text");
+            
+            done();
+          });
+
       });
 
     });

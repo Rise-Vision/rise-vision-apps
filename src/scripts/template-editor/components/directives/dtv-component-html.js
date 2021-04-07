@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentHtml', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .directive('templateComponentHtml', ['$window', '$timeout', 'templateEditorFactory',
+    function ($window, $timeout, templateEditorFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -10,10 +10,21 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
 
+          $scope.codemirrorOptions = {};
+
           function _load() {
             var html = $scope.getAvailableAttributeData($scope.componentId, 'html');
 
             $scope.html = html;
+
+            $timeout(function () {
+              $scope.codemirrorOptions = {
+                lineNumbers: true,
+                theme: 'default',
+                lineWrapping: false,
+                mode: 'htmlmixed'
+              };
+            }, 400);
           }
 
           $scope.save = function () {

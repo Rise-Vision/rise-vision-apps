@@ -1,10 +1,20 @@
 'use strict';
 
 var HtmlComponentPage = function() {
-  var textArea = element(by.id('html-input'));
+  var codeMirrorElement = element(by.css('#codemirror-html-input .CodeMirror'));
 
-  this.getTextArea = function () {
-    return textArea;
+  this.getCodeMirrorElement = function () {
+    return codeMirrorElement;
+  };
+
+  this.getCodeMirrorText = function () {
+    return browser.executeScript('var editor = $("#codemirror-html-input .CodeMirror")[0].CodeMirror;' +
+      'return editor.getValue();');
+  }
+
+  this.updateCodeMirrorText = function (text) {
+    browser.executeScript('var editor = $("#codemirror-html-input .CodeMirror")[0].CodeMirror;' +
+      'editor.setValue("' + text + '");')
   };
 };
 

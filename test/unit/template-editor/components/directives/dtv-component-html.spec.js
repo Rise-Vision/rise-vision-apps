@@ -1,7 +1,7 @@
 'use strict';
 
 describe('directive: templateComponentHtml', function() {
-  var $scope,
+  var $scope, $timeout,
       element,
       factory;
 
@@ -20,7 +20,9 @@ describe('directive: templateComponentHtml', function() {
     });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    $timeout = $injector.get('$timeout');
+
     $templateCache.put('partials/template-editor/components/component-html.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
@@ -39,6 +41,8 @@ describe('directive: templateComponentHtml', function() {
     expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
     expect($scope.registerDirective).to.have.been.called;
 
+    expect($scope.codemirrorOptions).to.deep.equal({});
+
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-html');
@@ -56,6 +60,21 @@ describe('directive: templateComponentHtml', function() {
 
     expect($scope.componentId).to.equal("TEST-ID");
     expect($scope.html).to.equal(sampleValue);
+  });
+
+  it('should set codemirror options asynchronously', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    directive.show();
+
+    $timeout.flush();
+
+    expect($scope.codemirrorOptions).to.deep.equal({
+      lineNumbers: true,
+      theme: 'default',
+      lineWrapping: false,
+      mode: 'htmlmixed'
+    });
   });
 
   it('should save html to attribute data', function() {
