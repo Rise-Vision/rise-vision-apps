@@ -45,7 +45,7 @@ var PlaylistComponentScenarios = function () {
         //search for something that returns no results
         playlistComponentPage.getSearchInput().sendKeys("purple unicorn" + protractor.Key.ENTER);
 
-        helper.waitAppearDisappear(playlistComponentPage.getTemplatesLoaderSpinner(), 'Spinner');
+        helper.waitAppearDisappear(playlistComponentPage.getTemplatesLoaderSpinner(), 'Templates Loader');
         browser.sleep(1000);
 
         expect(playlistComponentPage.getAddTemplateButton().isDisplayed()).to.eventually.be.true;
