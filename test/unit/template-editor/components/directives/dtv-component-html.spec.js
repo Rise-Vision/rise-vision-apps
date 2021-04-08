@@ -47,7 +47,7 @@ describe('directive: templateComponentHtml', function() {
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-html');
     expect(directive.iconType).to.equal('streamline');
-    expect(directive.icon).to.exist;
+    expect(directive.icon).to.equal('html');
     expect(directive.show).to.be.a('function');
   });
 
