@@ -44,17 +44,9 @@
         signInPage.customAuthSignIn(commonHeaderPage.getStageEmailAddress(), commonHeaderPage.getPassword());
       });
 
-      function waitAppearAndDisappear(element, name) {
-        helper.wait(element, name, 5000)
-          .catch(function (err) {
-            console.log(err);
-          });
-        helper.waitDisappear(element, name);
-      }
-
       describe('Subscription Details page', function() {
         it('should load subscription details', function() {
-          waitAppearAndDisappear(subscriptionDetailsPage.getLoader(), 'Subscription Details Page Loader');
+          helper.waitAppearDisappear(subscriptionDetailsPage.getLoader(), 'Subscription Details Page Loader');
 
           expect(subscriptionDetailsPage.getDescriptionText().getText()).to.eventually.contain('5 x Display Licenses Yearly Plan');
         });
@@ -75,7 +67,7 @@
         it('should navigate to Add Display Licenses page', function() {
           subscriptionDetailsPage.getAddLicensesButton().click();
 
-          waitAppearAndDisappear(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
+          helper.waitAppearDisappear(addDisplayLicensesPage.getLoader(), 'Display Licenses Page Loader');
 
           helper.wait(addDisplayLicensesPage.getPayButton(), 'Pay now button');
 
@@ -203,7 +195,7 @@
         it('should navigate back to subscription when done', function() {
           purchaseLicensesSuccessPage.getDoneButton().click();
 
-          waitAppearAndDisappear(subscriptionDetailsPage.getLoader(), 'Subscription Details Page Loader');
+          helper.waitAppearDisappear(subscriptionDetailsPage.getLoader(), 'Subscription Details Page Loader');
 
           expect(subscriptionDetailsPage.getDescriptionText().getText()).to.eventually.contain('7 x Display Licenses Yearly Plan');
         });
@@ -213,7 +205,7 @@
         it('should load Add Payment Method page', function() {
           subscriptionDetailsPage.getAddPaymentMethodButton().click();
 
-          waitAppearAndDisappear(addPaymentMethodPage.getLoader(), 'Add Payment Method Page Loader');
+          helper.waitAppearDisappear(addPaymentMethodPage.getLoader(), 'Add Payment Method Page Loader');
           
           expect(addPaymentMethodPage.getAddButton().isDisplayed()).to.eventually.be.true;
         });
@@ -230,9 +222,9 @@
         it('should Save credit card and navigate to Subscription Details', function() {
           addPaymentMethodPage.getAddButton().click();
 
-          waitAppearAndDisappear(addPaymentMethodPage.getLoader(), 'Add Payment Method Page Loader');
+          helper.waitAppearDisappear(addPaymentMethodPage.getLoader(), 'Add Payment Method Page Loader');
 
-          waitAppearAndDisappear(subscriptionDetailsPage.getLoader(), 'Subscription Details Page Loader');
+          helper.waitAppearDisappear(subscriptionDetailsPage.getLoader(), 'Subscription Details Page Loader');
 
           expect(subscriptionDetailsPage.getAddPaymentMethodButton().isDisplayed()).to.eventually.be.true;
         });

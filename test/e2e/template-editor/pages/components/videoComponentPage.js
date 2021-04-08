@@ -19,6 +19,7 @@ var VideoComponentPage = function() {
   var uploadButtonStorage = element(by.id('storage-selector-uploader-label'));
   var uploadInputStorage = element(by.id('storage-selector-uploader'));
   var uploadPanelStorage = element(by.id('upload-panel-storage-selector-uploader'));
+  var videoFileLoader = element(by.xpath('//div[@spinner-key="video-file-loader"]'));
 
   this.getSelectedVideosMain = function () {
     return selectedVideosMain;
@@ -78,6 +79,10 @@ var VideoComponentPage = function() {
 
   this.getUploadPanelStorage = function () {
     return uploadPanelStorage;
+  };
+
+  this.getVideoFileLoader = function() {
+    return videoFileLoader;
   };
 
   this.getSelectedVideosTitles = function() {

@@ -5,10 +5,10 @@ angular.module('risevision.template-editor.directives')
     'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
   .constant('CANVA_FOLDER', 'canva/')
-  .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory',
+  .directive('templateComponentImage', ['$log', '$q', '$timeout', '$loading', 'templateEditorFactory',
     'storageManagerFactory', 'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL',
     'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'baseImageFactory', 'fileDownloader', 'CANVA_FOLDER', 'ENV_NAME',
-    function ($log, $q, $timeout, templateEditorFactory, storageManagerFactory,
+    function ($log, $q, $timeout, $loading, templateEditorFactory, storageManagerFactory,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES,
       logoImageFactory, baseImageFactory, fileDownloader, CANVA_FOLDER, ENV_NAME) {
       return {
@@ -311,6 +311,14 @@ angular.module('risevision.template-editor.directives')
 
             $scope.selectedImages.splice(newIndex, 0, $scope.selectedImages.splice(oldIndex, 1)[0]);
           };
+
+          $scope.$watch('factory.loadingPresentation', function (loading) {
+            if (loading) {
+              $loading.start('image-file-loader');
+            } else {
+              $loading.stop('image-file-loader');
+            }
+          });
 
         }
       };

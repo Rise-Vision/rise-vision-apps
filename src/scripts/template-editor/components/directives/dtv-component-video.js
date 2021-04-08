@@ -3,10 +3,10 @@
 angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_VIDEO_THUMBNAIL', 'streamline:video')
   .constant('SUPPORTED_VIDEO_TYPES', '.mp4, .webm')
-  .directive('templateComponentVideo', ['$log', '$timeout', 'templateEditorFactory',
+  .directive('templateComponentVideo', ['$log', '$timeout', '$loading', 'templateEditorFactory',
     'storageManagerFactory', 'templateEditorUtils', 'fileExistenceCheckService', 
     'fileMetadataUtilsService', 'DEFAULT_VIDEO_THUMBNAIL', 'SUPPORTED_VIDEO_TYPES',
-    function ($log, $timeout, templateEditorFactory, storageManagerFactory, templateEditorUtils,
+    function ($log, $timeout, $loading, templateEditorFactory, storageManagerFactory, templateEditorUtils,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_VIDEO_THUMBNAIL,
       SUPPORTED_VIDEO_TYPES) {
       return {
@@ -186,6 +186,14 @@ angular.module('risevision.template-editor.directives')
 
             $scope.selectedFiles.splice(newIndex, 0, $scope.selectedFiles.splice(oldIndex, 1)[0]);
           };
+
+          $scope.$watch('factory.loadingPresentation', function (loading) {
+            if (loading) {
+              $loading.start('video-file-loader');
+            } else {
+              $loading.stop('video-file-loader');
+            }
+          });
 
         }
       };

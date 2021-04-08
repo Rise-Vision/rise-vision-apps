@@ -68,6 +68,8 @@ var VideoComponentScenarios = function () {
     describe('storage', function () {
       describe('basic operations', function () {
         it('should load Storage page', function () {
+          helper.waitDisappear(videoComponentPage.getVideoFileLoader(), 'Video File Loader');
+
           helper.wait(videoComponentPage.getStorageButtonMain(), 'Storage Button Main');
           helper.clickWhenClickable(videoComponentPage.getStorageButtonMain(), 'Storage Button Main');
           browser.sleep(1000);
