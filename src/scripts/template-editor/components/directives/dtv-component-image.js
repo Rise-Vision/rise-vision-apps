@@ -15,7 +15,12 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-image.html',
         link: function ($scope, element) {
-          var storagePanelSelector = '.storage-selector-container';
+          var storagePanelSelector = {
+            iconType: 'streamline',
+            icon: 'folder',
+            title: 'Rise Storage',
+            panel: '.storage-selector-container'
+          };
           var imageFactory = baseImageFactory;
 
           $scope.factory = templateEditorFactory;
@@ -298,7 +303,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.selectFromStorage = function () {
             $scope.storageManager.refresh();
-            $scope.showNextPanel(storagePanelSelector);
+            $scope.showNextPage(storagePanelSelector);
           };
 
           $scope.getPartialPath = function (partial) {

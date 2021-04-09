@@ -26,13 +26,12 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-branding',
             iconType: 'streamline',
             icon: 'ratingStar',
+            title: 'Brand Settings',
             element: element,
             panel: '.branding-component-container',
             show: function () {
-              $scope.setPanelTitle('Brand Settings');
             },
             onBackHandler: function () {
-              $scope.resetPanelHeader();
               return $scope.showPreviousPanel();
             }
           });

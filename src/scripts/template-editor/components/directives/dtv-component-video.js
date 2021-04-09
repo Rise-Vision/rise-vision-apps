@@ -12,7 +12,12 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-video.html',
         link: function ($scope, element) {
-          var storagePanelSelector = '.video-storage-container';
+          var storagePanelSelector = {
+            iconType: 'streamline',
+            icon: 'folder',
+            title: 'Rise Storage',
+            panel: '.video-storage-container'
+          };
 
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_VIDEO_TYPES;
@@ -185,7 +190,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.selectFromStorage = function () {
             $scope.storageManager.refresh();
-            $scope.showNextPanel(storagePanelSelector);
+            $scope.showNextPage(storagePanelSelector);
           };
 
           $scope.getPartialPath = function (partial) {

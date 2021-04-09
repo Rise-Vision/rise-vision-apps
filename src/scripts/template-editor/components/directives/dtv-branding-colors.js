@@ -20,15 +20,12 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-branding-colors',
             iconType: 'streamline',
             icon: 'palette',
+            title: 'Color Settings',
             element: element,
             panel: '.branding-colors-container',
             show: function () {
-              $scope.setPanelTitle('Color Settings');
             },
             onBackHandler: function () {
-              $scope.setPanelIcon('ratingStar', 'streamline');
-              $scope.setPanelTitle('Brand Settings');
-
               return $scope.showPreviousPanel();
             }
           });

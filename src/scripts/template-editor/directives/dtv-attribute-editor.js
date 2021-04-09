@@ -12,7 +12,7 @@ angular.module('risevision.template-editor.directives')
           $scope.factory = templateEditorFactory;
           $scope.showAttributeList = true;
           $scope.directives = {};
-          $scope.panels = [];
+          $scope.pages = [];
           $scope.factory.selected = null;
 
           $window.addEventListener('message', _handleMessageFromTemplate);
@@ -37,7 +37,7 @@ angular.module('risevision.template-editor.directives')
 
             directive.element.show();
             if (directive.panel) {
-              $scope.showNextPanel(directive.panel);
+              $scope.showNextPage(directive);
             }
 
             directive.show();
@@ -61,6 +61,7 @@ angular.module('risevision.template-editor.directives')
             var directive = $scope.directives[component.type];
 
             $scope.factory.selected = null;
+            $scope.pages = [];
             directive.element.hide();
 
             _showAttributeList(true, 0);
@@ -74,6 +75,19 @@ angular.module('risevision.template-editor.directives')
           $scope.getComponentIconType = function (component) {
             return component && $scope.directives[component.type] ?
               $scope.directives[component.type].iconType : '';
+          };
+
+          $scope.getComponentTitle = function (component) {
+            if ($scope.panelTitle) {
+              return $scope.panelTitle;
+            } else if (component && $scope.directives[component.type] &&
+              $scope.directives[component.type].title) {
+              return $scope.directives[component.type].title;
+            } else if (component && component.label) {
+              return component.label;
+            } else {
+              return '';
+            }
           };
 
           $scope.highlightComponent = function (componentId) {
@@ -97,19 +111,19 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.getCurrentPanel = function () {
-            return $scope.panels.length > 0 ? $scope.panels[$scope.panels.length - 1] : null;
+            return $scope.pages.length > 0 ? $scope.pages[$scope.pages.length - 1] : null;
           };
 
-          $scope.showNextPanel = function (newPanel) {
+          $scope.showNextPage = function (newPanel) {
             var currentPanel = $scope.getCurrentPanel();
 
-            $scope.panels.push(newPanel);
+            $scope.pages.push(newPanel);
             _swapToLeft(currentPanel, newPanel);
           };
 
           $scope.showPreviousPanel = function () {
-            var currentPanel = $scope.panels.length > 0 ? $scope.panels.pop() : null;
-            var previousPanel = $scope.panels.length > 0 ? $scope.panels[$scope.panels.length - 1] : null;
+            var currentPanel = $scope.pages.length > 0 ? $scope.pages.pop() : null;
+            var previousPanel = $scope.pages.length > 0 ? $scope.pages[$scope.pages.length - 1] : null;
 
             _swapToRight(currentPanel, previousPanel);
 
@@ -141,7 +155,7 @@ angular.module('risevision.template-editor.directives')
             if (component) {
               if ($scope.factory.selected) {
                 $scope.backToList();
-                $scope.panels = [];
+                $scope.pages = [];
                 $scope.resetPanelHeader();
               }
               $scope.editComponent(component);
@@ -159,8 +173,8 @@ angular.module('risevision.template-editor.directives')
             element.removeClass('attribute-editor-show-from-left');
           }
 
-          function _showElement(selector, direction, delay) {
-            var element = templateEditorUtils.findElement(selector);
+          function _showElement(page, direction, delay) {
+            var element = page && page.panel && templateEditorUtils.findElement(page.panel);
 
             if (!element) {
               return;
@@ -174,8 +188,8 @@ angular.module('risevision.template-editor.directives')
             }, delay || 0);
           }
 
-          function _hideElement(selector, delay) {
-            var element = templateEditorUtils.findElement(selector);
+          function _hideElement(page, delay) {
+            var element = page && page.panel && templateEditorUtils.findElement(page.panel);
 
             if (!element) {
               return;
