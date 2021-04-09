@@ -480,6 +480,7 @@
               "src/scripts/template-editor/services/svc-basic-storage-selector-factory.js",
               "src/scripts/template-editor/services/svc-financial-license-factory.js",
 
+              "src/scripts/template-editor/components/services/svc-storage-manager-factory.js",
               "src/scripts/template-editor/components/services/svc-branding-factory.js",
               "src/scripts/template-editor/components/services/svc-instrument-search.js",
               "src/scripts/template-editor/components/services/svc-logo-image-factory.js",
@@ -510,6 +511,7 @@
               "src/scripts/template-editor/directives/dtv-streamline-icon.js",
               "src/scripts/template-editor/directives/dtv-time-picker.js",
 
+              "src/scripts/template-editor/components/directives/dtv-storage-selector.js",
               "src/scripts/template-editor/components/directives/dtv-component-branding.js",
               "src/scripts/template-editor/components/directives/dtv-component-schedules.js",
               "src/scripts/template-editor/components/directives/dtv-branding-colors.js",
