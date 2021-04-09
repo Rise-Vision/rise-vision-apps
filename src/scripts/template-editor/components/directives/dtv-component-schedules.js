@@ -21,9 +21,7 @@ angular.module('risevision.template-editor.directives')
           $scope.registerDirective({
             type: 'rise-schedules',
             title: 'Schedules',
-            element: element,
-            show: function () {
-            }
+            element: element
           });
 
         }

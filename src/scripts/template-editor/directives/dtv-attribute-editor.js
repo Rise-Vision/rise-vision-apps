@@ -40,7 +40,9 @@ angular.module('risevision.template-editor.directives')
               $scope.showNextPage(directive);
             }
 
-            directive.show();
+            if (directive.show) {
+              directive.show();
+            }
 
             _showAttributeList(false, 300);
           };
