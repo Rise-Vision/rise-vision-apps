@@ -12,7 +12,7 @@ describe('directive: ComponentIcon', function () {
   beforeEach(inject(function ($compile, $rootScope) {
     $scope = $rootScope.$new();
 
-    element = $compile('<component-icon icon="{{iconValue}}" type="{{typeValue}}"></component-icon>')($scope);
+    element = $compile('<component-icon icon="{{iconValue}}" type="{{typeValue}}">someicon</component-icon>')($scope);
     elementScope = element.isolateScope();
     $scope.$digest();
   }));
@@ -21,6 +21,8 @@ describe('directive: ComponentIcon', function () {
     expect($scope).to.be.ok;
     expect(elementScope.icon).to.be.empty;
     expect(elementScope.type).to.be.empty;
+
+    expect(element.html()).to.equal("");
   });
 
   it("should render Font Awesome icon", function (done) {
