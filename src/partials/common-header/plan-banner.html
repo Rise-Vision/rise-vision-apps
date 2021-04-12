@@ -1,16 +1,6 @@
 <!-- Common Header Plan Info -->
 <div id="plan-banner" class="hidden-xs">
-  <div id="parent-plan-banner" class="alert p-2 mb-0 bg-success text-right" ng-show="getVisibleBanner() === 'parent'">
-    <div class="u_margin-right">
-      <span class="ml-2">Subscription managed by {{plan.parentPlanCompanyName || "the Parent Company"}}
-        <!-- <a href="#" aria-label="Go to Parent Company">{{plan.parentPlanCompanyName}}</a> -->
-      </span>
-      <a ng-if="!isApps()" class="ml-3 btn btn-xs btn-primary" href="https://apps.risevision.com/signup?show_product=true" target="_blank" link-cid>Change Plan</a>
-      <a ng-if="isApps()" class="ml-3 btn btn-xs btn-primary" href="#" ng-click="showPlans()">Change Plan</a>
-    </div>
-  </div>
-
-  <div id="parent-purchased-plan-banner" class="alert p-2 mb-0 bg-success text-right" ng-show="getVisibleBanner() === 'parentPurchased'">
+  <div id="parent-plan-banner" class="alert p-2 mb-0 bg-success text-right" ng-show="getVisibleBanner() === 'parent' || getVisibleBanner() === 'parentPurchased'">
     <div class="u_margin-right">
       <span class="ml-2">Subscription managed by {{plan.parentPlanCompanyName || "the Parent Company"}}</span>
     </div>

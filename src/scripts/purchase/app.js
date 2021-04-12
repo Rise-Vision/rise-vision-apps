@@ -29,15 +29,33 @@ angular.module('risevision.apps')
           templateUrl: 'partials/purchase/app-purchase.html',
           controller: 'PurchaseCtrl',
           resolve: {
-            canAccessApps: ['$state', '$stateParams', 'canAccessApps', 'currentPlanFactory',
-              function ($state, $stateParams, canAccessApps, currentPlanFactory) {
+            canAccessApps: ['$state', '$stateParams', 'canAccessApps', 'currentPlanFactory', 'messageBox', '$q',
+              function ($state, $stateParams, canAccessApps, currentPlanFactory, messageBox, $q) {
                 return canAccessApps()
                   .then(function () {
-                    if (currentPlanFactory.isSubscribed() && !currentPlanFactory.isParentPlan()) {
-                      $state.go('apps.purchase.licenses.add', {
+                    if (currentPlanFactory.isSubscribed()) {
+                     if (currentPlanFactory.isParentPlan() || currentPlanFactory.currentPlan.isPurchasedByParent) {
+                       var contactInfo = currentPlanFactory.currentPlan.parentPlanContactEmail ? ' at ' +
+                         currentPlanFactory.currentPlan.parentPlanContactEmail : '';
+
+                       return messageBox(
+                         'You can\'t edit your current plan.',
+                         'Your plan is managed by your parent company. Please contact your account administrator' +
+                         contactInfo + ' for additional licenses.',
+                         'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
+                       ).finally(function() {
+                         if (!$state.current.name) {
+                           $state.go('apps.home');
+                         } else {
+                           return $q.reject();
+                         }
+                       });
+                     } else {
+                       $state.go('apps.purchase.licenses.add', {
                         displayCount: $stateParams.displayCount
                       });
-                    }
+                     }
+                   }
                   });
               }
             ],
@@ -55,32 +73,9 @@ angular.module('risevision.apps')
           templateUrl: 'partials/purchase/update-subscription.html',
           controller: 'UpdateSubscriptionCtrl',
           resolve: {
-            canAccessApps: ['$q', '$state', 'canAccessApps', 'currentPlanFactory', 'messageBox',
-              function ($q, $state, canAccessApps, currentPlanFactory, messageBox) {
-                return canAccessApps()
-                  .then(function () {
-                    if (!currentPlanFactory.isSubscribed()) {
-                      $state.go('apps.purchase.home');
-                    } else if (currentPlanFactory.isParentPlan() || currentPlanFactory.currentPlan
-                      .isPurchasedByParent) {
-                      var contactInfo = currentPlanFactory.currentPlan.parentPlanContactEmail ? ' at ' +
-                        currentPlanFactory.currentPlan.parentPlanContactEmail : '';
-
-                      return messageBox(
-                        'You can\'t edit your current plan.',
-                        'Your plan is managed by your parent company. Please contact your account administrator' +
-                        contactInfo + ' for additional licenses.',
-                        'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html',
-                        'sm'
-                      ).finally(function () {
-                        if (!$state.current.name) {
-                          $state.go('apps.home');
-                        } else {
-                          return $q.reject();
-                        }
-                      });
-                    }
-                  });
+            canAccessApps: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
               }
             ],
             redirectTo: ['$location',

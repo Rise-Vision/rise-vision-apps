@@ -110,6 +110,68 @@ describe('app:', function() {
       },10);
     });
 
+    it('should show a message if company has a plan inherited from the parent company', function(done) {
+      currentPlanFactory.isParentPlan.returns(true);
+
+      $state.go('apps.purchase.home');
+      $rootScope.$digest();
+
+      canAccessApps.should.have.been.called;
+
+      setTimeout(function(){
+        expect(messageBoxStub).to.have.been.calledWith(
+          'You can\'t edit your current plan.',
+          'Your plan is managed by your parent company. Please contact your account administrator for additional licenses.',
+          'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
+        );
+
+        // $state.current.name exists; should not redirect to home
+        expect($state.go).to.not.have.been.calledWith('apps.home');
+        expect($state.go).to.not.have.been.calledWith('apps.purchase.licenses.add');
+        done();
+      },10);
+    });
+
+    it('should show a message if company has a plan purchased by the parent company', function(done) {
+      currentPlanFactory.currentPlan.isPurchasedByParent = true;
+
+      $state.go('apps.purchase.home');
+      $rootScope.$digest();
+
+      canAccessApps.should.have.been.called;
+
+      setTimeout(function(){
+        expect(messageBoxStub).to.have.been.calledWith(
+          'You can\'t edit your current plan.',
+          'Your plan is managed by your parent company. Please contact your account administrator for additional licenses.',
+          'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
+        );
+
+        // $state.current.name exists; should not redirect to home
+        expect($state.go).to.not.have.been.calledWith('apps.home');
+        expect($state.go).to.not.have.been.calledWith('apps.purchase.licenses.add');
+        done();
+      },10);
+    });
+
+    it('should show plan admin email if available', function(done) {
+      currentPlanFactory.currentPlan.isPurchasedByParent = true;
+      currentPlanFactory.currentPlan.parentPlanContactEmail = 'test@email.com';
+
+      $state.go('apps.purchase.home');
+      $rootScope.$digest();
+
+      setTimeout(function(){
+        expect(messageBoxStub).to.have.been.calledWith(
+          'You can\'t edit your current plan.',
+          'Your plan is managed by your parent company. Please contact your account administrator at test@email.com for additional licenses.',
+          'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
+        );
+
+        done();
+      },10);
+    });
+
     it('should resolve redirectTo as previous path', function() {
       sinon.stub($location, 'path').returns('/displays/list');
 
@@ -180,57 +242,10 @@ describe('app:', function() {
       expect(state.params).to.deep.equal({purchaseAction: 'add'});
     });
 
-    it('should go to Purchase page if company is not subscribed to a plan', function(done) {
-      currentPlanFactory.isSubscribed.returns(false);
-
+    it('should check apps access', function() {
       $state.go('apps.purchase.licenses.add');
       $rootScope.$digest();
-
-      setTimeout(function(){
-        $state.go.should.have.been.calledWith('apps.purchase.home');
-
-        done();
-      },10);
-    });
-
-    it('should show a message if company has a plan but it is managed by a parent company', function(done) {
-      currentPlanFactory.currentPlan.isPurchasedByParent = true;
-
-      $state.go('apps.purchase.licenses.add');
-      $rootScope.$digest();
-
       canAccessApps.should.have.been.called;
-
-      setTimeout(function(){
-        expect(messageBoxStub).to.have.been.calledWith(
-          'You can\'t edit your current plan.',
-          'Your plan is managed by your parent company. Please contact your account administrator for additional licenses.',
-          'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
-        );
-
-        // $state.current.name exists; should not redirect to home
-        expect($state.go).to.not.have.been.calledWith('apps.home');
-        expect($state.go).to.not.have.been.calledWith('apps.billing.home', {edit: 'subscriptionId'});
-        done();
-      },10);
-    });
-
-    it('should show plan admin email if available', function(done) {
-      currentPlanFactory.currentPlan.isPurchasedByParent = true
-      currentPlanFactory.currentPlan.parentPlanContactEmail = 'test@email.com';
-
-      $state.go('apps.purchase.licenses.add');
-      $rootScope.$digest();
-
-      setTimeout(function(){
-        expect(messageBoxStub).to.have.been.calledWith(
-          'You can\'t edit your current plan.',
-          'Your plan is managed by your parent company. Please contact your account administrator at test@email.com for additional licenses.',
-          'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
-        );
-
-        done();
-      },10);
     });
   });
 
@@ -242,57 +257,10 @@ describe('app:', function() {
       expect(state.params).to.deep.equal({purchaseAction: 'remove'});
     });
 
-    it('should go to Purchase page if company is not subscribed to a plan', function(done) {
-      currentPlanFactory.isSubscribed.returns(false);
-
+    it('should check apps access', function() {
       $state.go('apps.purchase.licenses.remove');
       $rootScope.$digest();
-
-      setTimeout(function(){
-        $state.go.should.have.been.calledWith('apps.purchase.home');
-
-        done();
-      },10);
-    });
-
-    it('should show a message if company has a plan but it is managed by a parent company', function(done) {
-      currentPlanFactory.currentPlan.isPurchasedByParent = true;
-
-      $state.go('apps.purchase.licenses.remove');
-      $rootScope.$digest();
-
       canAccessApps.should.have.been.called;
-
-      setTimeout(function(){
-        expect(messageBoxStub).to.have.been.calledWith(
-          'You can\'t edit your current plan.',
-          'Your plan is managed by your parent company. Please contact your account administrator for additional licenses.',
-          'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
-        );
-
-        // $state.current.name exists; should not redirect to home
-        expect($state.go).to.not.have.been.calledWith('apps.home');
-        expect($state.go).to.not.have.been.calledWith('apps.billing.home', {edit: 'subscriptionId'});
-        done();
-      },10);
-    });
-
-    it('should show plan admin email if available', function(done) {
-      currentPlanFactory.currentPlan.isPurchasedByParent = true
-      currentPlanFactory.currentPlan.parentPlanContactEmail = 'test@email.com';
-
-      $state.go('apps.purchase.licenses.remove');
-      $rootScope.$digest();
-
-      setTimeout(function(){
-        expect(messageBoxStub).to.have.been.calledWith(
-          'You can\'t edit your current plan.',
-          'Your plan is managed by your parent company. Please contact your account administrator at test@email.com for additional licenses.',
-          'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
-        );
-
-        done();
-      },10);
     });
   });
 
