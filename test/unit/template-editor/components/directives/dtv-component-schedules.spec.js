@@ -40,11 +40,6 @@ describe('directive: templateComponentSchedules', function() {
     $scope = element.scope();
 
     $scope.registerDirective = sinon.stub();
-    $scope.resetPanelHeader = sinon.stub();
-    $scope.setPanelTitle = sinon.stub();
-    $scope.setPanelIcon = sinon.stub();
-    $scope.showPreviousPanel = sinon.stub();
-    $scope.editComponent = sinon.stub();
 
     $scope.$digest();
   }
@@ -63,15 +58,7 @@ describe('directive: templateComponentSchedules', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-schedules');
-    expect(directive.show).to.be.a('function');
-  });
-
-  it('directive.show: ', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
-
-    directive.show();
-
-    $scope.setPanelTitle.should.have.been.calledWith('Schedules');
+    expect(directive.title).to.equal('Schedules');
   });
 
   describe('watch loadingSchedules:', function() {

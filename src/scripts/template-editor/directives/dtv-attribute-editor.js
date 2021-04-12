@@ -36,9 +36,8 @@ angular.module('risevision.template-editor.directives')
             $scope.factory.selected = component;
 
             directive.element.show();
-            if (directive.panel) {
-              $scope.showNextPage(directive);
-            }
+
+            $scope.showNextPage(directive);
 
             if (directive.show) {
               directive.show();
@@ -54,20 +53,24 @@ angular.module('risevision.template-editor.directives')
             var directive = $scope.directives[component.type];
 
             if (!directive.onBackHandler || !directive.onBackHandler()) {
-              $scope.showPreviousPanel();
+              $scope.showPreviousPage();
             }
           };
 
           // Private
           $scope.backToList = function () {
             var component = $scope.factory.selected;
-            var directive = $scope.directives[component.type];
+
+            if (component && component.type) {
+              var directive = $scope.directives[component.type];
+
+              directive.element.hide();              
+            }
 
             $scope.resetPanelHeader();
 
             $scope.factory.selected = null;
             $scope.pages = [];
-            directive.element.hide();
 
             _showAttributeList(true, 0);
           };
@@ -126,7 +129,7 @@ angular.module('risevision.template-editor.directives')
             _swapToLeft(currentPanel, newPanel);
           };
 
-          $scope.showPreviousPanel = function () {
+          $scope.showPreviousPage = function () {
             var currentPanel = $scope.pages.length > 0 ? $scope.pages.pop() : null;
             var previousPanel = $scope.pages.length > 0 ? $scope.pages[$scope.pages.length - 1] : null;
 

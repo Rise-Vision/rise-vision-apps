@@ -55,7 +55,7 @@ angular.module('risevision.template-editor.directives')
 
               _updatePanelHeader();
 
-              $scope.showPreviousPanel();
+              $scope.showPreviousPage();
             },
             isSingleFileSelector: $scope.isEditingLogo,
             handleNavigation: function (folderPath) {
