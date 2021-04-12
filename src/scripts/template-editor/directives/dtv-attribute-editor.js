@@ -138,7 +138,7 @@ angular.module('risevision.template-editor.directives')
             if (!previousPage) {
               $scope.backToList();
             } else {
-              $scope.factory.selected = previousPanel;
+              $scope.factory.selected = previousPage;
             }
 
             return !!previousPage;
