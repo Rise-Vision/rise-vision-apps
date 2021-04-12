@@ -226,7 +226,7 @@ angular.module('risevision.template-editor.directives')
               _loadHelpText();
             },
             onBackHandler: function () {
-              if ($scope.getCurrentPanel() !== storagePanelSelector) {
+              if ($scope.getCurrentPage() !== storagePanelSelector) {
                 if ($scope.isEditingLogo()) {
                   $scope.resetPanelHeader();
                 }

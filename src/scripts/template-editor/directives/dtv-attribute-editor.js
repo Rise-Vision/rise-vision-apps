@@ -118,30 +118,30 @@ angular.module('risevision.template-editor.directives')
               directive.isHeaderBottomRuleVisible() : true;
           };
 
-          $scope.getCurrentPanel = function () {
+          $scope.getCurrentPage = function () {
             return $scope.pages.length > 0 ? $scope.pages[$scope.pages.length - 1] : null;
           };
 
-          $scope.showNextPage = function (newPanel) {
-            var currentPanel = $scope.getCurrentPanel();
+          $scope.showNextPage = function (newPage) {
+            var currentPage = $scope.getCurrentPage();
 
-            $scope.pages.push(newPanel);
-            _swapToLeft(currentPanel, newPanel);
+            $scope.pages.push(newPage);
+            _swapToLeft(currentPage, newPage);
           };
 
           $scope.showPreviousPage = function () {
-            var currentPanel = $scope.pages.length > 0 ? $scope.pages.pop() : null;
-            var previousPanel = $scope.pages.length > 0 ? $scope.pages[$scope.pages.length - 1] : null;
+            var currentPage = $scope.pages.length > 0 ? $scope.pages.pop() : null;
+            var previousPage = $scope.pages.length > 0 ? $scope.pages[$scope.pages.length - 1] : null;
 
-            _swapToRight(currentPanel, previousPanel);
+            _swapToRight(currentPage, previousPage);
 
-            if (!previousPanel) {
+            if (!previousPage) {
               $scope.backToList();
             } else {
               $scope.factory.selected = previousPanel;
             }
 
-            return !!previousPanel;
+            return !!previousPage;
           };
 
           $scope.resetPanelHeader = function () {
