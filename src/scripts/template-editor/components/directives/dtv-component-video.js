@@ -161,7 +161,7 @@ angular.module('risevision.template-editor.directives')
               _loadVolume();
             },
             onBackHandler: function () {
-              if ($scope.getCurrentPanel() !== storagePanelSelector) {
+              if ($scope.getCurrentPage() !== storagePanelSelector) {
                 return false;
               } else if (!$scope.storageManager.onBackHandler()) {
                 $scope.setPanelIcon();
