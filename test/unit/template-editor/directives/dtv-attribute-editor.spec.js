@@ -161,7 +161,7 @@ describe('directive: TemplateAttributeEditor', function() {
     expect($scope.showAttributeList).to.be.false;
   });
 
-  it('Resets selected panels when editing a highlighted component', function() {
+  it('Resets selected pages when editing a highlighted component', function() {
     var directive = {
       type: 'rise-test',
       icon: 'fa-test',
@@ -184,7 +184,7 @@ describe('directive: TemplateAttributeEditor', function() {
     };
 
     factory.selected = component;
-    $scope.panels = [{}, {}, {}];
+    $scope.pages = [{}, {}, {}];
     $scope.setPanelIcon('previous-icon', 'streamline');
     $scope.setPanelTitle('Previous Title');
     
@@ -192,7 +192,8 @@ describe('directive: TemplateAttributeEditor', function() {
 
     expect(factory.selected).to.deep.equal(component);
 
-    expect($scope.panels).to.be.empty;
+    expect($scope.pages).to.have.length(1);
+    expect($scope.pages[0]).to.equal(directive)
     expect($scope.panelIcon).to.be.null;
     expect($scope.panelIconType).to.be.null;
     expect($scope.panelTitle).to.be.null;
@@ -423,40 +424,40 @@ describe('directive: TemplateAttributeEditor', function() {
     expect(visible).to.be.false;
   });
 
-  describe('showNextPanel', function () {
-    it('should show a new panel', function () {
-      expect($scope.panels).to.have.length(0);
+  describe('showNextPage', function () {
+    it('should show a new page', function () {
+      expect($scope.pages).to.have.length(0);
 
-      $scope.showNextPanel('selector1');
+      $scope.showNextPage('selector1');
 
-      expect($scope.panels).to.have.length(1);
-      expect($scope.panels[0]).to.equal('selector1');
+      expect($scope.pages).to.have.length(1);
+      expect($scope.pages[0]).to.equal('selector1');
     });
 
-    it('should show a second panel', function () {
-      $scope.showNextPanel('selector1');
-      $scope.showNextPanel('selector2');
+    it('should show a second page', function () {
+      $scope.showNextPage('selector1');
+      $scope.showNextPage('selector2');
 
-      expect($scope.panels).to.deep.equal(['selector1', 'selector2']);
+      expect($scope.pages).to.deep.equal(['selector1', 'selector2']);
     });
   });
 
-  describe('showPreviousPanel', function () {
-    it('should hide the first panel', function () {
-      $scope.showNextPanel('selector1');
+  describe('showPreviousPage', function () {
+    it('should hide the first page', function () {
+      $scope.showNextPage('selector1');
 
-      expect($scope.showPreviousPanel()).to.be.false;
+      expect($scope.showPreviousPage()).to.be.false;
 
-      expect($scope.panels).to.have.length(0);
+      expect($scope.pages).to.have.length(0);
     });
 
-    it('should hide the second panel', function () {
-      $scope.showNextPanel('selector1');
-      $scope.showNextPanel('selector2');
+    it('should hide the second page', function () {
+      $scope.showNextPage('selector1');
+      $scope.showNextPage('selector2');
 
-      expect($scope.showPreviousPanel()).to.be.true;
+      expect($scope.showPreviousPage()).to.be.true;
 
-      expect($scope.panels).to.deep.equal(['selector1']);
+      expect($scope.pages).to.deep.equal(['selector1']);
     });
   });
 });

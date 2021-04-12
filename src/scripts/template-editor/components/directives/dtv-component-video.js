@@ -34,7 +34,7 @@ angular.module('risevision.template-editor.directives')
               _addFilesToMetadata(newSelectedItems, true);
 
               $scope.resetPanelHeader();
-              $scope.showPreviousPanel();
+              $scope.showPreviousPage();
             },
             handleNavigation: function (folderPath) {
               var folderName = templateEditorUtils.fileNameOf(folderPath);
