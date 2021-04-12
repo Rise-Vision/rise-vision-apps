@@ -16,7 +16,7 @@
                   class="component-icon">
   </component-icon>
   <span class="u_text-ellipsis mr-auto">{{ getComponentTitle(factory.selected) }}</span>
-  <div class="btn-group" ng-if="getCurrentPanel() && getCurrentPanel().panel === '.storage-selector-container'">
+  <div class="btn-group" ng-if="getCurrentPage() && getCurrentPage().panel === '.storage-selector-container'">
     <button id="listViewButton" type="button" class="btn w-50" ng-click="basicStorageSelectorFactory.isListView = true" ng-class="{'btn-toggle-blue-off' : !basicStorageSelectorFactory.isListView, 'btn-toggle-blue-on' : basicStorageSelectorFactory.isListView}">
       <img ng-src="../images/icon-list{{!basicStorageSelectorFactory.isListView ? '' : '-inv'}}.svg">
     </button>
