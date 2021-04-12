@@ -231,11 +231,11 @@ angular.module('risevision.template-editor.directives')
                   $scope.setPanelIcon('ratingStar', 'streamline');
                   $scope.setPanelTitle('Brand Settings');
                 }
-                return $scope.showPreviousPanel();
+                return false;
               } else if (!$scope.storageManager.onBackHandler()) {
                 _updatePanelHeader();
 
-                return $scope.showPreviousPanel();
+                return false;
               } else {
                 return true;
               }
