@@ -164,8 +164,7 @@ angular.module('risevision.template-editor.directives')
               if ($scope.getCurrentPanel() !== storagePanelSelector) {
                 return false;
               } else if (!$scope.storageManager.onBackHandler()) {
-                $scope.setPanelIcon();
-                $scope.setPanelTitle();
+                $scope.resetPanelHeader();
 
                 return false;
               } else {

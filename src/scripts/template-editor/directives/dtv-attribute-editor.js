@@ -137,6 +137,8 @@ angular.module('risevision.template-editor.directives')
 
             if (!previousPanel) {
               $scope.backToList();
+            } else {
+              $scope.factory.selected = previousPanel;
             }
 
             return !!previousPanel;
