@@ -22,12 +22,7 @@ angular.module('risevision.template-editor.directives')
             icon: 'palette',
             title: 'Color Settings',
             element: element,
-            panel: '.branding-colors-container',
-            show: function () {
-            },
-            onBackHandler: function () {
-              return $scope.showPreviousPanel();
-            }
+            panel: '.branding-colors-container'
           });
         }
       };

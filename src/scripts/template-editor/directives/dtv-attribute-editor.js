@@ -40,7 +40,9 @@ angular.module('risevision.template-editor.directives')
               $scope.showNextPage(directive);
             }
 
-            directive.show();
+            if (directive.show) {
+              directive.show();
+            }
 
             _showAttributeList(false, 300);
           };
@@ -52,13 +54,16 @@ angular.module('risevision.template-editor.directives')
             var directive = $scope.directives[component.type];
 
             if (!directive.onBackHandler || !directive.onBackHandler()) {
-              $scope.backToList();
+              $scope.showPreviousPanel();
             }
           };
 
+          // Private
           $scope.backToList = function () {
             var component = $scope.factory.selected;
             var directive = $scope.directives[component.type];
+
+            $scope.resetPanelHeader();
 
             $scope.factory.selected = null;
             $scope.pages = [];
@@ -128,7 +133,7 @@ angular.module('risevision.template-editor.directives')
             _swapToRight(currentPanel, previousPanel);
 
             if (!previousPanel) {
-              $scope.resetPanelHeader();
+              $scope.backToList();
             }
 
             return !!previousPanel;
@@ -155,8 +160,6 @@ angular.module('risevision.template-editor.directives')
             if (component) {
               if ($scope.factory.selected) {
                 $scope.backToList();
-                $scope.pages = [];
-                $scope.resetPanelHeader();
               }
               $scope.editComponent(component);
             }
