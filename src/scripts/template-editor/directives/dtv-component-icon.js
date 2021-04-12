@@ -32,6 +32,8 @@ angular.module('risevision.template-editor.directives')
           $scope.$watch('icon', function (icon) {
             if (icon) {
               element.html(_html());
+            } else {
+              element.html('');
             }
           });
         }
