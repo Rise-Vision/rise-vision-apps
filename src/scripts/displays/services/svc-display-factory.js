@@ -159,13 +159,13 @@ angular.module('risevision.displays.services')
         });
       };
 
-      var _updateLicenseIfNeeded = function() {
+      var _updateLicenseIfNeeded = function () {
         if (factory.display.playerProAuthorized !== factory.display.originalPlayerProAuthorized) {
           return playerLicenseFactory.updateDisplayLicense(factory.display)
-            .then(function() {
+            .then(function () {
               factory.display.originalPlayerProAuthorized = factory.display.playerProAuthorized;
             })
-            .catch(function(err) {
+            .catch(function (err) {
               factory.apiError = playerLicenseFactory.apiError;
               return $q.reject(err);
             });

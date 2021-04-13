@@ -71,7 +71,7 @@
                   .then(function () {
                     window.location.hash = '';
                   })
-                  .catch(function(e) {
+                  .catch(function (e) {
                     return $state.go('common.auth.unauthorized', {
                       authError: e
                     });

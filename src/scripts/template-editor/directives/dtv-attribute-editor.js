@@ -202,8 +202,7 @@ angular.module('risevision.template-editor.directives')
             if ('string' === typeof event.data) {
               try {
                 data = JSON.parse(event.data);
-              }
-              catch(e) {}
+              } catch (e) {}
             }
 
             if (data.type === 'editComponent') {
