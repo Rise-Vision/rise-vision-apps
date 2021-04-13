@@ -73,9 +73,15 @@ angular.module('risevision.apps')
           templateUrl: 'partials/purchase/update-subscription.html',
           controller: 'UpdateSubscriptionCtrl',
           resolve: {
-            canAccessApps: ['canAccessApps',
-              function (canAccessApps) {
-                return canAccessApps();
+            canAccessApps: ['canAccessApps', 'currentPlanFactory', '$state',
+              function (canAccessApps, currentPlanFactory, $state) {
+                return canAccessApps().then(function () {
+                  if (!$state.params.subscriptionId && !currentPlanFactory.isSubscribed()) {
+                    $state.go('apps.purchase.home', {
+                      displayCount: $state.params.displayCount
+                    });
+                  }
+                });
               }
             ],
             redirectTo: ['$location',
