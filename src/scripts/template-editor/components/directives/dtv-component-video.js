@@ -12,11 +12,23 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-video.html',
         link: function ($scope, element) {
-          var storagePanelSelector = {
-            iconType: 'streamline',
-            icon: 'folder',
-            title: 'Rise Storage',
-            panel: '.video-storage-container'
+          var storageSelectorComponent = {
+            type: 'storage-selector',
+            directive: {
+              iconType: 'streamline',
+              icon: 'folder',
+              title: 'Rise Storage',
+              panel: '.video-storage-container',
+              onBackHandler: function () {
+                if (!$scope.storageManager.onBackHandler()) {
+                  $scope.resetPanelHeader();
+
+                  return false;
+                } else {
+                  return true;
+                }
+              }
+            }
           };
 
           $scope.factory = templateEditorFactory;
@@ -159,17 +171,6 @@ angular.module('risevision.template-editor.directives')
 
               _loadSelectedFiles();
               _loadVolume();
-            },
-            onBackHandler: function () {
-              if ($scope.getCurrentPage() !== storagePanelSelector) {
-                return false;
-              } else if (!$scope.storageManager.onBackHandler()) {
-                $scope.resetPanelHeader();
-
-                return false;
-              } else {
-                return true;
-              }
             }
           });
 
@@ -189,7 +190,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.selectFromStorage = function () {
             $scope.storageManager.refresh();
-            $scope.showNextPage(storagePanelSelector);
+            $scope.editComponent(storageSelectorComponent);
           };
 
           $scope.getPartialPath = function (partial) {

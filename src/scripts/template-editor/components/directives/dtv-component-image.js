@@ -15,12 +15,25 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-image.html',
         link: function ($scope, element) {
-          var storagePanelSelector = {
-            iconType: 'streamline',
-            icon: 'folder',
-            title: 'Rise Storage',
-            panel: '.storage-selector-container'
+          var storageSelectorComponent = {
+            type: 'storage-selector',
+            directive: {
+              iconType: 'streamline',
+              icon: 'folder',
+              title: 'Rise Storage',
+              panel: '.storage-selector-container',
+              onBackHandler: function() {
+                if (!$scope.storageManager.onBackHandler()) {
+                  _updatePanelHeader();
+
+                  return false;
+                } else {
+                  return true;
+                }
+              }
+            }
           };
+
           var imageFactory = baseImageFactory;
 
           $scope.factory = templateEditorFactory;
@@ -226,18 +239,10 @@ angular.module('risevision.template-editor.directives')
               _loadHelpText();
             },
             onBackHandler: function () {
-              if ($scope.getCurrentPage() !== storagePanelSelector) {
-                if ($scope.isEditingLogo()) {
-                  $scope.resetPanelHeader();
-                }
-                return false;
-              } else if (!$scope.storageManager.onBackHandler()) {
-                _updatePanelHeader();
-
-                return false;
-              } else {
-                return true;
+              if ($scope.isEditingLogo()) {
+                $scope.resetPanelHeader();
               }
+              return false;
             },
             onPresentationOpen: function () {
               console.log('on presentation open');
@@ -302,7 +307,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.selectFromStorage = function () {
             $scope.storageManager.refresh();
-            $scope.showNextPage(storagePanelSelector);
+            $scope.editComponent(storageSelectorComponent);
           };
 
           $scope.getPartialPath = function (partial) {
