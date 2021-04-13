@@ -193,7 +193,7 @@ describe('directive: TemplateAttributeEditor', function() {
     expect(factory.selected).to.deep.equal(component);
 
     expect($scope.pages).to.have.length(1);
-    expect($scope.pages[0]).to.equal(directive)
+    expect($scope.pages[0]).to.equal(component);
     expect($scope.panelIcon).to.be.null;
     expect($scope.panelIconType).to.be.null;
     expect($scope.panelTitle).to.be.null;

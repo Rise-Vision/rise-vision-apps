@@ -60,7 +60,6 @@ describe('directive: templateComponentVideo', function() {
     expect(directive.iconType).to.equal('streamline');
     expect(directive.icon).to.exist;
     expect(directive.show).to.be.a('function');
-    expect(directive.onBackHandler).to.be.a('function');
   });
 
   it('should set video lists when available as attribute data', function() {

@@ -30,16 +30,36 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
+          var _getDirective = function (component) {
+            if (!component) {
+              return null;
+            } else if (component.directive) {
+              return component.directive;
+            } else if ($scope.directives[component.type]) {
+              return $scope.directives[component.type];
+            } else {
+              return null;
+            }
+          };
+
+          var _getSelectedDirective = function () {
+            var component = $scope.factory.selected;
+
+            return _getDirective(component);
+          };
+
           $scope.editComponent = function (component) {
-            var directive = $scope.directives[component.type];
+            var directive = _getDirective(component);
 
             $scope.factory.selected = component;
 
-            directive.element.show();
+            if (directive && directive.element) {
+              directive.element.show();
+            }
 
-            $scope.showNextPage(directive);
+            $scope.showNextPage(component);
 
-            if (directive.show) {
+            if (directive && directive.show) {
               directive.show();
             }
 
@@ -49,21 +69,18 @@ angular.module('risevision.template-editor.directives')
           $scope.onBackButton = function () {
             $scope.highlightComponent(null);
 
-            var component = $scope.factory.selected;
-            var directive = $scope.directives[component.type];
+            var directive = _getSelectedDirective();
 
-            if (!directive.onBackHandler || !directive.onBackHandler()) {
+            if (!directive || !directive.onBackHandler || !directive.onBackHandler()) {
               $scope.showPreviousPage();
             }
           };
 
           // Private
           $scope.backToList = function () {
-            var component = $scope.factory.selected;
+            var directive = _getSelectedDirective();
 
-            if (component && component.type) {
-              var directive = $scope.directives[component.type];
-
+            if (directive && directive.element) {
               directive.element.hide();              
             }
 
@@ -76,21 +93,24 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.getComponentIcon = function (component) {
-            return component && $scope.directives[component.type] ?
-              $scope.directives[component.type].icon : '';
+            var directive = _getDirective(component);
+
+            return directive ? directive.icon : '';
           };
 
           $scope.getComponentIconType = function (component) {
-            return component && $scope.directives[component.type] ?
-              $scope.directives[component.type].iconType : '';
+            var directive = _getDirective(component);
+
+            return directive ? directive.iconType : '';
           };
 
           $scope.getComponentTitle = function (component) {
+            var directive = _getDirective(component);
+
             if ($scope.panelTitle) {
               return $scope.panelTitle;
-            } else if (component && $scope.directives[component.type] &&
-              $scope.directives[component.type].title) {
-              return $scope.directives[component.type].title;
+            } else if (directive && directive.title) {
+              return directive.title;
             } else if (component && component.label) {
               return component.label;
             } else {
@@ -108,11 +128,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.isHeaderBottomRuleVisible = function (component) {
-            if (!component) {
-              return true;
-            }
-
-            var directive = $scope.directives[component.type];
+            var directive = _getDirective(component);
 
             return directive && directive.isHeaderBottomRuleVisible ?
               directive.isHeaderBottomRuleVisible() : true;
@@ -181,8 +197,9 @@ angular.module('risevision.template-editor.directives')
             element.removeClass('attribute-editor-show-from-left');
           }
 
-          function _showElement(page, direction, delay) {
-            var element = page && page.panel && templateEditorUtils.findElement(page.panel);
+          function _showElement(component, direction, delay) {
+            var directive = _getDirective(component);
+            var element = directive && directive.panel && templateEditorUtils.findElement(directive.panel);
 
             if (!element) {
               return;
@@ -196,8 +213,9 @@ angular.module('risevision.template-editor.directives')
             }, delay || 0);
           }
 
-          function _hideElement(page, delay) {
-            var element = page && page.panel && templateEditorUtils.findElement(page.panel);
+          function _hideElement(component, delay) {
+            var directive = _getDirective(component);
+            var element = directive && directive.panel && templateEditorUtils.findElement(directive.panel);
 
             if (!element) {
               return;
