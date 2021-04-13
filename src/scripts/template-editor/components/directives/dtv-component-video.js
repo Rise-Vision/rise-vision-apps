@@ -3,34 +3,17 @@
 angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_VIDEO_THUMBNAIL', 'streamline:video')
   .constant('SUPPORTED_VIDEO_TYPES', '.mp4, .webm')
-  .directive('templateComponentVideo', ['$log', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
-    'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_VIDEO_THUMBNAIL', 'SUPPORTED_VIDEO_TYPES',
-    function ($log, $timeout, templateEditorFactory, templateEditorUtils,
-      fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_VIDEO_THUMBNAIL, SUPPORTED_VIDEO_TYPES) {
+  .directive('templateComponentVideo', ['$log', '$timeout', 'templateEditorFactory',
+    'storageManagerFactory', 'templateEditorUtils', 'fileExistenceCheckService', 
+    'fileMetadataUtilsService', 'DEFAULT_VIDEO_THUMBNAIL', 'SUPPORTED_VIDEO_TYPES',
+    function ($log, $timeout, templateEditorFactory, storageManagerFactory, templateEditorUtils,
+      fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_VIDEO_THUMBNAIL,
+      SUPPORTED_VIDEO_TYPES) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-video.html',
         link: function ($scope, element) {
-          var storageSelectorComponent = {
-            type: 'storage-selector',
-            directive: {
-              iconType: 'streamline',
-              icon: 'folder',
-              title: 'Rise Storage',
-              panel: '.video-storage-container',
-              onBackHandler: function () {
-                if (!$scope.storageManager.onBackHandler()) {
-                  $scope.resetPanelHeader();
-
-                  return false;
-                } else {
-                  return true;
-                }
-              }
-            }
-          };
-
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_VIDEO_TYPES;
           $scope.uploadManager = {
@@ -41,25 +24,7 @@ angular.module('risevision.template-editor.directives')
               _addFilesToMetadata([file]);
             }
           };
-          $scope.storageManager = {
-            addSelectedItems: function (newSelectedItems) {
-              _addFilesToMetadata(newSelectedItems, true);
 
-              $scope.resetPanelHeader();
-              $scope.showPreviousPage();
-            },
-            handleNavigation: function (folderPath) {
-              var folderName = templateEditorUtils.fileNameOf(folderPath);
-
-              if (folderName) {
-                $scope.setPanelIcon('folder', 'streamline');
-                $scope.setPanelTitle(folderName);
-              } else {
-                $scope.setPanelIcon('riseStorage', 'riseSvg');
-                $scope.setPanelTitle('Rise Storage');
-              }
-            }
-          };
           $scope.values = {
             volume: 0
           };
@@ -159,6 +124,17 @@ angular.module('risevision.template-editor.directives')
             _setAttribute('volume', $scope.values.volume);
           };
 
+          var _initStorageFactory = function() {
+            _reset();
+
+            storageManagerFactory.fileType = 'video';
+            storageManagerFactory.onSelectHandler = function(newSelectedItems) {
+              _addFilesToMetadata(newSelectedItems, true);
+            };
+
+            _loadSelectedFiles();
+          };
+
           $scope.registerDirective({
             type: 'rise-video',
             iconType: 'streamline',
@@ -166,10 +142,9 @@ angular.module('risevision.template-editor.directives')
             element: element,
             panel: '.video-component-container',
             show: function () {
-              _reset();
               $scope.componentId = $scope.factory.selected.id;
 
-              _loadSelectedFiles();
+              _initStorageFactory();
               _loadVolume();
             }
           });
@@ -189,8 +164,9 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.selectFromStorage = function () {
-            $scope.storageManager.refresh();
-            $scope.editComponent(storageSelectorComponent);
+            $scope.editComponent({
+              type: 'rise-storage-selector'
+            });
           };
 
           $scope.getPartialPath = function (partial) {
