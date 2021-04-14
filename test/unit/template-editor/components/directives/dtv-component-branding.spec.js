@@ -53,7 +53,7 @@ describe('directive: templateComponentBranding', function() {
   it('editLogo:', function() {
     $scope.editLogo();
 
-    $scope.editComponent.should.have.been.calledWith({type: 'rise-image'});
+    $scope.editComponent.should.have.been.calledWith({type: 'rise-image-logo'});
   });
 
   it('editColors: ', function() {
