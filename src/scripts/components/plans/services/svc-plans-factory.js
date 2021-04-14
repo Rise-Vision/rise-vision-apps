@@ -3,8 +3,9 @@
   'use strict';
   angular.module('risevision.common.components.plans')
     .factory('plansFactory', ['$modal', 'userState', 'plansService', 'analyticsFactory',
-      '$state', 'confirmModal',
-      function ($modal, userState, plansService, analyticsFactory, $state, confirmModal) {
+      '$state', 'confirmModal', 'currentPlanFactory', 'messageBox',
+      function ($modal, userState, plansService, analyticsFactory, $state, confirmModal, currentPlanFactory,
+        messageBox) {
         var _factory = {};
 
         _factory.showPurchaseOptions = function (displayCount) {
@@ -14,13 +15,23 @@
         };
 
         _factory.confirmAndPurchase = function (displayCount) {
-          confirmModal('Almost there!',
-              'There aren\'t available licenses to assign to the selected displays. Subscribe to additional licenses?',
-              'Yes', 'No', 'madero-style centered-modal',
-              'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
-            .then(function () {
-              _factory.showPurchaseOptions(displayCount);
-            });
+          if (currentPlanFactory.isParentPlan() || currentPlanFactory.currentPlan.isPurchasedByParent) {
+            var contactInfo = currentPlanFactory.currentPlan.parentPlanContactEmail ? ' at ' +
+              currentPlanFactory.currentPlan.parentPlanContactEmail : '';
+            messageBox('Almost there!',
+              'There aren\'t available display licenses to assign to the selected displays. Contact your account administrator' +
+              contactInfo + ' for additional display licenses.',
+              'Okay, I Got It', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
+              );
+          } else {
+            confirmModal('Almost there!',
+                'There aren\'t available display licenses to assign to the selected displays. Subscribe to additional licenses?',
+                'Yes', 'No', 'madero-style centered-modal',
+                'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+              .then(function () {
+                _factory.showPurchaseOptions(displayCount);
+              });
+          }
         };
 
         _factory.showUnlockThisFeatureModal = function () {
