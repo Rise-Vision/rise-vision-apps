@@ -23,9 +23,6 @@ describe('directive: templateBrandingColors', function() {
     $scope = element.scope();
 
     $scope.registerDirective = sinon.stub();
-    $scope.setPanelTitle = sinon.stub();
-    $scope.setPanelIcon = sinon.stub();
-    $scope.showPreviousPanel = sinon.stub();
 
     $scope.$digest();
   }));
@@ -43,9 +40,8 @@ describe('directive: templateBrandingColors', function() {
     expect(directive.type).to.equal('rise-branding-colors');
     expect(directive.iconType).to.equal('streamline');
     expect(directive.icon).to.equal('palette');
+    expect(directive.title).to.equal('Color Settings');
     expect(directive.panel).to.equal('.branding-colors-container');
-    expect(directive.show).to.be.a('function');
-    expect(directive.onBackHandler).to.be.a('function');
   });
 
   it('saveBranding: ', function() {
@@ -59,26 +55,6 @@ describe('directive: templateBrandingColors', function() {
     $scope.$digest();
 
     factory.setUnsavedChanges.should.have.been.called;
-  });
-
-  it('directive.show: ', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
-
-    directive.show();
-
-    $scope.setPanelTitle.should.have.been.calledWith('Color Settings');
-  });
-
-  it('directive.onBackHandler: ', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
-    $scope.showPreviousPanel.returns('backPanel');
-
-    expect(directive.onBackHandler()).to.equal('backPanel');
-
-    $scope.setPanelTitle.should.have.been.calledWith('Brand Settings');
-    $scope.setPanelIcon.should.have.been.calledWith('ratingStar', 'streamline');
-
-    $scope.showPreviousPanel.should.have.been.called;
   });
 
 });
