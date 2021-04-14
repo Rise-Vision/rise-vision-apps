@@ -135,7 +135,7 @@ describe('directive: TemplateComponentImage', function() {
         expect(directive.type).to.equal('rise-image-logo');
         expect(directive.iconType).to.equal('streamline');
         expect(directive.icon).to.equal('circleStar');
-        expect(directive.title).to.equal('Brand Settings');
+        expect(directive.title).to.equal('Logo Settings');
         expect(directive.element).to.be.an('object');
         expect(directive.panel).to.equal('.image-component-container');
         expect(directive.show).to.be.a('function');
