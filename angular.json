@@ -509,7 +509,7 @@
               "src/scripts/template-editor/directives/dtv-streamline-icon.js",
               "src/scripts/template-editor/directives/dtv-time-picker.js",
 
-              "src/scripts/template-editor/components/directives/dtv-storage-selector.js",
+              "src/scripts/template-editor/components/directives/dtv-component-storage-selector.js",
               "src/scripts/template-editor/components/directives/dtv-component-branding.js",
               "src/scripts/template-editor/components/directives/dtv-component-schedules.js",
               "src/scripts/template-editor/components/directives/dtv-branding-colors.js",

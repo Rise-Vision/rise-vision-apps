@@ -7,11 +7,11 @@ describe('directive: templateComponent', function () {
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
-    $provide.service('basicStorageSelectorFactory', function() {
+    $provide.service('storageManagerFactory', function() {
       return {};
     });
 
-    $provide.service('basicStorageSelectorFactory', function() {
+    $provide.service('storageManagerFactory', function() {
       return {};
     });
   }));
@@ -28,7 +28,7 @@ describe('directive: templateComponent', function () {
   it('should exist', function () {
     expect($scope).to.be.ok;
     expect($scope.factory).to.be.ok;
-    expect($scope.basicStorageSelectorFactory).to.be.ok;
+    expect($scope.storageManagerFactory).to.be.ok;
   });
 
 });

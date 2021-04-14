@@ -58,6 +58,7 @@ describe('service: templateEditorUtils:', function() {
     it('should return only the name of the file given a full path', function () {
       expect(templateEditorUtils.fileNameOf('')).to.equal('');
       expect(templateEditorUtils.fileNameOf('test.jpg')).to.equal('test.jpg');
+      expect(templateEditorUtils.fileNameOf('folder/')).to.equal('folder');
       expect(templateEditorUtils.fileNameOf('folder/test.jpg')).to.equal('test.jpg');
       expect(templateEditorUtils.fileNameOf('folder/subfolder/test.jpg')).to.equal('test.jpg');
     });

@@ -14,10 +14,6 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
   });
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
       return factory;

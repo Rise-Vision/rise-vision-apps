@@ -34,15 +34,6 @@ angular.module('risevision.template-editor.directives')
             isSingleFileSelector: $scope.isEditingLogo
           };
 
-          var _updatePanelHeader = function () {
-            if ($scope.isEditingLogo()) {
-              $scope.setPanelIcon('circleStar', 'streamline');
-              $scope.setPanelTitle('Logo Settings');
-            } else {
-              $scope.resetPanelHeader();
-            }
-          };
-
           $scope.values = {};
 
           function _reset() {
@@ -234,7 +225,7 @@ angular.module('risevision.template-editor.directives')
           var logoDirective = angular.extend({}, baseDirective, {
             type: 'rise-image-logo',
             icon: 'circleStar',
-            title: 'Brand Settings',
+            title: 'Logo Settings',
             show: function () {
               imageFactory = logoImageFactory;
               imageFactory.componentId = null;

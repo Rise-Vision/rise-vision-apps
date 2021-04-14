@@ -5,7 +5,8 @@ angular.module('risevision.template-editor.services')
     'SUPPORTED_IMAGE_TYPES', 'SUPPORTED_VIDEO_TYPES',
     function (storage, templateEditorUtils, SUPPORTED_IMAGE_TYPES, SUPPORTED_VIDEO_TYPES) {
       var factory = {
-        isListView: true
+        isListView: true,
+        folderItems: []
       };
 
       var _getValidExtensionsList = function() {
@@ -14,19 +15,18 @@ angular.module('risevision.template-editor.services')
         return validExtensions ? validExtensions.split(',') : [];
       };
 
-      factory.loadFiles = function(newFolderPath) {
+      factory.loadFiles = function(folderPath) {
         factory.loadingFiles = true;
-        factory.folderItems = undefined;
 
         return storage.files.get({
-            folderPath: newFolderPath
+            folderPath: folderPath
           })
           .then(function (items) {
             if (items.files) {
               factory.folderItems = items.files.filter(function (item) {
                 var isValid = templateEditorUtils.fileHasValidExtension(item.name, _getValidExtensionsList());
 
-                return item.name !== newFolderPath && (templateEditorUtils.isFolder(item.name) || isValid);
+                return item.name !== folderPath && (templateEditorUtils.isFolder(item.name) || isValid);
               });
             } else {
               factory.folderItems = [];
