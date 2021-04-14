@@ -12,7 +12,24 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-video.html',
         link: function ($scope, element) {
-          var storagePanelSelector = '.video-storage-container';
+          var storageSelectorComponent = {
+            type: 'storage-selector',
+            directive: {
+              iconType: 'streamline',
+              icon: 'folder',
+              title: 'Rise Storage',
+              panel: '.video-storage-container',
+              onBackHandler: function () {
+                if (!$scope.storageManager.onBackHandler()) {
+                  $scope.resetPanelHeader();
+
+                  return false;
+                } else {
+                  return true;
+                }
+              }
+            }
+          };
 
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_VIDEO_TYPES;
@@ -29,7 +46,7 @@ angular.module('risevision.template-editor.directives')
               _addFilesToMetadata(newSelectedItems, true);
 
               $scope.resetPanelHeader();
-              $scope.showPreviousPanel();
+              $scope.showPreviousPage();
             },
             handleNavigation: function (folderPath) {
               var folderName = templateEditorUtils.fileNameOf(folderPath);
@@ -154,18 +171,6 @@ angular.module('risevision.template-editor.directives')
 
               _loadSelectedFiles();
               _loadVolume();
-            },
-            onBackHandler: function () {
-              if ($scope.getCurrentPanel() !== storagePanelSelector) {
-                return $scope.showPreviousPanel();
-              } else if (!$scope.storageManager.onBackHandler()) {
-                $scope.setPanelIcon();
-                $scope.setPanelTitle();
-
-                return $scope.showPreviousPanel();
-              } else {
-                return true;
-              }
             }
           });
 
@@ -185,7 +190,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.selectFromStorage = function () {
             $scope.storageManager.refresh();
-            $scope.showNextPanel(storagePanelSelector);
+            $scope.editComponent(storageSelectorComponent);
           };
 
           $scope.getPartialPath = function (partial) {

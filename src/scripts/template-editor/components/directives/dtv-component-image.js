@@ -15,7 +15,25 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-image.html',
         link: function ($scope, element) {
-          var storagePanelSelector = '.storage-selector-container';
+          var storageSelectorComponent = {
+            type: 'storage-selector',
+            directive: {
+              iconType: 'streamline',
+              icon: 'folder',
+              title: 'Rise Storage',
+              panel: '.storage-selector-container',
+              onBackHandler: function() {
+                if (!$scope.storageManager.onBackHandler()) {
+                  _updatePanelHeader();
+
+                  return false;
+                } else {
+                  return true;
+                }
+              }
+            }
+          };
+
           var imageFactory = baseImageFactory;
 
           $scope.factory = templateEditorFactory;
@@ -50,7 +68,7 @@ angular.module('risevision.template-editor.directives')
 
               _updatePanelHeader();
 
-              $scope.showPreviousPanel();
+              $scope.showPreviousPage();
             },
             isSingleFileSelector: $scope.isEditingLogo,
             handleNavigation: function (folderPath) {
@@ -221,19 +239,10 @@ angular.module('risevision.template-editor.directives')
               _loadHelpText();
             },
             onBackHandler: function () {
-              if ($scope.getCurrentPanel() !== storagePanelSelector) {
-                if ($scope.isEditingLogo()) {
-                  $scope.setPanelIcon('ratingStar', 'streamline');
-                  $scope.setPanelTitle('Brand Settings');
-                }
-                return $scope.showPreviousPanel();
-              } else if (!$scope.storageManager.onBackHandler()) {
-                _updatePanelHeader();
-
-                return $scope.showPreviousPanel();
-              } else {
-                return true;
+              if ($scope.isEditingLogo()) {
+                $scope.resetPanelHeader();
               }
+              return false;
             },
             onPresentationOpen: function () {
               console.log('on presentation open');
@@ -298,7 +307,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.selectFromStorage = function () {
             $scope.storageManager.refresh();
-            $scope.showNextPanel(storagePanelSelector);
+            $scope.editComponent(storageSelectorComponent);
           };
 
           $scope.getPartialPath = function (partial) {
