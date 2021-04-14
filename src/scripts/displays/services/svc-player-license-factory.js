@@ -52,7 +52,8 @@ angular.module('risevision.displays.services')
         var company = userState.getCopyOfSelectedCompany(true);
 
         display.playerProAssigned = playerProAuthorized;
-        display.playerProAuthorized = (display.originalPlayerProAuthorized || company.playerProAvailableLicenseCount > 0) && playerProAuthorized;
+        display.playerProAuthorized = (display.originalPlayerProAuthorized || company
+          .playerProAvailableLicenseCount > 0) && playerProAuthorized;
       };
 
       factory.updateDisplayLicense = function (display) {
