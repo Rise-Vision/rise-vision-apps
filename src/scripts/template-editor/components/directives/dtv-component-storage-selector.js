@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('componentStorageSelector', ['$loading', 'filterFilter', 'storageManagerFactory', 'storage',
+  .directive('componentStorageSelector', ['$loading', 'filterFilter', 'storageManagerFactory',
     'templateEditorUtils',
-    function ($loading, filterFilter, storageManagerFactory, storage, templateEditorUtils) {
+    function ($loading, filterFilter, storageManagerFactory, templateEditorUtils) {
       return {
         restrict: 'E',
         scope: true,
@@ -14,7 +14,7 @@ angular.module('risevision.template-editor.directives')
           $scope.selectedItems = [];
           $scope.filterConfig = {
             placeholder: 'Search Rise Storage',
-            id: 'basicStorageSearchInput'
+            id: 'componentStorageSearchInput'
           };
           $scope.search = {
             doSearch: function () {},
@@ -72,9 +72,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.isFolder = templateEditorUtils.isFolder;
-
           $scope.fileNameOf = templateEditorUtils.fileNameOf;
-
           $scope.hasRegularFileItems = function () {
             return templateEditorUtils.hasRegularFileItems($scope.folderItems);
           };
@@ -99,10 +97,10 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.loadItems = function (newFolderPath) {
-            $scope.currentFolder = $scope.fileNameOf(newFolderPath);
+            $scope.currentFolder = templateEditorUtils.fileNameOf(newFolderPath);
             _handleNavigation(newFolderPath);
 
-            storageManagerFactory.loadFiles(newFolderPath)
+            return storageManagerFactory.loadFiles(newFolderPath)
               .then(function(folderItems) {
                 $scope.folderItems = folderItems;
 
@@ -134,7 +132,7 @@ angular.module('risevision.template-editor.directives')
             for (var i = 0; i < $scope.folderItems.length; ++i) {
               var item = $scope.folderItems[i];
 
-              if ($scope.isFolder(item.name)) {
+              if (templateEditorUtils.isFolder(item.name)) {
                 continue;
               }
 

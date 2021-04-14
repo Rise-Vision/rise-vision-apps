@@ -124,17 +124,6 @@ angular.module('risevision.template-editor.directives')
             _setAttribute('volume', $scope.values.volume);
           };
 
-          var _initStorageFactory = function() {
-            _reset();
-
-            storageManagerFactory.fileType = 'video';
-            storageManagerFactory.onSelectHandler = function(newSelectedItems) {
-              _addFilesToMetadata(newSelectedItems, true);
-            };
-
-            _loadSelectedFiles();
-          };
-
           $scope.registerDirective({
             type: 'rise-video',
             iconType: 'streamline',
@@ -142,9 +131,15 @@ angular.module('risevision.template-editor.directives')
             element: element,
             panel: '.video-component-container',
             show: function () {
+              _reset();
               $scope.componentId = $scope.factory.selected.id;
 
-              _initStorageFactory();
+              storageManagerFactory.fileType = 'video';
+              storageManagerFactory.onSelectHandler = function(newSelectedItems) {
+                _addFilesToMetadata(newSelectedItems, true);
+              };
+
+              _loadSelectedFiles();
               _loadVolume();
             }
           });
