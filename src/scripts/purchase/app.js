@@ -79,9 +79,7 @@ angular.module('risevision.apps')
               function (canAccessApps, currentPlanFactory, $state) {
                 return canAccessApps().then(function () {
                   if (!$state.params.subscriptionId && !currentPlanFactory.isSubscribed()) {
-                    $state.go('apps.purchase.home', {
-                      displayCount: $state.params.displayCount
-                    });
+                    $state.go('apps.purchase.home');
                   }
                 });
               }
