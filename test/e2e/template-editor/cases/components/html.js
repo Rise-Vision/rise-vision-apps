@@ -13,7 +13,7 @@ var HtmlComponentScenarios = function () {
     var presentationsListPage;
     var templateEditorPage;
     var htmlComponentPage;
-    var componentLabel = "HTML Component 1";
+    var componentLabel = "HTML Embed";
 
     before(function () {
       presentationsListPage = new PresentationListPage();

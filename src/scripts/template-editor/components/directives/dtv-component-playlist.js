@@ -118,7 +118,7 @@ angular.module('risevision.template-editor.directives')
               return;
             }
 
-            var presentationIds = _.map(_.filter(templates, $scope.isEmbeddedTemplate), 
+            var presentationIds = _.map(_.filter(templates, $scope.isEmbeddedTemplate),
               function (item) {
                 return 'id:' + item.id;
               });

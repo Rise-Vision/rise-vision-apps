@@ -226,10 +226,10 @@
           // The flag the indicates a user is potentially
           // authenticated already, must be destroyed.
           return _resetUserState(signOutGoogle)
-            .finally(function() {
+            .finally(function () {
               //call google api to sign out
               $rootScope.$broadcast('risevision.user.signedOut');
-              $log.debug('User is signed out.');              
+              $log.debug('User is signed out.');
             });
         };
 

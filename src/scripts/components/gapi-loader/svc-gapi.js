@@ -17,9 +17,9 @@ angular.module('risevision.common.gapi', [
     'risevision.common.components.util'
   ])
   .factory('rejectOnTimeout', ['$timeout',
-    function($timeout) {
-      return function(deferred, entry) {
-        var rejectTimeout = $timeout(function() {
+    function ($timeout) {
+      return function (deferred, entry) {
+        var rejectTimeout = $timeout(function () {
           var err = {
             code: -1,
             message: entry + ' Load Timeout'
@@ -29,7 +29,7 @@ angular.module('risevision.common.gapi', [
         }, 60 * 1000);
 
         deferred.promise
-          .finally(function() {
+          .finally(function () {
             $timeout.cancel(rejectTimeout);
           });
       };
@@ -41,7 +41,7 @@ angular.module('risevision.common.gapi', [
       var deferred = $q.defer();
 
       deferred.promise
-        .catch(function(err) {
+        .catch(function (err) {
           $exceptionHandler(err, 'gapiLoader Error.', true);
 
           return $q.reject(err);
@@ -63,7 +63,7 @@ angular.module('risevision.common.gapi', [
           fileref.setAttribute('type', 'text/javascript');
           fileref.setAttribute('src', src);
 
-          fileref.onerror = function(error) {
+          fileref.onerror = function (error) {
             deferred.reject(error);
 
             $window.removeEventListener('gapi.loaded', gapiLoaded, false);
@@ -114,12 +114,12 @@ angular.module('risevision.common.gapi', [
                     deferred.reject();
                   }
                 })
-                .catch(function(err) {
+                .catch(function (err) {
                   deferred.reject(err);
                 });
 
               return deferred.promise
-                .catch(function(err) {
+                .catch(function (err) {
                   var errMsg = libName + '.' + libVer + ' Load Failed';
 
                   $exceptionHandler(err, errMsg, true);

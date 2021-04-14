@@ -36,7 +36,7 @@ angular.module('risevision.apps.purchase')
                 .applyDiscount);
 
               $scope.yearlySavings = ($scope.basePricePerDisplay * $scope.displayCount * 12) - $scope
-              .totalPrice;
+                .totalPrice;
             });
 
             $scope.updatePlan = function () {
