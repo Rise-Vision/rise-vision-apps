@@ -1,34 +1,27 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('basicStorageSelector', ['$loading', 'filterFilter', 'storage', 'basicStorageSelectorFactory',
+  .directive('componentStorageSelector', ['$loading', 'filterFilter', 'storageManagerFactory',
     'templateEditorUtils',
-    function ($loading, filterFilter, storage, basicStorageSelectorFactory, templateEditorUtils) {
+    function ($loading, filterFilter, storageManagerFactory, templateEditorUtils) {
       return {
         restrict: 'E',
-        scope: {
-          storageSelectorId: '@',
-          fileType: '@',
-          validExtensions: '=?',
-          storageManager: '='
-        },
-        templateUrl: 'partials/template-editor/basic-storage-selector.html',
-        link: function ($scope) {
-          var spinnerId = 'storage-' + $scope.storageSelectorId + '-spinner';
-          var validExtensionsList = $scope.validExtensions ? $scope.validExtensions.split(',') : [];
-
-          $scope.basicStorageSelectorFactory = basicStorageSelectorFactory;
+        scope: true,
+        templateUrl: 'partials/template-editor/components/component-storage-selector.html',
+        link: function ($scope, element) {
+          $scope.storageManagerFactory = storageManagerFactory;
           $scope.folderItems = [];
           $scope.selectedItems = [];
           $scope.filterConfig = {
             placeholder: 'Search Rise Storage',
-            id: 'basicStorageSearchInput'
+            id: 'componentStorageSearchInput'
           };
           $scope.search = {
             doSearch: function () {},
             reverse: false
           };
 
+          $scope.storageSelectorId = 'storage-selector';
           $scope.storageUploadManager = {
             folderPath: '',
             onUploadStatus: function (isUploading) {
@@ -40,11 +33,18 @@ angular.module('risevision.template-editor.directives')
               }, file);
             }
           };
-          $scope.storageManager = angular.extend($scope.storageManager, {
-            refresh: function (skipReset) {
-              if (!skipReset) {
-                basicStorageSelectorFactory.isListView = true;
-              }
+
+          $scope.registerDirective({
+            type: 'rise-storage-selector',
+            iconType: 'riseSvg',
+            icon: 'riseStorage',
+            element: element,
+            panel: '.storage-selector-container',
+            title: 'Rise Storage',
+            show: function () {
+              storageManagerFactory.isListView = true;
+
+              $scope.fileType = storageManagerFactory.fileType;
 
               $scope.loadItems($scope.storageUploadManager.folderPath);
             },
@@ -57,12 +57,11 @@ angular.module('risevision.template-editor.directives')
                 // Since paths are of the 'folder/' form, the last item is the empty string
                 parts.splice(parts.length - 2, 2);
                 $scope.storageUploadManager.folderPath = parts.length > 0 ? parts.join('/') + '/' : '';
-                $scope.storageManager.refresh(true);
+                $scope.loadItems($scope.storageUploadManager.folderPath);
 
                 return true;
               }
-            },
-            reset: _reset
+            }
           });
 
           function _reset() {
@@ -73,9 +72,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.isFolder = templateEditorUtils.isFolder;
-
           $scope.fileNameOf = templateEditorUtils.fileNameOf;
-
           $scope.hasRegularFileItems = function () {
             return templateEditorUtils.hasRegularFileItems($scope.folderItems);
           };
@@ -88,39 +85,33 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
-          $scope.loadItems = function (newFolderPath) {
-            $loading.start(spinnerId);
-            $scope.currentFolder = $scope.fileNameOf(newFolderPath);
-            $scope.storageManager.handleNavigation(newFolderPath);
+          var _handleNavigation = function (folderPath) {
+            var folderName = templateEditorUtils.fileNameOf(folderPath);
 
-            return storage.files.get({
-                folderPath: newFolderPath
-              })
-              .then(function (items) {
+            if (folderName) {
+              $scope.setPanelIcon('folder', 'streamline');
+              $scope.setPanelTitle(folderName);
+            } else {
+              $scope.resetPanelHeader();
+            }
+          };
+
+          $scope.loadItems = function (newFolderPath) {
+            $scope.currentFolder = templateEditorUtils.fileNameOf(newFolderPath);
+            _handleNavigation(newFolderPath);
+
+            return storageManagerFactory.loadFiles(newFolderPath)
+              .then(function(folderItems) {
+                $scope.folderItems = folderItems;
+
                 $scope.selectedItems = [];
                 $scope.search.selectAll = false;
                 $scope.storageUploadManager.folderPath = newFolderPath;
-
-                if (items.files) {
-                  $scope.folderItems = items.files.filter(function (item) {
-                    var isValid = templateEditorUtils.fileHasValidExtension(item.name, validExtensionsList);
-
-                    return item.name !== newFolderPath && ($scope.isFolder(item.name) || isValid);
-                  });
-                } else {
-                  $scope.folderItems = [];
-                }
-              })
-              .catch(function (err) {
-                console.log('Failed to load files', err);
-              })
-              .finally(function () {
-                $loading.stop(spinnerId);
               });
           };
 
           $scope.selectItem = function (item) {
-            if ($scope.storageManager.isSingleFileSelector && $scope.storageManager.isSingleFileSelector()) {
+            if (storageManagerFactory.isSingleFileSelector && storageManagerFactory.isSingleFileSelector()) {
               if ($scope.isSelected(item)) {
                 $scope.selectedItems = [];
               } else {
@@ -141,7 +132,7 @@ angular.module('risevision.template-editor.directives')
             for (var i = 0; i < $scope.folderItems.length; ++i) {
               var item = $scope.folderItems[i];
 
-              if ($scope.isFolder(item.name)) {
+              if (templateEditorUtils.isFolder(item.name)) {
                 continue;
               }
 
@@ -164,8 +155,13 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.addSelected = function () {
-            $scope.storageManager.addSelectedItems($scope.selectedItems);
-            _reset();
+            if (storageManagerFactory.onSelectHandler) {
+              storageManagerFactory.onSelectHandler($scope.selectedItems);
+
+              _reset();
+
+              $scope.showPreviousPage();
+            }
           };
 
           $scope.sortBy = function (cat) {
@@ -185,7 +181,14 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.search.sortBy = $scope.fileNameOrderFunction;
-
+          
+          $scope.$watch('storageManagerFactory.loadingFiles', function (loading) {
+            if (loading) {
+              $loading.start('component-storage-selector-spinner');
+            } else {
+              $loading.stop('component-storage-selector-spinner');
+            }
+          });
         }
       };
     }

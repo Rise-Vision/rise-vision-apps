@@ -9,10 +9,8 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/components/component-branding/component-branding.html',
         link: function ($scope, element) {
           $scope.editLogo = function () {
-            $scope.setPanelIcon('circleStar', 'streamline');
-            $scope.setPanelTitle('Logo Settings');
             $scope.editComponent({
-              type: 'rise-image'
+              type: 'rise-image-logo'
             });
           };
 

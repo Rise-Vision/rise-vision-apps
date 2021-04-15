@@ -7,6 +7,7 @@ describe('directive: TemplateComponentImage', function() {
     timeout,
     baseImageFactory,
     logoImageFactory,
+    storageManagerFactory,
     sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
@@ -18,10 +19,6 @@ describe('directive: TemplateComponentImage', function() {
   });
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
       return factory;
@@ -80,10 +77,11 @@ describe('directive: TemplateComponentImage', function() {
 
     baseImageFactory = $injector.get('baseImageFactory');
     logoImageFactory = $injector.get('logoImageFactory');
+    storageManagerFactory = $injector.get('storageManagerFactory');
 
     $scope.registerDirective = sinon.stub();
     $scope.setAttributeData = sinon.stub();
-    $scope.showNextPanel = sinon.stub();
+    $scope.editComponent = sinon.stub();
     $scope.fileExistenceChecksCompleted = {};
     $scope.getBlueprintData = function() {
       return null;
@@ -103,16 +101,54 @@ describe('directive: TemplateComponentImage', function() {
     expect($scope.sortItem).to.be.a('function');
     expect($scope.saveDuration).to.be.a('function');
     expect($scope.saveTransition).to.be.a('function');
+  });
 
-    expect($scope.registerDirective).to.have.been.called;
+  describe('registerDirective:', function() {
+    describe('image:', function() {
+      it('should initialize', function() {
+        $scope.registerDirective.should.have.been.calledTwice;
 
-    var directive = $scope.registerDirective.getCall(0).args[0];
-    expect(directive).to.be.ok;
-    expect(directive.type).to.equal('rise-image');
-    expect(directive.icon).to.equal('image');
-    expect(directive.iconType).to.equal('streamline');
-    expect(directive.show).to.be.a('function');
-    expect(directive.onBackHandler).to.be.a('function');
+        var directive = $scope.registerDirective.getCall(0).args[0];
+        expect(directive).to.be.ok;
+        expect(directive.type).to.equal('rise-image');
+        expect(directive.iconType).to.equal('streamline');
+        expect(directive.icon).to.equal('image');
+        expect(directive.element).to.be.an('object');
+        expect(directive.panel).to.equal('.image-component-container');
+        expect(directive.show).to.be.a('function');
+        expect(directive.onBackHandler).to.be.a('function');
+      });
+
+      it('show:', function() {
+        $scope.registerDirective.getCall(0).args[0].show();
+
+        expect(storageManagerFactory.fileType).to.equal('image');
+        expect(storageManagerFactory.isSingleFileSelector).to.equal($scope.isEditingLogo);
+        expect(storageManagerFactory.onSelectHandler).to.be.a('function');
+      });
+    });
+
+    describe('logo:', function() {
+      it('should initialize', function() {
+        var directive = $scope.registerDirective.getCall(1).args[0];
+        expect(directive).to.be.ok;
+        expect(directive.type).to.equal('rise-image-logo');
+        expect(directive.iconType).to.equal('streamline');
+        expect(directive.icon).to.equal('circleStar');
+        expect(directive.title).to.equal('Logo Settings');
+        expect(directive.element).to.be.an('object');
+        expect(directive.panel).to.equal('.image-component-container');
+        expect(directive.show).to.be.a('function');
+      });
+
+      it('show:', function() {
+        $scope.registerDirective.getCall(0).args[0].show();
+
+        expect(storageManagerFactory.fileType).to.equal('image');
+        expect(storageManagerFactory.isSingleFileSelector).to.equal($scope.isEditingLogo);
+        expect(storageManagerFactory.onSelectHandler).to.be.a('function');
+      });
+    });
   });
 
   it('uploadManager:', function() {
@@ -123,37 +159,10 @@ describe('directive: TemplateComponentImage', function() {
     expect($scope.uploadManager.addFile).to.be.ok;
   });
 
-  it('storageManager:', function() {
-    expect($scope.storageManager).to.be.ok;
-    expect($scope.storageManager.isSingleFileSelector).to.be.ok;
-    expect($scope.storageManager.isSingleFileSelector).to.equal($scope.isEditingLogo);
-    expect($scope.storageManager.addSelectedItems).to.be.ok;
-    expect($scope.storageManager.handleNavigation).to.be.ok;
-  });
-
-  describe('isEditingLogo:', function() {
-    it('should not edit logo if component id is available', function() {
-      var directive = $scope.registerDirective.getCall(0).args[0];
-
-      directive.show();
-
-      expect($scope.isEditingLogo()).to.be.false;
-    });
-
-    it('should edit logo if component id is not available', function() {
-      var directive = $scope.registerDirective.getCall(0).args[0];
-      $scope.factory.selected = {};
-
-      directive.show();
-
-      expect($scope.isEditingLogo()).to.be.true;
-    });
-  });
-
   describe('show',function(){
 
     it('should use logoImageFactory when opening logo settings',function(){
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = $scope.registerDirective.getCall(1).args[0];
       logoImageFactory.getImagesAsMetadata.returns([]);
 
       $scope.factory.selected = {type:'rise-image'};
@@ -434,17 +443,33 @@ describe('directive: TemplateComponentImage', function() {
     });
   });
 
-  describe('storageManager.isSingleFileSelector',function(){
-    it('should be a single file selector when picking logo',function(){
-      var directive = $scope.registerDirective.getCall(0).args[0];
-      $scope.factory.selected = {type:'rise-image'};
-      directive.show();
-
-      expect($scope.storageManager.isSingleFileSelector()).be.true;
+  describe('isEditingLogo:',function(){
+    it('should default to false',function(){
+      expect($scope.isEditingLogo()).be.false;
     });
 
-    it('should not be a single file selector when picking a regular image',function(){
-      expect($scope.storageManager.isSingleFileSelector()).be.false;
+    it('should be be true when picking logo',function(){
+      var directive = $scope.registerDirective.getCall(1).args[0];
+
+      directive.show();
+
+      expect($scope.isEditingLogo()).be.true;
+    });
+
+    it('should be false picking a regular image',function(){
+      var directive = $scope.registerDirective.getCall(0).args[0];
+
+      directive.show();
+
+      expect($scope.isEditingLogo()).be.false;
+    });
+  });
+
+  it('selectFromStorage:', function() {
+    $scope.selectFromStorage();
+
+    $scope.editComponent.should.have.been.calledWith({
+      type: 'rise-storage-selector'
     });
   });
 

@@ -4,10 +4,10 @@ angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_IMAGE_THUMBNAIL',
     'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
-  .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
-    'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
-    'logoImageFactory', 'baseImageFactory',
-    function ($log, $q, $timeout, templateEditorFactory, templateEditorUtils,
+  .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory',
+    'storageManagerFactory', 'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL',
+    'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'baseImageFactory',
+    function ($log, $q, $timeout, templateEditorFactory, storageManagerFactory,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES,
       logoImageFactory, baseImageFactory) {
       return {
@@ -15,25 +15,6 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-image.html',
         link: function ($scope, element) {
-          var storageSelectorComponent = {
-            type: 'storage-selector',
-            directive: {
-              iconType: 'streamline',
-              icon: 'folder',
-              title: 'Rise Storage',
-              panel: '.storage-selector-container',
-              onBackHandler: function() {
-                if (!$scope.storageManager.onBackHandler()) {
-                  _updatePanelHeader();
-
-                  return false;
-                } else {
-                  return true;
-                }
-              }
-            }
-          };
-
           var imageFactory = baseImageFactory;
 
           $scope.factory = templateEditorFactory;
@@ -53,45 +34,11 @@ angular.module('risevision.template-editor.directives')
             isSingleFileSelector: $scope.isEditingLogo
           };
 
-          var _updatePanelHeader = function () {
-            if ($scope.isEditingLogo()) {
-              $scope.setPanelIcon('circleStar', 'streamline');
-              $scope.setPanelTitle('Logo Settings');
-            } else {
-              $scope.resetPanelHeader();
-            }
-          };
-
-          $scope.storageManager = {
-            addSelectedItems: function (newSelectedItems) {
-              _addFilesToMetadata(newSelectedItems, true);
-
-              _updatePanelHeader();
-
-              $scope.showPreviousPage();
-            },
-            isSingleFileSelector: $scope.isEditingLogo,
-            handleNavigation: function (folderPath) {
-              var folderName = templateEditorUtils.fileNameOf(folderPath);
-
-              if (folderName) {
-                $scope.setPanelIcon('folder', 'streamline');
-                $scope.setPanelTitle(folderName);
-              } else {
-                $scope.setPanelIcon('riseStorage', 'riseSvg');
-                $scope.setPanelTitle('Rise Storage');
-              }
-            },
-            reset: function () {
-              // for override
-            }
-          };
           $scope.values = {};
 
           function _reset() {
             _setSelectedImages([]);
             $scope.isUploading = false;
-            $scope.storageManager.reset();
           }
 
           function _addFilesToMetadata(files, alwaysAppend) {
@@ -215,25 +162,33 @@ angular.module('risevision.template-editor.directives')
             imageFactory.setTransition($scope.values.transition);
           };
 
-          $scope.registerDirective({
-            type: 'rise-image',
+          var _initStorageFactory = function() {
+            _reset();
+
+            storageManagerFactory.fileType = 'image';
+            storageManagerFactory.isSingleFileSelector = $scope.isEditingLogo;
+            storageManagerFactory.onSelectHandler = function(newSelectedItems) {
+              _addFilesToMetadata(newSelectedItems, true);
+            };
+
+            _loadSelectedImages();
+          };
+
+          var baseDirective = {
             iconType: 'streamline',
-            icon: 'image',
             element: element,
-            panel: '.image-component-container',
+            panel: '.image-component-container'
+          };
+
+          var componentDirective = angular.extend({}, baseDirective, {
+            type: 'rise-image',
+            icon: 'image',
             show: function () {
-              _reset();
+              imageFactory = baseImageFactory;
+              imageFactory.componentId = $scope.factory.selected.id;
 
-              // edits branding logo if no id is provided
-              if ($scope.factory.selected.id) {
-                imageFactory = baseImageFactory;
-                imageFactory.componentId = $scope.factory.selected.id;
-              } else {
-                imageFactory = logoImageFactory;
-                imageFactory.componentId = null;
-              }
+              _initStorageFactory();
 
-              _loadSelectedImages();
               _loadDuration();
               _loadTransition();
               _loadHelpText();
@@ -266,6 +221,25 @@ angular.module('risevision.template-editor.directives')
               });
             }
           });
+
+          var logoDirective = angular.extend({}, baseDirective, {
+            type: 'rise-image-logo',
+            icon: 'circleStar',
+            title: 'Logo Settings',
+            show: function () {
+              imageFactory = logoImageFactory;
+              imageFactory.componentId = null;
+
+              _initStorageFactory();
+
+              _loadDuration();
+              _loadTransition();
+              _loadHelpText();
+            }
+          });
+
+          $scope.registerDirective(componentDirective);
+          $scope.registerDirective(logoDirective);
 
           $scope.waitForPresentationId = function (metadata) {
             function _checkPresentationIdOrWait() {
@@ -306,8 +280,9 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.selectFromStorage = function () {
-            $scope.storageManager.refresh();
-            $scope.editComponent(storageSelectorComponent);
+            $scope.editComponent({
+              type: 'rise-storage-selector'
+            });
           };
 
           $scope.getPartialPath = function (partial) {
