@@ -15,19 +15,19 @@
                   type="{{ panelIconType }}"
                   class="component-icon">
   </component-icon>
-  <span class="u_text-ellipsis mr-auto" ng-show="!panelTitle">{{ factory.selected.label }}</span>
-  <span class="u_text-ellipsis mr-auto" ng-show="panelTitle">{{ panelTitle }}</span>
-  <div class="btn-group" ng-if="getCurrentPanel() === '.storage-selector-container'">
-    <button id="listViewButton" type="button" class="btn w-50" ng-click="basicStorageSelectorFactory.isListView = true" ng-class="{'btn-toggle-blue-off' : !basicStorageSelectorFactory.isListView, 'btn-toggle-blue-on' : basicStorageSelectorFactory.isListView}">
-      <img ng-src="../images/icon-list{{!basicStorageSelectorFactory.isListView ? '' : '-inv'}}.svg">
+  <span class="u_text-ellipsis mr-auto">{{ getComponentTitle(factory.selected) }}</span>
+  <div class="btn-group" ng-if="getCurrentPage() && getCurrentPage().type === 'rise-storage-selector' && storageManagerFactory.fileType === 'image'">
+    <button id="listViewButton" type="button" class="btn w-50" ng-click="storageManagerFactory.isListView = true" ng-class="{'btn-toggle-blue-off' : !storageManagerFactory.isListView, 'btn-toggle-blue-on' : storageManagerFactory.isListView}">
+      <img ng-src="../images/icon-list{{!storageManagerFactory.isListView ? '' : '-inv'}}.svg">
     </button>
-    <button id="gridViewButton" type="button" class="btn w-50" ng-click="basicStorageSelectorFactory.isListView = false" ng-class="{'btn-toggle-blue-off' : basicStorageSelectorFactory.isListView, 'btn-toggle-blue-on' : !basicStorageSelectorFactory.isListView}">
-      <img ng-src="../images/icon-module{{basicStorageSelectorFactory.isListView ? '' : '-inv'}}.svg">
+    <button id="gridViewButton" type="button" class="btn w-50" ng-click="storageManagerFactory.isListView = false" ng-class="{'btn-toggle-blue-off' : storageManagerFactory.isListView, 'btn-toggle-blue-on' : !storageManagerFactory.isListView}">
+      <img ng-src="../images/icon-module{{storageManagerFactory.isListView ? '' : '-inv'}}.svg">
     </button>
   </div>
 
 </div>
 <div class="component-container">
+  <component-storage-selector></component-storage-selector>
   <template-component-branding></template-component-branding>
   <template-component-schedules></template-component-schedules>
   <template-component-financial></template-component-financial>
@@ -42,4 +42,5 @@
   <template-component-twitter></template-component-twitter>
   <template-component-weather></template-component-weather>
   <template-component-playlist></template-component-playlist>
+  <template-component-html></template-component-html>
 </div>

@@ -28,7 +28,7 @@
     <!-- ERROR PANEL 4 -->
     <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.message">
       <p><strong>{{errors.messageTitle}}</strong></p>
-      <p class="u_remove-bottom">{{errors.message}}</p>
+      <p class="u_remove-bottom" ng-bind-html="errors.message"></p>
     </div>
 
     <!-- ERROR PANEL 5 -->

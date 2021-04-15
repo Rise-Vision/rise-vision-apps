@@ -57,8 +57,8 @@
                 });
             }
           ])
-          .when('/', ['$location', 'userAuthFactory', 'openidConnect',
-            function ($location, userAuthFactory, openidConnect) {
+          .when('/', ['$location', '$state', 'userAuthFactory', 'openidConnect',
+            function ($location, $state, userAuthFactory, openidConnect) {
               var hash = $location.hash();
 
               if (hash && hash.match(/.*(id_token|access_token)=.*/)) {
@@ -68,8 +68,13 @@
                   .then(function (user) {
                     return userAuthFactory.authenticate(true);
                   })
-                  .finally(function () {
+                  .then(function () {
                     window.location.hash = '';
+                  })
+                  .catch(function (e) {
+                    return $state.go('common.auth.unauthorized', {
+                      authError: e
+                    });
                   });
               } else {
                 return false;
@@ -105,7 +110,8 @@
             controller: 'LoginCtrl',
             params: {
               isSignUp: false,
-              passwordReset: null
+              passwordReset: null,
+              authError: null
             }
           })
 

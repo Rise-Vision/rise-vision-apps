@@ -47,13 +47,21 @@
 
         var _cancelAccessTokenAutoRefresh = function () {};
 
-        var _resetUserState = function () {
+        var _resetUserState = function (signOutGoogle) {
+          var promise = $q.resolve();
+
+          if (!userState.isRiseAuthUser()) {
+            promise = googleAuthFactory.signOut(signOutGoogle);
+          }
+
           $log.debug('Clearing user token...');
           _cancelAccessTokenAutoRefresh();
 
           _deleteUserToken();
 
           userState._resetState();
+
+          return promise;
         };
 
         var _detectUserOrAuthChange = function () {
@@ -78,47 +86,22 @@
         };
 
         var _visibilityListener = function () {
-          var visibilityState;
           var document = $document[0];
-          if (typeof document.hidden !== 'undefined') {
-            visibilityState = 'visibilityState';
-          } else if (typeof document.mozHidden !== 'undefined') {
-            visibilityState = 'mozVisibilityState';
-          } else if (typeof document.msHidden !== 'undefined') {
-            visibilityState = 'msVisibilityState';
-          } else if (typeof document.webkitHidden !== 'undefined') {
-            visibilityState = 'webkitVisibilityState';
-          }
-          $log.debug('visibility: ' + document[visibilityState]);
-          if ('visible' === document[visibilityState]) {
+
+          $log.debug('visibility: ' + document.visibilityState);
+
+          if ('visible' === document.visibilityState) {
             _detectUserOrAuthChange();
             $rootScope.$broadcast('risevision.page.visible', true);
           }
         };
 
-        var _getVisibilityChangeName = function () {
-          var visibilityChange;
-          var document = $document[0];
-          if (typeof document.hidden !== 'undefined') {
-            visibilityChange = 'visibilitychange';
-          } else if (typeof document.mozHidden !== 'undefined') {
-            visibilityChange = 'mozvisibilitychange';
-          } else if (typeof document.msHidden !== 'undefined') {
-            visibilityChange = 'msvisibilitychange';
-          } else if (typeof document.webkitHidden !== 'undefined') {
-            visibilityChange = 'webkitvisibilitychange';
-          }
-          return visibilityChange;
-        };
-
         var _addEventListenerVisibilityAPI = function () {
-          document.addEventListener(_getVisibilityChangeName(),
-            _visibilityListener);
+          document.addEventListener('visibilitychange', _visibilityListener);
         };
 
         var _removeEventListenerVisibilityAPI = function () {
-          document.removeEventListener(_getVisibilityChangeName(),
-            _visibilityListener);
+          document.removeEventListener('visibilitychange', _visibilityListener);
         };
 
         /*
@@ -148,9 +131,9 @@
               _setUserToken(authenticatedUser);
 
               userState.refreshProfile()
-                .then(null, function (err) {
+                .catch(function (err) {
                   if (err && err.code !== 403) {
-                    _authorizeDeferred.reject('Refresh Profile Error');
+                    _authorizeDeferred.reject(err);
 
                     _authorizeDeferred = undefined;
 
@@ -219,7 +202,7 @@
               userState._setIsRiseAuthUser(isRiseAuthUser);
               authenticateDeferred.resolve();
             })
-            .then(null, function (err) {
+            .catch(function (err) {
               $log.debug('Authentication Error: ', err);
 
               _resetUserState();
@@ -238,22 +221,16 @@
         };
 
         var signOut = function (signOutGoogle) {
-          var promise = $q.resolve();
-          if (!userState.isRiseAuthUser()) {
-            promise = googleAuthFactory.signOut(signOutGoogle);
-          }
-
           _authenticateDeferred = null;
 
           // The flag the indicates a user is potentially
           // authenticated already, must be destroyed.
-          _resetUserState();
-
-          //call google api to sign out
-          $rootScope.$broadcast('risevision.user.signedOut');
-          $log.debug('User is signed out.');
-
-          return promise;
+          return _resetUserState(signOutGoogle)
+            .finally(function () {
+              //call google api to sign out
+              $rootScope.$broadcast('risevision.user.signedOut');
+              $log.debug('User is signed out.');
+            });
         };
 
         var userAuthFactory = {

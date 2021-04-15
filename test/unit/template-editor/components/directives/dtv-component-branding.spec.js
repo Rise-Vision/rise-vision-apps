@@ -22,10 +22,8 @@ describe('directive: templateComponentBranding', function() {
     $scope = element.scope();
 
     $scope.registerDirective = sinon.stub();
-    $scope.resetPanelHeader = sinon.stub();
     $scope.setPanelTitle = sinon.stub();
     $scope.setPanelIcon = sinon.stub();
-    $scope.showPreviousPanel = sinon.stub();
     $scope.editComponent = sinon.stub();
 
     $scope.$digest();
@@ -48,39 +46,20 @@ describe('directive: templateComponentBranding', function() {
     expect(directive.type).to.equal('rise-branding');
     expect(directive.iconType).to.equal('streamline');
     expect(directive.icon).to.equal('ratingStar');
+    expect(directive.title).to.equal('Brand Settings');
     expect(directive.panel).to.equal('.branding-component-container');
-    expect(directive.show).to.be.a('function');
-    expect(directive.onBackHandler).to.be.a('function');
   });
 
   it('editLogo:', function() {
     $scope.editLogo();
 
-    $scope.editComponent.should.have.been.calledWith({type: 'rise-image'});
+    $scope.editComponent.should.have.been.calledWith({type: 'rise-image-logo'});
   });
 
   it('editColors: ', function() {
     $scope.editColors();
 
     $scope.editComponent.should.have.been.calledWith({type: 'rise-branding-colors'});
-  });
-
-  it('directive.show: ', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
-
-    directive.show();
-
-    $scope.setPanelTitle.should.have.been.calledWith('Brand Settings');
-  });
-
-  it('directive.onBackHandler: ', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
-    $scope.showPreviousPanel.returns('backPanel');
-
-    expect(directive.onBackHandler()).to.equal('backPanel');
-
-    $scope.resetPanelHeader.should.have.been.called;
-    $scope.showPreviousPanel.should.have.been.called;
   });
 
 });

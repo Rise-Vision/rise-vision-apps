@@ -49,11 +49,7 @@ var PresentationListPage = function() {
 
   this.loadCurrentCompanyPresentationList = function() {
     helper.clickWhenClickable(templateEditorPage.getPresentationsListLink(), 'Presentations List');
-    helper.wait(this.getPresentationsLoader(), 'Presentation loader')
-    .catch(function(err) {
-      console.log('Presentation loader never appeared; assume it already disappeared.', err);
-    });
-    helper.waitDisappear(this.getPresentationsLoader(), 'Presentation loader');
+    helper.waitAppearDisappear(this.getPresentationsLoader(), 'Presentation loader');
   }
 
   this.loadPresentation = function(presentationName) {

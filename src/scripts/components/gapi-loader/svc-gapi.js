@@ -3,25 +3,49 @@
 'use strict';
 
 /* jshint ignore:start */
-var gapiLoadingStatus = null;
-var handleClientJSLoad = function () {
-  gapiLoadingStatus = 'loaded';
+window.gapiLoadingStatus = null;
+window.handleClientJSLoad = function () {
+  window.gapiLoadingStatus = 'loaded';
+
   console.debug('ClientJS is loaded.');
-  //Ready: create a generic event
-  var evt = document.createEvent('Events');
-  //Aim: initialize it to be the event we want
-  evt.initEvent('gapi.loaded', true, true);
-  //FIRE!
-  window.dispatchEvent(evt);
+
+  window.dispatchEvent(new CustomEvent('gapi.loaded'));
 };
 /* jshint ignore:end */
 
 angular.module('risevision.common.gapi', [
     'risevision.common.components.util'
   ])
-  .factory('gapiLoader', ['$q', '$window',
-    function ($q, $window) {
+  .factory('rejectOnTimeout', ['$timeout',
+    function ($timeout) {
+      return function (deferred, entry) {
+        var rejectTimeout = $timeout(function () {
+          var err = {
+            code: -1,
+            message: entry + ' Load Timeout'
+          };
+
+          deferred.reject(err);
+        }, 60 * 1000);
+
+        deferred.promise
+          .finally(function () {
+            $timeout.cancel(rejectTimeout);
+          });
+      };
+    }
+  ])
+
+  .factory('gapiLoader', ['$q', '$window', '$exceptionHandler', 'rejectOnTimeout',
+    function ($q, $window, $exceptionHandler, rejectOnTimeout) {
       var deferred = $q.defer();
+
+      deferred.promise
+        .catch(function (err) {
+          $exceptionHandler(err, 'gapiLoader Error.', true);
+
+          return $q.reject(err);
+        });
 
       return function () {
         var gapiLoaded;
@@ -31,48 +55,31 @@ angular.module('risevision.common.gapi', [
         } else if (!$window.gapiLoadingStatus) {
           $window.gapiLoadingStatus = 'loading';
 
+          rejectOnTimeout(deferred, 'gapi');
+
           var src = $window.gapiSrc ||
             '//apis.google.com/js/client.js?onload=handleClientJSLoad';
-          var fileref = document.createElement('script');
+          var fileref = $window.document.createElement('script');
           fileref.setAttribute('type', 'text/javascript');
           fileref.setAttribute('src', src);
+
+          fileref.onerror = function (error) {
+            deferred.reject(error);
+
+            $window.removeEventListener('gapi.loaded', gapiLoaded, false);
+          };
+
           if (typeof fileref !== 'undefined') {
-            document.getElementsByTagName('body')[0].appendChild(fileref);
+            $window.document.getElementsByTagName('body')[0].appendChild(fileref);
           }
 
           gapiLoaded = function () {
             deferred.resolve($window.gapi);
-            $window.removeEventListener('gapi.loaded', gapiLoaded, false);
+            $window.removeEventListener('gapi.loaded', gapiLoaded);
           };
-          $window.addEventListener('gapi.loaded', gapiLoaded, false);
+          $window.addEventListener('gapi.loaded', gapiLoaded);
         }
-        return deferred.promise;
-      };
-    }
-  ])
 
-  .factory('clientAPILoader', ['$q', '$log', 'gapiLoader',
-    function ($q, $log, gapiLoader) {
-      return function () {
-        var deferred = $q.defer();
-        gapiLoader().then(function (gApi) {
-          if (gApi.client) {
-            //already loaded. return right away
-            deferred.resolve(gApi);
-          } else {
-            gApi.load('client', function (err) {
-              if (gApi.client) {
-                $log.debug('client API Loaded');
-
-                deferred.resolve(gApi);
-              } else {
-                var errMsg = 'client API Load Failed';
-                $log.error(errMsg, err);
-                deferred.reject(err || errMsg);
-              }
-            });
-          }
-        });
         return deferred.promise;
       };
     }
@@ -81,33 +88,45 @@ angular.module('risevision.common.gapi', [
   //abstract method for creading a loader factory service that loads any
   //custom Google Client API library
 
-  .factory('gapiClientLoaderGenerator', ['$q', '$log', 'clientAPILoader',
-    function ($q, $log, clientAPILoader) {
+  .factory('gapiClientLoaderGenerator', ['$q', '$log', '$exceptionHandler', 'gapiLoader',
+    'rejectOnTimeout',
+    function ($q, $log, $exceptionHandler, gapiLoader, rejectOnTimeout) {
       return function (libName, libVer, baseUrl) {
         return function () {
-          var deferred = $q.defer();
-          clientAPILoader().then(function (gApi) {
-            if (gApi.client[libName]) {
-              // already loaded. return right away
-              deferred.resolve(gApi.client[libName]);
-            } else {
+          return gapiLoader()
+            .then(function (gApi) {
+              var deferred = $q.defer();
+
+              if (gApi.client[libName]) {
+                // already loaded. return right away
+                return gApi.client[libName];
+              }
+
+              rejectOnTimeout(deferred, libName + '.' + libVer);
+
               gApi.client.load(libName, libVer, null, baseUrl)
                 .then(function () {
                   if (gApi.client[libName]) {
                     $log.debug(libName + '.' + libVer + ' Loaded');
+
                     deferred.resolve(gApi.client[libName]);
                   } else {
-                    return $q.reject();
+                    deferred.reject();
                   }
                 })
                 .catch(function (err) {
-                  var errMsg = libName + '.' + libVer + ' Load Failed';
-                  $log.error(errMsg, err);
-                  deferred.reject(err || errMsg);
+                  deferred.reject(err);
                 });
-            }
-          });
-          return deferred.promise;
+
+              return deferred.promise
+                .catch(function (err) {
+                  var errMsg = libName + '.' + libVer + ' Load Failed';
+
+                  $exceptionHandler(err, errMsg, true);
+
+                  return $q.reject(err || errMsg);
+                });
+            });
         };
       };
     }

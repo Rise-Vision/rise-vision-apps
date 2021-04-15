@@ -477,9 +477,9 @@
               "src/scripts/template-editor/services/svc-template-editor-utils.js",
               "src/scripts/template-editor/services/svc-auto-save-service.js",
               "src/scripts/template-editor/services/svc-blueprint-factory.js",
-              "src/scripts/template-editor/services/svc-basic-storage-selector-factory.js",
               "src/scripts/template-editor/services/svc-financial-license-factory.js",
 
+              "src/scripts/template-editor/components/services/svc-storage-manager-factory.js",
               "src/scripts/template-editor/components/services/svc-branding-factory.js",
               "src/scripts/template-editor/components/services/svc-instrument-search.js",
               "src/scripts/template-editor/components/services/svc-logo-image-factory.js",
@@ -503,13 +503,13 @@
               "src/scripts/template-editor/directives/dtv-toolbar.js",
               "src/scripts/template-editor/directives/dtv-component.js",
               "src/scripts/template-editor/directives/dtv-component-icon.js",
-              "src/scripts/template-editor/directives/dtv-basic-storage-selector.js",
               "src/scripts/template-editor/directives/dtv-basic-uploader.js",
               "src/scripts/template-editor/directives/dtv-file-entry.js",
               "src/scripts/template-editor/directives/dtv-empty-file-list.js",
               "src/scripts/template-editor/directives/dtv-streamline-icon.js",
               "src/scripts/template-editor/directives/dtv-time-picker.js",
 
+              "src/scripts/template-editor/components/directives/dtv-component-storage-selector.js",
               "src/scripts/template-editor/components/directives/dtv-component-branding.js",
               "src/scripts/template-editor/components/directives/dtv-component-schedules.js",
               "src/scripts/template-editor/components/directives/dtv-branding-colors.js",
@@ -525,6 +525,7 @@
               "src/scripts/template-editor/components/directives/dtv-component-twitter.js",
               "src/scripts/template-editor/components/directives/dtv-component-weather.js",
               "src/scripts/template-editor/components/directives/dtv-component-playlist.js",
+              "src/scripts/template-editor/components/directives/dtv-component-html.js",
 
               "src/scripts/template-editor/components/controllers/ctr-playlist-item-json-modal.js",
 

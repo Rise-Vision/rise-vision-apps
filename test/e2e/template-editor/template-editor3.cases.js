@@ -4,6 +4,7 @@
   var CommonHeaderPage = require('./../common-header/pages/commonHeaderPage.js');
   var PresentationListPage = require('./pages/presentationListPage.js');
 
+  var HtmlComponentScenarios = require('./cases/components/html.js');
   var PlaylistComponentScenarios = require('./cases/components/playlist.js');
   var TwitterComponentScenarios = require('./cases/components/twitter.js');
   var BrandingColorsOverrideComponentScenarios = require('./cases/components/branding-colors-override.js');
@@ -26,6 +27,7 @@
       commonHeaderPage.selectSubCompany(subCompanyName);
     });
 
+    var htmlComponentScenarios = new HtmlComponentScenarios();
     var playlistComponentScenarios = new PlaylistComponentScenarios();
     var twitterComponentScenarios = new TwitterComponentScenarios(subCompanyName);
     var brandingColorsOverrideComponentScenarios = new BrandingColorsOverrideComponentScenarios();

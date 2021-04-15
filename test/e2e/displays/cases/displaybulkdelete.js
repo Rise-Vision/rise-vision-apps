@@ -62,6 +62,9 @@ var DisplayListScenarios = function() {
 
         expect(displaysListPage.getBulkActionsDropdown().isDisplayed()).to.eventually.be.false;
         helper.clickWhenClickable(displaysListPage.getFirstRowCheckbox());
+
+        helper.wait(displaysListPage.getBulkActionsDropdown(),'Bulk Actions Dropdown');
+
         expect(displaysListPage.getBulkActionsDropdown().isDisplayed()).to.eventually.be.true;
       });
 
@@ -69,12 +72,16 @@ var DisplayListScenarios = function() {
         helper.clickWhenClickable(displaysListPage.getBulkActionsDropdown());
         browser.sleep(500);
 
+        helper.wait(displaysListPage.getDeleteDisplayBulkAction(),'Bulk Delete Action');
+
         expect(displaysListPage.getDeleteDisplayBulkAction().isDisplayed()).to.eventually.be.true;
 
         helper.clickWhenClickable(displaysListPage.getDeleteDisplayBulkAction());
       });
 
       it('should show bulk delete confirmation modal', function() {
+        helper.wait(displaysListPage.getDeleteDisplayFailsafeField(), 'Bulk Delete Confirmation');
+
         expect(displaysListPage.getDeleteDisplayConfirmButton().isDisplayed()).to.eventually.be.true;
         expect(displaysListPage.getDeleteDisplayConfirmButton().isEnabled()).to.eventually.be.false;
         expect(displaysListPage.getDeleteDisplayFailsafeField().isDisplayed()).to.eventually.be.true;

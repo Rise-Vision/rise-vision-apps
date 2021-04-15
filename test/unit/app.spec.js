@@ -31,6 +31,10 @@ describe('app:', function() {
         }
       });
 
+      $provide.service('plansFactory', function() {
+        return {}
+      });
+
       $provide.value('$exceptionHandler', sinon.stub());
     });
 

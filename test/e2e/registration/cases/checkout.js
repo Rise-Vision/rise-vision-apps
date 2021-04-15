@@ -56,6 +56,9 @@
 
           helper.wait(pricingPage.getSubscribeButton(), 'Pricing Component Modal');
 
+          expect(pricingPage.getContactSalesButton().isDisplayed()).to.eventually.be.true;
+          expect(pricingPage.getContactSalesButton().getAttribute('href')).to.eventually.equal('https://www.risevision.com/contact-us?form_selected=sales&content_hide=true');
+
           expect(pricingPage.getSubscribeButton().isDisplayed()).to.eventually.be.true;
         });
 

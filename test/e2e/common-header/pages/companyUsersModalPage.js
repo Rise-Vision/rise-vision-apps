@@ -62,8 +62,7 @@
         }
       });
       this.getUsersModalFilter().sendKeys(username);
-      helper.wait(this.getLoader(), "Load Company Users");
-      helper.waitDisappear(this.getLoader(), "Company Users Loaded");
+      helper.waitAppearDisappear(this.getLoader(), "Load Company Users");
     };
 
     this.deleteUserIfExists = function(username) {

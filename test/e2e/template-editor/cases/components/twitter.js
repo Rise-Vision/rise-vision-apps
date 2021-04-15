@@ -95,8 +95,6 @@ var TwitterComponentScenarios = function (subCompanyName) {
       it('changes username', function () {
         twitterComponentPage.getUsername().clear();
         twitterComponentPage.getUsername().sendKeys(expectedUsername + protractor.Key.ENTER);
-
-        templateEditorPage.waitForAutosave();
       });
 
       it('changes maxitems', function () {

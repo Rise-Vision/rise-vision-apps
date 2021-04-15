@@ -12,7 +12,7 @@ angular.module('risevision.template-editor.directives')
           $scope.factory = templateEditorFactory;
           $scope.showAttributeList = true;
           $scope.directives = {};
-          $scope.panels = [];
+          $scope.pages = [];
           $scope.factory.selected = null;
 
           $window.addEventListener('message', _handleMessageFromTemplate);
@@ -30,17 +30,38 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
+          var _getDirective = function (component) {
+            if (!component) {
+              return null;
+            } else if (component.directive) {
+              return component.directive;
+            } else if ($scope.directives[component.type]) {
+              return $scope.directives[component.type];
+            } else {
+              return null;
+            }
+          };
+
+          var _getSelectedDirective = function () {
+            var component = $scope.factory.selected;
+
+            return _getDirective(component);
+          };
+
           $scope.editComponent = function (component) {
-            var directive = $scope.directives[component.type];
+            var directive = _getDirective(component);
 
             $scope.factory.selected = component;
 
-            directive.element.show();
-            if (directive.panel) {
-              $scope.showNextPanel(directive.panel);
+            if (directive && directive.element) {
+              directive.element.show();
             }
 
-            directive.show();
+            $scope.showNextPage(component);
+
+            if (directive && directive.show) {
+              directive.show();
+            }
 
             _showAttributeList(false, 300);
           };
@@ -48,32 +69,53 @@ angular.module('risevision.template-editor.directives')
           $scope.onBackButton = function () {
             $scope.highlightComponent(null);
 
-            var component = $scope.factory.selected;
-            var directive = $scope.directives[component.type];
+            var directive = _getSelectedDirective();
 
-            if (!directive.onBackHandler || !directive.onBackHandler()) {
-              $scope.backToList();
+            if (!directive || !directive.onBackHandler || !directive.onBackHandler()) {
+              $scope.showPreviousPage();
             }
           };
 
+          // Private
           $scope.backToList = function () {
-            var component = $scope.factory.selected;
-            var directive = $scope.directives[component.type];
+            var directive = _getSelectedDirective();
+
+            if (directive && directive.element) {
+              directive.element.hide();              
+            }
+
+            $scope.resetPanelHeader();
 
             $scope.factory.selected = null;
-            directive.element.hide();
+            $scope.pages = [];
 
             _showAttributeList(true, 0);
           };
 
           $scope.getComponentIcon = function (component) {
-            return component && $scope.directives[component.type] ?
-              $scope.directives[component.type].icon : '';
+            var directive = _getDirective(component);
+
+            return directive ? directive.icon : '';
           };
 
           $scope.getComponentIconType = function (component) {
-            return component && $scope.directives[component.type] ?
-              $scope.directives[component.type].iconType : '';
+            var directive = _getDirective(component);
+
+            return directive ? directive.iconType : '';
+          };
+
+          $scope.getComponentTitle = function (component) {
+            var directive = _getDirective(component);
+
+            if ($scope.panelTitle) {
+              return $scope.panelTitle;
+            } else if (directive && directive.title) {
+              return directive.title;
+            } else if (component && component.label) {
+              return component.label;
+            } else {
+              return '';
+            }
           };
 
           $scope.highlightComponent = function (componentId) {
@@ -86,38 +128,36 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.isHeaderBottomRuleVisible = function (component) {
-            if (!component) {
-              return true;
-            }
-
-            var directive = $scope.directives[component.type];
+            var directive = _getDirective(component);
 
             return directive && directive.isHeaderBottomRuleVisible ?
               directive.isHeaderBottomRuleVisible() : true;
           };
 
-          $scope.getCurrentPanel = function () {
-            return $scope.panels.length > 0 ? $scope.panels[$scope.panels.length - 1] : null;
+          $scope.getCurrentPage = function () {
+            return $scope.pages.length > 0 ? $scope.pages[$scope.pages.length - 1] : null;
           };
 
-          $scope.showNextPanel = function (newPanel) {
-            var currentPanel = $scope.getCurrentPanel();
+          $scope.showNextPage = function (newPage) {
+            var currentPage = $scope.getCurrentPage();
 
-            $scope.panels.push(newPanel);
-            _swapToLeft(currentPanel, newPanel);
+            $scope.pages.push(newPage);
+            _swapToLeft(currentPage, newPage);
           };
 
-          $scope.showPreviousPanel = function () {
-            var currentPanel = $scope.panels.length > 0 ? $scope.panels.pop() : null;
-            var previousPanel = $scope.panels.length > 0 ? $scope.panels[$scope.panels.length - 1] : null;
+          $scope.showPreviousPage = function () {
+            var currentPage = $scope.pages.length > 0 ? $scope.pages.pop() : null;
+            var previousPage = $scope.pages.length > 0 ? $scope.pages[$scope.pages.length - 1] : null;
 
-            _swapToRight(currentPanel, previousPanel);
+            _swapToRight(currentPage, previousPage);
 
-            if (!previousPanel) {
-              $scope.resetPanelHeader();
+            if (!previousPage) {
+              $scope.backToList();
+            } else {
+              $scope.factory.selected = previousPage;
             }
 
-            return !!previousPanel;
+            return !!previousPage;
           };
 
           $scope.resetPanelHeader = function () {
@@ -141,8 +181,6 @@ angular.module('risevision.template-editor.directives')
             if (component) {
               if ($scope.factory.selected) {
                 $scope.backToList();
-                $scope.panels = [];
-                $scope.resetPanelHeader();
               }
               $scope.editComponent(component);
             }
@@ -159,8 +197,9 @@ angular.module('risevision.template-editor.directives')
             element.removeClass('attribute-editor-show-from-left');
           }
 
-          function _showElement(selector, direction, delay) {
-            var element = templateEditorUtils.findElement(selector);
+          function _showElement(component, direction, delay) {
+            var directive = _getDirective(component);
+            var element = directive && directive.panel && templateEditorUtils.findElement(directive.panel);
 
             if (!element) {
               return;
@@ -174,8 +213,9 @@ angular.module('risevision.template-editor.directives')
             }, delay || 0);
           }
 
-          function _hideElement(selector, delay) {
-            var element = templateEditorUtils.findElement(selector);
+          function _hideElement(component, delay) {
+            var directive = _getDirective(component);
+            var element = directive && directive.panel && templateEditorUtils.findElement(directive.panel);
 
             if (!element) {
               return;
@@ -202,8 +242,7 @@ angular.module('risevision.template-editor.directives')
             if ('string' === typeof event.data) {
               try {
                 data = JSON.parse(event.data);
-              }
-              catch(e) {}
+              } catch (e) {}
             }
 
             if (data.type === 'editComponent') {

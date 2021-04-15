@@ -35,10 +35,22 @@ describe("Services: plans factory", function() {
     $provide.factory('confirmModal', function() {
        return confirmModalStub = sinon.stub().returns(Q.resolve());
     });
+    $provide.service("currentPlanFactory", function() {
+      return {
+        isParentPlan: sinon.stub().returns(false),
+        currentPlan: {
+          isPurchasedByParent: false,
+          parentPlanContactEmail: "admin@test.com"
+        }
+      };
+    });
+    $provide.factory('messageBox', function() {
+       return messageBoxStub = sinon.stub().returns(Q.resolve());
+    });
   }));
 
   var sandbox, $modal, userState, plansFactory, analyticsFactory, $state,
-    confirmModalStub, VOLUME_PLAN;
+    confirmModalStub, VOLUME_PLAN, currentPlanFactory, messageBoxStub;
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
@@ -48,6 +60,7 @@ describe("Services: plans factory", function() {
       userState =  $injector.get("userState");
       plansFactory = $injector.get("plansFactory");
       analyticsFactory = $injector.get("analyticsFactory");
+      currentPlanFactory = $injector.get("currentPlanFactory");
       $state = $injector.get("$state");
 
       var plansService = $injector.get("plansService");
@@ -82,7 +95,7 @@ describe("Services: plans factory", function() {
       setTimeout(function() {        
         expect(confirmModalStub).to.have.been.calledWith(
           'Almost there!',
-          'There aren\'t available licenses to assign to the selected displays. Subscribe to additional licenses?',
+          'There aren\'t available display licenses to assign to the selected displays. Subscribe to additional licenses?',
           'Yes', 'No', 'madero-style centered-modal',
           'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
         );
@@ -102,6 +115,39 @@ describe("Services: plans factory", function() {
         expect(confirmModalStub).to.have.been.called;
         expect(plansFactory.showPurchaseOptions).to.not.have.been.called;
 
+        done();
+      },10);
+    });
+
+    it("should show a message to contact administrator if plan is inherited from parent", function(done) {
+      currentPlanFactory.isParentPlan.returns(true);
+      sinon.spy(plansFactory, "showPurchaseOptions");
+
+      plansFactory.confirmAndPurchase();
+
+      setTimeout(function() {        
+        expect(messageBoxStub).to.have.been.calledWith('Almost there!',
+              'There aren\'t available display licenses to assign to the selected displays. Contact your account administrator at admin@test.com for additional display licenses.',
+              'Okay, I Got It', 'madero-style centered-modal', 'partials/template-editor/message-box.html','sm');
+
+        expect(confirmModalStub).to.not.have.been.called;
+        expect(plansFactory.showPurchaseOptions).to.not.have.been.called;
+
+        done();
+      },10);
+
+    });
+
+    it("should show a message to contact administrator if plan is managed by parent", function(done) {
+      currentPlanFactory.isParentPlan.returns(false);
+      currentPlanFactory.currentPlan.isPurchasedByParent = true;
+
+      plansFactory.confirmAndPurchase();
+
+      setTimeout(function() {        
+        expect(messageBoxStub).to.have.been.calledWith('Almost there!',
+              'There aren\'t available display licenses to assign to the selected displays. Contact your account administrator at admin@test.com for additional display licenses.',
+              'Okay, I Got It', 'madero-style centered-modal', 'partials/template-editor/message-box.html','sm');
         done();
       },10);
     });

@@ -10,15 +10,15 @@ var VideoComponentPage = function() {
   var uploadButtonMain = element(by.id('video-list-uploader-label'));
   var uploadInputMain = element(by.id('video-list-uploader'));
   var uploadPanelMain = element(by.id('upload-panel-video-list-uploader'));
-  var storageSpinner = element(by.id('storage-video-storage-spinner'));
+  var storageSpinner = element(by.id('component-storage-selector-spinner'));
   var storageItemsSelector = 'item in folderItems | filter:search.query | orderBy:search.sortBy:search.reverse as filteredItems track by $index';
   var storageItems = element.all(by.repeater(storageItemsSelector));
   var storageButtonMain = element(by.id('video-list-storage-button'));
-  var storageAddSelected = element(by.id('video-storage-add-selected'));
+  var storageAddSelected = element(by.id('storage-selector-add-selected'));
   var storageNewFile = element(by.repeater(storageItemsSelector).row(1));
-  var uploadButtonStorage = element(by.id('video-storage-uploader-label'));
-  var uploadInputStorage = element(by.id('video-storage-uploader'));
-  var uploadPanelStorage = element(by.id('upload-panel-video-storage-uploader'));
+  var uploadButtonStorage = element(by.id('storage-selector-uploader-label'));
+  var uploadInputStorage = element(by.id('storage-selector-uploader'));
+  var uploadPanelStorage = element(by.id('upload-panel-storage-selector-uploader'));
 
   this.getSelectedVideosMain = function () {
     return selectedVideosMain;

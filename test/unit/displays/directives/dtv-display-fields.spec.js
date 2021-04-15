@@ -39,7 +39,8 @@ describe('directive: display fields', function() {
         getProLicenseCount: function () {},
         areAllProLicensesUsed: function () {},
         hasProfessionalLicenses: function () {},
-        isProAvailable: sinon.stub()
+        isProAvailable: sinon.stub(),
+        updateDisplayLicenseLocal: sinon.stub()
       };
     });
     $provide.service('scheduleFactory', function() {
@@ -51,14 +52,6 @@ describe('directive: display fields', function() {
     $provide.factory('plansFactory', function() {
       return {
         confirmAndPurchase: sandbox.spy()
-      };
-    });
-    $provide.factory('enableCompanyProduct', function() {
-      return sandbox.stub();
-    });
-    $provide.factory('processErrorCode', function() {
-      return function(error) {
-        return 'processed ' + error;
       };
     });
     $provide.factory('confirmModal', function() {
@@ -83,8 +76,7 @@ describe('directive: display fields', function() {
   }));
   
   var elm, $scope, $compile, $sce, playerProFactory, displayFactory, displayControlFactory, playerLicenseFactory,
-    scheduleFactory, plansFactory, enableCompanyProduct,
-    confirmModal, messageBox;
+    scheduleFactory, plansFactory, confirmModal, messageBox;
   var company;
 
   beforeEach(inject(function($rootScope, $injector, _$compile_, $templateCache) {
@@ -97,7 +89,6 @@ describe('directive: display fields', function() {
     playerLicenseFactory = $injector.get('playerLicenseFactory');
     scheduleFactory = $injector.get('scheduleFactory');
     plansFactory = $injector.get('plansFactory');
-    enableCompanyProduct = $injector.get('enableCompanyProduct');
 
     confirmModal = $injector.get('confirmModal');
     messageBox = $injector.get('messageBox');
@@ -137,156 +128,32 @@ describe('directive: display fields', function() {
 
       $scope.toggleProAuthorized();
       expect(plansFactory.confirmAndPurchase).to.have.been.called;
-      expect(enableCompanyProduct).to.not.have.been.called;
-    });
-
-    it('should toggle license locally', function () {
-      playerLicenseFactory.isProAvailable.returns(true);
-
-      displayFactory.display = {
-        playerProAssigned: false,
-        playerProAuthorized: true
-      };
-      company.playerProAvailableLicenseCount = 1;
-      $scope.toggleProAuthorized();
-
-      expect(enableCompanyProduct).to.have.not.been.called;
-
-      expect(displayFactory.display.playerProAssigned).to.be.true;
-      expect(displayFactory.display.playerProAuthorized).to.be.true;
-
-      expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.not.have.been.called;
-      expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
-    });
-
-    it('should deactivate license locally', function () {
-      playerLicenseFactory.isProAvailable.returns(true);
-
-      displayFactory.display = {
-        playerProAssigned: false,
-        playerProAuthorized: false
-      };
-      company.playerProAvailableLicenseCount = 1;
-      $scope.toggleProAuthorized();
-
-      expect(enableCompanyProduct).to.have.not.been.called;
-
-      expect(displayFactory.display.playerProAssigned).to.be.false;
       expect(displayFactory.display.playerProAuthorized).to.be.false;
+    });
 
-      expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.not.have.been.called;
+    it('should not prompt to subscribe if display was originally license', function () {
+      displayFactory.display = {
+        originalPlayerProAuthorized: true
+      };
+      playerLicenseFactory.isProAvailable.returns(false);
+
+      $scope.toggleProAuthorized();
+
+      expect(plansFactory.confirmAndPurchase).to.not.have.been.called;
+      expect(playerLicenseFactory.updateDisplayLicenseLocal).to.have.been.called;
+    });
+
+    it('should update license locally if licenses are available', function () {
+      playerLicenseFactory.isProAvailable.returns(true);
+
+      displayFactory.display = {
+        playerProAssigned: false,
+        playerProAuthorized: true
+      };
+      $scope.toggleProAuthorized();
+
+      expect(playerLicenseFactory.updateDisplayLicenseLocal).to.have.been.called;
       expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
-    });
-
-    it('should activate Pro status', function (done) {
-      playerLicenseFactory.isProAvailable.returns(true);
-      var enableResp = {item:{displays:{}}};
-      enableResp.item.displays[displayId] = true;
-      enableCompanyProduct.returns(Q.resolve(enableResp));
-
-      // The mocked value of playerProAuthorized AFTER ng-change
-      displayFactory.display = {
-        id: displayId,
-        playerProAssigned: false,
-        playerProAuthorized: true
-      };
-      company.playerProAvailableLicenseCount = 1;
-      $scope.toggleProAuthorized();
-
-      setTimeout(function () {
-        expect(enableCompanyProduct).to.have.been.called;
-
-        expect(displayFactory.display.playerProAssigned).to.be.true;
-        expect(displayFactory.display.playerProAuthorized).to.be.true;
-
-        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(true);
-        expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
-        done();        
-      }, 0);
-    });
-
-    it('should deactivate Pro status', function (done) {
-      playerLicenseFactory.isProAvailable.returns(true);
-      var enableResp = {item:{displays:{}}};
-      enableResp.item.displays[displayId] = false;
-      enableCompanyProduct.returns(Q.resolve(enableResp));
-
-      // The mocked value of playerProAuthorized AFTER ng-change
-      displayFactory.display = {
-        id: displayId,
-        playerProAssigned: true,
-        playerProAuthorized: false
-      };
-      company.playerProAvailableLicenseCount = 1;
-      $scope.errorUpdatingRPP = 'Licensing error';
-
-      $scope.toggleProAuthorized();
-
-      setTimeout(function () {
-        expect(enableCompanyProduct).to.have.been.called;
-
-        expect($scope.errorUpdatingRPP).to.not.be.ok;
-
-        expect(displayFactory.display.playerProAssigned).to.be.false;
-        expect(displayFactory.display.playerProAuthorized).to.be.false;
-
-        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(false);
-        expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
-        done();
-      }, 0);
-    });
-
-    it('should fail and not update count if display was assigned but not licensed', function (done) {
-      playerLicenseFactory.isProAvailable.returns(true);
-      var enableResp = {item:{displays:{}}};
-      enableResp.item.displays[displayId] = false;
-      enableCompanyProduct.returns(Q.resolve(enableResp));
-
-      // The mocked value of playerProAuthorized AFTER ng-change
-      displayFactory.display = {
-        id: displayId,
-        playerProAssigned: false,
-        playerProAuthorized: true
-      };
-      company.playerProAvailableLicenseCount = 1;
-      $scope.toggleProAuthorized();
-
-      setTimeout(function () {
-        expect(enableCompanyProduct).to.have.been.called;
-
-        expect(displayFactory.display.playerProAssigned).to.be.false;
-        expect(displayFactory.display.playerProAuthorized).to.be.false;
-
-        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.not.have.been.called;
-        expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
-        done();        
-      }, 0);
-    });
-
-    it('should fail to activate Pro status on error', function (done) {
-      playerLicenseFactory.isProAvailable.returns(true);
-      enableCompanyProduct.returns(Q.reject('Licensing error'));
-
-      // The mocked value of playerProAuthorized AFTER ng-change
-      displayFactory.display = {
-        id: displayId,
-        playerProAssigned: true,
-        playerProAuthorized: false
-      };
-      company.playerProAvailableLicenseCount = 1;
-      $scope.toggleProAuthorized();
-
-      setTimeout(function () {
-        expect(enableCompanyProduct).to.have.been.called;
-
-        expect($scope.errorUpdatingRPP).to.equal('processed Licensing error');
-        expect(displayFactory.display.playerProAssigned).to.be.true;
-        expect(displayFactory.display.playerProAuthorized).to.be.true;
-        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.not.have.been.called;
-
-        expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
-        done();
-      }, 0);
     });
   });
 

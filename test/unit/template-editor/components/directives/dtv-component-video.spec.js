@@ -4,18 +4,15 @@ describe('directive: templateComponentVideo', function() {
   var $scope,
       element,
       factory,
+      storageManagerFactory,
       testMetadata,
-      timeout;
+      $timeout;
 
   beforeEach(function() {
     factory = { selected: { id: 'TEST-ID' } };
   });
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
       return factory;
@@ -30,18 +27,22 @@ describe('directive: templateComponentVideo', function() {
     });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
     $templateCache.put('partials/template-editor/components/component-video.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
     $scope.registerDirective = sinon.stub();
+    $scope.getAttributeData = sinon.stub();
+    $scope.getAvailableAttributeData = sinon.stub();
     $scope.setAttributeData = sinon.stub();
-    $scope.showNextPanel = sinon.stub();
+    $scope.editComponent = sinon.stub();
     $scope.getBlueprintData = function() {
       return null;
     };
 
-    timeout = $timeout;
+    $timeout = $injector.get('$timeout');
+    storageManagerFactory = $injector.get('storageManagerFactory');
+
     element = $compile('<template-component-video></template-component-video>')($scope);
     $scope = element.scope();
     $scope.$digest();
@@ -51,16 +52,30 @@ describe('directive: templateComponentVideo', function() {
     expect($scope).to.be.ok;
     expect($scope.factory).to.be.ok;
     expect($scope.factory).to.deep.equal({ selected: { id: 'TEST-ID' } })
-    expect($scope.registerDirective).to.have.been.called;
     expect($scope.sortItem).to.be.a('function');
+  });
 
-    var directive = $scope.registerDirective.getCall(0).args[0];
-    expect(directive).to.be.ok;
-    expect(directive.type).to.equal('rise-video');
-    expect(directive.iconType).to.equal('streamline');
-    expect(directive.icon).to.exist;
-    expect(directive.show).to.be.a('function');
-    expect(directive.onBackHandler).to.be.a('function');
+  describe('registerDirective:', function() {
+    it('should initialize', function() {
+      $scope.registerDirective.should.have.been.called;
+
+      var directive = $scope.registerDirective.getCall(0).args[0];
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-video');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.equal('video');
+      expect(directive.element).to.be.an('object');
+      expect(directive.panel).to.equal('.video-component-container');
+      expect(directive.show).to.be.a('function');
+    });
+
+    it('show:', function() {
+      $scope.registerDirective.getCall(0).args[0].show();
+
+      expect(storageManagerFactory.fileType).to.equal('video');
+      expect(storageManagerFactory.onSelectHandler).to.be.a('function');
+    });
+
   });
 
   it('should set video lists when available as attribute data', function() {
@@ -81,7 +96,7 @@ describe('directive: templateComponentVideo', function() {
 
     expect($scope.selectedFiles).to.deep.equal(testMetadata);
 
-    timeout.flush();
+    $timeout.flush();
   });
 
   it('should detect default files', function() {
@@ -104,7 +119,7 @@ describe('directive: templateComponentVideo', function() {
 
     expect($scope.isDefaultFileList).to.be.true;
 
-    timeout.flush();
+    $timeout.flush();
   });
 
   it('should not consider a default value if it is not', function() {
@@ -127,7 +142,7 @@ describe('directive: templateComponentVideo', function() {
 
     expect($scope.isDefaultFileList).to.be.false;
 
-    timeout.flush();
+    $timeout.flush();
   });
 
   it('should get thumbnail URLs when not available as attribute data', function(done) {
@@ -154,7 +169,7 @@ describe('directive: templateComponentVideo', function() {
     ];
 
     directive.show();
-    timeout.flush();
+    $timeout.flush();
 
     setTimeout(function() {
       expect($scope.selectedFiles).to.deep.equal(testMetadata);
@@ -182,7 +197,7 @@ describe('directive: templateComponentVideo', function() {
 
     expect($scope.values).to.deep.equal({ volume: 10 });
 
-    timeout.flush();
+    $timeout.flush();
   });
 
   it('should default volume data to 0', function() {
@@ -198,7 +213,7 @@ describe('directive: templateComponentVideo', function() {
 
     expect($scope.values).to.deep.equal({ volume: 0 });
 
-    timeout.flush();
+    $timeout.flush();
   });
 
   it('should set volume as 0 if it has an invalid vaue', function() {
@@ -215,7 +230,7 @@ describe('directive: templateComponentVideo', function() {
 
     expect($scope.values).to.deep.equal({ volume: 0 });
 
-    timeout.flush();
+    $timeout.flush();
   });
 
   describe('showSettingsUI', function() {
@@ -417,6 +432,14 @@ describe('directive: templateComponentVideo', function() {
       ), 'set metadata attribute').to.be.true;
     });
 
+  });
+
+  it('selectFromStorage:', function() {
+    $scope.selectFromStorage();
+
+    $scope.editComponent.should.have.been.calledWith({
+      type: 'rise-storage-selector'
+    });
   });
 
   describe('showSettingsUI', function() {
