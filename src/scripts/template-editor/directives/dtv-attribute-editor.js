@@ -53,10 +53,6 @@ angular.module('risevision.template-editor.directives')
 
             $scope.factory.selected = component;
 
-            if (directive && directive.element) {
-              directive.element.show();
-            }
-
             $scope.showNextPage(component);
 
             if (directive && directive.show) {
@@ -201,6 +197,10 @@ angular.module('risevision.template-editor.directives')
             var directive = _getDirective(component);
             var element = directive && directive.panel && templateEditorUtils.findElement(directive.panel);
 
+            if (directive && directive.element) {
+              directive.element.show();
+            }
+
             if (!element) {
               return;
             }
@@ -216,6 +216,10 @@ angular.module('risevision.template-editor.directives')
           function _hideElement(component, delay) {
             var directive = _getDirective(component);
             var element = directive && directive.panel && templateEditorUtils.findElement(directive.panel);
+
+            if (directive && directive.element) {
+              directive.element.hide();
+            }
 
             if (!element) {
               return;

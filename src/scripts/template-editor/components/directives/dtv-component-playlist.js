@@ -2,12 +2,38 @@
 
 angular.module('risevision.template-editor.directives')
   .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
+  .constant('PLAYLIST_COMPONENTS', [
+    {
+      name: 'Text',
+      type: 'rise-text'
+    },
+    {
+      name: 'Image',
+      type: 'rise-image'
+    },
+    {
+      name: 'Video',
+      type: 'rise-video'
+    },
+    {
+      name: 'HTML',
+      type: 'rise-html'
+    },
+    {
+      name: 'Slides',
+      type: 'rise-slides'
+    },
+    {
+      name: 'Time & Date',
+      type: 'rise-time-date'
+    }
+  ])
   .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$loading',
     '$q', '$modal', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
-    'ENV_NAME',
+    'ENV_NAME', 'PLAYLIST_COMPONENTS',
     function (templateEditorFactory, presentation, $loading,
       $q, $modal, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory,
-      ENV_NAME) {
+      ENV_NAME, PLAYLIST_COMPONENTS) {
       return {
         restrict: 'E',
         scope: true,
@@ -20,6 +46,7 @@ angular.module('risevision.template-editor.directives')
             sortBy: 'changeDate',
             reverse: true
           };
+          $scope.playlistComponents = PLAYLIST_COMPONENTS;
           $scope.showJsonOption = !!ENV_NAME;
 
           function _load() {
@@ -301,6 +328,32 @@ angular.module('risevision.template-editor.directives')
             item['transition-type'] = $scope.selectedItem['transition-type'];
 
             $scope.save();
+          };
+
+          $scope.editPlaylistItem = function (key) {
+            var item = $scope.selectedTemplates[key];
+
+            $scope.editComponent({
+              type: item.tagName,
+              id: $scope.componentId + ' ' + $scope.selectedTemplates.indexOf(item)
+            });
+          };
+
+          $scope.addPlaylistItem = function (type) {
+            var item = {
+              'duration': 10,
+              'play-until-done': false,
+              'transition-type': 'normal',
+              'tagName': type
+            };
+
+            $scope.selectedTemplates.push(item);
+            $scope.save();
+
+            $scope.editComponent({
+              type: type,
+              id: $scope.componentId + ' ' + $scope.selectedTemplates.indexOf(item)
+            });
           };
 
           var _editJsonModal = function (item) {
