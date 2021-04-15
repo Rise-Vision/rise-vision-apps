@@ -279,6 +279,60 @@ angular.module('risevision.template-editor.directives')
               });
           }
 
+          $scope.editInCanva = function() {
+            console.log('Edit in Canva');
+
+            (function (document, url) {
+              var script = document.createElement('script');
+              script.src = url;
+              script.onload = function () {
+                console.log('Canva loaded', window.Canva);
+
+                if (window.Canva && window.Canva.DesignButton) {
+                  window.Canva.DesignButton.initialize({
+                    apiKey: 'EwLWFws4Qjpa-n_2ZJgBMQbz',
+                  }).then(function (api) {
+                    console.log('Canva API ready', api);
+                    api.createDesign({
+                      design: {
+                        type: 'Poster',
+                      },
+                      onDesignOpen: function (options) {
+                        var designId = options.designId;
+                        console.log('Canva designId', designId);
+                      },
+                      onDesignPublish: function (options) {
+                        console.log('Canva design Published', options);
+                        var exportUrl = options.exportUrl;
+                        var designId = options.designId;
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('GET', exportUrl);
+                        xhr.responseType = 'blob';
+                        xhr.onload = function() 
+                        {
+                          console.log('image loaded');
+                          var blob = xhr.response;
+
+                          var file = new File([blob], 'canva.png');
+
+                          $scope.canvaUploadList = [file];                          
+                        };
+                        xhr.send();
+                      },
+                      onDesignClose: function () {
+                        console.log('Canva design closed');
+                      },
+                    });
+                  });
+                }
+              };
+              document.body.appendChild(script);
+            })(document, 'https://sdk.canva.com/designbutton/v2/api.js');
+
+
+          };
+
           $scope.selectFromStorage = function () {
             $scope.editComponent({
               type: 'rise-storage-selector'

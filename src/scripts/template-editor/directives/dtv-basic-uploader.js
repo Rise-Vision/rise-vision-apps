@@ -12,6 +12,7 @@ angular.module('risevision.template-editor.directives')
           uploaderId: '@',
           uploadManager: '=',
           validExtensions: '=?',
+          fileList: '=?',
           validType: '@',
         },
         templateUrl: 'partials/template-editor/basic-uploader.html',
@@ -27,6 +28,15 @@ angular.module('risevision.template-editor.directives')
           function _isUploading() {
             return $scope.activeUploadCount() > 0;
           }
+
+          $scope.$watch('fileList',function(selectedFiles) {
+            if (selectedFiles) {
+              $scope.uploadSelectedFiles(selectedFiles).then(function() {
+                $scope.fileList = null;
+              });  
+            }
+            
+          });
 
           $scope.$watch($scope.uploadManager.isSingleFileSelector, function (value) {
             if (!value) {
