@@ -44,10 +44,6 @@ describe('directive: templateComponentBranding', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-branding');
-    expect(directive.iconType).to.equal('streamline');
-    expect(directive.icon).to.equal('ratingStar');
-    expect(directive.title).to.equal('Brand Settings');
-    expect(directive.panel).to.equal('.branding-component-container');
   });
 
   it('editLogo:', function() {

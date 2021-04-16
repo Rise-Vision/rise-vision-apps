@@ -2,9 +2,9 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateAttributeEditor', ['$timeout', 'templateEditorFactory', 'templateEditorUtils',
-    'blueprintFactory', '$window', 'HTML_TEMPLATE_DOMAIN',
+    'blueprintFactory', '$window', 'COMPONENTS_MAP', 'HTML_TEMPLATE_DOMAIN',
     function ($timeout, templateEditorFactory, templateEditorUtils, blueprintFactory, $window,
-      HTML_TEMPLATE_DOMAIN) {
+      COMPONENTS_MAP, HTML_TEMPLATE_DOMAIN) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/attribute-editor.html',
@@ -50,6 +50,8 @@ angular.module('risevision.template-editor.directives')
 
           $scope.editComponent = function (component) {
             var directive = _getDirective(component);
+
+            angular.extend(directive, COMPONENTS_MAP[directive.type]);
 
             $scope.factory.selected = component;
 
@@ -109,10 +111,10 @@ angular.module('risevision.template-editor.directives')
 
             if ($scope.panelTitle) {
               return $scope.panelTitle;
-            } else if (directive && directive.title) {
-              return directive.title;
             } else if (component && component.label) {
               return component.label;
+            } else if (directive && directive.title) {
+              return directive.title;
             } else {
               return '';
             }

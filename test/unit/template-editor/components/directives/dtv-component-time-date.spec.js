@@ -46,8 +46,6 @@ describe('directive: templateComponentTimeDate', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-time-date');
-    expect(directive.iconType).to.equal('streamline');
-    expect(directive.icon).to.exist;
     expect(directive.show).to.be.a('function');
   });
 
