@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class CanvaApiService {
 
   private _canvaApiPromise: Promise<any>;
-  private _designButtonPromise: Promise<any>;
+  private _designButtonPromise: Promise<CanvaButtonApi>;
 
   constructor() {}
 
@@ -14,13 +14,13 @@ export class CanvaApiService {
     if (this._canvaApiPromise) {
       return this._canvaApiPromise;
     } else {
-      this._canvaApiPromise = new Promise((resolve, reject) => {        
+      this._canvaApiPromise = new Promise<any>((resolve, reject) => {        
         const script = document.createElement('script');
         script.src = 'https://sdk.canva.com/designbutton/v2/api.js';
         script.onload = function () {
           console.log('Canva loaded');
-          if (window['Canva'] && window['Canva'].DesignButton) {
-            resolve(window['Canva']);
+          if (window.Canva && window.Canva.DesignButton) {
+            resolve(window.Canva);
           } else {
             reject();
           }
