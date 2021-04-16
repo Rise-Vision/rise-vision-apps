@@ -15,12 +15,9 @@ export class CanvaButtonComponent {
   constructor(private canvaApi: CanvaApiService) { }
 
   designWithCanva(): void {
-  	console.log('Canva clicked');
     this.canvaApi.createDesign().then((exportUrl: string) => {
-      console.log('Canva resolved', exportUrl);
       this.designPublished.emit(exportUrl);
-    });
-  	
+    });  	
   }
 
 }
