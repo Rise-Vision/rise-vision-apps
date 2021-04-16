@@ -16,7 +16,7 @@ export class CanvaButtonComponent {
 
   designWithCanva(): void {
   	console.log('Canva clicked');
-    this.canvaApi.load().then((exportUrl: string) => {
+    this.canvaApi.createDesign().then((exportUrl: string) => {
       console.log('Canva resolved', exportUrl);
       this.designPublished.emit(exportUrl);
     });
