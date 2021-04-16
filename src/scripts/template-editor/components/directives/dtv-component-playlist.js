@@ -9,30 +9,32 @@ angular.module('risevision.template-editor.directives')
     },
     {
       name: 'Image',
-      type: 'rise-image'
+      type: 'rise-image',
+      playUntilDone: true
     },
     {
       name: 'Video',
-      type: 'rise-video'
+      type: 'rise-video',
+      playUntilDone: true
     },
     {
-      name: 'HTML',
+      name: 'HTML Embed',
       type: 'rise-html'
     },
     {
-      name: 'Slides',
+      name: 'Google Slides',
       type: 'rise-slides'
     },
     {
-      name: 'Time & Date',
+      name: 'Time and Date',
       type: 'rise-time-date'
     }
   ])
   .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$loading',
-    '$q', '$modal', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
+    '$q', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
     'ENV_NAME', 'PLAYLIST_COMPONENTS',
     function (templateEditorFactory, presentation, $loading,
-      $q, $modal, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory,
+      $q, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory,
       ENV_NAME, PLAYLIST_COMPONENTS) {
       return {
         restrict: 'E',
@@ -47,7 +49,7 @@ angular.module('risevision.template-editor.directives')
             reverse: true
           };
           $scope.playlistComponents = PLAYLIST_COMPONENTS;
-          $scope.showJsonOption = !!ENV_NAME;
+          $scope.addVisualComponents = !!ENV_NAME;
 
           function _load() {
             var itemsJson = $scope.getAvailableAttributeData($scope.componentId, 'items');
@@ -330,19 +332,30 @@ angular.module('risevision.template-editor.directives')
             $scope.save();
           };
 
-          $scope.editPlaylistItem = function (key) {
-            var item = $scope.selectedTemplates[key];
+          var _getComponentByType = function(type) {
+            return _.find(PLAYLIST_COMPONENTS, {
+              type: type
+            });
+          };
 
+          var _editComponent = function(item) {
             $scope.editComponent({
               type: item.tagName,
               id: $scope.componentId + ' ' + $scope.selectedTemplates.indexOf(item)
             });
           };
 
+          $scope.editPlaylistItem = function (key) {
+            var item = $scope.selectedTemplates[key];
+
+            _editComponent(item);
+          };
+
           $scope.addPlaylistItem = function (type) {
+            var component = _getComponentByType(type);
             var item = {
               'duration': 10,
-              'play-until-done': false,
+              'play-until-done': !!component.playUntilDone,
               'transition-type': 'normal',
               'tagName': type
             };
@@ -350,53 +363,7 @@ angular.module('risevision.template-editor.directives')
             $scope.selectedTemplates.push(item);
             $scope.save();
 
-            $scope.editComponent({
-              type: type,
-              id: $scope.componentId + ' ' + $scope.selectedTemplates.indexOf(item)
-            });
-          };
-
-          var _editJsonModal = function (item) {
-            return $modal.open({
-              templateUrl: 'partials/template-editor/components/playlist-item-json-modal.html',
-              windowClass: 'madero-style',
-              size: 'md',
-              controller: 'PlaylistItemJsonController',
-              resolve: {
-                item: function() {
-                  return item;
-                }
-              }
-            }).result;
-          };
-
-          $scope.addItemJson = function () {
-            var item = {
-              'duration': 10,
-              'play-until-done': false,
-              'transition-type': 'normal',
-              'element': {
-                'tagName': 'rise-text',
-                'attributes': {
-                  'id': '1',
-                  'value': 'Example'
-                }
-              }
-            };
-
-            return _editJsonModal(item).then(function(result) {
-              $scope.selectedTemplates.push(_mapItemToEditorFormat(result));
-              $scope.save();
-            });
-          };
-
-          $scope.editItemJson = function (key) {
-            var item = _mapEditorToItemFormat($scope.selectedTemplates[key]);
-
-            return _editJsonModal(item).then(function(result) {
-              $scope.selectedTemplates[key] = _mapItemToEditorFormat(result);
-              $scope.save();
-            });
+            _editComponent(item);
           };
 
           $scope.createNewTemplate = function () {
