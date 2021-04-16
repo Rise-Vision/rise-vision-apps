@@ -61,9 +61,7 @@
 
 <div class="file-component-list-action-button-bar">
   <div class="edit-in-canva">
-    <button id="image-list-canva-button" class="btn btn-default btn-block" ng-click="editInCanva()" ng-disabled="isUploading">
-      <strong>Design with Canva {{canvaUploadList}}</strong>
-    </button>
+    <canva-button (design-published)="onDesignPublished($event)"></canva-button>
   </div>
 
   <div class="upload-files">
