@@ -17,7 +17,6 @@ angular.module('risevision.template-editor.directives')
         },
         templateUrl: 'partials/template-editor/basic-uploader.html',
         link: function ($scope, element) {
-          var confirmOverwriteModal;
           var FileUploader = fileUploaderFactory();
           var inputElement = element.find('input');
 
@@ -31,11 +30,8 @@ angular.module('risevision.template-editor.directives')
 
           $scope.$watch('fileList',function(selectedFiles) {
             if (selectedFiles) {
-              $scope.uploadSelectedFiles(selectedFiles).then(function() {
-                $scope.fileList = null;
-              });  
+              $scope.uploadSelectedFiles(selectedFiles);
             }
-            
           });
 
           $scope.$watch($scope.uploadManager.isSingleFileSelector, function (value) {

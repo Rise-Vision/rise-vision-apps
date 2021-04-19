@@ -290,8 +290,11 @@ angular.module('risevision.template-editor.directives')
               filename += options.designId + '.png';
               var blob = xhr.response;
               var file = new File([blob], 'canva/'+filename);
-              $scope.canvaUploadList = [file];                          
+              $scope.canvaUploadList = [file];
             };
+            xhr.onerror = function() {
+              $log.error('Could not import Canva design.', options);
+            }
             xhr.send();
           };
 
