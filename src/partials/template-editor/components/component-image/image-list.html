@@ -60,7 +60,7 @@
 </div>
 
 <div class="file-component-list-action-button-bar">
-  <div class="edit-in-canva">
+  <div class="edit-in-canva" ng-if="showCanvaButton">
     <canva-button (design-published)="onDesignPublished($event)"></canva-button>
   </div>
 
