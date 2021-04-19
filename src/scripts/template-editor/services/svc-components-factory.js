@@ -50,6 +50,13 @@ angular.module('risevision.template-editor.services')
       playUntilDone: true,
       visual: true
     },
+    'rise-image-logo': {
+      type: 'rise-image-logo',
+      icon: 'image',
+      icon: 'circleStar',
+      panel: '.image-component-container',
+      title: 'Logo Settings'
+    },
     'rise-playlist': {
       type: 'rise-playlist',
       iconType: 'streamline',

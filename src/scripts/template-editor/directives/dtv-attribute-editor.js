@@ -25,6 +25,8 @@ angular.module('risevision.template-editor.directives')
             directive.element.hide();
             $scope.directives[directive.type] = directive;
 
+            angular.extend(directive, COMPONENTS_MAP[directive.type]);
+
             if (directive.onPresentationOpen) {
               directive.onPresentationOpen();
             }
@@ -50,8 +52,6 @@ angular.module('risevision.template-editor.directives')
 
           $scope.editComponent = function (component) {
             var directive = _getDirective(component);
-
-            angular.extend(directive, COMPONENTS_MAP[directive.type]);
 
             $scope.factory.selected = component;
 

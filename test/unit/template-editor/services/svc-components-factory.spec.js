@@ -31,7 +31,7 @@ describe('service: componentsFactory:', function() {
   });
 
   it('COMPONENTS_ARRAY', function() {
-    expect(COMPONENTS_ARRAY).to.have.length(17);
+    expect(COMPONENTS_ARRAY).to.have.length(18);
 
     for (var i = 0; i < COMPONENTS_ARRAY.length; i++) {
       expect(COMPONENTS_ARRAY[i].type).to.be.ok;
