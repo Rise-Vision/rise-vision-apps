@@ -279,15 +279,17 @@ angular.module('risevision.template-editor.directives')
               });
           }
 
-          $scope.onDesignPublished = function(exportUrl) {
+          $scope.onDesignPublished = function(options) {
+            console.log('Canva result:', options);
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', exportUrl);
+            xhr.open('GET', options.exportUrl);
             xhr.responseType = 'blob';
             xhr.onload = function() 
             {
-              console.log('image loaded');
+              var filename = options.designTitle? options.designTitle + '_' : '';
+              filename += options.designId + '.png';
               var blob = xhr.response;
-              var file = new File([blob], 'canva.png');
+              var file = new File([blob], 'canva/'+filename);
               $scope.canvaUploadList = [file];                          
             };
             xhr.send();

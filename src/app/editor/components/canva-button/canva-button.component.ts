@@ -10,13 +10,13 @@ import { CanvaApiService } from '../../services/canva-api.service';
 })
 export class CanvaButtonComponent {
 
-  @Output() designPublished = new EventEmitter<string>();
+  @Output() designPublished = new EventEmitter<any>();
 
   constructor(private canvaApi: CanvaApiService) { }
 
   designWithCanva(): void {
-    this.canvaApi.createDesign().then((exportUrl: string) => {
-      this.designPublished.emit(exportUrl);
+    this.canvaApi.createDesign().then((options) => {
+      this.designPublished.emit(options);
     });  	
   }
 
