@@ -58,7 +58,6 @@ describe('directive: templateComponentSchedules', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-schedules');
-    expect(directive.title).to.equal('Schedules');
   });
 
   describe('watch loadingSchedules:', function() {

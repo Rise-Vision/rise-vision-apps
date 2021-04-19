@@ -150,11 +150,7 @@ describe('directive: componentStorageSelector', function() {
       var directive = $scope.registerDirective.getCall(0).args[0];
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-storage-selector');
-      expect(directive.iconType).to.equal('riseSvg');
-      expect(directive.icon).to.equal('riseStorage');
       expect(directive.element).to.be.an('object');
-      expect(directive.panel).to.equal('.storage-selector-container');
-      expect(directive.title).to.equal('Rise Storage');
       expect(directive.show).to.be.a('function');
       expect(directive.onBackHandler).to.be.a('function');
     });

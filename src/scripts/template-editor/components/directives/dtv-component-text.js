@@ -48,8 +48,6 @@ angular.module('risevision.template-editor.directives')
 
           $scope.registerDirective({
             type: 'rise-text',
-            iconType: 'streamline',
-            icon: 'text',
             element: element,
             show: function () {
               $scope.componentId = $scope.factory.selected.id;

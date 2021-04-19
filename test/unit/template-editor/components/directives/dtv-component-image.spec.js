@@ -111,10 +111,7 @@ describe('directive: TemplateComponentImage', function() {
         var directive = $scope.registerDirective.getCall(0).args[0];
         expect(directive).to.be.ok;
         expect(directive.type).to.equal('rise-image');
-        expect(directive.iconType).to.equal('streamline');
-        expect(directive.icon).to.equal('image');
         expect(directive.element).to.be.an('object');
-        expect(directive.panel).to.equal('.image-component-container');
         expect(directive.show).to.be.a('function');
         expect(directive.onBackHandler).to.be.a('function');
       });
@@ -133,11 +130,7 @@ describe('directive: TemplateComponentImage', function() {
         var directive = $scope.registerDirective.getCall(1).args[0];
         expect(directive).to.be.ok;
         expect(directive.type).to.equal('rise-image-logo');
-        expect(directive.iconType).to.equal('streamline');
-        expect(directive.icon).to.equal('circleStar');
-        expect(directive.title).to.equal('Logo Settings');
         expect(directive.element).to.be.an('object');
-        expect(directive.panel).to.equal('.image-component-container');
         expect(directive.show).to.be.a('function');
       });
 

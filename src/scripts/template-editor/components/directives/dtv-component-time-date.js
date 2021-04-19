@@ -21,8 +21,6 @@ angular.module('risevision.template-editor.directives')
 
           $scope.registerDirective({
             type: 'rise-time-date',
-            iconType: 'streamline',
-            icon: 'time',
             element: element,
             show: function () {
               element.show();

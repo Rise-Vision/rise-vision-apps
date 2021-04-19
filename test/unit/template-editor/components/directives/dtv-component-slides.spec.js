@@ -53,8 +53,6 @@ describe('directive: templateComponentSlides', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-slides');
-    expect(directive.iconType).to.equal('streamline');
-    expect(directive.icon).to.equal('slides');
     expect(directive.show).to.be.a('function');
   });
 

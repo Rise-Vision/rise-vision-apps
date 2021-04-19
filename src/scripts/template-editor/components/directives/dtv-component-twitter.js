@@ -60,8 +60,6 @@ angular.module('risevision.template-editor.directives')
 
           $scope.registerDirective({
             type: 'rise-data-twitter',
-            iconType: 'streamline',
-            icon: 'twitter',
             element: element,
             show: function () {
               element.show();
