@@ -4,12 +4,13 @@ angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_IMAGE_THUMBNAIL',
     'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
+  .constant('CANVA_FOLDER', 'canva/')
   .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory',
     'storageManagerFactory', 'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL',
-    'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'baseImageFactory', 'fileDownloader',
+    'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'baseImageFactory', 'fileDownloader', 'CANVA_FOLDER',
     function ($log, $q, $timeout, templateEditorFactory, storageManagerFactory,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES,
-      logoImageFactory, baseImageFactory, fileDownloader) {
+      logoImageFactory, baseImageFactory, fileDownloader, CANVA_FOLDER) {
       return {
         restrict: 'E',
         scope: true,
@@ -281,9 +282,10 @@ angular.module('risevision.template-editor.directives')
 
           $scope.onDesignPublished = function(options) {
             console.log('Canva result:', options);
-            var filename = options.designTitle? options.designTitle + '_' : '';
-            filename += options.designId + '.png';
-            fileDownloader(options.exportUrl, filename)
+            var filepath = CANVA_FOLDER;
+            filepath += options.designTitle? options.designTitle + '_' : '';
+            filepath += options.designId + '.png';
+            fileDownloader(options.exportUrl, filepath)
             .then(function(file) {
               $scope.canvaUploadList = [file];
             })

@@ -2,7 +2,7 @@
 
 angular.module('risevision.apps.services')
   .service('fileDownloader', ['$q', function ($q) {
-    return function (url, filename) {
+    return function (url, filepath) {
       var deferred = $q.defer();
       var xhr = new XMLHttpRequest();
 
@@ -13,7 +13,7 @@ angular.module('risevision.apps.services')
       xhr.onload = function () {
         if (xhr.status === 200) {
           var blob = xhr.response;
-          var file = new File([blob], filename);
+          var file = new File([blob], filepath);
           deferred.resolve(file);  
         } else {
           deferred.reject({
