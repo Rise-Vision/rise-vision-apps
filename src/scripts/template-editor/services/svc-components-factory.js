@@ -52,8 +52,8 @@ angular.module('risevision.template-editor.services')
     },
     'rise-image-logo': {
       type: 'rise-image-logo',
-      icon: 'image',
       icon: 'circleStar',
+      iconType: 'streamline',
       panel: '.image-component-container',
       title: 'Logo Settings'
     },
