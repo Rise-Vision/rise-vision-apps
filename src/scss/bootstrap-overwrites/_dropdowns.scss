@@ -1,8 +1,10 @@
 .dropdown {
   .dropdown-menu {
-    top: 120%;
-    left: auto;
-    right: 0;
+    :not(.dropup) {
+      top: 120%;
+      left: auto;
+      right: 0;      
+    }
     padding: 0;
     overflow: hidden;
     >li {
