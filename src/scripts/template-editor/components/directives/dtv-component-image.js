@@ -204,6 +204,8 @@ angular.module('risevision.template-editor.directives')
               _.forEach(imageComponentIds, function (componentId) {
                 console.log('checking file existence for component', componentId);
 
+                $scope.fileExistenceChecksCompleted[componentId] = false;
+
                 _checkFileExistenceFor(componentId)
                   .finally(function () {
                     $scope.fileExistenceChecksCompleted[componentId] = true;

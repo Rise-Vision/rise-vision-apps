@@ -2,34 +2,6 @@
 
 angular.module('risevision.template-editor.directives')
   .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
-  .constant('PLAYLIST_COMPONENTS', [
-    {
-      name: 'Text',
-      type: 'rise-text'
-    },
-    {
-      name: 'Image',
-      type: 'rise-image',
-      playUntilDone: true
-    },
-    {
-      name: 'Video',
-      type: 'rise-video',
-      playUntilDone: true
-    },
-    {
-      name: 'HTML Embed',
-      type: 'rise-html'
-    },
-    {
-      name: 'Google Slides',
-      type: 'rise-slides'
-    },
-    {
-      name: 'Time and Date',
-      type: 'rise-time-date'
-    }
-  ])
   .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$loading',
     '$q', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
     'ENV_NAME', 'PLAYLIST_COMPONENTS',
