@@ -6,10 +6,10 @@ angular.module('risevision.template-editor.directives')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
   .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory',
     'storageManagerFactory', 'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL',
-    'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'baseImageFactory',
+    'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'baseImageFactory', 'fileDownloader',
     function ($log, $q, $timeout, templateEditorFactory, storageManagerFactory,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES,
-      logoImageFactory, baseImageFactory) {
+      logoImageFactory, baseImageFactory, fileDownloader) {
       return {
         restrict: 'E',
         scope: true,
@@ -281,21 +281,15 @@ angular.module('risevision.template-editor.directives')
 
           $scope.onDesignPublished = function(options) {
             console.log('Canva result:', options);
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', options.exportUrl);
-            xhr.responseType = 'blob';
-            xhr.onload = function() 
-            {
-              var filename = options.designTitle? options.designTitle + '_' : '';
-              filename += options.designId + '.png';
-              var blob = xhr.response;
-              var file = new File([blob], 'canva/'+filename);
+            var filename = options.designTitle? options.designTitle + '_' : '';
+            filename += options.designId + '.png';
+            fileDownloader(options.exportUrl, filename)
+            .then(function(file) {
               $scope.canvaUploadList = [file];
-            };
-            xhr.onerror = function() {
-              $log.error('Could not import Canva design.', options);
-            }
-            xhr.send();
+            })
+            .catch(function(err) {
+              $log.error('Could not import Canva design.', err);
+            });
           };
 
           $scope.selectFromStorage = function () {
