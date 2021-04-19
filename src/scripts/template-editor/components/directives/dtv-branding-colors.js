@@ -18,11 +18,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.registerDirective({
             type: 'rise-branding-colors',
-            iconType: 'streamline',
-            icon: 'palette',
-            title: 'Color Settings',
             element: element,
-            panel: '.branding-colors-container'
           });
         }
       };

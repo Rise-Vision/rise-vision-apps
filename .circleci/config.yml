@@ -29,14 +29,17 @@ commands:
       - store_artifacts:
           path: ~/rise-vision-apps/reports
 
+defaults: &defaults
+  docker: 
+    - image: jenkinsrise/apps-node:10.23.2-browsers
+      auth:
+        username: $DOCKERHUB_USERNAME
+        password: $DOCKERHUB_PASSWORD
+
 jobs:
   dependencies:
     working_directory: ~/rise-vision-apps
-    docker: &BUILDIMAGE
-      - image: jenkinsrise/apps-node:10.23.2-browsers
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD 
+    <<: *defaults
     steps:
       - checkout
       - run:
@@ -66,7 +69,7 @@ jobs:
             - rise-vision-apps/*
   test_unit:
     working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
+    <<: *defaults
     steps:
       - attach_workspace:
           at: ~/
@@ -94,48 +97,48 @@ jobs:
             - rise-vision-apps/*
   e2e_apps_sections:
     working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
+    <<: *defaults
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/apps-sections.cases.js"
   e2e_apps_sections2:
     working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
+    <<: *defaults
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/apps-sections2.cases.js"
   e2e_registration:
     working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
+    <<: *defaults
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/registration/registration.cases.js"
   e2e_template_editor:
     working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
+    <<: *defaults
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/template-editor/template-editor.cases.js"
   e2e_template_editor2:
     working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
+    <<: *defaults
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/template-editor/template-editor2.cases.js"
   e2e_template_editor3:
     working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
+    <<: *defaults
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/template-editor/template-editor3.cases.js"
   test_e2e:
     working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
+    <<: *defaults
     steps:
       - run: echo "e2e tests finished"
   deploy_staging:
     working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
+    <<: *defaults
     steps:
       - attach_workspace:
           at: ~/
@@ -155,7 +158,7 @@ jobs:
           path: ~/rise-vision-apps/dist.tar.gz
   deploy_beta:
     working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
+    <<: *defaults
     steps:
       - attach_workspace:
           at: ~/
@@ -171,7 +174,7 @@ jobs:
           path: ~/rise-vision-apps/dist.tar.gz
   deploy_production:
     working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
+    <<: *defaults
     steps:
       - attach_workspace:
           at: ~/
@@ -211,48 +214,64 @@ workflows:
           context:
             - docker-hub-creds
       - test_unit:
+          context:
+            - docker-hub-creds
           requires:
             - dependencies
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_apps_sections:
+          context:
+            - docker-hub-creds
           requires:
             - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_apps_sections2:
+          context:
+            - docker-hub-creds
           requires:
             - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_registration:
+          context:
+            - docker-hub-creds
           requires:
             - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_template_editor:
+          context:
+            - docker-hub-creds
           requires:
             - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_template_editor2:
+          context:
+            - docker-hub-creds
           requires:
             - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_template_editor3:
+          context:
+            - docker-hub-creds
           requires:
             - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - test_e2e:
+          context:
+            - docker-hub-creds
           requires:
             - e2e_apps_sections
             - e2e_apps_sections2
@@ -264,12 +283,16 @@ workflows:
             branches:
               ignore: /(stage).*/
       - deploy_production:
+          context:
+            - docker-hub-creds
           requires:
             - test_e2e
           filters:
             branches:
               only: master
       - deploy_staging:
+          context:
+            - docker-hub-creds
           requires:
             - dependencies
           filters:
@@ -278,6 +301,8 @@ workflows:
                 - master
                 - /(feature|fix|chore|stage).*/
       - deploy_beta:
+          context:
+            - docker-hub-creds
           requires:
             - test_e2e
           filters:

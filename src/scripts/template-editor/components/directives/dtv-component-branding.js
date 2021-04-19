@@ -22,11 +22,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.registerDirective({
             type: 'rise-branding',
-            iconType: 'streamline',
-            icon: 'ratingStar',
-            title: 'Brand Settings',
-            element: element,
-            panel: '.branding-component-container'
+            element: element
           });
 
         }

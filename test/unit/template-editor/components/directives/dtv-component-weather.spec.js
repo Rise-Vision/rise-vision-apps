@@ -73,8 +73,6 @@ describe('directive: templateComponentWeather', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-data-weather');
-    expect(directive.iconType).to.equal('streamline');
-    expect(directive.icon).to.equal('sun');
     expect(directive.show).to.be.a('function');
   });
 
