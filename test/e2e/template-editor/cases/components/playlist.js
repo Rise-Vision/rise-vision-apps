@@ -40,13 +40,13 @@ var PlaylistComponentScenarios = function () {
 
       it('should show no results message when there are no templates', function () {
         helper.clickWhenClickable(playlistComponentPage.getSelectTemplatesButton(), 'Select Templates');
-        helper.waitDisappear(playlistComponentPage.getTemplatesLoaderSpinner(), 'Spinner');
+
+        helper.waitAppearDisappear(playlistComponentPage.getTemplatesLoaderSpinner(), 'Templates Loader');
 
         //search for something that returns no results
         playlistComponentPage.getSearchInput().sendKeys("purple unicorn" + protractor.Key.ENTER);
 
         helper.waitAppearDisappear(playlistComponentPage.getTemplatesLoaderSpinner(), 'Templates Loader');
-        browser.sleep(1000);
 
         expect(playlistComponentPage.getAddTemplateButton().isDisplayed()).to.eventually.be.true;
         expect(playlistComponentPage.getAddTemplateButton().isEnabled()).to.eventually.be.false;
