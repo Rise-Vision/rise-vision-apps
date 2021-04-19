@@ -1537,6 +1537,8 @@ $short-phone-height: 570px;
 
   .cm-s-default.CodeMirror {
     @extend .border-round;
+
+    resize: vertical;
   }
 }
 
