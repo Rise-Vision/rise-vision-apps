@@ -18,7 +18,7 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
               <div class="templates-name" ng-show="isEmbeddedTemplate(value)">{{ value.name }}</div>
               <div class="templates-name" ng-hide="isEmbeddedTemplate(value)">{{ value.tagName }}</div>
               <div class="templates-status templates-status-inline" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised' || value.removed}" ng-show="isEmbeddedTemplate(value)">{{ value.revisionStatusName }}</div>
-              <div class="templates-status templates-status-inline" ng-hide="isEmbeddedTemplate(value) || !showJsonOption">
+              <div class="templates-status templates-status-inline" ng-hide="isEmbeddedTemplate(value) || !addVisualComponents">
                 <a href="#" ng-click="editPlaylistItem(key)">
                    Edit
                 </a>
@@ -42,16 +42,16 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
 
     <div class="playlist-action-button-bar">
       <div class="select-templates" ng-class="{'no-selected-templates' : !selectedTemplates.length || selectedTemplates.length === 0}">
-        <button id="te-playlist-select-templates" class="btn btn-primary btn-block" ng-click="showAddTemplates()" ng-if="!showJsonOption">
+        <button id="te-playlist-select-templates" class="btn btn-primary btn-block" ng-click="showAddTemplates()" ng-if="!addVisualComponents">
           Select Presentations
         </button>
         <div class="btn-group btn-block" dropdown ng-class="{'dropup' : selectedTemplates.length && selectedTemplates.length > 0}">
-          <button id="addPlaylistItemButton" type="button" dropdown-toggle class="btn btn-primary btn-block" ng-if="showJsonOption">Add</button>
+          <button id="addPlaylistItemButton" type="button" dropdown-toggle class="btn btn-primary btn-block" ng-if="addVisualComponents">Add</button>
           <div class="dropdown-menu playlist-menu" role="menu">
             <ul>
             <li>
               <a class="u_clickable" id="addPresentationItemButton" ng-click="showAddTemplates()">
-                Presentation
+                Presentations
               </a>
             </li>
             <li ng-repeat="component in playlistComponents">
