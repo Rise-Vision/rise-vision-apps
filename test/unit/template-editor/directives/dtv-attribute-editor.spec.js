@@ -80,9 +80,9 @@ describe('directive: TemplateAttributeEditor', function() {
     sinon.assert.calledWith($window.removeEventListener, 'message');
   });
 
-  it('registerDirective:', function() {
-    it('Registers a directive', function() {
-      var directive = {
+  describe('registerDirective:', function() {
+    it('Registers a component', function() {
+      var component = {
         type: 'rise-test',
         icon: 'fa-test',
         element: {
@@ -91,16 +91,16 @@ describe('directive: TemplateAttributeEditor', function() {
         show: function() {}
       };
 
-      $scope.registerDirective(directive);
+      $scope.registerDirective(component);
 
       expect($scope.directives["rise-test"]).to.be.ok;
       expect($scope.directives["rise-test"].type).to.equal("rise-test");
 
-      expect(directive.element.hide).to.have.been.called;
+      expect(component.element.hide).to.have.been.called;
     });
 
     it('Runs the open presentation handler', function() {
-      var directive = {
+      var component = {
         type: 'rise-test',
         icon: 'fa-test',
         element: {
@@ -110,13 +110,90 @@ describe('directive: TemplateAttributeEditor', function() {
         onPresentationOpen: sandbox.stub()
       };
 
+      $scope.registerDirective(component);
+
+      expect(component.onPresentationOpen).to.have.been.called;
+    });
+
+    it('should populate directive properties', function() {
+      var directive = {
+        type: 'rise-text',
+        element: {
+          hide: function() {},
+          show: function() {}
+        }
+      };
+
       $scope.registerDirective(directive);
 
-      expect(directive.onPresentationOpen).to.have.been.called;
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.equal('text');
+      expect(directive.title).to.equal('Text');
     });
+
   });
 
-  describe('editComponent', function() {
+  describe('editComponent:', function() {
+    describe('_getDirective:', function() {
+      beforeEach(function() {
+        sandbox.stub($scope, 'showNextPage');
+      });
+
+      it('should handle missing component', function() {
+        $scope.editComponent();
+
+        expect($scope.factory.selected).to.not.be.ok;
+      });
+
+      it('should use component directive', function() {
+        var component = {
+          directive: {
+            type: 'rise-text',
+            element: {
+              hide: function() {},
+              show: sandbox.stub()
+            },
+            show: sandbox.stub()
+          }
+        };
+
+        $scope.editComponent(component);
+
+        expect($scope.factory.selected).to.equal(component);
+
+        expect(component.directive.element.show).to.have.been.called;
+        expect(component.directive.show).to.have.been.called;
+
+        $scope.showNextPage.should.have.been.calledWith(component);
+      });
+
+      it('should get directive from registered list', function() {
+        var directive = {
+          type: 'rise-text',
+          element: {
+            hide: function() {},
+            show: sandbox.stub()
+          },
+          show: sandbox.stub()
+        };
+
+        var component = {
+          type: 'rise-text'
+        }
+
+        $scope.registerDirective(directive);
+        $scope.editComponent(component);
+
+        expect($scope.factory.selected).to.equal(component);
+
+        expect(directive.element.show).to.have.been.called;
+        expect(directive.show).to.have.been.called;
+
+        $scope.showNextPage.should.have.been.calledWith(component);
+      });
+
+    });
+
     it('Edits a component', function() {
       var directive = {
         type: 'rise-test',
@@ -145,6 +222,98 @@ describe('directive: TemplateAttributeEditor', function() {
       timeout.flush();
       expect($scope.showAttributeList).to.be.false;
     });    
+  });
+  
+  describe('getComponentIcon:', function() {
+    it('should return empty if null', function() {
+      expect($scope.getComponentIcon()).to.equal('');
+    });
+
+    it('should return empty if directive is not found', function() {
+      var component = {};
+
+      expect($scope.getComponentIcon(component)).to.equal('');
+    });
+
+    it('should return directive icon', function() {
+      var component = {
+        directive: {
+          icon: 'sampleIcon'
+        }
+      };
+
+      expect($scope.getComponentIcon(component)).to.equal('sampleIcon');
+    });
+
+  });
+
+  describe('getComponentIconType:', function() {
+    it('should return empty if null', function() {
+      expect($scope.getComponentIconType()).to.equal('');
+    });
+
+    it('should return empty if directive is not found', function() {
+      var component = {};
+
+      expect($scope.getComponentIconType(component)).to.equal('');
+    });
+
+    it('should return directive icontype', function() {
+      var component = {
+        directive: {
+          iconType: 'iconType'
+        }
+      };
+
+      expect($scope.getComponentIconType(component)).to.equal('iconType');
+    });
+
+  });
+
+  describe('getComponentTitle:', function() {
+    it('should return empty if null', function() {
+      expect($scope.getComponentTitle()).to.equal('');
+    });
+
+    it('should return empty if directive is not found', function() {
+      var component = {};
+
+      expect($scope.getComponentTitle(component)).to.equal('');
+    });
+
+    it('should return panel title', function() {
+      $scope.panelTitle = 'panelTitle';
+      var component = {
+        label: 'directiveLabel',
+        directive: {
+          title: 'directiveTitle'
+        }
+      };
+
+      expect($scope.getComponentTitle(component)).to.equal('panelTitle');
+    });
+
+    it('should return component label', function() {
+      var component = {
+        label: 'directiveLabel',
+        directive: {
+          title: 'directiveTitle'
+        }
+      };
+
+      expect($scope.getComponentTitle(component)).to.equal('directiveLabel');
+    });
+
+    it('should return directive title if label is missing', function() {
+      var component = {
+        directive: {
+          title: 'directiveTitle'
+        }
+      };
+
+      expect($scope.getComponentTitle(component)).to.equal('directiveTitle');
+    });
+
   });
 
   describe('editHighlightedComponent:', function() {
