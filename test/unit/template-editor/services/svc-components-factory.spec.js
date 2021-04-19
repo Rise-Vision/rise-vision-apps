@@ -25,9 +25,177 @@ describe('service: componentsFactory:', function() {
       expect(COMPONENTS_MAP).to.be.an('object');
     });
 
-    it('should configure component objects', function() {
-      expect(COMPONENTS_MAP['rise-text']).to.be.ok;
+    it('rise-branding-colors', function() {
+      var directive = COMPONENTS_MAP['rise-branding-colors'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-branding-colors');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.equal('palette');
+      expect(directive.title).to.equal('Color Settings');
+      expect(directive.panel).to.equal('.branding-colors-container');
     });
+
+    it('rise-branding', function() {
+      var directive = COMPONENTS_MAP['rise-branding'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-branding');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.equal('ratingStar');
+      expect(directive.title).to.equal('Brand Settings');
+      expect(directive.panel).to.equal('.branding-component-container');
+    });
+
+    it('rise-override-brand-colors', function() {
+      var directive = COMPONENTS_MAP['rise-override-brand-colors'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-override-brand-colors');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.exist;
+    });
+
+    it('rise-data-counter', function() {
+      var directive = COMPONENTS_MAP['rise-data-counter'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-data-counter');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.exist;
+    });
+
+    it('rise-data-financial', function() {
+      var directive = COMPONENTS_MAP['rise-data-financial'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-data-financial');
+      expect(directive.icon).to.equal('financial');
+      expect(directive.iconType).to.equal('streamline');
+    });
+
+    it('rise-html', function() {
+      var directive = COMPONENTS_MAP['rise-html'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-html');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.equal('html');
+    });
+
+    it('rise-image', function() {
+      var directive = COMPONENTS_MAP['rise-image'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-image');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.equal('image');
+      expect(directive.panel).to.equal('.image-component-container');
+    });
+
+    it('rise-image-logo', function() {
+      var directive = COMPONENTS_MAP['rise-image-logo'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-image-logo');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.equal('circleStar');
+      expect(directive.title).to.equal('Logo Settings');
+      expect(directive.panel).to.equal('.image-component-container');
+    });
+
+    it('rise-playlist', function() {
+      var directive = COMPONENTS_MAP['rise-playlist'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal("rise-playlist");
+      expect(directive.iconType).to.equal("streamline");
+      expect(directive.icon).to.exist;
+    });
+
+    it('rise-data-rss', function() {
+      var directive = COMPONENTS_MAP['rise-data-rss'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-data-rss');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.equal('rss');
+    });
+
+    it('rise-schedules', function() {
+      var directive = COMPONENTS_MAP['rise-schedules'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-schedules');
+      expect(directive.title).to.equal('Schedules');
+    });
+
+    it('rise-slides', function() {
+      var directive = COMPONENTS_MAP['rise-slides'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-slides');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.equal('slides');
+    });
+
+    it('rise-storage-selector', function() {
+      var directive = COMPONENTS_MAP['rise-storage-selector'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-storage-selector');
+      expect(directive.iconType).to.equal('riseSvg');
+      expect(directive.icon).to.equal('riseStorage');
+      expect(directive.panel).to.equal('.storage-selector-container');
+      expect(directive.title).to.equal('Rise Storage');
+    });
+
+    it('rise-text', function() {
+      var directive = COMPONENTS_MAP['rise-text'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-text');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.exist;
+    });
+
+    it('rise-time-date', function() {
+      var directive = COMPONENTS_MAP['rise-time-date'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-time-date');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.exist;
+    });
+
+    it('rise-data-twitter', function() {
+      var directive = COMPONENTS_MAP['rise-data-twitter'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-data-twitter');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.exist;
+    });
+
+    it('rise-video', function() {
+      var directive = COMPONENTS_MAP['rise-video'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-video');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.equal('video');
+      expect(directive.panel).to.equal('.video-component-container');
+    });
+
+    it('rise-data-weather', function() {
+      var directive = COMPONENTS_MAP['rise-data-weather'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal('rise-data-weather');
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.equal('sun');
+    });
+
   });
 
   it('COMPONENTS_ARRAY', function() {
