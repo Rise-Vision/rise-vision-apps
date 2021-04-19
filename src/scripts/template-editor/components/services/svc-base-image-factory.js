@@ -36,7 +36,7 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.areChecksCompleted = function (checksCompleted) {
-        return !!checksCompleted && !!checksCompleted[factory.componentId];
+        return !!checksCompleted && checksCompleted[factory.componentId] !== false;
       };
 
       factory.isSetAsLogo = function () {
