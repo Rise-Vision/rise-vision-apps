@@ -60,10 +60,6 @@
 </div>
 
 <div class="file-component-list-action-button-bar">
-  <div class="edit-in-canva" ng-if="showCanvaButton">
-    <canva-button (design-published)="onDesignPublished($event)"></canva-button>
-  </div>
-
   <div class="upload-files">
     <label id="image-list-uploader-label"
       class="btn btn-default btn-block"
@@ -73,6 +69,9 @@
       <strong ng-if="!isEditingLogo()">Upload Images</strong>
       <strong ng-if="isEditingLogo()">Upload A Logo</strong>
     </label>
+  </div>
+  <div class="edit-in-canva u_margin-sm-top" ng-if="showCanvaButton">
+    <canva-button (design-published)="onDesignPublished($event)"></canva-button>
   </div>
   <div class="select-from-storage">
     <button id="image-list-storage-button" class="btn btn-default btn-block" ng-click="selectFromStorage()" ng-disabled="isUploading">
