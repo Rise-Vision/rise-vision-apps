@@ -54,8 +54,7 @@ export class CanvaApiService {
             type: 'Logo',
           },
           onDesignPublish: function (options) {
-            var exportUrl = options.exportUrl;
-            resolve(exportUrl);
+            resolve(options);
           },
           onDesignClose: function () {              
             reject('closed');

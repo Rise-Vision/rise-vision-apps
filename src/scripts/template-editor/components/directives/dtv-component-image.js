@@ -4,12 +4,13 @@ angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_IMAGE_THUMBNAIL',
     'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
+  .constant('CANVA_FOLDER', 'canva/')
   .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory',
     'storageManagerFactory', 'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL',
-    'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'baseImageFactory',
+    'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'baseImageFactory', 'fileDownloader', 'CANVA_FOLDER',
     function ($log, $q, $timeout, templateEditorFactory, storageManagerFactory,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES,
-      logoImageFactory, baseImageFactory) {
+      logoImageFactory, baseImageFactory, fileDownloader, CANVA_FOLDER) {
       return {
         restrict: 'E',
         scope: true,
@@ -279,18 +280,18 @@ angular.module('risevision.template-editor.directives')
               });
           }
 
-          $scope.onDesignPublished = function(exportUrl) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', exportUrl);
-            xhr.responseType = 'blob';
-            xhr.onload = function() 
-            {
-              console.log('image loaded');
-              var blob = xhr.response;
-              var file = new File([blob], 'canva.png');
-              $scope.canvaUploadList = [file];                          
-            };
-            xhr.send();
+          $scope.onDesignPublished = function(options) {
+            console.log('Canva result:', options);
+            var filepath = CANVA_FOLDER;
+            filepath += options.designTitle? options.designTitle + '_' : '';
+            filepath += options.designId + '.png';
+            fileDownloader(options.exportUrl, filepath)
+            .then(function(file) {
+              $scope.canvaUploadList = [file];
+            })
+            .catch(function(err) {
+              $log.error('Could not import Canva design.', err);
+            });
           };
 
           $scope.selectFromStorage = function () {
