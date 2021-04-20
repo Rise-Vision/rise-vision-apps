@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CanvaTypePicker } from 'src/app/ajs-upgraded-providers';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ export class CanvaApiService {
   private _canvaApiPromise: Promise<any>;
   private _designButtonPromise: Promise<CanvaButtonApi>;
 
-  constructor() {}
+  constructor(private canvaTypePicker: CanvaTypePicker) {}
 
   loadCanvaApi() {
     if (this._canvaApiPromise) {
@@ -47,11 +48,13 @@ export class CanvaApiService {
 
   createDesign() {
     const promise = new Promise((resolve, reject) => {
-      this.initializeDesignButtonApi().then(api => {
-        console.log('Canva DesignButton API ready');
+      Promise.all([this.initializeDesignButtonApi(),this.pickDesingType()])
+      .then((result: Array<any>) => {
+        const api: CanvaButtonApi = result[0];
+        const designType: string = result[1];
         api.createDesign({
           design: {
-            type: 'Logo',
+            type: designType,
           },
           onDesignPublish: function (options) {
             resolve(options);
@@ -61,6 +64,23 @@ export class CanvaApiService {
           },
         });
       });      
+    });
+    return promise;
+  }
+
+  pickDesingType() {
+    const promise = new Promise<string>((resolve, reject) => {
+      this.canvaTypePicker('Assign license?',
+      'Do you want to assign licenses to the selected displays?',
+      'Yes',
+      'No',
+      'madero-style centered-modal',
+      'partials/components/confirm-modal/madero-confirm-modal.html',
+      'sm')
+      .then(() => {
+        resolve('Logo');
+      })
+      .catch(reject);
     });
     return promise;
   }
