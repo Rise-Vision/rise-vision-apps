@@ -102,15 +102,23 @@ describe('service: baseImageFactory', function() {
       expect(baseImageFactory.areChecksCompleted({otherID:true,componentId:true})).to.be.true;
     });
 
-    it('should return false if empty or not present', function() {
-      expect(baseImageFactory.areChecksCompleted(null)).to.be.false
-      expect(baseImageFactory.areChecksCompleted({})).to.be.false;
-      expect(baseImageFactory.areChecksCompleted({anotherId:true})).to.be.false;
+    it('should return false if check is not completed', function() {
+      expect(baseImageFactory.areChecksCompleted({componentId:false})).to.be.false;
+      expect(baseImageFactory.areChecksCompleted({otherID:true,componentId:false})).to.be.false;
     });
 
-    it('should return false if componentId is not set', function() {
+    it('should return false if empty', function() {
+      expect(baseImageFactory.areChecksCompleted(null)).to.be.false;
+    });
+    
+    it('should return true if not present', function() {
+      expect(baseImageFactory.areChecksCompleted({})).to.be.true;
+      expect(baseImageFactory.areChecksCompleted({anotherId:true})).to.be.true;
+    });
+
+    it('should return true if componentId is not set', function() {
       baseImageFactory.componentId = null;
-      expect(baseImageFactory.areChecksCompleted({componentId:true})).to.be.false;
+      expect(baseImageFactory.areChecksCompleted({componentId:true})).to.be.true;
     });
   });
 

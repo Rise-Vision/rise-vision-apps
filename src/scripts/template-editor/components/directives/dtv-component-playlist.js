@@ -302,7 +302,7 @@ angular.module('risevision.template-editor.directives')
             $scope.save();
           };
 
-          var _getComponentByType = function(type) {
+          $scope.getComponentByType = function(type) {
             return _.find(PLAYLIST_COMPONENTS, {
               type: type
             });
@@ -322,7 +322,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.addPlaylistItem = function (type) {
-            var component = _getComponentByType(type);
+            var component = $scope.getComponentByType(type);
             var item = {
               'duration': 10,
               'play-until-done': !!component.playUntilDone,
