@@ -17,7 +17,9 @@ export class CanvaButtonComponent {
   designWithCanva(): void {
     this.canvaApi.createDesign().then((options) => {
       this.designPublished.emit(options);
-    });  	
+    }).catch(()=>{
+      // Canva was likely closed - prevents Unhandled Promise rejection  
+    });
   }
 
 }

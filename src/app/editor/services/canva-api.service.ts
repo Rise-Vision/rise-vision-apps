@@ -14,7 +14,7 @@ export class CanvaApiService {
     if (this._canvaApiPromise) {
       return this._canvaApiPromise;
     } else {
-      this._canvaApiPromise = new Promise<any>((resolve, reject) => {        
+      this._canvaApiPromise = new Promise<any>((resolve, reject) => {
         const script = document.createElement('script');
         script.src = 'https://sdk.canva.com/designbutton/v2/api.js';
         script.onload = function () {
@@ -32,7 +32,7 @@ export class CanvaApiService {
     }
   }
 
-  initializeDesignButtonApi() {
+  initializeDesignButtonApi(): Promise<CanvaButtonApi> {
     if (this._designButtonPromise) {
       return this._designButtonPromise;
     } else {      
