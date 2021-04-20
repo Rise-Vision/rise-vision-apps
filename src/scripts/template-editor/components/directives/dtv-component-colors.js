@@ -27,9 +27,6 @@ angular.module('risevision.template-editor.directives')
 
           $scope.registerDirective({
             type: 'rise-override-brand-colors',
-            iconType: 'streamline',
-            icon: 'palette',
-            title: 'Override Brand Colors',
             element: element,
             show: function () {
               $scope.componentId = $scope.factory.selected.id;

@@ -80,351 +80,532 @@ describe('directive: TemplateAttributeEditor', function() {
     sinon.assert.calledWith($window.removeEventListener, 'message');
   });
 
-  it('Registers a directive', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: sandbox.stub()
-      },
-      show: function() {}
-    };
+  describe('registerDirective:', function() {
+    it('Registers a component', function() {
+      var component = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub()
+        },
+        show: function() {}
+      };
 
-    $scope.registerDirective(directive);
+      $scope.registerDirective(component);
 
-    expect($scope.directives["rise-test"]).to.be.ok;
-    expect($scope.directives["rise-test"].type).to.equal("rise-test");
+      expect($scope.directives["rise-test"]).to.be.ok;
+      expect($scope.directives["rise-test"].type).to.equal("rise-test");
 
-    expect(directive.element.hide).to.have.been.called;
+      expect(component.element.hide).to.have.been.called;
+    });
+
+    it('Runs the open presentation handler', function() {
+      var component = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: function() {},
+          show: function() {}
+        },
+        onPresentationOpen: sandbox.stub()
+      };
+
+      $scope.registerDirective(component);
+
+      expect(component.onPresentationOpen).to.have.been.called;
+    });
+
+    it('should populate directive properties', function() {
+      var directive = {
+        type: 'rise-text',
+        element: {
+          hide: function() {},
+          show: function() {}
+        }
+      };
+
+      $scope.registerDirective(directive);
+
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.equal('text');
+      expect(directive.title).to.equal('Text');
+    });
+
   });
 
-  it('Edits a component', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: function() {},
+  describe('editComponent:', function() {
+    describe('_getDirective:', function() {
+      beforeEach(function() {
+        sandbox.stub($scope, 'showNextPage');
+      });
+
+      it('should handle missing component', function() {
+        $scope.editComponent();
+
+        expect($scope.factory.selected).to.not.be.ok;
+      });
+
+      it('should use component directive', function() {
+        var component = {
+          directive: {
+            type: 'rise-text',
+            element: {
+              hide: function() {},
+              show: sandbox.stub()
+            },
+            show: sandbox.stub()
+          }
+        };
+
+        $scope.editComponent(component);
+
+        expect($scope.factory.selected).to.equal(component);
+
+        expect(component.directive.element.show).to.have.been.called;
+        expect(component.directive.show).to.have.been.called;
+
+        $scope.showNextPage.should.have.been.calledWith(component);
+      });
+
+      it('should get directive from registered list', function() {
+        var directive = {
+          type: 'rise-text',
+          element: {
+            hide: function() {},
+            show: sandbox.stub()
+          },
+          show: sandbox.stub()
+        };
+
+        var component = {
+          type: 'rise-text'
+        }
+
+        $scope.registerDirective(directive);
+        $scope.editComponent(component);
+
+        expect($scope.factory.selected).to.equal(component);
+
+        expect(directive.element.show).to.have.been.called;
+        expect(directive.show).to.have.been.called;
+
+        $scope.showNextPage.should.have.been.calledWith(component);
+      });
+
+    });
+
+    it('Edits a component', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: function() {},
+          show: sandbox.stub()
+        },
         show: sandbox.stub()
-      },
-      show: sandbox.stub()
-    };
+      };
 
-    var component = {
-      type: 'rise-test'
-    }
+      var component = {
+        type: 'rise-test'
+      }
 
-    $scope.registerDirective(directive);
-    $scope.editComponent(component);
+      $scope.registerDirective(directive);
+      $scope.editComponent(component);
 
-    expect(factory.selected).to.deep.equal(component);
+      expect(factory.selected).to.deep.equal(component);
 
-    expect(directive.element.show).to.have.been.called;
-    expect(directive.show).to.have.been.called;
+      expect(directive.element.show).to.have.been.called;
+      expect(directive.show).to.have.been.called;
 
-    expect($scope.showAttributeList).to.be.true;
+      expect($scope.showAttributeList).to.be.true;
 
-    timeout.flush();
-    expect($scope.showAttributeList).to.be.false;
+      timeout.flush();
+      expect($scope.showAttributeList).to.be.false;
+    });    
+  });
+  
+  describe('getComponentIcon:', function() {
+    it('should return empty if null', function() {
+      expect($scope.getComponentIcon()).to.equal('');
+    });
+
+    it('should return empty if directive is not found', function() {
+      var component = {};
+
+      expect($scope.getComponentIcon(component)).to.equal('');
+    });
+
+    it('should return directive icon', function() {
+      var component = {
+        directive: {
+          icon: 'sampleIcon'
+        }
+      };
+
+      expect($scope.getComponentIcon(component)).to.equal('sampleIcon');
+    });
+
   });
 
-  it('Edits a highlighted component', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: function() {},
+  describe('getComponentIconType:', function() {
+    it('should return empty if null', function() {
+      expect($scope.getComponentIconType()).to.equal('');
+    });
+
+    it('should return empty if directive is not found', function() {
+      var component = {};
+
+      expect($scope.getComponentIconType(component)).to.equal('');
+    });
+
+    it('should return directive icontype', function() {
+      var component = {
+        directive: {
+          iconType: 'iconType'
+        }
+      };
+
+      expect($scope.getComponentIconType(component)).to.equal('iconType');
+    });
+
+  });
+
+  describe('getComponentTitle:', function() {
+    it('should return empty if null', function() {
+      expect($scope.getComponentTitle()).to.equal('');
+    });
+
+    it('should return empty if directive is not found', function() {
+      var component = {};
+
+      expect($scope.getComponentTitle(component)).to.equal('');
+    });
+
+    it('should return panel title', function() {
+      $scope.panelTitle = 'panelTitle';
+      var component = {
+        label: 'directiveLabel',
+        directive: {
+          title: 'directiveTitle'
+        }
+      };
+
+      expect($scope.getComponentTitle(component)).to.equal('panelTitle');
+    });
+
+    it('should return component label', function() {
+      var component = {
+        label: 'directiveLabel',
+        directive: {
+          title: 'directiveTitle'
+        }
+      };
+
+      expect($scope.getComponentTitle(component)).to.equal('directiveLabel');
+    });
+
+    it('should return directive title if label is missing', function() {
+      var component = {
+        directive: {
+          title: 'directiveTitle'
+        }
+      };
+
+      expect($scope.getComponentTitle(component)).to.equal('directiveTitle');
+    });
+
+  });
+
+  describe('editHighlightedComponent:', function() {
+    it('Edits a highlighted component', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: function() {},
+          show: sandbox.stub()
+        },
         show: sandbox.stub()
-      },
-      show: sandbox.stub()
-    };
+      };
 
-    var component = {
-      id: 'test',
-      type: 'rise-test'
-    }
+      var component = {
+        id: 'test',
+        type: 'rise-test'
+      }
 
-    blueprintFactory.blueprintData = {
-      components: [component]
-    };
+      blueprintFactory.blueprintData = {
+        components: [component]
+      };
 
-    $scope.registerDirective(directive);
-    $scope.editHighlightedComponent(component.id);
+      $scope.registerDirective(directive);
+      $scope.editHighlightedComponent(component.id);
 
-    expect(factory.selected).to.deep.equal(component);
+      expect(factory.selected).to.deep.equal(component);
 
-    expect(directive.element.show).to.have.been.called;
-    expect(directive.show).to.have.been.called;
+      expect(directive.element.show).to.have.been.called;
+      expect(directive.show).to.have.been.called;
 
-    expect($scope.showAttributeList).to.be.true;
+      expect($scope.showAttributeList).to.be.true;
 
-    timeout.flush();
-    expect($scope.showAttributeList).to.be.false;
-  });
+      timeout.flush();
+      expect($scope.showAttributeList).to.be.false;
+    });
 
-  it('Resets selected pages when editing a highlighted component', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: function() {},
+    it('Resets selected pages when editing a highlighted component', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: function() {},
+          show: sandbox.stub()
+        },
         show: sandbox.stub()
-      },
-      show: sandbox.stub()
-    };
+      };
 
-    var component = {
-      id: 'test',
-      type: 'rise-test'
-    }
-    
-    $scope.registerDirective(directive);
+      var component = {
+        id: 'test',
+        type: 'rise-test'
+      }
+      
+      $scope.registerDirective(directive);
 
-    blueprintFactory.blueprintData = {
-      components: [component]
-    };
+      blueprintFactory.blueprintData = {
+        components: [component]
+      };
 
-    factory.selected = component;
-    $scope.pages = [{}, {}, {}];
-    $scope.setPanelIcon('previous-icon', 'streamline');
-    $scope.setPanelTitle('Previous Title');
-    
-    $scope.editHighlightedComponent(component.id);
+      factory.selected = component;
+      $scope.pages = [{}, {}, {}];
+      $scope.setPanelIcon('previous-icon', 'streamline');
+      $scope.setPanelTitle('Previous Title');
+      
+      $scope.editHighlightedComponent(component.id);
 
-    expect(factory.selected).to.deep.equal(component);
+      expect(factory.selected).to.deep.equal(component);
 
-    expect($scope.pages).to.have.length(1);
-    expect($scope.pages[0]).to.equal(component);
-    expect($scope.panelIcon).to.be.null;
-    expect($scope.panelIconType).to.be.null;
-    expect($scope.panelTitle).to.be.null;
+      expect($scope.pages).to.have.length(1);
+      expect($scope.pages[0]).to.equal(component);
+      expect($scope.panelIcon).to.be.null;
+      expect($scope.panelIconType).to.be.null;
+      expect($scope.panelTitle).to.be.null;
 
-    expect(directive.element.show).to.have.been.called;
-    expect(directive.show).to.have.been.called;
+      expect(directive.element.show).to.have.been.called;
+      expect(directive.show).to.have.been.called;
 
-    expect($scope.showAttributeList).to.be.true;
+      expect($scope.showAttributeList).to.be.true;
 
-    timeout.flush();
-    expect($scope.showAttributeList).to.be.false;
+      timeout.flush();
+      expect($scope.showAttributeList).to.be.false;
+    });
   });
 
-  it('Runs the open presentation handler', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: function() {},
+  describe('backToList:', function() {
+    it('Goes back to list', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
         show: function() {}
-      },
-      onPresentationOpen: sandbox.stub()
-    };
+      };
 
-    $scope.registerDirective(directive);
+      var component = {
+        type: 'rise-test'
+      }
 
-    expect(directive.onPresentationOpen).to.have.been.called;
+      $scope.registerDirective(directive);
+      $scope.editComponent(component);
+      timeout.flush();
+
+      $scope.backToList();
+
+      expect(factory.selected).to.be.null;
+      expect(directive.element.hide).to.have.been.called.twice;
+
+      expect($scope.showAttributeList).to.be.false;
+
+      timeout.flush();
+      expect($scope.showAttributeList).to.be.true;
+    });
   });
 
-  it('Goes back to list', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: sandbox.stub(),
+  describe('onBackButton:', function() {
+    it('Goes back to list if there is no back handler', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
         show: function() {}
-      },
-      show: function() {}
-    };
+      };
 
-    var component = {
-      type: 'rise-test'
-    }
+      var component = {
+        type: 'rise-test'
+      }
 
-    $scope.registerDirective(directive);
-    $scope.editComponent(component);
-    timeout.flush();
+      $scope.highlightComponent = sandbox.stub();
+      $scope.registerDirective(directive);
+      $scope.editComponent(component);
+      timeout.flush();
 
-    $scope.backToList();
+      $scope.onBackButton();
 
-    expect(factory.selected).to.be.null;
-    expect(directive.element.hide).to.have.been.called.twice;
+      expect(factory.selected).to.be.null;
+      expect(directive.element.hide).to.have.been.called.twice;
+      expect($scope.highlightComponent).to.have.been.called.once;
 
-    expect($scope.showAttributeList).to.be.false;
+      expect($scope.showAttributeList).to.be.false;
 
-    timeout.flush();
-    expect($scope.showAttributeList).to.be.true;
+      timeout.flush();
+      expect($scope.showAttributeList).to.be.true;
+    });
+
+    it('Goes back to list if back handler returns false', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
+        show: function() {},
+        onBackHandler: function() { return false; }
+      };
+
+      var component = {
+        type: 'rise-test'
+      }
+
+      $scope.highlightComponent = sandbox.stub();
+      $scope.registerDirective(directive);
+      $scope.editComponent(component);
+      timeout.flush();
+
+      $scope.onBackButton();
+
+      expect(factory.selected).to.be.null;
+      expect(directive.element.hide).to.have.been.called.twice;
+      expect($scope.highlightComponent).to.have.been.called.once;
+
+      expect($scope.showAttributeList).to.be.false;
+
+      timeout.flush();
+      expect($scope.showAttributeList).to.be.true;
+    });
+
+    it('Does not go back to list if back handler returns true', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
+        show: function() {},
+        onBackHandler: function() { return true; }
+      };
+
+      var component = {
+        type: 'rise-test'
+      }
+
+      $scope.highlightComponent = sandbox.stub();
+      $scope.registerDirective(directive);
+      $scope.editComponent(component);
+      timeout.flush();
+
+      $scope.onBackButton();
+
+      expect(factory.selected).to.not.be.null;
+      expect(directive.element.hide).to.have.been.called.once;
+      expect($scope.highlightComponent).to.have.been.called.once;
+      expect($scope.showAttributeList).to.be.false;
+    });
   });
 
-  it('Goes back to list if there is no back handler', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: sandbox.stub(),
-        show: function() {}
-      },
-      show: function() {}
-    };
+  describe('isHeaderBottomRuleVisible:', function() {
+    it('Shows header bottom rule if isHeaderBottomRuleVisible is not defined for directive', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
+        show: function() {},
+        onBackHandler: function() { return true; }
+      };
 
-    var component = {
-      type: 'rise-test'
-    }
+      var component = {
+        type: 'rise-test'
+      }
 
-    $scope.highlightComponent = sandbox.stub();
-    $scope.registerDirective(directive);
-    $scope.editComponent(component);
-    timeout.flush();
+      $scope.registerDirective(directive);
+      $scope.editComponent(component);
+      timeout.flush();
 
-    $scope.onBackButton();
+      var visible = $scope.isHeaderBottomRuleVisible(component);
 
-    expect(factory.selected).to.be.null;
-    expect(directive.element.hide).to.have.been.called.twice;
-    expect($scope.highlightComponent).to.have.been.called.once;
+      expect(visible).to.be.true;
+    });
 
-    expect($scope.showAttributeList).to.be.false;
+    it('Shows header bottom rule if isHeaderBottomRuleVisible allows it', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
+        show: function() {},
+        isHeaderBottomRuleVisible: function() { return true; },
+        onBackHandler: function() { return true; }
+      };
 
-    timeout.flush();
-    expect($scope.showAttributeList).to.be.true;
+      var component = {
+        type: 'rise-test'
+      }
+
+      $scope.registerDirective(directive);
+      $scope.editComponent(component);
+      timeout.flush();
+
+      var visible = $scope.isHeaderBottomRuleVisible(component);
+
+      expect(visible).to.be.true;
+    });
+
+    it('Does not show header bottom rule if isHeaderBottomRuleVisible not allows it', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
+        show: function() {},
+        isHeaderBottomRuleVisible: function() { return false; },
+        onBackHandler: function() { return true; }
+      };
+
+      var component = {
+        type: 'rise-test'
+      }
+
+      $scope.registerDirective(directive);
+      $scope.editComponent(component);
+      timeout.flush();
+
+      var visible = $scope.isHeaderBottomRuleVisible(component);
+
+      expect(visible).to.be.false;
+    });    
   });
 
-  it('Goes back to list if back handler returns false', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: sandbox.stub(),
-        show: function() {}
-      },
-      show: function() {},
-      onBackHandler: function() { return false; }
-    };
-
-    var component = {
-      type: 'rise-test'
-    }
-
-    $scope.highlightComponent = sandbox.stub();
-    $scope.registerDirective(directive);
-    $scope.editComponent(component);
-    timeout.flush();
-
-    $scope.onBackButton();
-
-    expect(factory.selected).to.be.null;
-    expect(directive.element.hide).to.have.been.called.twice;
-    expect($scope.highlightComponent).to.have.been.called.once;
-
-    expect($scope.showAttributeList).to.be.false;
-
-    timeout.flush();
-    expect($scope.showAttributeList).to.be.true;
-  });
-
-  it('Does not go back to list if back handler returns true', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: sandbox.stub(),
-        show: function() {}
-      },
-      show: function() {},
-      onBackHandler: function() { return true; }
-    };
-
-    var component = {
-      type: 'rise-test'
-    }
-
-    $scope.highlightComponent = sandbox.stub();
-    $scope.registerDirective(directive);
-    $scope.editComponent(component);
-    timeout.flush();
-
-    $scope.onBackButton();
-
-    expect(factory.selected).to.not.be.null;
-    expect(directive.element.hide).to.have.been.called.once;
-    expect($scope.highlightComponent).to.have.been.called.once;
-    expect($scope.showAttributeList).to.be.false;
-  });
-
-  it('Shows header bottom rule if isHeaderBottomRuleVisible is not defined for directive', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: sandbox.stub(),
-        show: function() {}
-      },
-      show: function() {},
-      onBackHandler: function() { return true; }
-    };
-
-    var component = {
-      type: 'rise-test'
-    }
-
-    $scope.registerDirective(directive);
-    $scope.editComponent(component);
-    timeout.flush();
-
-    var visible = $scope.isHeaderBottomRuleVisible(component);
-
-    expect(visible).to.be.true;
-  });
-
-  it('Shows header bottom rule if isHeaderBottomRuleVisible allows it', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: sandbox.stub(),
-        show: function() {}
-      },
-      show: function() {},
-      isHeaderBottomRuleVisible: function() { return true; },
-      onBackHandler: function() { return true; }
-    };
-
-    var component = {
-      type: 'rise-test'
-    }
-
-    $scope.registerDirective(directive);
-    $scope.editComponent(component);
-    timeout.flush();
-
-    var visible = $scope.isHeaderBottomRuleVisible(component);
-
-    expect(visible).to.be.true;
-  });
-
-  it('Does not show header bottom rule if isHeaderBottomRuleVisible not allows it', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: sandbox.stub(),
-        show: function() {}
-      },
-      show: function() {},
-      isHeaderBottomRuleVisible: function() { return false; },
-      onBackHandler: function() { return true; }
-    };
-
-    var component = {
-      type: 'rise-test'
-    }
-
-    $scope.registerDirective(directive);
-    $scope.editComponent(component);
-    timeout.flush();
-
-    var visible = $scope.isHeaderBottomRuleVisible(component);
-
-    expect(visible).to.be.false;
-  });
-
-  describe('showNextPage', function () {
+  describe('showNextPage:', function () {
     it('should show a new page', function () {
       expect($scope.pages).to.have.length(0);
 
@@ -442,7 +623,7 @@ describe('directive: TemplateAttributeEditor', function() {
     });
   });
 
-  describe('showPreviousPage', function () {
+  describe('showPreviousPage:', function () {
     it('should hide the first page', function () {
       $scope.showNextPage('selector1');
 

@@ -126,10 +126,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.registerDirective({
             type: 'rise-video',
-            iconType: 'streamline',
-            icon: 'video',
             element: element,
-            panel: '.video-component-container',
             show: function () {
               _reset();
               $scope.componentId = $scope.factory.selected.id;

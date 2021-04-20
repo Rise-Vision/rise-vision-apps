@@ -57,8 +57,6 @@ angular.module('risevision.template-editor.directives')
 
           $scope.registerDirective({
             type: 'rise-slides',
-            iconType: 'streamline',
-            icon: 'slides',
             element: element,
             show: function () {
               $scope.componentId = $scope.factory.selected.id;

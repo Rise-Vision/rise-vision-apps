@@ -177,15 +177,9 @@ angular.module('risevision.template-editor.directives')
             _loadSelectedImages();
           };
 
-          var baseDirective = {
-            iconType: 'streamline',
-            element: element,
-            panel: '.image-component-container'
-          };
-
-          var componentDirective = angular.extend({}, baseDirective, {
+          var componentDirective = {
             type: 'rise-image',
-            icon: 'image',
+            element: element,
             show: function () {
               imageFactory = baseImageFactory;
               imageFactory.componentId = $scope.factory.selected.id;
@@ -223,12 +217,11 @@ angular.module('risevision.template-editor.directives')
                   });
               });
             }
-          });
+          };
 
-          var logoDirective = angular.extend({}, baseDirective, {
+          var logoDirective = {
             type: 'rise-image-logo',
-            icon: 'circleStar',
-            title: 'Logo Settings',
+            element: element,
             show: function () {
               imageFactory = logoImageFactory;
               imageFactory.componentId = null;
@@ -239,7 +232,7 @@ angular.module('risevision.template-editor.directives')
               _loadTransition();
               _loadHelpText();
             }
-          });
+          };
 
           $scope.registerDirective(componentDirective);
           $scope.registerDirective(logoDirective);

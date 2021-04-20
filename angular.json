@@ -479,6 +479,7 @@
               "src/scripts/template-editor/services/svc-auto-save-service.js",
               "src/scripts/template-editor/services/svc-blueprint-factory.js",
               "src/scripts/template-editor/services/svc-financial-license-factory.js",
+              "src/scripts/template-editor/services/svc-components-factory.js",
 
               "src/scripts/template-editor/components/services/svc-storage-manager-factory.js",
               "src/scripts/template-editor/components/services/svc-branding-factory.js",

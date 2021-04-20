@@ -36,11 +36,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.registerDirective({
             type: 'rise-storage-selector',
-            iconType: 'riseSvg',
-            icon: 'riseStorage',
             element: element,
-            panel: '.storage-selector-container',
-            title: 'Rise Storage',
             show: function () {
               storageManagerFactory.isListView = true;
 
