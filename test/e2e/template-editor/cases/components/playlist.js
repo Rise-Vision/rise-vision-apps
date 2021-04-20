@@ -35,6 +35,8 @@ var PlaylistComponentScenarios = function () {
       it('should open properties of Playlist Component', function () {
         templateEditorPage.selectComponent(componentLabel);
 
+        helper.wait(playlistComponentPage.getSelectTemplatesButton(), 'Select Button');
+
         expect(playlistComponentPage.getSelectTemplatesButton().isDisplayed()).to.eventually.be.true;
       });
 
