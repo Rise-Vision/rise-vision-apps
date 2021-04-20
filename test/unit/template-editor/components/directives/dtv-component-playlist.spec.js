@@ -4,7 +4,6 @@ describe("directive: templateComponentPlaylist", function() {
   var sandbox = sinon.sandbox.create(),
       $scope,
       $loading,
-      $modal,
       element,
       factory,
       editorFactory,
@@ -118,23 +117,6 @@ describe("directive: templateComponentPlaylist", function() {
       };
     });
 
-    $provide.service('$modal', function() {
-      return {
-        open: sinon.stub().returns({result: Q.resolve({
-          "duration": 20,
-          "element": {
-            "attributes": {
-              "id": "text2",
-              "value": "Updated"
-            },
-            "tagName": "rise-text"
-          },
-          "play-until-done": false,
-          "transition-type": "slideFromTop"
-        })})
-      }
-    });
-
     $provide.service("editorFactory", function() {
       return {
         addPresentationModal: sandbox.stub()
@@ -152,12 +134,12 @@ describe("directive: templateComponentPlaylist", function() {
     $templateCache.put("partials/template-editor/components/component-playlist.html", "<p>mock</p>");
     $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
-    $modal = $injector.get('$modal');
     editorFactory = $injector.get('editorFactory');
     blueprintFactory = $injector.get('blueprintFactory');
 
     $scope.registerDirective = sinon.stub();
     $scope.setAttributeData = sinon.stub();
+    $scope.editComponent = sinon.stub();
 
     element = $compile("<template-component-playlist></template-component-playlistt>")($scope);
     $scope = element.scope();
@@ -170,7 +152,12 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" }, presentation: { id: "TEST-ID" }});
     expect($scope.registerDirective).to.have.been.called;
 
-    expect($scope.showJsonOption).to.be.true;
+    expect($scope.playlistComponents).to.be.an('array');
+    expect($scope.addVisualComponents).to.be.false;
+
+    expect($scope.getComponentByType).to.be.a('function');
+    expect($scope.addPlaylistItem).to.be.a('function');
+    expect($scope.editPlaylistItem).to.be.a('function');
 
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
@@ -545,115 +532,70 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.save).to.be.calledOnce;
   });
 
-  describe("JSON items:", function () {
+  it('getComponentByType:', function() {
+    expect($scope.getComponentByType('rise-image')).to.be.ok;
+    expect($scope.getComponentByType('rise-image').title).to.equal('Image');
+
+    expect($scope.getComponentByType('rise-playlist')).to.not.be.ok;
+  });
+
+  it('editPlaylistItem:', function() {
+    $scope.componentId = 'playlist1';
+    $scope.selectedTemplates = [
+      'template1',
+      {
+        tagName: 'tag'
+      }
+    ];
+
+    $scope.editPlaylistItem(1);
+
+    $scope.editComponent.should.have.been.calledWith({
+      type: 'tag',
+      id: 'playlist1 1'
+    });
+  });
+
+  describe('addPlaylistItem:', function() {
     beforeEach(function() {
       sandbox.stub($scope, "save");
     });
 
-    it("addItemJson:", function(done) {
-      var directive = $scope.registerDirective.getCall(0).args[0];
-      var copySampleAttributeData = {
-        items: [
-          sampleAttributeData.items[1]
-        ]
-      };
+    it('should add the component and edit it', function() {
+      $scope.componentId = 'playlist1';
+      $scope.selectedTemplates = [
+        'template1'
+      ];
 
-      $scope.getAvailableAttributeData = function(componentId, attributeName) {
-        return copySampleAttributeData[attributeName];
-      };
+      $scope.addPlaylistItem('rise-text');
 
-      directive.show();
-
-      $scope.addItemJson()
-        .then(function() {
-          expect($scope.selectedTemplates.length).to.equal(2);
-          expect($scope.selectedTemplates[1]["duration"]).to.equal(20);
-          expect($scope.selectedTemplates[1]["play-until-done"]).to.be.false;
-          expect($scope.selectedTemplates[1]["transition-type"]).to.equal("slideFromTop");
-
-          expect($scope.selectedTemplates[1]["tagName"]).to.equal("rise-text");
-          expect($scope.selectedTemplates[1].attributes).to.deep.equal({
-            "id": "text2",
-            "value": "Updated"
-          });
-
-          $scope.save.should.have.been.called;
-
-          done();
-        });
-
-      $modal.open.should.have.been.calledWith({
-        templateUrl: 'partials/template-editor/components/playlist-item-json-modal.html',
-        windowClass: 'madero-style',
-        size: 'md',
-        controller: 'PlaylistItemJsonController',
-        resolve: {
-          item: sinon.match.func
-        }
+      expect($scope.selectedTemplates).to.have.length(2);
+      expect($scope.selectedTemplates[1]).to.deep.equal({
+        'duration': 10,
+        'play-until-done': false,
+        'transition-type': 'normal',
+        'tagName': 'rise-text'
       });
 
-      var item = $modal.open.getCall(0).args[0].resolve.item();
+      $scope.save.should.have.been.called;
 
-      expect(item["play-until-done"]).to.equal(false);
-      expect(item["duration"]).to.equal(10);
-      expect(item["transition-type"]).to.equal("normal");
-      expect(item.element["tagName"]).to.equal("rise-text");
-      expect(item.element.attributes["id"]).to.equal("1");
-      expect(item.element.attributes["value"]).to.equal("Example");
-
+      $scope.editComponent.should.have.been.calledWith({
+        type: 'rise-text',
+        id: 'playlist1 1'
+      });
     });
 
-    it("editItemJson:", function(done) {
-      var directive = $scope.registerDirective.getCall(0).args[0];
-      var copySampleAttributeData = {
-        items: [
-          sampleAttributeData.items[1]
-        ]
-      };
+    it('should set playUntilDone', function() {
+      $scope.selectedTemplates = [];
 
-      $scope.getAvailableAttributeData = function(componentId, attributeName) {
-        return copySampleAttributeData[attributeName];
-      };
+      $scope.addPlaylistItem('rise-image');
 
-      directive.show();
-
-      $scope.editItemJson(0)
-        .then(function() {
-          expect($scope.selectedTemplates.length).to.equal(1);
-          expect($scope.selectedTemplates[0]["duration"]).to.equal(20);
-          expect($scope.selectedTemplates[0]["play-until-done"]).to.be.false;
-          expect($scope.selectedTemplates[0]["transition-type"]).to.equal("slideFromTop");
-
-          expect($scope.selectedTemplates[0]["tagName"]).to.equal("rise-text");
-          expect($scope.selectedTemplates[0].attributes).to.deep.equal({
-            "id": "text2",
-            "value": "Updated"
-          });
-
-          $scope.save.should.have.been.called;
-
-          done();
-        });
-
-      $modal.open.should.have.been.calledWith({
-        templateUrl: 'partials/template-editor/components/playlist-item-json-modal.html',
-        windowClass: 'madero-style',
-        size: 'md',
-        controller: 'PlaylistItemJsonController',
-        resolve: {
-          item: sinon.match.func
-        }
+      expect($scope.selectedTemplates[0]).to.deep.equal({
+        'duration': 10,
+        'play-until-done': true,
+        'transition-type': 'normal',
+        'tagName': 'rise-image'
       });
-
-      var item = $modal.open.getCall(0).args[0].resolve.item();
-
-      expect(item["play-until-done"]).to.equal(false);
-      expect(item["duration"]).to.equal(10);
-      expect(item["transition-type"]).to.equal("fadeIn");
-      expect(item.element["tagName"]).to.equal("rise-text");
-      expect(item.element.attributes["id"]).to.equal("text1");
-      expect(item.element.attributes["value"]).to.equal("Sample");
-
     });
 
   });
