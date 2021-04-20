@@ -4,6 +4,9 @@
     --image-component-list-attributes-height: 105px;
     --image-component-list-help-text-height: 40px;
     --image-component-body-height: calc(100vh - var(--body-height) - var(--component-header-height));
+    &.active-canva-button {
+      --image-component-list-button-bar-height: 165px;
+    }
   }
 }
 
@@ -13,6 +16,9 @@
     --image-component-list-attributes-height: 110px;
     --image-component-list-help-text-height: 40px;
     --image-component-body-height: calc(100vh - var(--body-height));
+    &.active-canva-button {
+      --image-component-list-button-bar-height: 170px;
+    }
   }
 }
 

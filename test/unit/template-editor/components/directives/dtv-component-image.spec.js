@@ -8,7 +8,8 @@ describe('directive: TemplateComponentImage', function() {
     baseImageFactory,
     logoImageFactory,
     storageManagerFactory,
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.sandbox.create(),
+    fileDownloader = sandbox.stub();
 
   beforeEach(function() {
     factory = { selected: { id: 'TEST-ID' } };
@@ -68,6 +69,9 @@ describe('directive: TemplateComponentImage', function() {
           }
         });
       };
+    });
+    $provide.factory('fileDownloader', function() {
+      return fileDownloader;
     });
   }));
 
@@ -455,6 +459,43 @@ describe('directive: TemplateComponentImage', function() {
       directive.show();
 
       expect($scope.isEditingLogo()).be.false;
+    });
+  });
+
+  describe('onDesignPublished:', function() {
+    it('should download canva file and update canvaUploadList', function(done) {
+      var file = {};
+      fileDownloader.resolves(file);
+
+      var options = {
+        exportUrl: 'http://localhost/image.png',
+        designId: '123',
+        designTitle: 'title'
+      };     
+      $scope.onDesignPublished(options);
+
+      setTimeout(function() {
+        fileDownloader.should.have.been.calledWith(options.exportUrl,'canva/title_123.png');
+        expect($scope.canvaUploadList).to.deep.equal([file]);
+        done();
+      });
+    });
+
+    it('should handle title not provided', function(done) {
+      var file = {};
+      fileDownloader.resolves(file);
+
+      var options = {
+        exportUrl: 'http://localhost/image.png',
+        designId: '123',
+      };     
+      $scope.onDesignPublished(options);
+
+      setTimeout(function() {
+        fileDownloader.should.have.been.calledWith(options.exportUrl,'canva/123.png');
+        expect($scope.canvaUploadList).to.deep.equal([file]);
+        done();
+      });
     });
   });
 

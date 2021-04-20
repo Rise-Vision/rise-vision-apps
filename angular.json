@@ -297,6 +297,7 @@
               "src/scripts/common/directives/dtv-weekly-templates.js",
 
               "src/scripts/common/services/svc-cached-request.js",
+              "src/scripts/common/services/svc-file-downloader.js",
               "src/scripts/common/services/svc-gadgets-api.js",
               "src/scripts/common/services/svc-resource-loader.js",
               "src/scripts/common/services/svc-company-assets-factory.js",
