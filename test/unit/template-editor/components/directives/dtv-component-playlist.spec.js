@@ -153,7 +153,7 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.registerDirective).to.have.been.called;
 
     expect($scope.playlistComponents).to.be.an('array');
-    expect($scope.addVisualComponents).to.be.true;
+    expect($scope.addVisualComponents).to.be.false;
 
     expect($scope.getComponentByType).to.be.a('function');
     expect($scope.addPlaylistItem).to.be.a('function');
