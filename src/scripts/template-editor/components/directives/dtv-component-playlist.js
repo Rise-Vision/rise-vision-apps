@@ -21,7 +21,7 @@ angular.module('risevision.template-editor.directives')
             reverse: true
           };
           $scope.playlistComponents = PLAYLIST_COMPONENTS;
-          $scope.addVisualComponents = !!ENV_NAME;
+          $scope.addVisualComponents = !!ENV_NAME && ENV_NAME !== 'TEST';
 
           function _load() {
             var itemsJson = $scope.getAvailableAttributeData($scope.componentId, 'items');
