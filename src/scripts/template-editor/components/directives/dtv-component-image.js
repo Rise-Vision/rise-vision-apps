@@ -7,16 +7,18 @@ angular.module('risevision.template-editor.directives')
   .constant('CANVA_FOLDER', 'canva/')
   .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory',
     'storageManagerFactory', 'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL',
-    'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'baseImageFactory', 'fileDownloader', 'CANVA_FOLDER',
+    'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'baseImageFactory', 'fileDownloader', 'CANVA_FOLDER', 'ENV_NAME',
     function ($log, $q, $timeout, templateEditorFactory, storageManagerFactory,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES,
-      logoImageFactory, baseImageFactory, fileDownloader, CANVA_FOLDER) {
+      logoImageFactory, baseImageFactory, fileDownloader, CANVA_FOLDER, ENV_NAME) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-image.html',
         link: function ($scope, element) {
           var imageFactory = baseImageFactory;
+
+          $scope.showCanvaButton = !!ENV_NAME;
 
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_IMAGE_TYPES;
