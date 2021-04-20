@@ -7,10 +7,10 @@ var PlaylistComponentPage = function() {
   var searchInput = element(by.id('te-playlist-search'));
   var noResultsDiv = element(by.id('te-playlist-no-results'));
   var loadedTemplatesSelector = '(key, value) in templatesFactory.items.list';
-  var selectedTemplatesSelector = '(key, value) in selectedTemplates';
+  var playlistItemsSelector = '(key, value) in playlistItems';
   var firstLoadedTemplate = element(by.repeater(loadedTemplatesSelector).row(0));
-  var selectedTemplates = element.all(by.repeater(selectedTemplatesSelector));
-  var selectedTemplate = element(by.repeater(selectedTemplatesSelector).row(0));
+  var playlistItems = element.all(by.repeater(playlistItemsSelector));
+  var selectedTemplate = element(by.repeater(playlistItemsSelector).row(0));
   var editItemLink = selectedTemplate.element(by.name('edit'));
   var deleteItemLink = selectedTemplate.element(by.name('trash'));
   var durationInput = element(by.id('te-playlist-item-duration'));
@@ -45,8 +45,8 @@ var PlaylistComponentPage = function() {
     return firstLoadedTemplate;
   };
 
-  this.getSelectedTemplates = function () {
-    return selectedTemplates;
+  this.getPlaylistItems = function () {
+    return playlistItems;
   };
 
   this.getEditItemLink = function () {
