@@ -35,7 +35,7 @@ describe('CanvaButtonComponent', () => {
   it('should render Canva button', () => {
     const element: HTMLElement = fixture.nativeElement;
     expect(element.firstElementChild.tagName.toLowerCase()).toEqual('button');
-    expect(element.textContent).toEqual('Design with Canva');
+    expect(element.textContent).toEqual('Design With Canva');
   });
 
   describe('designWithCanva:',()=> {
