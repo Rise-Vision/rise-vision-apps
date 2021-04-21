@@ -6,6 +6,7 @@ describe('directive: templateComponentVideo', function() {
       factory,
       storageManagerFactory,
       testMetadata,
+      $loading,
       $timeout;
 
   beforeEach(function() {
@@ -14,6 +15,13 @@ describe('directive: templateComponentVideo', function() {
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(function ($provide) {
+    $provide.service('$loading', function() {
+      return {
+        start: sinon.stub(),
+        stop: sinon.stub()
+      };
+    });
+
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
@@ -41,6 +49,7 @@ describe('directive: templateComponentVideo', function() {
     };
 
     $timeout = $injector.get('$timeout');
+    $loading = $injector.get('$loading');
     storageManagerFactory = $injector.get('storageManagerFactory');
 
     element = $compile('<template-component-video></template-component-video>')($scope);
@@ -486,6 +495,22 @@ describe('directive: templateComponentVideo', function() {
       expect($scope.selectedFiles.indexOf('file0')).to.equal(0);
     });
 
+  });
+
+  describe('$loading: ', function() {
+    it('should stop spinner', function() {
+      $loading.stop.should.have.been.calledWith('video-file-loader');
+    });
+
+    it('should start spinner', function(done) {
+      $scope.factory.loadingPresentation = true;
+      $scope.$digest();
+      setTimeout(function() {
+        $loading.start.should.have.been.calledWith('video-file-loader');
+
+        done();
+      }, 10);
+    });
   });
 
 });

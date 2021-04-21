@@ -104,6 +104,26 @@ describe('directive: basicUploader', function () {
     expect(element.html()).to.equal('<input type="file">');
   });
 
+  describe('fileList:', function() {
+    it('should watch fileList and upload files when changed', function() {
+      sinon.stub($scope,'uploadSelectedFiles');
+      var newFileList = [{file: 'a.jpg'}];
+      $scope.fileList = newFileList;
+      $scope.$apply();
+      
+      $scope.uploadSelectedFiles.should.have.been.calledWith(newFileList);
+    });
+
+    it('should not try to upload a null list', function() {
+      sinon.stub($scope,'uploadSelectedFiles');
+      $scope.fileList = null;  
+      $scope.$apply();
+      
+      $scope.uploadSelectedFiles.should.not.have.been.called;
+    });
+  });
+
+  
   it('should invoke onAfterAddingFile', function () {
     var file1 = { name: 'test1.jpg', size: 200, slice: function () {} };
     var spy = sinon.spy(FileUploader,'onAfterAddingFile');

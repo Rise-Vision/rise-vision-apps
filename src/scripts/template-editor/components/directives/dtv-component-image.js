@@ -4,18 +4,21 @@ angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_IMAGE_THUMBNAIL',
     'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
-  .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory',
+  .constant('CANVA_FOLDER', 'canva/')
+  .directive('templateComponentImage', ['$log', '$q', '$timeout', '$loading', 'templateEditorFactory',
     'storageManagerFactory', 'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL',
-    'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'baseImageFactory',
-    function ($log, $q, $timeout, templateEditorFactory, storageManagerFactory,
+    'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'baseImageFactory', 'fileDownloader', 'CANVA_FOLDER', 'ENV_NAME',
+    function ($log, $q, $timeout, $loading, templateEditorFactory, storageManagerFactory,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES,
-      logoImageFactory, baseImageFactory) {
+      logoImageFactory, baseImageFactory, fileDownloader, CANVA_FOLDER, ENV_NAME) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-image.html',
         link: function ($scope, element) {
           var imageFactory = baseImageFactory;
+
+          $scope.showCanvaButton = !!ENV_NAME;
 
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_IMAGE_TYPES;
@@ -274,6 +277,20 @@ angular.module('risevision.template-editor.directives')
               });
           }
 
+          $scope.onDesignPublished = function(options) {
+            console.log('Canva result:', options);
+            var filepath = CANVA_FOLDER;
+            filepath += options.designTitle? options.designTitle + '_' : '';
+            filepath += options.designId + '.png';
+            fileDownloader(options.exportUrl, filepath)
+            .then(function(file) {
+              $scope.canvaUploadList = [file];
+            })
+            .catch(function(err) {
+              $log.error('Could not import Canva design.', err);
+            });
+          };
+
           $scope.selectFromStorage = function () {
             $scope.editComponent({
               type: 'rise-storage-selector'
@@ -296,6 +313,14 @@ angular.module('risevision.template-editor.directives')
 
             $scope.selectedImages.splice(newIndex, 0, $scope.selectedImages.splice(oldIndex, 1)[0]);
           };
+
+          $scope.$watch('factory.loadingPresentation', function (loading) {
+            if (loading) {
+              $loading.start('image-file-loader');
+            } else {
+              $loading.stop('image-file-loader');
+            }
+          });
 
         }
       };

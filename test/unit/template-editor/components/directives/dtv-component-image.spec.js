@@ -5,10 +5,12 @@ describe('directive: TemplateComponentImage', function() {
     element,
     factory,
     timeout,
+    $loading,
     baseImageFactory,
     logoImageFactory,
     storageManagerFactory,
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.sandbox.create(),
+    fileDownloader = sandbox.stub();
 
   beforeEach(function() {
     factory = { selected: { id: 'TEST-ID' } };
@@ -20,6 +22,12 @@ describe('directive: TemplateComponentImage', function() {
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(function ($provide) {
+    $provide.service('$loading', function() {
+      return {
+        start: sandbox.stub(),
+        stop: sandbox.stub()
+      };
+    });
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
@@ -69,12 +77,16 @@ describe('directive: TemplateComponentImage', function() {
         });
       };
     });
+    $provide.factory('fileDownloader', function() {
+      return fileDownloader;
+    });
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout, $injector){
     $templateCache.put('partials/template-editor/components/component-image.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
+    $loading = $injector.get('$loading');
     baseImageFactory = $injector.get('baseImageFactory');
     logoImageFactory = $injector.get('logoImageFactory');
     storageManagerFactory = $injector.get('storageManagerFactory');
@@ -458,6 +470,43 @@ describe('directive: TemplateComponentImage', function() {
     });
   });
 
+  describe('onDesignPublished:', function() {
+    it('should download canva file and update canvaUploadList', function(done) {
+      var file = {};
+      fileDownloader.resolves(file);
+
+      var options = {
+        exportUrl: 'http://localhost/image.png',
+        designId: '123',
+        designTitle: 'title'
+      };     
+      $scope.onDesignPublished(options);
+
+      setTimeout(function() {
+        fileDownloader.should.have.been.calledWith(options.exportUrl,'canva/title_123.png');
+        expect($scope.canvaUploadList).to.deep.equal([file]);
+        done();
+      });
+    });
+
+    it('should handle title not provided', function(done) {
+      var file = {};
+      fileDownloader.resolves(file);
+
+      var options = {
+        exportUrl: 'http://localhost/image.png',
+        designId: '123',
+      };     
+      $scope.onDesignPublished(options);
+
+      setTimeout(function() {
+        fileDownloader.should.have.been.calledWith(options.exportUrl,'canva/123.png');
+        expect($scope.canvaUploadList).to.deep.equal([file]);
+        done();
+      });
+    });
+  });
+
   it('selectFromStorage:', function() {
     $scope.selectFromStorage();
 
@@ -506,6 +555,23 @@ describe('directive: TemplateComponentImage', function() {
       $scope.values.transition = 'fadeIn';
       $scope.saveTransition();
       expect(baseImageFactory.setTransition).to.have.been.calledWith('fadeIn');
+    });
+  });
+
+  
+  describe('$loading: ', function() {
+    it('should stop spinner', function() {
+      $loading.stop.should.have.been.calledWith('image-file-loader');
+    });
+
+    it('should start spinner', function(done) {
+      $scope.factory.loadingPresentation = true;
+      $scope.$digest();
+      setTimeout(function() {
+        $loading.start.should.have.been.calledWith('image-file-loader');
+
+        done();
+      }, 10);
     });
   });
 
