@@ -269,16 +269,19 @@
 
 .playlist-action-button-bar {
   height: var(--playlist-button-bar-height);
-  padding: 0 20px;
+  margin: 0 20px;
   background: #FFF;
+
+  border-top: 1px solid #999;
+
+  &.no-selected-templates {
+    height: calc(var(--selector-body-height) - var(--playlist-selected-title-height));
+
+    border: none;
+  }
 
   .select-templates, .add-templates {
     padding: 27px 0 0 0;
-    border-top: 1px solid #999;
-
-    &.no-selected-templates {
-      border: none;
-    }
   }
 
   & > div {
