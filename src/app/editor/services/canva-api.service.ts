@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CanvaTypePicker } from 'src/app/ajs-upgraded-providers';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ export class CanvaApiService {
   private _canvaApiPromise: Promise<any>;
   private _designButtonPromise: Promise<CanvaButtonApi>;
 
-  constructor() {}
+  constructor(private canvaTypePicker: CanvaTypePicker) {}
 
   loadCanvaApi() {
     if (this._canvaApiPromise) {
@@ -47,11 +48,16 @@ export class CanvaApiService {
 
   createDesign() {
     const promise = new Promise((resolve, reject) => {
-      this.initializeDesignButtonApi().then(api => {
-        console.log('Canva DesignButton API ready');
+      Promise.all([this.initializeDesignButtonApi(),this.canvaTypePicker()])
+      .then((result: Array<any>) => {
+        const api: CanvaButtonApi = result[0];
+        const designType: string = result[1];
         api.createDesign({
           design: {
-            type: 'Logo',
+            type: designType,
+          },
+          editor: {
+            publishLabel: 'Save'
           },
           onDesignPublish: function (options) {
             resolve(options);
@@ -60,9 +66,9 @@ export class CanvaApiService {
             reject('closed');
           },
         });
-      });      
+      })
+      .catch(reject);
     });
     return promise;
   }
-
 }
