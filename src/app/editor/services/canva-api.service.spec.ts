@@ -1,12 +1,20 @@
 import { TestBed } from '@angular/core/testing';
+import { CanvaTypePicker } from 'src/app/ajs-upgraded-providers';
 
 import { CanvaApiService } from './canva-api.service';
 
 describe('CanvaApiService', () => {
   let service: CanvaApiService;
+  let mockCanvaTypePicker: CanvaTypePicker;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    mockCanvaTypePicker = jasmine.createSpy().and.resolveTo('Logo');
+    
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: CanvaTypePicker, useValue: mockCanvaTypePicker}
+      ]
+    });
     service = TestBed.inject(CanvaApiService);
   });
 
