@@ -31,13 +31,13 @@ describe(" controller: canvaTypePickerController", function() {
   });
 
   describe("ok:", function() {
-    it("should close modal and resolve default desing type",function(){
+    it("should close modal and resolve default design type",function(){
       $scope.ok();
       $scope.$digest();
       $modalInstance.close.should.have.been.calledWith("Flyer");
     });
 
-    it("should close modal and resolve updated desing type",function(){
+    it("should close modal and resolve updated design type",function(){
       $scope.designType = "Logo";      
       $scope.ok();
       $scope.$digest();
