@@ -1,15 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvaTypePicker } from 'src/app/ajs-upgraded-providers';
-
 import { CanvaApiService } from './canva-api.service';
 
 describe('CanvaApiService', () => {
   let service: CanvaApiService;
-  let mockCanvaTypePicker: CanvaTypePicker;
+  let mockCanvaTypePicker: any;
 
   beforeEach(() => {
     mockCanvaTypePicker = jasmine.createSpy().and.resolveTo('Logo');
-    
+
     TestBed.configureTestingModule({
       providers: [
         {provide: CanvaTypePicker, useValue: mockCanvaTypePicker}
@@ -107,28 +106,47 @@ describe('CanvaApiService', () => {
       spyOn(service,'initializeDesignButtonApi').and.resolveTo(mockCanvaButtonApi);
     });
 
-    it('should resolve on design published', (done) => {
+    it('should use provided canva type and resolve on design published', (done) => {
       const promise = service.createDesign();
 
       setTimeout(() => {
-        expect(mockCanvaButtonApi.createDesign).toHaveBeenCalled;
+        expect(mockCanvaButtonApi.createDesign).toHaveBeenCalled();
+        expect(mockCanvaTypePicker).toHaveBeenCalled();
+
+        const createDesignArgs = mockCanvaButtonApi.createDesign.calls.mostRecent().args[0];
+        expect(createDesignArgs.design.type).toEqual('Logo');
+        expect(createDesignArgs.editor.publishLabel).toEqual('Save');
+        
         promise.then(result => {
           expect(result).toEqual('result');
           done();
         });
-        mockCanvaButtonApi.createDesign.calls.mostRecent().args[0].onDesignPublish('result');
+        createDesignArgs.onDesignPublish('result');
       });
     });
 
     it('should reject on design closed', (done) => {
       const promise = service.createDesign();
       setTimeout(() => {
-        expect(mockCanvaButtonApi.createDesign).toHaveBeenCalled;
+        expect(mockCanvaButtonApi.createDesign).toHaveBeenCalled();
+        expect(mockCanvaTypePicker).toHaveBeenCalled();
         promise.catch(err => {
           expect(err).toEqual('closed');
           done();
         });
         mockCanvaButtonApi.createDesign.calls.mostRecent().args[0].onDesignClose();
+      });
+    });
+
+    it('should reject on canva type picker closed', (done) => {
+      (<jasmine.Spy> mockCanvaTypePicker).and.rejectWith('dismissed');
+
+      const promise = service.createDesign();
+      
+      expect(mockCanvaTypePicker).toHaveBeenCalled();
+      promise.catch(err => {
+        expect(err).toEqual('dismissed');
+        done();
       });
     });
   });

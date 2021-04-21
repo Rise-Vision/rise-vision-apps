@@ -66,7 +66,8 @@ export class CanvaApiService {
             reject('closed');
           },
         });
-      });      
+      })
+      .catch(reject);
     });
     return promise;
   }
