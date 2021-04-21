@@ -5,6 +5,7 @@ describe('directive: TemplateComponentImage', function() {
     element,
     factory,
     timeout,
+    $loading,
     baseImageFactory,
     logoImageFactory,
     storageManagerFactory,
@@ -21,6 +22,12 @@ describe('directive: TemplateComponentImage', function() {
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(function ($provide) {
+    $provide.service('$loading', function() {
+      return {
+        start: sandbox.stub(),
+        stop: sandbox.stub()
+      };
+    });
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
@@ -79,6 +86,7 @@ describe('directive: TemplateComponentImage', function() {
     $templateCache.put('partials/template-editor/components/component-image.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
+    $loading = $injector.get('$loading');
     baseImageFactory = $injector.get('baseImageFactory');
     logoImageFactory = $injector.get('logoImageFactory');
     storageManagerFactory = $injector.get('storageManagerFactory');
@@ -547,6 +555,23 @@ describe('directive: TemplateComponentImage', function() {
       $scope.values.transition = 'fadeIn';
       $scope.saveTransition();
       expect(baseImageFactory.setTransition).to.have.been.calledWith('fadeIn');
+    });
+  });
+
+  
+  describe('$loading: ', function() {
+    it('should stop spinner', function() {
+      $loading.stop.should.have.been.calledWith('image-file-loader');
+    });
+
+    it('should start spinner', function(done) {
+      $scope.factory.loadingPresentation = true;
+      $scope.$digest();
+      setTimeout(function() {
+        $loading.start.should.have.been.calledWith('image-file-loader');
+
+        done();
+      }, 10);
     });
   });
 

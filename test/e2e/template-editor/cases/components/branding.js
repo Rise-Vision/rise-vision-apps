@@ -142,6 +142,8 @@ var BrandingComponentScenarios = function () {
 
       describe('storage',function(){
         it('should load Storage page', function () {
+          helper.waitDisappear(imageComponentPage.getImageFileLoader(), 'Image File Loader');
+
           helper.wait(imageComponentPage.getStorageButtonMain(), 'Storage Button Main');
           helper.clickWhenClickable(imageComponentPage.getStorageButtonMain(), 'Storage Button Main');
           browser.sleep(1000);

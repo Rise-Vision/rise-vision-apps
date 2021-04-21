@@ -20,6 +20,7 @@ var ImageComponentPage = function() {
   var uploadInputStorage = element(by.id('storage-selector-uploader'));
   var uploadPanelStorage = element(by.id('upload-panel-storage-selector-uploader'));
   var emptyListContainer = element(by.css('.image-component-list .item-list-empty'));
+  var imageFileLoader = element(by.xpath('//div[@spinner-key="image-file-loader"]'));
 
   this.getSelectedImagesMain = function () {
     return selectedImagesMain;
@@ -83,6 +84,10 @@ var ImageComponentPage = function() {
 
   this.getEmptyListContainer = function () {
     return emptyListContainer;
+  };
+
+  this.getImageFileLoader = function() {
+    return imageFileLoader;
   };
 
   this.getSelectedImagesTitles = function() {
