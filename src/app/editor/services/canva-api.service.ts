@@ -56,6 +56,9 @@ export class CanvaApiService {
           design: {
             type: designType,
           },
+          editor: {
+            publishLabel: 'Save'
+          },
           onDesignPublish: function (options) {
             resolve(options);
           },
