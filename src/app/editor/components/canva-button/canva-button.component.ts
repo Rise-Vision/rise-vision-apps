@@ -15,12 +15,11 @@ export class CanvaButtonComponent {
   constructor(private canvaApi: CanvaApiService) { }
 
   designWithCanva(): void {
-    this.canvaApi.createDesign();
-    // this.canvaApi.createDesign().then((options) => {
-    //   this.designPublished.emit(options);
-    // }).catch(()=>{
-    //   // Canva was likely closed - prevents Unhandled Promise rejection  
-    // });
+    this.canvaApi.createDesign().then((options) => {
+      this.designPublished.emit(options);
+    }).catch(()=>{
+      // Canva was likely closed - prevents Unhandled Promise rejection  
+    });
   }
 
 }

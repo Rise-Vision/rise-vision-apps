@@ -48,7 +48,7 @@ export class CanvaApiService {
 
   createDesign() {
     const promise = new Promise((resolve, reject) => {
-      Promise.all([this.initializeDesignButtonApi(),this.pickDesingType()])
+      Promise.all([this.initializeDesignButtonApi(),this.canvaTypePicker()])
       .then((result: Array<any>) => {
         const api: CanvaButtonApi = result[0];
         const designType: string = result[1];
@@ -67,22 +67,4 @@ export class CanvaApiService {
     });
     return promise;
   }
-
-  pickDesingType() {
-    const promise = new Promise<string>((resolve, reject) => {
-      this.canvaTypePicker('Assign license?',
-      'Do you want to assign licenses to the selected displays?',
-      'Yes',
-      'No',
-      'madero-style centered-modal',
-      'partials/components/confirm-modal/madero-confirm-modal.html',
-      'sm')
-      .then(() => {
-        resolve('Logo');
-      })
-      .catch(reject);
-    });
-    return promise;
-  }
-
 }

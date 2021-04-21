@@ -241,6 +241,9 @@
               "src/scripts/components/confirm-modal/ctr-confirm-modal.js",
               "src/scripts/components/confirm-modal/svc-confirm-modal.js",
 
+              "src/scripts/components/canva-type-picker/ctr-canva-type-picker.js",
+              "src/scripts/components/canva-type-picker/svc-canva-type-picker.js",
+
               "src/scripts/components/stop-event/dtv-stop-event.js",
 
               "src/scripts/components/timeline/app.js",

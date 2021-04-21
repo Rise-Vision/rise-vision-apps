@@ -17,6 +17,7 @@ angular.module('risevision.apps', [
     'risevision.common.components.search-filter',
     'risevision.common.components.scrolling-list',
     'risevision.common.components.focus-me',
+    'risevision.common.components.canva-type-picker',
     'risevision.common.components.confirm-modal',
     'risevision.common.components.timeline',
     'risevision.common.components.timeline-basic',
