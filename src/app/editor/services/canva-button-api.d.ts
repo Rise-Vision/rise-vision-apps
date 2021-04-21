@@ -14,7 +14,7 @@ type CanvaButtonApi = {
       fileType?: 'jpg' | 'jpeg' | 'pdf' | 'png',
     },
     onDesignOpen?: (opts: { designId: string }) => void,
-    onDesignPublish?: (opts: { exportUrl: string, designId: string }) => void,
+    onDesignPublish?: (opts: { exportUrl: string, designId: string, designTitle: string }) => void,
     onDesignClose?: () => void,
   }) => void;
   editDesign: (opts: {
