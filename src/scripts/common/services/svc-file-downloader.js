@@ -13,7 +13,9 @@ angular.module('risevision.apps.services')
       xhr.onload = function () {
         if (xhr.status === 200) {
           var blob = xhr.response;
-          var file = new File([blob], filepath);
+          var file = new File([blob], filepath, {
+            type: xhr.getResponseHeader('content-type')
+          });
           deferred.resolve(file);  
         } else {
           deferred.reject({

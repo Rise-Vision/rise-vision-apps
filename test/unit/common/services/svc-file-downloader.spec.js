@@ -27,10 +27,11 @@ describe('service: file downloader:', function() {
     var filepath = 'folder/file.jpg';
     var promise = fileDownloader('http://localhost/image.jpg',filepath);
 
-    sandbox.server.requests[0].respond(200, {}, 'Image data');
+    sandbox.server.requests[0].respond(200, {'Content-Type': 'image/png'}, 'Image data');
 
     promise.then(function(file) {
       expect(file.name).to.equal(filepath);
+      expect(file.type).to.equal('image/png');
 
       var reader = new FileReader();
       reader.onload = function(event) {
