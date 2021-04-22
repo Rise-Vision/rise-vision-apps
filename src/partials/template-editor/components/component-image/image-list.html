@@ -70,7 +70,7 @@
       <strong ng-if="isEditingLogo()">Upload A Logo</strong>
     </label>
   </div>
-  <div class="edit-in-canva u_margin-sm-top" ng-if="showCanvaButton">
+  <div class="edit-in-canva u_margin-sm-top">
     <canva-button (design-published)="onDesignPublished($event)" [disabled]="isUploading"></canva-button>
   </div>
   <div class="select-from-storage">
