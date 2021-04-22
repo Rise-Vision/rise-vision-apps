@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { downgradeComponent } from '@angular/upgrade/static';
 import * as angular from 'angular';
 import { CanvaApiService } from '../../services/canva-api.service';
@@ -10,6 +10,7 @@ import { CanvaApiService } from '../../services/canva-api.service';
 })
 export class CanvaButtonComponent {
 
+  @Input() disabled: boolean;
   @Output() designPublished = new EventEmitter<any>();
 
   constructor(private canvaApi: CanvaApiService) { }

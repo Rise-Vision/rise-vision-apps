@@ -71,7 +71,7 @@
     </label>
   </div>
   <div class="edit-in-canva u_margin-sm-top" ng-if="showCanvaButton">
-    <canva-button (design-published)="onDesignPublished($event)"></canva-button>
+    <canva-button (design-published)="onDesignPublished($event)" [disabled]="isUploading"></canva-button>
   </div>
   <div class="select-from-storage">
     <button id="image-list-storage-button" class="btn btn-default btn-block" ng-click="selectFromStorage()" ng-disabled="isUploading">

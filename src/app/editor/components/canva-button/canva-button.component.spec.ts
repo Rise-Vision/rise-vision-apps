@@ -65,4 +65,20 @@ describe('CanvaButtonComponent', () => {
       });
     });
   });
+
+  describe('disabled:', () => {
+    it('should disable the button', () => {
+      const element: HTMLElement = fixture.nativeElement;
+      component.disabled = true;
+      fixture.detectChanges();
+      expect(element.firstElementChild['disabled']).toBeTrue();
+    });
+
+    it('should enable the button', () => {
+      const element: HTMLElement = fixture.nativeElement;
+      component.disabled = false;
+      fixture.detectChanges();
+      expect(element.firstElementChild['disabled']).toBeFalse();
+    });
+  });
 });
