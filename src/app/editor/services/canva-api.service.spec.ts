@@ -1,17 +1,20 @@
 import { TestBed } from '@angular/core/testing';
-import { CanvaTypePicker } from 'src/app/ajs-upgraded-providers';
+import { AnalyticsFactory, CanvaTypePicker } from 'src/app/ajs-upgraded-providers';
 import { CanvaApiService } from './canva-api.service';
 
 describe('CanvaApiService', () => {
   let service: CanvaApiService;
   let mockCanvaTypePicker: any;
+  let mockAnalyticsFactory: any;
 
   beforeEach(() => {
     mockCanvaTypePicker = jasmine.createSpy().and.resolveTo('Logo');
+    mockAnalyticsFactory = jasmine.createSpyObj(['track']);
 
     TestBed.configureTestingModule({
       providers: [
-        {provide: CanvaTypePicker, useValue: mockCanvaTypePicker}
+        {provide: CanvaTypePicker, useValue: mockCanvaTypePicker},
+        {provide: AnalyticsFactory, useValue: mockAnalyticsFactory}        
       ]
     });
     service = TestBed.inject(CanvaApiService);
@@ -112,16 +115,19 @@ describe('CanvaApiService', () => {
       setTimeout(() => {
         expect(mockCanvaButtonApi.createDesign).toHaveBeenCalled();
         expect(mockCanvaTypePicker).toHaveBeenCalled();
+        expect(mockAnalyticsFactory.track).toHaveBeenCalledWith('Canva Design Started');
 
         const createDesignArgs = mockCanvaButtonApi.createDesign.calls.mostRecent().args[0];
         expect(createDesignArgs.design.type).toEqual('Logo');
         expect(createDesignArgs.editor.publishLabel).toEqual('Save');
         
+        const publishResult :any = {designId:'id', designTitle: 'title', exportUrl: 'url'}; 
         promise.then(result => {
-          expect(result).toEqual('result');
+          expect(mockAnalyticsFactory.track).toHaveBeenCalledWith('Canva Design Published',{designId:'id', designTitle: 'title'});
+          expect(result).toEqual(publishResult);
           done();
         });
-        createDesignArgs.onDesignPublish('result');
+        createDesignArgs.onDesignPublish(publishResult);
       });
     });
 
@@ -130,7 +136,10 @@ describe('CanvaApiService', () => {
       setTimeout(() => {
         expect(mockCanvaButtonApi.createDesign).toHaveBeenCalled();
         expect(mockCanvaTypePicker).toHaveBeenCalled();
+        expect(mockAnalyticsFactory.track).toHaveBeenCalledWith('Canva Design Started');
+
         promise.catch(err => {
+          expect(mockAnalyticsFactory.track).toHaveBeenCalledTimes(1);
           expect(err).toEqual('closed');
           done();
         });
