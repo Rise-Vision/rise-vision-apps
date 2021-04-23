@@ -39,7 +39,7 @@ export class CanvaApiService {
     } else {      
       this._designButtonPromise = this.loadCanvaApi().then(canvaApi => {
         return canvaApi.DesignButton.initialize({
-          apiKey: 'EwLWFws4Qjpa-n_2ZJgBMQbz',
+          apiKey: '_Ow6FgJpQ3S_k0Mgyo1UX2nM',
         });
       });       
       return this._designButtonPromise;
