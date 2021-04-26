@@ -24,7 +24,7 @@ describe(" controller: canvaTypePickerController", function() {
   
   it("should exist",function(){
     expect($scope).to.be.truely;
-    expect($scope.designType).to.equal("Flyer");
+    expect($scope.designType).to.equal("Presentation");
 
     expect($scope.ok).to.be.a("function");
     expect($scope.dismiss).to.be.a("function");
@@ -34,7 +34,7 @@ describe(" controller: canvaTypePickerController", function() {
     it("should close modal and resolve default design type",function(){
       $scope.ok();
       $scope.$digest();
-      $modalInstance.close.should.have.been.calledWith("Flyer");
+      $modalInstance.close.should.have.been.calledWith("Presentation");
     });
 
     it("should close modal and resolve updated design type",function(){

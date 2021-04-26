@@ -5,7 +5,7 @@ angular.module('risevision.common.components.canva-type-picker', [
   ])
   .controller('canvaTypePickerController', ['$scope', '$modalInstance',
     function ($scope, $modalInstance) {
-      $scope.designType = 'Flyer';
+      $scope.designType = 'Presentation';
 
       $scope.ok = function () {
         $modalInstance.close($scope.designType);
