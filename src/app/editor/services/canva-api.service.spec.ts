@@ -88,7 +88,7 @@ describe('CanvaApiService', () => {
     it('should initialize button api',(done) => {
       service.initializeDesignButtonApi().then(() => {
         expect(mockCanvaApi.DesignButton.initialize).toHaveBeenCalledWith({
-          apiKey: 'EwLWFws4Qjpa-n_2ZJgBMQbz',
+          apiKey: '_Ow6FgJpQ3S_k0Mgyo1UX2nM',
         });
         done();
       });
