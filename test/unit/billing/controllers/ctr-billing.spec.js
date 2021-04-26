@@ -147,4 +147,32 @@ describe('controller: BillingCtrl', function () {
       expect($scope.isSuspended({ status: 'active' })).to.be.false;
     });
   });
+
+  describe('isWriteOff:', function() {
+    it('should return false if not paid', function () {
+      expect($scope.isWriteOff()).to.be.false;
+      expect($scope.isWriteOff({})).to.be.false;
+      expect($scope.isWriteOff({ status: 'unpaid' })).to.be.false;
+      expect($scope.isWriteOff({
+        status: 'unpaid',
+        write_off_amount: 500
+      })).to.be.false;
+    });
+
+    it('should return false if write off amount 0', function () {
+      expect($scope.isWriteOff({
+        status: 'paid',
+        write_off_amount: 0
+      })).to.be.false;
+    });
+
+    it('should return true if write off amount is greater than 0', function () {
+      expect($scope.isWriteOff({
+        status: 'paid',
+        write_off_amount: 500
+      })).to.be.true;
+    });
+
+  });
+
 });

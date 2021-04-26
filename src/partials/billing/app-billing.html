@@ -138,7 +138,7 @@
               Invoice #{{item.invoice.id}}
             </td>
             <td class="table-body__cell">
-              ${{(item.invoice.amount_due || item.invoice.total) / 100 | number:2}}
+              ${{(item.invoice.amount_due || item.invoice.total) / 100 | number:2}}<span class="text-danger" ng-show="isWriteOff(item.invoice)">&nbsp;(Write off)</span>
             </td>
             <td class="table-body__cell">
               <a class="madero-link u_clickable" ng-click="invoiceFactory.downloadInvoice(item.invoice.id)">

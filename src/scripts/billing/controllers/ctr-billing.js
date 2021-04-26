@@ -58,5 +58,13 @@ angular.module('risevision.apps.billing.controllers')
         return subscription.status === 'suspended';
       };
 
+      $scope.isWriteOff = function (invoice) {
+        if (!invoice || invoice.status !== 'paid') {
+          return false;
+        } else {
+          return invoice.write_off_amount > 0;
+        }
+      };
+
     }
   ]);
