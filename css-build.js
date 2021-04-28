@@ -9,7 +9,7 @@ var colors = require("colors");
 
 var paths = {
   sass: ["./src/scss/**/*.scss", "./src/scss/*.scss"],
-  appSass: "./src/scss/app.scss",
+  appSass: "./src/scss/rise.scss",
   alignmentSass: "./src/scss/ui-components/alignment.scss",
   tmpFonts: "./src/tmp/fonts",
   tmpCss: "./src/tmp/css",
