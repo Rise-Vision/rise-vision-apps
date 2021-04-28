@@ -61,6 +61,8 @@ angular.module('risevision.template-editor.directives')
           });
 
           function _reset() {
+            $scope.resetPanelHeader();
+
             $scope.folderItems = [];
             $scope.selectedItems = [];
             $scope.search.selectAll = false;
