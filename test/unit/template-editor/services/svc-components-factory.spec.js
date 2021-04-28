@@ -111,6 +111,7 @@ describe('service: componentsFactory:', function() {
       expect(directive.type).to.equal("rise-playlist");
       expect(directive.iconType).to.equal("streamline");
       expect(directive.icon).to.exist;
+      expect(directive.panel).to.equal(".rise-playlist-container");
     });
 
     it('rise-data-rss', function() {

@@ -7,6 +7,7 @@ describe('directive: TemplateAttributeEditor', function() {
       timeout,
       $window,
       blueprintFactory,
+      templateEditorUtils,
       sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
@@ -23,15 +24,31 @@ describe('directive: TemplateAttributeEditor', function() {
       return factory;
     });
 
-    blueprintFactory = {};
+    var elementStub = {
+      hide: sandbox.stub(),
+      show: sandbox.stub(),
+      addClass: sandbox.stub(),
+      removeClass: sandbox.stub()
+    };
+
+    $provide.service('templateEditorUtils', function() {
+      return {
+        elementStub: elementStub,
+        findElement: sandbox.stub().returns(elementStub)
+      };
+    });
 
     $provide.service('blueprintFactory', function() {
-      return blueprintFactory;
+      return {};
     });
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout, $injector){
     $window = $injector.get('$window');
+
+    templateEditorUtils = $injector.get('templateEditorUtils');
+    blueprintFactory = $injector.get('blueprintFactory');
+
     sandbox.spy($window, 'addEventListener');
     sandbox.spy($window, 'removeEventListener');
 
@@ -149,10 +166,6 @@ describe('directive: TemplateAttributeEditor', function() {
         var component = {
           directive: {
             type: 'rise-text',
-            element: {
-              hide: function() {},
-              show: sandbox.stub()
-            },
             show: sandbox.stub()
           }
         };
@@ -161,7 +174,6 @@ describe('directive: TemplateAttributeEditor', function() {
 
         expect($scope.factory.selected).to.equal(component);
 
-        expect(component.directive.element.show).to.have.been.called;
         expect(component.directive.show).to.have.been.called;
 
         $scope.showNextPage.should.have.been.calledWith(component);
@@ -172,7 +184,6 @@ describe('directive: TemplateAttributeEditor', function() {
           type: 'rise-text',
           element: {
             hide: function() {},
-            show: sandbox.stub()
           },
           show: sandbox.stub()
         };
@@ -186,7 +197,6 @@ describe('directive: TemplateAttributeEditor', function() {
 
         expect($scope.factory.selected).to.equal(component);
 
-        expect(directive.element.show).to.have.been.called;
         expect(directive.show).to.have.been.called;
 
         $scope.showNextPage.should.have.been.calledWith(component);
@@ -621,13 +631,73 @@ describe('directive: TemplateAttributeEditor', function() {
 
       expect($scope.pages).to.deep.equal(['selector1', 'selector2']);
     });
+
+    it('_swapToLeft:', function(done) {
+      var directive1 = {
+        type: 'rise-test-1',
+        panel: 'panel1',
+        element: {
+          hide: sandbox.stub(),
+          show: sandbox.stub()
+        },
+        show: sandbox.stub()
+      };
+      var directive2 = {
+        type: 'rise-test-2',
+        panel: 'panel2',
+        element: {
+          hide: sandbox.stub(),
+          show: sandbox.stub()
+        },
+        show: sandbox.stub()
+      };
+
+      var component1 = {
+        type: 'rise-test-1'
+      };
+      var component2 = {
+        type: 'rise-test-2'
+      };
+
+      $scope.registerDirective(directive1);
+      $scope.registerDirective(directive2);
+
+      $scope.pages.push(component1);
+
+      $scope.showNextPage(component2);
+
+      directive1.element.hide.should.have.been.called;
+      templateEditorUtils.findElement.should.have.been.calledWith('panel1');
+
+      directive2.element.show.should.have.been.called;
+      templateEditorUtils.findElement.should.have.been.calledWith('panel2');
+
+      templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-right');
+      templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-left');
+
+      templateEditorUtils.elementStub.addClass.should.have.been.calledWith('attribute-editor-show-from-right');
+
+      setTimeout(function() {
+        templateEditorUtils.elementStub.hide.should.have.been.called;
+        templateEditorUtils.elementStub.show.should.have.been.called;
+
+        done();
+      }, 10);
+    });
+
   });
 
   describe('showPreviousPage:', function () {
+    beforeEach(function() {
+      sandbox.stub($scope, 'backToList');
+    });
+
     it('should hide the first page', function () {
       $scope.showNextPage('selector1');
 
       expect($scope.showPreviousPage()).to.be.false;
+
+      $scope.backToList.should.have.been.called;
 
       expect($scope.pages).to.have.length(0);
     });
@@ -638,7 +708,66 @@ describe('directive: TemplateAttributeEditor', function() {
 
       expect($scope.showPreviousPage()).to.be.true;
 
+      $scope.backToList.should.not.have.been.called;
+
+      expect($scope.factory.selected).to.equal('selector1');
+
       expect($scope.pages).to.deep.equal(['selector1']);
     });
+
+    it('_swapToRight:', function(done) {
+      var directive1 = {
+        type: 'rise-test-1',
+        panel: 'panel1',
+        element: {
+          hide: sandbox.stub(),
+          show: sandbox.stub()
+        },
+        show: sandbox.stub()
+      };
+      var directive2 = {
+        type: 'rise-test-2',
+        panel: 'panel2',
+        element: {
+          hide: sandbox.stub(),
+          show: sandbox.stub()
+        },
+        show: sandbox.stub()
+      };
+
+      var component1 = {
+        type: 'rise-test-1'
+      };
+      var component2 = {
+        type: 'rise-test-2'
+      };
+
+      $scope.registerDirective(directive1);
+      $scope.registerDirective(directive2);
+
+      $scope.pages.push(component1);
+      $scope.pages.push(component2);
+
+      $scope.showPreviousPage();
+
+      directive1.element.show.should.have.been.called;
+      templateEditorUtils.findElement.should.have.been.calledWith('panel1');
+
+      directive2.element.hide.should.have.been.called;
+      templateEditorUtils.findElement.should.have.been.calledWith('panel2');
+
+      templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-right');
+      templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-left');
+
+      templateEditorUtils.elementStub.addClass.should.have.been.calledWith('attribute-editor-show-from-left');
+
+      setTimeout(function() {
+        templateEditorUtils.elementStub.hide.should.have.been.called;
+        templateEditorUtils.elementStub.show.should.have.been.called;
+
+        done();
+      }, 10);
+    });
+
   });
 });

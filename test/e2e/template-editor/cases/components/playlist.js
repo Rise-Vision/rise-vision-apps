@@ -35,6 +35,8 @@ var PlaylistComponentScenarios = function () {
       it('should open properties of Playlist Component', function () {
         templateEditorPage.selectComponent(componentLabel);
 
+        helper.wait(playlistComponentPage.getSelectTemplatesButton(), 'Select Button');
+
         expect(playlistComponentPage.getSelectTemplatesButton().isDisplayed()).to.eventually.be.true;
       });
 
@@ -86,7 +88,7 @@ var PlaylistComponentScenarios = function () {
         helper.waitDisappear(playlistComponentPage.getTemplatesLoaderSpinner(), 'Spinner');
 
         browser.sleep(500);
-        expect(playlistComponentPage.getSelectedTemplates().count()).to.eventually.equal(1);
+        expect(playlistComponentPage.getPlaylistItems().count()).to.eventually.equal(1);
       });
 
       it('should open playlist item properties', function () {
@@ -115,7 +117,7 @@ var PlaylistComponentScenarios = function () {
         browser.sleep(1000);
         helper.clickWhenClickable(playlistComponentPage.getDeleteItemLink(), 'Click Delete');
         browser.sleep(1000);
-        expect(playlistComponentPage.getSelectedTemplates().count()).to.eventually.equal(0);
+        expect(playlistComponentPage.getPlaylistItems().count()).to.eventually.equal(0);
 
         //wait for auto-saved to finish to prevent failures in "after all" hook in the template-editor.cases
         templateEditorPage.waitForAutosave();

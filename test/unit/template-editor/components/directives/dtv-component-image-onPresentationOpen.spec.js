@@ -81,7 +81,10 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
 
     directive.onPresentationOpen();
 
-    expect($scope.fileExistenceChecksCompleted).to.deep.equal({});
+    expect($scope.fileExistenceChecksCompleted).to.deep.equal({
+      component1: false,
+      component2: false
+    });
 
     setTimeout(function() {
       expect($scope.fileExistenceChecksCompleted).to.deep.equal({

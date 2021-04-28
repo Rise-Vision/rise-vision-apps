@@ -265,8 +265,12 @@ angular.module('risevision.template-editor.services')
 
         var component = _componentFor(componentId, false);
 
-        // if the attributeKey is not provided, it returns the full component structure
-        return attributeKey ? component[attributeKey] : component;
+        if (component.element && component.element.attributes) {
+          return attributeKey ? component.element.attributes[attributeKey] : component.element.attributes;
+        } else {
+          // if the attributeKey is not provided, it returns the full component structure
+          return attributeKey ? component[attributeKey] : component;
+        }
       };
 
       factory.setAttributeData = function (componentId, attributeKey, value) {
@@ -276,7 +280,15 @@ angular.module('risevision.template-editor.services')
 
         var component = _componentFor(componentId, true);
 
-        component[attributeKey] = value;
+        if (component.element) {
+          if (!component.element.attributes) {
+            component.element.attributes = {};
+          }
+
+          component.element.attributes[attributeKey] = value;
+        } else {
+          component[attributeKey] = value;
+        }
       };
 
       factory.getAttributeDataGlobal = function (attributeKey) {
@@ -293,7 +305,13 @@ angular.module('risevision.template-editor.services')
         var attributeData = factory.presentation.templateAttributeData;
         var component;
 
-        if (attributeData.components) {
+        if (componentId.indexOf(' ') !== -1) {
+          var tokens = componentId.split(' ');
+          var playlistId = tokens[0];
+          var playlist = _componentFor(playlistId, updateAttributeData);
+
+          return playlist.items[tokens[1]];
+        } else if (attributeData.components) {
           component = _.find(attributeData.components, {
             id: componentId
           });

@@ -142,6 +142,20 @@ describe('service: templateEditorFactory:', function() {
         done();
       });
     });
+
+    it('should handle failure to create a new presentation', function(done) {
+      sandbox.stub(blueprintFactory, 'getBlueprintCached').returns(Q.reject('error'));
+
+      templateEditorFactory.addFromProduct({})
+        .then(done)
+        .catch(function (err) {
+          console.log(err)
+
+          expect(err).to.equal('error');
+
+          done();
+        });
+    });
   });
 
   describe('isUnsaved: ', function() {
@@ -909,6 +923,38 @@ describe('service: templateEditorFactory:', function() {
       templateEditorFactory.presentation = { templateAttributeData: {} };
     });
 
+    describe('_componentFor', function() {
+      it('should get component if it exists', function() {
+        templateEditorFactory.presentation.templateAttributeData.components = [{id: 'test-id'}];
+
+        expect(templateEditorFactory.getAttributeData('test-id')).to.equal(templateEditorFactory.presentation.templateAttributeData.components[0]);
+      });
+
+      it('should get return a playlist item by index', function() {
+        templateEditorFactory.presentation.templateAttributeData.components = [
+          {
+            id: 'test-id'
+          },
+          {
+            id: 'playlist-1',
+            items: [
+              'playlistitem1',
+              'playlistitem2'
+            ]
+          }
+        ];
+
+        expect(templateEditorFactory.getAttributeData('playlist-1 0')).to.equal('playlistitem1');
+        expect(templateEditorFactory.getAttributeData('playlist-1 1')).to.equal('playlistitem2');
+      });
+    });
+
+    it('should return null if componentId is missing',function() {
+      var data = templateEditorFactory.getAttributeData();
+
+      expect(data).to.be.null;
+    });
+
     it('should get empty attribute data',function() {
       var data = templateEditorFactory.getAttributeData('test-id');
 
@@ -927,12 +973,72 @@ describe('service: templateEditorFactory:', function() {
       expect(data).to.not.be.ok;
     });
 
+    it('should get component property if it exists', function() {
+      templateEditorFactory.presentation.templateAttributeData.components = [{id: 'test-id', property: 'value'}];
+
+      expect(templateEditorFactory.getAttributeData('test-id', 'property')).to.equal('value');
+    });
+
+    it('should get playlist item attributes', function() {
+      templateEditorFactory.presentation.templateAttributeData.components = [
+        {
+          id: 'test-id'
+        },
+        {
+          id: 'playlist-1',
+          items: [
+            {
+              element: {
+                attributes: {
+                  property1: 'value'
+                }
+              }
+            },
+            'playlistitem2'
+          ]
+        }
+      ];
+
+      expect(templateEditorFactory.getAttributeData('playlist-1 0')).to.deep.equal({
+        property1: 'value'
+      });
+    });
+
+    it('should get playlist item attribute if it exists', function() {
+      templateEditorFactory.presentation.templateAttributeData.components = [
+        {
+          id: 'test-id'
+        },
+        {
+          id: 'playlist-1',
+          items: [
+            {
+              element: {
+                attributes: {
+                  property1: 'value'
+                }
+              }
+            },
+            'playlistitem2'
+          ]
+        }
+      ];
+
+      expect(templateEditorFactory.getAttributeData('playlist-1 0', 'property1')).to.equal('value');
+    });
+
   });
 
   describe('setAttributeData', function () {
 
     beforeEach(function(){
       templateEditorFactory.presentation = { templateAttributeData: {} };
+    });
+
+    it('should return null if componentId is missing',function() {
+      var data = templateEditorFactory.setAttributeData();
+
+      expect(data).to.be.null;
     });
 
     it('should set an attribute data value',function() {
@@ -964,6 +1070,46 @@ describe('service: templateEditorFactory:', function() {
       expect(data).to.deep.equal({
         id: 'test-id',
         symbols: 'CADUSD=X|MXNUSD=X'
+      });
+    });
+
+    it('should set playlist item attribute', function() {
+      templateEditorFactory.presentation.templateAttributeData.components = [
+        {
+          id: 'playlist-1',
+          items: [
+            {
+              element: {
+                attributes: {
+                  property1: 'value'
+                }
+              }
+            }
+          ]
+        }
+      ];
+
+      templateEditorFactory.setAttributeData('playlist-1 0', 'property2', 'value2');
+
+      expect(templateEditorFactory.getAttributeData('playlist-1 0', 'property2')).to.equal('value2');
+    });
+
+    it('should initialize attributes', function() {
+      templateEditorFactory.presentation.templateAttributeData.components = [
+        {
+          id: 'playlist-1',
+          items: [
+            {
+              element: {}
+            }
+          ]
+        }
+      ];
+
+      templateEditorFactory.setAttributeData('playlist-1 0', 'property2', 'value2');
+
+      expect(templateEditorFactory.getAttributeData('playlist-1 0')).to.deep.equal({
+        property2: 'value2'
       });
     });
 
