@@ -52,10 +52,6 @@
   "publish": "Publish",
   "required-credentials": "Rise Vision needs access to your Google account to verify who you are",
   "restore": "Restore",
-  "safeDelete": {
-    "message": "Please type DELETE to confirm. This operation cannot be undone!",
-    "title": "Are you sure you want to delete?"
-  },
   "saturday": "Saturday",
   "save": "Save",
   "saveBeforeLeave": "Do you want to save changes before leaving?",

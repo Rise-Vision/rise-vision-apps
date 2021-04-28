@@ -5,13 +5,13 @@ angular.module('risevision.common.header')
     'updateCompany', 'companyId', 'countries', 'REGIONS_CA', 'REGIONS_US',
     'TIMEZONES', 'getCompany', 'regenerateCompanyField', '$loading',
     'humanReadableError', 'userState', 'userAuthFactory', 'deleteCompany',
-    'companyTracker', 'confirmModal', '$modal', '$templateCache',
+    'companyTracker', 'confirmModal', '$modal',
     'COMPANY_INDUSTRY_FIELDS', 'COMPANY_SIZE_FIELDS', 'addressFactory',
     function ($scope, $modalInstance, updateCompany, companyId,
       countries, REGIONS_CA, REGIONS_US, TIMEZONES, getCompany,
       regenerateCompanyField, $loading, humanReadableError,
       userState, userAuthFactory, deleteCompany, companyTracker, confirmModal,
-      $modal, $templateCache, COMPANY_INDUSTRY_FIELDS, COMPANY_SIZE_FIELDS, addressFactory) {
+      $modal, COMPANY_INDUSTRY_FIELDS, COMPANY_SIZE_FIELDS, addressFactory) {
 
       $scope.company = {
         id: companyId
@@ -92,8 +92,13 @@ angular.module('risevision.common.header')
       $scope.deleteCompany = function () {
         _clearErrorMessages();
         var instance = $modal.open({
-          template: $templateCache.get('partials/common-header/safe-delete-modal.html'),
-          controller: 'SafeDeleteModalCtrl'
+          templateUrl: 'partials/common-header/safe-delete-modal.html',
+          controller: 'SafeDeleteModalCtrl',
+          resolve: {
+            name: function() {
+              return $scope.company.name;
+            }
+          }
         });
         instance.result.then(function () {
           $scope.loading = true;

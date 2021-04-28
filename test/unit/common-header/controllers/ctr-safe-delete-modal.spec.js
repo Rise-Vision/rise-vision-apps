@@ -19,6 +19,9 @@ describe("controller: safe delete modal", function() {
         return deferred.promise;
       };
     });
+
+    $provide.value("name", "Company Name");
+
     $translateProvider.useLoader("customLoader");
   }));
 
@@ -42,6 +45,9 @@ describe("controller: safe delete modal", function() {
     
   it("should exist",function(){
     expect($scope).to.be.ok;
+
+    expect($scope.name).to.equal("Company Name");
+
     expect($scope.confirm).to.be.a("function");
     expect($scope.cancel).to.be.a("function");
     expect($scope.dismiss).to.be.a("function");

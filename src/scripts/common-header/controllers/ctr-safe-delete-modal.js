@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('risevision.common.header')
-  .controller('SafeDeleteModalCtrl', ['$scope', '$modalInstance',
-    function ($scope, $modalInstance) {
+  .controller('SafeDeleteModalCtrl', ['$scope', '$modalInstance', 'name',
+    function ($scope, $modalInstance, name) {
+      $scope.name = name;
       $scope.inputText = null;
       $scope.canConfirm = false;
 

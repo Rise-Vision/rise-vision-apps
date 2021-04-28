@@ -6,6 +6,11 @@ describe("controller: company settings", function() {
   beforeEach(module("risevision.common.header"));
   beforeEach(module(function ($provide, $translateProvider) {
     $provide.service("userState",userState);
+    $provide.value('$modal', {
+      open: sinon.stub().returns({
+        result: Q.resolve()
+      })
+    });
     $provide.service("$modalInstance",function(){
       return {
         _dismissed : false,
@@ -45,6 +50,7 @@ describe("controller: company settings", function() {
         return deferred.promise;
       };
     });
+    $provide.value("deleteCompany", sinon.stub().returns(Q.resolve()));
     $provide.service("companyTracker", function() {
       return sinon.stub();
     });
@@ -82,8 +88,8 @@ describe("controller: company settings", function() {
 
   }));
 
-  var $scope, userProfile, userCompany, addressFactory, savedCompany, company, userState, $modalInstance, createCompany,
-  companyTracker, validateAddress, $loading, confirmModalStub, regenerateCompanyFieldStub;
+  var $scope, userProfile, userCompany, addressFactory, savedCompany, company, userState, $modal, $modalInstance, createCompany,
+  companyTracker, deleteCompany, validateAddress, $loading, confirmModalStub, regenerateCompanyFieldStub;
   var isStoreAdmin = true;
   beforeEach(function(){
     createCompany = true;
@@ -150,10 +156,12 @@ describe("controller: company settings", function() {
 
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
+      $modal = $injector.get("$modal");
       $modalInstance = $injector.get("$modalInstance");
       $loading = $injector.get("$loading");
       addressFactory = $injector.get("addressFactory");
       companyTracker = $injector.get("companyTracker");
+      deleteCompany = $injector.get("deleteCompany");
 
       $controller("CompanySettingsModalCtrl", {
         $scope : $scope,
@@ -304,6 +312,63 @@ describe("controller: company settings", function() {
         done();
       },10);
     });
+  });
+
+  describe('deleteCompany:', function() {
+    beforeEach(function() {
+      $loading.start.reset();
+      $loading.stop.reset();
+    });
+
+    it('should open confirm dialog', function() {
+      $scope.company.name = 'Company name';
+
+      $scope.deleteCompany();
+
+      $modal.open.should.have.been.calledWith({
+        templateUrl: 'partials/common-header/safe-delete-modal.html',
+        controller: 'SafeDeleteModalCtrl',
+        resolve: sinon.match.object
+      });
+
+      var resolve = $modal.open.getCall(0).args[0].resolve;
+      
+      expect(resolve.name).to.be.a("function");
+
+      expect(resolve.name()).to.equal('Company name');
+    });
+
+    it('should not do anything if the user cancels', function(done) {
+      $modal.open.returns({
+        result: Q.reject()
+      });
+
+      $scope.deleteCompany();
+      
+      setTimeout(function() {
+        $loading.start.should.not.have.been.called;
+        $loading.stop.should.not.have.been.called;
+        deleteCompany.should.not.have.been.called;
+
+        done();
+      }, 10);
+
+    });
+
+    it('should show spinner and call api', function(done) {
+      $scope.deleteCompany();
+
+      setTimeout(function() {
+        expect($scope.loading).to.be.false;
+
+        deleteCompany.should.have.been.calledWith($scope.company.id);
+
+        companyTracker.should.have.been.calledWith("Company Deleted");
+
+        done();
+      }, 10);
+    });
+
   });
 
   describe('resetAuthKey', function() {

@@ -3,10 +3,10 @@
     <button type="button" class="close" ng-click="dismiss()" data-dismiss="modal" aria-hidden="true">
       <i class="fa fa-times"></i>
     </button>
-    <h3 class="modal-title" translate>common.safeDelete.title</h3>
+    <h3 class="modal-title">Delete Company?</h3>
   </div>
   <div class="modal-body" stop-event="touchend">
-    <p translate>common.safeDelete.message</p>
+    <p>Are you sure you want to delete the company <strong>{{name}}</strong>? This operation cannot be undone! Please type DELETE to confirm.</p>
     <input id="safeDeleteInput" type="text" ng-model="inputText" class="form-control" />
   </div>
   <div class="modal-footer">
