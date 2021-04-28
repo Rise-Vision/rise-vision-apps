@@ -4,10 +4,10 @@ angular.module('risevision.template-editor.directives')
   .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
   .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$loading',
     '$q', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
-    'ENV_NAME', 'PLAYLIST_COMPONENTS',
+    'PLAYLIST_COMPONENTS',
     function (templateEditorFactory, presentation, $loading,
       $q, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory,
-      ENV_NAME, PLAYLIST_COMPONENTS) {
+      PLAYLIST_COMPONENTS) {
       return {
         restrict: 'E',
         scope: true,
@@ -21,7 +21,7 @@ angular.module('risevision.template-editor.directives')
             reverse: true
           };
           $scope.playlistComponents = PLAYLIST_COMPONENTS;
-          $scope.addVisualComponents = !!ENV_NAME && ENV_NAME !== 'TEST';
+          $scope.addVisualComponents = false;
 
           function _load() {
             var itemsJson = $scope.getAvailableAttributeData($scope.componentId, 'items');
