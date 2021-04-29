@@ -38,12 +38,12 @@
       <div class="panel-body">
         <div class="u_margin-sm-top" ng-repeat="item in uploader.queue">
           <p>
-            <a class="pull-right" href="#" ng-click="removeItem(item)">
+            <button class="btn btn-link pull-right" ng-click="removeItem(item)">
               <span translate="common.lremove"></span>
-            </a>
-            <a class="pull-right u_margin-right" href="#" ng-click="retryFailedUpload(item)" ng-show="item.isError && !item.isUnsupportedFile">
+            </button>
+            <button class="btn btn-link pull-right u_margin-right" ng-click="retryFailedUpload(item)" ng-show="item.isError && !item.isUnsupportedFile">
               <span translate="common.lretry"></span>
-            </a>
+            </button>
             <span class="pull-right text-muted u_margin-left u_margin-right"> {{ item.file.size|fileSizeFilter }}</span>
             <span class="pull-right text-danger" ng-show="item.isUnsupportedFile">
               {{ 'storage-client.error.upload-file-not-supported' | translate }}
