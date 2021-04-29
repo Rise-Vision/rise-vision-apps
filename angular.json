@@ -591,7 +591,8 @@
                 "src/loading-preview.html",
                 "src/assets",
                 "src/images",
-                "src/vendor"
+                "src/vendor",
+                "src/bower_components/font-awesome/fonts"
               ],
               "fileReplacements": [
                 {
