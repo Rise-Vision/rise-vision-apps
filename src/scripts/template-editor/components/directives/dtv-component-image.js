@@ -188,14 +188,7 @@ angular.module('risevision.template-editor.directives')
               _loadTransition();
               _loadHelpText();
             },
-            onBackHandler: function () {
-              if ($scope.isEditingLogo()) {
-                $scope.resetPanelHeader();
-              }
-              return false;
-            },
             onPresentationOpen: function () {
-              console.log('on presentation open');
               $scope.fileExistenceChecksCompleted = {};
 
               var imageComponentIds = $scope.getComponentIds(function (c) {
@@ -203,7 +196,7 @@ angular.module('risevision.template-editor.directives')
               });
 
               _.forEach(imageComponentIds, function (componentId) {
-                console.log('checking file existence for component', componentId);
+                $log.info('checking file existence for component', componentId);
 
                 $scope.fileExistenceChecksCompleted[componentId] = false;
 
@@ -266,7 +259,7 @@ angular.module('risevision.template-editor.directives')
                 return $scope.waitForPresentationId(metadata);
               })
               .then(function (metadata) {
-                console.log('received metadata', metadata);
+                $log.info('received metadata', metadata);
 
                 $scope.updateFileMetadata(componentId, metadata);
               })
@@ -276,7 +269,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.onDesignPublished = function(options) {
-            console.log('Canva result:', options);
+            $log.info('Canva result:', options);
             var filepath = CANVA_FOLDER;
             filepath += options.designTitle? options.designTitle + '_' : '';
             filepath += options.designId + '.png';

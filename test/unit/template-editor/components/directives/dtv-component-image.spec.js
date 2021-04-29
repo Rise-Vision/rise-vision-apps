@@ -125,7 +125,6 @@ describe('directive: TemplateComponentImage', function() {
         expect(directive.type).to.equal('rise-image');
         expect(directive.element).to.be.an('object');
         expect(directive.show).to.be.a('function');
-        expect(directive.onBackHandler).to.be.a('function');
       });
 
       it('show:', function() {

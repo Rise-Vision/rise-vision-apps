@@ -316,6 +316,8 @@ describe('directive: componentStorageSelector', function() {
       expect($scope.search.selectAll).to.be.false;
       expect(storageManagerFactory.onSelectHandler).to.have.been.calledWith(selectedItems);
 
+      $scope.resetPanelHeader.should.have.been.called;
+
       $scope.showPreviousPage.should.have.been.called;
     });
   });
