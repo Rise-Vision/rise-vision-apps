@@ -8,7 +8,7 @@
     "preng-start": "gulp build",
     "ng-start": "ng serve --port 8000",
     "preng-build": "gulp build",
-    "ng-build": "ng build --prod --delete-output-path false",
+    "ng-build": "ng build --configuration=$NODE_ENV --delete-output-path false",
     "ng-dist": "gulp dist-server",
     "ng-test": "ng test",
     "ng-test-headless": "ng test --watch=false --browsers=ChromeHeadless",

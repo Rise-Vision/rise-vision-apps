@@ -585,7 +585,7 @@
             ]
           },
           "configurations": {
-            "production": {
+            "prod": {
               "assets": [
                 "src/robots.txt",
                 "src/loading-preview.html",
@@ -620,13 +620,37 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "beta": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.beta.ts"
+                }
+              ]
+            },
+            "stage": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.stage.ts"
+                }
+              ]
+            },
+            "test": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test.ts"
+                }
+              ]
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "rise-vision-apps:build",
+            "browserTarget": "rise-vision-apps:build"
           },
           "configurations": {
             "production": {
