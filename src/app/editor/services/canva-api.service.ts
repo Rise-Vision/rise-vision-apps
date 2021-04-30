@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AnalyticsFactory, CanvaTypePicker } from 'src/app/ajs-upgraded-providers';
+import { environment } from './../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,7 @@ export class CanvaApiService {
     } else {      
       this._designButtonPromise = this.loadCanvaApi().then(canvaApi => {
         return canvaApi.DesignButton.initialize({
-          apiKey: '_Ow6FgJpQ3S_k0Mgyo1UX2nM',
+          apiKey: environment.canvaApiKey
         });
       });       
       return this._designButtonPromise;
