@@ -645,6 +645,9 @@
           "configurations": {
             "prod": {
               "browserTarget": "rise-vision-apps:build:prod"
+            },
+            "test": {
+              "browserTarget": "rise-vision-apps:build:test"
             }
           }
         },
@@ -686,7 +689,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "rise-vision-apps:serve"
+            "devServerTarget": "rise-vision-apps:serve:test"
           },
           "configurations": {
             "prod": {
