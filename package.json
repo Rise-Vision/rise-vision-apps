@@ -11,7 +11,7 @@
     "ng-build": "ng build --configuration=$NODE_ENV --delete-output-path false",
     "ng-dist": "gulp dist-server",
     "ng-test": "ng test",
-    "ng-test-headless": "ng test --watch=false --browsers=ChromeHeadless",
+    "ng-test-headless": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
     "ng-lint": "ng lint",
     "ng-e2e": "ng e2e",
     "test": "gulp test",
