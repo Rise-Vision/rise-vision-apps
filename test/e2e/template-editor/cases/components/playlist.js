@@ -65,6 +65,9 @@ var PlaylistComponentScenarios = function () {
         //open Embedded Template presentation
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent(componentLabel);
+
+        helper.wait(playlistComponentPage.getSelectTemplatesButton(), 'Select Templates');
+
         helper.clickWhenClickable(playlistComponentPage.getSelectTemplatesButton(), 'Select Templates');
         browser.sleep(500);
         helper.waitDisappear(playlistComponentPage.getTemplatesLoaderSpinner(), 'Spinner');
