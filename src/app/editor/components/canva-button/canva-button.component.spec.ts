@@ -1,3 +1,5 @@
+import {expect} from 'chai';
+
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CanvaApiService } from '../../services/canva-api.service';
 
@@ -10,7 +12,7 @@ describe('CanvaButtonComponent', () => {
 
   beforeEach(async(() => {
     mockCanvaApi = {
-      createDesign: jasmine.createSpy().and.resolveTo('canvaResult')
+      createDesign: sinon.stub().resolves('canvaResult')
     };
 
     TestBed.configureTestingModule({
@@ -29,23 +31,23 @@ describe('CanvaButtonComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).to.be.ok;
   });
 
   it('should render Canva button', () => {
     const element: HTMLElement = fixture.nativeElement;
-    expect(element.firstElementChild.tagName.toLowerCase()).toEqual('button');
-    expect(element.textContent).toEqual('Design With Canva');
+    expect(element.firstElementChild.tagName.toLowerCase()).to.equal('button');
+    expect(element.textContent).to.equal('Design With Canva');
   });
 
   describe('designWithCanva:',()=> {
     it('should call canvaApi and emit result', (done) => {
-      spyOn(component.designPublished,'emit');
+      sinon.spy(component.designPublished,'emit');
       component.designWithCanva();
 
       fixture.whenStable().then(() => {
-        expect(mockCanvaApi.createDesign).toHaveBeenCalled();
-        expect(component.designPublished.emit).toHaveBeenCalledWith('canvaResult');
+        mockCanvaApi.createDesign.should.have.been.called;
+        component.designPublished.emit.should.have.been.calledWith('canvaResult');
         
         done();
       });
@@ -53,14 +55,15 @@ describe('CanvaButtonComponent', () => {
     });
     
     it('should not emit result on canvaApi failure', (done)=>{
-      spyOn(component.designPublished,'emit');
-      mockCanvaApi.createDesign.and.rejectWith('closed');
+      sinon.spy(component.designPublished,'emit');
+      mockCanvaApi.createDesign.rejects('closed');
 
       component.designWithCanva();
       
       fixture.whenStable().then(() => {
-        expect(mockCanvaApi.createDesign).toHaveBeenCalled();
-        expect(component.designPublished.emit).not.toHaveBeenCalledWith('canvaResult');
+        mockCanvaApi.createDesign.should.have.been.called;
+        component.designPublished.emit.should.not.have.been.called;
+
         done();
       });
     });
@@ -71,14 +74,14 @@ describe('CanvaButtonComponent', () => {
       const element: HTMLElement = fixture.nativeElement;
       component.disabled = true;
       fixture.detectChanges();
-      expect(element.firstElementChild['disabled']).toBeTrue();
+      expect(element.firstElementChild['disabled']).to.be.true;
     });
 
     it('should enable the button', () => {
       const element: HTMLElement = fixture.nativeElement;
       component.disabled = false;
       fixture.detectChanges();
-      expect(element.firstElementChild['disabled']).toBeFalse();
+      expect(element.firstElementChild['disabled']).to.be.false;
     });
   });
 });

@@ -1,36 +1,38 @@
+import {expect} from 'chai';
+
 import { AnalyticsFactory, analyticsFactoryProvider, CanvaTypePicker, canvaTypePickerProvider } from './ajs-upgraded-providers';
 
 describe('ajs-upgraded-providers', () => {
 
   describe('canvaTypePicker:', () => {    
     it('should register provider', () => {
-      expect(canvaTypePickerProvider.provide).toEqual(CanvaTypePicker);
-      expect(canvaTypePickerProvider.deps).toEqual(['$injector']);
-      expect(canvaTypePickerProvider.useFactory).toBeInstanceOf(Function);
+      expect(canvaTypePickerProvider.provide).to.equal(CanvaTypePicker);
+      expect(canvaTypePickerProvider.deps).to.deep.equal(['$injector']);
+      expect(canvaTypePickerProvider.useFactory).to.be.a('function');
     });
 
     it('should get AngularJS service', () => {
       const $injector = {
-        get: jasmine.createSpy().and.returnValue('service')
+        get: sinon.stub().returns('service')
       }
-      expect(canvaTypePickerProvider.useFactory($injector)).toEqual('service');
-      expect($injector.get).toHaveBeenCalledWith('canvaTypePicker');
+      expect(canvaTypePickerProvider.useFactory($injector)).to.equal('service');
+      $injector.get.should.have.been.calledWith('canvaTypePicker');
     });
   });
 
   describe('analyticsFactory:', () => {    
     it('should register provider', () => {
-      expect(analyticsFactoryProvider.provide).toEqual(AnalyticsFactory);
-      expect(analyticsFactoryProvider.deps).toEqual(['$injector']);
-      expect(analyticsFactoryProvider.useFactory).toBeInstanceOf(Function);
+      expect(analyticsFactoryProvider.provide).to.equal(AnalyticsFactory);
+      expect(analyticsFactoryProvider.deps).to.deep.equal(['$injector']);
+      expect(analyticsFactoryProvider.useFactory).to.be.a('function');
     });
 
     it('should get AngularJS service', () => {
       const $injector = {
-        get: jasmine.createSpy().and.returnValue('service')
+        get: sinon.stub().returns('service')
       }
-      expect(analyticsFactoryProvider.useFactory($injector)).toEqual('service');
-      expect($injector.get).toHaveBeenCalledWith('analyticsFactory');
+      expect(analyticsFactoryProvider.useFactory($injector)).to.equal('service');
+      $injector.get.should.have.been.calledWith('analyticsFactory');
     });
   });
 });
