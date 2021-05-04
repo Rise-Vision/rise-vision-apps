@@ -83,9 +83,6 @@ jobs:
           name: Angular JS unit tests
           command: NODE_ENV=test npm run test
       - run:
-          name: 'Install coverage report merger'
-          command: npm install lcov-result-merger
-      - run:
           name: 'Merge coverage reports'
           command: ./node_modules/.bin/lcov-result-merger 'reports/coverage/**/lcov.info' reports/merged_lcov.info
       - coveralls/upload:
