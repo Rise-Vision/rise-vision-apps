@@ -74,8 +74,8 @@ $headings-color:          inherit;
 //## Specify custom location and filename of the included Glyphicons icon font. Useful for those including Bootstrap via Bower.
 
 //** Load fonts from this directory.
-$fa-font-path: "../bower_components/font-awesome/fonts";
-$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+$fa-font-path: "../fonts";
+$icon-font-path: "../../fonts/bootstrap/";
 //** File name for all font files.
 $icon-font-name:          "glyphicons-halflings-regular";
 //** Element ID within SVG icon file.
