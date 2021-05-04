@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   browser-tools: circleci/browser-tools@1.1.1
+  coveralls: coveralls/coveralls@1.0.6
 
 commands:
   run_e2e_cases:
@@ -81,6 +82,14 @@ jobs:
       - run: 
           name: Angular JS unit tests
           command: NODE_ENV=test npm run test
+      - run:
+          name: 'Install coverage report merger'
+          command: npm install lcov-result-merger
+      - run:
+          name: 'Merge coverage reports'
+          command: ./node_modules/.bin/lcov-result-merger 'reports/coverage/**/lcov.info' reports/merged_lcov.info
+      - coveralls/upload:
+          path_to_lcov: reports/merged_lcov.info
       - run: 
           name: Build app for e2e tests
           command: NODE_ENV=test npm run ng-build
