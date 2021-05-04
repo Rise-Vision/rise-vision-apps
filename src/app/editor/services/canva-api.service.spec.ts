@@ -1,3 +1,5 @@
+import {expect} from 'chai';
+
 import { TestBed } from '@angular/core/testing';
 import { AnalyticsFactory, CanvaTypePicker } from 'src/app/ajs-upgraded-providers';
 import { CanvaApiService } from './canva-api.service';
@@ -7,9 +9,14 @@ describe('CanvaApiService', () => {
   let mockCanvaTypePicker: any;
   let mockAnalyticsFactory: any;
 
+  let sandbox: any;
   beforeEach(() => {
-    mockCanvaTypePicker = jasmine.createSpy().and.resolveTo('Logo');
-    mockAnalyticsFactory = jasmine.createSpyObj(['track']);
+    sandbox = sinon.sandbox.create();
+
+    mockCanvaTypePicker = sandbox.stub().resolves('Logo');
+    mockAnalyticsFactory = {
+      track: sandbox.spy()
+    };
 
     TestBed.configureTestingModule({
       providers: [
@@ -20,31 +27,35 @@ describe('CanvaApiService', () => {
     service = TestBed.inject(CanvaApiService);
   });
 
+  afterEach(() => {
+    sandbox.restore();
+  });
+
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(service).to.be.ok;
   });
 
   describe('loadCanvaApi:', () => {
-    let el: HTMLElement;
+    let el: any;
     beforeEach(() => {
-      el = jasmine.createSpyObj<HTMLElement>(['onload','onerror']);
-      spyOn(document,'createElement').and.returnValue(el);
-      spyOn(document.body,'appendChild');
+      el = {};
+      sandbox.stub(document,'createElement').returns(el);
+      sandbox.stub(document.body,'appendChild');
     });
 
     it('should load canva script', (done) => {
       window.Canva = {
         DesignButton: {
-          initialize: jasmine.createSpy()
+          initialize: sandbox.spy()
         }
       };
       const promise = service.loadCanvaApi();
 
-      expect(document.createElement).toHaveBeenCalledWith('script');
-      expect(document.body.appendChild).toHaveBeenCalledWith(el);
+      document.createElement.should.have.been.calledWith('script');
+      document.body.appendChild.should.have.been.calledWith(el);
       
       promise.then((api)=>{
-        expect(api).toEqual(window.Canva);
+        expect(api).to.equal(window.Canva);
         delete window.Canva;
         done();
       });
@@ -56,17 +67,17 @@ describe('CanvaApiService', () => {
       const promise1 = service.loadCanvaApi();
       const promise2 = service.loadCanvaApi();  
       
-      expect(promise2).toEqual(promise1);      
+      expect(promise2).to.equal(promise1);      
     });
 
     it('should reject on failure loading script', (done) => {
       const promise = service.loadCanvaApi();
 
-      expect(document.createElement).toHaveBeenCalledWith('script');
-      expect(document.body.appendChild).toHaveBeenCalledWith(el);
+      document.createElement.should.have.been.calledWith('script');
+      document.body.appendChild.should.have.been.calledWith(el);
             
       promise.catch((err)=>{
-        expect(err).toEqual('error')
+        expect(err).to.equal('error')
         done();
       });
 
@@ -79,15 +90,15 @@ describe('CanvaApiService', () => {
     beforeEach(() => {
       mockCanvaApi = {
         DesignButton : {
-          initialize: jasmine.createSpy()
+          initialize: sandbox.spy()
         }
       };
-      spyOn(service,'loadCanvaApi').and.resolveTo(mockCanvaApi);
+      sandbox.stub(service,'loadCanvaApi').resolves(mockCanvaApi);
     });
     
     it('should initialize button api',(done) => {
       service.initializeDesignButtonApi().then(() => {
-        expect(mockCanvaApi.DesignButton.initialize).toHaveBeenCalledWith({
+        mockCanvaApi.DesignButton.initialize.should.have.been.calledWith({
           apiKey: 'EwLWFws4Qjpa-n_2ZJgBMQbz',
         });
         done();
@@ -98,33 +109,35 @@ describe('CanvaApiService', () => {
       const promise1 = service.initializeDesignButtonApi();
       const promise2 = service.initializeDesignButtonApi();  
       
-      expect(promise2).toEqual(promise1);  
+      expect(promise2).to.equal(promise1);  
     });
   });
 
   describe('createDesign:', () => {
     let mockCanvaButtonApi: any;
     beforeEach(() => {
-      mockCanvaButtonApi = jasmine.createSpyObj<CanvaButtonApi>(['createDesign']);
-      spyOn(service,'initializeDesignButtonApi').and.resolveTo(mockCanvaButtonApi);
+      mockCanvaButtonApi = {
+        createDesign: sandbox.spy()
+      };
+      sandbox.stub(service,'initializeDesignButtonApi').resolves(mockCanvaButtonApi);
     });
 
     it('should use provided canva type and resolve on design published', (done) => {
       const promise = service.createDesign();
 
       setTimeout(() => {
-        expect(mockCanvaButtonApi.createDesign).toHaveBeenCalled();
-        expect(mockCanvaTypePicker).toHaveBeenCalled();
-        expect(mockAnalyticsFactory.track).toHaveBeenCalledWith('Canva Design Started');
+        mockCanvaButtonApi.createDesign.should.have.been.called;;
+        mockCanvaTypePicker.should.have.been.called;
+        mockAnalyticsFactory.track.should.have.been.calledWith('Canva Design Started');
 
-        const createDesignArgs = mockCanvaButtonApi.createDesign.calls.mostRecent().args[0];
-        expect(createDesignArgs.design.type).toEqual('Logo');
-        expect(createDesignArgs.editor.publishLabel).toEqual('Save');
+        const createDesignArgs = mockCanvaButtonApi.createDesign.getCall(0).args[0];
+        expect(createDesignArgs.design.type).to.equal('Logo');
+        expect(createDesignArgs.editor.publishLabel).to.equal('Save');
         
         const publishResult :any = {designId:'id', designTitle: 'title', exportUrl: 'url'}; 
         promise.then(result => {
-          expect(mockAnalyticsFactory.track).toHaveBeenCalledWith('Canva Design Published',{designId:'id', designTitle: 'title'});
-          expect(result).toEqual(publishResult);
+          mockAnalyticsFactory.track.should.have.been.calledWith('Canva Design Published',{designId:'id', designTitle: 'title'});
+          expect(result).to.equal(publishResult);
           done();
         });
         createDesignArgs.onDesignPublish(publishResult);
@@ -134,27 +147,27 @@ describe('CanvaApiService', () => {
     it('should reject on design closed', (done) => {
       const promise = service.createDesign();
       setTimeout(() => {
-        expect(mockCanvaButtonApi.createDesign).toHaveBeenCalled();
-        expect(mockCanvaTypePicker).toHaveBeenCalled();
-        expect(mockAnalyticsFactory.track).toHaveBeenCalledWith('Canva Design Started');
+        mockCanvaButtonApi.createDesign.should.have.been.called;;
+        mockCanvaTypePicker.should.have.been.called;
+        mockAnalyticsFactory.track.should.have.been.calledWith('Canva Design Started');
 
         promise.catch(err => {
-          expect(mockAnalyticsFactory.track).toHaveBeenCalledTimes(1);
-          expect(err).toEqual('closed');
+          mockAnalyticsFactory.track.should.have.been.called.once;
+          expect(err).to.equal('closed');
           done();
         });
-        mockCanvaButtonApi.createDesign.calls.mostRecent().args[0].onDesignClose();
+        mockCanvaButtonApi.createDesign.getCall(0).args[0].onDesignClose();
       });
     });
 
     it('should reject on canva type picker closed', (done) => {
-      (<jasmine.Spy> mockCanvaTypePicker).and.rejectWith('dismissed');
+      mockCanvaTypePicker.rejects('dismissed');
 
       const promise = service.createDesign();
       
-      expect(mockCanvaTypePicker).toHaveBeenCalled();
+      mockCanvaTypePicker.should.have.been.called;
       promise.catch(err => {
-        expect(err).toEqual('dismissed');
+        expect(err.name).to.equal('dismissed');
         done();
       });
     });
