@@ -272,9 +272,7 @@ gulp.task("test:unit", factory.testUnitAngular({
     testFiles: unitTestFiles
 }));
 
-gulp.task("coveralls", factory.coveralls());
-
-gulp.task("test", gulp.series("config", "test:unit", "coveralls"));
+gulp.task("test", gulp.series("config", "test:unit"));
 
 /*---- e2e testing ----*/
 

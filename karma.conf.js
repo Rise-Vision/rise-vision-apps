@@ -4,7 +4,10 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    frameworks: [
+      'jasmine',
+      '@angular-devkit/build-angular'
+    ],
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
@@ -16,8 +19,8 @@ module.exports = function (config) {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
     coverageIstanbulReporter: {
-      dir: require('path').join(__dirname, './coverage/rise-vision-apps-angular2'),
-      reports: ['html', 'lcovonly', 'text-summary'],
+      dir: require('path').join(__dirname, './reports/coverage/angular2'),
+      reports: ['html', 'lcovonly', 'text', 'text-summary'],
       fixWebpackSourcePaths: true
     },
     reporters: ['progress', 'kjhtml'],
