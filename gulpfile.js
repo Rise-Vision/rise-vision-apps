@@ -1,8 +1,6 @@
 'use strict';
 
 var gulp        = require('gulp');
-var browserSync = require('browser-sync');
-var modRewrite  = require('connect-modrewrite');
 var prettify    = require('gulp-jsbeautifier');
 var jshint      = require('gulp-jshint');
 var rimraf      = require("gulp-rimraf");
@@ -87,28 +85,6 @@ var unitTestFiles = [
   "test/unit/**/*.spec.js",
   "test/unit/common-header/services/svc-help-widget-override.js"
 ];
-
-//------------------------- Browser Sync --------------------------------
-
-gulp.task('browser-sync', function() {
-  browserSync({
-    startPath: '/index.html',
-    files: ['./src/tmp/partials.js', './src/scripts/**/*.js', './dist/css/*.css', './src/index.html'],
-    server: {
-      baseDir: './src',
-      middleware: [
-        modRewrite([
-          '!\\.\\w+$ /index.html [L]'
-        ])
-      ]
-    },
-    reloadDebounce: 2000,
-    reloadDelay: 2000,
-    logLevel: "debug",
-    port: 8000,
-    open: false
-  });
-});
 
 //------------------------- Watch --------------------------------
 /**
