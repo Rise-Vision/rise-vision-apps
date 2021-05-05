@@ -28,7 +28,8 @@
               "src/loading-preview.html",
               "src/assets",
               "src/images",
-              "src/vendor"
+              "src/vendor",
+              "src/tmp/locales"
             ],
             "styles": [
               "src/scss/app.scss",
