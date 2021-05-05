@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LastRevisedComponent } from './last-revised.component';
 import { UsernamePipe } from '../../pipes/username.pipe';
@@ -9,7 +9,7 @@ describe('LastRevisedComponent', () => {
   let component: LastRevisedComponent;
   let fixture: ComponentFixture<LastRevisedComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ LastRevisedComponent, UsernamePipe ]
     })

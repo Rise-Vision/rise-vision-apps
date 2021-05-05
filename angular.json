@@ -29,8 +29,7 @@
               "src/assets",
               "src/images",
               "src/vendor",
-              "src/bower_components/font-awesome/fonts",
-              "src/tmp/locales/translation_en.json"
+              "src/tmp/locales"
             ],
             "styles": [
               "src/scss/app.scss",
@@ -593,7 +592,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": true,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": true,
@@ -634,6 +632,25 @@
                   "with": "src/environments/environment.test.ts"
                 }
               ]
+            },
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ],
+              "assets": [
+                "src/robots.txt",
+                "src/loading-preview.html",
+                "src/assets",
+                "src/images",
+                "src/vendor",
+                "src/tmp/locales",
+                "src/bower_components/oidc-client/dist/oidc-client.js",
+                "src/scripts/user-manager-silent.js",
+                "src/user-manager-silent.html"
+              ],
             }
           }
         },
@@ -648,6 +665,9 @@
             },
             "test": {
               "browserTarget": "rise-vision-apps:build:test"
+            },
+            "dev": {
+              "browserTarget": "rise-vision-apps:build:dev"
             }
           }
         },
