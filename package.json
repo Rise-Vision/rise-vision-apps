@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "preng-start": "gulp build",
-    "ng-start": "ng serve --port 8000",
+    "ng-start": "ng serve --port 8000 --configuration=dev",
     "preng-build": "gulp build",
     "ng-build": "ng build --configuration=$NODE_ENV --delete-output-path false",
     "ng-dist": "gulp dist-server",
