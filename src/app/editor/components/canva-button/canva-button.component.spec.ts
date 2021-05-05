@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CanvaApiService } from '../../services/canva-api.service';
 
 import { CanvaButtonComponent } from './canva-button.component';
@@ -10,7 +10,7 @@ describe('CanvaButtonComponent', () => {
   let fixture: ComponentFixture<CanvaButtonComponent>;
   let mockCanvaApi: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     mockCanvaApi = {
       createDesign: sinon.stub().resolves('canvaResult')
     };
