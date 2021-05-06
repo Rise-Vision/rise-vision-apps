@@ -6,7 +6,6 @@ var jshint      = require('gulp-jshint');
 var rimraf      = require("gulp-rimraf");
 var uglify      = require("gulp-uglify-es").default;
 var usemin      = require("gulp-usemin");
-var cleanCSS    = require('gulp-clean-css');
 var minifyHtml  = require('gulp-htmlmin');
 var ngHtml2Js   = require("gulp-ng-html2js");
 var concat      = require("gulp-concat");
@@ -88,7 +87,6 @@ var unitTestFiles = [
 
 //------------------------- Watch --------------------------------
 /**
- * Watch scss files for changes & recompile
  * Watch html/md files, run jekyll & reload BrowserSync
  */
  gulp.task('watch-html', function () {
@@ -147,14 +145,6 @@ gulp.task("clean", gulp.parallel("clean-dist", "clean-tmp"));
 function buildHtml(path) {
   return gulp.src([path])
     .pipe(usemin({
-      css: [cleanCSS, 'concat'],
-      html: [function() {
-        return minifyHtml({
-          collapseWhitespace: true,
-          conservativeCollapse: true,
-          removeComments: true
-        })
-      }],
       js: [
         sourcemaps.init({largeFile: true}),
         'concat',
@@ -286,7 +276,7 @@ gulp.task("test:e2e", gulp.series(gulp.parallel("config-e2e"), "server", "test:e
 
 gulp.task('default', function(done) {
   console.log('***********************'.yellow);
-  console.log('  npm run ng-start: start a server at port 8000 and watch angular files'.yellow);
+  console.log('  npm run ng-serve: start a server at port 8000 and watch angular files'.yellow);
   console.log('  npm run ng-build: build angular & angularjs to the dist folder'.yellow);
   console.log('  gulp dist-server: start a server at port 8000 for the dist folder'.yellow);  
   console.log('***********************'.yellow);
