@@ -591,8 +591,7 @@
                 "src/loading-preview.html",
                 "src/assets",
                 "src/images",
-                "src/vendor",
-                "src/tmp/locales"
+                "src/vendor"
               ],
               "optimization": true,
               "outputHashing": "all",
@@ -645,6 +644,205 @@
                   "with": "src/environments/environment.test.ts"
                 }
               ]
+            },
+            "selector": {
+              "index": "src/storage-selector.html",
+              "main": "src/storage-selector.ts",
+              "tsConfig": "tsconfig.selector.json",
+              "scripts": [
+                "src/bower_components/jquery/dist/jquery.js",
+                "src/bower_components/angular/angular.js",
+                "src/bower_components/angular-sanitize/angular-sanitize.js",
+                "src/bower_components/angular-animate/angular-animate.js",
+                "src/bower_components/angular-touch/angular-touch.js",
+                "src/bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
+                "src/bower_components/angular-ui-router/release/angular-ui-router.js",
+                "src/bower_components/angular-translate/angular-translate.js",
+                "src/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js",
+                "src/bower_components/checklist-model/checklist-model.js",
+                "src/bower_components/ngstorage/ngStorage.js",
+                "src/bower_components/angular-spinner/dist/angular-spinner.js",
+                "src/bower_components/angular-cookies/angular-cookies.js",
+                "src/bower_components/lodash/dist/lodash.js",
+                "src/bower_components/ng-csv/build/ng-csv.js",
+                "src/bower_components/ng-tags-input/ng-tags-input.js",
+                "src/bower_components/oclazyload/dist/ocLazyLoad.js",
+                "src/bower_components/angular-md5/angular-md5.min.js",
+                "src/bower_components/angular-local-storage/dist/angular-local-storage.js",
+                "src/bower_components/oidc-client/dist/oidc-client.js",
+
+                "src/scripts/common-header/dtv-common-header.js",
+                "src/scripts/common-header/config/config.js",
+
+                "src/scripts/common-header/controllers/ctr-auth-buttons.js",
+                "src/scripts/common-header/controllers/ctr-close-frame.js",
+                "src/scripts/common-header/controllers/ctr-company-buttons.js",
+                "src/scripts/common-header/controllers/ctr-company-icp-modal.js",
+                "src/scripts/common-header/controllers/ctr-company-settings-modal.js",
+                "src/scripts/common-header/controllers/ctr-company-users-modal.js",
+                "src/scripts/common-header/controllers/ctr-global-alerts.js",
+                "src/scripts/common-header/controllers/ctr-move-company-modal.js",
+                "src/scripts/common-header/controllers/ctr-plan-banner.js",
+                "src/scripts/common-header/controllers/ctr-register-button.js",
+                "src/scripts/common-header/controllers/ctr-safe-delete-modal.js",
+                "src/scripts/common-header/controllers/ctr-signout-button.js",
+                "src/scripts/common-header/controllers/ctr-signout-modal.js",
+                "src/scripts/common-header/controllers/ctr-subcompany-banner.js",
+                "src/scripts/common-header/controllers/ctr-subcompany-modal.js",
+                "src/scripts/common-header/controllers/ctr-subcompany-selector-modal.js",
+                "src/scripts/common-header/controllers/ctr-test-company-banner.js",
+                "src/scripts/common-header/controllers/ctr-user-add-modal.js",
+                "src/scripts/common-header/controllers/ctr-user-settings-modal.js",
+
+                "src/scripts/common-header/directives/dtv-common-header-height.js",
+                "src/scripts/common-header/directives/dtv-company-buttons.js",
+                "src/scripts/common-header/directives/dtv-emails-field.js",
+                "src/scripts/common-header/directives/dtv-empty-select-parser.js",
+                "src/scripts/common-header/directives/dtv-integer-parser.js",
+                "src/scripts/common-header/directives/dtv-link-cid.js",
+                "src/scripts/common-header/directives/dtv-require-role.js",
+                "src/scripts/common-header/directives/dtv-website-validator.js",
+                "src/scripts/common-header/directives/dtv-email-validator.js",
+
+                "src/scripts/common-header/filters/ftr-supress-zero.js",
+
+                "src/scripts/common-header/services/svc-account.js",
+                "src/scripts/common-header/services/svc-company-icp.js",
+                "src/scripts/common-header/services/svc-company-settings-factory.js",
+                "src/scripts/common-header/services/svc-cookie-tester.js",
+                "src/scripts/common-header/services/svc-data-gadgets.js",
+                "src/scripts/common-header/services/svc-geodata.js",
+                "src/scripts/common-header/services/svc-registration.js",
+                "src/scripts/common-header/services/svc-store-service.js",
+                "src/scripts/common-header/services/svc-help-widget-factory.js",
+                "src/scripts/common-header/services/svc-address-factory.js",
+                "src/scripts/common-header/services/svc-address.js",
+                "src/scripts/common-header/services/svc-contact.js",
+
+                "src/scripts/components/action-sheet.js",
+                "src/scripts/components/off-canvas-nav.js",
+
+                "src/scripts/components/i18n/app.js",
+
+                "src/scripts/components/gapi-loader/svc-gapi.js",
+                "src/scripts/components/gapi-loader/svc-util.js",
+
+                "src/scripts/components/core-api-client/svc-call-endpoint.js",
+                "src/scripts/components/core-api-client/svc-company.js",
+                "src/scripts/components/core-api-client/svc-core-util.js",
+                "src/scripts/components/core-api-client/svc-countries.js",
+                "src/scripts/components/core-api-client/svc-display.js",
+                "src/scripts/components/core-api-client/svc-store-authorization.js",
+                "src/scripts/components/core-api-client/svc-store-product.js",
+                "src/scripts/components/core-api-client/svc-user.js",
+
+                "src/scripts/components/ui-flow/app.js",
+                "src/scripts/components/ui-flow/svc-ui-flow.js",
+
+                "src/scripts/components/logging/app.js",
+                "src/scripts/components/logging/svc-external-logging.js",
+                "src/scripts/components/logging/svc-big-query-logging.js",
+                "src/scripts/components/logging/svc-analytics-factory.js",
+                "src/scripts/components/logging/svc-hubspot.js",
+                "src/scripts/components/logging/svc-exception-handler.js",
+                "src/scripts/components/logging/svc-purchase-flow-tracker.js",
+                "src/scripts/components/logging/svc-user-tracker.js",
+                "src/scripts/components/logging/svc-openid-tracker.js",
+
+                "src/scripts/components/userstate/app.js",
+                "src/scripts/components/userstate/controllers/ctr-login.js",
+                "src/scripts/components/userstate/controllers/ctr-request-password-reset.js",
+                "src/scripts/components/userstate/controllers/ctr-reset-password-confirm.js",
+                "src/scripts/components/userstate/controllers/ctr-registration.js",
+                "src/scripts/components/userstate/services/svc-access.js",
+                "src/scripts/components/userstate/services/svc-companystate.js",
+                "src/scripts/components/userstate/services/svc-custom-auth-factory.js",
+                "src/scripts/components/userstate/services/svc-google-auth-factory.js",
+                "src/scripts/components/userstate/services/svc-rv-token-store.js",
+                "src/scripts/components/userstate/services/svc-selected-company-url-handler.js",
+                "src/scripts/components/userstate/services/svc-url-state.js",
+                "src/scripts/components/userstate/services/svc-user-auth-factory.js",
+                "src/scripts/components/userstate/services/svc-userauth.js",
+                "src/scripts/components/userstate/services/svc-userstate.js",
+                "src/scripts/components/userstate/services/svc-openid-connect.js",
+
+                "src/scripts/components/last-modified/dtv-last-modified.js",
+                "src/scripts/components/last-modified/ftr-username.js",
+
+                "src/scripts/components/loading/app.js",
+                "src/scripts/components/loading/dtv-global-spinner.js",
+                "src/scripts/components/loading/dtv-loading.js",
+                "src/scripts/components/loading/svc-loading.js",
+
+                "src/scripts/components/plans/app.js",
+                "src/scripts/components/plans/directives/dtv-rv-on.js",
+                "src/scripts/components/plans/services/svc-currency.js",
+                "src/scripts/components/plans/services/svc-plans.js",
+                "src/scripts/components/plans/services/svc-current-plan-factory.js",
+                "src/scripts/components/plans/services/svc-plans-factory.js",
+
+                "src/scripts/components/password-input/dtv-password-input.js",
+
+                "src/scripts/components/search-filter/dtv-search-filter.js",
+
+                "src/scripts/components/scrolling-list/app.js",
+
+                "src/scripts/components/scrolling-list/directives/dtv-scroll-event.js",
+                "src/scripts/components/scrolling-list/directives/dtv-scrolling-list.js",
+                "src/scripts/components/scrolling-list/directives/dtv-batch-operations.js",
+
+                "src/scripts/components/scrolling-list/controllers/ctr-bulk-delete-modal.js",
+
+                "src/scripts/components/scrolling-list/services/svc-get-error.js",
+                "src/scripts/components/scrolling-list/services/svc-process-error-code.js",
+                "src/scripts/components/scrolling-list/services/svc-batch-operations.js",
+                "src/scripts/components/scrolling-list/services/svc-scrolling-list-service.js",
+
+                "src/scripts/components/stop-event/dtv-stop-event.js",
+
+                "src/scripts/components/message-box/ctr-message-box.js",
+                "src/scripts/components/message-box/svc-message-box.js",
+
+                "src/scripts/components/svg-icon/dtv-svg-icon.js",
+
+                "src/scripts/components/focus-me/dtv-focus-me.js",
+
+                "src/scripts/components/confirm-modal/ctr-confirm-modal.js",
+                "src/scripts/components/confirm-modal/svc-confirm-modal.js",
+
+                "src/tmp/partials.js",
+
+                "src/scripts/config/config.js",
+                "src/scripts/storage-selector.module.ajs.js",
+
+                "src/scripts/common/services/svc-gadgets-api.js",
+
+                "src/scripts/storage/services/svc-storage-factory.js",
+                "src/scripts/storage/services/svc-storage-utils.js",
+                "src/scripts/storage/services/svc-file-upload.js",
+                "src/scripts/storage/services/svc-files-factory.js",
+                "src/scripts/storage/services/svc-storage.js",
+                "src/scripts/storage/services/svc-upload-uri.js",
+                "src/scripts/storage/services/svc-upload-overwrite-warning.js",
+                "src/scripts/storage/services/svc-pending-operations-factory.js",
+                "src/scripts/storage/services/svc-encoding.js",
+                "src/node_modules/tus-js-client/dist/tus.min.js",
+                "src/node_modules/compressorjs/dist/compressor.min.js",
+
+                "src/scripts/storage/filters/ftr-filters.js",
+                "src/scripts/storage/directives/dtv-storage-file-select.js",
+                "src/scripts/storage/directives/dtv-storage-breadcrumb.js",
+                "src/scripts/storage/directives/dtv-upload.js",
+                "src/scripts/storage/directives/dtv-selected-files-count.js",
+                "src/scripts/storage/directives/dtv-empty-state.js",
+                "src/scripts/storage/directives/dtv-thumbnail-image.js",
+
+                "src/scripts/storage/controllers/ctr-files-list.js",
+                "src/scripts/storage/controllers/ctr-storage-selector-iframe.js",
+                "src/scripts/storage/controllers/ctr-new-folder-modal.js",
+                "src/scripts/storage/controllers/ctr-break-link-warning-modal.js",
+                "src/scripts/storage/controllers/ctr-rename-modal.js"
+              ]
             }
           }
         },
@@ -659,6 +857,9 @@
             },
             "test": {
               "browserTarget": "rise-vision-apps:build:test"
+            },
+            "selector": {
+              "browserTarget": "rise-vision-apps:build:selector"
             }
           }
         },

@@ -69,7 +69,7 @@ var unitTestFiles = [
   "src/scripts/components/**/*.js",
   "src/scripts/common-header/*.js",
   "src/scripts/common-header/**/*.js",
-  "src/scripts/storage-selector-app.js",
+  "src/scripts/storage-selector.module.ajs.js",
   "src/scripts/app.module.ajs.js",
   "src/scripts/purchase/**/*.js",
   "src/scripts/billing/**/*.js",
@@ -187,15 +187,9 @@ function buildHtml(path) {
     });
 }
 
-gulp.task("html-selector", function () {
-  return buildHtml("./src/storage-selector.html");
-});
-
 gulp.task("html-user-manager-silent", function () {
   return buildHtml("./src/user-manager-silent.html");
 });
-
-gulp.task("html", gulp.parallel("lint", "html-selector", "html-user-manager-silent"));
 
 gulp.task("html2js", function() {
   return gulp.src(partialsHTMLFiles)
@@ -222,9 +216,9 @@ gulp.task("config", function() {
     .pipe(gulp.dest("./src/scripts/config"));
 });
 
-gulp.task('build-pieces', gulp.series("clean", gulp.parallel('config', 'i18n-build', 'css-build', 'html2js')));
+gulp.task('build-pieces', gulp.series("clean", gulp.parallel('config', 'i18n-build', 'html2js')));
 
-gulp.task('build', gulp.series('build-pieces', "html"));
+gulp.task('build', gulp.series('lint', 'build-pieces', "html-user-manager-silent"));
 
 /*---- Unit testing ----*/
 
