@@ -1,19 +1,57 @@
 # Rise Vision Apps [![Circle CI](https://circleci.com/gh/Rise-Vision/rise-vision-apps.svg?style=svg)](https://circleci.com/gh/Rise-Vision/rise-vision-apps) [![Coverage Status](https://coveralls.io/repos/Rise-Vision/rise-vision-apps/badge.svg?branch=&service=github)](https://coveralls.io/github/Rise-Vision/rise-vision-apps?branch=)
-==============
 
 ## Introduction
 
-Rise Vision Apps is our apps launcher built with Angular & AngularJS.
+Rise Vision Apps is the frontend application for managing digital signage for the Rise Vision platform.
 
-Project Name works in conjunction with [Rise Vision](http://www.risevision.com), the [digital signage management application](http://rva.risevision.com/) that runs on [Google Cloud](https://cloud.google.com).
 
 ## Built With
-- *[Node 10+](https://nodejs.org/)*
-- *[NPM](https://www.npmjs.org/)*
+
+### Languages
+
+- *[Javascript (ES5)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)*
+- *[Typescript](https://www.typescriptlang.org/)*
+
+### Frameworks
+
 - *[Angular](https://angular.io/)*
 - *[AngularJs](https://angularjs.org/)*
-- *[Bower](http://bower.io/)*
+- *[Sass](https://sass-lang.com/)*
+- *[Bootstrap 3](https://getbootstrap.com/docs/3.3/)*
+
+Given AngularJS is deprecated, Apps is currently in the process of migrating to Angular (more details in [this doc](https://docs.google.com/document/d/1Lha7Uf7kGjdhOb95k3V1jyW0xk3L6jYzvD-6PUf3MWg/edit#)). New features must be implemented in Angular as much as possible, and when working with AngularJS code, consider upgrading it to Angular.
+
+**Note:** Following Angular naming convention, Angular 1.x is referred to as AngularJS, while Angular 2+ versions are referred to as Angular.
+
+### Build Tools
+
+- *[Node 10+](https://nodejs.org/)*
+- *[Angular CLI](https://angular.io/cli)*
 - *[Gulp.js](http://gulpjs.com/)*
+- *[CircleCI](https://circleci.com/gh/Rise-Vision/workflows/rise-vision-apps)*
+- *[Github](https://github.com/Rise-Vision/rise-vision-apps)*
+
+### Testing Tools
+
+- *[Protractor](https://www.protractortest.org/#/)*
+- *[Karma](https://karma-runner.github.io/)*
+- *[Mocha](https://mochajs.org/)*
+- *[Chai](https://www.chaijs.com/)*
+- *[SinonJS](https://sinonjs.org/)*
+- *[Coveralls](https://coveralls.io/github/Rise-Vision/rise-vision-apps)*
+
+### Package management
+
+- *[NPM](https://www.npmjs.org/)*
+- *[Bower](http://bower.io/)*
+
+## Supported Browsers
+The following browsers are supported, mobile and desktop, in their latest versions:
+
+- Chrome
+- Safari
+- Edge
+
 
 ## Development
 
@@ -91,10 +129,10 @@ gulp test:unit
 
 ### Protractor End-to-End Testing
 
-E2E tests require some environment variables to be defined for the accounts used for testing. The variables are `E2E_USER` / `E2E_PASS` for Google Authentication and `E2E_USER1` / `E2E_PASS1` for Custom Authentication. The command would be as follows:
+E2E tests require some environment variables to be defined for the accounts used for testing. The variables are `E2E_USER` / `E2E_PASS` for Google Authentication and `E2E_USER1` / `E2E_PASS1` for Custom Authentication and can be confirmed by reaching out to the Apps team. The command would be as follows:
 
-```
-E2E_USER=jenkins.rise@gmail.com E2E_PASS=... E2E_USER1=jenkins.rise+custom@gmail.com E2E_PASS1=... gulp test:e2e
+```bash
+E2E_USER=... E2E_PASS=... E2E_USER1=... E2E_PASS1=... gulp test:e2e
 ```
 
 #### Susbcribed vs Non Susbscribed Test Companies
@@ -124,17 +162,13 @@ In case the Jenkins Company gets removed, which causes all e2e tests to fail, th
 - Create a new  subcompany *"Jenkins Unsubscribed Subcompany"*
 - Under *"Jenkins Unsubscribed Subcompany"* create a new  subcompany *"E2E SUBCOMPANY - UNSUBSCRIBED"*
 
-### Staging summary
+## Deployment Environments
 
-When pushing changes to chore/fix/feature branches, a staging environment needs to be indicated at the end of the commit message. The format is [stage-x], with x ranging from 1 to 20.
+When pushing changes to chore/, fix/ or feature/ branches, a staging environment needs to be indicated at the end of the commit message. The format is [stage-x], with x ranging from 1 to 20.
 
 You can also push changes to a stage/ branch, which will stage directly and skip running unit and e2e test.
 
 You can also push changes to a beta/ branch, which will stage a production version of the app. This requires the build's unit and e2e tests to pass.
-
-#### Staging Assignments by Team
-
-Please check the staging assignment in [this article](https://help.risevision.com/hc/en-us/articles/360001203463-Apps-Stage-Environments).
 
 #### Check which Stage is in Use
 
