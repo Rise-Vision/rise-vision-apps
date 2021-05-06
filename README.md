@@ -47,7 +47,7 @@ gulp
 
 * Start a server at port 8000 and watch angular files
 ```bash
-npm run ng-start
+npm run ng-serve
 ```
 
 * Build angular & angularjs to the dist folder
