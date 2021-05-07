@@ -644,12 +644,11 @@ describe("directive: templateComponentPlaylist", function() {
       $scope.addPlaylistItem('rise-text');
 
       expect($scope.playlistItems).to.have.length(2);
-      expect($scope.playlistItems[1]).to.deep.equal({
-        'duration': 10,
-        'play-until-done': false,
-        'transition-type': 'normal',
-        'tagName': 'rise-text'
-      });
+      expect($scope.playlistItems[1]['duration']).to.equal(10);
+      expect($scope.playlistItems[1]['play-until-done']).to.be.false;
+      expect($scope.playlistItems[1]['transition-type']).to.equal('normal');
+      expect($scope.playlistItems[1]['tagName']).to.equal('rise-text');
+      expect($scope.playlistItems[1]['attributes']).to.be.an('object');
 
       $scope.save.should.have.been.called;
 
@@ -664,12 +663,11 @@ describe("directive: templateComponentPlaylist", function() {
 
       $scope.addPlaylistItem('rise-image');
 
-      expect($scope.playlistItems[0]).to.deep.equal({
-        'duration': 10,
-        'play-until-done': true,
-        'transition-type': 'normal',
-        'tagName': 'rise-image'
-      });
+      expect($scope.playlistItems[0]['duration']).to.equal(10);
+      expect($scope.playlistItems[0]['play-until-done']).to.be.true;
+      expect($scope.playlistItems[0]['transition-type']).to.equal('normal');
+      expect($scope.playlistItems[0]['tagName']).to.equal('rise-image');
+      expect($scope.playlistItems[0]['attributes']).to.deep.equal({});
     });
 
   });

@@ -33,6 +33,7 @@ angular.module('risevision.template-editor.directives')
           });
 
           $scope.load = function () {
+            var defaultType = $scope.getBlueprintData($scope.componentId, 'type');
             var type = $scope.getAvailableAttributeData($scope.componentId, 'type');
             var timeFormat = $scope.getAvailableAttributeData($scope.componentId, 'time');
             var dateFormat = $scope.getAvailableAttributeData($scope.componentId, 'date');
@@ -40,6 +41,7 @@ angular.module('risevision.template-editor.directives')
             var timeFormatVal = timeFormat || 'Hours12';
             var dateFormatVal = dateFormat || $scope.dateFormats[0].format;
 
+            $scope.defaultType = defaultType;
             $scope.type = type;
             $scope.timezoneType = !timezone ? 'DisplayTz' : 'SpecificTz';
             $scope.timezone = timezone;
@@ -61,6 +63,10 @@ angular.module('risevision.template-editor.directives')
           $scope.save = function () {
             if ($scope.timezoneType === 'DisplayTz' || !$scope.timezone) {
               $scope.timezone = null;
+            }
+
+            if (!$scope.defaultType) {
+              $scope.setAttributeData($scope.componentId, 'type', $scope.type);
             }
 
             if ($scope.type === 'timedate') {

@@ -93,14 +93,21 @@ angular.module('risevision.template-editor.services')
       iconType: 'streamline',
       icon: 'text',
       title: 'Text',
-      visual: true
+      visual: true,
+      defaultAttributes: {
+        fontsize: 100,
+        multiline: true
+      }
     },
     'rise-time-date': {
       type: 'rise-time-date',
       iconType: 'streamline',
       icon: 'time',
       title: 'Time and Date',
-      visual: true
+      visual: true,
+      defaultAttributes: {
+        type: 'timedate'
+      }
     },
     'rise-data-twitter': {
       type: 'rise-data-twitter',

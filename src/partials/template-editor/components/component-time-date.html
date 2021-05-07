@@ -1,7 +1,32 @@
 <div class="attribute-editor-component time-date-container">
+  <div class="attribute-editor-row" ng-show="!defaultType">
+    <label class="mb-0">Show:</label>
+
+    <div class="madero-radio" id="timedateRadio">
+      <input type="radio" ng-model="type" value="timedate" id="timedate" name="timedate" ng-change="save()" aria-required="true" required>
+      <label for="timedate" id="timedateLabel">
+        Time & Date
+      </label>
+    </div>
+
+    <div class="madero-radio" id="dateRadio">
+      <input type="radio" ng-model="type" value="date" id="date" name="date" ng-change="save()" aria-required="true" required>
+      <label for="date" id="dateLabel">
+        Date
+      </label>
+    </div>
+
+    <div class="madero-radio" id="timeRadio">
+      <input type="radio" ng-model="type" value="time" id="time" name="time" ng-change="save()" aria-required="true" required>
+      <label for="time" id="timeLabel">
+        Time
+      </label>
+    </div>
+  </div>
+
   <div class="attribute-editor-row" ng-show="type === 'timedate' || type === 'date'">
     <div class="form-group">
-      <label class="control-label" for="te-td-date-format">Date format:</label>
+      <label class="control-label u_margin-sm-top" for="te-td-date-format">Date format:</label>
       <select id="te-td-date-format"
               class="form-control"
               ng-model="dateFormat"
