@@ -65,13 +65,7 @@ var gulp = require("gulp"),
     "./src/bower_components/ng-tags-input/ng-tags-input.js",
     "./src/bower_components/angular-md5/angular-md5.min.js",
     "./src/bower_components/angular-local-storage/dist/angular-local-storage.js",
-    "./src/bower_components/oclazyload/dist/ocLazyLoad.js"],
-    injectorGenerator = function (srcFiles, id) {
-      return gulpInject(
-        gulp.src(srcFiles,
-          {read: false}),
-          {starttag: "<!-- inject:" + id + ":{{ext}} -->", relative: true});
-      };
+    "./src/bower_components/oclazyload/dist/ocLazyLoad.js"];
 
 gulp.task("clean", function () {
   return del(["./tmp/**", "./dist/**"]);
