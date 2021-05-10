@@ -125,7 +125,7 @@ describe("directive: templateComponentPlaylist", function() {
 
     $provide.service("blueprintFactory", function() {
       return {
-        isPlayUntilDone: function() {return Q.resolve(true)}
+        isPlayUntilDone: sandbox.stub().resolves(true)
       };
     });
   }));
@@ -163,6 +163,32 @@ describe("directive: templateComponentPlaylist", function() {
     expect(directive).to.be.ok;
     expect(directive.type).to.equal("rise-playlist");
     expect(directive.show).to.be.a("function");
+  });
+
+  describe('registerDirective:', function() {
+    it('should initialize', function() {
+      $scope.registerDirective.should.have.been.called;
+
+      var directive = $scope.registerDirective.getCall(0).args[0];
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal("rise-playlist");
+      expect(directive.show).to.be.a("function");
+      expect(directive.onBackHandler).to.be.a("function");
+    });
+
+    describe('onBackHandler:', function() {
+      it ('should enable default navigation if no view is active:', function() {
+        expect($scope.registerDirective.getCall(0).args[0].onBackHandler()).to.not.be.ok;
+        expect($scope.view).to.not.be.ok;
+      });
+
+      it ('should reset view and return true:', function() {
+        $scope.view = 'some-view';
+
+        expect($scope.registerDirective.getCall(0).args[0].onBackHandler()).to.be.true;
+        expect($scope.view).to.not.be.ok;
+      });
+    });
   });
 
   it("should load items from attribute data", function(done) {
@@ -477,40 +503,88 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.durationToText(item)).to.equal("12345 seconds");
   });
 
-  it("should edit properties of a playlist item", function(done) {
-    $scope.playlistItems = samplePlaylistItems;
+  describe('editProperties:', function() {
+    describe('embedded template:', function() {
+      it("should edit properties of a playlist item", function(done) {
+        $scope.playlistItems = samplePlaylistItems;
 
-    $scope.editProperties(0);
+        $scope.editProperties(0);
 
-    setTimeout(function() {
-      expect($scope.selectedItem["key"]).to.equal(0);
-      expect($scope.selectedItem["play-until-done"]).to.equal("true");
-      expect($scope.selectedItem["play-until-done-supported"]).to.equal(true);
-      expect($scope.selectedItem["duration"]).to.equal(20);
-      expect($scope.selectedItem["transition-type"]).to.equal("fadeIn");
+        blueprintFactory.isPlayUntilDone.should.have.been.calledWith($scope.selectedItem.productCode);
 
-      done();
-    }, 10);
+        setTimeout(function() {
+          expect($scope.selectedItem["key"]).to.equal(0);
+          expect($scope.selectedItem["play-until-done"]).to.equal("true");
+          expect($scope.selectedItem["play-until-done-supported"]).to.equal(true);
+          expect($scope.selectedItem["duration"]).to.equal(20);
+          expect($scope.selectedItem["transition-type"]).to.equal("fadeIn");
 
-  });
+          expect($scope.view).to.equal("edit");
 
-  it("should set play-until-done-supported to false", function(done) {
-    $scope.playlistItems = samplePlaylistItems;
+          done();
+        }, 10);
 
-    blueprintFactory.isPlayUntilDone = function() {return Q.resolve(false)};
+      });
+      
+      it("should set play-until-done-supported to false", function(done) {
+        $scope.playlistItems = samplePlaylistItems;
 
-    $scope.editProperties(0);
+        blueprintFactory.isPlayUntilDone.resolves(false);
 
-    setTimeout(function() {
-      expect($scope.selectedItem["key"]).to.equal(0);
-      expect($scope.selectedItem["play-until-done"]).to.equal("false");
-      expect($scope.selectedItem["play-until-done-supported"]).to.equal(false);
-      expect($scope.selectedItem["duration"]).to.equal(20);
-      expect($scope.selectedItem["transition-type"]).to.equal("fadeIn");
+        $scope.editProperties(0);
 
-      done();
-    }, 10);
+        setTimeout(function() {
+          expect($scope.selectedItem["key"]).to.equal(0);
+          expect($scope.selectedItem["play-until-done"]).to.equal("false");
+          expect($scope.selectedItem["play-until-done-supported"]).to.equal(false);
+          expect($scope.selectedItem["duration"]).to.equal(20);
+          expect($scope.selectedItem["transition-type"]).to.equal("fadeIn");
 
+          expect($scope.view).to.equal("edit");
+
+          done();
+        }, 10);
+
+      });
+
+      it("should set play-until-done-supported to false on failure", function(done) {
+        $scope.playlistItems = samplePlaylistItems;
+
+        blueprintFactory.isPlayUntilDone.rejects();
+
+        $scope.editProperties(0);
+
+        setTimeout(function() {
+          expect($scope.selectedItem["key"]).to.equal(0);
+          expect($scope.selectedItem["play-until-done"]).to.equal("false");
+          expect($scope.selectedItem["play-until-done-supported"]).to.equal(false);
+          expect($scope.selectedItem["duration"]).to.equal(20);
+          expect($scope.selectedItem["transition-type"]).to.equal("fadeIn");
+
+          expect($scope.view).to.equal("edit");
+
+          done();
+        }, 10);
+      });
+    });
+
+    describe('visual components:', function() {
+      it('should populate play-until-done', function() {
+        $scope.playlistItems = samplePlaylistItems;
+
+        $scope.editProperties(1);
+
+        blueprintFactory.isPlayUntilDone.should.not.have.been.called;
+
+        expect($scope.selectedItem["key"]).to.equal(1);
+        expect($scope.selectedItem["play-until-done"]).to.equal("false");
+        expect($scope.selectedItem["play-until-done-supported"]).to.equal(false);
+        expect($scope.selectedItem["duration"]).to.equal(10);
+        expect($scope.selectedItem["transition-type"]).to.equal("fadeIn");
+
+        expect($scope.view).to.equal("edit");
+      });
+    });
   });
 
   it("should save properties of a playlist item", function() {
@@ -570,12 +644,11 @@ describe("directive: templateComponentPlaylist", function() {
       $scope.addPlaylistItem('rise-text');
 
       expect($scope.playlistItems).to.have.length(2);
-      expect($scope.playlistItems[1]).to.deep.equal({
-        'duration': 10,
-        'play-until-done': false,
-        'transition-type': 'normal',
-        'tagName': 'rise-text'
-      });
+      expect($scope.playlistItems[1]['duration']).to.equal(10);
+      expect($scope.playlistItems[1]['play-until-done']).to.be.false;
+      expect($scope.playlistItems[1]['transition-type']).to.equal('normal');
+      expect($scope.playlistItems[1]['tagName']).to.equal('rise-text');
+      expect($scope.playlistItems[1]['attributes']).to.be.an('object');
 
       $scope.save.should.have.been.called;
 
@@ -588,14 +661,13 @@ describe("directive: templateComponentPlaylist", function() {
     it('should set playUntilDone', function() {
       $scope.playlistItems = [];
 
-      $scope.addPlaylistItem('rise-image');
+      $scope.addPlaylistItem('rise-video');
 
-      expect($scope.playlistItems[0]).to.deep.equal({
-        'duration': 10,
-        'play-until-done': true,
-        'transition-type': 'normal',
-        'tagName': 'rise-image'
-      });
+      expect($scope.playlistItems[0]['duration']).to.equal(10);
+      expect($scope.playlistItems[0]['play-until-done']).to.be.true;
+      expect($scope.playlistItems[0]['transition-type']).to.equal('normal');
+      expect($scope.playlistItems[0]['tagName']).to.equal('rise-video');
+      expect($scope.playlistItems[0]['attributes']).to.deep.equal({});
     });
 
   });

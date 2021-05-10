@@ -4,10 +4,10 @@ angular.module('risevision.template-editor.directives')
   .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
   .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$loading',
     '$q', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
-    'PLAYLIST_COMPONENTS',
+    'PLAYLIST_COMPONENTS', 'ENV_NAME',
     function (templateEditorFactory, presentation, $loading,
       $q, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory,
-      PLAYLIST_COMPONENTS) {
+      PLAYLIST_COMPONENTS, ENV_NAME) {
       return {
         restrict: 'E',
         scope: true,
@@ -21,7 +21,7 @@ angular.module('risevision.template-editor.directives')
             reverse: true
           };
           $scope.playlistComponents = PLAYLIST_COMPONENTS;
-          $scope.addVisualComponents = false;
+          $scope.addVisualComponents = !!ENV_NAME && ENV_NAME !== 'TEST';
 
           function _load() {
             var itemsJson = $scope.getAvailableAttributeData($scope.componentId, 'items');
@@ -160,9 +160,8 @@ angular.module('risevision.template-editor.directives')
                   }
                 });
                 $scope.playlistItems = playlistItems;
-                $loading.stop('rise-playlist-templates-loader');
               })
-              .catch(function () {
+              .finally(function () {
                 $loading.stop('rise-playlist-templates-loader');
               });
           };
@@ -240,11 +239,9 @@ angular.module('risevision.template-editor.directives')
                 $scope.playlistItems = $scope.playlistItems.concat(itemsToAdd);
                 $scope.save();
 
-                $loading.stop('rise-playlist-templates-loader');
-
                 $scope.showPlaylistItems();
               })
-              .catch(function (e) {
+              .finally(function (e) {
                 $loading.stop('rise-playlist-templates-loader');
               });
           };
@@ -269,6 +266,13 @@ angular.module('risevision.template-editor.directives')
             return item['play-until-done'] ? 'PUD' : (item.duration ? item.duration : '10') + ' seconds';
           };
 
+          var _updatePlayUntilDone = function (isSupported) {
+            $scope.selectedItem['play-until-done-supported'] = isSupported;
+
+            $scope.selectedItem['play-until-done'] = $scope.selectedItem['play-until-done-supported'] &&
+              $scope.selectedItem['play-until-done'] ? 'true' : 'false';
+          };
+
           $scope.editProperties = function (key) {
             $scope.selectedItem = angular.copy($scope.playlistItems[key]);
             $scope.selectedItem.key = key;
@@ -279,17 +283,24 @@ angular.module('risevision.template-editor.directives')
             $scope.selectedItem['transition-type'] = $scope.selectedItem['transition-type'] ? $scope.selectedItem[
               'transition-type'] : 'normal';
 
-            blueprintFactory.isPlayUntilDone($scope.selectedItem.productCode)
-              .then(function (res) {
-                $scope.selectedItem['play-until-done-supported'] = res;
-              })
-              .catch(function () {})
-              .finally(function () {
-                $scope.selectedItem['play-until-done'] = $scope.selectedItem['play-until-done-supported'] &&
-                  $scope.selectedItem['play-until-done'] ? 'true' : 'false';
+            if (!$scope.isEmbeddedTemplate($scope.selectedItem)) {
+              var component = $scope.getComponentByType($scope.selectedItem.tagName);
 
-                $scope.showProperties();
-              });
+              _updatePlayUntilDone(!!component.playUntilDone);
+
+              $scope.showProperties();
+            } else {
+              blueprintFactory.isPlayUntilDone($scope.selectedItem.productCode)
+                .then(function (res) {
+                  _updatePlayUntilDone(res);
+                })
+                .catch(function () {
+                  _updatePlayUntilDone(false);
+                })
+                .finally(function () {
+                  $scope.showProperties();
+                });
+            }
           };
 
           $scope.saveProperties = function () {
@@ -327,7 +338,8 @@ angular.module('risevision.template-editor.directives')
               'duration': 10,
               'play-until-done': !!component.playUntilDone,
               'transition-type': 'normal',
-              'tagName': type
+              'tagName': type,
+              'attributes': angular.copy(component.defaultAttributes) || {}
             };
 
             $scope.playlistItems.push(item);
