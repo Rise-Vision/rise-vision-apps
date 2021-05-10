@@ -661,12 +661,12 @@ describe("directive: templateComponentPlaylist", function() {
     it('should set playUntilDone', function() {
       $scope.playlistItems = [];
 
-      $scope.addPlaylistItem('rise-image');
+      $scope.addPlaylistItem('rise-video');
 
       expect($scope.playlistItems[0]['duration']).to.equal(10);
       expect($scope.playlistItems[0]['play-until-done']).to.be.true;
       expect($scope.playlistItems[0]['transition-type']).to.equal('normal');
-      expect($scope.playlistItems[0]['tagName']).to.equal('rise-image');
+      expect($scope.playlistItems[0]['tagName']).to.equal('rise-video');
       expect($scope.playlistItems[0]['attributes']).to.deep.equal({});
     });
 
