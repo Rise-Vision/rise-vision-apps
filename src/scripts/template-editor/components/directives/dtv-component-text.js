@@ -15,7 +15,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           function _load() {
-            $scope.isMultiline = $scope.getBlueprintData($scope.componentId, 'multiline');
+            $scope.isMultiline = $scope.getAvailableAttributeData($scope.componentId, 'multiline');
             var value = $scope.getAvailableAttributeData($scope.componentId, 'value');
             var fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
             var minfontsize = $scope.getAvailableAttributeData($scope.componentId, 'minfontsize');

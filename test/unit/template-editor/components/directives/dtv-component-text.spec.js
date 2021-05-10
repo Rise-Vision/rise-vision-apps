@@ -27,7 +27,6 @@ describe('directive: templateComponentText', function() {
     $scope.registerDirective = sinon.stub();
     $scope.setAttributeData = sinon.stub();
     $scope.getAvailableAttributeData = sinon.stub().returns('data');
-    $scope.getBlueprintData = sinon.stub().returns(false);
 
     element = $compile("<template-component-text></template-component-text>")($scope);
     $scope = element.scope();
@@ -58,12 +57,12 @@ describe('directive: templateComponentText', function() {
   });
 
   it('should load multiline attribute from blueprint', function() {
-    $scope.getBlueprintData.returns(true);
+    $scope.getAvailableAttributeData.returns(true);
     var directive = $scope.registerDirective.getCall(0).args[0];
 
     directive.show();
 
-    expect($scope.getBlueprintData).to.have.been.calledWith('TEST-ID', 'multiline');
+    expect($scope.getAvailableAttributeData).to.have.been.calledWith('TEST-ID', 'multiline');
     expect($scope.isMultiline).to.be.true;
   });
 

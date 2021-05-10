@@ -48,7 +48,10 @@ angular.module('risevision.template-editor.services')
       panel: '.image-component-container',
       title: 'Image',
       playUntilDone: true,
-      visual: true
+      visual: true,
+      defaultAttributes: {
+        responsive: true
+      }
     },
     'rise-image-logo': {
       type: 'rise-image-logo',
@@ -93,14 +96,21 @@ angular.module('risevision.template-editor.services')
       iconType: 'streamline',
       icon: 'text',
       title: 'Text',
-      visual: true
+      visual: true,
+      defaultAttributes: {
+        fontsize: 100,
+        multiline: true
+      }
     },
     'rise-time-date': {
       type: 'rise-time-date',
       iconType: 'streamline',
       icon: 'time',
       title: 'Time and Date',
-      visual: true
+      visual: true,
+      defaultAttributes: {
+        type: 'timedate'
+      }
     },
     'rise-data-twitter': {
       type: 'rise-data-twitter',

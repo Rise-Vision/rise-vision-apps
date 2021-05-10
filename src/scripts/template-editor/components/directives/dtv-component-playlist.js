@@ -338,7 +338,8 @@ angular.module('risevision.template-editor.directives')
               'duration': 10,
               'play-until-done': !!component.playUntilDone,
               'transition-type': 'normal',
-              'tagName': type
+              'tagName': type,
+              'attributes': angular.copy(component.defaultAttributes) || {}
             };
 
             $scope.playlistItems.push(item);
