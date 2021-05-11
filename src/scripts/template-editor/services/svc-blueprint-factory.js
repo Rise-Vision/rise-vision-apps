@@ -54,6 +54,10 @@ angular.module('risevision.template-editor.services')
         return (!!factory.blueprintData && factory.blueprintData.branding === true);
       };
 
+      factory.isRiseInit = function () {
+        return (!!factory.blueprintData && factory.blueprintData.riseInit === true);
+      };
+
       factory.getBlueprintData = function (componentId, attributeKey) {
         var components = factory.blueprintData.components;
         var component = _.find(components, {

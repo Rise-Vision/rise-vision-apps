@@ -47,6 +47,7 @@ describe('service: blueprint factory', function() {
     expect(blueprintFactory.getBlueprintCached).to.be.a('function');
     expect(blueprintFactory.isPlayUntilDone).to.be.a('function');
     expect(blueprintFactory.hasBranding).to.be.a('function');
+    expect(blueprintFactory.isRiseInit).to.be.a('function');
   });
 
   describe('getBlueprintCached: ', function() {
@@ -170,6 +171,29 @@ describe('service: blueprint factory', function() {
       };
 
       expect(blueprintFactory.hasBranding()).to.be.false;
+    });
+  });
+
+  describe('isRiseInit: ', function() {
+
+    it('should return false if blueprintData is not populated',function() {
+      expect(blueprintFactory.isRiseInit()).to.be.false;
+    });
+
+    it('should return true if blueprintData.riseInit is true',function() {
+      blueprintFactory.blueprintData = {
+        riseInit: true
+      };
+
+      expect(blueprintFactory.isRiseInit()).to.be.true;
+    });
+
+    it('should return false otherwise',function() {
+      blueprintFactory.blueprintData = {
+        riseInit: false
+      };
+
+      expect(blueprintFactory.isRiseInit()).to.be.false;
     });
   });
 

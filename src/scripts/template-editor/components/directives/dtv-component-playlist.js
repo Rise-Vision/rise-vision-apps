@@ -23,7 +23,25 @@ angular.module('risevision.template-editor.directives')
           $scope.playlistComponents = PLAYLIST_COMPONENTS;
           $scope.addVisualComponents = !!ENV_NAME && ENV_NAME !== 'TEST';
 
+          var _updatePlaylistComponents = function() {
+            if (!blueprintFactory.isRiseInit()) {
+              $scope.addVisualComponents = false;
+            } else {
+              var allowedComponents = $scope.getBlueprintData($scope.componentId, 'allowed-components');
+
+              if (allowedComponents && allowedComponents !== '*') {
+                var componentsArray = allowedComponents.split(',');
+
+                $scope.playlistComponents = _.filter(PLAYLIST_COMPONENTS, function(component) {
+                  return componentsArray.indexOf(component.type) !== -1;
+                });
+              }
+            }
+          };
+
           function _load() {
+            _updatePlaylistComponents();
+
             var itemsJson = $scope.getAvailableAttributeData($scope.componentId, 'items');
             var itemsArray = $scope.jsonToPlaylistItems(itemsJson);
             $scope.loadTemplateNames(itemsArray);
@@ -49,6 +67,10 @@ angular.module('risevision.template-editor.directives')
               }
             }
           });
+
+          $scope.showComponentsDropdown = function() {
+            return $scope.addVisualComponents && !!$scope.playlistComponents && $scope.playlistComponents.length > 0;
+          };
 
           var _mapItemToEditorFormat = function (item) {
             return {

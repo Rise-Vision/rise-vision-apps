@@ -42,11 +42,11 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
 
     <div class="playlist-action-button-bar" ng-class="{'no-selected-templates' : !playlistItems.length || playlistItems.length === 0}">
       <div class="select-templates">
-        <button id="te-playlist-select-templates" class="btn btn-primary btn-block" ng-click="showAddTemplates()" ng-if="!addVisualComponents">
+        <button id="te-playlist-select-templates" class="btn btn-primary btn-block" ng-click="showAddTemplates()" ng-if="!showComponentsDropdown()">
           Select Presentations
         </button>
         <div class="btn-group btn-block" dropdown ng-class="{'dropup' : playlistItems.length && playlistItems.length > 0}">
-          <button id="addPlaylistItemButton" type="button" dropdown-toggle class="btn btn-primary btn-block" ng-if="addVisualComponents">Add</button>
+          <button id="addPlaylistItemButton" type="button" dropdown-toggle class="btn btn-primary btn-block" ng-if="showComponentsDropdown()">Add</button>
           <div class="dropdown-menu playlist-menu" role="menu">
             <ul>
             <li>
