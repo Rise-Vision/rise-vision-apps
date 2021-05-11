@@ -29,7 +29,9 @@ angular.module('risevision.template-editor.directives')
             } else {
               var allowedComponents = $scope.getBlueprintData($scope.componentId, 'allowed-components');
 
-              if (allowedComponents && allowedComponents !== '*') {
+              if (!allowedComponents || allowedComponents === '*') {
+                $scope.playlistComponents = PLAYLIST_COMPONENTS;
+              } else {
                 var componentsArray = allowedComponents.split(',');
 
                 $scope.playlistComponents = _.filter(PLAYLIST_COMPONENTS, function(component) {

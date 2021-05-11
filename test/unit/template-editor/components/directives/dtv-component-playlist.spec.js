@@ -222,22 +222,30 @@ describe("directive: templateComponentPlaylist", function() {
           expect($scope.playlistComponents).to.equal(playlistComponents);
         });
 
+        it('should reset playlist components', function() {
+          $scope.playlistComponents = null;
+
+          $scope.registerDirective.getCall(0).args[0].show();
+
+          expect($scope.playlistComponents).to.equal(playlistComponents);
+        });
+
         it('should handle * for allowed-components', function() {
-          $scope.getBlueprintData.returns('*')
+          $scope.getBlueprintData.returns('*');
           $scope.registerDirective.getCall(0).args[0].show();
 
           expect($scope.playlistComponents).to.equal(playlistComponents);
         });
 
         it('should parse csv values for allowed-components', function() {
-          $scope.getBlueprintData.returns('rise-video,rise-slides')
+          $scope.getBlueprintData.returns('rise-video,rise-slides');
           $scope.registerDirective.getCall(0).args[0].show();
 
           expect($scope.playlistComponents).to.have.length(2);
         });
 
         it('should ignore rise-embedded-template', function() {
-          $scope.getBlueprintData.returns('rise-embedded-template,rise-video,rise-slides')
+          $scope.getBlueprintData.returns('rise-embedded-template,rise-video,rise-slides');
           $scope.registerDirective.getCall(0).args[0].show();
 
           expect($scope.playlistComponents).to.have.length(2);
