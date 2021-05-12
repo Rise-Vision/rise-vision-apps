@@ -18,3 +18,25 @@ export const analyticsFactoryProvider = {
   },
   deps: ['$injector']
 };
+
+export abstract class BlueprintFactory {
+  [key: string]: any;
+}
+export const blueprintFactoryProvider = {
+  provide: BlueprintFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('blueprintFactory');
+  },
+  deps: ['$injector']
+};
+
+export abstract class TemplateEditorFactory {
+  [key: string]: any;
+}
+export const templateEditorFactoryProvider = {
+  provide: TemplateEditorFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('templateEditorFactory');
+  },
+  deps: ['$injector']
+};

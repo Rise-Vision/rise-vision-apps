@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { EditorModule } from './editor/editor.module';
-import { analyticsFactoryProvider, canvaTypePickerProvider } from './ajs-upgraded-providers';
+import { analyticsFactoryProvider, blueprintFactoryProvider, canvaTypePickerProvider, templateEditorFactoryProvider } from './ajs-upgraded-providers';
 import { TemplateEditorModule } from './template-editor/template-editor.module';
 
 @NgModule({
@@ -18,7 +18,9 @@ import { TemplateEditorModule } from './template-editor/template-editor.module';
   ],
   providers: [
     analyticsFactoryProvider,
-    canvaTypePickerProvider
+    blueprintFactoryProvider,
+    canvaTypePickerProvider,
+    templateEditorFactoryProvider
   ],
   bootstrap: []
 })
