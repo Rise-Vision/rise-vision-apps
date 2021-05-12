@@ -125,7 +125,8 @@ describe("directive: templateComponentPlaylist", function() {
 
     $provide.service("blueprintFactory", function() {
       return {
-        isPlayUntilDone: sandbox.stub().resolves(true)
+        isPlayUntilDone: sandbox.stub().resolves(true),
+        isRiseInit: sandbox.stub().returns(true)
       };
     });
   }));
@@ -137,9 +138,10 @@ describe("directive: templateComponentPlaylist", function() {
     editorFactory = $injector.get('editorFactory');
     blueprintFactory = $injector.get('blueprintFactory');
 
-    $scope.registerDirective = sinon.stub();
-    $scope.setAttributeData = sinon.stub();
-    $scope.editComponent = sinon.stub();
+    $scope.getBlueprintData = sandbox.stub();
+    $scope.registerDirective = sandbox.stub();
+    $scope.setAttributeData = sandbox.stub();
+    $scope.editComponent = sandbox.stub();
 
     element = $compile("<template-component-playlist></template-component-playlistt>")($scope);
     $scope = element.scope();
@@ -154,6 +156,8 @@ describe("directive: templateComponentPlaylist", function() {
 
     expect($scope.playlistComponents).to.be.an('array');
     expect($scope.addVisualComponents).to.be.false;
+
+    expect($scope.showComponentsDropdown).to.be.a('function')
 
     expect($scope.getComponentByType).to.be.a('function');
     expect($scope.addPlaylistItem).to.be.a('function');
@@ -188,6 +192,93 @@ describe("directive: templateComponentPlaylist", function() {
         expect($scope.registerDirective.getCall(0).args[0].onBackHandler()).to.be.true;
         expect($scope.view).to.not.be.ok;
       });
+    });
+
+    describe('show:', function() {
+      describe('_updatePlaylistComponents:', function() {
+        var playlistComponents;
+
+        beforeEach(function() {
+          playlistComponents = $scope.playlistComponents;
+
+          $scope.getAvailableAttributeData = sandbox.stub();
+        });
+
+        it('should set addVisualComponents to false based on isRiseInit being false', function() {
+          blueprintFactory.isRiseInit.returns(false);
+
+          $scope.addVisualComponents = true;
+
+          $scope.registerDirective.getCall(0).args[0].show();
+
+          expect($scope.addVisualComponents).to.be.false;
+        });
+
+        it('should check blueprint data for allowed-components', function() {
+          $scope.registerDirective.getCall(0).args[0].show();
+
+          $scope.getBlueprintData.should.have.been.calledWith('TEST-ID', 'allowed-components');
+
+          expect($scope.playlistComponents).to.equal(playlistComponents);
+        });
+
+        it('should reset playlist components', function() {
+          $scope.playlistComponents = null;
+
+          $scope.registerDirective.getCall(0).args[0].show();
+
+          expect($scope.playlistComponents).to.equal(playlistComponents);
+        });
+
+        it('should handle * for allowed-components', function() {
+          $scope.getBlueprintData.returns('*');
+          $scope.registerDirective.getCall(0).args[0].show();
+
+          expect($scope.playlistComponents).to.equal(playlistComponents);
+        });
+
+        it('should parse csv values for allowed-components', function() {
+          $scope.getBlueprintData.returns('rise-video,rise-slides');
+          $scope.registerDirective.getCall(0).args[0].show();
+
+          expect($scope.playlistComponents).to.have.length(2);
+        });
+
+        it('should ignore rise-embedded-template', function() {
+          $scope.getBlueprintData.returns('rise-embedded-template,rise-video,rise-slides');
+          $scope.registerDirective.getCall(0).args[0].show();
+
+          expect($scope.playlistComponents).to.have.length(2);
+        });
+
+      });
+    });
+  });
+
+  describe('showComponentsDropdown:', function() {
+    it('should not show by default', function() {
+      expect($scope.showComponentsDropdown()).to.be.false;
+    });
+
+    it('should not show if playlistComponents does not exist', function() {
+      $scope.addVisualComponents = true;
+      $scope.playlistComponents = null;
+
+      expect($scope.showComponentsDropdown()).to.be.false;
+    });
+
+    it('should not show if there are no visual components', function() {
+      $scope.addVisualComponents = true;
+      $scope.playlistComponents = [];
+
+      expect($scope.showComponentsDropdown()).to.be.false;
+    });
+
+    it('should show if there are visual components', function() {
+      $scope.addVisualComponents = true;
+      $scope.playlistComponents = ['rise-video'];
+
+      expect($scope.showComponentsDropdown()).to.be.true;
     });
   });
 
