@@ -8,7 +8,6 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-weather.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
           $scope.companySettingsFactory = companySettingsFactory;
           $scope.canEditCompany = userState.hasRole('ua');
 
@@ -32,7 +31,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-data-weather',
             element: element,
             show: function () {
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               _load();
             }
           });

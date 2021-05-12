@@ -10,7 +10,6 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-twitter.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
           $scope.MAX_ITEMS = 100;
 
           $scope.$watch('spinner', function (loading) {
@@ -63,7 +62,7 @@ angular.module('risevision.template-editor.directives')
             element: element,
             show: function () {
               element.show();
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               _validateCredentials();
               _load();
             }
@@ -87,7 +86,7 @@ angular.module('risevision.template-editor.directives')
           function _validateCredentials() {
             $scope.spinner = true;
 
-            twitterCredentialsValidation.verifyCredentials($scope.factory.presentation.companyId)
+            twitterCredentialsValidation.verifyCredentials(templateEditorFactory.presentation.companyId)
               .then(function (hasCredentials) {
                 $scope.connected = hasCredentials;
                 $scope.connectionFailure = false;

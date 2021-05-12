@@ -8,7 +8,6 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-text.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
           $scope.sliderOptions = {
             hideLimitLabels: true,
             hidePointerLabels: true
@@ -50,7 +49,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-text',
             element: element,
             show: function () {
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               _load();
             }
           });

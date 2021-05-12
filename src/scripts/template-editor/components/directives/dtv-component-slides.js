@@ -9,8 +9,6 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-slides.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
-
           $rootScope.$on('risevision.page.visible', function (pageIsVisible) {
             if (_directiveIsVisible() && pageIsVisible) {
               $scope.saveSrc();
@@ -59,7 +57,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-slides',
             element: element,
             show: function () {
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               _load();
               $scope.saveSrc(); //validate Slides URL
             }

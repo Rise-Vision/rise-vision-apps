@@ -8,8 +8,6 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-colors.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
-
           // TODO: refactor logic for Override Brand Settings epic
 
           $scope.save = function () {
@@ -29,7 +27,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-override-brand-colors',
             element: element,
             show: function () {
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               $scope.load();
             }
           });

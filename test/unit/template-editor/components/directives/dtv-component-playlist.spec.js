@@ -5,7 +5,6 @@ describe("directive: templateComponentPlaylist", function() {
       $scope,
       $loading,
       element,
-      factory,
       attributeDataFactory,
       editorFactory,
       blueprintFactory,
@@ -21,11 +20,6 @@ describe("directive: templateComponentPlaylist", function() {
   };
 
   beforeEach(function() {
-    factory = {
-      selected: { id: "TEST-ID" },
-      presentation: { id: "TEST-ID" }
-    };
-
     sampleAttributeData = {
       "items": [
         {
@@ -97,7 +91,10 @@ describe("directive: templateComponentPlaylist", function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service("templateEditorFactory", function() {
-      return factory;
+      return {
+        selected: { id: "TEST-ID" },
+        presentation: { id: "TEST-ID" }
+      };
     });
 
     $provide.service('attributeDataFactory', function() {
@@ -157,8 +154,6 @@ describe("directive: templateComponentPlaylist", function() {
 
   it("should exist", function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" }, presentation: { id: "TEST-ID" }});
     expect($scope.registerDirective).to.have.been.called;
 
     expect($scope.playlistComponents).to.be.an('array');

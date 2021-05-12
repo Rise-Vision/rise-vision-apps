@@ -3,7 +3,6 @@
 describe('directive: templateComponentWeather', function() {
   var $scope,
       element,
-      factory,
       attributeDataFactory,
       company,
       rootScope,
@@ -11,7 +10,6 @@ describe('directive: templateComponentWeather', function() {
       hasRole = true;
 
   beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
     company = {
       postalCode: '12345'
     };
@@ -24,7 +22,7 @@ describe('directive: templateComponentWeather', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return { selected: { id: "TEST-ID" } };
     });
     $provide.service('attributeDataFactory', function() {
       return {
@@ -70,8 +68,6 @@ describe('directive: templateComponentWeather', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
     expect($scope.registerDirective).to.have.been.called;
     expect($scope.companySettingsFactory).to.be.ok;
     expect($scope.hasValidAddress).to.be.ok;

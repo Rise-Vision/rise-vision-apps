@@ -3,7 +3,6 @@
 describe('directive: templateComponentTwitter', function() {
   var $scope,
     element,
-    factory,
     attributeDataFactory,
     oauthService,
     twitterCredentialsValidation,
@@ -11,7 +10,6 @@ describe('directive: templateComponentTwitter', function() {
     sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" }, presentation: {companyId: "abc123"} };
     oauthService = {};
     twitterCredentialsValidation = {};
     templateEditorUtils = {isStaging: sandbox.stub()};
@@ -24,7 +22,7 @@ describe('directive: templateComponentTwitter', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return { selected: { id: "TEST-ID" }, presentation: {companyId: "abc123"} };
     });
 
     $provide.service('attributeDataFactory', function() {
@@ -61,8 +59,6 @@ describe('directive: templateComponentTwitter', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" }, presentation: {companyId: "abc123"} });
     expect($scope.registerDirective).to.have.been.called;
 
     var directive = $scope.registerDirective.getCall(0).args[0];

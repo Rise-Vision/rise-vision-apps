@@ -8,8 +8,6 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-html.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
-
           $scope.codemirrorOptions = {};
 
           function _load() {
@@ -35,7 +33,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-html',
             element: element,
             show: function () {
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               _load();
             }
           });

@@ -10,7 +10,6 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           var DATE_FORMATS = ['MMMM DD, YYYY', 'MMM DD YYYY', 'MM/DD/YYYY', 'DD/MM/YYYY'];
 
-          $scope.factory = templateEditorFactory;
           $scope.dateFormats = DATE_FORMATS.map(function (format) {
             return {
               format: format,
@@ -24,7 +23,7 @@ angular.module('risevision.template-editor.directives')
             element: element,
             show: function () {
               element.show();
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               $scope.load();
             },
             getTitle: function (component) {

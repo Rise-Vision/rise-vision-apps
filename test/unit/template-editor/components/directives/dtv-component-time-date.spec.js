@@ -3,13 +3,8 @@
 describe('directive: templateComponentTimeDate', function() {
   var $scope,
     element,
-    factory,
     attributeDataFactory,
     sandbox = sinon.sandbox.create();
-
-  beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
-  });
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.controllers'));
@@ -18,7 +13,7 @@ describe('directive: templateComponentTimeDate', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return { selected: { id: "TEST-ID" } };
     });
 
     $provide.service('attributeDataFactory', function() {
@@ -47,8 +42,6 @@ describe('directive: templateComponentTimeDate', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } });
   });
 
   describe('registerDirective:', function() {
