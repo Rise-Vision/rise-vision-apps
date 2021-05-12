@@ -1,6 +1,6 @@
 'use strict';
 describe('controller: TemplateEditor', function() {
-  var $rootScope, $scope, $modal, $timeout, $window, $state, templateEditorFactory, attributeDataFactory, userState;
+  var $rootScope, $scope, $modal, $timeout, $window, $state, templateEditorFactory, userState;
   var sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
@@ -63,7 +63,6 @@ describe('controller: TemplateEditor', function() {
       $timeout = $injector.get('$timeout');
       $state = $injector.get('$state');
       templateEditorFactory = $injector.get('templateEditorFactory');
-      attributeDataFactory = $injector.get('attributeDataFactory');
       userState = $injector.get('userState');
 
       $controller('TemplateEditorController', {
@@ -80,16 +79,6 @@ describe('controller: TemplateEditor', function() {
     expect($scope.factory).to.be.ok;
     expect($scope.factory.presentation).to.be.ok;
     expect($scope.factory.presentation.templateAttributeData).to.deep.equal({});
-  });
-
-  it('should proxy attributeDataFactory functions',function() {
-    expect($scope.getBlueprintData).to.equal(attributeDataFactory.getBlueprintData);
-    expect($scope.getAttributeData).to.equal(attributeDataFactory.getAttributeData);
-    expect($scope.setAttributeData).to.equal(attributeDataFactory.setAttributeData);
-    expect($scope.getAttributeDataGlobal).to.equal(attributeDataFactory.getAttributeDataGlobal);
-    expect($scope.setAttributeDataGlobal).to.equal(attributeDataFactory.setAttributeDataGlobal);
-    expect($scope.getAvailableAttributeData).to.equal(attributeDataFactory.getAvailableAttributeData);
-    expect($scope.getComponentIds).to.equal(attributeDataFactory.getComponentIds);
   });
 
   describe('hasContentEditorRole', function() {

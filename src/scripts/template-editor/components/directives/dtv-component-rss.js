@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentRss', ['templateEditorFactory', '$loading', 'componentUtils', 'rssFeedValidation',
+  .directive('templateComponentRss', ['templateEditorFactory', 'attributeDataFactory', '$loading', 'componentUtils', 'rssFeedValidation',
     '$timeout',
-    function (templateEditorFactory, $loading, componentUtils, rssFeedValidation, $timeout) {
+    function (templateEditorFactory, attributeDataFactory, $loading, componentUtils, rssFeedValidation, $timeout) {
       return {
         restrict: 'E',
         scope: true,
@@ -30,7 +30,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.saveMaxItems = function () {
-            $scope.setAttributeData($scope.componentId, 'maxitems', parseInt($scope.maxItems, 10));
+            attributeDataFactory.setAttributeData($scope.componentId, 'maxitems', parseInt($scope.maxItems, 10));
           };
 
           $scope.registerDirective({
@@ -44,9 +44,9 @@ angular.module('risevision.template-editor.directives')
           });
 
           function _load() {
-            var maxItems = $scope.getAvailableAttributeData($scope.componentId, 'maxitems');
+            var maxItems = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'maxitems');
 
-            $scope.feedUrl = $scope.getAvailableAttributeData($scope.componentId, 'feedurl');
+            $scope.feedUrl = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'feedurl');
             $scope.maxItems = maxItems ? maxItems.toString() : '1';
           }
 
@@ -73,7 +73,7 @@ angular.module('risevision.template-editor.directives')
             rssFeedValidation.isParsable($scope.feedUrl)
               .then(function (result) {
                 if (result === 'VALID') {
-                  $scope.setAttributeData($scope.componentId, 'feedurl', $scope.feedUrl);
+                  attributeDataFactory.setAttributeData($scope.componentId, 'feedurl', $scope.feedUrl);
 
                   _isFeedValid();
                 } else {

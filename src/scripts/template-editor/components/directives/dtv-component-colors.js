@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentColors', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .directive('templateComponentColors', ['templateEditorFactory', 'attributeDataFactory',
+    function (templateEditorFactory, attributeDataFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -22,7 +22,7 @@ angular.module('risevision.template-editor.directives')
               };
             }
 
-            $scope.setAttributeDataGlobal('brandingOverride', brandingOverride);
+            attributeDataFactory.setAttributeDataGlobal('brandingOverride', brandingOverride);
           };
 
           $scope.registerDirective({
@@ -36,7 +36,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.load = function () {
 
-            var brandingOverride = $scope.getAttributeDataGlobal('brandingOverride');
+            var brandingOverride = attributeDataFactory.getAttributeDataGlobal('brandingOverride');
 
             $scope.override = !!brandingOverride;
             $scope.baseColor = $scope.override ? brandingOverride.baseColor : null;

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentText', ['$timeout', '$window', 'templateEditorFactory', 'templateEditorUtils',
-    function ($timeout, $window, templateEditorFactory, templateEditorUtils) {
+  .directive('templateComponentText', ['$timeout', '$window', 'templateEditorFactory', 'attributeDataFactory', 'templateEditorUtils',
+    function ($timeout, $window, templateEditorFactory, attributeDataFactory, templateEditorUtils) {
       return {
         restrict: 'E',
         scope: true,
@@ -15,11 +15,11 @@ angular.module('risevision.template-editor.directives')
           };
 
           function _load() {
-            $scope.isMultiline = $scope.getAvailableAttributeData($scope.componentId, 'multiline');
-            var value = $scope.getAvailableAttributeData($scope.componentId, 'value');
-            var fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
-            var minfontsize = $scope.getAvailableAttributeData($scope.componentId, 'minfontsize');
-            var maxfontsize = $scope.getAvailableAttributeData($scope.componentId, 'maxfontsize');
+            $scope.isMultiline = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'multiline');
+            var value = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'value');
+            var fontsize = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'fontsize');
+            var minfontsize = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'minfontsize');
+            var maxfontsize = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'maxfontsize');
 
             var fontsizeInt = templateEditorUtils.intValueFor(fontsize, null);
             var minFontSize = templateEditorUtils.intValueFor(minfontsize, 1);
@@ -39,10 +39,10 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.save = function () {
-            $scope.setAttributeData($scope.componentId, 'value', $scope.value);
+            attributeDataFactory.setAttributeData($scope.componentId, 'value', $scope.value);
 
             if ($scope.showFontSize) {
-              $scope.setAttributeData($scope.componentId, 'fontsize', $scope.fontsize);
+              attributeDataFactory.setAttributeData($scope.componentId, 'fontsize', $scope.fontsize);
             }
           };
 

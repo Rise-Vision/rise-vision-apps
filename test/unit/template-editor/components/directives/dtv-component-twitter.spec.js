@@ -4,6 +4,7 @@ describe('directive: templateComponentTwitter', function() {
   var $scope,
     element,
     factory,
+    attributeDataFactory,
     oauthService,
     twitterCredentialsValidation,
     templateEditorUtils,
@@ -26,6 +27,12 @@ describe('directive: templateComponentTwitter', function() {
       return factory;
     });
 
+    $provide.service('attributeDataFactory', function() {
+      return {
+        setAttributeData: sandbox.stub()
+      };
+    });
+
     $provide.service('TwitterOAuthService', function() {
       return oauthService;
     });
@@ -39,12 +46,13 @@ describe('directive: templateComponentTwitter', function() {
     });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    attributeDataFactory = $injector.get('attributeDataFactory');
+
     $templateCache.put('partials/template-editor/components/component-twitter.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
     $scope.registerDirective = sinon.stub();
-    $scope.setAttributeData = sinon.stub();
 
     element = $compile("<template-component-twitter></template-component-twitter>")($scope);
     $scope = element.scope();
@@ -75,9 +83,9 @@ describe('directive: templateComponentTwitter', function() {
       expect($scope.connected).to.be.true;
       expect($scope.connectionFailure).to.be.false;
 
-      expect($scope.setAttributeData).to.have.been.called;
-      expect($scope.setAttributeData.lastCall.args[1]).to.equal('credentialsUpdated');
-      expect($scope.setAttributeData.lastCall.args[2]).to.be.ok;
+      expect(attributeDataFactory.setAttributeData).to.have.been.called;
+      expect(attributeDataFactory.setAttributeData.lastCall.args[1]).to.equal('credentialsUpdated');
+      expect(attributeDataFactory.setAttributeData.lastCall.args[2]).to.be.ok;
 
       done();
     });
@@ -95,7 +103,7 @@ describe('directive: templateComponentTwitter', function() {
       expect($scope.connected).to.be.false;
       expect($scope.connectionFailure).to.be.true;
 
-      expect($scope.setAttributeData).to.have.not.been.called;
+      expect(attributeDataFactory.setAttributeData).to.have.not.been.called;
 
       done();
     });
@@ -105,7 +113,7 @@ describe('directive: templateComponentTwitter', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
     twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
-    $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
+    attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
 
     directive.show();
 
@@ -116,7 +124,7 @@ describe('directive: templateComponentTwitter', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
     twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(false));
-    $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
+    attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
 
     directive.show();
 
@@ -135,7 +143,7 @@ describe('directive: templateComponentTwitter', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
     twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
-    $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
+    attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
 
     directive.show();
 
@@ -154,7 +162,7 @@ describe('directive: templateComponentTwitter', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
     twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.reject());
-    $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
+    attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
 
     directive.show();
 
@@ -174,7 +182,7 @@ describe('directive: templateComponentTwitter', function() {
       it('should load data and indicate the username is valid', function() {
         var directive = $scope.registerDirective.getCall(0).args[0];
 
-        $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
+        attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
         twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
 
         directive.show();
@@ -186,7 +194,7 @@ describe('directive: templateComponentTwitter', function() {
       it('should load data and indicate the username is not valid', function() {
         var directive = $scope.registerDirective.getCall(0).args[0];
 
-        $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandleButReallyLongAndNotValid');
+        attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('@twitterHandleButReallyLongAndNotValid');
         twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
 
         directive.show();
@@ -200,7 +208,7 @@ describe('directive: templateComponentTwitter', function() {
       it('should load data and indicate maxitems is valid', function() {
         var directive = $scope.registerDirective.getCall(0).args[0];
 
-        $scope.getAvailableAttributeData = sandbox.stub().returns('20');
+        attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('20');
         twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
 
         directive.show();
@@ -212,7 +220,7 @@ describe('directive: templateComponentTwitter', function() {
       it('should load data and indicate maxitems is not valid', function() {
         var directive = $scope.registerDirective.getCall(0).args[0];
 
-        $scope.getAvailableAttributeData = sandbox.stub().returns('300');
+        attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('300');
         twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
 
         directive.show();
@@ -230,73 +238,73 @@ describe('directive: templateComponentTwitter', function() {
 
     describe('username', function () {
       it('should save data and indicate the username is valid', function() {
-        $scope.setAttributeData = sandbox.stub();
+        attributeDataFactory.setAttributeData = sandbox.stub();
         $scope.username = '@twitterHandle';
 
         $scope.save();
 
-        expect($scope.setAttributeData).to.have.been.called;
-        expect($scope.setAttributeData.lastCall.args[2]).to.equal('twitterHandle');
+        expect(attributeDataFactory.setAttributeData).to.have.been.called;
+        expect(attributeDataFactory.setAttributeData.lastCall.args[2]).to.equal('twitterHandle');
         expect($scope.usernameStatus).to.equal('VALID');
       });
 
       it('should load data and indicate the username is not valid', function() {
-        $scope.setAttributeData = sandbox.stub();
+        attributeDataFactory.setAttributeData = sandbox.stub();
         $scope.username = '@twitterHandleButReallyLongAndNotValid';
 
         $scope.save();
 
-        expect($scope.setAttributeData.callCount).to.equal(1);
+        expect(attributeDataFactory.setAttributeData.callCount).to.equal(1);
         expect($scope.usernameStatus).to.equal('INVALID_USERNAME');
       });
     });
 
     describe('maxitems', function () {
       it('should save data and indicate maxitems is valid', function() {
-        $scope.setAttributeData = sandbox.stub();
+        attributeDataFactory.setAttributeData = sandbox.stub();
         $scope.maxitems = '20';
 
         $scope.save();
 
-        expect($scope.setAttributeData).to.have.been.called;
-        expect($scope.setAttributeData.lastCall.args[2]).to.equal(20);
+        expect(attributeDataFactory.setAttributeData).to.have.been.called;
+        expect(attributeDataFactory.setAttributeData.lastCall.args[2]).to.equal(20);
         expect($scope.maxitemsStatus).to.equal('VALID');
       });
 
       it('should load data and indicate maxitems is not valid', function() {
-        $scope.setAttributeData = sandbox.stub();
+        attributeDataFactory.setAttributeData = sandbox.stub();
         $scope.maxitems = '300';
 
         $scope.save();
 
-        expect($scope.setAttributeData.callCount).to.equal(1);
+        expect(attributeDataFactory.setAttributeData.callCount).to.equal(1);
         expect($scope.maxitemsStatus).to.equal('INVALID_RANGE');
       });
     });
 
     describe('isStaging', function () {
       it('should save isStaging to true', function() {
-        $scope.setAttributeData = sandbox.stub();
+        attributeDataFactory.setAttributeData = sandbox.stub();
         $scope.isStaging = true;
         $scope.username = '@twitterHandle';
 
         $scope.save();
 
-        expect($scope.setAttributeData.callCount).to.equal(2);
-        console.log($scope.setAttributeData.firstCall.args);
-        expect($scope.setAttributeData.firstCall.args[2]).to.be.true;
+        expect(attributeDataFactory.setAttributeData.callCount).to.equal(2);
+        console.log(attributeDataFactory.setAttributeData.firstCall.args);
+        expect(attributeDataFactory.setAttributeData.firstCall.args[2]).to.be.true;
       });
 
       it('should save isStaging to false', function() {
-        $scope.setAttributeData = sandbox.stub();
+        attributeDataFactory.setAttributeData = sandbox.stub();
         $scope.isStaging = false;
         $scope.username = '@twitterHandle';
 
         $scope.save();
 
-        expect($scope.setAttributeData.callCount).to.equal(2);
-        console.log($scope.setAttributeData.firstCall.args);
-        expect($scope.setAttributeData.firstCall.args[2]).to.be.false;
+        expect(attributeDataFactory.setAttributeData.callCount).to.equal(2);
+        console.log(attributeDataFactory.setAttributeData.firstCall.args);
+        expect(attributeDataFactory.setAttributeData.firstCall.args[2]).to.be.false;
       });
     });
   });

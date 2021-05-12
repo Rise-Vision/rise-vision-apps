@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentTimeDate', ['WORLD_TIMEZONES', 'templateEditorFactory',
-    function (WORLD_TIMEZONES, templateEditorFactory) {
+  .directive('templateComponentTimeDate', ['WORLD_TIMEZONES', 'templateEditorFactory', 'attributeDataFactory',
+    function (WORLD_TIMEZONES, templateEditorFactory, attributeDataFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -33,11 +33,11 @@ angular.module('risevision.template-editor.directives')
           });
 
           $scope.load = function () {
-            var defaultType = $scope.getBlueprintData($scope.componentId, 'type');
-            var type = $scope.getAvailableAttributeData($scope.componentId, 'type');
-            var timeFormat = $scope.getAvailableAttributeData($scope.componentId, 'time');
-            var dateFormat = $scope.getAvailableAttributeData($scope.componentId, 'date');
-            var timezone = $scope.getAvailableAttributeData($scope.componentId, 'timezone');
+            var defaultType = attributeDataFactory.getBlueprintData($scope.componentId, 'type');
+            var type = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'type');
+            var timeFormat = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'time');
+            var dateFormat = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'date');
+            var timezone = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'timezone');
             var timeFormatVal = timeFormat || 'Hours12';
             var dateFormatVal = dateFormat || $scope.dateFormats[0].format;
 
@@ -66,19 +66,19 @@ angular.module('risevision.template-editor.directives')
             }
 
             if (!$scope.defaultType) {
-              $scope.setAttributeData($scope.componentId, 'type', $scope.type);
+              attributeDataFactory.setAttributeData($scope.componentId, 'type', $scope.type);
             }
 
             if ($scope.type === 'timedate') {
-              $scope.setAttributeData($scope.componentId, 'time', $scope.timeFormat);
-              $scope.setAttributeData($scope.componentId, 'date', $scope.dateFormat);
+              attributeDataFactory.setAttributeData($scope.componentId, 'time', $scope.timeFormat);
+              attributeDataFactory.setAttributeData($scope.componentId, 'date', $scope.dateFormat);
             } else if ($scope.type === 'time') {
-              $scope.setAttributeData($scope.componentId, 'time', $scope.timeFormat);
+              attributeDataFactory.setAttributeData($scope.componentId, 'time', $scope.timeFormat);
             } else if ($scope.type === 'date') {
-              $scope.setAttributeData($scope.componentId, 'date', $scope.dateFormat);
+              attributeDataFactory.setAttributeData($scope.componentId, 'date', $scope.dateFormat);
             }
 
-            $scope.setAttributeData($scope.componentId, 'timezone', $scope.timezone);
+            attributeDataFactory.setAttributeData($scope.componentId, 'timezone', $scope.timezone);
           };
         }
       };

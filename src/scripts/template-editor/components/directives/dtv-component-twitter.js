@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentTwitter', ['templateEditorFactory', 'TwitterOAuthService', '$loading',
+  .directive('templateComponentTwitter', ['templateEditorFactory', 'attributeDataFactory', 'TwitterOAuthService', '$loading',
     'twitterCredentialsValidation', 'templateEditorUtils',
-    function (templateEditorFactory, TwitterOAuthService, $loading, twitterCredentialsValidation,
+    function (templateEditorFactory, attributeDataFactory, TwitterOAuthService, $loading, twitterCredentialsValidation,
       templateEditorUtils) {
       return {
         restrict: 'E',
@@ -37,7 +37,7 @@ angular.module('risevision.template-editor.directives')
                 $scope.connected = true;
                 $scope.connectionFailure = false;
 
-                $scope.setAttributeData($scope.componentId, 'credentialsUpdated', Date.now());
+                attributeDataFactory.setAttributeData($scope.componentId, 'credentialsUpdated', Date.now());
               }, function () {
                 _handleConnectionFailure();
               })
@@ -47,14 +47,14 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.save = function () {
-            $scope.setAttributeData($scope.componentId, 'isStaging', $scope.isStaging);
+            attributeDataFactory.setAttributeData($scope.componentId, 'isStaging', $scope.isStaging);
 
             if (_validateUsername($scope.username)) {
-              $scope.setAttributeData($scope.componentId, 'username', $scope.username.replace('@', ''));
+              attributeDataFactory.setAttributeData($scope.componentId, 'username', $scope.username.replace('@', ''));
             }
 
             if (_validateMaxitems($scope.maxitems)) {
-              $scope.setAttributeData($scope.componentId, 'maxitems', Number($scope.maxitems));
+              attributeDataFactory.setAttributeData($scope.componentId, 'maxitems', Number($scope.maxitems));
             }
           };
 
@@ -70,8 +70,8 @@ angular.module('risevision.template-editor.directives')
           });
 
           function _load() {
-            var username = $scope.getAvailableAttributeData($scope.componentId, 'username');
-            var maxitems = $scope.getAvailableAttributeData($scope.componentId, 'maxitems');
+            var username = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'username');
+            var maxitems = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'maxitems');
 
             $scope.username = username && username.indexOf('@') === -1 ? '@' + username : username;
             $scope.maxitems = maxitems;

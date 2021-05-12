@@ -4,9 +4,9 @@ angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_VIDEO_THUMBNAIL', 'streamline:video')
   .constant('SUPPORTED_VIDEO_TYPES', '.mp4, .webm')
   .directive('templateComponentVideo', ['$log', '$timeout', '$loading', 'templateEditorFactory',
-    'storageManagerFactory', 'templateEditorUtils', 'fileExistenceCheckService', 
+    'attributeDataFactory', 'storageManagerFactory', 'templateEditorUtils', 'fileExistenceCheckService', 
     'fileMetadataUtilsService', 'DEFAULT_VIDEO_THUMBNAIL', 'SUPPORTED_VIDEO_TYPES',
-    function ($log, $timeout, $loading, templateEditorFactory, storageManagerFactory, templateEditorUtils,
+    function ($log, $timeout, $loading, templateEditorFactory, attributeDataFactory, storageManagerFactory, templateEditorUtils,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_VIDEO_THUMBNAIL,
       SUPPORTED_VIDEO_TYPES) {
       return {
@@ -67,26 +67,26 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _getAttribute(key) {
-            return $scope.getAttributeData($scope.componentId, key);
+            return attributeDataFactory.getAttributeData($scope.componentId, key);
           }
 
           function _setAttribute(key, value) {
-            $scope.setAttributeData($scope.componentId, key, value);
+            attributeDataFactory.setAttributeData($scope.componentId, key, value);
           }
 
           function _getAvailableAttribute(key) {
-            return $scope.getAvailableAttributeData($scope.componentId, key);
+            return attributeDataFactory.getAvailableAttributeData($scope.componentId, key);
           }
 
           function _getBlueprintData(key) {
-            return $scope.getBlueprintData($scope.componentId, key);
+            return attributeDataFactory.getBlueprintData($scope.componentId, key);
           }
 
           function _getFilesFor(componentId) {
-            var metadata = $scope.getAttributeData(componentId, 'metadata');
+            var metadata = attributeDataFactory.getAttributeData(componentId, 'metadata');
 
             if (!metadata) {
-              return $scope.getBlueprintData(componentId, 'files');
+              return attributeDataFactory.getBlueprintData(componentId, 'files');
             }
 
             return fileMetadataUtilsService.extractFileNamesFrom(metadata);
