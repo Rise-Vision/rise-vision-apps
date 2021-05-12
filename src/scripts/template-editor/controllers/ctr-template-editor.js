@@ -2,10 +2,10 @@
 
 angular.module('risevision.template-editor.controllers')
   .controller('TemplateEditorController', ['$scope', '$q', '$filter', '$loading', '$state', '$timeout', '$window',
-    'templateEditorFactory', 'blueprintFactory', 'AutoSaveService',
+    'templateEditorFactory', 'attributeDataFactory', 'AutoSaveService',
     'presentationUtils', 'userState',
     function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory,
-      blueprintFactory, AutoSaveService, presentationUtils, userState) {
+      attributeDataFactory, AutoSaveService, presentationUtils, userState) {
       var autoSaveService = new AutoSaveService(templateEditorFactory.save);
 
       $scope.factory = templateEditorFactory;
@@ -13,45 +13,13 @@ angular.module('risevision.template-editor.controllers')
 
       $scope.considerChromeBarHeight = _considerChromeBarHeight();
 
-      $scope.getBlueprintData = function (componentId, attributeKey) {
-        return blueprintFactory.getBlueprintData(componentId, attributeKey);
-      };
-
-      $scope.getAttributeData = function (componentId, attributeKey) {
-        return templateEditorFactory.getAttributeData(componentId, attributeKey);
-      };
-
-      $scope.setAttributeData = function (componentId, attributeKey, value) {
-        templateEditorFactory.setAttributeData(componentId, attributeKey, value);
-      };
-
-      $scope.getAttributeDataGlobal = function (attributeKey) {
-        return templateEditorFactory.getAttributeDataGlobal(attributeKey);
-      };
-
-      $scope.setAttributeDataGlobal = function (attributeKey, value) {
-        templateEditorFactory.setAttributeDataGlobal(attributeKey, value);
-      };
-
-      $scope.getAvailableAttributeData = function (componentId, attributeName) {
-        var result = $scope.getAttributeData(componentId, attributeName);
-
-        if (angular.isUndefined(result)) {
-          result = $scope.getBlueprintData(componentId, attributeName);
-        }
-
-        return result;
-      };
-
-      $scope.getComponentIds = function (filter) {
-        var components = blueprintFactory.blueprintData.components;
-
-        var filteredComponents = _.filter(components, filter);
-
-        return _.map(filteredComponents, function (component) {
-          return component.id;
-        });
-      };
+      $scope.getBlueprintData = attributeDataFactory.getBlueprintData;
+      $scope.getAttributeData = attributeDataFactory.getAttributeData;
+      $scope.setAttributeData = attributeDataFactory.setAttributeData;
+      $scope.getAttributeDataGlobal = attributeDataFactory.getAttributeDataGlobal;
+      $scope.setAttributeDataGlobal = attributeDataFactory.setAttributeDataGlobal;
+      $scope.getAvailableAttributeData = attributeDataFactory.getAvailableAttributeData;
+      $scope.getComponentIds = attributeDataFactory.getComponentIds;
 
       $scope.hasContentEditorRole = function () {
         return userState.hasRole('ce');

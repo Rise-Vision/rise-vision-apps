@@ -14,6 +14,15 @@ angular.module('risevision.template-editor.services')
         hasUnsavedChanges: false
       };
 
+      var _parseJSON = function (json) {
+        try {
+          return JSON.parse(json);
+        } catch (err) {
+          $log.error('Invalid JSON: ' + err);
+          return null;
+        }
+      };
+
       var _setPresentation = function (presentation, isUpdate) {
 
         if (isUpdate) {
@@ -153,7 +162,6 @@ angular.module('risevision.template-editor.services')
         return deferred.promise;
       };
 
-
       factory.getPresentation = function (presentationId) {
         var deferred = $q.defer();
 
@@ -258,80 +266,6 @@ angular.module('risevision.template-editor.services')
         return deferred.promise;
       };
 
-      factory.getAttributeData = function (componentId, attributeKey) {
-        if (!componentId) {
-          return null;
-        }
-
-        var component = _componentFor(componentId, false);
-
-        if (component.element && component.element.attributes) {
-          return attributeKey ? component.element.attributes[attributeKey] : component.element.attributes;
-        } else {
-          // if the attributeKey is not provided, it returns the full component structure
-          return attributeKey ? component[attributeKey] : component;
-        }
-      };
-
-      factory.setAttributeData = function (componentId, attributeKey, value) {
-        if (!componentId) {
-          return null;
-        }
-
-        var component = _componentFor(componentId, true);
-
-        if (component.element) {
-          if (!component.element.attributes) {
-            component.element.attributes = {};
-          }
-
-          component.element.attributes[attributeKey] = value;
-        } else {
-          component[attributeKey] = value;
-        }
-      };
-
-      factory.getAttributeDataGlobal = function (attributeKey) {
-        return factory.presentation.templateAttributeData[attributeKey];
-      };
-
-      factory.setAttributeDataGlobal = function (attributeKey, value) {
-        factory.presentation.templateAttributeData[attributeKey] = value;
-      };
-
-      // updateAttributeData: do not update the object on getAttributeData
-      // or it will unnecessarily trigger hasUnsavedChanges = true
-      var _componentFor = function (componentId, updateAttributeData) {
-        var attributeData = factory.presentation.templateAttributeData;
-        var component;
-
-        if (componentId.indexOf(' ') !== -1) {
-          var tokens = componentId.split(' ');
-          var playlistId = tokens[0];
-          var playlist = _componentFor(playlistId, updateAttributeData);
-
-          return playlist.items[tokens[1]];
-        } else if (attributeData.components) {
-          component = _.find(attributeData.components, {
-            id: componentId
-          });
-        } else if (updateAttributeData) {
-          attributeData.components = [];
-        }
-
-        if (!component) {
-          component = {
-            id: componentId
-          };
-
-          if (updateAttributeData) {
-            attributeData.components.push(component);
-          }
-        }
-
-        return component;
-      };
-
       var _publishPresentation = function () {
         if (!factory.isRevised()) {
           // template is already published
@@ -357,15 +291,6 @@ angular.module('risevision.template-editor.services')
           .catch(function (err) {
             return err === 'Already have Schedules' ? $q.resolve() : $q.reject(err);
           });
-      };
-
-      var _parseJSON = function (json) {
-        try {
-          return JSON.parse(json);
-        } catch (err) {
-          $log.error('Invalid JSON: ' + err);
-          return null;
-        }
       };
 
       var _showErrorMessage = function (action, e) {

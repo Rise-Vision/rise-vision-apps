@@ -13,7 +13,7 @@ describe('service: baseImageFactory', function() {
         getHelpText: sandbox.stub().returns('help text')
       };
     });
-    $provide.service('templateEditorFactory', function() {
+    $provide.service('attributeDataFactory', function() {
       return {
         getAttributeData: sandbox.stub().returns('data'),
         setAttributeData: sandbox.stub()
@@ -30,7 +30,7 @@ describe('service: baseImageFactory', function() {
     });
   }));
 
-  var baseImageFactory, blueprintFactory, templateEditorFactory, fileMetadataUtilsService;
+  var baseImageFactory, blueprintFactory, attributeDataFactory, fileMetadataUtilsService;
   var sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
@@ -39,7 +39,7 @@ describe('service: baseImageFactory', function() {
       baseImageFactory.componentId = 'componentId';
       
       blueprintFactory = $injector.get('blueprintFactory');
-      templateEditorFactory = $injector.get('templateEditorFactory');
+      attributeDataFactory = $injector.get('attributeDataFactory');
       fileMetadataUtilsService = $injector.get('fileMetadataUtilsService');
     });
   });
@@ -66,7 +66,7 @@ describe('service: baseImageFactory', function() {
       var data = baseImageFactory.getImagesAsMetadata();      
 
       expect(data).to.equals('data');
-      templateEditorFactory.getAttributeData.should.have.been.calledWith('componentId','metadata');
+      attributeDataFactory.getAttributeData.should.have.been.calledWith('componentId','metadata');
     });
   });
 
@@ -75,7 +75,7 @@ describe('service: baseImageFactory', function() {
       var data = baseImageFactory.getDuration();      
 
       expect(data).to.equals('data');
-      templateEditorFactory.getAttributeData.should.have.been.calledWith('componentId','duration');
+      attributeDataFactory.getAttributeData.should.have.been.calledWith('componentId','duration');
     });
   });
 
@@ -83,7 +83,7 @@ describe('service: baseImageFactory', function() {
     it('should set Template Editor attributes duration', function() {
       baseImageFactory.setDuration(55);      
 
-      templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId','duration',55);
+      attributeDataFactory.setAttributeData.should.have.been.calledWith('componentId','duration',55);
     });
   });
 
@@ -156,8 +156,8 @@ describe('service: baseImageFactory', function() {
       var data = baseImageFactory.updateMetadata(metadata);      
 
       expect(data).to.deep.equals(metadata);
-      templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId','metadata',metadata);
-      templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId','files','files');
+      attributeDataFactory.setAttributeData.should.have.been.calledWith('componentId','metadata',metadata);
+      attributeDataFactory.setAttributeData.should.have.been.calledWith('componentId','files','files');
 
       fileMetadataUtilsService.filesAttributeFor.should.have.been.calledWith(metadata);
     });
@@ -167,7 +167,7 @@ describe('service: baseImageFactory', function() {
         var metadata = ['metadata'];
         var data = baseImageFactory.updateMetadata(metadata);      
 
-        templateEditorFactory.setAttributeData.should.have.been.calledTwice;
+        attributeDataFactory.setAttributeData.should.have.been.calledTwice;
       });
 
       it('should update flag if isLogo is true', function() {
@@ -175,7 +175,7 @@ describe('service: baseImageFactory', function() {
         blueprintFactory.getBlueprintData.returns('true');
         var data = baseImageFactory.updateMetadata(metadata);      
 
-        templateEditorFactory.setAttributeData.should.have.been.calledThrice;
+        attributeDataFactory.setAttributeData.should.have.been.calledThrice;
       });
 
       it('should update isLogo flag to false if some files are sent', function() {
@@ -183,7 +183,7 @@ describe('service: baseImageFactory', function() {
         blueprintFactory.getBlueprintData.returns('true');
         var data = baseImageFactory.updateMetadata(metadata);      
 
-        templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId', 'isLogo', false);
+        attributeDataFactory.setAttributeData.should.have.been.calledWith('componentId', 'isLogo', false);
       });
 
       it('should update isLogo flag to false if no files are sent', function() {
@@ -191,7 +191,7 @@ describe('service: baseImageFactory', function() {
         blueprintFactory.getBlueprintData.returns('true');
         var data = baseImageFactory.updateMetadata(metadata);      
 
-        templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId', 'isLogo', false);
+        attributeDataFactory.setAttributeData.should.have.been.calledWith('componentId', 'isLogo', false);
       });
 
     });
@@ -199,22 +199,22 @@ describe('service: baseImageFactory', function() {
     describe('isSetAsLogo',function() {
       it('should return true if blueprint is logo and attribute is true',function(){
         blueprintFactory.getBlueprintData.returns('true');
-        templateEditorFactory.getAttributeData.returns(true);
+        attributeDataFactory.getAttributeData.returns(true);
 
         expect(baseImageFactory.isSetAsLogo()).to.equals(true);
       });
 
       it('should return false otherwise',function(){
         blueprintFactory.getBlueprintData.returns('false');
-        templateEditorFactory.getAttributeData.returns(true);
+        attributeDataFactory.getAttributeData.returns(true);
         expect(baseImageFactory.isSetAsLogo()).to.equals(false);
 
         blueprintFactory.getBlueprintData.returns('true');
-        templateEditorFactory.getAttributeData.returns(false);
+        attributeDataFactory.getAttributeData.returns(false);
         expect(baseImageFactory.isSetAsLogo()).to.equals(false);
 
         blueprintFactory.getBlueprintData.returns('false');
-        templateEditorFactory.getAttributeData.returns(false);
+        attributeDataFactory.getAttributeData.returns(false);
         expect(baseImageFactory.isSetAsLogo()).to.equals(false);
       });
     });
@@ -225,7 +225,7 @@ describe('service: baseImageFactory', function() {
       var data = baseImageFactory.getTransition();
 
       expect(data).to.equals('data');
-      templateEditorFactory.getAttributeData.should.have.been.calledWith('componentId','transition');
+      attributeDataFactory.getAttributeData.should.have.been.calledWith('componentId','transition');
     });
   });
 
@@ -233,7 +233,7 @@ describe('service: baseImageFactory', function() {
     it('should set Template Editor transition attribute', function() {
       baseImageFactory.setTransition('fadeIn');      
 
-      templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId','transition','fadeIn');
+      attributeDataFactory.setAttributeData.should.have.been.calledWith('componentId','transition','fadeIn');
     });
   });
 
