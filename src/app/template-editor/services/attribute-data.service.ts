@@ -111,4 +111,4 @@ export class AttributeDataService {
 }
 
 angular.module('risevision.template-editor.services')
-  .factory('attributeDataFactory2', downgradeInjectable(AttributeDataService));
+  .factory('attributeDataFactory', downgradeInjectable(AttributeDataService));
