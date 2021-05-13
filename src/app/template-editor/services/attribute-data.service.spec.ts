@@ -1,36 +1,34 @@
-'use strict';
+import {expect} from 'chai';
 
-describe('service: attributeDataFactory:', function() {
-  var sandbox = sinon.sandbox.create();
+import { TestBed } from '@angular/core/testing';
+import { BlueprintFactory, TemplateEditorFactory } from 'src/app/ajs-upgraded-providers';
 
-  beforeEach(module('risevision.template-editor.services'));
+import { AttributeDataService } from './attribute-data.service';
 
-  beforeEach(module(function ($provide) {
-    $provide.factory('templateEditorFactory', function() {
-      return {
-        presentation: {}
-      };
+describe('AttributeDataService', () => {
+  let sandbox = sinon.sandbox.create();
+
+  let attributeDataFactory: AttributeDataService;
+  let blueprintFactory;
+  let templateEditorFactory;
+
+  beforeEach(() => {
+    blueprintFactory = {
+      getBlueprintData: sandbox.stub().returns('blueprintData')
+    }
+    templateEditorFactory = {
+      presentation: {}
+    };
+
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: BlueprintFactory, useValue: blueprintFactory},
+        {provide: TemplateEditorFactory, useValue: templateEditorFactory}        
+      ]
     });
-
-    $provide.factory('blueprintFactory', function() {
-      return blueprintFactory = {
-        getBlueprintData: sandbox.stub().returns('blueprintData')
-      };
-    });
-
-  }));
-
-  var attributeDataFactory, templateEditorFactory, blueprintFactory;
-
-  beforeEach(function() {
-    inject(function($injector) {
-      attributeDataFactory = $injector.get('attributeDataFactory');
-
-      templateEditorFactory = $injector.get('templateEditorFactory');
-      blueprintFactory = $injector.get('blueprintFactory');
-    });
+    attributeDataFactory = TestBed.inject(AttributeDataService);
   });
-
+  
   afterEach(function() {
     sandbox.restore();
   });
@@ -93,7 +91,7 @@ describe('service: attributeDataFactory:', function() {
     });
 
     it('should return null if componentId is missing',function() {
-      var data = attributeDataFactory.getAttributeData();
+      var data = attributeDataFactory.getAttributeData(null);
 
       expect(data).to.be.null;
     });
@@ -179,7 +177,7 @@ describe('service: attributeDataFactory:', function() {
     });
 
     it('should return null if componentId is missing',function() {
-      var data = attributeDataFactory.setAttributeData();
+      var data = attributeDataFactory.setAttributeData(null,null,null);
 
       expect(data).to.be.null;
     });
@@ -329,5 +327,4 @@ describe('service: attributeDataFactory:', function() {
     });
 
   });
-
 });
