@@ -5,7 +5,7 @@ describe("directive: templateComponentPlaylist", function() {
       $scope,
       $loading,
       element,
-      factory,
+      attributeDataFactory,
       editorFactory,
       blueprintFactory,
       sampleAttributeData,
@@ -20,11 +20,6 @@ describe("directive: templateComponentPlaylist", function() {
   };
 
   beforeEach(function() {
-    factory = {
-      selected: { id: "TEST-ID" },
-      presentation: { id: "TEST-ID" }
-    };
-
     sampleAttributeData = {
       "items": [
         {
@@ -96,7 +91,17 @@ describe("directive: templateComponentPlaylist", function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service("templateEditorFactory", function() {
-      return factory;
+      return {
+        selected: { id: "TEST-ID" },
+        presentation: { id: "TEST-ID" }
+      };
+    });
+
+    $provide.service('attributeDataFactory', function() {
+      return {
+        setAttributeData: sandbox.stub(),
+        getBlueprintData: sandbox.stub()
+      };
     });
 
     $provide.service("ScrollingListService", function() {
@@ -135,12 +140,11 @@ describe("directive: templateComponentPlaylist", function() {
     $templateCache.put("partials/template-editor/components/component-playlist.html", "<p>mock</p>");
     $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
+    attributeDataFactory = $injector.get('attributeDataFactory');
     editorFactory = $injector.get('editorFactory');
     blueprintFactory = $injector.get('blueprintFactory');
 
-    $scope.getBlueprintData = sandbox.stub();
     $scope.registerDirective = sandbox.stub();
-    $scope.setAttributeData = sandbox.stub();
     $scope.editComponent = sandbox.stub();
 
     element = $compile("<template-component-playlist></template-component-playlistt>")($scope);
@@ -150,8 +154,6 @@ describe("directive: templateComponentPlaylist", function() {
 
   it("should exist", function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" }, presentation: { id: "TEST-ID" }});
     expect($scope.registerDirective).to.have.been.called;
 
     expect($scope.playlistComponents).to.be.an('array');
@@ -201,7 +203,7 @@ describe("directive: templateComponentPlaylist", function() {
         beforeEach(function() {
           playlistComponents = $scope.playlistComponents;
 
-          $scope.getAvailableAttributeData = sandbox.stub();
+          attributeDataFactory.getAvailableAttributeData = sandbox.stub();
         });
 
         it('should set addVisualComponents to false based on isRiseInit being false', function() {
@@ -217,7 +219,7 @@ describe("directive: templateComponentPlaylist", function() {
         it('should check blueprint data for allowed-components', function() {
           $scope.registerDirective.getCall(0).args[0].show();
 
-          $scope.getBlueprintData.should.have.been.calledWith('TEST-ID', 'allowed-components');
+          attributeDataFactory.getBlueprintData.should.have.been.calledWith('TEST-ID', 'allowed-components');
 
           expect($scope.playlistComponents).to.equal(playlistComponents);
         });
@@ -231,21 +233,21 @@ describe("directive: templateComponentPlaylist", function() {
         });
 
         it('should handle * for allowed-components', function() {
-          $scope.getBlueprintData.returns('*');
+          attributeDataFactory.getBlueprintData.returns('*');
           $scope.registerDirective.getCall(0).args[0].show();
 
           expect($scope.playlistComponents).to.equal(playlistComponents);
         });
 
         it('should parse csv values for allowed-components', function() {
-          $scope.getBlueprintData.returns('rise-video,rise-slides');
+          attributeDataFactory.getBlueprintData.returns('rise-video,rise-slides');
           $scope.registerDirective.getCall(0).args[0].show();
 
           expect($scope.playlistComponents).to.have.length(2);
         });
 
         it('should ignore rise-embedded-template', function() {
-          $scope.getBlueprintData.returns('rise-embedded-template,rise-video,rise-slides');
+          attributeDataFactory.getBlueprintData.returns('rise-embedded-template,rise-video,rise-slides');
           $scope.registerDirective.getCall(0).args[0].show();
 
           expect($scope.playlistComponents).to.have.length(2);
@@ -285,7 +287,7 @@ describe("directive: templateComponentPlaylist", function() {
   it("should load items from attribute data", function(done) {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
-    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return sampleAttributeData[attributeName];
     };
 
@@ -351,7 +353,7 @@ describe("directive: templateComponentPlaylist", function() {
       "transition-type": "fadeIn"
     });
 
-    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return copySampleAttributeData[attributeName];
     };
 
@@ -376,7 +378,7 @@ describe("directive: templateComponentPlaylist", function() {
       ]
     };
 
-    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return copySampleAttributeData[attributeName];
     };
 
@@ -409,7 +411,7 @@ describe("directive: templateComponentPlaylist", function() {
     $scope.save();
 
     expect($scope.playlistItemsToJson).to.be.calledOnce;
-    expect($scope.setAttributeData.calledWith(
+    expect(attributeDataFactory.setAttributeData.calledWith(
       "TEST-ID", "items", "fake data"
     )).to.be.true;
   });

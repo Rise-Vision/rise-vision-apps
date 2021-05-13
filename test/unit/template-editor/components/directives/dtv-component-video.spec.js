@@ -4,6 +4,7 @@ describe('directive: templateComponentVideo', function() {
   var $scope,
       element,
       factory,
+      attributeDataFactory,
       storageManagerFactory,
       testMetadata,
       $loading,
@@ -26,6 +27,15 @@ describe('directive: templateComponentVideo', function() {
       return factory;
     });
 
+    $provide.service('attributeDataFactory', function() {
+      return {
+        getAttributeData: sinon.stub(),
+        getAvailableAttributeData: sinon.stub(),
+        setAttributeData: sinon.stub(),
+        getBlueprintData: sinon.stub().returns(null)
+      };
+    });
+
     $provide.service('fileExistenceCheckService', function() {
       return {
         requestMetadataFor: function() {
@@ -36,21 +46,16 @@ describe('directive: templateComponentVideo', function() {
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    $timeout = $injector.get('$timeout');
+    $loading = $injector.get('$loading');
+    attributeDataFactory = $injector.get('attributeDataFactory');
+    storageManagerFactory = $injector.get('storageManagerFactory');
+
     $templateCache.put('partials/template-editor/components/component-video.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
     $scope.registerDirective = sinon.stub();
-    $scope.getAttributeData = sinon.stub();
-    $scope.getAvailableAttributeData = sinon.stub();
-    $scope.setAttributeData = sinon.stub();
     $scope.editComponent = sinon.stub();
-    $scope.getBlueprintData = function() {
-      return null;
-    };
-
-    $timeout = $injector.get('$timeout');
-    $loading = $injector.get('$loading');
-    storageManagerFactory = $injector.get('storageManagerFactory');
 
     element = $compile('<template-component-video></template-component-video>')($scope);
     $scope = element.scope();
@@ -91,10 +96,10 @@ describe('directive: templateComponentVideo', function() {
       { 'file': 'test|character.mp4', 'thumbnail-url': 'http://test%7Ccharacter.mp4' }
     ];
 
-    $scope.getAttributeData = function(componentId, key) {
+    attributeDataFactory.getAttributeData = function(componentId, key) {
       return testMetadata;
     };
-    $scope.getAvailableAttributeData = function(componentId, key) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, key) {
       return "";
     };
 
@@ -111,13 +116,13 @@ describe('directive: templateComponentVideo', function() {
       { "file": "video.mp4", "thumbnail-url": "http://video" }
     ];
 
-    $scope.getAttributeData = function(componentId, key) {
+    attributeDataFactory.getAttributeData = function(componentId, key) {
       return sampleFiles;
     };
-    $scope.getBlueprintData = function(componentId, key) {
+    attributeDataFactory.getBlueprintData = function(componentId, key) {
       return "video.mp4";
     };
-    $scope.getAvailableAttributeData = function(componentId, key) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, key) {
       return "0";
     };
 
@@ -134,13 +139,13 @@ describe('directive: templateComponentVideo', function() {
       { "file": "video.mp4", "thumbnail-url": "http://video" }
     ];
 
-    $scope.getAttributeData = function(componentId, key) {
+    attributeDataFactory.getAttributeData = function(componentId, key) {
       return sampleFiles;
     };
-    $scope.getBlueprintData = function(componentId, key) {
+    attributeDataFactory.getBlueprintData = function(componentId, key) {
       return "default.mp4";
     };
-    $scope.getAvailableAttributeData = function(componentId, key) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, key) {
       return "0";
     };
 
@@ -155,13 +160,13 @@ describe('directive: templateComponentVideo', function() {
     var TEST_FILE = 'risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/file1.mp4';
     var directive = $scope.registerDirective.getCall(0).args[0];
 
-    $scope.getAttributeData = function() {
+    attributeDataFactory.getAttributeData = function() {
       return null;
     };
-    $scope.getBlueprintData = function() {
+    attributeDataFactory.getBlueprintData = function() {
       return TEST_FILE;
     };
-    $scope.getAvailableAttributeData = function(componentId, key) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, key) {
       return "";
     };
 
@@ -180,8 +185,8 @@ describe('directive: templateComponentVideo', function() {
     setTimeout(function() {
       expect($scope.selectedFiles).to.deep.equal(testMetadata);
 
-      expect($scope.setAttributeData).to.have.been.called.once;
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData).to.have.been.called.once;
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'metadata', testMetadata
       )).to.be.true;
 
@@ -192,10 +197,10 @@ describe('directive: templateComponentVideo', function() {
   it('should get volume data', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
-    $scope.getAttributeData = function(componentId, key) {
+    attributeDataFactory.getAttributeData = function(componentId, key) {
       return [];
     };
-    $scope.getAvailableAttributeData = function(componentId, key) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, key) {
       return "10";
     };
 
@@ -209,10 +214,10 @@ describe('directive: templateComponentVideo', function() {
   it('should default volume data to 0', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
-    $scope.getAttributeData = function(componentId, key) {
+    attributeDataFactory.getAttributeData = function(componentId, key) {
       return [];
     };
-    $scope.getAvailableAttributeData = function(componentId, key) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, key) {
     };
 
     directive.show();
@@ -225,10 +230,10 @@ describe('directive: templateComponentVideo', function() {
   it('should set volume as 0 if it has an invalid vaue', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
-    $scope.getAttributeData = function(componentId, key) {
+    attributeDataFactory.getAttributeData = function(componentId, key) {
       return [];
     };
-    $scope.getAvailableAttributeData = function(componentId, key) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, key) {
       return "NOT A NUMBER !"
     };
 
@@ -294,14 +299,14 @@ describe('directive: templateComponentVideo', function() {
       ];
 
       $scope.componentId = 'TEST-ID';
-      $scope.getBlueprintData = function(componentId, key) {
+      attributeDataFactory.getBlueprintData = function(componentId, key) {
         return "video.mp4";
       };
     });
 
     it('should directly set metadata if it\'s not already loaded', function()
     {
-      $scope.getAttributeData = function() {
+      attributeDataFactory.getAttributeData = function() {
         return null;
       };
 
@@ -310,9 +315,9 @@ describe('directive: templateComponentVideo', function() {
       expect($scope.isDefaultFileList).to.be.false;
       expect($scope.selectedFiles).to.deep.equal(sampleVideos);
 
-      expect($scope.setAttributeData).to.have.been.called.once;
+      expect(attributeDataFactory.setAttributeData).to.have.been.called.once;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'metadata', sampleVideos
       ), 'set metadata attribute').to.be.true;
     });
@@ -334,7 +339,7 @@ describe('directive: templateComponentVideo', function() {
         }
       ];
 
-      $scope.getAttributeData = function() {
+      attributeDataFactory.getAttributeData = function() {
         return sampleVideos;
       };
 
@@ -343,9 +348,9 @@ describe('directive: templateComponentVideo', function() {
       expect($scope.isDefaultFileList).to.be.false;
       expect($scope.selectedFiles).to.deep.equal(updatedVideos);
 
-      expect($scope.setAttributeData).to.have.been.called.once;
+      expect(attributeDataFactory.setAttributeData).to.have.been.called.once;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'metadata', updatedVideos
       ), 'set metadata attribute').to.be.true;
     });
@@ -375,7 +380,7 @@ describe('directive: templateComponentVideo', function() {
         }
       ];
 
-      $scope.getAttributeData = function() {
+      attributeDataFactory.getAttributeData = function() {
         return sampleVideos;
       };
 
@@ -384,9 +389,9 @@ describe('directive: templateComponentVideo', function() {
       expect($scope.isDefaultFileList).to.be.false;
       expect($scope.selectedFiles).to.deep.equal(expectedVideos);
 
-      expect($scope.setAttributeData).to.have.been.called.once;
+      expect(attributeDataFactory.setAttributeData).to.have.been.called.once;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'metadata', expectedVideos
       ), 'set metadata attribute').to.be.true;
     });
@@ -422,7 +427,7 @@ describe('directive: templateComponentVideo', function() {
         }
       ];
 
-      $scope.getAttributeData = function() {
+      attributeDataFactory.getAttributeData = function() {
         return sampleVideos;
       };
 
@@ -431,9 +436,9 @@ describe('directive: templateComponentVideo', function() {
       expect($scope.isDefaultFileList).to.be.false;
       expect($scope.selectedFiles).to.deep.equal(expectedVideos);
 
-      expect($scope.setAttributeData).to.have.been.called.once;
+      expect(attributeDataFactory.setAttributeData).to.have.been.called.once;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'metadata', expectedVideos
       ), 'set metadata attribute').to.be.true;
     });
@@ -456,7 +461,7 @@ describe('directive: templateComponentVideo', function() {
 
       $scope.saveVolume();
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'volume', 100
       ), 'set volume attribute').to.be.true;
     });

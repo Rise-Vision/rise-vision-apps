@@ -2,24 +2,16 @@
 
 angular.module('risevision.template-editor.controllers')
   .controller('TemplateEditorController', ['$scope', '$q', '$filter', '$loading', '$state', '$timeout', '$window',
-    'templateEditorFactory', 'attributeDataFactory', 'AutoSaveService',
+    'templateEditorFactory', 'AutoSaveService',
     'presentationUtils', 'userState',
     function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory,
-      attributeDataFactory, AutoSaveService, presentationUtils, userState) {
+      AutoSaveService, presentationUtils, userState) {
       var autoSaveService = new AutoSaveService(templateEditorFactory.save);
 
       $scope.factory = templateEditorFactory;
       $scope.factory.hasUnsavedChanges = false;
 
       $scope.considerChromeBarHeight = _considerChromeBarHeight();
-
-      $scope.getBlueprintData = attributeDataFactory.getBlueprintData;
-      $scope.getAttributeData = attributeDataFactory.getAttributeData;
-      $scope.setAttributeData = attributeDataFactory.setAttributeData;
-      $scope.getAttributeDataGlobal = attributeDataFactory.getAttributeDataGlobal;
-      $scope.setAttributeDataGlobal = attributeDataFactory.setAttributeDataGlobal;
-      $scope.getAvailableAttributeData = attributeDataFactory.getAvailableAttributeData;
-      $scope.getComponentIds = attributeDataFactory.getComponentIds;
 
       $scope.hasContentEditorRole = function () {
         return userState.hasRole('ce');

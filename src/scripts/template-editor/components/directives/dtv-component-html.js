@@ -1,19 +1,17 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentHtml', ['$window', '$timeout', 'templateEditorFactory',
-    function ($window, $timeout, templateEditorFactory) {
+  .directive('templateComponentHtml', ['$timeout', 'templateEditorFactory', 'attributeDataFactory',
+    function ($timeout, templateEditorFactory, attributeDataFactory) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-html.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
-
           $scope.codemirrorOptions = {};
 
           function _load() {
-            var html = $scope.getAvailableAttributeData($scope.componentId, 'html');
+            var html = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'html');
 
             $scope.html = html;
 
@@ -28,14 +26,14 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.save = function () {
-            $scope.setAttributeData($scope.componentId, 'html', $scope.html);
+            attributeDataFactory.setAttributeData($scope.componentId, 'html', $scope.html);
           };
 
           $scope.registerDirective({
             type: 'rise-html',
             element: element,
             show: function () {
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               _load();
             }
           });

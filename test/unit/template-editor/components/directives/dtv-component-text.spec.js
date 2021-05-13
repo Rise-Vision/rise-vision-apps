@@ -3,11 +3,7 @@
 describe('directive: templateComponentText', function() {
   var $scope,
       element,
-      factory;
-
-  beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
-  });
+      attributeDataFactory;
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.controllers'));
@@ -16,17 +12,24 @@ describe('directive: templateComponentText', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return { selected: { id: "TEST-ID" } };
+    });
+
+    $provide.service('attributeDataFactory', function() {
+      return {
+        setAttributeData: sinon.stub(),
+        getAvailableAttributeData: sinon.stub().returns('data')
+      };
     });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    attributeDataFactory = $injector.get('attributeDataFactory');
+
     $templateCache.put('partials/template-editor/components/component-text.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
     $scope.registerDirective = sinon.stub();
-    $scope.setAttributeData = sinon.stub();
-    $scope.getAvailableAttributeData = sinon.stub().returns('data');
 
     element = $compile("<template-component-text></template-component-text>")($scope);
     $scope = element.scope();
@@ -35,8 +38,6 @@ describe('directive: templateComponentText', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
     expect($scope.registerDirective).to.have.been.called;
 
     var directive = $scope.registerDirective.getCall(0).args[0];
@@ -48,7 +49,7 @@ describe('directive: templateComponentText', function() {
   it('should load text from attribute data', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleValue = "test text";
-    $scope.getAvailableAttributeData.returns(sampleValue);
+    attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
 
     directive.show();
 
@@ -57,19 +58,19 @@ describe('directive: templateComponentText', function() {
   });
 
   it('should load multiline attribute from blueprint', function() {
-    $scope.getAvailableAttributeData.returns(true);
+    attributeDataFactory.getAvailableAttributeData.returns(true);
     var directive = $scope.registerDirective.getCall(0).args[0];
 
     directive.show();
 
-    expect($scope.getAvailableAttributeData).to.have.been.calledWith('TEST-ID', 'multiline');
+    expect(attributeDataFactory.getAvailableAttributeData).to.have.been.calledWith('TEST-ID', 'multiline');
     expect($scope.isMultiline).to.be.true;
   });
 
   it('should save text to attribute data', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleValue = "test text";
-    $scope.getAvailableAttributeData.returns(sampleValue);
+    attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
 
     directive.show();
 
@@ -77,7 +78,7 @@ describe('directive: templateComponentText', function() {
 
     $scope.save();
 
-    expect($scope.setAttributeData.calledWith(
+    expect(attributeDataFactory.setAttributeData.calledWith(
       "TEST-ID", "value", "updated text"
     )).to.be.true;
   });

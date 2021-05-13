@@ -4,6 +4,7 @@ describe('directive: TemplateComponentImage', function() {
   var $scope,
     element,
     factory,
+    attributeDataFactory,
     timeout,
     $loading,
     baseImageFactory,
@@ -30,6 +31,14 @@ describe('directive: TemplateComponentImage', function() {
     });
     $provide.service('templateEditorFactory', function() {
       return factory;
+    });
+    $provide.service('attributeDataFactory', function() {
+      return {
+        getAttributeData: sinon.stub(),
+        getAvailableAttributeData: sinon.stub(),
+        setAttributeData: sinon.stub(),
+        getBlueprintData: sinon.stub().returns(null)
+      };
     });
     $provide.service('logoImageFactory', function() {
       return {
@@ -83,21 +92,18 @@ describe('directive: TemplateComponentImage', function() {
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout, $injector){
-    $templateCache.put('partials/template-editor/components/component-image.html', '<p>mock</p>');
-    $scope = $rootScope.$new();
-
     $loading = $injector.get('$loading');
+    attributeDataFactory = $injector.get('attributeDataFactory');
     baseImageFactory = $injector.get('baseImageFactory');
     logoImageFactory = $injector.get('logoImageFactory');
     storageManagerFactory = $injector.get('storageManagerFactory');
 
+    $templateCache.put('partials/template-editor/components/component-image.html', '<p>mock</p>');
+    $scope = $rootScope.$new();
+
     $scope.registerDirective = sinon.stub();
-    $scope.setAttributeData = sinon.stub();
     $scope.editComponent = sinon.stub();
     $scope.fileExistenceChecksCompleted = {};
-    $scope.getBlueprintData = function() {
-      return null;
-    };
 
     timeout = $timeout;
     element = $compile("<template-component-image></template-component-image>")($scope);
@@ -279,7 +285,7 @@ describe('directive: TemplateComponentImage', function() {
 
     it('should directly set metadata if it\'s not already loaded', function()
     {
-      $scope.getAttributeData = function() {
+      attributeDataFactory.getAttributeData = function() {
         return null;
       };
 
@@ -288,13 +294,13 @@ describe('directive: TemplateComponentImage', function() {
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(sampleImages);
 
-      expect($scope.setAttributeData).to.have.been.called.twice;
+      expect(attributeDataFactory.setAttributeData).to.have.been.called.twice;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'metadata', sampleImages
       ), 'set metadata attribute').to.be.true;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'files', 'image.png|image2.png'
       ), 'set files attribute').to.be.true;
     });
@@ -315,7 +321,7 @@ describe('directive: TemplateComponentImage', function() {
         }
       ];
 
-      $scope.getAttributeData = function() {
+      attributeDataFactory.getAttributeData = function() {
         return sampleImages;
       };
 
@@ -324,13 +330,13 @@ describe('directive: TemplateComponentImage', function() {
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(updatedImages);
 
-      expect($scope.setAttributeData).to.have.been.called.twice;
+      expect(attributeDataFactory.setAttributeData).to.have.been.called.twice;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'metadata', updatedImages
       ), 'set metadata attribute').to.be.true;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'files', 'image.png|image2.png'
       ), 'set files attribute').to.be.true;
     });
@@ -359,7 +365,7 @@ describe('directive: TemplateComponentImage', function() {
         }
       ];
 
-      $scope.getAttributeData = function() {
+      attributeDataFactory.getAttributeData = function() {
         return sampleImages;
       };
 
@@ -368,13 +374,13 @@ describe('directive: TemplateComponentImage', function() {
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(expectedImages);
 
-      expect($scope.setAttributeData).to.have.been.called.twice;
+      expect(attributeDataFactory.setAttributeData).to.have.been.called.twice;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'metadata', expectedImages
       ), 'set metadata attribute').to.be.true;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'files', 'image.png|image2.png'
       ), 'set files attribute').to.be.true;
     });
@@ -409,7 +415,7 @@ describe('directive: TemplateComponentImage', function() {
         }
       ];
 
-      $scope.getAttributeData = function() {
+      attributeDataFactory.getAttributeData = function() {
         return sampleImages;
       };
 
@@ -418,13 +424,13 @@ describe('directive: TemplateComponentImage', function() {
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(expectedImages);
 
-      expect($scope.setAttributeData).to.have.been.called.twice;
+      expect(attributeDataFactory.setAttributeData).to.have.been.called.twice;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'metadata', expectedImages
       ), 'set metadata attribute').to.be.true;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         'TEST-ID', 'files', 'image.png|image2.png'
       ), 'set files attribute').to.be.true;
     });

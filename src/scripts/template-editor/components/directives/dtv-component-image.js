@@ -6,11 +6,13 @@ angular.module('risevision.template-editor.directives')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
   .constant('CANVA_FOLDER', 'canva/')
   .directive('templateComponentImage', ['$log', '$q', '$timeout', '$loading', 'templateEditorFactory',
-    'storageManagerFactory', 'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL',
-    'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'baseImageFactory', 'fileDownloader', 'CANVA_FOLDER',
-    function ($log, $q, $timeout, $loading, templateEditorFactory, storageManagerFactory,
-      fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES,
-      logoImageFactory, baseImageFactory, fileDownloader, CANVA_FOLDER) {
+    'attributeDataFactory', 'storageManagerFactory', 'fileExistenceCheckService', 'fileMetadataUtilsService',
+    'logoImageFactory', 'baseImageFactory', 'fileDownloader', 'DEFAULT_IMAGE_THUMBNAIL',
+    'SUPPORTED_IMAGE_TYPES', 'CANVA_FOLDER',
+    function ($log, $q, $timeout, $loading, templateEditorFactory, attributeDataFactory,
+      storageManagerFactory, fileExistenceCheckService, fileMetadataUtilsService,
+      logoImageFactory, baseImageFactory, fileDownloader,
+      DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES, CANVA_FOLDER) {
       return {
         restrict: 'E',
         scope: true,
@@ -107,17 +109,17 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _getFilesFor(componentId) {
-            var metadata = $scope.getAttributeData(componentId, 'metadata');
+            var metadata = attributeDataFactory.getAttributeData(componentId, 'metadata');
 
             if (!metadata) {
-              return $scope.getBlueprintData(componentId, 'files');
+              return attributeDataFactory.getBlueprintData(componentId, 'files');
             }
 
             return fileMetadataUtilsService.extractFileNamesFrom(metadata);
           }
 
           $scope.updateFileMetadata = function (componentId, newMetadata) {
-            var currentMetadata = $scope.getAttributeData(componentId, 'metadata');
+            var currentMetadata = attributeDataFactory.getAttributeData(componentId, 'metadata');
             var updatedMetadata =
               fileMetadataUtilsService.getUpdatedFileMetadata(currentMetadata, newMetadata);
 
@@ -135,8 +137,8 @@ angular.module('risevision.template-editor.directives')
               _setSelectedImages(selectedImages);
             }
 
-            $scope.setAttributeData(componentId, 'metadata', selectedImages);
-            $scope.setAttributeData(componentId, 'files', filesAttribute);
+            attributeDataFactory.setAttributeData(componentId, 'metadata', selectedImages);
+            attributeDataFactory.setAttributeData(componentId, 'files', filesAttribute);
           }
 
           function _setSelectedImages(selectedImages) {
@@ -191,7 +193,7 @@ angular.module('risevision.template-editor.directives')
             onPresentationOpen: function () {
               $scope.fileExistenceChecksCompleted = {};
 
-              var imageComponentIds = $scope.getComponentIds(function (c) {
+              var imageComponentIds = attributeDataFactory.getComponentIds(function (c) {
                 return c.type === 'rise-image';
               });
 

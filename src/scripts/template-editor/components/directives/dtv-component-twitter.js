@@ -1,16 +1,15 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentTwitter', ['templateEditorFactory', 'TwitterOAuthService', '$loading',
+  .directive('templateComponentTwitter', ['templateEditorFactory', 'attributeDataFactory', 'TwitterOAuthService', '$loading',
     'twitterCredentialsValidation', 'templateEditorUtils',
-    function (templateEditorFactory, TwitterOAuthService, $loading, twitterCredentialsValidation,
+    function (templateEditorFactory, attributeDataFactory, TwitterOAuthService, $loading, twitterCredentialsValidation,
       templateEditorUtils) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-twitter.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
           $scope.MAX_ITEMS = 100;
 
           $scope.$watch('spinner', function (loading) {
@@ -37,7 +36,7 @@ angular.module('risevision.template-editor.directives')
                 $scope.connected = true;
                 $scope.connectionFailure = false;
 
-                $scope.setAttributeData($scope.componentId, 'credentialsUpdated', Date.now());
+                attributeDataFactory.setAttributeData($scope.componentId, 'credentialsUpdated', Date.now());
               }, function () {
                 _handleConnectionFailure();
               })
@@ -47,14 +46,14 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.save = function () {
-            $scope.setAttributeData($scope.componentId, 'isStaging', $scope.isStaging);
+            attributeDataFactory.setAttributeData($scope.componentId, 'isStaging', $scope.isStaging);
 
             if (_validateUsername($scope.username)) {
-              $scope.setAttributeData($scope.componentId, 'username', $scope.username.replace('@', ''));
+              attributeDataFactory.setAttributeData($scope.componentId, 'username', $scope.username.replace('@', ''));
             }
 
             if (_validateMaxitems($scope.maxitems)) {
-              $scope.setAttributeData($scope.componentId, 'maxitems', Number($scope.maxitems));
+              attributeDataFactory.setAttributeData($scope.componentId, 'maxitems', Number($scope.maxitems));
             }
           };
 
@@ -63,15 +62,15 @@ angular.module('risevision.template-editor.directives')
             element: element,
             show: function () {
               element.show();
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               _validateCredentials();
               _load();
             }
           });
 
           function _load() {
-            var username = $scope.getAvailableAttributeData($scope.componentId, 'username');
-            var maxitems = $scope.getAvailableAttributeData($scope.componentId, 'maxitems');
+            var username = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'username');
+            var maxitems = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'maxitems');
 
             $scope.username = username && username.indexOf('@') === -1 ? '@' + username : username;
             $scope.maxitems = maxitems;
@@ -87,7 +86,7 @@ angular.module('risevision.template-editor.directives')
           function _validateCredentials() {
             $scope.spinner = true;
 
-            twitterCredentialsValidation.verifyCredentials($scope.factory.presentation.companyId)
+            twitterCredentialsValidation.verifyCredentials(templateEditorFactory.presentation.companyId)
               .then(function (hasCredentials) {
                 $scope.connected = hasCredentials;
                 $scope.connectionFailure = false;

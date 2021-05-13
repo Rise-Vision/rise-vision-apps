@@ -1,15 +1,13 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentColors', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .directive('templateComponentColors', ['templateEditorFactory', 'attributeDataFactory',
+    function (templateEditorFactory, attributeDataFactory) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-colors.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
-
           // TODO: refactor logic for Override Brand Settings epic
 
           $scope.save = function () {
@@ -22,21 +20,21 @@ angular.module('risevision.template-editor.directives')
               };
             }
 
-            $scope.setAttributeDataGlobal('brandingOverride', brandingOverride);
+            attributeDataFactory.setAttributeDataGlobal('brandingOverride', brandingOverride);
           };
 
           $scope.registerDirective({
             type: 'rise-override-brand-colors',
             element: element,
             show: function () {
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               $scope.load();
             }
           });
 
           $scope.load = function () {
 
-            var brandingOverride = $scope.getAttributeDataGlobal('brandingOverride');
+            var brandingOverride = attributeDataFactory.getAttributeDataGlobal('brandingOverride');
 
             $scope.override = !!brandingOverride;
             $scope.baseColor = $scope.override ? brandingOverride.baseColor : null;

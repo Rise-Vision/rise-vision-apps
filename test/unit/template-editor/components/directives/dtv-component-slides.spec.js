@@ -3,13 +3,11 @@
 describe('directive: templateComponentSlides', function() {
   var $scope,
       element,
-      factory,
+      attributeDataFactory,
       slidesUrlValidationService,
       sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
-
     slidesUrlValidationService = { validate: sandbox.stub().returns(Q.resolve()) };
   });
 
@@ -24,7 +22,13 @@ describe('directive: templateComponentSlides', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return { selected: { id: "TEST-ID" } };
+    });
+
+    $provide.service('attributeDataFactory', function() {
+      return {
+        setAttributeData: sandbox.stub()
+      };
     });
 
     $provide.service('slidesUrlValidationService', function() {
@@ -32,12 +36,13 @@ describe('directive: templateComponentSlides', function() {
     });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    attributeDataFactory = $injector.get('attributeDataFactory');
+
     $templateCache.put('partials/template-editor/components/component-slides.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
     $scope.registerDirective = sandbox.stub();
-    $scope.setAttributeData = sandbox.stub();
 
     element = $compile("<template-component-slides></template-component-slides>")($scope);
     $scope = element.scope();
@@ -46,8 +51,6 @@ describe('directive: templateComponentSlides', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
     expect($scope.registerDirective).to.have.been.called;
 
     var directive = $scope.registerDirective.getCall(0).args[0];
@@ -62,7 +65,7 @@ describe('directive: templateComponentSlides', function() {
       src: 'https://docs.google.com/presentation/d/e/2PACX-1vTncMMQxJIzZNdNIFqAsTI8ydohnKU97taOG-dvwYcxS3d0DjdkLlcEqUQKeL-z_nvYQIcFwxKC81b1/pub?start=false&loop=false&delayms=3000'
     };
 
-    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return sampleData[attributeName];
     };
 
@@ -79,7 +82,7 @@ describe('directive: templateComponentSlides', function() {
       duration: 2
     };
 
-    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return sampleData[attributeName];
     };
 
@@ -92,7 +95,7 @@ describe('directive: templateComponentSlides', function() {
   it('should set duration to 10 when default value and blueprint are undefined', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
-    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return undefined;
     };
 
@@ -109,7 +112,7 @@ describe('directive: templateComponentSlides', function() {
       duration: 2
     };
 
-    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return sampleData[attributeName];
     };
 
@@ -126,7 +129,7 @@ describe('directive: templateComponentSlides', function() {
         duration: 2
       };
   
-      $scope.getAvailableAttributeData = function(componentId, attributeName) {
+      attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
         return sampleData[attributeName];
       };
     });

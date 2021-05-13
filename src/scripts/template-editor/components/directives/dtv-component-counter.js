@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentCounter', ['$document', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
-    function ($document, $timeout, templateEditorFactory, utils) {
+  .directive('templateComponentCounter', ['$document', '$timeout', 'templateEditorFactory', 'attributeDataFactory', 'templateEditorUtils',
+    function ($document, $timeout, templateEditorFactory, attributeDataFactory, utils) {
       return {
         restrict: 'E',
         scope: true,
@@ -31,13 +31,11 @@ angular.module('risevision.template-editor.directives')
               };
             },
             post: function ($scope, element) {
-              $scope.factory = templateEditorFactory;
-
               $scope.registerDirective({
                 type: 'rise-data-counter',
                 element: element,
                 show: function () {
-                  $scope.componentId = $scope.factory.selected.id;
+                  $scope.componentId = templateEditorFactory.selected.id;
                   $scope.load();
                 },
                 getTitle: function (component) {
@@ -46,11 +44,11 @@ angular.module('risevision.template-editor.directives')
               });
 
               $scope.load = function () {
-                var counterType = $scope.getAvailableAttributeData($scope.componentId, 'type');
-                var targetDate = $scope.getAvailableAttributeData($scope.componentId, 'date');
-                var targetTime = $scope.getAvailableAttributeData($scope.componentId, 'time');
-                var nonCompletion = $scope.getAvailableAttributeData($scope.componentId, 'non-completion');
-                var completion = $scope.getAvailableAttributeData($scope.componentId, 'completion');
+                var counterType = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'type');
+                var targetDate = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'date');
+                var targetTime = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'time');
+                var nonCompletion = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'non-completion');
+                var completion = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'completion');
 
                 $scope.counterType = counterType;
                 $scope.nonCompletion = nonCompletion === '';
@@ -85,17 +83,17 @@ angular.module('risevision.template-editor.directives')
                   var localDate = new Date($scope.targetDate);
                   localDate.setMinutes(localDate.getMinutes() - localDate.getTimezoneOffset());
 
-                  $scope.setAttributeData($scope.componentId, 'date', utils.formatISODate(localDate));
-                  $scope.setAttributeData($scope.componentId, 'time', formattedDateTime);
+                  attributeDataFactory.setAttributeData($scope.componentId, 'date', utils.formatISODate(localDate));
+                  attributeDataFactory.setAttributeData($scope.componentId, 'time', formattedDateTime);
                 } else if ($scope.targetUnit === 'targetTime' && $scope.targetTime) {
                   var formattedTime = utils.meridianTimeToAbsolute($scope.targetTime);
 
-                  $scope.setAttributeData($scope.componentId, 'date', null);
-                  $scope.setAttributeData($scope.componentId, 'time', formattedTime);
+                  attributeDataFactory.setAttributeData($scope.componentId, 'date', null);
+                  attributeDataFactory.setAttributeData($scope.componentId, 'time', formattedTime);
                 }
 
                 if ($scope.counterType === 'down' && !$scope.nonCompletion) {
-                  $scope.setAttributeData($scope.componentId, 'completion', $scope.completionMessage);
+                  attributeDataFactory.setAttributeData($scope.componentId, 'completion', $scope.completionMessage);
                 }
               };
 

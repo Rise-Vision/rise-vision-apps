@@ -1,16 +1,14 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentRss', ['templateEditorFactory', '$loading', 'componentUtils', 'rssFeedValidation',
+  .directive('templateComponentRss', ['templateEditorFactory', 'attributeDataFactory', '$loading', 'componentUtils', 'rssFeedValidation',
     '$timeout',
-    function (templateEditorFactory, $loading, componentUtils, rssFeedValidation, $timeout) {
+    function (templateEditorFactory, attributeDataFactory, $loading, componentUtils, rssFeedValidation, $timeout) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-rss.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
-
           $scope.$watch('spinner', function (loading) {
             if (loading) {
               $loading.start('rss-editor-loader');
@@ -30,23 +28,23 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.saveMaxItems = function () {
-            $scope.setAttributeData($scope.componentId, 'maxitems', parseInt($scope.maxItems, 10));
+            attributeDataFactory.setAttributeData($scope.componentId, 'maxitems', parseInt($scope.maxItems, 10));
           };
 
           $scope.registerDirective({
             type: 'rise-data-rss',
             element: element,
             show: function () {
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               _load();
               $scope.saveFeed(); // validate Feed URL
             }
           });
 
           function _load() {
-            var maxItems = $scope.getAvailableAttributeData($scope.componentId, 'maxitems');
+            var maxItems = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'maxitems');
 
-            $scope.feedUrl = $scope.getAvailableAttributeData($scope.componentId, 'feedurl');
+            $scope.feedUrl = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'feedurl');
             $scope.maxItems = maxItems ? maxItems.toString() : '1';
           }
 
@@ -73,7 +71,7 @@ angular.module('risevision.template-editor.directives')
             rssFeedValidation.isParsable($scope.feedUrl)
               .then(function (result) {
                 if (result === 'VALID') {
-                  $scope.setAttributeData($scope.componentId, 'feedurl', $scope.feedUrl);
+                  attributeDataFactory.setAttributeData($scope.componentId, 'feedurl', $scope.feedUrl);
 
                   _isFeedValid();
                 } else {
