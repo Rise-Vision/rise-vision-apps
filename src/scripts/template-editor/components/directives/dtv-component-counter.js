@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentCounter', ['$document', '$timeout', 'templateEditorFactory', 'attributeDataFactory', 'templateEditorUtils',
-    function ($document, $timeout, templateEditorFactory, attributeDataFactory, utils) {
+  .directive('templateComponentCounter', ['$document', '$timeout', 'componentsFactory', 'attributeDataFactory', 'templateEditorUtils',
+    function ($document, $timeout, componentsFactory, attributeDataFactory, utils) {
       return {
         restrict: 'E',
         scope: true,
@@ -35,7 +35,7 @@ angular.module('risevision.template-editor.directives')
                 type: 'rise-data-counter',
                 element: element,
                 show: function () {
-                  $scope.componentId = templateEditorFactory.selected.id;
+                  $scope.componentId = componentsFactory.selected.id;
                   $scope.load();
                 },
                 getTitle: function (component) {

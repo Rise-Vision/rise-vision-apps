@@ -22,7 +22,7 @@ describe('directive: footer', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
+    expect($scope.templateEditorFactory).to.be.ok;
   });
 
   it('Replaces the element with the appropriate content', function() {

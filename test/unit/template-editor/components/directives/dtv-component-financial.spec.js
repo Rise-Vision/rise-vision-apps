@@ -46,18 +46,14 @@ describe('directive: TemplateComponentFinancial', function() {
     ],
     noResults = false;
 
-  beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
-  });
-
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.controllers'));
   beforeEach(module('risevision.template-editor.services'));
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
-    $provide.service('templateEditorFactory', function() {
-      return factory;
+    $provide.service('componentsFactory', function() {
+      return { selected: { id: "TEST-ID" } };
     });
 
     $provide.service('attributeDataFactory', function() {
@@ -94,8 +90,7 @@ describe('directive: TemplateComponentFinancial', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
+    expect($scope.templateEditorFactory).to.be.ok;
     expect($scope.registerDirective).to.have.been.called;
 
     var directive = $scope.registerDirective.getCall(0).args[0];

@@ -3,18 +3,18 @@
 angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_VIDEO_THUMBNAIL', 'streamline:video')
   .constant('SUPPORTED_VIDEO_TYPES', '.mp4, .webm')
-  .directive('templateComponentVideo', ['$log', '$timeout', '$loading', 'templateEditorFactory',
+  .directive('templateComponentVideo', ['$log', '$timeout', '$loading', 'componentsFactory', 'templateEditorFactory',
     'attributeDataFactory', 'storageManagerFactory', 'templateEditorUtils', 'fileExistenceCheckService', 
     'fileMetadataUtilsService', 'DEFAULT_VIDEO_THUMBNAIL', 'SUPPORTED_VIDEO_TYPES',
-    function ($log, $timeout, $loading, templateEditorFactory, attributeDataFactory, storageManagerFactory, templateEditorUtils,
-      fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_VIDEO_THUMBNAIL,
-      SUPPORTED_VIDEO_TYPES) {
+    function ($log, $timeout, $loading, componentsFactory, templateEditorFactory, attributeDataFactory, 
+      storageManagerFactory, templateEditorUtils, fileExistenceCheckService, fileMetadataUtilsService,
+      DEFAULT_VIDEO_THUMBNAIL, SUPPORTED_VIDEO_TYPES) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-video.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
+          $scope.templateEditorFactory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_VIDEO_TYPES;
           $scope.uploadManager = {
             onUploadStatus: function (isUploading) {
@@ -49,12 +49,12 @@ angular.module('risevision.template-editor.directives')
               _setSelectedFiles(selectedFiles);
             }
 
-            $scope.factory.loadingPresentation = true;
+            templateEditorFactory.loadingPresentation = true;
 
             _checkFileExistenceFor($scope.componentId)
               .finally(function () {
                 $timeout(function () {
-                  $scope.factory.loadingPresentation = false;
+                  templateEditorFactory.loadingPresentation = false;
                 });
               });
           }
@@ -129,7 +129,7 @@ angular.module('risevision.template-editor.directives')
             element: element,
             show: function () {
               _reset();
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = componentsFactory.selected.id;
 
               storageManagerFactory.fileType = 'video';
               storageManagerFactory.onSelectHandler = function(newSelectedItems) {
@@ -187,7 +187,7 @@ angular.module('risevision.template-editor.directives')
             $scope.selectedFiles.splice(newIndex, 0, $scope.selectedFiles.splice(oldIndex, 1)[0]);
           };
 
-          $scope.$watch('factory.loadingPresentation', function (loading) {
+          $scope.$watch('templateEditorFactory.loadingPresentation', function (loading) {
             if (loading) {
               $loading.start('video-file-loader');
             } else {

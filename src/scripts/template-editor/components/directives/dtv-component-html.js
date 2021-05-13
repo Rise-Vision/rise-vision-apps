@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentHtml', ['$timeout', 'templateEditorFactory', 'attributeDataFactory',
-    function ($timeout, templateEditorFactory, attributeDataFactory) {
+  .directive('templateComponentHtml', ['$timeout', 'componentsFactory', 'attributeDataFactory',
+    function ($timeout, componentsFactory, attributeDataFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -33,7 +33,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-html',
             element: element,
             show: function () {
-              $scope.componentId = templateEditorFactory.selected.id;
+              $scope.componentId = componentsFactory.selected.id;
               _load();
             }
           });

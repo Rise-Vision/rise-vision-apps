@@ -3,7 +3,7 @@
 describe('directive: TemplateAttributeEditor', function() {
   var $scope,
       element,
-      factory,
+      componentsFactory,
       timeout,
       $window,
       blueprintFactory,
@@ -11,7 +11,7 @@ describe('directive: TemplateAttributeEditor', function() {
       sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
-    factory = {};
+    componentsFactory = {};
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -20,8 +20,8 @@ describe('directive: TemplateAttributeEditor', function() {
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
-    $provide.service('templateEditorFactory', function() {
-      return factory;
+    $provide.service('componentsFactory', function() {
+      return componentsFactory;
     });
 
     var elementStub = {
@@ -65,7 +65,7 @@ describe('directive: TemplateAttributeEditor', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
+    expect($scope.componentsFactory).to.be.ok;
   });
 
   it('should show the attribute list', function() {
@@ -159,7 +159,7 @@ describe('directive: TemplateAttributeEditor', function() {
       it('should handle missing component', function() {
         $scope.editComponent();
 
-        expect($scope.factory.selected).to.not.be.ok;
+        expect(componentsFactory.selected).to.not.be.ok;
       });
 
       it('should use component directive', function() {
@@ -172,7 +172,7 @@ describe('directive: TemplateAttributeEditor', function() {
 
         $scope.editComponent(component);
 
-        expect($scope.factory.selected).to.equal(component);
+        expect(componentsFactory.selected).to.equal(component);
 
         expect(component.directive.show).to.have.been.called;
 
@@ -195,7 +195,7 @@ describe('directive: TemplateAttributeEditor', function() {
         $scope.registerDirective(directive);
         $scope.editComponent(component);
 
-        expect($scope.factory.selected).to.equal(component);
+        expect(componentsFactory.selected).to.equal(component);
 
         expect(directive.show).to.have.been.called;
 
@@ -222,7 +222,7 @@ describe('directive: TemplateAttributeEditor', function() {
       $scope.registerDirective(directive);
       $scope.editComponent(component);
 
-      expect(factory.selected).to.deep.equal(component);
+      expect(componentsFactory.selected).to.deep.equal(component);
 
       expect(directive.element.show).to.have.been.called;
       expect(directive.show).to.have.been.called;
@@ -350,7 +350,7 @@ describe('directive: TemplateAttributeEditor', function() {
       $scope.registerDirective(directive);
       $scope.editHighlightedComponent(component.id);
 
-      expect(factory.selected).to.deep.equal(component);
+      expect(componentsFactory.selected).to.deep.equal(component);
 
       expect(directive.element.show).to.have.been.called;
       expect(directive.show).to.have.been.called;
@@ -383,14 +383,14 @@ describe('directive: TemplateAttributeEditor', function() {
         components: [component]
       };
 
-      factory.selected = component;
+      componentsFactory.selected = component;
       $scope.pages = [{}, {}, {}];
       $scope.setPanelIcon('previous-icon', 'streamline');
       $scope.setPanelTitle('Previous Title');
       
       $scope.editHighlightedComponent(component.id);
 
-      expect(factory.selected).to.deep.equal(component);
+      expect(componentsFactory.selected).to.deep.equal(component);
 
       expect($scope.pages).to.have.length(1);
       expect($scope.pages[0]).to.equal(component);
@@ -430,7 +430,7 @@ describe('directive: TemplateAttributeEditor', function() {
 
       $scope.backToList();
 
-      expect(factory.selected).to.be.null;
+      expect(componentsFactory.selected).to.be.null;
       expect(directive.element.hide).to.have.been.called.twice;
 
       expect($scope.showAttributeList).to.be.false;
@@ -463,7 +463,7 @@ describe('directive: TemplateAttributeEditor', function() {
 
       $scope.onBackButton();
 
-      expect(factory.selected).to.be.null;
+      expect(componentsFactory.selected).to.be.null;
       expect(directive.element.hide).to.have.been.called.twice;
       expect($scope.highlightComponent).to.have.been.called.once;
 
@@ -496,7 +496,7 @@ describe('directive: TemplateAttributeEditor', function() {
 
       $scope.onBackButton();
 
-      expect(factory.selected).to.be.null;
+      expect(componentsFactory.selected).to.be.null;
       expect(directive.element.hide).to.have.been.called.twice;
       expect($scope.highlightComponent).to.have.been.called.once;
 
@@ -529,7 +529,7 @@ describe('directive: TemplateAttributeEditor', function() {
 
       $scope.onBackButton();
 
-      expect(factory.selected).to.not.be.null;
+      expect(componentsFactory.selected).to.not.be.null;
       expect(directive.element.hide).to.have.been.called.once;
       expect($scope.highlightComponent).to.have.been.called.once;
       expect($scope.showAttributeList).to.be.false;
@@ -710,7 +710,7 @@ describe('directive: TemplateAttributeEditor', function() {
 
       $scope.backToList.should.not.have.been.called;
 
-      expect($scope.factory.selected).to.equal('selector1');
+      expect(componentsFactory.selected).to.equal('selector1');
 
       expect($scope.pages).to.deep.equal(['selector1']);
     });

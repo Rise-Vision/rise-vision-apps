@@ -92,8 +92,13 @@ describe("directive: templateComponentPlaylist", function() {
   beforeEach(module(function ($provide) {
     $provide.service("templateEditorFactory", function() {
       return {
-        selected: { id: "TEST-ID" },
         presentation: { id: "TEST-ID" }
+      };
+    });
+
+    $provide.service("componentsFactory", function() {
+      return {
+        selected: { id: "TEST-ID" }
       };
     });
 

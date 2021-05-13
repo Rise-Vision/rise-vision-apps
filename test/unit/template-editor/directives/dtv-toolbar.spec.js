@@ -41,7 +41,7 @@ describe('directive: toolbar', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
+    expect($scope.templateEditorFactory).to.be.ok;
 
     expect($scope.confirmDelete).to.be.a('function');
   });

@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentSlides', ['templateEditorFactory', 'attributeDataFactory', 'slidesUrlValidationService', '$rootScope',
+  .directive('templateComponentSlides', ['componentsFactory', 'attributeDataFactory', 'slidesUrlValidationService', '$rootScope',
     '$loading',
-    function (templateEditorFactory, attributeDataFactory, slidesUrlValidationService, $rootScope, $loading) {
+    function (componentsFactory, attributeDataFactory, slidesUrlValidationService, $rootScope, $loading) {
       return {
         restrict: 'E',
         scope: true,
@@ -57,7 +57,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-slides',
             element: element,
             show: function () {
-              $scope.componentId = templateEditorFactory.selected.id;
+              $scope.componentId = componentsFactory.selected.id;
               _load();
               $scope.saveSrc(); //validate Slides URL
             }
@@ -66,7 +66,7 @@ angular.module('risevision.template-editor.directives')
           function _directiveIsVisible() {
             // This directive is instantiated once by templateAttributeEditor
             // It becomes visible when <rise-slides> is selected
-            return templateEditorFactory.selected && (templateEditorFactory.selected.type === 'rise-slides');
+            return componentsFactory.selected && (componentsFactory.selected.type === 'rise-slides');
           }
 
           function _validateSrcLocally() {

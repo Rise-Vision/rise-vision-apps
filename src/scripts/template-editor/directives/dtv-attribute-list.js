@@ -9,8 +9,6 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/attribute-list.html',
         link: function ($scope) {
-          $scope.factory = templateEditorFactory;
-
           $scope.brandingComponent = brandingFactory.getBrandingComponent();
 
           if (userState.hasRole('cp')) {

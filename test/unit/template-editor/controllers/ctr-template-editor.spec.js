@@ -76,9 +76,10 @@ describe('controller: TemplateEditor', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory.presentation).to.be.ok;
-    expect($scope.factory.presentation.templateAttributeData).to.deep.equal({});
+    expect($scope.templateEditorFactory).to.be.ok;
+    expect($scope.templateEditorFactory.presentation).to.be.ok;
+    expect($scope.templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
+    expect($scope.componentsFactory).to.be.ok;
   });
 
   describe('hasContentEditorRole', function() {
@@ -95,13 +96,13 @@ describe('controller: TemplateEditor', function() {
 
   describe('unsaved changes', function () {
     it('should flag unsaved changes to presentation', function () {
-      expect($scope.factory.hasUnsavedChanges).to.be.false;
+      expect($scope.templateEditorFactory.hasUnsavedChanges).to.be.false;
       templateEditorFactory.presentation.id = '1234';
       templateEditorFactory.presentation.name = 'New Name';
       $scope.$apply();
       $timeout.flush();
 
-      expect($scope.factory.hasUnsavedChanges).to.be.true;
+      expect($scope.templateEditorFactory.hasUnsavedChanges).to.be.true;
     });
 
     it('should save presentation if no id is provided', function () {
@@ -128,7 +129,7 @@ describe('controller: TemplateEditor', function() {
       $rootScope.$broadcast('presentationUpdated');
       $scope.$apply();
       $timeout.flush();
-      expect($scope.factory.hasUnsavedChanges).to.be.false;
+      expect($scope.templateEditorFactory.hasUnsavedChanges).to.be.false;
     });
 
     it('should clear unsaved changes when deleting the presentation', function () {
@@ -137,7 +138,7 @@ describe('controller: TemplateEditor', function() {
       $scope.$apply();
       $rootScope.$broadcast('presentationDeleted');
       $scope.$apply();
-      expect($scope.factory.hasUnsavedChanges).to.be.false;
+      expect($scope.templateEditorFactory.hasUnsavedChanges).to.be.false;
     });
 
     it('should not flag unsaved changes when publishing', function () {
@@ -147,7 +148,7 @@ describe('controller: TemplateEditor', function() {
       templateEditorFactory.presentation.changedBy = 'newUsername';
       $scope.$apply();
 
-      expect($scope.factory.hasUnsavedChanges).to.be.false;
+      expect($scope.templateEditorFactory.hasUnsavedChanges).to.be.false;
     });
 
     it('should notify unsaved changes when changing URL', function () {

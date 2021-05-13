@@ -22,7 +22,11 @@ describe('directive: templateComponentTwitter', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return { selected: { id: "TEST-ID" }, presentation: {companyId: "abc123"} };
+      return { presentation: {companyId: "abc123"} };
+    });
+
+    $provide.service('componentsFactory', function() {
+      return { selected: { id: "TEST-ID" } };
     });
 
     $provide.service('attributeDataFactory', function() {

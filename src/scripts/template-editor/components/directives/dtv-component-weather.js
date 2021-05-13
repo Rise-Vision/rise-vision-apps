@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentWeather', ['templateEditorFactory', 'attributeDataFactory', 'companySettingsFactory', 'userState',
-    function (templateEditorFactory, attributeDataFactory, companySettingsFactory, userState) {
+  .directive('templateComponentWeather', ['componentsFactory', 'attributeDataFactory', 'companySettingsFactory', 'userState',
+    function (componentsFactory, attributeDataFactory, companySettingsFactory, userState) {
       return {
         restrict: 'E',
         scope: true,
@@ -31,7 +31,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-data-weather',
             element: element,
             show: function () {
-              $scope.componentId = templateEditorFactory.selected.id;
+              $scope.componentId = componentsFactory.selected.id;
               _load();
             }
           });

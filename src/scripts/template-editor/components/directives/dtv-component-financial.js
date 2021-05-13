@@ -1,16 +1,16 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentFinancial', ['$log', '$timeout', 'templateEditorFactory',
+  .directive('templateComponentFinancial', ['$log', '$timeout', 'componentsFactory', 'templateEditorFactory',
     'attributeDataFactory', 'instrumentSearchService',
-    function ($log, $timeout, templateEditorFactory, attributeDataFactory,
+    function ($log, $timeout, componentsFactory, templateEditorFactory, attributeDataFactory,
       instrumentSearchService) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-financial.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
+          $scope.templateEditorFactory = templateEditorFactory;
 
           function _reset() {
             $scope.showInstrumentList = false;
@@ -36,7 +36,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _buildInstrumentListFromBlueprint() {
-            $scope.factory.loadingPresentation = true;
+            templateEditorFactory.loadingPresentation = true;
             var symbolString = attributeDataFactory.getBlueprintData($scope.componentId, 'symbols');
 
             if (!symbolString) {
@@ -55,7 +55,7 @@ angular.module('risevision.template-editor.directives')
           function _buildListRecursive(instruments, symbols) {
             if (symbols.length === 0) {
               _setInstruments(instruments);
-              $scope.factory.loadingPresentation = false;
+              templateEditorFactory.loadingPresentation = false;
 
               return;
             }
@@ -113,7 +113,7 @@ angular.module('risevision.template-editor.directives')
             element: element,
             show: function () {
               _reset();
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = componentsFactory.selected.id;
               $scope.category = _getCategory();
 
               _loadInstrumentList();

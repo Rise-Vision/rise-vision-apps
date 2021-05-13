@@ -2,10 +2,10 @@
 
 angular.module('risevision.template-editor.directives')
   .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
-  .directive('templateComponentPlaylist', ['templateEditorFactory', 'attributeDataFactory', 'presentation', '$loading',
-    '$q', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
+  .directive('templateComponentPlaylist', ['componentsFactory', 'templateEditorFactory', 'attributeDataFactory',
+    'presentation', '$loading', '$q', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
     'PLAYLIST_COMPONENTS', 'ENV_NAME',
-    function (templateEditorFactory, attributeDataFactory, presentation, $loading,
+    function (componentsFactory, templateEditorFactory, attributeDataFactory, presentation, $loading,
       $q, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory,
       PLAYLIST_COMPONENTS, ENV_NAME) {
       return {
@@ -57,7 +57,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-playlist',
             element: element,
             show: function () {
-              $scope.componentId = templateEditorFactory.selected.id;
+              $scope.componentId = componentsFactory.selected.id;
               $scope.playlistItems = [];
               _load();
             },

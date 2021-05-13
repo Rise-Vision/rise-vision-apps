@@ -3,7 +3,8 @@
 describe('directive: TemplateComponentImage', function() {
   var $scope,
     element,
-    factory,
+    templateEditorFactory,
+    componentsFactory,
     attributeDataFactory,
     timeout,
     $loading,
@@ -12,10 +13,6 @@ describe('directive: TemplateComponentImage', function() {
     storageManagerFactory,
     sandbox = sinon.sandbox.create(),
     fileDownloader = sandbox.stub();
-
-  beforeEach(function() {
-    factory = { selected: { id: 'TEST-ID' } };
-  });
 
   afterEach(function() {
     sandbox.restore();
@@ -30,7 +27,10 @@ describe('directive: TemplateComponentImage', function() {
       };
     });
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return {};
+    });
+    $provide.service('componentsFactory', function() {
+      return { selected: { id: 'TEST-ID' } };
     });
     $provide.service('attributeDataFactory', function() {
       return {
@@ -93,6 +93,8 @@ describe('directive: TemplateComponentImage', function() {
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout, $injector){
     $loading = $injector.get('$loading');
+    templateEditorFactory = $injector.get('templateEditorFactory');
+    componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
     baseImageFactory = $injector.get('baseImageFactory');
     logoImageFactory = $injector.get('logoImageFactory');
@@ -113,8 +115,7 @@ describe('directive: TemplateComponentImage', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } });
+    expect($scope.templateEditorFactory).to.be.ok;
     expect($scope.isEditingLogo).to.be.a('function');
     expect($scope.sortItem).to.be.a('function');
     expect($scope.saveDuration).to.be.a('function');
@@ -175,7 +176,7 @@ describe('directive: TemplateComponentImage', function() {
       var directive = $scope.registerDirective.getCall(1).args[0];
       logoImageFactory.getImagesAsMetadata.returns([]);
 
-      $scope.factory.selected = {type:'rise-image'};
+      componentsFactory.selected = {type:'rise-image'};
 
       directive.show();
 
@@ -187,7 +188,7 @@ describe('directive: TemplateComponentImage', function() {
       var directive = $scope.registerDirective.getCall(0).args[0];
       logoImageFactory.getImagesAsMetadata.returns([]);
 
-      $scope.factory.selected = {type:'rise-image', id:'image-id'};
+      componentsFactory.selected = {type:'rise-image', id:'image-id'};
 
       directive.show();
 
@@ -208,7 +209,7 @@ describe('directive: TemplateComponentImage', function() {
       directive.show();
 
       expect($scope.selectedImages).to.deep.equal(sampleImages);
-      expect($scope.factory.loadingPresentation).to.be.true;
+      expect(templateEditorFactory.loadingPresentation).to.be.true;
 
       timeout.flush();
     });
@@ -570,7 +571,7 @@ describe('directive: TemplateComponentImage', function() {
     });
 
     it('should start spinner', function(done) {
-      $scope.factory.loadingPresentation = true;
+      templateEditorFactory.loadingPresentation = true;
       $scope.$digest();
       setTimeout(function() {
         $loading.start.should.have.been.calledWith('image-file-loader');

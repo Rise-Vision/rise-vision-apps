@@ -7,7 +7,7 @@ angular.module('risevision.template-editor.directives')
         restrict: 'E',
         templateUrl: 'partials/template-editor/toolbar.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
+          $scope.templateEditorFactory = templateEditorFactory;
 
           $scope.confirmDelete = function () {
             $scope.modalInstance = $modal.open({
