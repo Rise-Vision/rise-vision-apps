@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { EditorModule } from './editor/editor.module';
 import { analyticsFactoryProvider, canvaTypePickerProvider } from './ajs-upgraded-providers';
+import { TemplateEditorModule } from './template-editor/template-editor.module';
 
 @NgModule({
   imports: [
     BrowserModule,
     UpgradeModule,
-    EditorModule
+    EditorModule,
+    TemplateEditorModule
   ],
   declarations: [
   ],
