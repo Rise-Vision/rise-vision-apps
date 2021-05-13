@@ -87,8 +87,6 @@
 
               "src/bower_components/angular-slugify/angular-slugify.js",
 
-              "node_modules/lodash/lodash.js",
-
               "src/tmp/partials.js",
 
               "src/scripts/common-header/dtv-common-header.js",
