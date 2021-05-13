@@ -3,6 +3,7 @@
 describe('directive: templateComponentWeather', function() {
   var $scope,
       element,
+      componentsFactory,
       attributeDataFactory,
       company,
       rootScope,
@@ -16,13 +17,12 @@ describe('directive: templateComponentWeather', function() {
   });
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('componentsFactory', function() {
-      return { selected: { id: "TEST-ID" } };
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sinon.stub()
+      };
     });
     $provide.service('attributeDataFactory', function() {
       return {
@@ -46,6 +46,7 @@ describe('directive: templateComponentWeather', function() {
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
 
     rootScope = $rootScope;
@@ -58,7 +59,6 @@ describe('directive: templateComponentWeather', function() {
   function compileDirective() {
     element = compile("<template-component-weather></template-component-weather>")(rootScope.$new());
     $scope = element.scope();
-    $scope.registerDirective = sinon.stub();
     $scope.$digest();
   }
 
@@ -68,19 +68,19 @@ describe('directive: templateComponentWeather', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.registerDirective).to.have.been.called;
+    expect(componentsFactory.registerDirective).to.have.been.called;
     expect($scope.companySettingsFactory).to.be.ok;
     expect($scope.hasValidAddress).to.be.ok;
     expect($scope.canEditCompany).to.be.true;
 
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-data-weather');
     expect(directive.show).to.be.a('function');
   });
 
   it('should load weather from attribute data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleValue = "test weather";
 
     attributeDataFactory.getAttributeData = function() {
@@ -94,7 +94,7 @@ describe('directive: templateComponentWeather', function() {
   });
 
   it('should load weather from blueprint when the attribute data is missing', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleValue = "test weather";
 
     attributeDataFactory.getAttributeData = function() {
@@ -112,7 +112,7 @@ describe('directive: templateComponentWeather', function() {
   });
 
   it('should save weather to attribute data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleValue = "test weather";
 
     attributeDataFactory.getAttributeData = function() {

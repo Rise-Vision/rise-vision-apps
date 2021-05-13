@@ -124,7 +124,7 @@ angular.module('risevision.template-editor.directives')
             _setAttribute('volume', $scope.values.volume);
           };
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-video',
             element: element,
             show: function () {
@@ -156,7 +156,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.selectFromStorage = function () {
-            $scope.editComponent({
+            componentsFactory.editComponent({
               type: 'rise-storage-selector'
             });
           };

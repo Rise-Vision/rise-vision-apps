@@ -45,7 +45,7 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-text',
             element: element,
             show: function () {

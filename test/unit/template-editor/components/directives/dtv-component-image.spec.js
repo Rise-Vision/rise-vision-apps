@@ -30,7 +30,11 @@ describe('directive: TemplateComponentImage', function() {
       return {};
     });
     $provide.service('componentsFactory', function() {
-      return { selected: { id: 'TEST-ID' } };
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sandbox.stub(),
+        editComponent: sandbox.stub()
+      };
     });
     $provide.service('attributeDataFactory', function() {
       return {
@@ -103,8 +107,6 @@ describe('directive: TemplateComponentImage', function() {
     $templateCache.put('partials/template-editor/components/component-image.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
-    $scope.registerDirective = sinon.stub();
-    $scope.editComponent = sinon.stub();
     $scope.fileExistenceChecksCompleted = {};
 
     timeout = $timeout;
@@ -125,9 +127,9 @@ describe('directive: TemplateComponentImage', function() {
   describe('registerDirective:', function() {
     describe('image:', function() {
       it('should initialize', function() {
-        $scope.registerDirective.should.have.been.calledTwice;
+        componentsFactory.registerDirective.should.have.been.calledTwice;
 
-        var directive = $scope.registerDirective.getCall(0).args[0];
+        var directive = componentsFactory.registerDirective.getCall(0).args[0];
         expect(directive).to.be.ok;
         expect(directive.type).to.equal('rise-image');
         expect(directive.element).to.be.an('object');
@@ -135,7 +137,7 @@ describe('directive: TemplateComponentImage', function() {
       });
 
       it('show:', function() {
-        $scope.registerDirective.getCall(0).args[0].show();
+        componentsFactory.registerDirective.getCall(0).args[0].show();
 
         expect(storageManagerFactory.fileType).to.equal('image');
         expect(storageManagerFactory.isSingleFileSelector).to.equal($scope.isEditingLogo);
@@ -145,7 +147,7 @@ describe('directive: TemplateComponentImage', function() {
 
     describe('logo:', function() {
       it('should initialize', function() {
-        var directive = $scope.registerDirective.getCall(1).args[0];
+        var directive = componentsFactory.registerDirective.getCall(1).args[0];
         expect(directive).to.be.ok;
         expect(directive.type).to.equal('rise-image-logo');
         expect(directive.element).to.be.an('object');
@@ -153,7 +155,7 @@ describe('directive: TemplateComponentImage', function() {
       });
 
       it('show:', function() {
-        $scope.registerDirective.getCall(0).args[0].show();
+        componentsFactory.registerDirective.getCall(0).args[0].show();
 
         expect(storageManagerFactory.fileType).to.equal('image');
         expect(storageManagerFactory.isSingleFileSelector).to.equal($scope.isEditingLogo);
@@ -173,7 +175,7 @@ describe('directive: TemplateComponentImage', function() {
   describe('show',function(){
 
     it('should use logoImageFactory when opening logo settings',function(){
-      var directive = $scope.registerDirective.getCall(1).args[0];
+      var directive = componentsFactory.registerDirective.getCall(1).args[0];
       logoImageFactory.getImagesAsMetadata.returns([]);
 
       componentsFactory.selected = {type:'rise-image'};
@@ -185,7 +187,7 @@ describe('directive: TemplateComponentImage', function() {
     });
 
     it('should use baseImageFactory when opening images',function(){
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
       logoImageFactory.getImagesAsMetadata.returns([]);
 
       componentsFactory.selected = {type:'rise-image', id:'image-id'};
@@ -198,7 +200,7 @@ describe('directive: TemplateComponentImage', function() {
     });
 
     it('should set image lists when available as attribute data', function() {
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
       var sampleImages = [
         { "file": 'image.png', "thumbnail-url": "http://image" },
         { "file": 'test|character.jpg', "thumbnail-url": "http://test%7Ccharacter.jpg" }
@@ -215,7 +217,7 @@ describe('directive: TemplateComponentImage', function() {
     });
 
     it('should detect default images', function() {
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
       var sampleImages = [
         { "file": "image.png", "thumbnail-url": "http://image" }
       ];
@@ -231,7 +233,7 @@ describe('directive: TemplateComponentImage', function() {
     });
 
     it('should not consider a default value if it is not', function() {
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
       var sampleImages = [
         { "file": "image.png", "thumbnail-url": "http://image" }
       ];
@@ -247,7 +249,7 @@ describe('directive: TemplateComponentImage', function() {
     });
 
     it('should show logo when isLogo is true and a logo is available',function(){
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
       var sampleImages = [
         { "file": 'logo.png', "thumbnail-url": "http://logo" }
       ];
@@ -460,7 +462,7 @@ describe('directive: TemplateComponentImage', function() {
     });
 
     it('should be be true when picking logo',function(){
-      var directive = $scope.registerDirective.getCall(1).args[0];
+      var directive = componentsFactory.registerDirective.getCall(1).args[0];
 
       directive.show();
 
@@ -468,7 +470,7 @@ describe('directive: TemplateComponentImage', function() {
     });
 
     it('should be false picking a regular image',function(){
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
       directive.show();
 
@@ -516,7 +518,7 @@ describe('directive: TemplateComponentImage', function() {
   it('selectFromStorage:', function() {
     $scope.selectFromStorage();
 
-    $scope.editComponent.should.have.been.calledWith({
+    componentsFactory.editComponent.should.have.been.calledWith({
       type: 'rise-storage-selector'
     });
   });

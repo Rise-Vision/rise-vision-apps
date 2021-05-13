@@ -5,6 +5,7 @@ describe("directive: templateComponentPlaylist", function() {
       $scope,
       $loading,
       element,
+      componentsFactory,
       attributeDataFactory,
       editorFactory,
       blueprintFactory,
@@ -85,10 +86,6 @@ describe("directive: templateComponentPlaylist", function() {
   });
 
   beforeEach(module("risevision.template-editor.directives"));
-  beforeEach(module("risevision.template-editor.controllers"));
-  beforeEach(module("risevision.template-editor.services"));
-  beforeEach(module("risevision.editor.services"));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service("templateEditorFactory", function() {
       return {
@@ -98,7 +95,9 @@ describe("directive: templateComponentPlaylist", function() {
 
     $provide.service("componentsFactory", function() {
       return {
-        selected: { id: "TEST-ID" }
+        selected: { id: "TEST-ID" },
+        registerDirective: sandbox.stub(),
+        editComponent: sandbox.stub()
       };
     });
 
@@ -142,15 +141,14 @@ describe("directive: templateComponentPlaylist", function() {
   }));
 
   beforeEach(inject(function($injector, $compile, $rootScope, $templateCache){
-    $templateCache.put("partials/template-editor/components/component-playlist.html", "<p>mock</p>");
-    $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
+    componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
     editorFactory = $injector.get('editorFactory');
     blueprintFactory = $injector.get('blueprintFactory');
 
-    $scope.registerDirective = sandbox.stub();
-    $scope.editComponent = sandbox.stub();
+    $templateCache.put("partials/template-editor/components/component-playlist.html", "<p>mock</p>");
+    $scope = $rootScope.$new();
 
     element = $compile("<template-component-playlist></template-component-playlistt>")($scope);
     $scope = element.scope();
@@ -159,7 +157,7 @@ describe("directive: templateComponentPlaylist", function() {
 
   it("should exist", function() {
     expect($scope).to.be.ok;
-    expect($scope.registerDirective).to.have.been.called;
+    expect(componentsFactory.registerDirective).to.have.been.called;
 
     expect($scope.playlistComponents).to.be.an('array');
     expect($scope.addVisualComponents).to.be.false;
@@ -170,7 +168,7 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.addPlaylistItem).to.be.a('function');
     expect($scope.editPlaylistItem).to.be.a('function');
 
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal("rise-playlist");
     expect(directive.show).to.be.a("function");
@@ -178,9 +176,9 @@ describe("directive: templateComponentPlaylist", function() {
 
   describe('registerDirective:', function() {
     it('should initialize', function() {
-      $scope.registerDirective.should.have.been.called;
+      componentsFactory.registerDirective.should.have.been.called;
 
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
       expect(directive).to.be.ok;
       expect(directive.type).to.equal("rise-playlist");
       expect(directive.show).to.be.a("function");
@@ -189,14 +187,14 @@ describe("directive: templateComponentPlaylist", function() {
 
     describe('onBackHandler:', function() {
       it ('should enable default navigation if no view is active:', function() {
-        expect($scope.registerDirective.getCall(0).args[0].onBackHandler()).to.not.be.ok;
+        expect(componentsFactory.registerDirective.getCall(0).args[0].onBackHandler()).to.not.be.ok;
         expect($scope.view).to.not.be.ok;
       });
 
       it ('should reset view and return true:', function() {
         $scope.view = 'some-view';
 
-        expect($scope.registerDirective.getCall(0).args[0].onBackHandler()).to.be.true;
+        expect(componentsFactory.registerDirective.getCall(0).args[0].onBackHandler()).to.be.true;
         expect($scope.view).to.not.be.ok;
       });
     });
@@ -216,13 +214,13 @@ describe("directive: templateComponentPlaylist", function() {
 
           $scope.addVisualComponents = true;
 
-          $scope.registerDirective.getCall(0).args[0].show();
+          componentsFactory.registerDirective.getCall(0).args[0].show();
 
           expect($scope.addVisualComponents).to.be.false;
         });
 
         it('should check blueprint data for allowed-components', function() {
-          $scope.registerDirective.getCall(0).args[0].show();
+          componentsFactory.registerDirective.getCall(0).args[0].show();
 
           attributeDataFactory.getBlueprintData.should.have.been.calledWith('TEST-ID', 'allowed-components');
 
@@ -232,28 +230,28 @@ describe("directive: templateComponentPlaylist", function() {
         it('should reset playlist components', function() {
           $scope.playlistComponents = null;
 
-          $scope.registerDirective.getCall(0).args[0].show();
+          componentsFactory.registerDirective.getCall(0).args[0].show();
 
           expect($scope.playlistComponents).to.equal(playlistComponents);
         });
 
         it('should handle * for allowed-components', function() {
           attributeDataFactory.getBlueprintData.returns('*');
-          $scope.registerDirective.getCall(0).args[0].show();
+          componentsFactory.registerDirective.getCall(0).args[0].show();
 
           expect($scope.playlistComponents).to.equal(playlistComponents);
         });
 
         it('should parse csv values for allowed-components', function() {
           attributeDataFactory.getBlueprintData.returns('rise-video,rise-slides');
-          $scope.registerDirective.getCall(0).args[0].show();
+          componentsFactory.registerDirective.getCall(0).args[0].show();
 
           expect($scope.playlistComponents).to.have.length(2);
         });
 
         it('should ignore rise-embedded-template', function() {
           attributeDataFactory.getBlueprintData.returns('rise-embedded-template,rise-video,rise-slides');
-          $scope.registerDirective.getCall(0).args[0].show();
+          componentsFactory.registerDirective.getCall(0).args[0].show();
 
           expect($scope.playlistComponents).to.have.length(2);
         });
@@ -290,7 +288,7 @@ describe("directive: templateComponentPlaylist", function() {
   });
 
   it("should load items from attribute data", function(done) {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return sampleAttributeData[attributeName];
@@ -341,7 +339,7 @@ describe("directive: templateComponentPlaylist", function() {
   });
 
   it("should indicate any templates that are now 'Unknown' from being deleted", function(done) {
-    var directive = $scope.registerDirective.getCall(0).args[0],
+    var directive = componentsFactory.registerDirective.getCall(0).args[0],
         copySampleAttributeData = angular.copy(sampleAttributeData);
 
     // add deleted item
@@ -376,7 +374,7 @@ describe("directive: templateComponentPlaylist", function() {
   });
 
   it("should load attribute data correctly even without embedded templates", function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var copySampleAttributeData = {
       items: [
         sampleAttributeData.items[1]
@@ -722,7 +720,7 @@ describe("directive: templateComponentPlaylist", function() {
 
     $scope.editPlaylistItem(1);
 
-    $scope.editComponent.should.have.been.calledWith({
+    componentsFactory.editComponent.should.have.been.calledWith({
       type: 'tag',
       id: 'playlist1 1'
     });
@@ -750,7 +748,7 @@ describe("directive: templateComponentPlaylist", function() {
 
       $scope.save.should.have.been.called;
 
-      $scope.editComponent.should.have.been.calledWith({
+      componentsFactory.editComponent.should.have.been.calledWith({
         type: 'rise-text',
         id: 'playlist1 1'
       });

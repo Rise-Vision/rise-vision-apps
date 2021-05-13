@@ -4,18 +4,24 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
   var $scope,
     element,
     factory,
+    componentsFactory,
     attributeDataFactory,
     timeout;
 
   beforeEach(function() {
     factory = {
-      presentation: { id: 'TEST-ID' },
-      selected: { id: 'TEST-ID' }
+      presentation: { id: 'TEST-ID' }
     };
   });
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(function ($provide) {
+    $provide.service('componentsFactory', function() {
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sinon.stub()
+      };
+    });
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
@@ -49,13 +55,13 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout, $injector){
+    componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
 
     $templateCache.put('partials/template-editor/components/component-image.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
-    $scope.registerDirective = sinon.stub();
-    $scope.showNextPanel = sinon.stub();
+    componentsFactory.registerDirective = sinon.stub();
     $scope.fileExistenceChecksCompleted = {};
 
     timeout = $timeout;
@@ -71,7 +77,7 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
       return Q.resolve(metadata);
     };
 
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleImages = [
       { "file": 'image.png', "thumbnail-url": "http://image" },
       { "file": 'test.jpg', "thumbnail-url": "http://test.jpg" }

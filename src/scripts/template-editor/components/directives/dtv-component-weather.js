@@ -27,7 +27,7 @@ angular.module('risevision.template-editor.directives')
             attributeDataFactory.setAttributeData($scope.componentId, 'scale', $scope.scale);
           };
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-data-weather',
             element: element,
             show: function () {

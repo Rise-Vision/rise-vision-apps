@@ -29,7 +29,7 @@ angular.module('risevision.template-editor.directives')
             attributeDataFactory.setAttributeData($scope.componentId, 'html', $scope.html);
           };
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-html',
             element: element,
             show: function () {

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateBrandingColors', ['brandingFactory',
-    function (brandingFactory) {
+  .directive('templateBrandingColors', ['componentsFactory', 'brandingFactory',
+    function (componentsFactory, brandingFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -16,7 +16,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.$on('colorpicker-selected', $scope.saveBranding);
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-branding-colors',
             element: element,
           });
