@@ -13,7 +13,6 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-playlist.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
           $scope.playlistItems = [];
           $scope.searchKeyword = '';
           $scope.templatesSearch = {
@@ -58,7 +57,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-playlist',
             element: element,
             show: function () {
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               $scope.playlistItems = [];
               _load();
             },
@@ -196,7 +195,7 @@ angular.module('risevision.template-editor.directives')
               FILTER_HTML_TEMPLATES);
 
             //exclude a template that is being edited
-            $scope.templatesSearch.filter += ' AND NOT id:' + $scope.factory.presentation.id;
+            $scope.templatesSearch.filter += ' AND NOT id:' + templateEditorFactory.presentation.id;
 
             if (!$scope.templatesFactory) {
               $scope.initTemplatesFactory();

@@ -31,13 +31,11 @@ angular.module('risevision.template-editor.directives')
               };
             },
             post: function ($scope, element) {
-              $scope.factory = templateEditorFactory;
-
               $scope.registerDirective({
                 type: 'rise-data-counter',
                 element: element,
                 show: function () {
-                  $scope.componentId = $scope.factory.selected.id;
+                  $scope.componentId = templateEditorFactory.selected.id;
                   $scope.load();
                 },
                 getTitle: function (component) {

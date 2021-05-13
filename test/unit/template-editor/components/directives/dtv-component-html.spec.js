@@ -3,12 +3,7 @@
 describe('directive: templateComponentHtml', function() {
   var $scope, $timeout,
       element,
-      factory,
       attributeDataFactory;
-
-  beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
-  });
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.controllers'));
@@ -17,7 +12,7 @@ describe('directive: templateComponentHtml', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return { selected: { id: "TEST-ID" } };
     });
 
     $provide.service('attributeDataFactory', function() {
@@ -45,8 +40,6 @@ describe('directive: templateComponentHtml', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
     expect($scope.registerDirective).to.have.been.called;
 
     expect($scope.codemirrorOptions).to.deep.equal({});

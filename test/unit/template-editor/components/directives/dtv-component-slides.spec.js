@@ -3,14 +3,11 @@
 describe('directive: templateComponentSlides', function() {
   var $scope,
       element,
-      factory,
       attributeDataFactory,
       slidesUrlValidationService,
       sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
-
     slidesUrlValidationService = { validate: sandbox.stub().returns(Q.resolve()) };
   });
 
@@ -25,7 +22,7 @@ describe('directive: templateComponentSlides', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return { selected: { id: "TEST-ID" } };
     });
 
     $provide.service('attributeDataFactory', function() {
@@ -54,8 +51,6 @@ describe('directive: templateComponentSlides', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
     expect($scope.registerDirective).to.have.been.called;
 
     var directive = $scope.registerDirective.getCall(0).args[0];

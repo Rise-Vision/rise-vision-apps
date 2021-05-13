@@ -3,13 +3,8 @@
 describe('directive: templateComponentCounter', function() {
   var $scope,
     element,
-    factory,
     attributeDataFactory,
     sandbox = sinon.sandbox.create();
-
-  beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
-  });
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.controllers'));
@@ -18,7 +13,7 @@ describe('directive: templateComponentCounter', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return { selected: { id: "TEST-ID" } };
     });
 
     $provide.service('attributeDataFactory', function() {
@@ -47,8 +42,6 @@ describe('directive: templateComponentCounter', function() {
 
   it('should initialize', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } });
     expect($scope.registerDirective).to.have.been.called;
 
     expect($scope.dateOptions).to.be.an.object;

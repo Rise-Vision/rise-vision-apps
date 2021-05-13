@@ -9,8 +9,6 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-rss.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
-
           $scope.$watch('spinner', function (loading) {
             if (loading) {
               $loading.start('rss-editor-loader');
@@ -37,7 +35,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-data-rss',
             element: element,
             show: function () {
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               _load();
               $scope.saveFeed(); // validate Feed URL
             }
