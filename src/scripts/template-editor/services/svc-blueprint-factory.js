@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('blueprintFactory', ['$q', '$http', 'BLUEPRINT_URL',
+  .factory('blueprintFactory2', ['$q', '$http', 'BLUEPRINT_URL',
     function ($q, $http, BLUEPRINT_URL) {
       var factory = {};
 
