@@ -1,16 +1,14 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentSlides', ['templateEditorFactory', 'slidesUrlValidationService', '$rootScope',
+  .directive('templateComponentSlides', ['templateEditorFactory', 'attributeDataFactory', 'slidesUrlValidationService', '$rootScope',
     '$loading',
-    function (templateEditorFactory, slidesUrlValidationService, $rootScope, $loading) {
+    function (templateEditorFactory, attributeDataFactory, slidesUrlValidationService, $rootScope, $loading) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-slides.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
-
           $rootScope.$on('risevision.page.visible', function (pageIsVisible) {
             if (_directiveIsVisible() && pageIsVisible) {
               $scope.saveSrc();
@@ -28,20 +26,20 @@ angular.module('risevision.template-editor.directives')
           $scope.spinner = false;
 
           function _load() {
-            $scope.src = $scope.getAvailableAttributeData($scope.componentId, 'src');
-            $scope.duration = parseInt($scope.getAvailableAttributeData($scope.componentId, 'duration')) || 10;
+            $scope.src = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'src');
+            $scope.duration = parseInt(attributeDataFactory.getAvailableAttributeData($scope.componentId, 'duration')) || 10;
           }
 
           $scope.saveDuration = function () {
             if ($scope.duration > 0) {
-              $scope.setAttributeData($scope.componentId, 'duration', $scope.duration);
+              attributeDataFactory.setAttributeData($scope.componentId, 'duration', $scope.duration);
             }
           };
 
           $scope.saveSrc = function () {
             if (_validateSrcLocally()) {
 
-              $scope.setAttributeData($scope.componentId, 'src', $scope.src);
+              attributeDataFactory.setAttributeData($scope.componentId, 'src', $scope.src);
 
               $scope.spinner = true;
 
@@ -59,7 +57,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-slides',
             element: element,
             show: function () {
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               _load();
               $scope.saveSrc(); //validate Slides URL
             }
@@ -68,7 +66,7 @@ angular.module('risevision.template-editor.directives')
           function _directiveIsVisible() {
             // This directive is instantiated once by templateAttributeEditor
             // It becomes visible when <rise-slides> is selected
-            return $scope.factory.selected && ($scope.factory.selected.type === 'rise-slides');
+            return templateEditorFactory.selected && (templateEditorFactory.selected.type === 'rise-slides');
           }
 
           function _validateSrcLocally() {

@@ -4,6 +4,7 @@ describe('directive: TemplateComponentFinancial', function() {
   var $scope,
       element,
       factory,
+      attributeDataFactory,
       timeout;
 
   var popularResults = [
@@ -59,6 +60,12 @@ describe('directive: TemplateComponentFinancial', function() {
       return factory;
     });
 
+    $provide.service('attributeDataFactory', function() {
+      return {
+        setAttributeData: sinon.stub()
+      };
+    });
+
     $provide.service('instrumentSearchService', function($q) {
       return {
         popularSearch: function() {
@@ -71,12 +78,13 @@ describe('directive: TemplateComponentFinancial', function() {
     });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout, $injector){
+    attributeDataFactory = $injector.get('attributeDataFactory');
+
     $templateCache.put('partials/template-editor/components/component-financial.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
     $scope.registerDirective = sinon.stub();
-    $scope.setAttributeData = sinon.stub();
 
     timeout = $timeout;
     element = $compile("<template-component-financial></template-component-financial>")($scope);
@@ -152,10 +160,10 @@ describe('directive: TemplateComponentFinancial', function() {
       { name: "CANADIAN DOLLAR", symbol: "CADUSD=X" }
     ];
 
-    $scope.getAttributeData = function() {
+    attributeDataFactory.getAttributeData = function() {
       return sampleInstruments;
     }
-    $scope.getBlueprintData = function () {
+    attributeDataFactory.getBlueprintData = function () {
       return "currencies";
     }
 
@@ -170,10 +178,10 @@ describe('directive: TemplateComponentFinancial', function() {
   it('should download instruments when not available as attribute data', function(done) {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
-    $scope.getAttributeData = function() {
+    attributeDataFactory.getAttributeData = function() {
       return null;
     }
-    $scope.getBlueprintData = function() {
+    attributeDataFactory.getBlueprintData = function() {
       return "SXFc1";
     }
 
@@ -191,13 +199,13 @@ describe('directive: TemplateComponentFinancial', function() {
 
       expect($scope.instruments).to.deep.equal(expectedInstruments);
 
-      expect($scope.setAttributeData).to.have.been.called.twice;
+      expect(attributeDataFactory.setAttributeData).to.have.been.called.twice;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         "TEST-ID", "instruments", expectedInstruments
       )).to.be.true;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         "TEST-ID", "symbols", "SXFc1"
       )).to.be.true;
 
@@ -208,10 +216,10 @@ describe('directive: TemplateComponentFinancial', function() {
   it('should not set instruments when they are not available in the search', function(done) {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
-    $scope.getAttributeData = function () {
+    attributeDataFactory.getAttributeData = function () {
       return null;
     }
-    $scope.getBlueprintData = function () {
+    attributeDataFactory.getBlueprintData = function () {
       return "invalid_symbol";
     }
 
@@ -221,13 +229,13 @@ describe('directive: TemplateComponentFinancial', function() {
     setTimeout(function () {
       expect($scope.instruments).to.deep.equal([]);
 
-      expect($scope.setAttributeData).to.have.been.called.twice;
+      expect(attributeDataFactory.setAttributeData).to.have.been.called.twice;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         "TEST-ID", "instruments", []
       )).to.be.true;
 
-      expect($scope.setAttributeData.calledWith(
+      expect(attributeDataFactory.setAttributeData.calledWith(
         "TEST-ID", "symbols", ""
       )).to.be.true;
 
@@ -258,13 +266,13 @@ describe('directive: TemplateComponentFinancial', function() {
 
     expect($scope.instruments).to.deep.equal(expectedInstruments);
 
-    expect($scope.setAttributeData).to.have.been.called.twice;
+    expect(attributeDataFactory.setAttributeData).to.have.been.called.twice;
 
-    expect($scope.setAttributeData.calledWith(
+    expect(attributeDataFactory.setAttributeData.calledWith(
       "TEST-ID", "instruments", expectedInstruments
     )).to.be.true;
 
-    expect($scope.setAttributeData.calledWith(
+    expect(attributeDataFactory.setAttributeData.calledWith(
       "TEST-ID", "symbols", "SXFc1|FCSc1"
     )).to.be.true;
   });
@@ -347,10 +355,10 @@ describe('directive: TemplateComponentFinancial', function() {
       }
     ];
 
-    $scope.getAttributeData = function() {
+    attributeDataFactory.getAttributeData = function() {
       return instruments;
     };
-    $scope.getBlueprintData = function () {
+    attributeDataFactory.getBlueprintData = function () {
       return "currencies";
     }
 
@@ -408,10 +416,10 @@ describe('directive: TemplateComponentFinancial', function() {
       }
     ];
 
-    $scope.getAttributeData = function() {
+    attributeDataFactory.getAttributeData = function() {
       return instruments;
     };
-    $scope.getBlueprintData = function () {
+    attributeDataFactory.getBlueprintData = function () {
       return "currencies";
     }
 

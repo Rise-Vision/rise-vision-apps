@@ -1,8 +1,10 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentFinancial', ['$log', '$timeout', 'templateEditorFactory', 'instrumentSearchService',
-    function ($log, $timeout, templateEditorFactory, instrumentSearchService) {
+  .directive('templateComponentFinancial', ['$log', '$timeout', 'templateEditorFactory',
+    'attributeDataFactory', 'instrumentSearchService',
+    function ($log, $timeout, templateEditorFactory, attributeDataFactory,
+      instrumentSearchService) {
       return {
         restrict: 'E',
         scope: true,
@@ -24,7 +26,7 @@ angular.module('risevision.template-editor.directives')
 
           function _loadInstrumentList() {
             var instruments =
-              $scope.getAttributeData($scope.componentId, 'instruments');
+              attributeDataFactory.getAttributeData($scope.componentId, 'instruments');
 
             if (instruments) {
               $scope.instruments = instruments;
@@ -35,7 +37,7 @@ angular.module('risevision.template-editor.directives')
 
           function _buildInstrumentListFromBlueprint() {
             $scope.factory.loadingPresentation = true;
-            var symbolString = $scope.getBlueprintData($scope.componentId, 'symbols');
+            var symbolString = attributeDataFactory.getBlueprintData($scope.componentId, 'symbols');
 
             if (!symbolString) {
               $log.error('The component blueprint data is not providing default symbols value: ' + $scope
@@ -90,12 +92,12 @@ angular.module('risevision.template-editor.directives')
             var value = angular.copy(instruments);
 
             $scope.instruments = value;
-            $scope.setAttributeData($scope.componentId, 'instruments', value);
-            $scope.setAttributeData($scope.componentId, 'symbols', _symbolsFor(value));
+            attributeDataFactory.setAttributeData($scope.componentId, 'instruments', value);
+            attributeDataFactory.setAttributeData($scope.componentId, 'symbols', _symbolsFor(value));
           }
 
           function _getCategory() {
-            var category = $scope.getBlueprintData($scope.componentId, 'category');
+            var category = attributeDataFactory.getBlueprintData($scope.componentId, 'category');
 
             if (!category) {
               $log.error('No category was defined for financial component');

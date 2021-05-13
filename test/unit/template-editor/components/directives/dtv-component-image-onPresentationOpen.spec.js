@@ -4,6 +4,7 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
   var $scope,
     element,
     factory,
+    attributeDataFactory,
     timeout;
 
   beforeEach(function() {
@@ -17,6 +18,15 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
       return factory;
+    });
+    $provide.service('attributeDataFactory', function() {
+      return {
+        getAttributeData: sinon.stub(),
+        getAvailableAttributeData: sinon.stub(),
+        setAttributeData: sinon.stub(),
+        getBlueprintData: sinon.stub().returns(null),
+        getComponentIds: sinon.stub().returns(['component1', 'component2'])
+      };
     });
     $provide.service('logoImageFactory', function() {
       return {
@@ -38,20 +48,15 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
     });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout, $injector){
+    attributeDataFactory = $injector.get('attributeDataFactory');
+
     $templateCache.put('partials/template-editor/components/component-image.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
     $scope.registerDirective = sinon.stub();
-    $scope.setAttributeData = sinon.stub();
     $scope.showNextPanel = sinon.stub();
     $scope.fileExistenceChecksCompleted = {};
-    $scope.getBlueprintData = function() {
-      return null;
-    };
-    $scope.getComponentIds = function() {
-      return ['component1', 'component2'];
-    }
 
     timeout = $timeout;
     element = $compile("<template-component-image></template-component-image>")($scope);
@@ -72,7 +77,7 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
       { "file": 'test.jpg', "thumbnail-url": "http://test.jpg" }
     ];
 
-    $scope.getAttributeData = function(componentId, key) {
+    attributeDataFactory.getAttributeData = function(componentId, key) {
       switch(key) {
         case 'metadata': return sampleImages;
         case 'files': return 'image.png|test.png';

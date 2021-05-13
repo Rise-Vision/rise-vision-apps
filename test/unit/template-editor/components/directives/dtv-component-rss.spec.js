@@ -3,13 +3,11 @@
 describe('directive: templateComponentRss', function() {
   var $scope,
     element,
-    factory,
+    attributeDataFactory,
     rssFeedValidation,
     sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
-
     rssFeedValidation = {
       isParsable: sandbox.stub().returns(Q.resolve('VALID')),
       isValid: sandbox.stub().returns(Q.resolve('VALID'))
@@ -23,7 +21,13 @@ describe('directive: templateComponentRss', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return { selected: { id: "TEST-ID" } };
+    });
+
+    $provide.service('attributeDataFactory', function() {
+      return {
+        setAttributeData: sinon.stub()
+      };
     });
 
     $provide.service('rssFeedValidation', function() {
@@ -31,12 +35,13 @@ describe('directive: templateComponentRss', function() {
     });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    attributeDataFactory = $injector.get('attributeDataFactory');
+
     $templateCache.put('partials/template-editor/components/component-rss.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
     $scope.registerDirective = sinon.stub();
-    $scope.setAttributeData = sinon.stub();
 
     element = $compile("<template-component-rss></template-component-rss>")($scope);
     $scope = element.scope();
@@ -45,8 +50,6 @@ describe('directive: templateComponentRss', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
     expect($scope.registerDirective).to.have.been.called;
 
     var directive = $scope.registerDirective.getCall(0).args[0];
@@ -61,7 +64,7 @@ describe('directive: templateComponentRss', function() {
       'feedurl': 'http://rss.cnn.com/rss/cnn_topstories.rss'
     };
 
-    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return sampleData[attributeName];
     };
 
@@ -78,7 +81,7 @@ describe('directive: templateComponentRss', function() {
       'maxitems': 5
     };
 
-    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return sampleData[attributeName];
     };
 
@@ -91,7 +94,7 @@ describe('directive: templateComponentRss', function() {
   it('should set maxItems to 1 when default value and blueprint are undefined', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
-    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return undefined;
     };
 
@@ -108,7 +111,7 @@ describe('directive: templateComponentRss', function() {
       'maxitems': 5
     };
 
-    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return sampleData[attributeName];
     };
 
@@ -119,7 +122,7 @@ describe('directive: templateComponentRss', function() {
 
     setTimeout(function(){
       expect(rssFeedValidation.isValid).to.have.been.called;
-      expect($scope.setAttributeData).to.have.been.called;
+      expect(attributeDataFactory.setAttributeData).to.have.been.called;
 
       done();
     }, 200);
@@ -129,7 +132,7 @@ describe('directive: templateComponentRss', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleData = {};
 
-    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return sampleData[attributeName];
     };
 
@@ -141,7 +144,7 @@ describe('directive: templateComponentRss', function() {
 
     // only 1 call from initial load, no subsequent call from invalid url entry
     expect(rssFeedValidation.isParsable.callCount).to.equal(1);
-    expect($scope.setAttributeData).to.not.have.been.called;
+    expect(attributeDataFactory.setAttributeData).to.not.have.been.called;
   });
 
   it('should not save or check feed validity if feed parser response is not VALID', function(done) {
@@ -150,7 +153,7 @@ describe('directive: templateComponentRss', function() {
 
     rssFeedValidation.isParsable = sandbox.stub().returns(Q.resolve('NON_FEED'));
 
-    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+    attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return sampleData[attributeName];
     };
 
@@ -164,7 +167,7 @@ describe('directive: templateComponentRss', function() {
     expect(rssFeedValidation.isParsable.callCount).to.equal(2);
 
     setTimeout(function(){
-      expect($scope.setAttributeData).to.not.have.been.called;
+      expect(attributeDataFactory.setAttributeData).to.not.have.been.called;
       expect(rssFeedValidation.isValid).to.not.have.been.called;
 
       done();

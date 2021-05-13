@@ -3,14 +3,13 @@
 describe('directive: templateComponentWeather', function() {
   var $scope,
       element,
-      factory,
+      attributeDataFactory,
       company,
       rootScope,
       compile,
       hasRole = true;
 
   beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
     company = {
       postalCode: '12345'
     };
@@ -23,7 +22,12 @@ describe('directive: templateComponentWeather', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return { selected: { id: "TEST-ID" } };
+    });
+    $provide.service('attributeDataFactory', function() {
+      return {
+        setAttributeData: sinon.stub()
+      };
     });
     $provide.service('companySettingsFactory', function() {
       return {};
@@ -41,7 +45,9 @@ describe('directive: templateComponentWeather', function() {
     });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    attributeDataFactory = $injector.get('attributeDataFactory');
+
     rootScope = $rootScope;
     compile = $compile;
     $templateCache.put('partials/template-editor/components/component-weather.html', '<p>mock</p>');
@@ -53,7 +59,6 @@ describe('directive: templateComponentWeather', function() {
     element = compile("<template-component-weather></template-component-weather>")(rootScope.$new());
     $scope = element.scope();
     $scope.registerDirective = sinon.stub();
-    $scope.setAttributeData = sinon.stub();
     $scope.$digest();
   }
 
@@ -63,8 +68,6 @@ describe('directive: templateComponentWeather', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
     expect($scope.registerDirective).to.have.been.called;
     expect($scope.companySettingsFactory).to.be.ok;
     expect($scope.hasValidAddress).to.be.ok;
@@ -80,7 +83,7 @@ describe('directive: templateComponentWeather', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleValue = "test weather";
 
-    $scope.getAttributeData = function() {
+    attributeDataFactory.getAttributeData = function() {
       return sampleValue;
     }
 
@@ -94,11 +97,11 @@ describe('directive: templateComponentWeather', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleValue = "test weather";
 
-    $scope.getAttributeData = function() {
+    attributeDataFactory.getAttributeData = function() {
       return null;
     };
 
-    $scope.getBlueprintData = function() {
+    attributeDataFactory.getBlueprintData = function() {
       return sampleValue;
     };
 
@@ -112,7 +115,7 @@ describe('directive: templateComponentWeather', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleValue = "test weather";
 
-    $scope.getAttributeData = function() {
+    attributeDataFactory.getAttributeData = function() {
       return sampleValue;
     }
 
@@ -122,7 +125,7 @@ describe('directive: templateComponentWeather', function() {
 
     $scope.save();
 
-    expect($scope.setAttributeData.calledWith(
+    expect(attributeDataFactory.setAttributeData.calledWith(
       "TEST-ID", "scale", "updated weather"
     )).to.be.true;
   });

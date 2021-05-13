@@ -1,25 +1,24 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentText', ['$timeout', '$window', 'templateEditorFactory', 'templateEditorUtils',
-    function ($timeout, $window, templateEditorFactory, templateEditorUtils) {
+  .directive('templateComponentText', ['$timeout', '$window', 'templateEditorFactory', 'attributeDataFactory', 'templateEditorUtils',
+    function ($timeout, $window, templateEditorFactory, attributeDataFactory, templateEditorUtils) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-text.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
           $scope.sliderOptions = {
             hideLimitLabels: true,
             hidePointerLabels: true
           };
 
           function _load() {
-            $scope.isMultiline = $scope.getAvailableAttributeData($scope.componentId, 'multiline');
-            var value = $scope.getAvailableAttributeData($scope.componentId, 'value');
-            var fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
-            var minfontsize = $scope.getAvailableAttributeData($scope.componentId, 'minfontsize');
-            var maxfontsize = $scope.getAvailableAttributeData($scope.componentId, 'maxfontsize');
+            $scope.isMultiline = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'multiline');
+            var value = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'value');
+            var fontsize = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'fontsize');
+            var minfontsize = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'minfontsize');
+            var maxfontsize = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'maxfontsize');
 
             var fontsizeInt = templateEditorUtils.intValueFor(fontsize, null);
             var minFontSize = templateEditorUtils.intValueFor(minfontsize, 1);
@@ -39,10 +38,10 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.save = function () {
-            $scope.setAttributeData($scope.componentId, 'value', $scope.value);
+            attributeDataFactory.setAttributeData($scope.componentId, 'value', $scope.value);
 
             if ($scope.showFontSize) {
-              $scope.setAttributeData($scope.componentId, 'fontsize', $scope.fontsize);
+              attributeDataFactory.setAttributeData($scope.componentId, 'fontsize', $scope.fontsize);
             }
           };
 
@@ -50,7 +49,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-text',
             element: element,
             show: function () {
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               _load();
             }
           });

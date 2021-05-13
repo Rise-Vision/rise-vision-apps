@@ -2,10 +2,10 @@
 
 angular.module('risevision.template-editor.directives')
   .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
-  .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$loading',
+  .directive('templateComponentPlaylist', ['templateEditorFactory', 'attributeDataFactory', 'presentation', '$loading',
     '$q', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
     'PLAYLIST_COMPONENTS', 'ENV_NAME',
-    function (templateEditorFactory, presentation, $loading,
+    function (templateEditorFactory, attributeDataFactory, presentation, $loading,
       $q, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory,
       PLAYLIST_COMPONENTS, ENV_NAME) {
       return {
@@ -13,7 +13,6 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-playlist.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
           $scope.playlistItems = [];
           $scope.searchKeyword = '';
           $scope.templatesSearch = {
@@ -27,7 +26,7 @@ angular.module('risevision.template-editor.directives')
             if (!blueprintFactory.isRiseInit()) {
               $scope.addVisualComponents = false;
             } else {
-              var allowedComponents = $scope.getBlueprintData($scope.componentId, 'allowed-components');
+              var allowedComponents = attributeDataFactory.getBlueprintData($scope.componentId, 'allowed-components');
 
               if (!allowedComponents || allowedComponents === '*') {
                 $scope.playlistComponents = PLAYLIST_COMPONENTS;
@@ -44,21 +43,21 @@ angular.module('risevision.template-editor.directives')
           function _load() {
             _updatePlaylistComponents();
 
-            var itemsJson = $scope.getAvailableAttributeData($scope.componentId, 'items');
+            var itemsJson = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'items');
             var itemsArray = $scope.jsonToPlaylistItems(itemsJson);
             $scope.loadTemplateNames(itemsArray);
           }
 
           $scope.save = function () {
             var itemsJson = $scope.playlistItemsToJson();
-            $scope.setAttributeData($scope.componentId, 'items', itemsJson);
+            attributeDataFactory.setAttributeData($scope.componentId, 'items', itemsJson);
           };
 
           $scope.registerDirective({
             type: 'rise-playlist',
             element: element,
             show: function () {
-              $scope.componentId = $scope.factory.selected.id;
+              $scope.componentId = templateEditorFactory.selected.id;
               $scope.playlistItems = [];
               _load();
             },
@@ -196,7 +195,7 @@ angular.module('risevision.template-editor.directives')
               FILTER_HTML_TEMPLATES);
 
             //exclude a template that is being edited
-            $scope.templatesSearch.filter += ' AND NOT id:' + $scope.factory.presentation.id;
+            $scope.templatesSearch.filter += ' AND NOT id:' + templateEditorFactory.presentation.id;
 
             if (!$scope.templatesFactory) {
               $scope.initTemplatesFactory();

@@ -3,11 +3,7 @@
 describe('directive: templateComponentHtml', function() {
   var $scope, $timeout,
       element,
-      factory;
-
-  beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
-  });
+      attributeDataFactory;
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.controllers'));
@@ -16,19 +12,26 @@ describe('directive: templateComponentHtml', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return { selected: { id: "TEST-ID" } };
     });
+
+    $provide.service('attributeDataFactory', function() {
+      return {
+        setAttributeData: sinon.stub(),
+        getAvailableAttributeData: sinon.stub().returns('data')
+      };
+    });
+
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
     $timeout = $injector.get('$timeout');
+    attributeDataFactory = $injector.get('attributeDataFactory');
 
     $templateCache.put('partials/template-editor/components/component-html.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
     $scope.registerDirective = sinon.stub();
-    $scope.setAttributeData = sinon.stub();
-    $scope.getAvailableAttributeData = sinon.stub().returns('data');
 
     element = $compile("<template-component-html></template-component-html>")($scope);
     $scope = element.scope();
@@ -37,8 +40,6 @@ describe('directive: templateComponentHtml', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
     expect($scope.registerDirective).to.have.been.called;
 
     expect($scope.codemirrorOptions).to.deep.equal({});
@@ -52,7 +53,7 @@ describe('directive: templateComponentHtml', function() {
   it('should load html from attribute data', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleValue = "test html";
-    $scope.getAvailableAttributeData.returns(sampleValue);
+    attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
 
     directive.show();
 
@@ -78,7 +79,7 @@ describe('directive: templateComponentHtml', function() {
   it('should save html to attribute data', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleValue = "test html";
-    $scope.getAvailableAttributeData.returns(sampleValue);
+    attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
 
     directive.show();
 
@@ -86,7 +87,7 @@ describe('directive: templateComponentHtml', function() {
 
     $scope.save();
 
-    expect($scope.setAttributeData.calledWith(
+    expect(attributeDataFactory.setAttributeData.calledWith(
       "TEST-ID", "html", "updated html"
     )).to.be.true;
   });

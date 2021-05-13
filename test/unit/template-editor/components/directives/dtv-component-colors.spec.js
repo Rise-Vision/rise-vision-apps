@@ -3,11 +3,7 @@
 describe('directive: templateComponentColors', function() {
   var $scope,
     element,
-    factory;
-
-  beforeEach(function() {
-    factory = { selected: { id: 'TEST-ID' } };
-  });
+    attributeDataFactory;
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.controllers'));
@@ -16,17 +12,24 @@ describe('directive: templateComponentColors', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return { selected: { id: "TEST-ID" } };
+    });
+
+    $provide.service('attributeDataFactory', function() {
+      return {
+        setAttributeDataGlobal: sinon.stub(),
+        getAttributeDataGlobal: sinon.stub()
+      };
     });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    attributeDataFactory = $injector.get('attributeDataFactory');
+
     $templateCache.put('partials/template-editor/components/component-colors.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
     $scope.registerDirective = sinon.stub();
-    $scope.setAttributeDataGlobal = sinon.stub();
-    $scope.getAttributeDataGlobal = sinon.stub();
 
     element = $compile('<template-component-colors></template-component-colors>')($scope);
     $scope = element.scope();
@@ -35,8 +38,6 @@ describe('directive: templateComponentColors', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: 'TEST-ID' } });
     expect($scope.registerDirective).to.have.been.called;
 
     var directive = $scope.registerDirective.getCall(0).args[0];
@@ -50,7 +51,7 @@ describe('directive: templateComponentColors', function() {
     $scope.baseColor = 'red';
     $scope.accentColor = 'green';
     $scope.save();
-    expect($scope.setAttributeDataGlobal.calledWith('brandingOverride', {baseColor: 'red', accentColor: 'green'})).to.be.true;
+    expect(attributeDataFactory.setAttributeDataGlobal.calledWith('brandingOverride', {baseColor: 'red', accentColor: 'green'})).to.be.true;
   });
 
   it('should not save colors if override is false', function() {
@@ -58,11 +59,11 @@ describe('directive: templateComponentColors', function() {
     $scope.baseColor = 'red';
     $scope.accentColor = 'green';
     $scope.save();
-    expect($scope.setAttributeDataGlobal.calledWith('brandingOverride', null)).to.be.true;
+    expect(attributeDataFactory.setAttributeDataGlobal.calledWith('brandingOverride', null)).to.be.true;
   });
 
   it('should load colors and set override to true', function() {
-    $scope.getAttributeDataGlobal.returns({baseColor: 'red', accentColor: 'green'});
+    attributeDataFactory.getAttributeDataGlobal.returns({baseColor: 'red', accentColor: 'green'});
     $scope.load();
     expect($scope.override).to.be.true;
     expect($scope.baseColor).to.equal('red');
@@ -70,13 +71,13 @@ describe('directive: templateComponentColors', function() {
   });
 
   it('should set override to false', function() {
-    $scope.getAttributeDataGlobal.returns(null);
+    attributeDataFactory.getAttributeDataGlobal.returns(null);
     $scope.load();
     expect($scope.override).to.be.false;
   });
 
   it('should save baseColor on change', function() {
-    $scope.getAttributeDataGlobal.returns({baseColor: 'red', accentColor: 'green'});
+    attributeDataFactory.getAttributeDataGlobal.returns({baseColor: 'red', accentColor: 'green'});
     $scope.load(); //register $watch for baseColor
     $scope.$digest();
 
@@ -89,7 +90,7 @@ describe('directive: templateComponentColors', function() {
   });
 
   it('should save accentColor on change', function() {
-    $scope.getAttributeDataGlobal.returns({baseColor: 'red', accentColor: 'green'});
+    attributeDataFactory.getAttributeDataGlobal.returns({baseColor: 'red', accentColor: 'green'});
     $scope.load(); //register $watch for accentColor
     $scope.$digest();
 
