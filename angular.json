@@ -57,7 +57,6 @@
               "src/bower_components/ngstorage/ngStorage.js",
               "src/bower_components/angular-spinner/dist/angular-spinner.js",
               "src/bower_components/angular-cookies/angular-cookies.js",
-              "src/bower_components/lodash/dist/lodash.js",
               "src/bower_components/ng-csv/build/ng-csv.js",
               "src/bower_components/ng-tags-input/ng-tags-input.js",
               "src/bower_components/oclazyload/dist/ocLazyLoad.js",
@@ -663,13 +662,14 @@
                 "src/bower_components/ngstorage/ngStorage.js",
                 "src/bower_components/angular-spinner/dist/angular-spinner.js",
                 "src/bower_components/angular-cookies/angular-cookies.js",
-                "src/bower_components/lodash/dist/lodash.js",
                 "src/bower_components/ng-csv/build/ng-csv.js",
                 "src/bower_components/ng-tags-input/ng-tags-input.js",
                 "src/bower_components/oclazyload/dist/ocLazyLoad.js",
                 "src/bower_components/angular-md5/angular-md5.min.js",
                 "src/bower_components/angular-local-storage/dist/angular-local-storage.js",
                 "src/bower_components/oidc-client/dist/oidc-client.js",
+
+                "node_modules/lodash/lodash.js",
 
                 "src/scripts/common-header/dtv-common-header.js",
                 "src/scripts/common-header/config/config.js",
