@@ -46,14 +46,16 @@ describe('directive: attribute-list', function() {
     $templateCache.put('partials/template-editor/attribute-list.html', '<p>mock</p>');
     compileDirective = function() {
       element = $compile('<template-attribute-list></template-attribute-list>')($rootScope.$new());
-      $scope = element.scope();
-      $scope.$digest();      
+      $rootScope.$digest();
+
+      $scope = element.isolateScope();
     };
     compileDirective();
   }));
 
   it('should exist', function() {
     expect($scope).to.be.ok;
+    expect($scope.componentsFactory).to.be.ok;
     expect($scope.components).to.be.ok;
   });
 

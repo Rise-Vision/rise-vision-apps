@@ -1,14 +1,16 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateAttributeList', ['userState', 'templateEditorFactory', 'brandingFactory',
-    'blueprintFactory', 'scheduleSelectorFactory',
-    function (userState, templateEditorFactory, brandingFactory, blueprintFactory, scheduleSelectorFactory) {
+  .directive('templateAttributeList', ['userState', 'componentsFactory', 'templateEditorFactory',
+    'brandingFactory', 'blueprintFactory', 'scheduleSelectorFactory',
+    function (userState, componentsFactory, templateEditorFactory, brandingFactory, 
+      blueprintFactory, scheduleSelectorFactory) {
       return {
         restrict: 'E',
-        scope: true,
+        scope: {},
         templateUrl: 'partials/template-editor/attribute-list.html',
         link: function ($scope) {
+          $scope.componentsFactory = componentsFactory;
           $scope.brandingComponent = brandingFactory.getBrandingComponent();
 
           if (userState.hasRole('cp')) {

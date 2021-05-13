@@ -146,9 +146,241 @@ angular.module('risevision.template-editor.services')
       });
     }
   ])
-  .factory('componentsFactory', ['COMPONENTS_MAP',
-    function (COMPONENTS_MAP) {
+  .factory('componentsFactory', ['$window', '$timeout', 'templateEditorUtils', 'blueprintFactory',
+    'COMPONENTS_MAP', 'HTML_TEMPLATE_DOMAIN',
+    function ($window, $timeout, templateEditorUtils, blueprintFactory,
+      COMPONENTS_MAP, HTML_TEMPLATE_DOMAIN) {
       var factory = {};
+
+      factory.reset = function() {
+        factory.selected = null;
+        factory.showAttributeList = true;
+        factory.directives = {};
+        factory.pages = [];
+      };
+
+      factory.reset();
+
+      factory.registerDirective = function (directive) {
+        directive.element.hide();
+        factory.directives[directive.type] = directive;
+
+        angular.extend(directive, COMPONENTS_MAP[directive.type]);
+
+        if (directive.onPresentationOpen) {
+          directive.onPresentationOpen();
+        }
+      };
+
+      var _getDirective = function (component) {
+        if (!component) {
+          return null;
+        } else if (component.directive) {
+          return component.directive;
+        } else if (factory.directives[component.type]) {
+          return factory.directives[component.type];
+        } else {
+          return null;
+        }
+      };
+
+      var _getSelectedDirective = function () {
+        var component = factory.selected;
+
+        return _getDirective(component);
+      };
+
+      factory.editComponent = function (component) {
+        var directive = _getDirective(component);
+
+        factory.selected = component;
+
+        factory.showNextPage(component);
+
+        if (directive && directive.show) {
+          directive.show();
+        }
+
+        _showAttributeList(false, 300);
+      };
+
+      factory.onBackButton = function () {
+        factory.highlightComponent(null);
+
+        var directive = _getSelectedDirective();
+
+        if (!directive || !directive.onBackHandler || !directive.onBackHandler()) {
+          factory.showPreviousPage();
+        }
+      };
+
+      // Private
+      factory.backToList = function () {
+        var directive = _getSelectedDirective();
+
+        if (directive && directive.element) {
+          directive.element.hide();              
+        }
+
+        factory.resetPanelHeader();
+
+        factory.selected = null;
+        factory.pages = [];
+
+        _showAttributeList(true, 0);
+      };
+
+      factory.getComponentIcon = function (component) {
+        var directive = _getDirective(component);
+
+        return directive ? directive.icon : '';
+      };
+
+      factory.getComponentIconType = function (component) {
+        var directive = _getDirective(component);
+
+        return directive ? directive.iconType : '';
+      };
+
+      factory.getComponentTitle = function (component) {
+        var directive = _getDirective(component);
+
+        if (factory.panelTitle) {
+          return factory.panelTitle;
+        } else if (component && component.label) {
+          return component.label;
+        } else if (directive && directive.title) {
+          return directive.title;
+        } else {
+          return '';
+        }
+      };
+
+      factory.highlightComponent = function (componentId) {
+        var message = {
+          type: 'highlightComponent',
+          value: componentId
+        };
+        var iframe = $window.document.getElementById('template-editor-preview');
+        iframe.contentWindow.postMessage(JSON.stringify(message), HTML_TEMPLATE_DOMAIN);
+      };
+
+      factory.isHeaderBottomRuleVisible = function (component) {
+        var directive = _getDirective(component);
+
+        return directive && directive.isHeaderBottomRuleVisible ?
+          directive.isHeaderBottomRuleVisible() : true;
+      };
+
+      factory.getCurrentPage = function () {
+        return factory.pages.length > 0 ? factory.pages[factory.pages.length - 1] : null;
+      };
+
+      factory.showNextPage = function (newPage) {
+        var currentPage = factory.getCurrentPage();
+
+        factory.pages.push(newPage);
+        _swapToLeft(currentPage, newPage);
+      };
+
+      factory.showPreviousPage = function () {
+        var currentPage = factory.pages.length > 0 ? factory.pages.pop() : null;
+        var previousPage = factory.pages.length > 0 ? factory.pages[factory.pages.length - 1] : null;
+
+        _swapToRight(currentPage, previousPage);
+
+        if (!previousPage) {
+          factory.backToList();
+        } else {
+          factory.selected = previousPage;
+        }
+
+        return !!previousPage;
+      };
+
+      factory.resetPanelHeader = function () {
+        factory.setPanelIcon(null, null);
+        factory.setPanelTitle(null);
+      };
+
+      factory.setPanelIcon = function (panelIcon, panelIconType) {
+        factory.panelIcon = panelIcon;
+        factory.panelIconType = panelIconType;
+      };
+
+      factory.setPanelTitle = function (panelTitle) {
+        factory.panelTitle = panelTitle;
+      };
+
+      factory.editHighlightedComponent = function (componentId) {
+        var component = _.find(blueprintFactory.blueprintData.components, function (element) {
+          return element.id === componentId;
+        });
+        if (component) {
+          if (factory.selected) {
+            factory.backToList();
+          }
+          factory.editComponent(component);
+        }
+      };
+
+      function _showAttributeList(value, delay) {
+        $timeout(function () {
+          factory.showAttributeList = value;
+        }, !isNaN(delay) ? delay : 500);
+      }
+
+      function _removeAnimationClasses(element) {
+        element.removeClass('attribute-editor-show-from-right');
+        element.removeClass('attribute-editor-show-from-left');
+      }
+
+      function _showElement(component, direction, delay) {
+        var directive = _getDirective(component);
+        var element = directive && directive.panel && templateEditorUtils.findElement(directive.panel);
+
+        if (directive && directive.element) {
+          directive.element.show();
+        }
+
+        if (!element) {
+          return;
+        }
+
+        _removeAnimationClasses(element);
+        element.addClass('attribute-editor-show-from-' + direction);
+
+        setTimeout(function () {
+          element.show();
+        }, delay || 0);
+      }
+
+      function _hideElement(component, delay) {
+        var directive = _getDirective(component);
+        var element = directive && directive.panel && templateEditorUtils.findElement(directive.panel);
+
+        if (directive && directive.element) {
+          directive.element.hide();
+        }
+
+        if (!element) {
+          return;
+        }
+
+        setTimeout(function () {
+          element.hide();
+        }, delay || 0);
+      }
+
+      function _swapToLeft(swappedOutSelector, swappedInSelector) {
+        _showElement(swappedInSelector, 'right');
+        _hideElement(swappedOutSelector);
+      }
+
+      function _swapToRight(swappedOutSelector, swappedInSelector) {
+        _showElement(swappedInSelector, 'left');
+        _hideElement(swappedOutSelector);
+      }
 
       return factory;
     }

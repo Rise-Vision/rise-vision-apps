@@ -2,13 +2,43 @@
 
 describe('service: componentsFactory:', function() {
   var sandbox = sinon.sandbox.create();
+  var componentsFactory, COMPONENTS_MAP, COMPONENTS_ARRAY, PLAYLIST_COMPONENTS;
+  var element,
+    $timeout,
+    $window,
+    blueprintFactory,
+    templateEditorUtils;
 
   beforeEach(module('risevision.template-editor.services'));
 
-  var componentsFactory, COMPONENTS_MAP, COMPONENTS_ARRAY, PLAYLIST_COMPONENTS;
+  beforeEach(module(function ($provide) {
+    var elementStub = {
+      hide: sandbox.stub(),
+      show: sandbox.stub(),
+      addClass: sandbox.stub(),
+      removeClass: sandbox.stub()
+    };
+
+    $provide.service('templateEditorUtils', function() {
+      return {
+        elementStub: elementStub,
+        findElement: sandbox.stub().returns(elementStub)
+      };
+    });
+
+    $provide.service('blueprintFactory', function() {
+      return {};
+    });
+  }));
 
   beforeEach(function() {
     inject(function($injector) {
+      $window = $injector.get('$window');
+      $timeout = $injector.get('$timeout');
+
+      templateEditorUtils = $injector.get('templateEditorUtils');
+      blueprintFactory = $injector.get('blueprintFactory');
+
       componentsFactory = $injector.get('componentsFactory');
       COMPONENTS_MAP = $injector.get('COMPONENTS_MAP');
       COMPONENTS_ARRAY = $injector.get('COMPONENTS_ARRAY');
@@ -214,6 +244,709 @@ describe('service: componentsFactory:', function() {
 
   it('should initialize', function() {
     expect(componentsFactory).to.be.ok;
+
+    expect(componentsFactory.selected).to.be.null;
+    expect(componentsFactory.showAttributeList).to.be.true;
+    expect(componentsFactory.directives).to.deep.equal({});
+    expect(componentsFactory.pages).to.deep.equal([]);
+  });
+
+  it('should define functions', function() {
+    expect(componentsFactory.registerDirective).to.be.a('function');
+    expect(componentsFactory.editComponent).to.be.a('function');
+    expect(componentsFactory.onBackButton).to.be.a('function');
+    expect(componentsFactory.backToList).to.be.a('function');
+    expect(componentsFactory.getComponentIcon).to.be.a('function');
+  });
+
+  it('reset:', function() {
+    componentsFactory.selected = 'selected';
+    componentsFactory.showAttributeList = false;
+    componentsFactory.directives = {
+      first: {}
+    };
+    componentsFactory.pages = ['page'];
+
+    componentsFactory.reset();
+
+    expect(componentsFactory.selected).to.be.null;
+    expect(componentsFactory.showAttributeList).to.be.true;
+    expect(componentsFactory.directives).to.deep.equal({});
+    expect(componentsFactory.pages).to.deep.equal([]);
+  });
+
+  describe('registerDirective:', function() {
+    it('Registers a component', function() {
+      var component = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub()
+        },
+        show: function() {}
+      };
+
+      componentsFactory.registerDirective(component);
+
+      expect(componentsFactory.directives["rise-test"]).to.be.ok;
+      expect(componentsFactory.directives["rise-test"].type).to.equal("rise-test");
+
+      expect(component.element.hide).to.have.been.called;
+    });
+
+    it('Runs the open presentation handler', function() {
+      var component = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: function() {},
+          show: function() {}
+        },
+        onPresentationOpen: sandbox.stub()
+      };
+
+      componentsFactory.registerDirective(component);
+
+      expect(component.onPresentationOpen).to.have.been.called;
+    });
+
+    it('should populate directive properties', function() {
+      var directive = {
+        type: 'rise-text',
+        element: {
+          hide: function() {},
+          show: function() {}
+        }
+      };
+
+      componentsFactory.registerDirective(directive);
+
+      expect(directive.iconType).to.equal('streamline');
+      expect(directive.icon).to.equal('text');
+      expect(directive.title).to.equal('Text');
+    });
+
+  });
+
+  describe('editComponent:', function() {
+    describe('_getDirective:', function() {
+      beforeEach(function() {
+        sandbox.stub(componentsFactory, 'showNextPage');
+      });
+
+      it('should handle missing component', function() {
+        componentsFactory.editComponent();
+
+        expect(componentsFactory.selected).to.not.be.ok;
+      });
+
+      it('should use component directive', function() {
+        var component = {
+          directive: {
+            type: 'rise-text',
+            show: sandbox.stub()
+          }
+        };
+
+        componentsFactory.editComponent(component);
+
+        expect(componentsFactory.selected).to.equal(component);
+
+        expect(component.directive.show).to.have.been.called;
+
+        componentsFactory.showNextPage.should.have.been.calledWith(component);
+      });
+
+      it('should get directive from registered list', function() {
+        var directive = {
+          type: 'rise-text',
+          element: {
+            hide: function() {},
+          },
+          show: sandbox.stub()
+        };
+
+        var component = {
+          type: 'rise-text'
+        }
+
+        componentsFactory.registerDirective(directive);
+        componentsFactory.editComponent(component);
+
+        expect(componentsFactory.selected).to.equal(component);
+
+        expect(directive.show).to.have.been.called;
+
+        componentsFactory.showNextPage.should.have.been.calledWith(component);
+      });
+
+    });
+
+    it('Edits a component', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: function() {},
+          show: sandbox.stub()
+        },
+        show: sandbox.stub()
+      };
+
+      var component = {
+        type: 'rise-test'
+      }
+
+      componentsFactory.registerDirective(directive);
+      componentsFactory.editComponent(component);
+
+      expect(componentsFactory.selected).to.deep.equal(component);
+
+      expect(directive.element.show).to.have.been.called;
+      expect(directive.show).to.have.been.called;
+
+      expect(componentsFactory.showAttributeList).to.be.true;
+
+      $timeout.flush();
+      expect(componentsFactory.showAttributeList).to.be.false;
+    });    
+  });
+  
+  describe('getComponentIcon:', function() {
+    it('should return empty if null', function() {
+      expect(componentsFactory.getComponentIcon()).to.equal('');
+    });
+
+    it('should return empty if directive is not found', function() {
+      var component = {};
+
+      expect(componentsFactory.getComponentIcon(component)).to.equal('');
+    });
+
+    it('should return directive icon', function() {
+      var component = {
+        directive: {
+          icon: 'sampleIcon'
+        }
+      };
+
+      expect(componentsFactory.getComponentIcon(component)).to.equal('sampleIcon');
+    });
+
+  });
+
+  describe('getComponentIconType:', function() {
+    it('should return empty if null', function() {
+      expect(componentsFactory.getComponentIconType()).to.equal('');
+    });
+
+    it('should return empty if directive is not found', function() {
+      var component = {};
+
+      expect(componentsFactory.getComponentIconType(component)).to.equal('');
+    });
+
+    it('should return directive icontype', function() {
+      var component = {
+        directive: {
+          iconType: 'iconType'
+        }
+      };
+
+      expect(componentsFactory.getComponentIconType(component)).to.equal('iconType');
+    });
+
+  });
+
+  describe('getComponentTitle:', function() {
+    it('should return empty if null', function() {
+      expect(componentsFactory.getComponentTitle()).to.equal('');
+    });
+
+    it('should return empty if directive is not found', function() {
+      var component = {};
+
+      expect(componentsFactory.getComponentTitle(component)).to.equal('');
+    });
+
+    it('should return panel title', function() {
+      componentsFactory.panelTitle = 'panelTitle';
+      var component = {
+        label: 'directiveLabel',
+        directive: {
+          title: 'directiveTitle'
+        }
+      };
+
+      expect(componentsFactory.getComponentTitle(component)).to.equal('panelTitle');
+    });
+
+    it('should return component label', function() {
+      var component = {
+        label: 'directiveLabel',
+        directive: {
+          title: 'directiveTitle'
+        }
+      };
+
+      expect(componentsFactory.getComponentTitle(component)).to.equal('directiveLabel');
+    });
+
+    it('should return directive title if label is missing', function() {
+      var component = {
+        directive: {
+          title: 'directiveTitle'
+        }
+      };
+
+      expect(componentsFactory.getComponentTitle(component)).to.equal('directiveTitle');
+    });
+
+  });
+
+  describe('editHighlightedComponent:', function() {
+    it('Edits a highlighted component', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: function() {},
+          show: sandbox.stub()
+        },
+        show: sandbox.stub()
+      };
+
+      var component = {
+        id: 'test',
+        type: 'rise-test'
+      }
+
+      blueprintFactory.blueprintData = {
+        components: [component]
+      };
+
+      componentsFactory.registerDirective(directive);
+      componentsFactory.editHighlightedComponent(component.id);
+
+      expect(componentsFactory.selected).to.deep.equal(component);
+
+      expect(directive.element.show).to.have.been.called;
+      expect(directive.show).to.have.been.called;
+
+      expect(componentsFactory.showAttributeList).to.be.true;
+
+      $timeout.flush();
+      expect(componentsFactory.showAttributeList).to.be.false;
+    });
+
+    it('Resets selected pages when editing a highlighted component', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: function() {},
+          show: sandbox.stub()
+        },
+        show: sandbox.stub()
+      };
+
+      var component = {
+        id: 'test',
+        type: 'rise-test'
+      }
+      
+      componentsFactory.registerDirective(directive);
+
+      blueprintFactory.blueprintData = {
+        components: [component]
+      };
+
+      componentsFactory.selected = component;
+      componentsFactory.pages = [{}, {}, {}];
+      componentsFactory.setPanelIcon('previous-icon', 'streamline');
+      componentsFactory.setPanelTitle('Previous Title');
+      
+      componentsFactory.editHighlightedComponent(component.id);
+
+      expect(componentsFactory.selected).to.deep.equal(component);
+
+      expect(componentsFactory.pages).to.have.length(1);
+      expect(componentsFactory.pages[0]).to.equal(component);
+      expect(componentsFactory.panelIcon).to.be.null;
+      expect(componentsFactory.panelIconType).to.be.null;
+      expect(componentsFactory.panelTitle).to.be.null;
+
+      expect(directive.element.show).to.have.been.called;
+      expect(directive.show).to.have.been.called;
+
+      expect(componentsFactory.showAttributeList).to.be.true;
+
+      $timeout.flush();
+      expect(componentsFactory.showAttributeList).to.be.false;
+    });
+  });
+
+  describe('backToList:', function() {
+    it('Goes back to list', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
+        show: function() {}
+      };
+
+      var component = {
+        type: 'rise-test'
+      }
+
+      componentsFactory.registerDirective(directive);
+      componentsFactory.editComponent(component);
+      $timeout.flush();
+
+      componentsFactory.backToList();
+
+      expect(componentsFactory.selected).to.be.null;
+      expect(directive.element.hide).to.have.been.called.twice;
+
+      expect(componentsFactory.showAttributeList).to.be.false;
+
+      $timeout.flush();
+      expect(componentsFactory.showAttributeList).to.be.true;
+    });
+  });
+
+  describe('onBackButton:', function() {
+    it('Goes back to list if there is no back handler', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
+        show: function() {}
+      };
+
+      var component = {
+        type: 'rise-test'
+      }
+
+      componentsFactory.highlightComponent = sandbox.stub();
+      componentsFactory.registerDirective(directive);
+      componentsFactory.editComponent(component);
+      $timeout.flush();
+
+      componentsFactory.onBackButton();
+
+      expect(componentsFactory.selected).to.be.null;
+      expect(directive.element.hide).to.have.been.called.twice;
+      expect(componentsFactory.highlightComponent).to.have.been.called.once;
+
+      expect(componentsFactory.showAttributeList).to.be.false;
+
+      $timeout.flush();
+      expect(componentsFactory.showAttributeList).to.be.true;
+    });
+
+    it('Goes back to list if back handler returns false', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
+        show: function() {},
+        onBackHandler: function() { return false; }
+      };
+
+      var component = {
+        type: 'rise-test'
+      }
+
+      componentsFactory.highlightComponent = sandbox.stub();
+      componentsFactory.registerDirective(directive);
+      componentsFactory.editComponent(component);
+      $timeout.flush();
+
+      componentsFactory.onBackButton();
+
+      expect(componentsFactory.selected).to.be.null;
+      expect(directive.element.hide).to.have.been.called.twice;
+      expect(componentsFactory.highlightComponent).to.have.been.called.once;
+
+      expect(componentsFactory.showAttributeList).to.be.false;
+
+      $timeout.flush();
+      expect(componentsFactory.showAttributeList).to.be.true;
+    });
+
+    it('Does not go back to list if back handler returns true', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
+        show: function() {},
+        onBackHandler: function() { return true; }
+      };
+
+      var component = {
+        type: 'rise-test'
+      }
+
+      componentsFactory.highlightComponent = sandbox.stub();
+      componentsFactory.registerDirective(directive);
+      componentsFactory.editComponent(component);
+      $timeout.flush();
+
+      componentsFactory.onBackButton();
+
+      expect(componentsFactory.selected).to.not.be.null;
+      expect(directive.element.hide).to.have.been.called.once;
+      expect(componentsFactory.highlightComponent).to.have.been.called.once;
+      expect(componentsFactory.showAttributeList).to.be.false;
+    });
+  });
+
+  describe('isHeaderBottomRuleVisible:', function() {
+    it('Shows header bottom rule if isHeaderBottomRuleVisible is not defined for directive', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
+        show: function() {},
+        onBackHandler: function() { return true; }
+      };
+
+      var component = {
+        type: 'rise-test'
+      }
+
+      componentsFactory.registerDirective(directive);
+      componentsFactory.editComponent(component);
+      $timeout.flush();
+
+      var visible = componentsFactory.isHeaderBottomRuleVisible(component);
+
+      expect(visible).to.be.true;
+    });
+
+    it('Shows header bottom rule if isHeaderBottomRuleVisible allows it', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
+        show: function() {},
+        isHeaderBottomRuleVisible: function() { return true; },
+        onBackHandler: function() { return true; }
+      };
+
+      var component = {
+        type: 'rise-test'
+      }
+
+      componentsFactory.registerDirective(directive);
+      componentsFactory.editComponent(component);
+      $timeout.flush();
+
+      var visible = componentsFactory.isHeaderBottomRuleVisible(component);
+
+      expect(visible).to.be.true;
+    });
+
+    it('Does not show header bottom rule if isHeaderBottomRuleVisible not allows it', function() {
+      var directive = {
+        type: 'rise-test',
+        icon: 'fa-test',
+        element: {
+          hide: sandbox.stub(),
+          show: function() {}
+        },
+        show: function() {},
+        isHeaderBottomRuleVisible: function() { return false; },
+        onBackHandler: function() { return true; }
+      };
+
+      var component = {
+        type: 'rise-test'
+      }
+
+      componentsFactory.registerDirective(directive);
+      componentsFactory.editComponent(component);
+      $timeout.flush();
+
+      var visible = componentsFactory.isHeaderBottomRuleVisible(component);
+
+      expect(visible).to.be.false;
+    });    
+  });
+
+  describe('showNextPage:', function () {
+    it('should show a new page', function () {
+      expect(componentsFactory.pages).to.have.length(0);
+
+      componentsFactory.showNextPage('selector1');
+
+      expect(componentsFactory.pages).to.have.length(1);
+      expect(componentsFactory.pages[0]).to.equal('selector1');
+    });
+
+    it('should show a second page', function () {
+      componentsFactory.showNextPage('selector1');
+      componentsFactory.showNextPage('selector2');
+
+      expect(componentsFactory.pages).to.deep.equal(['selector1', 'selector2']);
+    });
+
+    it('_swapToLeft:', function(done) {
+      var directive1 = {
+        type: 'rise-test-1',
+        panel: 'panel1',
+        element: {
+          hide: sandbox.stub(),
+          show: sandbox.stub()
+        },
+        show: sandbox.stub()
+      };
+      var directive2 = {
+        type: 'rise-test-2',
+        panel: 'panel2',
+        element: {
+          hide: sandbox.stub(),
+          show: sandbox.stub()
+        },
+        show: sandbox.stub()
+      };
+
+      var component1 = {
+        type: 'rise-test-1'
+      };
+      var component2 = {
+        type: 'rise-test-2'
+      };
+
+      componentsFactory.registerDirective(directive1);
+      componentsFactory.registerDirective(directive2);
+
+      componentsFactory.pages.push(component1);
+
+      componentsFactory.showNextPage(component2);
+
+      directive1.element.hide.should.have.been.called;
+      templateEditorUtils.findElement.should.have.been.calledWith('panel1');
+
+      directive2.element.show.should.have.been.called;
+      templateEditorUtils.findElement.should.have.been.calledWith('panel2');
+
+      templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-right');
+      templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-left');
+
+      templateEditorUtils.elementStub.addClass.should.have.been.calledWith('attribute-editor-show-from-right');
+
+      setTimeout(function() {
+        templateEditorUtils.elementStub.hide.should.have.been.called;
+        templateEditorUtils.elementStub.show.should.have.been.called;
+
+        done();
+      }, 10);
+    });
+
+  });
+
+  describe('showPreviousPage:', function () {
+    beforeEach(function() {
+      sandbox.stub(componentsFactory, 'backToList');
+    });
+
+    it('should hide the first page', function () {
+      componentsFactory.showNextPage('selector1');
+
+      expect(componentsFactory.showPreviousPage()).to.be.false;
+
+      componentsFactory.backToList.should.have.been.called;
+
+      expect(componentsFactory.pages).to.have.length(0);
+    });
+
+    it('should hide the second page', function () {
+      componentsFactory.showNextPage('selector1');
+      componentsFactory.showNextPage('selector2');
+
+      expect(componentsFactory.showPreviousPage()).to.be.true;
+
+      componentsFactory.backToList.should.not.have.been.called;
+
+      expect(componentsFactory.selected).to.equal('selector1');
+
+      expect(componentsFactory.pages).to.deep.equal(['selector1']);
+    });
+
+    it('_swapToRight:', function(done) {
+      var directive1 = {
+        type: 'rise-test-1',
+        panel: 'panel1',
+        element: {
+          hide: sandbox.stub(),
+          show: sandbox.stub()
+        },
+        show: sandbox.stub()
+      };
+      var directive2 = {
+        type: 'rise-test-2',
+        panel: 'panel2',
+        element: {
+          hide: sandbox.stub(),
+          show: sandbox.stub()
+        },
+        show: sandbox.stub()
+      };
+
+      var component1 = {
+        type: 'rise-test-1'
+      };
+      var component2 = {
+        type: 'rise-test-2'
+      };
+
+      componentsFactory.registerDirective(directive1);
+      componentsFactory.registerDirective(directive2);
+
+      componentsFactory.pages.push(component1);
+      componentsFactory.pages.push(component2);
+
+      componentsFactory.showPreviousPage();
+
+      directive1.element.show.should.have.been.called;
+      templateEditorUtils.findElement.should.have.been.calledWith('panel1');
+
+      directive2.element.hide.should.have.been.called;
+      templateEditorUtils.findElement.should.have.been.calledWith('panel2');
+
+      templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-right');
+      templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-left');
+
+      templateEditorUtils.elementStub.addClass.should.have.been.calledWith('attribute-editor-show-from-left');
+
+      setTimeout(function() {
+        templateEditorUtils.elementStub.hide.should.have.been.called;
+        templateEditorUtils.elementStub.show.should.have.been.called;
+
+        done();
+      }, 10);
+    });
+
   });
 
 });

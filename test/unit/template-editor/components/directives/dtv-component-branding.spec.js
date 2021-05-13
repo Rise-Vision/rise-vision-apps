@@ -22,8 +22,6 @@ describe('directive: templateComponentBranding', function() {
     $scope = element.scope();
 
     $scope.registerDirective = sinon.stub();
-    $scope.setPanelTitle = sinon.stub();
-    $scope.setPanelIcon = sinon.stub();
     $scope.editComponent = sinon.stub();
 
     $scope.$digest();

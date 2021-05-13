@@ -1,13 +1,13 @@
-<div class="component-header aligner" ng-class="{ 'visible-bottom-rule': isHeaderBottomRuleVisible(componentsFactory.selected) }">
-  <a ng-click="onBackButton();">
+<div class="component-header aligner" ng-class="{ 'visible-bottom-rule': componentsFactory.isHeaderBottomRuleVisible(componentsFactory.selected) }">
+  <a id="back-button" ng-click="componentsFactory.onBackButton();">
     <span class="attribute-edit text-nowrap">
       <i class="fa fa-lg fa-angle-left arrow-icon"></i>
       <span translate>template.attribute-editor.back-to-list</span>
     </span>
   </a>
   <component-icon ng-if="!panelIcon"
-                  icon="{{ getComponentIcon(componentsFactory.selected) }}"
-                  type="{{ getComponentIconType(componentsFactory.selected) }}"
+                  icon="{{ componentsFactory.getComponentIcon(componentsFactory.selected) }}"
+                  type="{{ componentsFactory.getComponentIconType(componentsFactory.selected) }}"
                   class="component-icon">
   </component-icon>
   <component-icon ng-if="panelIcon"
@@ -15,8 +15,8 @@
                   type="{{ panelIconType }}"
                   class="component-icon">
   </component-icon>
-  <span class="u_text-ellipsis mr-auto">{{ getComponentTitle(componentsFactory.selected) }}</span>
-  <div class="btn-group" ng-if="getCurrentPage() && getCurrentPage().type === 'rise-storage-selector' && storageManagerFactory.fileType === 'image'">
+  <span class="u_text-ellipsis mr-auto">{{ componentsFactory.getComponentTitle(componentsFactory.selected) }}</span>
+  <div class="btn-group" ng-if="componentsFactory.getCurrentPage() && componentsFactory.getCurrentPage().type === 'rise-storage-selector' && storageManagerFactory.fileType === 'image'">
     <button id="listViewButton" type="button" class="btn w-50" ng-click="storageManagerFactory.isListView = true" ng-class="{'btn-toggle-blue-off' : !storageManagerFactory.isListView, 'btn-toggle-blue-on' : storageManagerFactory.isListView}">
       <img ng-src="../images/icon-list{{!storageManagerFactory.isListView ? '' : '-inv'}}.svg">
     </button>
