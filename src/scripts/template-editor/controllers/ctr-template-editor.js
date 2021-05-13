@@ -3,13 +3,14 @@
 angular.module('risevision.template-editor.controllers')
   .controller('TemplateEditorController', ['$scope', '$q', '$filter', '$loading', '$state', '$timeout', '$window',
     'templateEditorFactory', 'AutoSaveService',
-    'presentationUtils', 'userState',
+    'presentationUtils', 'componentsFactory', 'userState',
     function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory,
-      AutoSaveService, presentationUtils, userState) {
+      AutoSaveService, presentationUtils, componentsFactory, userState) {
       var autoSaveService = new AutoSaveService(templateEditorFactory.save);
 
-      $scope.factory = templateEditorFactory;
-      $scope.factory.hasUnsavedChanges = false;
+      $scope.templateEditorFactory = templateEditorFactory;
+      $scope.componentsFactory = componentsFactory;
+      templateEditorFactory.hasUnsavedChanges = false;
 
       $scope.considerChromeBarHeight = _considerChromeBarHeight();
 
@@ -20,9 +21,9 @@ angular.module('risevision.template-editor.controllers')
       var _bypassUnsaved = false,
         _initializing = false;
       var _setUnsavedChanges = function (state) {
-        $scope.factory.hasUnsavedChanges = state;
+        templateEditorFactory.hasUnsavedChanges = state;
 
-        if ($scope.factory.hasUnsavedChanges && $scope.hasContentEditorRole()) {
+        if (templateEditorFactory.hasUnsavedChanges && $scope.hasContentEditorRole()) {
           autoSaveService.save();
         }
       };
@@ -41,7 +42,7 @@ angular.module('risevision.template-editor.controllers')
           !(/Firefox|SamsungBrowser/i.test(userAgent));
       }
 
-      $scope.$watch('factory.presentation', function (newValue, oldValue) {
+      $scope.$watch('templateEditorFactory.presentation', function (newValue, oldValue) {
         if (!$scope.hasContentEditorRole()) {
           return;
         }
@@ -51,10 +52,10 @@ angular.module('risevision.template-editor.controllers')
         ];
 
         if (!newValue.id) {
-          $scope.factory.save();
+          templateEditorFactory.save();
           return;
         }
-        if ($scope.factory.hasUnsavedChanges) {
+        if (templateEditorFactory.hasUnsavedChanges) {
           return;
         }
 
@@ -86,7 +87,7 @@ angular.module('risevision.template-editor.controllers')
 
           autoSaveService.clearSaveTimeout();
 
-          var savePromise = $scope.factory.isUnsaved() && $scope.hasContentEditorRole() ? $scope.factory.save() :
+          var savePromise = templateEditorFactory.isUnsaved() && $scope.hasContentEditorRole() ? templateEditorFactory.save() :
             $q.resolve();
 
           savePromise
@@ -98,7 +99,7 @@ angular.module('risevision.template-editor.controllers')
       });
 
       $window.onbeforeunload = function () {
-        if ($scope.factory.isUnsaved()) {
+        if (templateEditorFactory.isUnsaved()) {
           return $filter('translate')('common.saveBeforeLeave');
         }
       };
@@ -107,7 +108,7 @@ angular.module('risevision.template-editor.controllers')
         $window.onbeforeunload = undefined;
       });
 
-      $scope.$watch('factory.loadingPresentation', function (loading) {
+      $scope.$watch('templateEditorFactory.loadingPresentation', function (loading) {
         if (loading) {
           $loading.start('template-editor-loader');
         } else {

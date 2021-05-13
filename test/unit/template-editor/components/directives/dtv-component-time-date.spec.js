@@ -12,7 +12,7 @@ describe('directive: templateComponentTimeDate', function() {
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
-    $provide.service('templateEditorFactory', function() {
+    $provide.service('componentsFactory', function() {
       return { selected: { id: "TEST-ID" } };
     });
 

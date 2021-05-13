@@ -2,14 +2,15 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateEditorPreviewHolder', ['$window', '$timeout', '$sce', 'userState', 'templateEditorFactory',
-    'blueprintFactory', 'brandingFactory', 'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL',
+    'blueprintFactory', 'brandingFactory', 'componentsFactory', 'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL',
     function ($window, $timeout, $sce, userState, templateEditorFactory, blueprintFactory, brandingFactory,
-      HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL) {
+      componentsFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/preview-holder.html',
         link: function ($scope) {
-          $scope.factory = templateEditorFactory;
+          $scope.templateEditorFactory = templateEditorFactory;
+          $scope.componentsFactory = componentsFactory;
           $scope.blueprintFactory = blueprintFactory;
           $scope.brandingFactory = brandingFactory;
 
@@ -38,9 +39,13 @@ angular.module('risevision.template-editor.directives')
 
           };
 
-          $scope.getEditorPreviewUrl = function (productCode) {
-            var presentationId =
-              $scope.factory.presentation && $scope.factory.presentation.id;
+          $scope.getEditorPreviewUrl = function () {
+            if (!templateEditorFactory.presentation) {
+              return;
+            }
+
+            var productCode = templateEditorFactory.presentation.productCode;
+            var presentationId = templateEditorFactory.presentation.id;
 
             var url = HTML_TEMPLATE_URL.replace('PRODUCT_CODE', productCode) + '?type=preview&presentationId=' +
               presentationId;
@@ -167,13 +172,13 @@ angular.module('risevision.template-editor.directives')
             angular.element($window).off('resize', _onResize);
           });
 
-          $scope.$watch('factory.selected', function (selected) {
+          $scope.$watch('componentsFactory.selected', function (selected) {
             if (!selected) {
               $timeout(_onResize);
             }
           });
 
-          $scope.$watch('factory.presentation.templateAttributeData', function (value) {
+          $scope.$watch('templateEditorFactory.presentation.templateAttributeData', function (value) {
             _postAttributeData();
           }, true);
 
@@ -222,7 +227,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _postAttributeData() {
-            var attributeData = angular.copy($scope.factory.presentation.templateAttributeData);
+            var attributeData = angular.copy(templateEditorFactory.presentation.templateAttributeData);
 
             _updateLogoData(attributeData);
 

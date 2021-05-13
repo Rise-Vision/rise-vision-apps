@@ -1,19 +1,20 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateAttributeEditor', ['$timeout', 'templateEditorFactory', 'templateEditorUtils',
+  .directive('templateAttributeEditor', ['$timeout', 'componentsFactory', 'templateEditorUtils',
     'blueprintFactory', '$window', 'COMPONENTS_MAP', 'HTML_TEMPLATE_DOMAIN',
-    function ($timeout, templateEditorFactory, templateEditorUtils, blueprintFactory, $window,
-      COMPONENTS_MAP, HTML_TEMPLATE_DOMAIN) {
+    function ($timeout, componentsFactory, templateEditorUtils, blueprintFactory,
+      $window, COMPONENTS_MAP, HTML_TEMPLATE_DOMAIN) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/attribute-editor.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
+          $scope.componentsFactory = componentsFactory;
           $scope.showAttributeList = true;
           $scope.directives = {};
           $scope.pages = [];
-          $scope.factory.selected = null;
+
+          componentsFactory.selected = null;
 
           $window.addEventListener('message', _handleMessageFromTemplate);
 
@@ -45,7 +46,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           var _getSelectedDirective = function () {
-            var component = $scope.factory.selected;
+            var component = componentsFactory.selected;
 
             return _getDirective(component);
           };
@@ -53,7 +54,7 @@ angular.module('risevision.template-editor.directives')
           $scope.editComponent = function (component) {
             var directive = _getDirective(component);
 
-            $scope.factory.selected = component;
+            componentsFactory.selected = component;
 
             $scope.showNextPage(component);
 
@@ -84,7 +85,7 @@ angular.module('risevision.template-editor.directives')
 
             $scope.resetPanelHeader();
 
-            $scope.factory.selected = null;
+            componentsFactory.selected = null;
             $scope.pages = [];
 
             _showAttributeList(true, 0);
@@ -152,7 +153,7 @@ angular.module('risevision.template-editor.directives')
             if (!previousPage) {
               $scope.backToList();
             } else {
-              $scope.factory.selected = previousPage;
+              componentsFactory.selected = previousPage;
             }
 
             return !!previousPage;
@@ -177,7 +178,7 @@ angular.module('risevision.template-editor.directives')
               return element.id === componentId;
             });
             if (component) {
-              if ($scope.factory.selected) {
+              if (componentsFactory.selected) {
                 $scope.backToList();
               }
               $scope.editComponent(component);

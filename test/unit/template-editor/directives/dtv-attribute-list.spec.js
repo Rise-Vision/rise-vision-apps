@@ -54,7 +54,6 @@ describe('directive: attribute-list', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
     expect($scope.components).to.be.ok;
   });
 

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateEditorFileEntry', ['templateEditorFactory', 'templateEditorUtils',
-    function (templateEditorFactory, templateEditorUtils) {
+  .directive('templateEditorFileEntry', ['templateEditorUtils',
+    function (templateEditorUtils) {
       return {
         restrict: 'E',
         replace: true,
@@ -15,8 +15,6 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/file-entry.html',
         link: function ($scope) {
           var STREAMLINE_URI = /^streamline:(.+)/;
-
-          $scope.factory = templateEditorFactory;
 
           $scope.getFileName = function () {
             return templateEditorUtils.fileNameOf($scope.entry.file);

@@ -10,10 +10,6 @@ describe('directive: templateComponent', function () {
     $provide.service('storageManagerFactory', function() {
       return {};
     });
-
-    $provide.service('storageManagerFactory', function() {
-      return {};
-    });
   }));
 
 
@@ -27,7 +23,7 @@ describe('directive: templateComponent', function () {
 
   it('should exist', function () {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
+    expect($scope.componentsFactory).to.be.ok;
     expect($scope.storageManagerFactory).to.be.ok;
   });
 

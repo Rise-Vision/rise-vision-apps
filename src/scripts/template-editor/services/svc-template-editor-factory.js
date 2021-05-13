@@ -55,8 +55,6 @@ angular.module('risevision.template-editor.services')
       factory.addFromProduct = function (productDetails) {
         _clearMessages();
 
-        factory.selected = null;
-
         factory.presentation = {
           id: undefined,
           productCode: productDetails.productCode,

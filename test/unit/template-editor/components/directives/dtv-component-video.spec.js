@@ -3,16 +3,13 @@
 describe('directive: templateComponentVideo', function() {
   var $scope,
       element,
-      factory,
+      templateEditorFactory,
+      componentsFactory,
       attributeDataFactory,
       storageManagerFactory,
       testMetadata,
       $loading,
       $timeout;
-
-  beforeEach(function() {
-    factory = { selected: { id: 'TEST-ID' } };
-  });
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(function ($provide) {
@@ -24,7 +21,11 @@ describe('directive: templateComponentVideo', function() {
     });
 
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return {};
+    });
+
+    $provide.service('componentsFactory', function() {
+      return { selected: { id: 'TEST-ID' } };
     });
 
     $provide.service('attributeDataFactory', function() {
@@ -48,6 +49,8 @@ describe('directive: templateComponentVideo', function() {
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
     $timeout = $injector.get('$timeout');
     $loading = $injector.get('$loading');
+    templateEditorFactory = $injector.get('templateEditorFactory');
+    componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
     storageManagerFactory = $injector.get('storageManagerFactory');
 
@@ -64,8 +67,7 @@ describe('directive: templateComponentVideo', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: 'TEST-ID' } })
+    expect($scope.templateEditorFactory).to.be.ok;
     expect($scope.sortItem).to.be.a('function');
   });
 
@@ -82,6 +84,8 @@ describe('directive: templateComponentVideo', function() {
 
     it('show:', function() {
       $scope.registerDirective.getCall(0).args[0].show();
+
+      expect($scope.componentId).to.equal('TEST-ID');
 
       expect(storageManagerFactory.fileType).to.equal('video');
       expect(storageManagerFactory.onSelectHandler).to.be.a('function');
@@ -508,7 +512,7 @@ describe('directive: templateComponentVideo', function() {
     });
 
     it('should start spinner', function(done) {
-      $scope.factory.loadingPresentation = true;
+      $scope.templateEditorFactory.loadingPresentation = true;
       $scope.$digest();
       setTimeout(function() {
         $loading.start.should.have.been.calledWith('video-file-loader');

@@ -1,4 +1,4 @@
-<div class="component-header aligner" ng-class="{ 'visible-bottom-rule': isHeaderBottomRuleVisible(factory.selected) }">
+<div class="component-header aligner" ng-class="{ 'visible-bottom-rule': isHeaderBottomRuleVisible(componentsFactory.selected) }">
   <a ng-click="onBackButton();">
     <span class="attribute-edit text-nowrap">
       <i class="fa fa-lg fa-angle-left arrow-icon"></i>
@@ -6,8 +6,8 @@
     </span>
   </a>
   <component-icon ng-if="!panelIcon"
-                  icon="{{ getComponentIcon(factory.selected) }}"
-                  type="{{ getComponentIconType(factory.selected) }}"
+                  icon="{{ getComponentIcon(componentsFactory.selected) }}"
+                  type="{{ getComponentIconType(componentsFactory.selected) }}"
                   class="component-icon">
   </component-icon>
   <component-icon ng-if="panelIcon"
@@ -15,7 +15,7 @@
                   type="{{ panelIconType }}"
                   class="component-icon">
   </component-icon>
-  <span class="u_text-ellipsis mr-auto">{{ getComponentTitle(factory.selected) }}</span>
+  <span class="u_text-ellipsis mr-auto">{{ getComponentTitle(componentsFactory.selected) }}</span>
   <div class="btn-group" ng-if="getCurrentPage() && getCurrentPage().type === 'rise-storage-selector' && storageManagerFactory.fileType === 'image'">
     <button id="listViewButton" type="button" class="btn w-50" ng-click="storageManagerFactory.isListView = true" ng-class="{'btn-toggle-blue-off' : !storageManagerFactory.isListView, 'btn-toggle-blue-on' : storageManagerFactory.isListView}">
       <img ng-src="../images/icon-list{{!storageManagerFactory.isListView ? '' : '-inv'}}.svg">

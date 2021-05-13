@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentTimeDate', ['WORLD_TIMEZONES', 'templateEditorFactory', 'attributeDataFactory',
-    function (WORLD_TIMEZONES, templateEditorFactory, attributeDataFactory) {
+  .directive('templateComponentTimeDate', ['WORLD_TIMEZONES', 'componentsFactory', 'attributeDataFactory',
+    function (WORLD_TIMEZONES, componentsFactory, attributeDataFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -23,7 +23,7 @@ angular.module('risevision.template-editor.directives')
             element: element,
             show: function () {
               element.show();
-              $scope.componentId = templateEditorFactory.selected.id;
+              $scope.componentId = componentsFactory.selected.id;
               $scope.load();
             },
             getTitle: function (component) {

@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentRss', ['templateEditorFactory', 'attributeDataFactory', '$loading', 'componentUtils', 'rssFeedValidation',
+  .directive('templateComponentRss', ['componentsFactory', 'attributeDataFactory', '$loading', 'componentUtils', 'rssFeedValidation',
     '$timeout',
-    function (templateEditorFactory, attributeDataFactory, $loading, componentUtils, rssFeedValidation, $timeout) {
+    function (componentsFactory, attributeDataFactory, $loading, componentUtils, rssFeedValidation, $timeout) {
       return {
         restrict: 'E',
         scope: true,
@@ -35,7 +35,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-data-rss',
             element: element,
             show: function () {
-              $scope.componentId = templateEditorFactory.selected.id;
+              $scope.componentId = componentsFactory.selected.id;
               _load();
               $scope.saveFeed(); // validate Feed URL
             }

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentColors', ['templateEditorFactory', 'attributeDataFactory',
-    function (templateEditorFactory, attributeDataFactory) {
+  .directive('templateComponentColors', ['componentsFactory', 'attributeDataFactory',
+    function (componentsFactory, attributeDataFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -27,7 +27,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-override-brand-colors',
             element: element,
             show: function () {
-              $scope.componentId = templateEditorFactory.selected.id;
+              $scope.componentId = componentsFactory.selected.id;
               $scope.load();
             }
           });

@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentTwitter', ['templateEditorFactory', 'attributeDataFactory', 'TwitterOAuthService', '$loading',
-    'twitterCredentialsValidation', 'templateEditorUtils',
-    function (templateEditorFactory, attributeDataFactory, TwitterOAuthService, $loading, twitterCredentialsValidation,
-      templateEditorUtils) {
+  .directive('templateComponentTwitter', ['componentsFactory', 'templateEditorFactory', 'attributeDataFactory',
+    'TwitterOAuthService', '$loading', 'twitterCredentialsValidation', 'templateEditorUtils',
+    function (componentsFactory, templateEditorFactory, attributeDataFactory, TwitterOAuthService,
+      $loading, twitterCredentialsValidation, templateEditorUtils) {
       return {
         restrict: 'E',
         scope: true,
@@ -62,7 +62,7 @@ angular.module('risevision.template-editor.directives')
             element: element,
             show: function () {
               element.show();
-              $scope.componentId = templateEditorFactory.selected.id;
+              $scope.componentId = componentsFactory.selected.id;
               _validateCredentials();
               _load();
             }

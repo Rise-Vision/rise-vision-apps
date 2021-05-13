@@ -39,6 +39,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
       return {
         presentation: {
           id: 'xxxxyyyy',
+          productCode: 'AAAA',
           templateAttributeData: {
             components: [
               {id:'image', metadata: 'originalMetadata1'},
@@ -94,7 +95,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
+    expect($scope.templateEditorFactory).to.be.ok;
     expect($scope.blueprintFactory).to.be.ok;
   });
 
@@ -301,7 +302,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
   describe('getEditorPreviewUrl', function() {
     it('should include presentation id and type preview in template URL', function() {
-      var url = $scope.getEditorPreviewUrl('AAAA');
+      var url = $scope.getEditorPreviewUrl();
 
       expect(url.toString()).to.equal('https://widgets.risevision.com/staging/templates/AAAA/src/template.html?type=preview&presentationId=xxxxyyyy');
     });
