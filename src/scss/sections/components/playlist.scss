@@ -186,7 +186,7 @@
 }
 
 .templates-selector {
-  & .templates-row {
+  & .templates-row label {
     cursor: pointer;
   }
 }
@@ -212,29 +212,10 @@
 
 .templates-selector-checkbox {
   position: absolute;
-
-  input[type=checkbox] { display:none; }
-
-  label {
-    cursor: pointer;
-  }
-
-  input[type="checkbox"] + label span {
-    display: inline-block;
-    vertical-align: middle;
-    width: 20px;
-    height: 35px;
-    background: url('/images/checkbox.svg') 0px center no-repeat;
-  }
-
-  input[type=checkbox]:checked + label span {
-    background: url('/images/checkbox-selected.svg') 0px center no-repeat;
-  }
 }
 
 .templates-selector-name {
   display: inline-block;
-  margin-left: 30px;
 }
 
 .templates-selector-no-results {
