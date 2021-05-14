@@ -1,24 +1,17 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
-  .directive('templateComponentPlaylist', ['componentsFactory', 'templateEditorFactory', 'attributeDataFactory',
-    'presentation', '$loading', '$q', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
-    'PLAYLIST_COMPONENTS', 'ENV_NAME',
-    function (componentsFactory, templateEditorFactory, attributeDataFactory, presentation, $loading,
-      $q, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory,
-      PLAYLIST_COMPONENTS, ENV_NAME) {
+  .directive('templateComponentPlaylist', ['$loading', 'componentsFactory', 'attributeDataFactory',
+    'playlistComponentFactory', 'blueprintFactory', 'PLAYLIST_COMPONENTS', 'ENV_NAME',
+    function ($loading, componentsFactory, attributeDataFactory, playlistComponentFactory,
+      blueprintFactory, PLAYLIST_COMPONENTS, ENV_NAME) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-playlist.html',
         link: function ($scope, element) {
+          $scope.playlistComponentFactory = playlistComponentFactory;
           $scope.playlistItems = [];
-          $scope.searchKeyword = '';
-          $scope.templatesSearch = {
-            sortBy: 'changeDate',
-            reverse: true
-          };
           $scope.playlistComponents = PLAYLIST_COMPONENTS;
           $scope.addVisualComponents = !!ENV_NAME && ENV_NAME !== 'TEST';
 
@@ -40,12 +33,27 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
+          function _loadPresentationNames() {
+            if (!$scope.playlistItems || !$scope.playlistItems.length) {
+              return;
+            }
+
+            var presentationItems = _.filter($scope.playlistItems, $scope.isEmbeddedTemplate);
+            
+            if (!presentationItems.length) {
+              return;
+            }
+
+            playlistComponentFactory.loadPresentationNames(presentationItems);
+          }
+
           function _load() {
             _updatePlaylistComponents();
 
             var itemsJson = attributeDataFactory.getAvailableAttributeData($scope.componentId, 'items');
-            var itemsArray = $scope.jsonToPlaylistItems(itemsJson);
-            $scope.loadTemplateNames(itemsArray);
+            $scope.playlistItems = $scope.jsonToPlaylistItems(itemsJson);
+
+            _loadPresentationNames();
           }
 
           $scope.save = function () {
@@ -59,6 +67,9 @@ angular.module('risevision.template-editor.directives')
             show: function () {
               $scope.componentId = componentsFactory.selected.id;
               $scope.playlistItems = [];
+
+              playlistComponentFactory.onAddHandler = $scope.addItems;
+
               _load();
             },
             onBackHandler: function () {
@@ -120,9 +131,9 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.showAddTemplates = function () {
-            $scope.canAddTemplates = false;
-            $scope.view = 'add-templates';
-            $scope.searchTemplates();
+            componentsFactory.editComponent({
+              type: 'rise-presentation-selector'
+            });
           };
 
           $scope.showPlaylistItems = function () {
@@ -137,136 +148,9 @@ angular.module('risevision.template-editor.directives')
             return item.tagName === 'rise-embedded-template' || !item.tagName;
           };
 
-          $scope.loadTemplateNames = function (playlistItems) {
-
-            if (!playlistItems || !playlistItems.length) {
-              return;
-            }
-
-            var presentationIds = _.map(_.filter(playlistItems, $scope.isEmbeddedTemplate),
-              function (item) {
-                return 'id:' + item.id;
-              });
-
-            if (!presentationIds.length) {
-              $scope.playlistItems = playlistItems;
-
-              return;
-            }
-
-            var search = {
-              filter: presentationIds.join(' OR ')
-            };
-
-            $loading.start('rise-playlist-templates-loader');
-
-            presentation.list(search)
-              .then(function (res) {
-                _.forEach(playlistItems, function (playlistItem) {
-                  var found = false;
-
-                  if (res.items) {
-                    _.forEach(res.items, function (item) {
-                      if (playlistItem.id === item.id) {
-                        found = true;
-                        playlistItem.name = item.name;
-                        playlistItem.revisionStatusName = item.revisionStatusName;
-                        playlistItem.removed = false;
-                      }
-                    });
-                  }
-
-                  if (!found && $scope.isEmbeddedTemplate(playlistItem)) {
-                    playlistItem.name = 'Unknown';
-                    playlistItem.revisionStatusName = 'Template not found.';
-                    playlistItem.removed = true;
-                  }
-                });
-                $scope.playlistItems = playlistItems;
-              })
-              .finally(function () {
-                $loading.stop('rise-playlist-templates-loader');
-              });
-          };
-
-          $scope.searchTemplates = function () {
-
-            $scope.templatesSearch.filter = presentation.buildFilterString($scope.searchKeyword,
-              FILTER_HTML_TEMPLATES);
-
-            //exclude a template that is being edited
-            $scope.templatesSearch.filter += ' AND NOT id:' + templateEditorFactory.presentation.id;
-
-            if (!$scope.templatesFactory) {
-              $scope.initTemplatesFactory();
-            } else {
-              $scope.templatesFactory.doSearch();
-            }
-          };
-
-          $scope.searchKeyPressed = function (keyEvent) {
-            // handle enter key
-            if (keyEvent.which === 13) {
-              $scope.searchTemplates();
-            }
-          };
-
-          $scope.resetSearch = function () {
-            $scope.searchKeyword = '';
-            $scope.searchTemplates();
-          };
-
-          $scope.initTemplatesFactory = function () {
-
-            $scope.templatesFactory = new ScrollingListService(presentation.list, $scope.templatesSearch);
-
-            $scope.$watch('templatesFactory.loadingItems',
-              function (loading) {
-                if (loading) {
-                  $loading.start('rise-playlist-templates-loader');
-                } else {
-                  $loading.stop('rise-playlist-templates-loader');
-                }
-              });
-          };
-
-          $scope.selectTemplate = function (key) {
-            $scope.templatesFactory.items.list[key].isSelected = !$scope.templatesFactory.items.list[key]
-              .isSelected;
-            $scope.canAddTemplates = _.some($scope.templatesFactory.items.list, function (item) {
-              return item.isSelected;
-            });
-          };
-
-          $scope.addTemplates = function () {
-            var itemsToAdd = _.filter($scope.templatesFactory.items.list, function (item) {
-              return item.isSelected;
-            });
-
-            //if template supports PUD, then set it to PUD automatically
-
-            var promises = [];
-            _.forEach(itemsToAdd, function (item) {
-              promises.push(blueprintFactory.isPlayUntilDone(item.productCode));
-            });
-
-            $loading.start('rise-playlist-templates-loader');
-
-            $q.all(promises)
-              .then(function (playUntilDoneValues) {
-
-                for (var i = 0; i < playUntilDoneValues.length; i++) {
-                  itemsToAdd[i]['play-until-done'] = playUntilDoneValues[i];
-                }
-
-                $scope.playlistItems = $scope.playlistItems.concat(itemsToAdd);
-                $scope.save();
-
-                $scope.showPlaylistItems();
-              })
-              .finally(function (e) {
-                $loading.stop('rise-playlist-templates-loader');
-              });
+          $scope.addItems = function (itemsToAdd) {
+            $scope.playlistItems = $scope.playlistItems.concat(itemsToAdd);
+            $scope.save();
           };
 
           $scope.removeItem = function (key) {
@@ -371,9 +255,13 @@ angular.module('risevision.template-editor.directives')
             _editComponent(item);
           };
 
-          $scope.createNewTemplate = function () {
-            editorFactory.addPresentationModal();
-          };
+          $scope.$watch('playlistComponentFactory.loading', function (loading) {
+            if (loading) {
+              $loading.start('rise-playlist-loader');
+            } else {
+              $loading.stop('rise-playlist-loader');
+            }
+          });
         }
       };
     }

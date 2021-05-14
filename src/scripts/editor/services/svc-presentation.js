@@ -202,18 +202,6 @@ angular.module('risevision.editor.services')
             });
 
           return deferred.promise;
-        },
-        buildFilterString: function (query, filter) {
-          var result;
-
-          result = query ?
-            '(' + createSearchQuery(PRESENTAION_SEARCH_FIELDS, query) + ')' : '';
-
-          result += result && filter ? ' AND ' : '';
-
-          result += filter ? '(' + filter + ')' : '';
-
-          return result;
         }
       };
 

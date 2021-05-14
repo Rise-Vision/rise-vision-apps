@@ -1,0 +1,42 @@
+<div class="presentation-selector-container attribute-editor-component" rv-spinner rv-spinner-key="presentation-selector-loader">
+
+  <div class="playlist-templates-title active-search">
+    <label>Choose A Presentation</label>
+  </div>
+  <search-filter class="templates-selector-search-box" filter-config="filterConfig" search="playlistComponentFactory.search" do-search="playlistComponentFactory.templates.doSearch" icon-set="madero"></search-filter>
+
+  <div class="templates-selector te-scrollable-container active-search"
+       scrolling-list="playlistComponentFactory.templates.load()">
+    <div id="te-playlist-no-results" class="templates-selector-no-results" ng-show="!(playlistComponentFactory.templates.items.list.length > 0)">
+      No Presentations found. To create a new Presentation click here. <a ng-click="createNewTemplate()">click here</a>. 
+    </div>
+
+    <div class="row templates-row" ng-show="playlistComponentFactory.templates.items.list.length > 0"
+        ng-repeat="(key, value) in playlistComponentFactory.templates.items.list"
+        ng-click="playlistComponentFactory.templates.select(value)">
+      <div class="col-xs-12 pl-0 pr-0">
+        <span class="templates-selector-checkbox">
+          <input id="{{value.id}}" type="checkbox"
+                ng-click="playlistComponentFactory.templates.select(value)"
+                ng-checked="value.selected">
+          <label for="{{value.id}}">
+            <span></span>
+          </label>
+        </span>
+        <span class="templates-selector-name">
+          <div class="templates-name">{{ value.name }}</div>
+          <div class="templates-status" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised'}">{{ value.revisionStatusName }}</div>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="playlist-action-button-bar">
+    <div class="add-templates">
+      <button id="te-playlist-add-template" class="btn btn-primary btn-block" ng-click="addTemplates()" ng-disabled="!playlistComponentFactory.templates.getSelected().length">
+        Add Presentation
+      </button>
+    </div>
+  </div>
+
+</div>

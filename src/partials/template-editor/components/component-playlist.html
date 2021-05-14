@@ -1,5 +1,5 @@
 <div class="rise-playlist-container attribute-editor-component"
-rv-spinner rv-spinner-key="rise-playlist-templates-loader">
+rv-spinner rv-spinner-key="rise-playlist-loader">
 
   <!-- default view -->
   <div ng-show="!view">
@@ -65,60 +65,6 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- "add-templates" view -->
-  <div ng-show="view === 'add-templates'">
-    <div class="playlist-templates-title active-search">
-      <label>Choose A Presentation</label>
-    </div>
-    <div class="input-group templates-selector-search-box">
-      <span class="input-group-addon" ng-click="searchTemplates()">
-        <streamline-icon name="magnifier" width="16" height="16"></streamline-icon>
-      </span>
-      <input id="te-playlist-search" type="text" class="form-control"
-            ng-model="searchKeyword" ng-keyup="searchKeyPressed($event)"
-            placeholder="Search Presentations"
-            aria-label="Search Presentations">
-      <span class="input-group-addon" ng-click="resetSearch()">
-        <streamline-icon name="close" width="12" height="12"></streamline-icon>
-      </span>
-    </div>
-
-    <div class="templates-selector te-scrollable-container active-search"
-         scrolling-list="templatesFactory.load()">
-      <div id="te-playlist-no-results" class="templates-selector-no-results" ng-show="!(templatesFactory.items.list.length > 0)">
-        No Presentations found. To create a new Presentation click here. <a ng-click="createNewTemplate()">click here</a>. 
-      </div>
-
-      <div class="row templates-row" ng-show="templatesFactory.items.list.length > 0"
-          ng-repeat="(key, value) in templatesFactory.items.list"
-          ng-click="selectTemplate(key)">
-        <div class="col-xs-12 pl-0 pr-0">
-          <span class="templates-selector-checkbox">
-            <input id="{{value.id}}" type="checkbox"
-                  ng-click="selectTemplate(key)"
-                  ng-checked="value.isSelected">
-            <label for="{{value.id}}">
-              <span></span>
-            </label>
-          </span>
-          <span class="templates-selector-name">
-            <div class="templates-name">{{ value.name }}</div>
-            <div class="templates-status" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised'}">{{ value.revisionStatusName }}</div>
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <div class="playlist-action-button-bar">
-      <div class="add-templates">
-        <button id="te-playlist-add-template" class="btn btn-primary btn-block" ng-click="addTemplates()" ng-disabled="!canAddTemplates">
-          Add Presentation
-        </button>
-      </div>
-    </div>
-
   </div>
 
   <!-- "edit" view -->
