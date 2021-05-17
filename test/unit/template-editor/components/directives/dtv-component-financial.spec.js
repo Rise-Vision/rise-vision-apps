@@ -56,6 +56,10 @@ describe('directive: TemplateComponentFinancial', function() {
       return { selected: { id: "TEST-ID" } };
     });
 
+    $provide.service('blueprintFactory', function() {
+      return {};
+    });
+
     $provide.service('attributeDataFactory', function() {
       return {
         setAttributeData: sinon.stub()
