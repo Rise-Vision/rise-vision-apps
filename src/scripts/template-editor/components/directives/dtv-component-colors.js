@@ -23,7 +23,7 @@ angular.module('risevision.template-editor.directives')
             attributeDataFactory.setAttributeDataGlobal('brandingOverride', brandingOverride);
           };
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-override-brand-colors',
             element: element,
             show: function () {

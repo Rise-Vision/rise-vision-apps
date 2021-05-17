@@ -53,7 +53,7 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-slides',
             element: element,
             show: function () {

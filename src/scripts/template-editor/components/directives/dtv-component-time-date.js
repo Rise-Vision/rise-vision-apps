@@ -18,7 +18,7 @@ angular.module('risevision.template-editor.directives')
           });
           $scope.timezones = WORLD_TIMEZONES;
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-time-date',
             element: element,
             show: function () {

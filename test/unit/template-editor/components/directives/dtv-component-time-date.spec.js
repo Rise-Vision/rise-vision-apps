@@ -3,33 +3,32 @@
 describe('directive: templateComponentTimeDate', function() {
   var $scope,
     element,
+    componentsFactory,
     attributeDataFactory,
     sandbox = sinon.sandbox.create();
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('componentsFactory', function() {
-      return { selected: { id: "TEST-ID" } };
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sandbox.stub()
+      };
     });
 
     $provide.service('attributeDataFactory', function() {
       return {
-        setAttributeData: sinon.stub()
+        setAttributeData: sandbox.stub()
       };
     });
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
 
     $templateCache.put('partials/template-editor/components/component-time-date.html', '<p>mock</p>');
     $scope = $rootScope.$new();
-
-    $scope.registerDirective = sinon.stub();
 
     element = $compile("<template-component-time-date></template-component-time-date>")($scope);
     $scope = element.scope();
@@ -46,9 +45,9 @@ describe('directive: templateComponentTimeDate', function() {
 
   describe('registerDirective:', function() {
     it('should initialize', function() {
-      expect($scope.registerDirective).to.have.been.called;
+      expect(componentsFactory.registerDirective).to.have.been.called;
 
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-time-date');
       expect(directive.show).to.be.a('function');
@@ -57,7 +56,7 @@ describe('directive: templateComponentTimeDate', function() {
     it('show:', function() {
       sandbox.stub($scope, 'load');
 
-      $scope.registerDirective.getCall(0).args[0].show();
+      componentsFactory.registerDirective.getCall(0).args[0].show();
 
       expect($scope.componentId).to.equal('TEST-ID');
 
@@ -66,7 +65,7 @@ describe('directive: templateComponentTimeDate', function() {
   });
 
   it('should return the correct title', function () {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var timeDateInstance = { attributes: { type: { value: 'timedate' } } };
     var timeInstance = { attributes: { type: { value: 'time' } } };
     var dateInstance = { attributes: { type: { value: 'date' } } };

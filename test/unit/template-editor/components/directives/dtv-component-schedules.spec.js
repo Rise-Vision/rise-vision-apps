@@ -6,11 +6,18 @@ describe('directive: templateComponentSchedules', function() {
       rootScope,
       compile,
       $loading,
+      componentsFactory,
       scheduleSelectorFactory;
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
+    $provide.service('componentsFactory', function() {
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sinon.stub()
+      };
+    });
+
     $provide.service('scheduleSelectorFactory', function() {
       return {
         loadingSchedules: false
@@ -26,11 +33,13 @@ describe('directive: templateComponentSchedules', function() {
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    $loading = $injector.get('$loading');
+    scheduleSelectorFactory = $injector.get('scheduleSelectorFactory');
+    componentsFactory = $injector.get('componentsFactory');
+
     rootScope = $rootScope;
     compile = $compile;
     $templateCache.put('partials/template-editor/components/component-schedules.html', '<p>mock</p>');
-    $loading = $injector.get('$loading');
-    scheduleSelectorFactory = $injector.get('scheduleSelectorFactory');
 
     compileDirective();
   }));
@@ -38,8 +47,6 @@ describe('directive: templateComponentSchedules', function() {
   function compileDirective() {
     element = compile("<template-component-schedules></template-component-schedules>")(rootScope.$new());
     $scope = element.scope();
-
-    $scope.registerDirective = sinon.stub();
 
     $scope.$digest();
   }
@@ -51,11 +58,11 @@ describe('directive: templateComponentSchedules', function() {
   it('should exist', function() {
     expect($scope).to.be.ok;
     expect($scope.factory).to.be.ok;
-    expect($scope.registerDirective).to.have.been.called;
+    expect(componentsFactory.registerDirective).to.have.been.called;
   });
 
   it('should initialize directive', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-schedules');
   });

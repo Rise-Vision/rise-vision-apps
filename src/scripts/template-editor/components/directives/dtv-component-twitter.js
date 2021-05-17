@@ -57,7 +57,7 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-data-twitter',
             element: element,
             show: function () {

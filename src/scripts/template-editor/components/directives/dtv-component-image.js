@@ -229,8 +229,8 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
-          $scope.registerDirective(componentDirective);
-          $scope.registerDirective(logoDirective);
+          componentsFactory.registerDirective(componentDirective);
+          componentsFactory.registerDirective(logoDirective);
 
           $scope.waitForPresentationId = function (metadata) {
             function _checkPresentationIdOrWait() {
@@ -284,7 +284,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.selectFromStorage = function () {
-            $scope.editComponent({
+            componentsFactory.editComponent({
               type: 'rise-storage-selector'
             });
           };

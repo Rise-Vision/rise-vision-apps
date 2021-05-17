@@ -25,7 +25,11 @@ describe('directive: templateComponentVideo', function() {
     });
 
     $provide.service('componentsFactory', function() {
-      return { selected: { id: 'TEST-ID' } };
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sinon.stub(),
+        editComponent: sinon.stub()
+      };
     });
 
     $provide.service('attributeDataFactory', function() {
@@ -57,9 +61,6 @@ describe('directive: templateComponentVideo', function() {
     $templateCache.put('partials/template-editor/components/component-video.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
-    $scope.registerDirective = sinon.stub();
-    $scope.editComponent = sinon.stub();
-
     element = $compile('<template-component-video></template-component-video>')($scope);
     $scope = element.scope();
     $scope.$digest();
@@ -73,9 +74,9 @@ describe('directive: templateComponentVideo', function() {
 
   describe('registerDirective:', function() {
     it('should initialize', function() {
-      $scope.registerDirective.should.have.been.called;
+      componentsFactory.registerDirective.should.have.been.called;
 
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-video');
       expect(directive.element).to.be.an('object');
@@ -83,7 +84,7 @@ describe('directive: templateComponentVideo', function() {
     });
 
     it('show:', function() {
-      $scope.registerDirective.getCall(0).args[0].show();
+      componentsFactory.registerDirective.getCall(0).args[0].show();
 
       expect($scope.componentId).to.equal('TEST-ID');
 
@@ -94,7 +95,7 @@ describe('directive: templateComponentVideo', function() {
   });
 
   it('should set video lists when available as attribute data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     testMetadata = [
       { 'file': 'video.mp4', 'thumbnail-url': 'http://video' },
       { 'file': 'test|character.mp4', 'thumbnail-url': 'http://test%7Ccharacter.mp4' }
@@ -115,7 +116,7 @@ describe('directive: templateComponentVideo', function() {
   });
 
   it('should detect default files', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleFiles = [
       { "file": "video.mp4", "thumbnail-url": "http://video" }
     ];
@@ -138,7 +139,7 @@ describe('directive: templateComponentVideo', function() {
   });
 
   it('should not consider a default value if it is not', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleFiles = [
       { "file": "video.mp4", "thumbnail-url": "http://video" }
     ];
@@ -162,7 +163,7 @@ describe('directive: templateComponentVideo', function() {
 
   it('should get thumbnail URLs when not available as attribute data', function(done) {
     var TEST_FILE = 'risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/file1.mp4';
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     attributeDataFactory.getAttributeData = function() {
       return null;
@@ -199,7 +200,7 @@ describe('directive: templateComponentVideo', function() {
   });
 
   it('should get volume data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     attributeDataFactory.getAttributeData = function(componentId, key) {
       return [];
@@ -216,7 +217,7 @@ describe('directive: templateComponentVideo', function() {
   });
 
   it('should default volume data to 0', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     attributeDataFactory.getAttributeData = function(componentId, key) {
       return [];
@@ -232,7 +233,7 @@ describe('directive: templateComponentVideo', function() {
   });
 
   it('should set volume as 0 if it has an invalid vaue', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     attributeDataFactory.getAttributeData = function(componentId, key) {
       return [];
@@ -452,7 +453,7 @@ describe('directive: templateComponentVideo', function() {
   it('selectFromStorage:', function() {
     $scope.selectFromStorage();
 
-    $scope.editComponent.should.have.been.calledWith({
+    componentsFactory.editComponent.should.have.been.calledWith({
       type: 'rise-storage-selector'
     });
   });

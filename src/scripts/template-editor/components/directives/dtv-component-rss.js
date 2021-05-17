@@ -31,7 +31,7 @@ angular.module('risevision.template-editor.directives')
             attributeDataFactory.setAttributeData($scope.componentId, 'maxitems', parseInt($scope.maxItems, 10));
           };
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-data-rss',
             element: element,
             show: function () {

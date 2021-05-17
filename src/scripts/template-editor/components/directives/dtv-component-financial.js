@@ -108,7 +108,7 @@ angular.module('risevision.template-editor.directives')
 
           _reset();
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-data-financial',
             element: element,
             show: function () {
