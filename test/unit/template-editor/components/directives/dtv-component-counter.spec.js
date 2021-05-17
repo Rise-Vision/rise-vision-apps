@@ -3,33 +3,32 @@
 describe('directive: templateComponentCounter', function() {
   var $scope,
     element,
+    componentsFactory,
     attributeDataFactory,
     sandbox = sinon.sandbox.create();
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('componentsFactory', function() {
-      return { selected: { id: "TEST-ID" } };
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sandbox.stub()
+      };
     });
 
     $provide.service('attributeDataFactory', function() {
       return {
-        setAttributeData: sinon.stub()
+        setAttributeData: sandbox.stub()
       };
     });
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
 
     $templateCache.put('partials/template-editor/components/component-counter.html', '<p>mock</p>');
     $scope = $rootScope.$new();
-
-    $scope.registerDirective = sandbox.stub();
 
     element = $compile('<template-component-counter></template-component-counter>')($scope);
     $scope = element.scope();
@@ -42,19 +41,19 @@ describe('directive: templateComponentCounter', function() {
 
   it('should initialize', function() {
     expect($scope).to.be.ok;
-    expect($scope.registerDirective).to.have.been.called;
+    expect(componentsFactory.registerDirective).to.have.been.called;
 
     expect($scope.dateOptions).to.be.an.object;
     expect($scope.targetDatePicker).to.be.an.object;
 
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-data-counter');
     expect(directive.show).to.be.a('function');
   });
 
   it('should return the correct title', function () {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var component = { attributes: { type: { value: 'down' } } };
 
     expect(directive.getTitle(component)).to.equal('template.rise-data-counter-down');

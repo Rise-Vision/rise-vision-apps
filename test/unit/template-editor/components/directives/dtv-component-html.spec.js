@@ -1,18 +1,19 @@
 'use strict';
 
 describe('directive: templateComponentHtml', function() {
-  var $scope, $timeout,
+  var $scope,
+      $timeout,
       element,
+      componentsFactory,
       attributeDataFactory;
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('componentsFactory', function() {
-      return { selected: { id: "TEST-ID" } };
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sinon.stub()
+      };
     });
 
     $provide.service('attributeDataFactory', function() {
@@ -26,12 +27,11 @@ describe('directive: templateComponentHtml', function() {
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
     $timeout = $injector.get('$timeout');
+    componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
 
     $templateCache.put('partials/template-editor/components/component-html.html', '<p>mock</p>');
     $scope = $rootScope.$new();
-
-    $scope.registerDirective = sinon.stub();
 
     element = $compile("<template-component-html></template-component-html>")($scope);
     $scope = element.scope();
@@ -40,18 +40,18 @@ describe('directive: templateComponentHtml', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.registerDirective).to.have.been.called;
+    expect(componentsFactory.registerDirective).to.have.been.called;
 
     expect($scope.codemirrorOptions).to.deep.equal({});
 
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-html');
     expect(directive.show).to.be.a('function');
   });
 
   it('should load html from attribute data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleValue = "test html";
     attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
 
@@ -62,7 +62,7 @@ describe('directive: templateComponentHtml', function() {
   });
 
   it('should set codemirror options asynchronously', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     directive.show();
 
@@ -77,7 +77,7 @@ describe('directive: templateComponentHtml', function() {
   });
 
   it('should save html to attribute data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleValue = "test html";
     attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
 

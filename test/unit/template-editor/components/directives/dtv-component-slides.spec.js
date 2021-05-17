@@ -3,6 +3,7 @@
 describe('directive: templateComponentSlides', function() {
   var $scope,
       element,
+      componentsFactory,
       attributeDataFactory,
       slidesUrlValidationService,
       sandbox = sinon.sandbox.create();
@@ -16,13 +17,12 @@ describe('directive: templateComponentSlides', function() {
   });
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('componentsFactory', function() {
-      return { selected: { id: "TEST-ID" } };
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sandbox.stub()
+      };
     });
 
     $provide.service('attributeDataFactory', function() {
@@ -37,12 +37,13 @@ describe('directive: templateComponentSlides', function() {
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
 
     $templateCache.put('partials/template-editor/components/component-slides.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
-    $scope.registerDirective = sandbox.stub();
+    componentsFactory.registerDirective = sandbox.stub();
 
     element = $compile("<template-component-slides></template-component-slides>")($scope);
     $scope = element.scope();
@@ -51,16 +52,16 @@ describe('directive: templateComponentSlides', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.registerDirective).to.have.been.called;
+    expect(componentsFactory.registerDirective).to.have.been.called;
 
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-slides');
     expect(directive.show).to.be.a('function');
   });
 
   it('should load Slides URL from attribute data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleData = {
       src: 'https://docs.google.com/presentation/d/e/2PACX-1vTncMMQxJIzZNdNIFqAsTI8ydohnKU97taOG-dvwYcxS3d0DjdkLlcEqUQKeL-z_nvYQIcFwxKC81b1/pub?start=false&loop=false&delayms=3000'
     };
@@ -76,7 +77,7 @@ describe('directive: templateComponentSlides', function() {
   });
 
   it('should load duration from attribute data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleData = {
       src: 'https://docs.google.com/presentation/d/e/2PACX-1vTncMMQxJIzZNdNIFqAsTI8ydohnKU97taOG-dvwYcxS3d0DjdkLlcEqUQKeL-z_nvYQIcFwxKC81b1/pub?start=false&loop=false&delayms=3000',
       duration: 2
@@ -93,7 +94,7 @@ describe('directive: templateComponentSlides', function() {
   });
 
   it('should set duration to 10 when default value and blueprint are undefined', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return undefined;
@@ -106,7 +107,7 @@ describe('directive: templateComponentSlides', function() {
   });
 
   it('should validate URL when is shown', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleData = {
       src: 'https://docs.google.com/presentation/d/e/2PACX-1vTncMMQxJIzZNdNIFqAsTI8ydohnKU97taOG-dvwYcxS3d0DjdkLlcEqUQKeL-z_nvYQIcFwxKC81b1/pub?start=false&loop=false&delayms=3000',
       duration: 2
@@ -135,7 +136,7 @@ describe('directive: templateComponentSlides', function() {
     });
 
     it('should accept Slides ID as src', function() {
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
       
       directive.show();
   
@@ -147,7 +148,7 @@ describe('directive: templateComponentSlides', function() {
     });
   
     it('should accept published URL as src', function() {
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
   
       directive.show();
   
@@ -159,7 +160,7 @@ describe('directive: templateComponentSlides', function() {
     });
   
     it('should accept browser URL as src', function() {
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
   
       directive.show();
   
@@ -171,7 +172,7 @@ describe('directive: templateComponentSlides', function() {
     });
   
     it('should accept empty URL as src', function() {
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
       directive.show();
   
@@ -183,7 +184,7 @@ describe('directive: templateComponentSlides', function() {
     });
 
     it('should not accept non Slides URL as src', function() {
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
       directive.show();
   

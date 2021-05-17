@@ -3,9 +3,9 @@
 describe('directive: TemplateComponentFinancial', function() {
   var $scope,
       element,
-      factory,
+      componentsFactory,
       attributeDataFactory,
-      timeout;
+      $timeout;
 
   var popularResults = [
     {
@@ -47,13 +47,12 @@ describe('directive: TemplateComponentFinancial', function() {
     noResults = false;
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('componentsFactory', function() {
-      return { selected: { id: "TEST-ID" } };
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sinon.stub()
+      };
     });
 
     $provide.service('attributeDataFactory', function() {
@@ -74,15 +73,14 @@ describe('directive: TemplateComponentFinancial', function() {
     });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout, $injector){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    $timeout = $injector.get('$timeout');
+    componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
 
     $templateCache.put('partials/template-editor/components/component-financial.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
-    $scope.registerDirective = sinon.stub();
-
-    timeout = $timeout;
     element = $compile("<template-component-financial></template-component-financial>")($scope);
     $scope = element.scope();
     $scope.$digest();
@@ -91,9 +89,9 @@ describe('directive: TemplateComponentFinancial', function() {
   it('should exist', function() {
     expect($scope).to.be.ok;
     expect($scope.templateEditorFactory).to.be.ok;
-    expect($scope.registerDirective).to.have.been.called;
+    expect(componentsFactory.registerDirective).to.have.been.called;
 
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-data-financial');
     expect(directive.show).to.be.a('function');
@@ -122,7 +120,7 @@ describe('directive: TemplateComponentFinancial', function() {
     expect($scope.enteringSymbolSelector).to.be.true;
     expect($scope.exitingSymbolSelector).to.be.false;
 
-    timeout.flush();
+    $timeout.flush();
 
     expect($scope.showInstrumentList).to.be.false;
     expect($scope.showSymbolSelector).to.be.true;
@@ -132,7 +130,7 @@ describe('directive: TemplateComponentFinancial', function() {
 
   it('should go back to instrument list', function() {
     $scope.showSymbolSearch();
-    timeout.flush();
+    $timeout.flush();
 
     $scope.selectInstruments();
 
@@ -141,7 +139,7 @@ describe('directive: TemplateComponentFinancial', function() {
     expect($scope.enteringSymbolSelector).to.be.false;
     expect($scope.exitingSymbolSelector).to.be.true;
 
-    timeout.flush();
+    $timeout.flush();
 
     expect($scope.showInstrumentList).to.be.true;
     expect($scope.showSymbolSelector).to.be.false;
@@ -150,7 +148,7 @@ describe('directive: TemplateComponentFinancial', function() {
   });
 
   it('should set instrument lists when available as attribute data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleInstruments = [
       { name: "CANADIAN DOLLAR", symbol: "CADUSD=X" }
     ];
@@ -167,11 +165,11 @@ describe('directive: TemplateComponentFinancial', function() {
     expect($scope.category).to.equal("currencies");
     expect($scope.instruments).to.deep.equal(sampleInstruments);
 
-    timeout.flush();
+    $timeout.flush();
   });
 
   it('should download instruments when not available as attribute data', function(done) {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     attributeDataFactory.getAttributeData = function() {
       return null;
@@ -181,7 +179,7 @@ describe('directive: TemplateComponentFinancial', function() {
     }
 
     directive.show();
-    timeout.flush();
+    $timeout.flush();
 
     setTimeout(function() {
       var expectedInstruments = [
@@ -209,7 +207,7 @@ describe('directive: TemplateComponentFinancial', function() {
   });
 
   it('should not set instruments when they are not available in the search', function(done) {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     attributeDataFactory.getAttributeData = function () {
       return null;
@@ -219,7 +217,7 @@ describe('directive: TemplateComponentFinancial', function() {
     }
 
     directive.show();
-    timeout.flush();
+    $timeout.flush();
 
     setTimeout(function () {
       expect($scope.instruments).to.deep.equal([]);
@@ -274,7 +272,7 @@ describe('directive: TemplateComponentFinancial', function() {
 
   it('should reset instrument selector list to show popular instruments when showing instrument list', function() {
     $scope.selectInstruments();
-    timeout.flush();
+    $timeout.flush();
     $scope.$digest();
 
     expect($scope.instrumentSearch).to.deep.equal(popularResults);
@@ -282,7 +280,7 @@ describe('directive: TemplateComponentFinancial', function() {
 
   it('should populate instrument selector list with search results when search returns results', function() {
     $scope.showSymbolSearch();
-    timeout.flush();
+    $timeout.flush();
 
     $scope.searchKeyword = "test";
     $scope.searchInstruments();
@@ -293,7 +291,7 @@ describe('directive: TemplateComponentFinancial', function() {
 
   it('should allow for UI to handle empty results from search', function() {
     $scope.showSymbolSearch();
-    timeout.flush();
+    $timeout.flush();
 
     noResults = true;
     $scope.searchKeyword = "test";
@@ -306,7 +304,7 @@ describe('directive: TemplateComponentFinancial', function() {
 
   it('should reset instrument selector list to show popular instruments when search input cleared', function() {
     $scope.showSymbolSearch();
-    timeout.flush();
+    $timeout.flush();
     $scope.$digest();
 
     $scope.searchKeyword = "test";
@@ -324,7 +322,7 @@ describe('directive: TemplateComponentFinancial', function() {
 
   it("should disable adding instruments until at least one instrument is selected", function() {
     $scope.selectInstruments();
-    timeout.flush();
+    $timeout.flush();
     $scope.$digest();
     $scope.showSymbolSearch();
 
@@ -340,7 +338,7 @@ describe('directive: TemplateComponentFinancial', function() {
   });
 
   it('should add selected instruments to instruments list and prioritize them to top of list', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var instruments = [
       {
         "symbol": "CADUSD=X",
@@ -361,10 +359,10 @@ describe('directive: TemplateComponentFinancial', function() {
 
     expect($scope.instruments).to.deep.equal(instruments);
 
-    timeout.flush();
+    $timeout.flush();
 
     $scope.showSymbolSearch();
-    timeout.flush();
+    $timeout.flush();
     $scope.$digest();
 
     $scope.selectInstrument(1);
@@ -395,7 +393,7 @@ describe('directive: TemplateComponentFinancial', function() {
   });
 
   it('should not add duplicate instruments', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var instruments = [
       {
         "symbol": "CADUSD=X",
@@ -422,10 +420,10 @@ describe('directive: TemplateComponentFinancial', function() {
 
     expect($scope.instruments).to.deep.equal(instruments);
 
-    timeout.flush();
+    $timeout.flush();
 
     $scope.showSymbolSearch();
-    timeout.flush();
+    $timeout.flush();
     $scope.$digest();
 
     $scope.selectInstrument(2);

@@ -31,7 +31,7 @@ angular.module('risevision.template-editor.directives')
               };
             },
             post: function ($scope, element) {
-              $scope.registerDirective({
+              componentsFactory.registerDirective({
                 type: 'rise-data-counter',
                 element: element,
                 show: function () {

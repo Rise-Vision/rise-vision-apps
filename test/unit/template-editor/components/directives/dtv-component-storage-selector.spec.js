@@ -2,7 +2,7 @@
 
 describe('directive: componentStorageSelector', function() {
   var sandbox = sinon.sandbox.create(),
-      $scope, element, $loading, templateEditorUtils, storageManagerFactory;
+      $scope, element, $loading, componentsFactory, templateEditorUtils, storageManagerFactory;
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(function ($provide) {
@@ -10,6 +10,17 @@ describe('directive: componentStorageSelector', function() {
       return {
         start: sandbox.stub(),
         stop: sandbox.stub()
+      };
+    });
+
+    $provide.service('componentsFactory', function() {
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sandbox.stub(),
+        setPanelIcon: sandbox.stub(),
+        setPanelTitle: sandbox.stub(),
+        resetPanelHeader: sandbox.stub(),
+        showPreviousPage: sandbox.stub(),
       };
     });
 
@@ -24,20 +35,13 @@ describe('directive: componentStorageSelector', function() {
   }));
 
   beforeEach(inject(function($injector, $compile, $rootScope, $templateCache) {
-    $templateCache.put('partials/template-editor/components/component-storage-selector.html', '<p>mock</p>');
-    $scope = $rootScope.$new();
-
-    $scope.registerDirective = sandbox.stub();
-
-    $scope.setPanelIcon = sandbox.stub();
-    $scope.setPanelTitle = sandbox.stub();
-    $scope.resetPanelHeader = sandbox.stub();
-
-    $scope.showPreviousPage = sandbox.stub();
-
     $loading = $injector.get('$loading');
+    componentsFactory = $injector.get('componentsFactory');
     templateEditorUtils = $injector.get('templateEditorUtils');
     storageManagerFactory = $injector.get('storageManagerFactory');
+
+    $templateCache.put('partials/template-editor/components/component-storage-selector.html', '<p>mock</p>');
+    $scope = $rootScope.$new();
 
     element = $compile('<component-storage-selector></component-storage-selector>')($scope);
     $scope = element.scope();
@@ -145,9 +149,9 @@ describe('directive: componentStorageSelector', function() {
     });
 
     it('should initialize', function() {
-      $scope.registerDirective.should.have.been.called;
+      componentsFactory.registerDirective.should.have.been.called;
 
-      var directive = $scope.registerDirective.getCall(0).args[0];
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-storage-selector');
       expect(directive.element).to.be.an('object');
@@ -156,7 +160,7 @@ describe('directive: componentStorageSelector', function() {
     });
 
     it('show:', function() {
-      $scope.registerDirective.getCall(0).args[0].show();
+      componentsFactory.registerDirective.getCall(0).args[0].show();
 
       expect(storageManagerFactory.isListView).to.be.true;
       expect($scope.fileType).to.equal('image');
@@ -166,7 +170,7 @@ describe('directive: componentStorageSelector', function() {
 
     describe('onBackHandler:', function() {
       it('should navigate away', function() {
-        expect($scope.registerDirective.getCall(0).args[0].onBackHandler()).to.be.false;
+        expect(componentsFactory.registerDirective.getCall(0).args[0].onBackHandler()).to.be.false;
 
         $scope.loadItems.should.not.have.been.called;
       });
@@ -174,7 +178,7 @@ describe('directive: componentStorageSelector', function() {
       it('should update folder path and load files', function() {
         $scope.storageUploadManager.folderPath = 'someFolder/subfolder/';
 
-        expect($scope.registerDirective.getCall(0).args[0].onBackHandler()).to.be.true;
+        expect(componentsFactory.registerDirective.getCall(0).args[0].onBackHandler()).to.be.true;
 
         expect($scope.storageUploadManager.folderPath).to.equal('someFolder/');
 
@@ -184,7 +188,7 @@ describe('directive: componentStorageSelector', function() {
       it('should handle going to root', function() {
         $scope.storageUploadManager.folderPath = 'someFolder/';
 
-        expect($scope.registerDirective.getCall(0).args[0].onBackHandler()).to.be.true;
+        expect(componentsFactory.registerDirective.getCall(0).args[0].onBackHandler()).to.be.true;
 
         expect($scope.storageUploadManager.folderPath).to.equal('');
       });
@@ -299,7 +303,7 @@ describe('directive: componentStorageSelector', function() {
     it('should handle missing callback', function () {
       $scope.addSelected();
 
-      $scope.showPreviousPage.should.not.have.been.called;
+      componentsFactory.showPreviousPage.should.not.have.been.called;
     });
 
     it('should call callback and reset the internal status', function () {
@@ -316,9 +320,9 @@ describe('directive: componentStorageSelector', function() {
       expect($scope.search.selectAll).to.be.false;
       expect(storageManagerFactory.onSelectHandler).to.have.been.calledWith(selectedItems);
 
-      $scope.resetPanelHeader.should.have.been.called;
+      componentsFactory.resetPanelHeader.should.have.been.called;
 
-      $scope.showPreviousPage.should.have.been.called;
+      componentsFactory.showPreviousPage.should.have.been.called;
     });
   });
 
@@ -339,10 +343,10 @@ describe('directive: componentStorageSelector', function() {
 
         templateEditorUtils.fileNameOf.should.have.been.calledWith('folder/');
 
-        $scope.setPanelIcon.should.have.been.calledWith('folder', 'streamline');
-        $scope.setPanelTitle.should.have.been.calledWith('folderName');
+        componentsFactory.setPanelIcon.should.have.been.calledWith('folder', 'streamline');
+        componentsFactory.setPanelTitle.should.have.been.calledWith('folderName');
 
-        $scope.resetPanelHeader.should.not.have.been.called;
+        componentsFactory.resetPanelHeader.should.not.have.been.called;
       });
 
       it('should navigate to root', function() {
@@ -352,10 +356,10 @@ describe('directive: componentStorageSelector', function() {
 
         templateEditorUtils.fileNameOf.should.have.been.called;
 
-        $scope.setPanelIcon.should.not.have.been.called;
-        $scope.setPanelTitle.should.not.have.been.called;
+        componentsFactory.setPanelIcon.should.not.have.been.called;
+        componentsFactory.setPanelTitle.should.not.have.been.called;
 
-        $scope.resetPanelHeader.should.have.been.called;
+        componentsFactory.resetPanelHeader.should.have.been.called;
       });
     });
 

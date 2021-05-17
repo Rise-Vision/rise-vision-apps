@@ -3,6 +3,7 @@
 describe('directive: templateComponentTwitter', function() {
   var $scope,
     element,
+    componentsFactory,
     attributeDataFactory,
     oauthService,
     twitterCredentialsValidation,
@@ -16,17 +17,16 @@ describe('directive: templateComponentTwitter', function() {
   });
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
       return { presentation: {companyId: "abc123"} };
     });
 
     $provide.service('componentsFactory', function() {
-      return { selected: { id: "TEST-ID" } };
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sandbox.stub()
+      };
     });
 
     $provide.service('attributeDataFactory', function() {
@@ -49,12 +49,11 @@ describe('directive: templateComponentTwitter', function() {
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
 
     $templateCache.put('partials/template-editor/components/component-twitter.html', '<p>mock</p>');
     $scope = $rootScope.$new();
-
-    $scope.registerDirective = sinon.stub();
 
     element = $compile("<template-component-twitter></template-component-twitter>")($scope);
     $scope = element.scope();
@@ -63,9 +62,9 @@ describe('directive: templateComponentTwitter', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.registerDirective).to.have.been.called;
+    expect(componentsFactory.registerDirective).to.have.been.called;
 
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-data-twitter');
     expect(directive.show).to.be.a('function');
@@ -110,7 +109,7 @@ describe('directive: templateComponentTwitter', function() {
   });
 
   it('should attempt to verify credentials when Twitter is shown', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
     attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
@@ -121,7 +120,7 @@ describe('directive: templateComponentTwitter', function() {
   });
 
   it('should detect when no credentials exist or token is invalid/expired', function(done) {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(false));
     attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
@@ -140,7 +139,7 @@ describe('directive: templateComponentTwitter', function() {
   });
 
   it('should detect when credentials exist', function(done) {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
     attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
@@ -159,7 +158,7 @@ describe('directive: templateComponentTwitter', function() {
   });
 
   it('should detect when a verifying credentials encountered a problem', function(done) {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.reject());
     attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
@@ -180,7 +179,7 @@ describe('directive: templateComponentTwitter', function() {
   describe('load', function () {
     describe('username', function () {
       it('should load data and indicate the username is valid', function() {
-        var directive = $scope.registerDirective.getCall(0).args[0];
+        var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
         attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
         twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
@@ -192,7 +191,7 @@ describe('directive: templateComponentTwitter', function() {
       });
 
       it('should load data and indicate the username is not valid', function() {
-        var directive = $scope.registerDirective.getCall(0).args[0];
+        var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
         attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('@twitterHandleButReallyLongAndNotValid');
         twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
@@ -206,7 +205,7 @@ describe('directive: templateComponentTwitter', function() {
 
     describe('maxitems', function () {
       it('should load data and indicate maxitems is valid', function() {
-        var directive = $scope.registerDirective.getCall(0).args[0];
+        var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
         attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('20');
         twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
@@ -218,7 +217,7 @@ describe('directive: templateComponentTwitter', function() {
       });
 
       it('should load data and indicate maxitems is not valid', function() {
-        var directive = $scope.registerDirective.getCall(0).args[0];
+        var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
         attributeDataFactory.getAvailableAttributeData = sandbox.stub().returns('300');
         twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));

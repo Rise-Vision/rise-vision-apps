@@ -17,7 +17,7 @@ var TemplateEditorPage = function() {
   var imageComponentSelector = '//div[div/span[contains(text(), "Test Instance")]]';
   var imageComponent = element(by.xpath('(' + imageComponentSelector + ')[1]'));
   var imageComponentEdit = element(by.xpath('(' + imageComponentSelector + '/div/a)[1]'));
-  var backToComponentsButton = element(by.css('[ng-click="onBackButton();"]'));
+  var backToComponentsButton = element(by.id('back-button'));
   var financialDataLicenseMessage = element(by.css('.financial-data-license-message'));
   var financialDataLicenseCloseButton = element(by.css('#confirmForm .close'));
   var brandingContainer = element(by.id('branding'));

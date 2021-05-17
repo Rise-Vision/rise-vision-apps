@@ -5,7 +5,6 @@ describe('directive: templateComponent', function () {
     element;
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('storageManagerFactory', function() {
       return {};
@@ -13,12 +12,12 @@ describe('directive: templateComponent', function () {
   }));
 
 
-  beforeEach(inject(function ($compile, $templateCache, $rootScope) {
-    $scope = $rootScope.$new();
-
+  beforeEach(inject(function ($compile, $templateCache, $rootScope, $injector) {
     $templateCache.put('partials/template-editor/component.html', '<p>mock</p>');
-    element = $compile('<template-component></template-component>')($scope);
-    $scope.$digest();
+    element = $compile('<template-component></template-component>')($rootScope.$new());
+    $rootScope.$digest();
+
+    $scope = element.isolateScope();
   }));
 
   it('should exist', function () {

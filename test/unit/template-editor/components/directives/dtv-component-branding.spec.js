@@ -4,12 +4,23 @@ describe('directive: templateComponentBranding', function() {
   var $scope,
       element,
       rootScope,
-      compile;
+      compile,
+      componentsFactory;
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module(mockTranslate()));
+  beforeEach(module(function ($provide) {
+    $provide.service('componentsFactory', function() {
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sinon.stub(),
+        editComponent: sinon.stub()
+      };
+    });
+  }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    componentsFactory = $injector.get('componentsFactory');
+
     rootScope = $rootScope;
     compile = $compile;
     $templateCache.put('partials/template-editor/components/component-branding/component-branding.html', '<p>mock</p>');
@@ -21,10 +32,8 @@ describe('directive: templateComponentBranding', function() {
     element = compile("<template-component-branding></template-component-branding>")(rootScope.$new());
     $scope = element.scope();
 
-    $scope.registerDirective = sinon.stub();
-    $scope.setPanelTitle = sinon.stub();
-    $scope.setPanelIcon = sinon.stub();
-    $scope.editComponent = sinon.stub();
+    componentsFactory.registerDirective = sinon.stub();
+    componentsFactory.editComponent = sinon.stub();
 
     $scope.$digest();
   }
@@ -37,11 +46,11 @@ describe('directive: templateComponentBranding', function() {
     expect($scope).to.be.ok;
     expect($scope.editLogo).to.be.ok;
     expect($scope.editColors).to.be.ok;
-    expect($scope.registerDirective).to.have.been.called;
+    expect(componentsFactory.registerDirective).to.have.been.called;
   });
 
   it('should initialize directive', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-branding');
   });
@@ -49,13 +58,13 @@ describe('directive: templateComponentBranding', function() {
   it('editLogo:', function() {
     $scope.editLogo();
 
-    $scope.editComponent.should.have.been.calledWith({type: 'rise-image-logo'});
+    componentsFactory.editComponent.should.have.been.calledWith({type: 'rise-image-logo'});
   });
 
   it('editColors: ', function() {
     $scope.editColors();
 
-    $scope.editComponent.should.have.been.calledWith({type: 'rise-branding-colors'});
+    componentsFactory.editComponent.should.have.been.calledWith({type: 'rise-branding-colors'});
   });
 
 });

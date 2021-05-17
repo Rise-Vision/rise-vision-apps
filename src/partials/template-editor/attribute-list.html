@@ -3,13 +3,13 @@
 
   <div class="attribute-row">
     <div class="col-xs-10 pl-0 attribute-desc">
-      <component-icon icon="{{ getComponentIcon(brandingComponent) }}" type="{{ getComponentIconType(brandingComponent) }}"></component-icon>
+      <component-icon icon="{{ componentsFactory.getComponentIcon(brandingComponent) }}" type="{{ componentsFactory.getComponentIconType(brandingComponent) }}"></component-icon>
       <span>
         Brand Settings
       </span>
     </div>
     <div class="col-xs-2 pr-0 align-right">
-      <a id="branding-edit" ng-click="editComponent(brandingComponent);">
+      <a id="branding-edit" ng-click="componentsFactory.editComponent(brandingComponent);">
         <span class="attribute-edit text-nowrap">
           <span translate>template.attribute-editor.edit-component</span>
           <i class="fa fa-lg fa-angle-right arrow-icon"></i>
@@ -31,7 +31,7 @@
     </div>
   </div>
   <div class="col-xs-2 pr-0 align-right">
-    <a ng-click="editComponent(schedulesComponent);">
+    <a ng-click="componentsFactory.editComponent(schedulesComponent);">
       <span class="attribute-edit text-nowrap">
         <span translate>template.attribute-editor.edit-component</span>
         <i class="fa fa-lg fa-angle-right arrow-icon"></i>
@@ -43,13 +43,13 @@
 <div id="branding-colors-override" ng-show="colorsComponent">
   <div class="attribute-row">
     <div class="col-xs-10 pl-0 attribute-desc">
-      <component-icon icon="{{ getComponentIcon(colorsComponent) }}" type="{{ getComponentIconType(colorsComponent) }}"></component-icon>
+      <component-icon icon="{{ componentsFactory.getComponentIcon(colorsComponent) }}" type="{{ componentsFactory.getComponentIconType(colorsComponent) }}"></component-icon>
       <span>
         Colors
       </span>
     </div>
     <div class="col-xs-2 pr-0 align-right">
-      <a id="branding-colors-override-edit" ng-click="editComponent(colorsComponent);">
+      <a id="branding-colors-override-edit" ng-click="componentsFactory.editComponent(colorsComponent);">
         <span class="attribute-edit text-nowrap">
           <span translate>template.attribute-editor.edit-component</span>
           <i class="fa fa-lg fa-angle-right arrow-icon"></i>
@@ -59,16 +59,16 @@
   </div>
 </div>
 
-<div ng-mouseleave="highlightComponent(null)">
+<div ng-mouseleave="componentsFactory.highlightComponent(null)">
   <div class="attribute-row attribute-row-hover" ng-repeat="comp in components track by $index">
-    <div class="col-xs-10 pl-0 attribute-desc" ng-mouseover="highlightComponent(comp.id)">
-      <component-icon icon="{{ getComponentIcon(comp) }}" type="{{ getComponentIconType(comp) }}"></component-icon>
+    <div class="col-xs-10 pl-0 attribute-desc" ng-mouseover="componentsFactory.highlightComponent(comp.id)">
+      <component-icon icon="{{ componentsFactory.getComponentIcon(comp) }}" type="{{ componentsFactory.getComponentIconType(comp) }}"></component-icon>
       <span>
         {{ comp.label }}
       </span>
     </div>
     <div class="col-xs-2 pr-0 align-right">
-      <a ng-click="editComponent(comp);">
+      <a ng-click="componentsFactory.editComponent(comp);">
         <span class="attribute-edit text-nowrap">
           <span translate>template.attribute-editor.edit-component</span>
           <i class="fa fa-lg fa-angle-right arrow-icon"></i>

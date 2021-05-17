@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentSchedules', ['scheduleSelectorFactory', '$loading',
-    function (scheduleSelectorFactory, $loading) {
+  .directive('templateComponentSchedules', ['componentsFactory', 'scheduleSelectorFactory', '$loading',
+    function (componentsFactory, scheduleSelectorFactory, $loading) {
       return {
         restrict: 'E',
         scope: true,
@@ -18,7 +18,7 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-schedules',
             element: element
           });

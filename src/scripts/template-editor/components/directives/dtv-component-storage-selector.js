@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('componentStorageSelector', ['$loading', 'filterFilter', 'storageManagerFactory',
+  .directive('componentStorageSelector', ['$loading', 'filterFilter', 'componentsFactory', 'storageManagerFactory',
     'templateEditorUtils',
-    function ($loading, filterFilter, storageManagerFactory, templateEditorUtils) {
+    function ($loading, filterFilter, componentsFactory, storageManagerFactory, templateEditorUtils) {
       return {
         restrict: 'E',
         scope: true,
@@ -34,7 +34,7 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-storage-selector',
             element: element,
             show: function () {
@@ -61,7 +61,7 @@ angular.module('risevision.template-editor.directives')
           });
 
           function _reset() {
-            $scope.resetPanelHeader();
+            componentsFactory.resetPanelHeader();
 
             $scope.folderItems = [];
             $scope.selectedItems = [];
@@ -87,10 +87,10 @@ angular.module('risevision.template-editor.directives')
             var folderName = templateEditorUtils.fileNameOf(folderPath);
 
             if (folderName) {
-              $scope.setPanelIcon('folder', 'streamline');
-              $scope.setPanelTitle(folderName);
+              componentsFactory.setPanelIcon('folder', 'streamline');
+              componentsFactory.setPanelTitle(folderName);
             } else {
-              $scope.resetPanelHeader();
+              componentsFactory.resetPanelHeader();
             }
           };
 
@@ -158,7 +158,7 @@ angular.module('risevision.template-editor.directives')
 
               _reset();
 
-              $scope.showPreviousPage();
+              componentsFactory.showPreviousPage();
             }
           };
 

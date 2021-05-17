@@ -53,7 +53,7 @@ angular.module('risevision.template-editor.directives')
             attributeDataFactory.setAttributeData($scope.componentId, 'items', itemsJson);
           };
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-playlist',
             element: element,
             show: function () {
@@ -343,7 +343,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           var _editComponent = function(item) {
-            $scope.editComponent({
+            componentsFactory.editComponent({
               type: item.tagName,
               id: $scope.componentId + ' ' + $scope.playlistItems.indexOf(item)
             });

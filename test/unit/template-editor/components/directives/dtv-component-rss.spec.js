@@ -3,6 +3,7 @@
 describe('directive: templateComponentRss', function() {
   var $scope,
     element,
+    componentsFactory,
     attributeDataFactory,
     rssFeedValidation,
     sandbox = sinon.sandbox.create();
@@ -15,18 +16,17 @@ describe('directive: templateComponentRss', function() {
   });
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('componentsFactory', function() {
-      return { selected: { id: "TEST-ID" } };
+      return {
+        selected: { id: "TEST-ID" },
+        registerDirective: sandbox.stub()
+      };
     });
 
     $provide.service('attributeDataFactory', function() {
       return {
-        setAttributeData: sinon.stub()
+        setAttributeData: sandbox.stub()
       };
     });
 
@@ -36,12 +36,11 @@ describe('directive: templateComponentRss', function() {
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
 
     $templateCache.put('partials/template-editor/components/component-rss.html', '<p>mock</p>');
     $scope = $rootScope.$new();
-
-    $scope.registerDirective = sinon.stub();
 
     element = $compile("<template-component-rss></template-component-rss>")($scope);
     $scope = element.scope();
@@ -50,16 +49,16 @@ describe('directive: templateComponentRss', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.registerDirective).to.have.been.called;
+    expect(componentsFactory.registerDirective).to.have.been.called;
 
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-data-rss');
     expect(directive.show).to.be.a('function');
   });
 
   it('should load feed url from attribute data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleData = {
       'feedurl': 'http://rss.cnn.com/rss/cnn_topstories.rss'
     };
@@ -75,7 +74,7 @@ describe('directive: templateComponentRss', function() {
   });
 
   it('should load max items from attribute data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleData = {
       'feedurl': 'http://rss.cnn.com/rss/cnn_topstories.rss',
       'maxitems': 5
@@ -92,7 +91,7 @@ describe('directive: templateComponentRss', function() {
   });
 
   it('should set maxItems to 1 when default value and blueprint are undefined', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
 
     attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
       return undefined;
@@ -105,7 +104,7 @@ describe('directive: templateComponentRss', function() {
   });
 
   it('should save feed and check feed parsability and check if valid RSS when is shown', function(done) {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleData = {
       'feedurl': 'http://rss.cnn.com/rss/cnn_topstories.rss',
       'maxitems': 5
@@ -129,7 +128,7 @@ describe('directive: templateComponentRss', function() {
   });
 
   it('should not save or check feed parsability if invalid URL format', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleData = {};
 
     attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
@@ -148,7 +147,7 @@ describe('directive: templateComponentRss', function() {
   });
 
   it('should not save or check feed validity if feed parser response is not VALID', function(done) {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleData = {};
 
     rssFeedValidation.isParsable = sandbox.stub().returns(Q.resolve('NON_FEED'));

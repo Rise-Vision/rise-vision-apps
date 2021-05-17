@@ -1,26 +1,26 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentBranding', [
-    function () {
+  .directive('templateComponentBranding', ['componentsFactory',
+    function (componentsFactory) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-branding/component-branding.html',
         link: function ($scope, element) {
           $scope.editLogo = function () {
-            $scope.editComponent({
+            componentsFactory.editComponent({
               type: 'rise-image-logo'
             });
           };
 
           $scope.editColors = function () {
-            $scope.editComponent({
+            componentsFactory.editComponent({
               type: 'rise-branding-colors'
             });
           };
 
-          $scope.registerDirective({
+          componentsFactory.registerDirective({
             type: 'rise-branding',
             element: element
           });
