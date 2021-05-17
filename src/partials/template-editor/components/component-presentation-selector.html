@@ -12,22 +12,13 @@
     </div>
 
     <div class="row templates-row" ng-show="playlistComponentFactory.templates.items.list.length > 0"
-        ng-repeat="(key, value) in playlistComponentFactory.templates.items.list"
-        ng-click="playlistComponentFactory.templates.select(value)">
-      <div class="col-xs-12 pl-0 pr-0">
-        <span class="templates-selector-checkbox">
-          <input id="{{value.id}}" type="checkbox"
-                ng-click="playlistComponentFactory.templates.select(value)"
-                ng-checked="value.selected">
-          <label for="{{value.id}}">
-            <span></span>
-          </label>
-        </span>
-        <span class="templates-selector-name">
-          <div class="templates-name">{{ value.name }}</div>
-          <div class="templates-status" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised'}">{{ value.revisionStatusName }}</div>
-        </span>
-      </div>
+        ng-repeat="template in playlistComponentFactory.templates.items.list"
+        ng-click="playlistComponentFactory.templates.select(template)">
+      <madero-checkbox id="{{template.id}}" ng-value="template.selected"></madero-checkbox>
+      <label class="templates-selector-name" for="{{template.id}}">
+        <div class="templates-name">{{ template.name }}</div>
+        <div class="templates-status font-weight-normal" ng-class="{'templates-status-revised' : template.revisionStatusName === 'Revised'}">{{ template.revisionStatusName }}</div>
+      </label>
     </div>
   </div>
 
