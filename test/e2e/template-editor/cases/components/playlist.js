@@ -70,7 +70,7 @@ var PlaylistComponentScenarios = function () {
 
         helper.clickWhenClickable(playlistComponentPage.getSelectTemplatesButton(), 'Select Templates');
         browser.sleep(500);
-        helper.waitDisappear(playlistComponentPage.getTemplatesLoaderSpinner(), 'Spinner');
+        helper.waitAppearDisappear(playlistComponentPage.getTemplatesLoaderSpinner(), 'Spinner');
 
         browser.sleep(1000);
         expect(playlistComponentPage.getAddTemplateButton().isDisplayed()).to.eventually.be.true;

@@ -1,5 +1,5 @@
 @media (min-width: $screen-sm) {
-  .rise-playlist-container {
+  .rise-playlist-container, .presentation-selector-container {
     --playlist-button-bar-height: 90px;
     --playlist-selected-title-height: 50px;
     --selector-search-box-height: 60px;
@@ -8,7 +8,7 @@
 }
 
 @media (max-width: $screen-sm) {
-  .rise-playlist-container {
+  .rise-playlist-container, .presentation-selector-container {
     --playlist-button-bar-height: 90px;
     --playlist-selected-title-height: 50px;
     --selector-search-box-height: 60px;
@@ -16,7 +16,7 @@
   }
 }
 
-.rise-playlist-container {
+.rise-playlist-container, .presentation-selector-container {
   --duration-group-offset: 29px;
 
   &.attribute-editor-component {
@@ -104,7 +104,7 @@
     }
   }
 
-.templates-selector-search-box {
+.templates-selector-search-box .input-group {
   height: var(--selector-search-box-height);
   padding: 0px 0px 20px;
   margin: 0px 20px 0px;
@@ -186,7 +186,7 @@
 }
 
 .templates-selector {
-  & .templates-row {
+  & .templates-row label {
     cursor: pointer;
   }
 }
@@ -212,29 +212,10 @@
 
 .templates-selector-checkbox {
   position: absolute;
-
-  input[type=checkbox] { display:none; }
-
-  label {
-    cursor: pointer;
-  }
-
-  input[type="checkbox"] + label span {
-    display: inline-block;
-    vertical-align: middle;
-    width: 20px;
-    height: 35px;
-    background: url('/images/checkbox.svg') 0px center no-repeat;
-  }
-
-  input[type=checkbox]:checked + label span {
-    background: url('/images/checkbox-selected.svg') 0px center no-repeat;
-  }
 }
 
 .templates-selector-name {
   display: inline-block;
-  margin-left: 30px;
 }
 
 .templates-selector-no-results {

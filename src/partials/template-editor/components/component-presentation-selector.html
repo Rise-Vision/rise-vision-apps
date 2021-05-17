@@ -1,0 +1,33 @@
+<div class="presentation-selector-container attribute-editor-component" rv-spinner rv-spinner-key="presentation-selector-loader">
+
+  <div class="playlist-templates-title active-search">
+    <label>Choose A Presentation</label>
+  </div>
+  <search-filter class="templates-selector-search-box" filter-config="filterConfig" search="playlistComponentFactory.search" do-search="playlistComponentFactory.templates.doSearch" icon-set="madero"></search-filter>
+
+  <div class="templates-selector te-scrollable-container active-search"
+       scrolling-list="playlistComponentFactory.templates.load()">
+    <div id="te-playlist-no-results" class="templates-selector-no-results" ng-show="!(playlistComponentFactory.templates.items.list.length > 0)">
+      No Presentations found. To create a new Presentation <a ng-click="createNewTemplate()">click here</a>. 
+    </div>
+
+    <div class="row templates-row" ng-show="playlistComponentFactory.templates.items.list.length > 0"
+        ng-repeat="template in playlistComponentFactory.templates.items.list"
+        ng-click="playlistComponentFactory.templates.select(template)">
+      <madero-checkbox id="{{template.id}}" ng-value="template.selected"></madero-checkbox>
+      <label class="templates-selector-name" for="{{template.id}}">
+        <div class="templates-name">{{ template.name }}</div>
+        <div class="templates-status font-weight-normal" ng-class="{'templates-status-revised' : template.revisionStatusName === 'Revised'}">{{ template.revisionStatusName }}</div>
+      </label>
+    </div>
+  </div>
+
+  <div class="playlist-action-button-bar">
+    <div class="add-templates">
+      <button id="te-playlist-add-template" class="btn btn-primary btn-block" ng-click="addTemplates()" ng-disabled="!playlistComponentFactory.templates.getSelected().length">
+        Add Presentation
+      </button>
+    </div>
+  </div>
+
+</div>

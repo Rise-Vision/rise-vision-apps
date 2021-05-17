@@ -144,6 +144,16 @@ describe('service: componentsFactory:', function() {
       expect(directive.panel).to.equal(".rise-playlist-container");
     });
 
+    it('rise-presentation-selector', function() {
+      var directive = COMPONENTS_MAP['rise-presentation-selector'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal("rise-presentation-selector");
+      expect(directive.iconType).to.equal("streamline");
+      expect(directive.icon).to.exist;
+      expect(directive.panel).to.equal(".presentation-selector-container");
+    });
+
     it('rise-data-rss', function() {
       var directive = COMPONENTS_MAP['rise-data-rss'];
 
@@ -230,7 +240,7 @@ describe('service: componentsFactory:', function() {
   });
 
   it('COMPONENTS_ARRAY', function() {
-    expect(COMPONENTS_ARRAY).to.have.length(18);
+    expect(COMPONENTS_ARRAY).to.have.length(19);
 
     for (var i = 0; i < COMPONENTS_ARRAY.length; i++) {
       expect(COMPONENTS_ARRAY[i].type).to.be.ok;
