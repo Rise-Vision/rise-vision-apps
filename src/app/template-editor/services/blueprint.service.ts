@@ -15,10 +15,10 @@ export class BlueprintService {
   public loadingBlueprint = false;
   public blueprintData;
   
-  constructor(private $http: HttpClient) {     
+  constructor(private httpClient: HttpClient) {     
   }
 
-  getBlueprintCached(productCode, readOnly) {
+  getBlueprintCached(productCode, readOnly?) {
     var blueprint = this._blueprints[productCode];
 
     if (blueprint) {
@@ -39,7 +39,7 @@ export class BlueprintService {
     this.loadingBlueprint = true;
 
     let self = this;
-    return this.$http.get(url)
+    return this.httpClient.get(url)
       .toPromise()
       .then(function (response :any) {
         if (!readOnly) {
@@ -55,7 +55,7 @@ export class BlueprintService {
       });
   }
 
-  isPlayUntilDone(productCode) {
+  isPlayUntilDone(productCode?) {
     return this.getBlueprintCached(productCode, true)
       .then(function (result) {
         return !!(result && result.playUntilDone);
@@ -70,7 +70,7 @@ export class BlueprintService {
     return (!!this.blueprintData && this.blueprintData.riseInit === true);
   }
 
-  getBlueprintData(componentId, attributeKey) {
+  getBlueprintData(componentId, attributeKey?) {
     var components = this.blueprintData.components;
     var component = _.find(components, {
       id: componentId
