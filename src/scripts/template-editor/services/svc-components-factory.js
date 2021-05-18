@@ -48,10 +48,7 @@ angular.module('risevision.template-editor.services')
       panel: '.image-component-container',
       title: 'Image',
       playUntilDone: true,
-      visual: true,
-      defaultAttributes: {
-        responsive: true
-      }
+      visual: true
     },
     'rise-image-logo': {
       type: 'rise-image-logo',
