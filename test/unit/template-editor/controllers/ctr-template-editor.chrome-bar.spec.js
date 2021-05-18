@@ -34,6 +34,11 @@ describe('controller: TemplateEditor : Chrome Bar', function() {
         hasSchedules: function () {}
       };
     });
+    $provide.factory('componentsFactory', function() {
+      return {
+      };
+    });
+    
 
   }));
 

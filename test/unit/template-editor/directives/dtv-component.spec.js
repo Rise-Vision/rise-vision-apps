@@ -9,6 +9,9 @@ describe('directive: templateComponent', function () {
     $provide.service('storageManagerFactory', function() {
       return {};
     });
+    $provide.service('componentsFactory', function() {
+      return {};
+    });    
   }));
 
 
