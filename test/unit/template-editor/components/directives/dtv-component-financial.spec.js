@@ -55,6 +55,10 @@ describe('directive: TemplateComponentFinancial', function() {
       };
     });
 
+    $provide.service('blueprintFactory', function() {
+      return {};
+    });
+
     $provide.service('attributeDataFactory', function() {
       return {
         setAttributeData: sinon.stub()

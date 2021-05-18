@@ -1,8 +1,11 @@
-'use strict';
+import {expect} from 'chai';
 
-describe('service: blueprint factory', function() {
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module(mockTranslate()));
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { BlueprintService } from './blueprint.service';
+
+describe('BlueprintService', () => {
+  let blueprintFactory: BlueprintService;
 
   var SAMPLE_COMPONENTS = [
     {
@@ -34,14 +37,25 @@ describe('service: blueprint factory', function() {
   ];
 
   var PRODUCT_CODE = "template123";
-  var blueprintFactory, httpReturn, $httpBackend;
-  beforeEach(function(){
-    inject(function($injector){
-      $httpBackend = $injector.get('$httpBackend');
-      blueprintFactory = $injector.get('blueprintFactory');
-    });
-  });
 
+  let $httpBackend : HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ]
+    });
+
+    blueprintFactory = TestBed.inject(BlueprintService);
+    $httpBackend = TestBed.inject(HttpTestingController);
+
+  })
+  
+  afterEach(() => {
+    $httpBackend.verify();
+  });
+ 
   it('should exist',function(){
     expect(blueprintFactory).to.be.ok;
     expect(blueprintFactory.getBlueprintCached).to.be.a('function');
@@ -53,8 +67,6 @@ describe('service: blueprint factory', function() {
   describe('getBlueprintCached: ', function() {
 
     it('should call API and return blueprintData',function(done) {
-      $httpBackend.expect('GET', 'https://widgets.risevision.com/staging/templates/template123/blueprint.json').respond(200, 'blueprintData');
-
       blueprintFactory.getBlueprintCached(PRODUCT_CODE)
         .then(function(resp) {
           expect(resp).to.equal('blueprintData');
@@ -63,27 +75,23 @@ describe('service: blueprint factory', function() {
 
           done();
         });
-
       expect(blueprintFactory.loadingBlueprint).to.be.true;
-
-      $httpBackend.flush();
+      $httpBackend.expectOne('https://widgets.risevision.com/staging/templates/template123/blueprint.json').flush('blueprintData');
     });
 
     it('should populate factory object on api response',function(done) {
-      $httpBackend.expect('GET', 'https://widgets.risevision.com/staging/templates/template123/blueprint.json').respond(200, 'blueprintData');
 
       blueprintFactory.getBlueprintCached(PRODUCT_CODE)
         .then(function(resp) {
           expect(blueprintFactory.blueprintData).to.equal('blueprintData');
           done();
         });
+      $httpBackend.expectOne('https://widgets.risevision.com/staging/templates/template123/blueprint.json').flush('blueprintData');
 
-      $httpBackend.flush();
     });
 
-    it('should cache api response',function(done) {
-      $httpBackend.expect('GET', 'https://widgets.risevision.com/staging/templates/template123/blueprint.json').respond(200, 'blueprintData');
-
+ 
+    it('should cache api response',function(done) {      
       blueprintFactory.getBlueprintCached(PRODUCT_CODE)
         .then(function(resp) {
           expect(blueprintFactory.blueprintData).to.equal('blueprintData');
@@ -96,12 +104,10 @@ describe('service: blueprint factory', function() {
             });
         });
 
-      $httpBackend.flush();
+      $httpBackend.expectOne('https://widgets.risevision.com/staging/templates/template123/blueprint.json').flush('blueprintData');
     });
 
     it('should reject on http error',function(done) {
-      $httpBackend.expect('GET', 'https://widgets.risevision.com/staging/templates/template123/blueprint.json').respond(500, { error: 'Error' });
-
       blueprintFactory.getBlueprintCached(PRODUCT_CODE)
         .then(null,function(error) {
           expect(error).to.be.ok;
@@ -113,21 +119,21 @@ describe('service: blueprint factory', function() {
 
       expect(blueprintFactory.loadingBlueprint).to.be.true;
 
-      $httpBackend.flush();
+      $httpBackend.expectOne('https://widgets.risevision.com/staging/templates/template123/blueprint.json').error(new ErrorEvent('Error'));
     });
   });
 
   describe('isPlayUntilDone: ', function() {
 
     it('should return a promise',function() {
-      sinon.stub(blueprintFactory, 'getBlueprintCached').returns(Q.resolve());
+      sinon.stub(blueprintFactory, 'getBlueprintCached').returns(Promise.resolve());
       expect(blueprintFactory.isPlayUntilDone('productCode').then).to.be.a('function');
 
       blueprintFactory.getBlueprintCached.should.have.been.calledWith('productCode', true);
     });
 
     it('should return false if blueprintData is not populated',function() {
-      sinon.stub(blueprintFactory, 'getBlueprintCached').returns(Q.resolve());
+      sinon.stub(blueprintFactory, 'getBlueprintCached').returns(Promise.resolve());
 
       return blueprintFactory.isPlayUntilDone().then(function(result) {
         expect(result).to.be.false;
@@ -135,7 +141,7 @@ describe('service: blueprint factory', function() {
     });
 
     it('should return true if blueprintData exists and playUntilDone is true',function() {
-      sinon.stub(blueprintFactory, 'getBlueprintCached').returns(Q.resolve({playUntilDone: true}));
+      sinon.stub(blueprintFactory, 'getBlueprintCached').returns(Promise.resolve({playUntilDone: true}));
 
       return blueprintFactory.isPlayUntilDone().then(function(result) {
         expect(result).to.be.true;
@@ -143,7 +149,7 @@ describe('service: blueprint factory', function() {
     });
 
     it('should return true if blueprintData exists and playUntilDone is not true',function() {
-      sinon.stub(blueprintFactory, 'getBlueprintCached').returns(Q.resolve({}));
+      sinon.stub(blueprintFactory, 'getBlueprintCached').returns(Promise.resolve({}));
 
       return blueprintFactory.isPlayUntilDone().then(function(result) {
         expect(result).to.be.false;
