@@ -2,120 +2,119 @@
 rv-spinner rv-spinner-key="rise-playlist-loader">
 
   <!-- default view -->
-  <div ng-show="!view">
-    <div class="playlist-templates-title" ng-show="playlistItems.length">
-      <label ng-show="!showComponentsDropdown()">Embedded Presentations:</label>
-      <label ng-show="showComponentsDropdown()">Playlist Items:</label>
-    </div>
-    <div class="templates-selector te-scrollable-container" ng-show="playlistItems.length">
-      <div rv-sortable on-sort="sortItem(evt)" append-to=".component-container" class="sortable-list">
-        <div class="row templates-row  rv-sortable-item"
-            ng-repeat="(key, value) in playlistItems">
-          <div class="list-grip pr-4 rv-sortable-handle">
-            <img class="img-responsive" src="../images/navigation-menu-vertical.svg">
-          </div>
-          <div class="col-xs-10 pl-0 pr-0">
-            <span class="playlist-item-name">
-              <div class="templates-name" ng-show="isEmbeddedTemplate(value)">{{ value.name }}</div>
-              <div class="templates-name" ng-hide="isEmbeddedTemplate(value)">{{ getComponentByType(value.tagName).title }}</div>
-              <div class="templates-status templates-status-inline" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised' || value.removed}" ng-show="isEmbeddedTemplate(value)">{{ value.revisionStatusName }}</div>
-              <div class="templates-status templates-status-inline" ng-hide="isEmbeddedTemplate(value) || !addVisualComponents">
-                <a href="#" ng-click="editPlaylistItem(key)">
-                   Edit
-                </a>
-              </div>
-              <div class="templates-status templates-status-inline" ng-hide="value.removed"> • {{ durationToText(value) }}</div>
-            </span>
-          </div>
-          <div class="col-xs-2 pr-0 playlist-item-actions">
-            <a href="#"
-               ng-click="editProperties(key)" ng-hide="value.removed">
-               <streamline-icon class="u_margin-left streamline-component-icon" name="edit" width="16" height="16"></streamline-icon>
-            </a>
-            <a href="#"
-               ng-click="removeItem(key)">
-               <streamline-icon class="u_margin-left streamline-component-icon" name="trash" width="16" height="16"></streamline-icon>
-            </a>
-          </div>
+  <div class="playlist-templates-title" ng-show="playlistItems.length">
+    <label ng-show="!showComponentsDropdown()">Embedded Presentations:</label>
+    <label ng-show="showComponentsDropdown()">Playlist Items:</label>
+  </div>
+  <div class="templates-selector te-scrollable-container" ng-show="playlistItems.length">
+    <div rv-sortable on-sort="sortItem(evt)" append-to=".component-container" class="sortable-list">
+      <div class="row templates-row  rv-sortable-item"
+          ng-repeat="(key, value) in playlistItems">
+        <div class="list-grip pr-4 rv-sortable-handle">
+          <img class="img-responsive" src="../images/navigation-menu-vertical.svg">
         </div>
-      </div>
-    </div>
-
-    <div class="playlist-action-button-bar" ng-class="{'no-selected-templates' : !playlistItems.length || playlistItems.length === 0}">
-      <div class="select-templates">
-        <button id="te-playlist-select-templates" class="btn btn-primary btn-block" ng-click="showAddTemplates()" ng-if="!showComponentsDropdown()">
-          Select Presentations
-        </button>
-        <div class="btn-group btn-block" dropdown ng-class="{'dropup' : playlistItems.length && playlistItems.length > 0}" ng-if="showComponentsDropdown()">
-          <button id="addPlaylistItemButton" type="button" dropdown-toggle class="btn btn-primary btn-block">Add</button>
-          <div class="dropdown-menu playlist-menu" role="menu">
-            <ul>
-            <li>
-              <a class="u_clickable" id="addPresentationItemButton" ng-click="showAddTemplates()">
-                Presentations
+        <div class="col-xs-10 pl-0 pr-0">
+          <span class="playlist-item-name">
+            <div class="templates-name" ng-show="isEmbeddedTemplate(value)">{{ value.name }}</div>
+            <div class="templates-name" ng-hide="isEmbeddedTemplate(value)">{{ getComponentByType(value.tagName).title }}</div>
+            <div class="templates-status templates-status-inline" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised' || value.removed}" ng-show="isEmbeddedTemplate(value)">{{ value.revisionStatusName }}</div>
+            <div class="templates-status templates-status-inline" ng-hide="isEmbeddedTemplate(value) || !addVisualComponents">
+              <a href="#" ng-click="editPlaylistItem(key)">
+                 Edit
               </a>
-            </li>
-            <li ng-repeat="component in playlistComponents">
-              <a class="u_clickable" id="addTextButton" ng-click="addPlaylistItem(component.type)">
-                {{component.title}}
-              </a>
-            </li>
-            </ul>
-          </div>
+            </div>
+            <div class="templates-status templates-status-inline" ng-hide="value.removed"> • {{ durationToText(value) }}</div>
+          </span>
+        </div>
+        <div class="col-xs-2 pr-0 playlist-item-actions">
+          <a href="#"
+             ng-click="editProperties(key)" ng-hide="value.removed">
+             <streamline-icon class="u_margin-left streamline-component-icon" name="edit" width="16" height="16"></streamline-icon>
+          </a>
+          <a href="#"
+             ng-click="removeItem(key)">
+             <streamline-icon class="u_margin-left streamline-component-icon" name="trash" width="16" height="16"></streamline-icon>
+          </a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- "edit" view -->
-  <div ng-show="view === 'edit'">
-    <div class="form-group has-feedback">
-
-      <div class="attribute-editor-row">
-        <label class="control-label" for="te-playlist-item-duration">Duration:</label>
-        <div  ng-show="selectedItem['play-until-done-supported']">
-          <div class="madero-radio">
-            <input type="radio" ng-model="selectedItem['play-until-done']" value="true" name="pud" id="te-playlist-item-pud-true" ng-change="saveProperties()" aria-required="true" required>
-            <label for="te-playlist-item-pud-true">
-              Play until done (PUD).
-            </label>
-          </div>
-          <div class="madero-radio">
-            <input type="radio" ng-model="selectedItem['play-until-done']" value="false" name="pud" id="te-playlist-item-pud-false" ng-change="saveProperties()" aria-required="true" required>
-            <label for="te-playlist-item-pud-false">
-              A specific time period.
-            </label>
-          </div>
+  <div class="playlist-action-button-bar" ng-class="{'no-selected-templates' : !playlistItems.length || playlistItems.length === 0}">
+    <div class="select-templates">
+      <button id="te-playlist-select-templates" class="btn btn-primary btn-block" ng-click="showAddTemplates()" ng-if="!showComponentsDropdown()">
+        Select Presentations
+      </button>
+      <div class="btn-group btn-block" dropdown ng-class="{'dropup' : playlistItems.length && playlistItems.length > 0}" ng-if="showComponentsDropdown()">
+        <button id="addPlaylistItemButton" type="button" dropdown-toggle class="btn btn-primary btn-block">Add</button>
+        <div class="dropdown-menu playlist-menu" role="menu">
+          <ul>
+          <li>
+            <a class="u_clickable" id="addPresentationItemButton" ng-click="showAddTemplates()">
+              Presentations
+            </a>
+          </li>
+          <li ng-repeat="component in playlistComponents">
+            <a class="u_clickable" id="addTextButton" ng-click="addPlaylistItem(component.type)">
+              {{component.title}}
+            </a>
+          </li>
+          </ul>
         </div>
       </div>
-
-      <div class="attribute-editor-row" ng-show="selectedItem['play-until-done'] === 'false'">
-        <!-- Use the <form> tag in order to handle "debounce" option correctly for the <input> tag.
-        That way the model value is processed immeditly on Form submit and saveProperties() is called only once. -->
-        <form>
-          <div class="input-group">
-            <input type="number" id="te-playlist-item-duration" class="form-control" ng-class="{'duration-input-group' : selectedItem['play-until-done-supported']}" ng-model="selectedItem.duration" placeholder="Enter duration" ng-model-options="{ debounce: 1000 }" ng-change="saveProperties()">
-            <span class="input-group-addon">seconds</span>
-          </div>
-        </form>
-      </div>
-
-      <div class="attribute-editor-row">
-        <label class="control-label" for="te-playlist-item-transition">Transition:</label>
-        <select id="te-playlist-item-transition" ng-model="selectedItem['transition-type']" class="form-control" ng-change="saveProperties()">
-          <option value="normal">No transition</option>
-          <option value="fadeIn">Fade in</option>
-          <option value="slideFromLeft">Slide from left</option>
-          <option value="slideFromRight">Slide from right</option>
-          <option value="slideFromTop">Slide from top</option>
-          <option value="slideFromBottom">Slide from bottom</option>
-          <option value="stripesHorizontal">Stripes horizontal</option>
-          <option value="stripesVertical">Stripes vertical</option>
-          <option value="zoomIn">Zoom in</option>
-        </select>
-      </div>
-
     </div>
   </div>
 
+</div>
+
+<!-- "edit" view -->
+<div class="playlist-item-container attribute-editor-component" style="display:none;"
+  rv-spinner rv-spinner-key="rise-playlist-loader">
+  <div class="form-group has-feedback">
+
+    <div class="attribute-editor-row">
+      <label class="control-label" for="te-playlist-item-duration">Duration:</label>
+      <div  ng-show="selectedItem['play-until-done-supported']">
+        <div class="madero-radio">
+          <input type="radio" ng-model="selectedItem['play-until-done']" value="true" name="pud" id="te-playlist-item-pud-true" ng-change="saveProperties()" aria-required="true" required>
+          <label for="te-playlist-item-pud-true">
+            Play until done (PUD).
+          </label>
+        </div>
+        <div class="madero-radio">
+          <input type="radio" ng-model="selectedItem['play-until-done']" value="false" name="pud" id="te-playlist-item-pud-false" ng-change="saveProperties()" aria-required="true" required>
+          <label for="te-playlist-item-pud-false">
+            A specific time period.
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="attribute-editor-row" ng-show="selectedItem['play-until-done'] === 'false'">
+      <!-- Use the <form> tag in order to handle "debounce" option correctly for the <input> tag.
+      That way the model value is processed immeditly on Form submit and saveProperties() is called only once. -->
+      <form>
+        <div class="input-group">
+          <input type="number" id="te-playlist-item-duration" class="form-control" ng-class="{'duration-input-group' : selectedItem['play-until-done-supported']}" ng-model="selectedItem.duration" placeholder="Enter duration" ng-model-options="{ debounce: 1000 }" ng-change="saveProperties()">
+          <span class="input-group-addon">seconds</span>
+        </div>
+      </form>
+    </div>
+
+    <div class="attribute-editor-row">
+      <label class="control-label" for="te-playlist-item-transition">Transition:</label>
+      <select id="te-playlist-item-transition" ng-model="selectedItem['transition-type']" class="form-control" ng-change="saveProperties()">
+        <option value="normal">No transition</option>
+        <option value="fadeIn">Fade in</option>
+        <option value="slideFromLeft">Slide from left</option>
+        <option value="slideFromRight">Slide from right</option>
+        <option value="slideFromTop">Slide from top</option>
+        <option value="slideFromBottom">Slide from bottom</option>
+        <option value="stripesHorizontal">Stripes horizontal</option>
+        <option value="stripesVertical">Stripes vertical</option>
+        <option value="zoomIn">Zoom in</option>
+      </select>
+    </div>
+
+  </div>
 </div>

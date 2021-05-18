@@ -67,6 +67,13 @@ angular.module('risevision.template-editor.services')
       panel: '.rise-playlist-container',
       title: 'Playlist'
     },
+    'rise-playlist-item': {
+      type: 'rise-playlist-item',
+      iconType: 'streamline',
+      icon: 'embedded-template',
+      panel: '.playlist-item-container',
+      title: 'Playlist Item'
+    },
     'rise-presentation-selector': {
       type: 'rise-presentation-selector',
       iconType: 'streamline',
@@ -294,12 +301,12 @@ angular.module('risevision.template-editor.services')
         var currentPage = factory.pages.length > 0 ? factory.pages.pop() : null;
         var previousPage = factory.pages.length > 0 ? factory.pages[factory.pages.length - 1] : null;
 
-        _swapToRight(currentPage, previousPage);
-
         if (!previousPage) {
           factory.backToList();
         } else {
           factory.selected = previousPage;
+
+          _swapToRight(currentPage, previousPage);
         }
 
         return !!previousPage;
@@ -364,9 +371,11 @@ angular.module('risevision.template-editor.services')
 
       function _hideElement(component, delay) {
         var directive = _getDirective(component);
+        var selectedDirective = _getDirective(factory.getCurrentPage());
+
         var element = directive && directive.panel && templateEditorUtils.findElement(directive.panel);
 
-        if (directive && directive.element) {
+        if (directive && directive.element && directive.element !== selectedDirective.element) {
           directive.element.hide();
         }
 

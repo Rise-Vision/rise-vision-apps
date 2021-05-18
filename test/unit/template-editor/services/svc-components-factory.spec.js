@@ -144,6 +144,16 @@ describe('service: componentsFactory:', function() {
       expect(directive.panel).to.equal(".rise-playlist-container");
     });
 
+    it('rise-playlist-item', function() {
+      var directive = COMPONENTS_MAP['rise-playlist-item'];
+
+      expect(directive).to.be.ok;
+      expect(directive.type).to.equal("rise-playlist-item");
+      expect(directive.iconType).to.equal("streamline");
+      expect(directive.icon).to.exist;
+      expect(directive.panel).to.equal(".playlist-item-container");
+    });
+
     it('rise-presentation-selector', function() {
       var directive = COMPONENTS_MAP['rise-presentation-selector'];
 
@@ -240,7 +250,7 @@ describe('service: componentsFactory:', function() {
   });
 
   it('COMPONENTS_ARRAY', function() {
-    expect(COMPONENTS_ARRAY).to.have.length(19);
+    expect(COMPONENTS_ARRAY).to.have.length(20);
 
     for (var i = 0; i < COMPONENTS_ARRAY.length; i++) {
       expect(COMPONENTS_ARRAY[i].type).to.be.ok;
@@ -820,57 +830,94 @@ describe('service: componentsFactory:', function() {
       expect(componentsFactory.pages).to.deep.equal(['selector1', 'selector2']);
     });
 
-    it('_swapToLeft:', function(done) {
-      var directive1 = {
-        type: 'rise-test-1',
-        panel: 'panel1',
-        element: {
-          hide: sandbox.stub(),
+    describe('_swapToLeft:', function() {
+      var directive1, directive2;
+      var component1, component2;
+
+      beforeEach(function() {
+        directive1 = {
+          type: 'rise-test-1',
+          panel: 'panel1',
+          element: {
+            hide: sandbox.stub(),
+            show: sandbox.stub()
+          },
           show: sandbox.stub()
-        },
-        show: sandbox.stub()
-      };
-      var directive2 = {
-        type: 'rise-test-2',
-        panel: 'panel2',
-        element: {
-          hide: sandbox.stub(),
+        };
+        directive2 = {
+          type: 'rise-test-2',
+          panel: 'panel2',
+          element: {
+            hide: sandbox.stub(),
+            show: sandbox.stub()
+          },
           show: sandbox.stub()
-        },
-        show: sandbox.stub()
-      };
+        };
 
-      var component1 = {
-        type: 'rise-test-1'
-      };
-      var component2 = {
-        type: 'rise-test-2'
-      };
+        component1 = {
+          type: 'rise-test-1'
+        };
+        component2 = {
+          type: 'rise-test-2'
+        };
 
-      componentsFactory.registerDirective(directive1);
-      componentsFactory.registerDirective(directive2);
+        componentsFactory.registerDirective(directive1);
+        componentsFactory.registerDirective(directive2);
 
-      componentsFactory.pages.push(component1);
+        directive1.element.hide.reset();
+        directive2.element.hide.reset();
+      });
 
-      componentsFactory.showNextPage(component2);
+      it('should swap left', function(done) {
+        componentsFactory.pages.push(component1);
 
-      directive1.element.hide.should.have.been.called;
-      templateEditorUtils.findElement.should.have.been.calledWith('panel1');
+        componentsFactory.showNextPage(component2);
 
-      directive2.element.show.should.have.been.called;
-      templateEditorUtils.findElement.should.have.been.calledWith('panel2');
+        directive1.element.hide.should.have.been.called;
+        templateEditorUtils.findElement.should.have.been.calledWith('panel1');
 
-      templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-right');
-      templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-left');
+        directive2.element.show.should.have.been.called;
+        templateEditorUtils.findElement.should.have.been.calledWith('panel2');
 
-      templateEditorUtils.elementStub.addClass.should.have.been.calledWith('attribute-editor-show-from-right');
+        templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-right');
+        templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-left');
 
-      setTimeout(function() {
-        templateEditorUtils.elementStub.hide.should.have.been.called;
-        templateEditorUtils.elementStub.show.should.have.been.called;
+        templateEditorUtils.elementStub.addClass.should.have.been.calledWith('attribute-editor-show-from-right');
 
-        done();
-      }, 10);
+        setTimeout(function() {
+          templateEditorUtils.elementStub.hide.should.have.been.called;
+          templateEditorUtils.elementStub.show.should.have.been.called;
+
+          done();
+        }, 10);
+      });
+      
+      it('should not hide the element if its the same', function() {
+        directive2.element = directive1.element;
+
+        componentsFactory.pages.push(component1);
+
+        componentsFactory.showNextPage(component2);
+
+        directive1.element.hide.should.not.have.been.called;
+        directive1.element.show.should.have.been.called;
+      });
+
+      it('should handle missing page', function(done) {
+        componentsFactory.showNextPage(component2);
+
+        directive2.element.show.should.have.been.called;
+        templateEditorUtils.findElement.should.have.been.calledWith('panel2');
+
+        templateEditorUtils.elementStub.addClass.should.have.been.calledWith('attribute-editor-show-from-right');
+
+        setTimeout(function() {
+          templateEditorUtils.elementStub.show.should.have.been.called;
+
+          done();
+        }, 10);
+      });
+
     });
 
   });
@@ -903,58 +950,81 @@ describe('service: componentsFactory:', function() {
       expect(componentsFactory.pages).to.deep.equal(['selector1']);
     });
 
-    it('_swapToRight:', function(done) {
-      var directive1 = {
-        type: 'rise-test-1',
-        panel: 'panel1',
-        element: {
-          hide: sandbox.stub(),
+    describe('_swapToRight:', function() {
+      var directive1, directive2;
+      var component1, component2;
+
+      beforeEach(function() {
+        directive1 = {
+          type: 'rise-test-1',
+          panel: 'panel1',
+          element: {
+            hide: sandbox.stub(),
+            show: sandbox.stub()
+          },
           show: sandbox.stub()
-        },
-        show: sandbox.stub()
-      };
-      var directive2 = {
-        type: 'rise-test-2',
-        panel: 'panel2',
-        element: {
-          hide: sandbox.stub(),
+        };
+        directive2 = {
+          type: 'rise-test-2',
+          panel: 'panel2',
+          element: {
+            hide: sandbox.stub(),
+            show: sandbox.stub()
+          },
           show: sandbox.stub()
-        },
-        show: sandbox.stub()
-      };
+        };
 
-      var component1 = {
-        type: 'rise-test-1'
-      };
-      var component2 = {
-        type: 'rise-test-2'
-      };
+        component1 = {
+          type: 'rise-test-1'
+        };
+        component2 = {
+          type: 'rise-test-2'
+        };
 
-      componentsFactory.registerDirective(directive1);
-      componentsFactory.registerDirective(directive2);
+        componentsFactory.registerDirective(directive1);
+        componentsFactory.registerDirective(directive2);
 
-      componentsFactory.pages.push(component1);
-      componentsFactory.pages.push(component2);
+        directive1.element.hide.reset();
+        directive2.element.hide.reset();
+      });
 
-      componentsFactory.showPreviousPage();
+      it('should swap right', function(done) {
+        componentsFactory.pages.push(component1);
+        componentsFactory.pages.push(component2);
 
-      directive1.element.show.should.have.been.called;
-      templateEditorUtils.findElement.should.have.been.calledWith('panel1');
+        componentsFactory.showPreviousPage();
 
-      directive2.element.hide.should.have.been.called;
-      templateEditorUtils.findElement.should.have.been.calledWith('panel2');
+        directive1.element.show.should.have.been.called;
+        templateEditorUtils.findElement.should.have.been.calledWith('panel1');
 
-      templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-right');
-      templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-left');
+        directive2.element.hide.should.have.been.called;
+        templateEditorUtils.findElement.should.have.been.calledWith('panel2');
 
-      templateEditorUtils.elementStub.addClass.should.have.been.calledWith('attribute-editor-show-from-left');
+        templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-right');
+        templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-left');
 
-      setTimeout(function() {
-        templateEditorUtils.elementStub.hide.should.have.been.called;
-        templateEditorUtils.elementStub.show.should.have.been.called;
+        templateEditorUtils.elementStub.addClass.should.have.been.calledWith('attribute-editor-show-from-left');
 
-        done();
-      }, 10);
+        setTimeout(function() {
+          templateEditorUtils.elementStub.hide.should.have.been.called;
+          templateEditorUtils.elementStub.show.should.have.been.called;
+
+          done();
+        }, 10);
+      });
+
+      it('should not hide the element if its the same', function() {
+        directive2.element = directive1.element;
+
+        componentsFactory.pages.push(component1);
+        componentsFactory.pages.push(component2);
+
+        componentsFactory.showPreviousPage();
+
+        directive1.element.hide.should.not.have.been.called;
+        directive1.element.show.should.have.been.called;
+      });
+
     });
 
   });

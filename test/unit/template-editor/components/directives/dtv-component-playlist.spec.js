@@ -148,27 +148,16 @@ describe("directive: templateComponentPlaylist", function() {
 
   describe('registerDirective:', function() {
     it('should initialize', function() {
-      componentsFactory.registerDirective.should.have.been.called;
+      componentsFactory.registerDirective.should.have.been.calledTwice;
 
-      var directive = componentsFactory.registerDirective.getCall(0).args[0];
-      expect(directive).to.be.ok;
-      expect(directive.type).to.equal("rise-playlist");
-      expect(directive.show).to.be.a("function");
-      expect(directive.onBackHandler).to.be.a("function");
-    });
+      var playlistDirective = componentsFactory.registerDirective.getCall(0).args[0];
+      expect(playlistDirective).to.be.ok;
+      expect(playlistDirective.type).to.equal("rise-playlist");
+      expect(playlistDirective.show).to.be.a("function");
 
-    describe('onBackHandler:', function() {
-      it ('should enable default navigation if no view is active:', function() {
-        expect(componentsFactory.registerDirective.getCall(0).args[0].onBackHandler()).to.not.be.ok;
-        expect($scope.view).to.not.be.ok;
-      });
-
-      it ('should reset view and return true:', function() {
-        $scope.view = 'some-view';
-
-        expect(componentsFactory.registerDirective.getCall(0).args[0].onBackHandler()).to.be.true;
-        expect($scope.view).to.not.be.ok;
-      });
+      var playlistItemDirective = componentsFactory.registerDirective.getCall(1).args[0];
+      expect(playlistItemDirective).to.be.ok;
+      expect(playlistItemDirective.type).to.equal("rise-playlist-item");
     });
 
     describe('show:', function() {
@@ -378,14 +367,12 @@ describe("directive: templateComponentPlaylist", function() {
     });
   });
 
-  it("showPlaylistItems:", function() {
-    $scope.showPlaylistItems();
-    expect($scope.view).to.equal("");
-  });
-
   it("showProperties:", function() {
     $scope.showProperties();
-    expect($scope.view).to.equal("edit");
+
+    componentsFactory.editComponent.should.have.been.calledWith({
+      type: 'rise-playlist-item'      
+    });
   });
 
   it("showAddTemplates:", function() {
@@ -448,6 +435,10 @@ describe("directive: templateComponentPlaylist", function() {
   });
 
   describe('editProperties:', function() {
+    beforeEach(function() {
+      sandbox.stub($scope, 'showProperties');
+    });
+
     describe('embedded template:', function() {
       it("should edit properties of a playlist item", function(done) {
         $scope.playlistItems = samplePlaylistItems;
@@ -463,7 +454,7 @@ describe("directive: templateComponentPlaylist", function() {
           expect($scope.selectedItem["duration"]).to.equal(20);
           expect($scope.selectedItem["transition-type"]).to.equal("fadeIn");
 
-          expect($scope.view).to.equal("edit");
+          $scope.showProperties.should.have.been.called;
 
           done();
         }, 10);
@@ -484,7 +475,7 @@ describe("directive: templateComponentPlaylist", function() {
           expect($scope.selectedItem["duration"]).to.equal(20);
           expect($scope.selectedItem["transition-type"]).to.equal("fadeIn");
 
-          expect($scope.view).to.equal("edit");
+          $scope.showProperties.should.have.been.called;
 
           done();
         }, 10);
@@ -505,7 +496,7 @@ describe("directive: templateComponentPlaylist", function() {
           expect($scope.selectedItem["duration"]).to.equal(20);
           expect($scope.selectedItem["transition-type"]).to.equal("fadeIn");
 
-          expect($scope.view).to.equal("edit");
+          $scope.showProperties.should.have.been.called;
 
           done();
         }, 10);
@@ -526,7 +517,7 @@ describe("directive: templateComponentPlaylist", function() {
         expect($scope.selectedItem["duration"]).to.equal(10);
         expect($scope.selectedItem["transition-type"]).to.equal("fadeIn");
 
-        expect($scope.view).to.equal("edit");
+        $scope.showProperties.should.have.been.called;
       });
     });
   });
