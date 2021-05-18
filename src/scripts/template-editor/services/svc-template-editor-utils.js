@@ -84,8 +84,12 @@ angular.module('risevision.template-editor.services')
         return regularFiles.length > 0;
       };
 
-      svc.findElement = function (selector) {
-        return document.querySelector(selector) && angular.element(document.querySelector(selector));
+      svc.findElement = function (selector, parent) {
+        if (parent) {
+          return parent.find(selector);
+        } else {
+          return document.querySelector(selector) && angular.element(document.querySelector(selector));          
+        }
       };
 
       svc.showMessageWindow = function (title, message, buttonLabel) {

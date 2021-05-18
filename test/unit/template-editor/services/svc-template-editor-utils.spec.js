@@ -193,6 +193,27 @@ describe('service: templateEditorUtils:', function() {
     });
   });
 
+  describe('findElement:', function() {
+    it('should look for child elements if parent is available', function() {
+      var parent = {
+        find: sandbox.stub().returns('found')
+      };
+
+      expect(templateEditorUtils.findElement('.selector', parent)).to.equal('found');
+
+      parent.find.should.have.been.calledWith('.selector');
+    });
+
+    it('should search element', function() {
+      sandbox.spy(document, 'querySelector');
+
+      templateEditorUtils.findElement('.selector');
+
+      document.querySelector.should.have.been.calledWith('.selector');
+    });
+    
+  });
+
   describe('showInvalidExtensionsMessage', function () {
     it('should call the correct functions', function () {
       sandbox.stub(templateEditorUtils, 'showMessageWindow');

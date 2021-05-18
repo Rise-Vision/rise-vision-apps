@@ -346,6 +346,53 @@ describe('service: componentsFactory:', function() {
       expect(directive.title).to.equal('Text');
     });
 
+    describe('panel:', function() {
+      it('should set default panel', function() {
+        var component = {
+          type: 'rise-test',
+          icon: 'fa-test',
+          element: {
+            hide: sandbox.stub()
+          }
+        };
+
+        componentsFactory.registerDirective(component);
+
+        expect(componentsFactory.directives["rise-test"]).to.be.ok;
+        expect(componentsFactory.directives["rise-test"].panel).to.equal('.attribute-editor-component');
+      });
+
+      it('should not override directive panel', function() {
+        var component = {
+          type: 'rise-test',
+          icon: 'fa-test',
+          panel: '.component-panel',
+          element: {
+            hide: sandbox.stub()
+          }
+        };
+
+        componentsFactory.registerDirective(component);
+
+        expect(componentsFactory.directives["rise-test"]).to.be.ok;
+        expect(componentsFactory.directives["rise-test"].panel).to.equal('.component-panel');
+      });
+
+      it('should not override default directive panel', function() {
+        var component = {
+          type: 'rise-video',
+          element: {
+            hide: sandbox.stub()
+          }
+        };
+
+        componentsFactory.registerDirective(component);
+
+        expect(componentsFactory.directives["rise-video"]).to.be.ok;
+        expect(componentsFactory.directives["rise-video"].panel).to.equal('.video-component-container');
+      });
+
+    });
   });
 
   describe('editComponent:', function() {
@@ -870,14 +917,15 @@ describe('service: componentsFactory:', function() {
 
       it('should swap left', function(done) {
         componentsFactory.pages.push(component1);
+        componentsFactory.selected = component2;
 
         componentsFactory.showNextPage(component2);
 
         directive1.element.hide.should.have.been.called;
-        templateEditorUtils.findElement.should.have.been.calledWith('panel1');
+        templateEditorUtils.findElement.should.have.been.calledWith('panel1', directive1.element);
 
         directive2.element.show.should.have.been.called;
-        templateEditorUtils.findElement.should.have.been.calledWith('panel2');
+        templateEditorUtils.findElement.should.have.been.calledWith('panel2', directive2.element);
 
         templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-right');
         templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-left');
@@ -894,6 +942,7 @@ describe('service: componentsFactory:', function() {
       
       it('should not hide the element if its the same', function() {
         directive2.element = directive1.element;
+        componentsFactory.selected = component2;
 
         componentsFactory.pages.push(component1);
 
@@ -907,7 +956,7 @@ describe('service: componentsFactory:', function() {
         componentsFactory.showNextPage(component2);
 
         directive2.element.show.should.have.been.called;
-        templateEditorUtils.findElement.should.have.been.calledWith('panel2');
+        templateEditorUtils.findElement.should.have.been.calledWith('panel2', directive2.element);
 
         templateEditorUtils.elementStub.addClass.should.have.been.calledWith('attribute-editor-show-from-right');
 
@@ -930,7 +979,7 @@ describe('service: componentsFactory:', function() {
     it('should hide the first page', function () {
       componentsFactory.showNextPage('selector1');
 
-      expect(componentsFactory.showPreviousPage()).to.be.false;
+      componentsFactory.showPreviousPage();
 
       componentsFactory.backToList.should.have.been.called;
 
@@ -941,7 +990,7 @@ describe('service: componentsFactory:', function() {
       componentsFactory.showNextPage('selector1');
       componentsFactory.showNextPage('selector2');
 
-      expect(componentsFactory.showPreviousPage()).to.be.true;
+      componentsFactory.showPreviousPage();
 
       componentsFactory.backToList.should.not.have.been.called;
 
@@ -995,10 +1044,10 @@ describe('service: componentsFactory:', function() {
         componentsFactory.showPreviousPage();
 
         directive1.element.show.should.have.been.called;
-        templateEditorUtils.findElement.should.have.been.calledWith('panel1');
+        templateEditorUtils.findElement.should.have.been.calledWith('panel1', directive1.element);
 
         directive2.element.hide.should.have.been.called;
-        templateEditorUtils.findElement.should.have.been.calledWith('panel2');
+        templateEditorUtils.findElement.should.have.been.calledWith('panel2', directive2.element);
 
         templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-right');
         templateEditorUtils.elementStub.removeClass.should.have.been.calledWith('attribute-editor-show-from-left');
