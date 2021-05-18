@@ -51,6 +51,9 @@ describe('controller: TemplateEditor', function() {
         }
       };
     });
+    $provide.factory('componentsFactory', function() {
+      return {};
+    });
   }));
 
   beforeEach(function() {
