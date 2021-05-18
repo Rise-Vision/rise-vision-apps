@@ -71,13 +71,12 @@ angular.module('risevision.template-editor.directives')
               playlistComponentFactory.onAddHandler = $scope.addItems;
 
               _load();
-            },
-            onBackHandler: function () {
-              if ($scope.view) {
-                $scope.showPlaylistItems();
-                return true;
-              }
             }
+          });
+
+          componentsFactory.registerDirective({
+            type: 'rise-playlist-item',
+            element: element
           });
 
           $scope.showComponentsDropdown = function() {
@@ -136,12 +135,10 @@ angular.module('risevision.template-editor.directives')
             });
           };
 
-          $scope.showPlaylistItems = function () {
-            $scope.view = '';
-          };
-
           $scope.showProperties = function () {
-            $scope.view = 'edit';
+            componentsFactory.editComponent({
+              type: 'rise-playlist-item'
+            });
           };
 
           $scope.isEmbeddedTemplate = function (item) {

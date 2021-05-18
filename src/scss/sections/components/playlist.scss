@@ -1,5 +1,5 @@
 @media (min-width: $screen-sm) {
-  .rise-playlist-container, .presentation-selector-container {
+  .rise-playlist-container, .presentation-selector-container, .playlist-item-container {
     --playlist-button-bar-height: 90px;
     --playlist-selected-title-height: 50px;
     --selector-search-box-height: 60px;
@@ -8,7 +8,7 @@
 }
 
 @media (max-width: $screen-sm) {
-  .rise-playlist-container, .presentation-selector-container {
+  .rise-playlist-container, .presentation-selector-container, .playlist-item-container {
     --playlist-button-bar-height: 90px;
     --playlist-selected-title-height: 50px;
     --selector-search-box-height: 60px;
@@ -16,7 +16,7 @@
   }
 }
 
-.rise-playlist-container, .presentation-selector-container {
+.rise-playlist-container, .presentation-selector-container, .playlist-item-container {
   --duration-group-offset: 29px;
 
   &.attribute-editor-component {
