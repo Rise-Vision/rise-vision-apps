@@ -167,7 +167,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.durationToText = function (item) {
-            return item['play-until-done'] ? 'PUD' : (item.duration ? item.duration : '10') + ' seconds';
+            return item['play-until-done'] ? 'PUD' : (item.duration ? item.duration : '10') + 's';
           };
 
           var _updatePlayUntilDone = function (isSupported) {

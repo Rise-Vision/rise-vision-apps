@@ -1,17 +1,19 @@
+.rise-playlist-container, .presentation-selector-container, .playlist-item-container {
+  --playlist-button-bar-height: 90px;
+  --playlist-selected-title-height: 50px;
+  --selector-search-box-height: 60px;
+}
+.rise-playlist-container {
+  --playlist-button-bar-height: 40px;
+}
 @media (min-width: $screen-sm) {
   .rise-playlist-container, .presentation-selector-container, .playlist-item-container {
-    --playlist-button-bar-height: 90px;
-    --playlist-selected-title-height: 50px;
-    --selector-search-box-height: 60px;
     --selector-body-height: calc(100vh - var(--body-height) - var(--component-header-height));
   }
 }
 
 @media (max-width: $screen-sm) {
-  .rise-playlist-container, .presentation-selector-container, .playlist-item-container {
-    --playlist-button-bar-height: 90px;
-    --playlist-selected-title-height: 50px;
-    --selector-search-box-height: 60px;
+  .rise-playlist-container, .presentation-selector-container, .playlist-item-container {    
     --selector-body-height: calc(100vh - var(--body-height));
   }
 }
@@ -63,10 +65,6 @@
       margin: 0 auto;
     }
   }
-}
-
-.playlist-item-name {
-  display: inline-block;
 }
 
 .templates-selector {
@@ -168,10 +166,6 @@
   color: #d9544f;
 }
 
-.templates-status-inline {
-  display: inline;
-}
-
 .templates-delete {
   font-size: 12px;
   font-weight: bold;
@@ -255,13 +249,7 @@
 
   border-top: 1px solid #999;
 
-  &.no-selected-templates {
-    height: calc(var(--selector-body-height) - var(--playlist-selected-title-height));
-
-    border: none;
-  }
-
-  .select-templates, .add-templates {
+  .add-templates {
     padding: 27px 0 0 0;
   }
 

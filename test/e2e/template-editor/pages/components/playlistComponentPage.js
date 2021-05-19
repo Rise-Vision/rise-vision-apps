@@ -11,7 +11,7 @@ var PlaylistComponentPage = function() {
   var firstLoadedTemplate = element(by.repeater(loadedTemplatesSelector).row(0));
   var playlistItems = element.all(by.repeater(playlistItemsSelector));
   var selectedTemplate = element(by.repeater(playlistItemsSelector).row(0));
-  var editItemLink = selectedTemplate.element(by.name('edit'));
+  var editItemLink = selectedTemplate.element(by.css('[ng-click="editProperties(key)"]'));
   var deleteItemLink = selectedTemplate.element(by.name('trash'));
   var durationInput = element(by.id('te-playlist-item-duration'));
   var transitionSelect = element(by.id('te-playlist-item-transition'));
