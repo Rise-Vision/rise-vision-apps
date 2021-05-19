@@ -259,7 +259,7 @@ describe('service: componentsFactory:', function() {
   });
 
   it('PLAYLIST_COMPONENTS', function() {
-    expect(PLAYLIST_COMPONENTS).to.have.length(6);
+    expect(PLAYLIST_COMPONENTS).to.have.length(5);
   });
 
   it('should initialize', function() {

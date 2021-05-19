@@ -120,11 +120,7 @@ angular.module('risevision.template-editor.services')
       type: 'rise-time-date',
       iconType: 'streamline',
       icon: 'time',
-      title: 'Time and Date',
-      visual: true,
-      defaultAttributes: {
-        type: 'timedate'
-      }
+      title: 'Time and Date'
     },
     'rise-data-twitter': {
       type: 'rise-data-twitter',
