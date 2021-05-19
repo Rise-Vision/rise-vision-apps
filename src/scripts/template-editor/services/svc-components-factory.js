@@ -179,7 +179,9 @@ angular.module('risevision.template-editor.services')
         directive.element.hide();
         factory.directives[directive.type] = directive;
 
-        angular.extend(directive, COMPONENTS_MAP[directive.type]);
+        _.defaults(directive, COMPONENTS_MAP[directive.type], {
+          panel: '.attribute-editor-component'
+        });
 
         if (directive.onPresentationOpen) {
           directive.onPresentationOpen();
@@ -299,7 +301,7 @@ angular.module('risevision.template-editor.services')
 
       factory.showPreviousPage = function () {
         var currentPage = factory.pages.length > 0 ? factory.pages.pop() : null;
-        var previousPage = factory.pages.length > 0 ? factory.pages[factory.pages.length - 1] : null;
+        var previousPage = factory.getCurrentPage();
 
         if (!previousPage) {
           factory.backToList();
@@ -308,8 +310,6 @@ angular.module('risevision.template-editor.services')
 
           _swapToRight(currentPage, previousPage);
         }
-
-        return !!previousPage;
       };
 
       factory.resetPanelHeader = function () {
@@ -351,7 +351,7 @@ angular.module('risevision.template-editor.services')
 
       function _showElement(component, direction, delay) {
         var directive = _getDirective(component);
-        var element = directive && directive.panel && templateEditorUtils.findElement(directive.panel);
+        var element = directive && directive.panel && templateEditorUtils.findElement(directive.panel, directive.element);
 
         if (directive && directive.element) {
           directive.element.show();
@@ -371,9 +371,9 @@ angular.module('risevision.template-editor.services')
 
       function _hideElement(component, delay) {
         var directive = _getDirective(component);
-        var selectedDirective = _getDirective(factory.getCurrentPage());
+        var selectedDirective = _getSelectedDirective();
 
-        var element = directive && directive.panel && templateEditorUtils.findElement(directive.panel);
+        var element = directive && directive.panel && templateEditorUtils.findElement(directive.panel, directive.element);
 
         if (directive && directive.element && directive.element !== selectedDirective.element) {
           directive.element.hide();
