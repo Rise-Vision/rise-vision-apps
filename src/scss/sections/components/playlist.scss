@@ -265,3 +265,13 @@
   }
 
 }
+
+.templates-row {
+  &.draggable-mirror {
+    min-height: 45px;
+    display: flex;
+    align-items: center; 
+    background: rgba(242, 242, 242, 0.85);
+    border-bottom: 1px solid $madero-gray;
+  }
+}
