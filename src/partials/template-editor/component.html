@@ -1,9 +1,6 @@
 <div class="component-header aligner" ng-class="{ 'visible-bottom-rule': componentsFactory.isHeaderBottomRuleVisible(componentsFactory.selected) }">
-  <a id="back-button" ng-click="componentsFactory.onBackButton();">
-    <span class="attribute-edit text-nowrap">
-      <i class="fa fa-lg fa-angle-left arrow-icon"></i>
-      <span translate>template.attribute-editor.back-to-list</span>
-    </span>
+  <a id="back-button" class="madero-link" ng-click="componentsFactory.onBackButton();">
+      <i class="fa fa-lg fa-angle-left arrow-icon pr-3"></i><span translate>template.attribute-editor.back-to-list</span>
   </a>
   <component-icon ng-if="!panelIcon"
                   icon="{{ componentsFactory.getComponentIcon(componentsFactory.selected) }}"

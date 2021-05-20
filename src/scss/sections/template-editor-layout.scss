@@ -381,7 +381,7 @@ $short-phone-height: 570px;
   }
 
   & .component-header {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -399,7 +399,7 @@ $short-phone-height: 570px;
     }
 
     & .component-icon {
-      margin-left: 15px;
+      margin-left: 20px;
       svg {
         height: 16px;
       }
@@ -408,6 +408,10 @@ $short-phone-height: 570px;
     & .btn-group {
       flex: 0 0 auto;
       margin-left: 10px;
+    }
+
+    a {
+      font-size: 14px;
     }
   }
 
