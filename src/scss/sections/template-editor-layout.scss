@@ -411,7 +411,7 @@ $short-phone-height: 570px;
     }
 
     a {
-      font-size: 14px;
+      @extend .text-md;
     }
   }
 
@@ -420,7 +420,7 @@ $short-phone-height: 570px;
   }
 
   & .arrow-icon {
-    line-height: 10px;
+    line-height: 5px;
   }
 }
 
