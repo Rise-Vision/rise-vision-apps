@@ -60,7 +60,7 @@ angular.module('risevision.template-editor.services')
     'rise-playlist': {
       type: 'rise-playlist',
       iconType: 'streamline',
-      icon: 'embedded-template',
+      icon: 'playlist',
       panel: '.rise-playlist-container',
       title: 'Playlist'
     },
