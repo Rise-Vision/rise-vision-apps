@@ -15,28 +15,8 @@ angular.module('risevision.template-editor.directives')
               horizontal: 'left'
             },
             {
-              name: 'Middle Left',
-              vertical: 'middle',
-              horizontal: 'left'
-            },
-            {
-              name: 'Bottom Left',
-              vertical: 'bottom',
-              horizontal: 'left'
-            },
-            {
               name: 'Top Center',
               vertical: 'top',
-              horizontal: 'center'
-            },
-            {
-              name: 'Middle Center',
-              vertical: 'middle',
-              horizontal: 'center'
-            },
-            {
-              name: 'Bottom Center',
-              vertical: 'bottom',
               horizontal: 'center'
             },
             {
@@ -45,9 +25,29 @@ angular.module('risevision.template-editor.directives')
               horizontal: 'right'
             },
             {
+              name: 'Middle Left',
+              vertical: 'middle',
+              horizontal: 'left'
+            },
+            {
+              name: 'Middle Center',
+              vertical: 'middle',
+              horizontal: 'center'
+            },
+            {
               name: 'Middle Right',
               vertical: 'middle',
               horizontal: 'right'
+            },
+            {
+              name: 'Bottom Left',
+              vertical: 'bottom',
+              horizontal: 'left'
+            },
+            {
+              name: 'Bottom Center',
+              vertical: 'bottom',
+              horizontal: 'center'
             },
             {
               name: 'Bottom Right',
