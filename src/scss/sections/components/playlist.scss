@@ -1,4 +1,4 @@
-.rise-playlist-container, .presentation-selector-container, .playlist-item-container {
+.rise-playlist-container, .presentation-selector-container {
   --playlist-button-bar-height: 90px;
   --playlist-selected-title-height: 50px;
   --selector-search-box-height: 60px;
@@ -7,18 +7,18 @@
   --playlist-button-bar-height: 40px;
 }
 @media (min-width: $screen-sm) {
-  .rise-playlist-container, .presentation-selector-container, .playlist-item-container {
+  .rise-playlist-container, .presentation-selector-container {
     --selector-body-height: calc(100vh - var(--body-height) - var(--component-header-height));
   }
 }
 
 @media (max-width: $screen-sm) {
-  .rise-playlist-container, .presentation-selector-container, .playlist-item-container {    
+  .rise-playlist-container, .presentation-selector-container {    
     --selector-body-height: calc(100vh - var(--body-height));
   }
 }
 
-.rise-playlist-container, .presentation-selector-container, .playlist-item-container {
+.rise-playlist-container, .presentation-selector-container {
   --duration-group-offset: 29px;
 
   &.attribute-editor-component {
