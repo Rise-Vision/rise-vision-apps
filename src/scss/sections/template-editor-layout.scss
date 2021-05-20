@@ -821,11 +821,6 @@ $short-phone-height: 570px;
 
   @extend .template-editor-file-row;
 
-  .list-grip {
-    cursor: move;
-    cursor: -webkit-grabbing;
-  }
-
   &.draggable-mirror {
     border-top: 1px solid $madero-gray;
     background: rgba(242, 242, 242, 0.85);
@@ -1644,4 +1639,9 @@ $short-phone-height: 570px;
   margin-right: .5rem;
   position: relative;
   top: 3px;
+}
+
+.list-grip {
+  cursor: move;
+  cursor: -webkit-grabbing;
 }
