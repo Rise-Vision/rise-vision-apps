@@ -131,12 +131,6 @@ jobs:
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/template-editor/template-editor2.cases.js"
-  e2e_template_editor3:
-    working_directory: ~/rise-vision-apps
-    <<: *defaults
-    steps:
-      - run_e2e_cases:
-          casesfile: "test/e2e/template-editor/template-editor3.cases.js"
   test_e2e:
     working_directory: ~/rise-vision-apps
     <<: *defaults
@@ -267,14 +261,6 @@ workflows:
           filters:
             branches:
               ignore: /(stage).*/
-      - e2e_template_editor3:
-          context:
-            - docker-hub-creds
-          requires:
-            - test_unit
-          filters:
-            branches:
-              ignore: /(stage).*/
       - test_e2e:
           context:
             - docker-hub-creds
@@ -284,7 +270,6 @@ workflows:
             - e2e_registration
             - e2e_template_editor
             - e2e_template_editor2
-            - e2e_template_editor3
           filters:
             branches:
               ignore: /(stage).*/

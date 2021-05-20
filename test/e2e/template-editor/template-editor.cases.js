@@ -9,6 +9,10 @@
   var FinancialComponentScenarios = require('./cases/components/financial.js');
   var WeatherComponentScenarios = require('./cases/components/weather.js');
   var BrandingComponentScenarios = require('./cases/components/branding.js');
+  var BrandingColorsOverrideComponentScenarios = require('./cases/components/branding-colors-override.js');
+  var HtmlComponentScenarios = require('./cases/components/html.js');
+  var PlaylistComponentScenarios = require('./cases/components/playlist.js');
+  var TwitterComponentScenarios = require('./cases/components/twitter.js');
 
   describe('Template Editor', function() {
 
@@ -34,6 +38,10 @@
     var financialComponentScenarios = new FinancialComponentScenarios();   
     var weatherComponentScenarios = new WeatherComponentScenarios();
     var brandingComponentScenarios = new BrandingComponentScenarios();
+    var brandingColorsOverrideComponentScenarios = new BrandingColorsOverrideComponentScenarios();
+    var htmlComponentScenarios = new HtmlComponentScenarios();
+    var playlistComponentScenarios = new PlaylistComponentScenarios();
+    var twitterComponentScenarios = new TwitterComponentScenarios(subCompanyName);
 
     after(function() {
       // Loading the Presentation List is a workaround to a Chrome Driver issue that has it fail to click on elements over the Preview iframe
