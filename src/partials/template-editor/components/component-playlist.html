@@ -2,51 +2,13 @@
 rv-spinner rv-spinner-key="rise-playlist-loader">
 
   <!-- default view -->
-  <div class="playlist-templates-title" ng-show="playlistItems.length">
-    <label ng-show="!showComponentsDropdown()">Embedded Presentations:</label>
-    <label ng-show="showComponentsDropdown()">Playlist Items:</label>
-  </div>
-  <div class="templates-selector te-scrollable-container" ng-show="playlistItems.length">
-    <div rv-sortable on-sort="sortItem(evt)" append-to=".component-container" class="sortable-list">
-      <div class="row templates-row  rv-sortable-item"
-          ng-repeat="(key, value) in playlistItems">
-        <div class="list-grip pr-4 rv-sortable-handle">
-          <img class="img-responsive" src="../images/navigation-menu-vertical.svg">
-        </div>
-        <div class="col-xs-10 pl-0 pr-0">
-          <span class="playlist-item-name">
-            <div class="templates-name" ng-show="isEmbeddedTemplate(value)">{{ value.name }}</div>
-            <div class="templates-name" ng-hide="isEmbeddedTemplate(value)">{{ getComponentByType(value.tagName).title }}</div>
-            <div class="templates-status templates-status-inline" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised' || value.removed}" ng-show="isEmbeddedTemplate(value)">{{ value.revisionStatusName }}</div>
-            <div class="templates-status templates-status-inline" ng-hide="isEmbeddedTemplate(value) || !addVisualComponents">
-              <a href="#" ng-click="editPlaylistItem(key)">
-                 Edit
-              </a>
-            </div>
-            <div class="templates-status templates-status-inline" ng-hide="value.removed"> • {{ durationToText(value) }}</div>
-          </span>
-        </div>
-        <div class="col-xs-2 pr-0 playlist-item-actions">
-          <a href="#"
-             ng-click="editProperties(key)" ng-hide="value.removed">
-             <streamline-icon class="u_margin-left streamline-component-icon" name="edit" width="16" height="16"></streamline-icon>
-          </a>
-          <a href="#"
-             ng-click="removeItem(key)">
-             <streamline-icon class="u_margin-left streamline-component-icon" name="trash" width="16" height="16"></streamline-icon>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="playlist-action-button-bar" ng-class="{'no-selected-templates' : !playlistItems.length || playlistItems.length === 0}">
-    <div class="select-templates">
-      <button id="te-playlist-select-templates" class="btn btn-primary btn-block" ng-click="showAddTemplates()" ng-if="!showComponentsDropdown()">
+  <div class="attribute-editor-component" >
+    <div class="attribute-editor-row">
+      <button id="te-playlist-select-templates" class="btn btn-default btn-block" ng-click="showAddTemplates()" ng-if="!showComponentsDropdown()">
         Select Presentations
       </button>
-      <div class="btn-group btn-block" dropdown ng-class="{'dropup' : playlistItems.length && playlistItems.length > 0}" ng-if="showComponentsDropdown()">
-        <button id="addPlaylistItemButton" type="button" dropdown-toggle class="btn btn-primary btn-block">Add</button>
+      <div class="btn-group btn-block" dropdown ng-if="showComponentsDropdown()">
+        <button id="addPlaylistItemButton" type="button" dropdown-toggle class="btn btn-default btn-block">Add</button>
         <div class="dropdown-menu playlist-menu" role="menu">
           <ul>
           <li>
@@ -65,6 +27,33 @@ rv-spinner rv-spinner-key="rise-playlist-loader">
     </div>
   </div>
 
+  <div class="templates-selector te-scrollable-container" ng-show="playlistItems.length">
+    <div rv-sortable on-sort="sortItem(evt)" append-to=".component-container" class="sortable-list">
+      <div class="row templates-row  rv-sortable-item"
+          ng-repeat="(key, value) in playlistItems">
+        <div class="list-grip pr-4 rv-sortable-handle">
+          <img class="img-responsive" src="../images/navigation-menu-vertical.svg">          
+        </div>
+        <div class="col-xs-1 pl-0 pr-0">
+          <component-icon ng-show="isEmbeddedTemplate(value)" icon="embedded-template" type="streamline"></component-icon>  
+          <component-icon ng-hide="isEmbeddedTemplate(value)" icon="{{ getComponentByType(value.tagName).icon }}" type="{{ getComponentByType(value.tagName).iconType }}"></component-icon>  
+        </div>
+        <div class="col-xs-9 u_text-ellipsis">
+          <span class="templates-name" ng-show="isEmbeddedTemplate(value)">{{ value.name }}</span>
+          <a class="madero-link" href="#" ng-click="editPlaylistItem(key)" ng-hide="isEmbeddedTemplate(value)">
+            <span class="templates-name">{{ getComponentByType(value.tagName).title }}</span>
+          </a>
+          <div class="templates-status templates-status-inline" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised' || value.removed}" ng-show="isEmbeddedTemplate(value)">{{ value.revisionStatusName }}</div>
+        </div>
+        <div class="col-xs-2 pr-0 playlist-item-actions">
+          <a class="madero-link" href="#" ng-click="editProperties(key)" ng-hide="value.removed">{{ durationToText(value) }}</a>
+          <a href="#" ng-click="removeItem(key)">
+             <streamline-icon class="u_margin-left streamline-component-icon" name="trash" width="16" height="16"></streamline-icon>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- "edit" view -->

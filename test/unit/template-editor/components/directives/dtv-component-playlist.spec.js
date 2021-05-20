@@ -428,10 +428,10 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.durationToText(item)).to.equal("PUD");
 
     item["play-until-done"] = false;
-    expect($scope.durationToText(item)).to.equal("10 seconds");
+    expect($scope.durationToText(item)).to.equal("10s");
 
     item["duration"] = 12345;
-    expect($scope.durationToText(item)).to.equal("12345 seconds");
+    expect($scope.durationToText(item)).to.equal("12345s");
   });
 
   describe('editProperties:', function() {
