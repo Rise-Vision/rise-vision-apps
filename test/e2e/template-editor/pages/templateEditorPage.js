@@ -142,7 +142,7 @@ var TemplateEditorPage = function() {
   }
 
   this.selectComponent = function (selectorLabel) {
-    var componentEditLink = element(by.xpath('//div[div/span[contains(text(), "' + selectorLabel + '")]]/div/a'));
+    var componentEditLink = element(by.cssContainingText('.attribute-desc a', selectorLabel));
 
     helper.wait(this.getAttributeList(), 'Attribute List');
     helper.wait(componentEditLink, 'Component Edit');
