@@ -3,9 +3,7 @@
   --playlist-selected-title-height: 50px;
   --selector-search-box-height: 60px;
 }
-.rise-playlist-container {
-  --playlist-button-bar-height: 40px;
-}
+
 @media (min-width: $screen-sm) {
   .rise-playlist-container, .presentation-selector-container {
     --selector-body-height: calc(100vh - var(--body-height) - var(--component-header-height));
@@ -16,6 +14,11 @@
   .rise-playlist-container, .presentation-selector-container {    
     --selector-body-height: calc(100vh - var(--body-height));
   }
+}
+
+.rise-playlist-container {
+  --playlist-button-bar-height: 40px;
+  height: calc(var(--selector-body-height) - var(--playlist-selected-title-height));
 }
 
 .rise-playlist-container, .presentation-selector-container {
