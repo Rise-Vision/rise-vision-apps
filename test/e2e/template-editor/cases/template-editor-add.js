@@ -66,7 +66,7 @@ var TemplateAddScenarios = function() {
         presentationsListPage.loadPresentation(presentationName);
 
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
-        expect(templateEditorPage.getImageComponentEdit().isPresent()).to.eventually.be.true;
+        expect(templateEditorPage.getImageComponent().isPresent()).to.eventually.be.true;
       });
 
       it('should not have auto-published the Presentation when navigating', function () {
