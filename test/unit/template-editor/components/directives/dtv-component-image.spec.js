@@ -41,7 +41,8 @@ describe('directive: TemplateComponentImage', function() {
         getAttributeData: sinon.stub(),
         getAvailableAttributeData: sinon.stub(),
         setAttributeData: sinon.stub(),
-        getBlueprintData: sinon.stub().returns(null)
+        getBlueprintData: sinon.stub().returns(null),
+        getComponentIds: sinon.stub().returns(['component1', 'component2'])
       };
     });
     $provide.service('logoImageFactory', function() {
@@ -67,6 +68,14 @@ describe('directive: TemplateComponentImage', function() {
         getHelpText: sandbox.stub().returns('help text')
       };
     });
+    $provide.service('fileExistenceCheckService', function() {
+      return {
+        requestMetadataFor: function() {
+          return Q.resolve([]);
+        }
+      };
+    });
+
     $provide.service('storageAPILoader', function() {
       return function() {
         return Q.resolve({
@@ -134,6 +143,8 @@ describe('directive: TemplateComponentImage', function() {
         expect(directive.type).to.equal('rise-image');
         expect(directive.element).to.be.an('object');
         expect(directive.show).to.be.a('function');
+        expect(directive.onPresentationOpen).to.be.a('function');
+        expect(directive.getName).to.be.a('function');
       });
 
       it('show:', function() {
@@ -142,6 +153,89 @@ describe('directive: TemplateComponentImage', function() {
         expect(storageManagerFactory.fileType).to.equal('image');
         expect(storageManagerFactory.isSingleFileSelector).to.equal($scope.isEditingLogo);
         expect(storageManagerFactory.onSelectHandler).to.be.a('function');
+      });
+
+      describe('getName:', function() {
+        beforeEach(function() {
+          attributeDataFactory.getAttributeData.reset();
+          attributeDataFactory.getBlueprintData.reset();
+        });
+
+        it('should return null if data is not found', function() {
+          expect(componentsFactory.registerDirective.getCall(0).args[0].getName('component1')).to.be.null;
+
+          attributeDataFactory.getAttributeData.should.have.been.calledWith('component1', 'metadata');
+          attributeDataFactory.getBlueprintData.should.have.been.calledWith('component1', 'files');
+        });
+
+        it('should get first file name from attribute data', function() {
+          attributeDataFactory.getAttributeData.returns([
+            { "file": 'bucketid/someFolder/image.png' },
+            { "file": 'test.jpg' }
+          ]);
+
+          expect(componentsFactory.registerDirective.getCall(0).args[0].getName('component1')).to.equal('image.png');
+
+          attributeDataFactory.getAttributeData.should.have.been.calledWith('component1', 'metadata');
+          attributeDataFactory.getBlueprintData.should.not.have.been.called;
+        });
+
+        it('should fallback to blueprint data', function() {
+          attributeDataFactory.getBlueprintData.returns([
+            'bucketid/someFolder/image.png',
+            'test.jpg'
+          ]);
+
+          expect(componentsFactory.registerDirective.getCall(0).args[0].getName('component1')).to.equal('image.png');
+
+          attributeDataFactory.getAttributeData.should.have.been.calledWith('component1', 'metadata');
+          attributeDataFactory.getBlueprintData.should.have.been.calledWith('component1', 'files');
+        });
+
+        it('should return null if files list is empty', function() {
+          attributeDataFactory.getAttributeData.returns([]);
+
+          expect(componentsFactory.registerDirective.getCall(0).args[0].getName()).to.be.null;
+        });
+
+      });
+
+      describe('onPresentationOpen:', function() {
+        it('should check file existence when presentation opens', function(done) {
+          // I had to mock as this because directly setting $q provider above broke registerDirective() call
+          $scope.waitForPresentationId = function(metadata) {
+            return Q.resolve(metadata);
+          };
+
+          var directive = componentsFactory.registerDirective.getCall(0).args[0];
+          var sampleImages = [
+            { "file": 'image.png', "thumbnail-url": "http://image" },
+            { "file": 'test.jpg', "thumbnail-url": "http://test.jpg" }
+          ];
+
+          attributeDataFactory.getAttributeData = function(componentId, key) {
+            switch(key) {
+              case 'metadata': return sampleImages;
+              case 'files': return 'image.png|test.png';
+            }
+          };
+
+          directive.onPresentationOpen();
+
+          expect($scope.fileExistenceChecksCompleted).to.deep.equal({
+            component1: false,
+            component2: false
+          });
+
+          setTimeout(function() {
+            expect($scope.fileExistenceChecksCompleted).to.deep.equal({
+              component1: true,
+              component2: true
+            });
+
+            done();
+          }, 100);
+        });
       });
     });
 

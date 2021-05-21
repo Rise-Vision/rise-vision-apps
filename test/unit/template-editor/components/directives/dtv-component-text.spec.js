@@ -43,43 +43,58 @@ describe('directive: templateComponentText', function() {
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-text');
     expect(directive.show).to.be.a('function');
+    expect(directive.getName).to.be.a('function');
   });
 
-  it('should load text from attribute data', function() {
+  describe('show:', function() {
+    it('should load text from attribute data', function() {
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
+      var sampleValue = "test text";
+      attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
+
+      directive.show();
+
+      expect($scope.componentId).to.equal("TEST-ID");
+      expect($scope.value).to.equal(sampleValue);
+    });
+
+    it('should load multiline attribute from blueprint', function() {
+      attributeDataFactory.getAvailableAttributeData.returns(true);
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
+
+      directive.show();
+
+      expect(attributeDataFactory.getAvailableAttributeData).to.have.been.calledWith('TEST-ID', 'multiline');
+      expect($scope.isMultiline).to.be.true;
+    });
+  });
+
+  it('getName:', function() {
     var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleValue = "test text";
     attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
 
-    directive.show();
+    expect(directive.getName('componentId')).to.equal(sampleValue);
 
-    expect($scope.componentId).to.equal("TEST-ID");
-    expect($scope.value).to.equal(sampleValue);
+    attributeDataFactory.getAvailableAttributeData.should.have.been.calledWith('componentId', 'value');
   });
 
-  it('should load multiline attribute from blueprint', function() {
-    attributeDataFactory.getAvailableAttributeData.returns(true);
-    var directive = componentsFactory.registerDirective.getCall(0).args[0];
+  describe('save:', function() {
+    it('should save text to attribute data', function() {
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
+      var sampleValue = "test text";
+      attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
 
-    directive.show();
+      directive.show();
 
-    expect(attributeDataFactory.getAvailableAttributeData).to.have.been.calledWith('TEST-ID', 'multiline');
-    expect($scope.isMultiline).to.be.true;
-  });
+      $scope.value = "updated text";
 
-  it('should save text to attribute data', function() {
-    var directive = componentsFactory.registerDirective.getCall(0).args[0];
-    var sampleValue = "test text";
-    attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
+      $scope.save();
 
-    directive.show();
-
-    $scope.value = "updated text";
-
-    $scope.save();
-
-    expect(attributeDataFactory.setAttributeData.calledWith(
-      "TEST-ID", "value", "updated text"
-    )).to.be.true;
+      expect(attributeDataFactory.setAttributeData.calledWith(
+        "TEST-ID", "value", "updated text"
+      )).to.be.true;
+    });    
   });
 
 });

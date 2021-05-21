@@ -237,11 +237,19 @@ angular.module('risevision.template-editor.directives')
             });
           };
 
-          var _editComponent = function(item) {
-            componentsFactory.editComponent({
+          var _getComponentObject = function(item) {
+            return {
               type: item.tagName,
               id: $scope.componentId + ' ' + $scope.playlistItems.indexOf(item)
-            });
+            };
+          };
+
+          $scope.getComponentName = function(item) {
+            return componentsFactory.getComponentName(_getComponentObject(item));
+          };
+
+          var _editComponent = function(item) {
+            componentsFactory.editComponent(_getComponentObject(item));
           };
 
           $scope.editPlaylistItem = function (key) {

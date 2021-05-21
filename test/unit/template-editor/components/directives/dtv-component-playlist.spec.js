@@ -84,7 +84,8 @@ describe("directive: templateComponentPlaylist", function() {
       return {
         selected: { id: "TEST-ID" },
         registerDirective: sandbox.stub(),
-        editComponent: sandbox.stub()
+        editComponent: sandbox.stub(),
+        getComponentName: sandbox.stub().returns('componentName')
       };
     });
 
@@ -142,6 +143,7 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.showComponentsDropdown).to.be.a('function')
 
     expect($scope.getComponentByType).to.be.a('function');
+    expect($scope.getComponentName).to.be.a('function');
     expect($scope.addPlaylistItem).to.be.a('function');
     expect($scope.editPlaylistItem).to.be.a('function');
   });
@@ -587,6 +589,23 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.getComponentByType('rise-image').title).to.equal('Image');
 
     expect($scope.getComponentByType('rise-playlist')).to.not.be.ok;
+  });
+
+  it('getComponentName:', function() {
+    $scope.componentId = 'playlist1';
+    $scope.playlistItems = [
+      'template1',
+      {
+        tagName: 'tag'
+      }
+    ];
+
+    expect($scope.getComponentName($scope.playlistItems[1])).to.equal('componentName');
+
+    componentsFactory.getComponentName.should.have.been.calledWith({
+      type: 'tag',
+      id: 'playlist1 1'
+    });
   });
 
   it('editPlaylistItem:', function() {

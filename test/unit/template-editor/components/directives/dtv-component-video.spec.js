@@ -81,6 +81,7 @@ describe('directive: templateComponentVideo', function() {
       expect(directive.type).to.equal('rise-video');
       expect(directive.element).to.be.an('object');
       expect(directive.show).to.be.a('function');
+      expect(directive.getName).to.be.a('function');
     });
 
     it('show:', function() {
@@ -92,6 +93,50 @@ describe('directive: templateComponentVideo', function() {
       expect(storageManagerFactory.onSelectHandler).to.be.a('function');
     });
 
+    describe('getName:', function() {
+      beforeEach(function() {
+        attributeDataFactory.getAttributeData.reset();
+        attributeDataFactory.getBlueprintData.reset();
+      });
+
+      it('should return null if data is not found', function() {
+        expect(componentsFactory.registerDirective.getCall(0).args[0].getName('component1')).to.be.null;
+
+        attributeDataFactory.getAttributeData.should.have.been.calledWith('component1', 'metadata');
+        attributeDataFactory.getBlueprintData.should.have.been.calledWith('component1', 'files');
+      });
+
+      it('should get first file name from attribute data', function() {
+        attributeDataFactory.getAttributeData.returns([
+          { "file": 'bucketid/someFolder/video.webm' },
+          { "file": 'video2.mpg' }
+        ]);
+
+        expect(componentsFactory.registerDirective.getCall(0).args[0].getName('component1')).to.equal('video.webm');
+
+        attributeDataFactory.getAttributeData.should.have.been.calledWith('component1', 'metadata');
+        attributeDataFactory.getBlueprintData.should.not.have.been.called;
+      });
+
+      it('should fallback to blueprint data', function() {
+        attributeDataFactory.getBlueprintData.returns([
+          'bucketid/someFolder/video.webm',
+          'video2.mpg'
+        ]);
+
+        expect(componentsFactory.registerDirective.getCall(0).args[0].getName('component1')).to.equal('video.webm');
+
+        attributeDataFactory.getAttributeData.should.have.been.calledWith('component1', 'metadata');
+        attributeDataFactory.getBlueprintData.should.have.been.calledWith('component1', 'files');
+      });
+
+      it('should return null if files list is empty', function() {
+        attributeDataFactory.getAttributeData.returns([]);
+
+        expect(componentsFactory.registerDirective.getCall(0).args[0].getName()).to.be.null;
+      });
+
+    });
   });
 
   it('should set video lists when available as attribute data', function() {
