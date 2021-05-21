@@ -19,15 +19,8 @@
 }
 
 .rise-playlist-container, .presentation-selector-container, .playlist-item-container {
-  --duration-group-offset: 29px;
-
   &.attribute-editor-component {
     margin-top: 0;
-  }
-
-  .duration-input-group {
-    width: calc(100% - var(--duration-group-offset));
-    margin-left: var(--duration-group-offset);
   }
 
 .templates-list {
@@ -106,34 +99,6 @@
   height: var(--selector-search-box-height);
   padding: 0px 0px 20px;
   margin: 0px 20px 0px;
-
-  svg {
-    fill: #999999;
-  }
-}
-
-.templates-list-show {
-  animation-name: slide-in-right;
-  animation-duration: 0.5s;
-  animation-fill-mode: forwards;
-}
-
-.templates-list-hide {
-  animation-name: slide-out-right;
-  animation-duration: 0.5s;
-  animation-fill-mode: forwards;
-}
-
-.templates-list-cover {
-  animation-name: slide-out;
-  animation-duration: 0.5s;
-  animation-fill-mode: forwards;
-}
-
-.templates-list-uncover {
-  animation-name: slide-in;
-  animation-duration: 0.5s;
-  animation-fill-mode: forwards;
 }
 
 .templates-row {
@@ -149,12 +114,6 @@
   line-height: 20px;
 }
 
-.templates-name-ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .templates-status {
   font-size: 12px;
   line-height: 12px;
@@ -164,19 +123,6 @@
 
 .templates-status-revised {
   color: #d9544f;
-}
-
-.templates-delete {
-  font-size: 12px;
-  font-weight: bold;
-  text-align: right;
-  letter-spacing: 0px;
-  line-height: 18px;
-
-  & a {
-    color: #d9534f;
-    text-decoration: underline;
-  }
 }
 
 .templates-selector {
@@ -197,17 +143,6 @@
   animation-fill-mode: forwards;
 }
 
-.templates-selector-popular {
-  font-weight: bold;
-  font-size: 0.8em;
-  margin: 20px 0px 0px;
-  padding: 0px 20px;
-}
-
-.templates-selector-checkbox {
-  position: absolute;
-}
-
 .templates-selector-name {
   display: inline-block;
 }
@@ -220,18 +155,6 @@
     color: $rise-blue;
   }
 
-}
-
-.templates-row--is-selected {
-  background: #107DDA;
-
-  & .templates-name {
-    color: #FFF;
-  }
-
-  & .templates-status {
-    color: #FFF;
-  }
 }
 
 .playlist-item-actions {
@@ -257,12 +180,6 @@
     background: #FFF;
   }
 }
-
-  .madero-radio {
-    label {
-      font-weight: normal;
-    }
-  }
 
 }
 

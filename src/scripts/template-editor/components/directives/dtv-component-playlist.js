@@ -174,7 +174,7 @@ angular.module('risevision.template-editor.directives')
             $scope.selectedItem['play-until-done-supported'] = isSupported;
 
             $scope.selectedItem['play-until-done'] = $scope.selectedItem['play-until-done-supported'] &&
-              $scope.selectedItem['play-until-done'] ? 'true' : 'false';
+              $scope.selectedItem['play-until-done'];
           };
 
           $scope.editProperties = function (key) {
@@ -211,10 +211,16 @@ angular.module('risevision.template-editor.directives')
             var item = $scope.playlistItems[$scope.selectedItem.key];
 
             item.duration = Number.isInteger($scope.selectedItem.duration) ? $scope.selectedItem.duration : 10;
-            item['play-until-done'] = $scope.selectedItem['play-until-done'] === 'true';
+            item['play-until-done'] = $scope.selectedItem['play-until-done'];
             item['transition-type'] = $scope.selectedItem['transition-type'];
 
             $scope.save();
+          };
+
+          $scope.savePlayUntilDone = function () {
+            $scope.selectedItem['play-until-done'] = !$scope.selectedItem['play-until-done'];
+
+            $scope.saveProperties();
           };
 
           $scope.getComponentByType = function(type) {
