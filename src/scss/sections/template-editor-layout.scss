@@ -344,7 +344,7 @@ $short-phone-height: 570px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;
     letter-spacing: 0px;
 
@@ -371,13 +371,6 @@ $short-phone-height: 570px;
         height: 12px;
       }
     }
-  }
-
-  & .attribute-edit {
-    color: rgb(69, 183, 100);
-    font-size: 14px;
-    font-weight: bold;
-    letter-spacing: 0px;
   }
 
   & .component-header {

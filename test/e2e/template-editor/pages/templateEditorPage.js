@@ -14,9 +14,8 @@ var TemplateEditorPage = function() {
   var deleteForeverButton = element(by.buttonText('Delete Forever'));
   var errorModal = element(by.xpath('//h4[contains(text(), "Failed to")]'));
   var publishButton = element(by.id('publishButtonDesktop'));
-  var imageComponentSelector = '//div[div/span[contains(text(), "Test Instance")]]';
+  var imageComponentSelector = '//div[div/a[contains(text(), "Test Instance")]]';
   var imageComponent = element(by.xpath('(' + imageComponentSelector + ')[1]'));
-  var imageComponentEdit = element(by.xpath('(' + imageComponentSelector + '/div/a)[1]'));
   var backToComponentsButton = element(by.id('back-button'));
   var financialDataLicenseMessage = element(by.css('.financial-data-license-message'));
   var financialDataLicenseCloseButton = element(by.css('#confirmForm .close'));
@@ -94,10 +93,6 @@ var TemplateEditorPage = function() {
     return imageComponent;
   };
 
-  this.getImageComponentEdit = function () {
-    return imageComponentEdit;
-  };
-
   this.getBackToComponentsButton = function () {
     return backToComponentsButton;
   };
@@ -147,7 +142,7 @@ var TemplateEditorPage = function() {
   }
 
   this.selectComponent = function (selectorLabel) {
-    var componentEditLink = element(by.xpath('//div[div/span[contains(text(), "' + selectorLabel + '")]]/div/a'));
+    var componentEditLink = element(by.cssContainingText('.attribute-desc a', selectorLabel));
 
     helper.wait(this.getAttributeList(), 'Attribute List');
     helper.wait(componentEditLink, 'Component Edit');
