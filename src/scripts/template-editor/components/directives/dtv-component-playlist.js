@@ -100,6 +100,10 @@ angular.module('risevision.template-editor.directives')
           $scope.jsonToPlaylistItems = function (playlistItems) {
             var result = [];
 
+            if (typeof playlistItems === 'string' || playlistItems instanceof String) {
+              playlistItems = JSON.parse(playlistItems);
+            }
+
             if (Array.isArray(playlistItems)) {
               result = _.map(playlistItems, _mapItemToEditorFormat);
             }

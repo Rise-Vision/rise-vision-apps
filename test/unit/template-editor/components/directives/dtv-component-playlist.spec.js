@@ -304,6 +304,33 @@ describe("directive: templateComponentPlaylist", function() {
           playlistComponentFactory.loadPresentationNames.should.not.have.been.called;
         });
 
+        it("should load default attribute data from string, as provided by blueprint", function() {
+          var directive = componentsFactory.registerDirective.getCall(0).args[0];
+
+          attributeDataFactory.getAvailableAttributeData = function(componentId, attributeName) {
+            return '[{"duration": 10,"transition-type": "fadeIn","element": {"tagName": "rise-text","attributes": {"value": "Default text" }}}]';
+          };
+
+          $scope.playlistItems = samplePlaylistItems; //some garbage data from past session
+
+          directive.show();
+
+          expect($scope.componentId).to.equal("TEST-ID");
+
+          expect($scope.playlistItems.length).to.equal(1);
+          expect($scope.playlistItems[0]["duration"]).to.equal(10);
+          expect($scope.playlistItems[0]["transition-type"]).to.equal("fadeIn");
+          expect($scope.playlistItems[0]["tagName"]).to.equal("rise-text");
+          expect($scope.playlistItems[0].attributes).to.deep.equal({
+            "value": "Default text"
+          });
+          expect($scope.playlistItems[0]["play-until-done"]).to.not.be.ok;          
+          expect($scope.playlistItems[0]["id"]).to.not.be.ok;
+          expect($scope.playlistItems[0]["productCode"]).to.not.be.ok;        
+
+          playlistComponentFactory.loadPresentationNames.should.not.have.been.called;
+        });
+
       });
     });
   });
