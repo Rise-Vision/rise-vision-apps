@@ -1,7 +1,9 @@
 'use strict';
 
 var PlaylistComponentPage = function() {
-  var selectTemplatesButton = element(by.id('te-playlist-select-templates'));
+  var addPlaylistItemButton = element(by.id('addPlaylistItemButton'));
+  var addTextComponentButton = element(by.cssContainingText('.playlist-menu a', 'Text'));
+  var addPresentationItemButton = element(by.id('addPresentationItemButton'));
   var addTemplateButton = element(by.id('te-playlist-add-template'));
   var templatesLoaderSpinner = element(by.id('rise-playlist-templates-loader'));
   var searchInput = element(by.id('te-playlist-search'));
@@ -17,8 +19,16 @@ var PlaylistComponentPage = function() {
   var transitionSelect = element(by.id('te-playlist-item-transition'));
   var slideFromRightOption = element(by.cssContainingText('option', 'Slide from right'));
   
-  this.getSelectTemplatesButton = function () {
-    return selectTemplatesButton;
+  this.getAddPlaylistItemButton = function() {
+    return addPlaylistItemButton;
+  };
+
+  this.getAddTextComponentButton = function() {
+    return addTextComponentButton;
+  };
+
+  this.getAddPresentationItemButton = function() {
+    return addPresentationItemButton;
   };
 
   this.getAddTemplateButton = function () {
