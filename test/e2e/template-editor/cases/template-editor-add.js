@@ -84,7 +84,7 @@ var TemplateAddScenarios = function() {
       });
 
       it('should delete the Presentation', function () {
-        browser.sleep(500);
+        browser.sleep(10000); //TODO: prevent extra Save calls from happening
         helper.clickWhenClickable(templateEditorPage.getDeleteButton(), 'Template Delete Button');
 
         browser.sleep(500);
