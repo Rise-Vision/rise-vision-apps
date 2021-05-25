@@ -137,7 +137,7 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.playlistComponentFactory).to.equal(playlistComponentFactory);
 
     expect($scope.playlistComponents).to.be.an('array');
-    expect($scope.addVisualComponents).to.be.false;
+    expect($scope.addVisualComponents).to.be.true;
 
     expect($scope.showComponentsDropdown).to.be.a('function')
 
@@ -341,8 +341,8 @@ describe("directive: templateComponentPlaylist", function() {
   });
 
   describe('showComponentsDropdown:', function() {
-    it('should not show by default', function() {
-      expect($scope.showComponentsDropdown()).to.be.false;
+    it('should show by default', function() {
+      expect($scope.showComponentsDropdown()).to.be.true;
     });
 
     it('should not show if playlistComponents does not exist', function() {

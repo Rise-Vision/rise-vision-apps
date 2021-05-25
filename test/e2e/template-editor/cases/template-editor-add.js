@@ -19,15 +19,7 @@ var TemplateAddScenarios = function() {
     describe('basic operations', function () {
       before(function() {
         presentationsListPage.loadCurrentCompanyPresentationList();
-        presentationsListPage.createNewPresentationFromTemplate('Example Financial Template V4', 'example-financial-template-v4');
-        templateEditorPage.dismissFinancialDataLicenseMessage();
-      });
-
-      it('should auto-save the Presentation after it has been created', function () {
-        //wait for presentation to be auto-saved
-        templateEditorPage.waitForAutosave();
-
-        expect(templateEditorPage.getSavedText().isDisplayed()).to.eventually.be.true;
+        presentationsListPage.createNewPresentationFromTemplate('Example Playlist Component', 'example-playlist-component');
       });
 
       it('should set presentation name', function(done) {
@@ -66,7 +58,6 @@ var TemplateAddScenarios = function() {
         presentationsListPage.loadPresentation(presentationName);
 
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
-        expect(templateEditorPage.getImageComponent().isPresent()).to.eventually.be.true;
       });
 
       it('should not have auto-published the Presentation when navigating', function () {
@@ -79,8 +70,7 @@ var TemplateAddScenarios = function() {
     describe('remove',function(){
       before(function(){
         presentationsListPage.loadCurrentCompanyPresentationList();
-        presentationsListPage.createNewPresentationFromTemplate('Example Financial Template V4', 'example-financial-template-v4');
-        templateEditorPage.dismissFinancialDataLicenseMessage();
+        presentationsListPage.createNewPresentationFromTemplate('Example Playlist Component', 'example-playlist-component');
       });
 
       it('should delete the Presentation', function () {
