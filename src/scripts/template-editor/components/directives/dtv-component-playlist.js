@@ -2,9 +2,9 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateComponentPlaylist', ['$loading', 'componentsFactory', 'attributeDataFactory',
-    'playlistComponentFactory', 'blueprintFactory', 'PLAYLIST_COMPONENTS', 'ENV_NAME',
+    'playlistComponentFactory', 'blueprintFactory', 'PLAYLIST_COMPONENTS', 'ENV_NAME', 'analyticsFactory',
     function ($loading, componentsFactory, attributeDataFactory, playlistComponentFactory,
-      blueprintFactory, PLAYLIST_COMPONENTS, ENV_NAME) {
+      blueprintFactory, PLAYLIST_COMPONENTS, ENV_NAME, analyticsFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -13,7 +13,7 @@ angular.module('risevision.template-editor.directives')
           $scope.playlistComponentFactory = playlistComponentFactory;
           $scope.playlistItems = [];
           $scope.playlistComponents = PLAYLIST_COMPONENTS;
-          $scope.addVisualComponents = !!ENV_NAME && ENV_NAME !== 'TEST';
+          $scope.addVisualComponents = !!ENV_NAME;
 
           var _updatePlaylistComponents = function() {
             if (!blueprintFactory.isRiseInit()) {
@@ -71,6 +71,10 @@ angular.module('risevision.template-editor.directives')
               playlistComponentFactory.onAddHandler = $scope.addItems;
 
               _load();
+
+              analyticsFactory.track('Playlist Viewed', {
+                componentId: $scope.componentId
+              });
             }
           });
 
@@ -132,6 +136,10 @@ angular.module('risevision.template-editor.directives')
           $scope.showAddTemplates = function () {
             componentsFactory.editComponent({
               type: 'rise-presentation-selector'
+            });
+
+            analyticsFactory.track('Playlist Item Added', {
+              componentType: 'rise-embedded-template',
             });
           };
 
@@ -270,6 +278,10 @@ angular.module('risevision.template-editor.directives')
 
             $scope.playlistItems.push(item);
             $scope.save();
+
+            analyticsFactory.track('Playlist Item Added', {
+              componentType: type,
+            });
 
             _editComponent(item);
           };

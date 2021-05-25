@@ -60,7 +60,7 @@ angular.module('risevision.template-editor.services')
     'rise-playlist': {
       type: 'rise-playlist',
       iconType: 'streamline',
-      icon: 'embedded-template',
+      icon: 'playlist',
       panel: '.rise-playlist-container',
       title: 'Playlist'
     },
@@ -110,7 +110,10 @@ angular.module('risevision.template-editor.services')
       visual: true,
       defaultAttributes: {
         fontsize: 100,
-        multiline: true
+        multiline: true,
+        verticalalign: 'middle',
+        horizontalalign: 'center',
+        textalign: 'center'
       }
     },
     'rise-time-date': {

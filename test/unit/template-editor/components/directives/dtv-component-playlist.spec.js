@@ -6,6 +6,7 @@ describe("directive: templateComponentPlaylist", function() {
       $loading,
       element,
       componentsFactory,
+      analyticsFactory,
       attributeDataFactory,
       playlistComponentFactory,
       blueprintFactory,
@@ -95,6 +96,13 @@ describe("directive: templateComponentPlaylist", function() {
       };
     });
 
+    $provide.service('analyticsFactory', function() {
+      return {
+        load: sandbox.stub(),
+        track: sandbox.stub()
+      };
+    });
+
     $provide.service('attributeDataFactory', function() {
       return {
         setAttributeData: sandbox.stub(),
@@ -120,6 +128,7 @@ describe("directive: templateComponentPlaylist", function() {
   beforeEach(inject(function($injector, $compile, $rootScope, $templateCache){
     $loading = $injector.get('$loading');
     componentsFactory = $injector.get('componentsFactory');
+    analyticsFactory = $injector.get('analyticsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
     playlistComponentFactory = $injector.get('playlistComponentFactory');
     blueprintFactory = $injector.get('blueprintFactory');
@@ -138,7 +147,7 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.playlistComponentFactory).to.equal(playlistComponentFactory);
 
     expect($scope.playlistComponents).to.be.an('array');
-    expect($scope.addVisualComponents).to.be.false;
+    expect($scope.addVisualComponents).to.be.true;
 
     expect($scope.showComponentsDropdown).to.be.a('function')
 
@@ -228,6 +237,12 @@ describe("directive: templateComponentPlaylist", function() {
           componentsFactory.registerDirective.getCall(0).args[0].show();
 
           expect($scope.playlistComponents).to.have.length(2);
+        });
+
+        it('shuold track Playlist Viewed event', function() {
+          componentsFactory.registerDirective.getCall(0).args[0].show();
+
+          expect(analyticsFactory.track).to.have.been.calledWith('Playlist Viewed', {componentId: 'TEST-ID'});
         });
 
       });
@@ -343,8 +358,8 @@ describe("directive: templateComponentPlaylist", function() {
   });
 
   describe('showComponentsDropdown:', function() {
-    it('should not show by default', function() {
-      expect($scope.showComponentsDropdown()).to.be.false;
+    it('should show by default', function() {
+      expect($scope.showComponentsDropdown()).to.be.true;
     });
 
     it('should not show if playlistComponents does not exist', function() {
@@ -383,6 +398,8 @@ describe("directive: templateComponentPlaylist", function() {
     componentsFactory.editComponent.should.have.been.calledWith({
       type: 'rise-presentation-selector'      
     });
+
+    expect(analyticsFactory.track).to.have.been.calledWith('Playlist Item Added', {componentType: 'rise-embedded-template'});
   });
 
   it("addItems:", function() {
@@ -651,6 +668,8 @@ describe("directive: templateComponentPlaylist", function() {
         type: 'rise-text',
         id: 'playlist1 1'
       });
+
+      expect(analyticsFactory.track).to.have.been.calledWith('Playlist Item Added', {componentType: 'rise-text'});
     });
 
     it('should set playUntilDone', function() {
