@@ -15,8 +15,8 @@
         ng-repeat="template in playlistComponentFactory.templates.items.list"
         ng-click="playlistComponentFactory.templates.select(template)">
       <madero-checkbox id="{{template.id}}" ng-value="template.selected"></madero-checkbox>
-      <label class="templates-selector-name" for="{{template.id}}">
-        <div class="templates-name">{{ template.name }}</div>
+      <label class="templates-selector-name u_text-ellipsis" for="{{template.id}}">
+        <span class="templates-name">{{ template.name }}</span>
         <div class="templates-status font-weight-normal" ng-class="{'templates-status-revised' : template.revisionStatusName === 'Revised'}">{{ template.revisionStatusName }}</div>
       </label>
     </div>

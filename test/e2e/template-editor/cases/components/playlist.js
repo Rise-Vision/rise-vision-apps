@@ -35,16 +35,41 @@ var PlaylistComponentScenarios = function () {
       it('should open properties of Playlist Component', function () {
         templateEditorPage.selectComponent(componentLabel);
 
-        helper.wait(playlistComponentPage.getSelectTemplatesButton(), 'Select Button');
+        helper.wait(playlistComponentPage.getAddPlaylistItemButton(), 'Add Playlist Item Button');
 
-        expect(playlistComponentPage.getSelectTemplatesButton().isDisplayed()).to.eventually.be.true;
+        expect(playlistComponentPage.getAddPlaylistItemButton().isDisplayed()).to.eventually.be.true;
       });
 
-      it('should show no results message when there are no templates', function () {
-        helper.clickWhenClickable(playlistComponentPage.getSelectTemplatesButton(), 'Select Templates');
+      it('should add a Text component', function() {
+        helper.clickWhenClickable(playlistComponentPage.getAddPlaylistItemButton(), 'Add Playlist Item Templates');
+
+        helper.clickWhenClickable(playlistComponentPage.getAddTextComponentButton(), 'Add Text Component');
+        browser.sleep(1000);
+
+        helper.clickWhenClickable(templateEditorPage.getBackToComponentsButton(),'Back to selected templates');
+        browser.sleep(1000);
+
+        expect(playlistComponentPage.getPlaylistItems().count()).to.eventually.equal(1);
+      });
+
+      it('should delete item', function () {
+        helper.clickWhenClickable(playlistComponentPage.getDeleteItemLink(), 'Click Delete');
+        browser.sleep(1000);
+        expect(playlistComponentPage.getPlaylistItems().count()).to.eventually.equal(0);
+      });
+
+      it('should add Embedded Templates', function() {
+        helper.clickWhenClickable(playlistComponentPage.getAddPlaylistItemButton(), 'Select Templates');
+
+        helper.clickWhenClickable(playlistComponentPage.getAddPresentationItemButton(), 'Add Embedded Presentation');
+        browser.sleep(1000);
 
         helper.waitAppearDisappear(playlistComponentPage.getTemplatesLoaderSpinner(), 'Templates Loader');
 
+        expect(playlistComponentPage.getSearchInput().isDisplayed()).to.eventually.be.true;
+      });
+
+      it('should show no results message when there are no templates', function () {
         //search for something that returns no results
         playlistComponentPage.getSearchInput().sendKeys("purple unicorn" + protractor.Key.ENTER);
 
@@ -66,9 +91,11 @@ var PlaylistComponentScenarios = function () {
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent(componentLabel);
 
-        helper.wait(playlistComponentPage.getSelectTemplatesButton(), 'Select Templates');
+        helper.wait(playlistComponentPage.getAddPlaylistItemButton(), 'Add Playlist Item Button');
+        helper.clickWhenClickable(playlistComponentPage.getAddPlaylistItemButton(), 'Add Playlist Item Button');
 
-        helper.clickWhenClickable(playlistComponentPage.getSelectTemplatesButton(), 'Select Templates');
+        helper.clickWhenClickable(playlistComponentPage.getAddPresentationItemButton(), 'Add Embedded Presentation');
+        
         browser.sleep(500);
         helper.waitAppearDisappear(playlistComponentPage.getTemplatesLoaderSpinner(), 'Spinner');
 

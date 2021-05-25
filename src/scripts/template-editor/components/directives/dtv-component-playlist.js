@@ -13,7 +13,7 @@ angular.module('risevision.template-editor.directives')
           $scope.playlistComponentFactory = playlistComponentFactory;
           $scope.playlistItems = [];
           $scope.playlistComponents = PLAYLIST_COMPONENTS;
-          $scope.addVisualComponents = !!ENV_NAME && ENV_NAME !== 'TEST';
+          $scope.addVisualComponents = !!ENV_NAME;
 
           var _updatePlaylistComponents = function() {
             if (!blueprintFactory.isRiseInit()) {
