@@ -3,6 +3,8 @@
 describe('directive: templateComponentText', function() {
   var $scope,
       element,
+      $window,
+      $timeout,
       componentsFactory,
       attributeDataFactory;
 
@@ -24,8 +26,12 @@ describe('directive: templateComponentText', function() {
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    $window = $injector.get('$window');
+    $timeout = $injector.get('$timeout');
     componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
+
+    sinon.stub($window, 'dispatchEvent');
 
     $templateCache.put('partials/template-editor/components/component-text.html', '<p>mock</p>');
     $scope = $rootScope.$new();
@@ -35,6 +41,10 @@ describe('directive: templateComponentText', function() {
     $scope.$digest();
   }));
 
+  afterEach(function() {
+    $window.dispatchEvent.restore();
+  });
+
   it('should exist', function() {
     expect($scope).to.be.ok;
     expect(componentsFactory.registerDirective).to.have.been.called;
@@ -43,6 +53,8 @@ describe('directive: templateComponentText', function() {
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-text');
     expect(directive.show).to.be.a('function');
+
+    expect($scope.alignmentOptions).to.be.an('array');
   });
 
   it('should load text from attribute data', function() {
@@ -54,6 +66,20 @@ describe('directive: templateComponentText', function() {
 
     expect($scope.componentId).to.equal("TEST-ID");
     expect($scope.value).to.equal(sampleValue);
+  });
+
+  it('should dispatch resize event on load', function() {
+    var directive = componentsFactory.registerDirective.getCall(0).args[0];
+
+    directive.show();
+
+    $window.dispatchEvent.should.not.have.been.called;
+
+    $timeout.flush();
+
+    $window.dispatchEvent.should.have.been.called;
+    expect($window.dispatchEvent.getCall(0).args[0]).to.be.ok;
+    expect($window.dispatchEvent.getCall(0).args[0].type).to.equal('resize');
   });
 
   it('should load multiline attribute from blueprint', function() {
@@ -81,5 +107,99 @@ describe('directive: templateComponentText', function() {
       "TEST-ID", "value", "updated text"
     )).to.be.true;
   });
+
+  describe('fontsize:', function() {
+    it('should not show fontsize if option is not initialized', function() {
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
+
+      directive.show();
+
+      expect($scope.showFontSize).to.be.false;
+      expect($scope.fontsize).to.not.be.ok;
+    });
+
+    it('should load font size from blueprint', function() {
+      attributeDataFactory.getAvailableAttributeData.withArgs('TEST-ID', 'fontsize').returns('15');
+
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
+
+      directive.show();
+
+      expect(attributeDataFactory.getAvailableAttributeData).to.have.been.calledWith('TEST-ID', 'fontsize');
+
+      expect($scope.showFontSize).to.be.true;
+      expect($scope.fontsize).to.equal(15);
+    });
+
+    it('should not save font size if not shown', function() {
+      $scope.showFontSize = false;
+      $scope.fontsize = 12;
+
+      $scope.save();
+
+      expect(attributeDataFactory.setAttributeData).to.have.been.calledOnce;
+    });
+
+    it('should save font size to attribute data', function() {
+      $scope.showFontSize = true;
+      $scope.fontsize = 12;
+
+      $scope.save();
+
+      expect(attributeDataFactory.setAttributeData).to.have.been.calledWith(sinon.match.any, 'fontsize', 12);
+    });
+
+  });
+
+  describe('alignment:', function() {
+    it('should not show alignment if options are not initialized', function() {
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
+
+      directive.show();
+
+      expect(attributeDataFactory.getAvailableAttributeData).to.have.been.calledWith('TEST-ID', 'verticalalign');
+      expect(attributeDataFactory.getAvailableAttributeData).to.have.been.calledWith('TEST-ID', 'horizontalalign');
+
+      expect($scope.showAlignment).to.be.false;
+      expect($scope.alignment).to.not.be.ok;
+    });
+
+    it('should load alignment options from blueprint', function() {
+      attributeDataFactory.getAvailableAttributeData.withArgs('TEST-ID', 'verticalalign').returns('bottom');
+      attributeDataFactory.getAvailableAttributeData.withArgs('TEST-ID', 'horizontalalign').returns('center');
+
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
+
+      directive.show();
+
+      expect(attributeDataFactory.getAvailableAttributeData).to.have.been.calledWith('TEST-ID', 'verticalalign');
+      expect(attributeDataFactory.getAvailableAttributeData).to.have.been.calledWith('TEST-ID', 'horizontalalign');
+
+      expect($scope.showAlignment).to.be.true;
+      expect($scope.alignment).to.be.an('object');
+      expect($scope.alignment.name).to.equal('Bottom Center');
+    });
+
+    it('should not save alignment if not shown', function() {
+      $scope.showAlignment = false;
+      $scope.alignment = $scope.alignmentOptions[3];
+
+      $scope.save();
+
+      expect(attributeDataFactory.setAttributeData).to.have.been.calledOnce;
+    });
+
+    it('should save alignment to attribute data', function() {
+      $scope.showAlignment = true;
+      $scope.alignment = $scope.alignmentOptions[3];
+
+      $scope.save();
+
+      expect(attributeDataFactory.setAttributeData).to.have.been.calledWith(sinon.match.any, 'verticalalign', 'middle');
+      expect(attributeDataFactory.setAttributeData).to.have.been.calledWith(sinon.match.any, 'horizontalalign', 'left');
+      expect(attributeDataFactory.setAttributeData).to.have.been.calledWith(sinon.match.any, 'textalign', 'left');
+    });
+  });
+
 
 });
