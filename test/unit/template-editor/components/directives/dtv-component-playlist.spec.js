@@ -394,6 +394,16 @@ describe("directive: templateComponentPlaylist", function() {
     $scope.save.should.have.been.called;
   });
 
+  it("copyItem:", function() {
+    $scope.playlistItems = samplePlaylistItems;
+    sandbox.stub($scope, "save");
+
+    $scope.copyItem(0);
+
+    expect($scope.playlistItems.length).to.equal(3);
+    expect($scope.playlistItems[0]).to.deep.equal($scope.playlistItems[1]);
+  });
+
   it("removeItem:", function() {
     $scope.playlistItems = samplePlaylistItems;
     sandbox.stub($scope, "save");

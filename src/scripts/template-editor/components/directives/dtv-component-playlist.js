@@ -150,6 +150,14 @@ angular.module('risevision.template-editor.directives')
             $scope.save();
           };
 
+          $scope.copyItem = function (key) {
+            var item = angular.copy($scope.playlistItems[key]);
+
+            $scope.playlistItems.splice(key + 1, 0, item);
+
+            $scope.save();
+          };
+
           $scope.removeItem = function (key) {
             $scope.playlistItems.splice(key, 1);
 
