@@ -110,7 +110,10 @@ angular.module('risevision.template-editor.services')
       visual: true,
       defaultAttributes: {
         fontsize: 100,
-        multiline: true
+        multiline: true,
+        verticalalign: 'middle',
+        horizontalalign: 'center',
+        textalign: 'center'
       }
     },
     'rise-time-date': {

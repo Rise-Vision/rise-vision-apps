@@ -2,9 +2,9 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateComponentPlaylist', ['$loading', 'componentsFactory', 'attributeDataFactory',
-    'playlistComponentFactory', 'blueprintFactory', 'PLAYLIST_COMPONENTS', 'ENV_NAME',
+    'playlistComponentFactory', 'blueprintFactory', 'PLAYLIST_COMPONENTS', 'ENV_NAME', 'analyticsFactory',
     function ($loading, componentsFactory, attributeDataFactory, playlistComponentFactory,
-      blueprintFactory, PLAYLIST_COMPONENTS, ENV_NAME) {
+      blueprintFactory, PLAYLIST_COMPONENTS, ENV_NAME, analyticsFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -71,6 +71,10 @@ angular.module('risevision.template-editor.directives')
               playlistComponentFactory.onAddHandler = $scope.addItems;
 
               _load();
+
+              analyticsFactory.track('Playlist Viewed', {
+                componentId: $scope.componentId
+              });
             }
           });
 
@@ -133,6 +137,10 @@ angular.module('risevision.template-editor.directives')
             componentsFactory.editComponent({
               type: 'rise-presentation-selector'
             });
+
+            analyticsFactory.track('Playlist Item Added', {
+              componentType: 'rise-embedded-template',
+            });
           };
 
           $scope.showProperties = function () {
@@ -147,6 +155,14 @@ angular.module('risevision.template-editor.directives')
 
           $scope.addItems = function (itemsToAdd) {
             $scope.playlistItems = $scope.playlistItems.concat(itemsToAdd);
+            $scope.save();
+          };
+
+          $scope.copyItem = function (key) {
+            var item = angular.copy($scope.playlistItems[key]);
+
+            $scope.playlistItems.splice(key + 1, 0, item);
+
             $scope.save();
           };
 
@@ -174,7 +190,7 @@ angular.module('risevision.template-editor.directives')
             $scope.selectedItem['play-until-done-supported'] = isSupported;
 
             $scope.selectedItem['play-until-done'] = $scope.selectedItem['play-until-done-supported'] &&
-              $scope.selectedItem['play-until-done'] ? 'true' : 'false';
+              $scope.selectedItem['play-until-done'];
           };
 
           $scope.editProperties = function (key) {
@@ -211,10 +227,16 @@ angular.module('risevision.template-editor.directives')
             var item = $scope.playlistItems[$scope.selectedItem.key];
 
             item.duration = Number.isInteger($scope.selectedItem.duration) ? $scope.selectedItem.duration : 10;
-            item['play-until-done'] = $scope.selectedItem['play-until-done'] === 'true';
+            item['play-until-done'] = $scope.selectedItem['play-until-done'];
             item['transition-type'] = $scope.selectedItem['transition-type'];
 
             $scope.save();
+          };
+
+          $scope.savePlayUntilDone = function () {
+            $scope.selectedItem['play-until-done'] = !$scope.selectedItem['play-until-done'];
+
+            $scope.saveProperties();
           };
 
           $scope.getComponentByType = function(type) {
@@ -248,6 +270,10 @@ angular.module('risevision.template-editor.directives')
 
             $scope.playlistItems.push(item);
             $scope.save();
+
+            analyticsFactory.track('Playlist Item Added', {
+              componentType: type,
+            });
 
             _editComponent(item);
           };

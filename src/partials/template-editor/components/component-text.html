@@ -9,6 +9,7 @@
       </div>
     </div>
   </div>
+
   <div class="attribute-editor-row" ng-show="showFontSize">
     <div>
       <label class="u_margin-md-top">Font size:</label>
@@ -20,4 +21,17 @@
       <p class="range-value">{{ fontsize }}px</p>
     </div>
   </div>
+
+  <div class="attribute-editor-row" ng-show="showAlignment">
+    <div class="form-group">
+      <label class="control-label u_margin-sm-top" for="te-tc-alignment">Alignment:</label>
+      <select id="te-tc-alignment"
+              class="form-control"
+              ng-model="alignment"
+              ng-options="ao as ao.name for ao in alignmentOptions"
+              ng-change="save()">
+      </select>
+    </div>
+  </div>
+
 </div>

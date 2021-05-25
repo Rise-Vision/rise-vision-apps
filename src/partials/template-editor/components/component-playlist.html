@@ -45,10 +45,13 @@ rv-spinner rv-spinner-key="rise-playlist-loader">
           </a>
           <div class="templates-status templates-status-inline" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised' || value.removed}" ng-show="isEmbeddedTemplate(value)">{{ value.revisionStatusName }}</div>
         </div>
-        <div class="col-xs-2 pr-0 playlist-item-actions">
+        <div class="u_float-left mr-0 flex-row">
           <a class="madero-link" href="#" ng-click="editProperties(key)" ng-hide="value.removed">{{ durationToText(value) }}</a>
+          <a href="#" ng-click="copyItem(key)">
+            <streamline-icon class="ml-3 mr-0 streamline-component-icon" name="copy" width="16" height="18"></streamline-icon>
+          </a>
           <a href="#" ng-click="removeItem(key)">
-             <streamline-icon class="u_margin-left streamline-component-icon" name="trash" width="16" height="16"></streamline-icon>
+            <streamline-icon class="ml-3 streamline-component-icon" name="trash" width="16" height="18"></streamline-icon>
           </a>
         </div>
       </div>
@@ -59,38 +62,26 @@ rv-spinner rv-spinner-key="rise-playlist-loader">
 <!-- "edit" view -->
 <div class="playlist-item-container attribute-editor-component" style="display:none;"
   rv-spinner rv-spinner-key="rise-playlist-loader">
-  <div class="form-group has-feedback">
 
+  <div class="form-group has-feedback">
     <div class="attribute-editor-row">
       <label class="control-label" for="te-playlist-item-duration">Duration:</label>
-      <div  ng-show="selectedItem['play-until-done-supported']">
-        <div class="madero-radio">
-          <input type="radio" ng-model="selectedItem['play-until-done']" value="true" name="pud" id="te-playlist-item-pud-true" ng-change="saveProperties()" aria-required="true" required>
-          <label for="te-playlist-item-pud-true">
-            Play until done (PUD).
-          </label>
-        </div>
-        <div class="madero-radio">
-          <input type="radio" ng-model="selectedItem['play-until-done']" value="false" name="pud" id="te-playlist-item-pud-false" ng-change="saveProperties()" aria-required="true" required>
-          <label for="te-playlist-item-pud-false">
-            A specific time period.
-          </label>
-        </div>
+
+      <div class="flex-row" ng-show="selectedItem['play-until-done-supported']">
+        <madero-checkbox name="pud" id="te-playlist-item-pud-true" ng-value="selectedItem['play-until-done']" ng-click="savePlayUntilDone()"></madero-checkbox>
+        <span>
+          Play Until Done
+        </span>
       </div>
+
     </div>
 
-    <div class="attribute-editor-row" ng-show="selectedItem['play-until-done'] === 'false'">
-      <!-- Use the <form> tag in order to handle "debounce" option correctly for the <input> tag.
-      That way the model value is processed immeditly on Form submit and saveProperties() is called only once. -->
-      <form>
-        <div class="input-group">
-          <input type="number" id="te-playlist-item-duration" class="form-control" ng-class="{'duration-input-group' : selectedItem['play-until-done-supported']}" ng-model="selectedItem.duration" placeholder="Enter duration" ng-model-options="{ debounce: 1000 }" ng-change="saveProperties()">
-          <span class="input-group-addon">seconds</span>
-        </div>
-      </form>
+    <div class="attribute-editor-row input-group" ng-show="!selectedItem['play-until-done']">
+      <input type="number" id="te-playlist-item-duration" class="form-control" ng-class="{'duration-input-group' : selectedItem['play-until-done-supported']}" ng-model="selectedItem.duration" placeholder="Enter duration" ng-model-options="{ debounce: 1000 }" ng-change="saveProperties()">
+      <span class="input-group-addon">Seconds</span>
     </div>
 
-    <div class="attribute-editor-row">
+    <div class="attribute-editor-row mt-4">
       <label class="control-label" for="te-playlist-item-transition">Transition:</label>
       <select id="te-playlist-item-transition" ng-model="selectedItem['transition-type']" class="form-control" ng-change="saveProperties()">
         <option value="normal">No transition</option>
