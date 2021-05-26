@@ -147,7 +147,6 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.playlistComponentFactory).to.equal(playlistComponentFactory);
 
     expect($scope.playlistComponents).to.be.an('array');
-    expect($scope.addVisualComponents).to.be.true;
 
     expect($scope.showComponentsDropdown).to.be.a('function')
 
@@ -192,16 +191,6 @@ describe("directive: templateComponentPlaylist", function() {
       });
 
       describe('_updatePlaylistComponents:', function() {
-        it('should set addVisualComponents to false based on isRiseInit being false', function() {
-          blueprintFactory.isRiseInit.returns(false);
-
-          $scope.addVisualComponents = true;
-
-          componentsFactory.registerDirective.getCall(0).args[0].show();
-
-          expect($scope.addVisualComponents).to.be.false;
-        });
-
         it('should check blueprint data for allowed-components', function() {
           componentsFactory.registerDirective.getCall(0).args[0].show();
 
@@ -362,22 +351,25 @@ describe("directive: templateComponentPlaylist", function() {
       expect($scope.showComponentsDropdown()).to.be.true;
     });
 
+    it('should not show if template is not rise-init', function() {
+      blueprintFactory.isRiseInit.returns(false);
+
+      expect($scope.showComponentsDropdown()).to.be.false;
+    });
+
     it('should not show if playlistComponents does not exist', function() {
-      $scope.addVisualComponents = true;
       $scope.playlistComponents = null;
 
       expect($scope.showComponentsDropdown()).to.be.false;
     });
 
     it('should not show if there are no visual components', function() {
-      $scope.addVisualComponents = true;
       $scope.playlistComponents = [];
 
       expect($scope.showComponentsDropdown()).to.be.false;
     });
 
     it('should show if there are visual components', function() {
-      $scope.addVisualComponents = true;
       $scope.playlistComponents = ['rise-video'];
 
       expect($scope.showComponentsDropdown()).to.be.true;
