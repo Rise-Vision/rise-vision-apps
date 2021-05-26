@@ -24,7 +24,7 @@ commands:
             export CHROME_VERSION=$(google-chrome --version | grep -iE "[0-9.]{10,20}")
             echo "Chrome version $CHROME_VERSION";
             TEST_FILES=$(circleci tests glob "<< parameters.casesfile >>" | circleci tests split)
-            XUNIT_FILE=~/rise-vision-apps/reports/angular-xunit.xml PROSHOT_DIR=~/rise-vision-apps/reports/screenshots DBUS_SESSION_BUS_ADDRESS=/dev/null xvfb-run -a --server-args="-screen 0 1280x800x24" node run-test.js $TEST_FILES
+            CHROME_VERSION=90.0.4430.24 XUNIT_FILE=~/rise-vision-apps/reports/angular-xunit.xml PROSHOT_DIR=~/rise-vision-apps/reports/screenshots DBUS_SESSION_BUS_ADDRESS=/dev/null xvfb-run -a --server-args="-screen 0 1280x800x24" node run-test.js $TEST_FILES
       - store_test_results:
           path: ~/rise-vision-apps/reports
       - store_artifacts:
