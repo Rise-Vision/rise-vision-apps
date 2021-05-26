@@ -13,23 +13,18 @@ angular.module('risevision.template-editor.directives')
           $scope.playlistComponentFactory = playlistComponentFactory;
           $scope.playlistItems = [];
           $scope.playlistComponents = PLAYLIST_COMPONENTS;
-          $scope.addVisualComponents = true;
 
           var _updatePlaylistComponents = function() {
-            if (!blueprintFactory.isRiseInit()) {
-              $scope.addVisualComponents = false;
+            var allowedComponents = attributeDataFactory.getBlueprintData($scope.componentId, 'allowed-components');
+
+            if (!allowedComponents || allowedComponents === '*') {
+              $scope.playlistComponents = PLAYLIST_COMPONENTS;
             } else {
-              var allowedComponents = attributeDataFactory.getBlueprintData($scope.componentId, 'allowed-components');
+              var componentsArray = allowedComponents.split(',');
 
-              if (!allowedComponents || allowedComponents === '*') {
-                $scope.playlistComponents = PLAYLIST_COMPONENTS;
-              } else {
-                var componentsArray = allowedComponents.split(',');
-
-                $scope.playlistComponents = _.filter(PLAYLIST_COMPONENTS, function(component) {
-                  return componentsArray.indexOf(component.type) !== -1;
-                });
-              }
+              $scope.playlistComponents = _.filter(PLAYLIST_COMPONENTS, function(component) {
+                return componentsArray.indexOf(component.type) !== -1;
+              });
             }
           };
 
@@ -84,7 +79,7 @@ angular.module('risevision.template-editor.directives')
           });
 
           $scope.showComponentsDropdown = function() {
-            return $scope.addVisualComponents && !!$scope.playlistComponents && $scope.playlistComponents.length > 0;
+            return blueprintFactory.isRiseInit() && !!$scope.playlistComponents && $scope.playlistComponents.length > 0;
           };
 
           var _mapItemToEditorFormat = function (item) {
