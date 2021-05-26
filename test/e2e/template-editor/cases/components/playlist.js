@@ -40,6 +40,21 @@ var PlaylistComponentScenarios = function () {
         expect(playlistComponentPage.getAddPlaylistItemButton().isDisplayed()).to.eventually.be.true;
       });
 
+      it('should delete default items', function (done) {
+        playlistComponentPage.getPlaylistItems().count().then(function(count) {
+          for (var i = 0; i < count; i++) {
+            helper.clickWhenClickable(playlistComponentPage.getDeleteItemLink(), 'Click Delete');
+            browser.sleep(1000);            
+          }
+
+          console.log('Deleted ' + count + ' items');
+
+          expect(playlistComponentPage.getPlaylistItems().count()).to.eventually.equal(0);
+
+          done();
+        });
+      });
+
       it('should add a Text component', function() {
         helper.clickWhenClickable(playlistComponentPage.getAddPlaylistItemButton(), 'Add Playlist Item Templates');
 
