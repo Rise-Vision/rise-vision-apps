@@ -90,7 +90,7 @@ angular.module('risevision.template-editor.directives')
           var _mapItemToEditorFormat = function (item) {
             return {
               'duration': item.duration,
-              'play-until-done': item['play-until-done'],
+              'play-until-done': item['play-until-done'] === '' ? true : item['play-until-done'],
               'transition-type': item['transition-type'],
               'tagName': item.element && item.element.tagName ? item.element.tagName : undefined,
               'id': item.element && item.element.attributes ? item.element.attributes['presentation-id'] :

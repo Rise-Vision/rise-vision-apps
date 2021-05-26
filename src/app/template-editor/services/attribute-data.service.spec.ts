@@ -169,6 +169,12 @@ describe('AttributeDataService', () => {
       expect(attributeDataFactory.getAttributeData('playlist-1 0', 'property1')).to.equal('value');
     });
 
+    it('should get empty attribute data for a missing playlist item',function() {
+      var data = attributeDataFactory.getAttributeData('playlist-1 0', 'property1');
+
+      expect(data).to.be.undefined;
+    });
+
   });
 
   describe('setAttributeData', function () {
