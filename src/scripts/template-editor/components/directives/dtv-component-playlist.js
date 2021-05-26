@@ -2,9 +2,9 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateComponentPlaylist', ['$loading', 'componentsFactory', 'attributeDataFactory',
-    'playlistComponentFactory', 'blueprintFactory', 'PLAYLIST_COMPONENTS', 'ENV_NAME', 'analyticsFactory',
+    'playlistComponentFactory', 'blueprintFactory', 'PLAYLIST_COMPONENTS', 'analyticsFactory',
     function ($loading, componentsFactory, attributeDataFactory, playlistComponentFactory,
-      blueprintFactory, PLAYLIST_COMPONENTS, ENV_NAME, analyticsFactory) {
+      blueprintFactory, PLAYLIST_COMPONENTS, analyticsFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -13,7 +13,7 @@ angular.module('risevision.template-editor.directives')
           $scope.playlistComponentFactory = playlistComponentFactory;
           $scope.playlistItems = [];
           $scope.playlistComponents = PLAYLIST_COMPONENTS;
-          $scope.addVisualComponents = !!ENV_NAME;
+          $scope.addVisualComponents = true;
 
           var _updatePlaylistComponents = function() {
             if (!blueprintFactory.isRiseInit()) {
