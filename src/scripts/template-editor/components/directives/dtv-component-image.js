@@ -7,11 +7,11 @@ angular.module('risevision.template-editor.directives')
   .constant('CANVA_FOLDER', 'canva/')
   .directive('templateComponentImage', ['$log', '$q', '$timeout', '$loading', 'componentsFactory', 'templateEditorFactory',
     'attributeDataFactory', 'storageManagerFactory', 'fileExistenceCheckService', 'fileMetadataUtilsService',
-    'logoImageFactory', 'baseImageFactory', 'fileDownloader', 'DEFAULT_IMAGE_THUMBNAIL',
+    'logoImageFactory', 'baseImageFactory', 'fileDownloader', 'templateEditorUtils', 'DEFAULT_IMAGE_THUMBNAIL',
     'SUPPORTED_IMAGE_TYPES', 'CANVA_FOLDER',
     function ($log, $q, $timeout, $loading, componentsFactory, templateEditorFactory, attributeDataFactory,
       storageManagerFactory, fileExistenceCheckService, fileMetadataUtilsService,
-      logoImageFactory, baseImageFactory, fileDownloader,
+      logoImageFactory, baseImageFactory, fileDownloader, templateEditorUtils,
       DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES, CANVA_FOLDER) {
       return {
         restrict: 'E',
@@ -211,6 +211,15 @@ angular.module('risevision.template-editor.directives')
                     }
                   });
               });
+            },
+            getName: function(componentId) {
+              var files = _getFilesFor(componentId);
+
+              if (files && files.length > 0) {
+                return templateEditorUtils.fileNameOf(files[0]);
+              } else {
+                return null;
+              }
             }
           };
 

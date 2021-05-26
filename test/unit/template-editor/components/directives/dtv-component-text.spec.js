@@ -53,59 +53,75 @@ describe('directive: templateComponentText', function() {
     expect(directive).to.be.ok;
     expect(directive.type).to.equal('rise-text');
     expect(directive.show).to.be.a('function');
+    expect(directive.getName).to.be.a('function');
 
     expect($scope.alignmentOptions).to.be.an('array');
   });
 
-  it('should load text from attribute data', function() {
+  describe('show:', function() {
+    it('should load text from attribute data', function() {
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
+      var sampleValue = "test text";
+      attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
+
+      directive.show();
+
+      expect($scope.componentId).to.equal("TEST-ID");
+      expect($scope.value).to.equal(sampleValue);
+    });
+
+    it('should load multiline attribute from blueprint', function() {
+      attributeDataFactory.getAvailableAttributeData.returns(true);
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
+
+      directive.show();
+
+      expect(attributeDataFactory.getAvailableAttributeData).to.have.been.calledWith('TEST-ID', 'multiline');
+      expect($scope.isMultiline).to.be.true;
+    });
+
+    it('should dispatch resize event on load', function() {
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
+
+      directive.show();
+
+      $window.dispatchEvent.should.not.have.been.called;
+
+      $timeout.flush();
+
+      $window.dispatchEvent.should.have.been.called;
+      expect($window.dispatchEvent.getCall(0).args[0]).to.be.ok;
+      expect($window.dispatchEvent.getCall(0).args[0].type).to.equal('resize');
+    });
+
+  });
+
+  it('getName:', function() {
     var directive = componentsFactory.registerDirective.getCall(0).args[0];
     var sampleValue = "test text";
     attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
 
-    directive.show();
+    expect(directive.getName('componentId')).to.equal(sampleValue);
 
-    expect($scope.componentId).to.equal("TEST-ID");
-    expect($scope.value).to.equal(sampleValue);
+    attributeDataFactory.getAvailableAttributeData.should.have.been.calledWith('componentId', 'value');
   });
 
-  it('should dispatch resize event on load', function() {
-    var directive = componentsFactory.registerDirective.getCall(0).args[0];
+  describe('save:', function() {
+    it('should save text to attribute data', function() {
+      var directive = componentsFactory.registerDirective.getCall(0).args[0];
+      var sampleValue = "test text";
+      attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
 
-    directive.show();
+      directive.show();
 
-    $window.dispatchEvent.should.not.have.been.called;
+      $scope.value = "updated text";
 
-    $timeout.flush();
+      $scope.save();
 
-    $window.dispatchEvent.should.have.been.called;
-    expect($window.dispatchEvent.getCall(0).args[0]).to.be.ok;
-    expect($window.dispatchEvent.getCall(0).args[0].type).to.equal('resize');
-  });
-
-  it('should load multiline attribute from blueprint', function() {
-    attributeDataFactory.getAvailableAttributeData.returns(true);
-    var directive = componentsFactory.registerDirective.getCall(0).args[0];
-
-    directive.show();
-
-    expect(attributeDataFactory.getAvailableAttributeData).to.have.been.calledWith('TEST-ID', 'multiline');
-    expect($scope.isMultiline).to.be.true;
-  });
-
-  it('should save text to attribute data', function() {
-    var directive = componentsFactory.registerDirective.getCall(0).args[0];
-    var sampleValue = "test text";
-    attributeDataFactory.getAvailableAttributeData.returns(sampleValue);
-
-    directive.show();
-
-    $scope.value = "updated text";
-
-    $scope.save();
-
-    expect(attributeDataFactory.setAttributeData.calledWith(
-      "TEST-ID", "value", "updated text"
-    )).to.be.true;
+      expect(attributeDataFactory.setAttributeData.calledWith(
+        "TEST-ID", "value", "updated text"
+      )).to.be.true;
+    });    
   });
 
   describe('fontsize:', function() {
@@ -200,6 +216,5 @@ describe('directive: templateComponentText', function() {
       expect(attributeDataFactory.setAttributeData).to.have.been.calledWith(sinon.match.any, 'textalign', 'left');
     });
   });
-
 
 });

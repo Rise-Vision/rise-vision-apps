@@ -138,6 +138,15 @@ angular.module('risevision.template-editor.directives')
 
               _loadSelectedFiles();
               _loadVolume();
+            },
+            getName: function(componentId) {
+              var files = _getFilesFor(componentId);
+
+              if (files && files.length > 0) {
+                return templateEditorUtils.fileNameOf(files[0]);
+              } else {
+                return null;
+              }
             }
           });
 

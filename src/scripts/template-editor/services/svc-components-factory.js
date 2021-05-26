@@ -268,6 +268,18 @@ angular.module('risevision.template-editor.services')
         }
       };
 
+      factory.getComponentName = function(component) {
+        var directive = _getDirective(component);
+
+        if (directive && directive.getName) {
+          return directive.getName(component.id) || directive.title;
+        } else if (directive) {
+          return directive.title;
+        } else {
+          return '';
+        }
+      };
+
       factory.highlightComponent = function (componentId) {
         var message = {
           type: 'highlightComponent',

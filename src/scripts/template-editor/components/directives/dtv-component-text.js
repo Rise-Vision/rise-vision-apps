@@ -117,6 +117,9 @@ angular.module('risevision.template-editor.directives')
             show: function () {
               $scope.componentId = componentsFactory.selected.id;
               _load();
+            },
+            getName: function(componentId) {
+              return attributeDataFactory.getAvailableAttributeData(componentId, 'value');
             }
           });
 

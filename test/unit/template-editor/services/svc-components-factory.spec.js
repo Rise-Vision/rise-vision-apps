@@ -277,6 +277,7 @@ describe('service: componentsFactory:', function() {
     expect(componentsFactory.onBackButton).to.be.a('function');
     expect(componentsFactory.backToList).to.be.a('function');
     expect(componentsFactory.getComponentIcon).to.be.a('function');
+    expect(componentsFactory.getComponentName).to.be.a('function');
   });
 
   it('reset:', function() {
@@ -567,6 +568,54 @@ describe('service: componentsFactory:', function() {
       };
 
       expect(componentsFactory.getComponentTitle(component)).to.equal('directiveTitle');
+    });
+
+  });
+
+  describe('getComponentName:', function() {
+    var directive, component;
+
+    beforeEach(function() {
+      directive = {
+        type: 'rise-test',
+        title: 'directiveTitle',
+        element: {
+          hide: function() {}
+        }
+      };
+
+      component = {
+        type: 'rise-test',
+        id: 'componentId'
+      };
+
+      componentsFactory.registerDirective(directive);
+    });
+
+    it('should check getName function on the directive', function() {
+      directive.getName = sandbox.stub().returns('componentName');
+
+      expect(componentsFactory.getComponentName(component)).to.equal('componentName');
+
+      directive.getName.should.have.been.calledWith('componentId');
+    });
+
+    it('should return title if getName returns blank', function() {
+      directive.getName = sandbox.stub().returns('');
+
+      expect(componentsFactory.getComponentName(component)).to.equal('directiveTitle');
+
+      directive.getName.should.have.been.calledWith('componentId');
+    });
+
+    it('should return title if getName doesnt exist', function() {
+      expect(componentsFactory.getComponentName(component)).to.equal('directiveTitle');
+    });
+
+    it('should return blank if directive is not found', function() {
+      expect(componentsFactory.getComponentName({
+        type: 'rise-test-2'
+      })).to.equal('');
     });
 
   });

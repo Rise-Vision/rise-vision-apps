@@ -41,7 +41,7 @@ rv-spinner rv-spinner-key="rise-playlist-loader">
         <div class="col-xs-9 u_text-ellipsis">
           <span class="templates-name" ng-show="isEmbeddedTemplate(value)">{{ value.name }}</span>
           <a class="madero-link" href="#" ng-click="editPlaylistItem(key)" ng-hide="isEmbeddedTemplate(value)">
-            <span class="templates-name">{{ getComponentByType(value.tagName).title }}</span>
+            <span class="templates-name">{{ getComponentName(value) }}</span>
           </a>
           <div class="templates-status templates-status-inline" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised' || value.removed}" ng-show="isEmbeddedTemplate(value)">{{ value.revisionStatusName }}</div>
         </div>
