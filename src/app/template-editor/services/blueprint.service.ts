@@ -70,11 +70,15 @@ export class BlueprintService {
     return (!!this.blueprintData && this.blueprintData.riseInit === true);
   }
 
-  getBlueprintData(componentId, attributeKey?) {
+  componentFor(componentId) {
     var components = this.blueprintData.components;
-    var component = _.find(components, {
+    return _.find(components, {
       id: componentId
     });
+  }
+
+  getBlueprintData(componentId, attributeKey?) {
+    var component = this.componentFor(componentId);
 
     if (!component || !component.attributes) {
       return null;

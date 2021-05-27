@@ -58,6 +58,8 @@ describe('BlueprintService', () => {
  
   it('should exist',function(){
     expect(blueprintFactory).to.be.ok;
+    expect(blueprintFactory.componentFor).to.be.a('function');
+    expect(blueprintFactory.getBlueprintData).to.be.a('function');
     expect(blueprintFactory.getBlueprintCached).to.be.a('function');
     expect(blueprintFactory.isPlayUntilDone).to.be.a('function');
     expect(blueprintFactory.hasBranding).to.be.a('function');
@@ -201,6 +203,26 @@ describe('BlueprintService', () => {
 
       expect(blueprintFactory.isRiseInit()).to.be.false;
     });
+  });
+
+  describe('componentFor', function () {
+
+    it('should handle missing component',function() {
+      blueprintFactory.blueprintData = { components: SAMPLE_COMPONENTS };
+
+      var component = blueprintFactory.componentFor('rise-text-missing');
+
+      expect(component).to.not.be.ok;
+    });
+
+    it('should get component if it exists',function() {
+      blueprintFactory.blueprintData = { components: SAMPLE_COMPONENTS };
+
+      var component = blueprintFactory.componentFor('rise-data-financial-01');
+
+      expect(component).to.equal(SAMPLE_COMPONENTS[1]);
+    });
+
   });
 
   describe('getBlueprintData', function () {
