@@ -2,9 +2,9 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateComponentPlaylist', ['$loading', 'componentsFactory', 'attributeDataFactory',
-    'playlistComponentFactory', 'blueprintFactory', 'PLAYLIST_COMPONENTS', 'analyticsFactory',
+    'playlistComponentFactory', 'blueprintFactory', 'templateEditorUtils', 'PLAYLIST_COMPONENTS', 'analyticsFactory',
     function ($loading, componentsFactory, attributeDataFactory, playlistComponentFactory,
-      blueprintFactory, PLAYLIST_COMPONENTS, analyticsFactory) {
+      blueprintFactory, templateEditorUtils, PLAYLIST_COMPONENTS, analyticsFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -198,8 +198,7 @@ angular.module('risevision.template-editor.directives')
             $scope.selectedItem.key = key;
 
             //set default values
-            $scope.selectedItem.duration = Number.isInteger($scope.selectedItem.duration) ? $scope.selectedItem
-              .duration : 10;
+            $scope.selectedItem.duration = templateEditorUtils.intValueFor($scope.selectedItem.duration, 10);
             $scope.selectedItem['transition-type'] = $scope.selectedItem['transition-type'] ? $scope.selectedItem[
               'transition-type'] : 'normal';
 
