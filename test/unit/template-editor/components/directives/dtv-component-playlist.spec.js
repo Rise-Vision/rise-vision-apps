@@ -565,6 +565,14 @@ describe("directive: templateComponentPlaylist", function() {
       });
     });
 
+    it('should parse duration string', function() {
+      $scope.playlistItems[1].duration = '25';
+
+      $scope.editProperties(1);
+
+      expect($scope.selectedItem["duration"]).to.equal(25);
+    });
+
     it('should handle invalid duration and set default transition-type', function() {
       $scope.playlistItems[1].duration = 'invalid';
       $scope.playlistItems[1]['transition-type'] = '';
