@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { HttpClientModule } from '@angular/common/http';
 import { EditorModule } from './editor/editor.module';
-import { analyticsFactoryProvider, canvaTypePickerProvider, templateEditorFactoryProvider } from './ajs-upgraded-providers';
+import { analyticsFactoryProvider, canvaTypePickerProvider, templateEditorFactoryProvider, templateEditorUtilsProvider } from './ajs-upgraded-providers';
 import { TemplateEditorModule } from './template-editor/template-editor.module';
 
 @NgModule({
@@ -21,7 +21,8 @@ import { TemplateEditorModule } from './template-editor/template-editor.module';
   providers: [
     analyticsFactoryProvider,
     canvaTypePickerProvider,
-    templateEditorFactoryProvider
+    templateEditorFactoryProvider,
+    templateEditorUtilsProvider
   ],
   bootstrap: []
 })
