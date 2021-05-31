@@ -15,7 +15,8 @@ describe('AttributeDataService', () => {
 
   beforeEach(() => {
     blueprintFactory = {
-      getBlueprintData: sandbox.stub().returns('blueprintData')
+      getBlueprintData: sandbox.stub().returns('blueprintData'),
+      componentFor: sandbox.stub()
     }
     templateEditorFactory = {
       presentation: {}
@@ -100,7 +101,26 @@ describe('AttributeDataService', () => {
     it('should get empty attribute data',function() {
       var data = attributeDataFactory.getAttributeData('test-id');
 
+      blueprintFactory.componentFor.should.have.been.calledWith('test-id');
+      blueprintFactory.getBlueprintData.should.not.have.been.called;
+
       expect(data).to.deep.equal({ id: 'test-id' });
+    });
+
+    it('should retrieve blueprint items for a playlist component',function() {
+      blueprintFactory.componentFor.returns({
+        type: 'rise-playlist'
+      });
+
+      var data = attributeDataFactory.getAttributeData('test-id');
+
+      blueprintFactory.componentFor.should.have.been.calledWith('test-id');
+      blueprintFactory.getBlueprintData.should.have.been.calledWith('test-id', 'items');
+
+      expect(data).to.deep.equal({
+        id: 'test-id',
+        items: 'blueprintData'
+      });
     });
 
     it('should not update templateAttributeData on get',function() {
@@ -167,6 +187,21 @@ describe('AttributeDataService', () => {
       ];
 
       expect(attributeDataFactory.getAttributeData('playlist-1 0', 'property1')).to.equal('value');
+    });
+
+    it('should get attribute data from the blueprint for a missing playlist item',function() {
+      blueprintFactory.componentFor.returns({
+        type: 'rise-playlist'
+      });
+      blueprintFactory.getBlueprintData.returns([
+        {
+          'property1': 'value1'
+        }
+      ])
+
+      var data = attributeDataFactory.getAttributeData('playlist-1 0', 'property1');
+
+      expect(data).to.equal('value1');
     });
 
     it('should get empty attribute data for a missing playlist item',function() {

@@ -4,6 +4,7 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 import { environment } from 'src/environments/environment';
 import * as angular from 'angular';
 import * as _ from 'lodash';
+import { TemplateEditorUtils } from 'src/app/ajs-upgraded-providers';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class BlueprintService {
   public loadingBlueprint = false;
   public blueprintData;
   
-  constructor(private httpClient: HttpClient) {     
+  constructor(private httpClient: HttpClient, private templateEditorUtils: TemplateEditorUtils) {     
   }
 
   getBlueprintCached(productCode, readOnly?) {
@@ -32,26 +33,50 @@ export class BlueprintService {
     }
   }
 
+  _sanitizeBlueprint(blueprintData) {
+    const components = blueprintData && blueprintData.components || [];
+
+    components.forEach(component => {
+      // Retrieve playlist items from the blueprint
+      if (component && component.type === 'rise-playlist') {
+        const items = component.attributes && component.attributes.items && component.attributes.items.value || [];
+
+        items.forEach(item => {
+          item.duration = this.templateEditorUtils.intValueFor(item.duration, 10);
+
+          var attributes = item.element && item.element.attributes || {};
+          if (attributes.minfontsize) {
+            attributes.minfontsize = this.templateEditorUtils.intValueFor(attributes.minfontsize, null);
+          }
+          if (attributes.maxfontsize) {
+            attributes.maxfontsize = this.templateEditorUtils.intValueFor(attributes.maxfontsize, null);
+          }
+        });
+      }
+    });
+  }
+
   _getBlueprint(productCode, readOnly) {
     var url = environment.BLUEPRINT_URL.replace('PRODUCT_CODE', productCode);
 
     //show loading spinner
     this.loadingBlueprint = true;
 
-    let self = this;
     return this.httpClient.get(url)
       .toPromise()
-      .then(function (response :any) {
+      .then((response :any) => {
+        this._sanitizeBlueprint(response);
+
         if (!readOnly) {
-          self.blueprintData = response;
+          this.blueprintData = response;
         }
 
-        self._blueprints[productCode] = response;
+        this._blueprints[productCode] = response;
 
         return response;
       })
-      .finally(function () {
-        self.loadingBlueprint = false;
+      .finally(() => {
+        this.loadingBlueprint = false;
       });
   }
 
@@ -70,11 +95,15 @@ export class BlueprintService {
     return (!!this.blueprintData && this.blueprintData.riseInit === true);
   }
 
-  getBlueprintData(componentId, attributeKey?) {
+  componentFor(componentId) {
     var components = this.blueprintData.components;
-    var component = _.find(components, {
+    return _.find(components, {
       id: componentId
     });
+  }
+
+  getBlueprintData(componentId, attributeKey?) {
+    var component = this.componentFor(componentId);
 
     if (!component || !component.attributes) {
       return null;
@@ -101,9 +130,8 @@ export class BlueprintService {
   }
 
   getHelpText(componentId) {
-    var component = _.find(this.blueprintData.components, {
-      id: componentId
-    });
+    var component = this.componentFor(componentId);
+
     return component && component.helpText;
   };
 }

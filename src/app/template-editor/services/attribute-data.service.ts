@@ -94,6 +94,13 @@ export class AttributeDataService {
         id: componentId
       };
 
+      var blueprintComponent = this.blueprintFactory.componentFor(componentId);
+      
+      // Retrieve playlist items from the blueprint
+      if (blueprintComponent && blueprintComponent.type === 'rise-playlist') {
+        component.items = this.getBlueprintData(componentId, 'items');
+      }
+
       if (updateAttributeData) {
         attributeData.components.push(component);
       }
