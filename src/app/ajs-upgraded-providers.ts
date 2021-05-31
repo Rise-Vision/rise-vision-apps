@@ -29,3 +29,14 @@ export const templateEditorFactoryProvider = {
   },
   deps: ['$injector']
 };
+
+export abstract class TemplateEditorUtils {
+  [key: string]: any;
+}
+export const templateEditorUtilsProvider = {
+  provide: TemplateEditorUtils,
+  useFactory: function ($injector: any) {
+    return $injector.get('templateEditorUtils');
+  },
+  deps: ['$injector']
+};

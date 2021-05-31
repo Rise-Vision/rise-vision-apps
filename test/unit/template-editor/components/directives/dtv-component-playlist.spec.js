@@ -326,6 +326,43 @@ describe("directive: templateComponentPlaylist", function() {
     )).to.be.true;
   });
 
+  describe("jsonToPlaylistItems:", function() {
+    it('should map items', function() {
+      var items = $scope.jsonToPlaylistItems(sampleAttributeData.items);
+
+      expect(items.length).to.equal(2);
+      expect(items[0]["play-until-done"]).to.be.true;
+      expect(items[0]["duration"]).to.equal(10);
+      expect(items[0]["transition-type"]).to.equal("fadeIn");
+      expect(items[0]["tagName"]).to.equal("rise-embedded-template");
+      expect(items[0]["id"]).to.equal("presentation-id-1");
+      expect(items[0]["productCode"]).to.equal("template-id-1");
+      expect(items[0].attributes["template-id"]).to.equal("template-id-1");
+      expect(items[0].attributes["presentation-id"]).to.equal("presentation-id-1");
+
+      expect(items[1]["play-until-done"]).to.be.false;
+      expect(items[1]["duration"]).to.equal(10);
+      expect(items[1]["transition-type"]).to.equal("fadeIn");
+      expect(items[1]["tagName"]).to.equal("rise-text");
+      expect(items[1].attributes["id"]).to.equal("text1");
+      expect(items[1].attributes["value"]).to.equal("Sample");      
+    });
+
+    it('should map defaults', function() {
+      var items = $scope.jsonToPlaylistItems([{
+        "duration": 10,
+        "element": {
+        },
+        "play-until-done": ""
+      }]);
+
+      expect(items.length).to.equal(1);
+      expect(items[0]["play-until-done"]).to.be.true;
+      expect(items[0]["duration"]).to.equal(10);
+      expect(items[0].attributes).to.deep.equal({});
+    });
+  });
+
   it("playlistItemsToJson:", function() {
     $scope.playlistItems = samplePlaylistItems;
     var items = $scope.playlistItemsToJson();

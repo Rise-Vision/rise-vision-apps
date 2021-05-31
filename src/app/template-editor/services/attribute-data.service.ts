@@ -78,7 +78,9 @@ export class AttributeDataService {
       var playlistId = tokens[0];
       var playlist = this._componentFor(playlistId, updateAttributeData);
 
-      return playlist.items[tokens[1]];
+      if (playlist.items) {
+        return playlist.items[tokens[1]];        
+      }
     } else if (attributeData.components) {
       component = _.find(attributeData.components, {
         id: componentId
@@ -91,6 +93,13 @@ export class AttributeDataService {
       component = {
         id: componentId
       };
+
+      var blueprintComponent = this.blueprintFactory.componentFor(componentId);
+      
+      // Retrieve playlist items from the blueprint
+      if (blueprintComponent && blueprintComponent.type === 'rise-playlist') {
+        component.items = this.getBlueprintData(componentId, 'items');
+      }
 
       if (updateAttributeData) {
         attributeData.components.push(component);
