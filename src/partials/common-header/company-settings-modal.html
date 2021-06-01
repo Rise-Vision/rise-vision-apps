@@ -113,7 +113,7 @@
           Test Company
         </label>
       </div>
-      <div class="checkbox" ng-if="isRiseStoreAdmin">
+      <div class="checkbox" ng-if="isRiseStoreAdmin && !currentPlanFactory.isUnlimitedPlan()">
         <label class="form-control-label">
           <input type="checkbox" ng-model="company.shareCompanyPlan" />
           Share Company Plan
