@@ -102,6 +102,10 @@
           return _factory.isCancelled() && (_factory.currentPlan.currentPeriodEndDate > now);
         };
 
+        _factory.isUnlimitedPlan = function() {
+          return _factory.currentPlan.type === 'unlimited';
+        };
+
         _loadCurrentPlan();
 
         $rootScope.$on('risevision.company.selectedCompanyChanged', function () {

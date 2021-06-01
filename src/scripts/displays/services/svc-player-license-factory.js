@@ -8,10 +8,15 @@ angular.module('risevision.displays.services')
       var factory = {};
 
       factory.getUsedLicenseString = function () {
-        return factory.getProUsedLicenseCount() +
-          ' Licensed Display' + (factory.getProUsedLicenseCount() !== 1 ? 's' : '') +
-          ' / ' + factory.getProAvailableLicenseCount() +
-          ' Available License' + (factory.getProAvailableLicenseCount() !== 1 ? 's' : '');
+        var text = factory.getProUsedLicenseCount() + ' Licensed Display' + 
+          (factory.getProUsedLicenseCount() !== 1 ? 's' : '') + ' / ';
+        if (currentPlanFactory.isUnlimitedPlan()) {
+          text += 'Unlimited Licenses';
+        } else {
+          text += factory.getProAvailableLicenseCount() +
+            ' Available License' + (factory.getProAvailableLicenseCount() !== 1 ? 's' : '');
+        }
+        return text;
       };
 
       factory.isProAvailable = function (display) {
