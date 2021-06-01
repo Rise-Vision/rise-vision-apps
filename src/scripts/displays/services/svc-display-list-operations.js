@@ -220,6 +220,18 @@ angular.module('risevision.displays.services')
               requireRole: 'da'
             },
             {
+              name: 'License',
+              actionCall: function (selected) {
+                return _licenseDisplays(selected.companyId, selected.items);
+              },
+              beforeBatchAction: _confirmLicense,
+              groupBy: 'companyId',
+              filter: {
+                playerProAuthorized: false
+              },
+              requireRole: 'da'
+            },
+            {
               name: 'Assign Schedule',
               beforeBatchAction: _confirmAssignSchedule,
               actionCall: function (selected, schedule) {
@@ -265,20 +277,6 @@ angular.module('risevision.displays.services')
             }
           ]
         };
-        if (!currentPlanFactory.isUnlimitedPlan()) {
-          listOperations.operations.splice( 2, 0, {
-            name: 'License',
-            actionCall: function (selected) {
-              return _licenseDisplays(selected.companyId, selected.items);
-            },
-            beforeBatchAction: _confirmLicense,
-            groupBy: 'companyId',
-            filter: {
-              playerProAuthorized: false
-            },
-            requireRole: 'da'
-          });
-        }
 
         return listOperations;
       };
