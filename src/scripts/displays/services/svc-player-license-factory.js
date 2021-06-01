@@ -41,7 +41,7 @@ angular.module('risevision.displays.services')
       };
 
       factory.isProToggleEnabled = function (display) {
-        return userState.hasRole('da') && ((display && display.playerProAuthorized) ||
+        return !currentPlanFactory.isUnlimitedPlan() && userState.hasRole('da') && ((display && display.playerProAuthorized) ||
           (factory.areAllProLicensesUsed(display) ? !currentPlanFactory.currentPlan.isPurchasedByParent : true));
       };
 
