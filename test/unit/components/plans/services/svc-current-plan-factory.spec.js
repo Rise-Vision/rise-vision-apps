@@ -498,4 +498,21 @@ describe("Services: current plan factory", function() {
     });
   });
 
+  describe("isUnlimitedPlan:", function() {
+    it("should return true is plan type is unlimited", function() {
+      currentPlanFactory.currentPlan = { type: "unlimited" };
+      expect(currentPlanFactory.isUnlimitedPlan()).to.be.true;
+    });
+
+    it("should return false is plan type is not unlimited", function() {
+      currentPlanFactory.currentPlan = { type: "other" };
+      expect(currentPlanFactory.isUnlimitedPlan()).to.be.false;
+    });
+
+    it("should return false is plan type is missing", function() {
+      currentPlanFactory.currentPlan = {};
+      expect(currentPlanFactory.isUnlimitedPlan()).to.be.false;
+    });
+  });
+
 });

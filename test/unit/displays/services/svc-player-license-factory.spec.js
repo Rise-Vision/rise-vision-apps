@@ -1,12 +1,10 @@
 'use strict';
 
 describe('Services: playerLicenseFactory', function() {
-  var storeApiFailure;
   var PLAYER_PRO_PRODUCT_CODE = 'PLAYER_PRO_PRODUCT_CODE';
 
   beforeEach(module('risevision.displays.services'));
   beforeEach(module(function ($provide) {
-    storeApiFailure = false;
 
     $provide.value('PLAYER_PRO_PRODUCT_CODE', PLAYER_PRO_PRODUCT_CODE)
     $provide.service('$q', function() {return Q;});
@@ -31,6 +29,7 @@ describe('Services: playerLicenseFactory', function() {
         isProSubscribed: function() {
           return true;
         },
+        isUnlimitedPlan: sandbox.stub().returns(false),
         currentPlan: {
           playerProTotalLicenseCount: 2,
           playerProAvailableLicenseCount: 1
@@ -109,6 +108,12 @@ describe('Services: playerLicenseFactory', function() {
       currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 2;
 
       expect(playerLicenseFactory.getUsedLicenseString()).to.equal('2 Licensed Displays / 2 Available Licenses');
+    });
+
+    it('should handle unlimited plan case', function () {
+      currentPlanFactory.isUnlimitedPlan.returns(true);
+
+      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('1 Licensed Display / Unlimited Licenses');
     });
 
   });
@@ -297,6 +302,12 @@ describe('Services: playerLicenseFactory', function() {
 
     it('should return false if user is not display administrator', function () {
       userState.hasRole.returns(false);
+
+      expect(playerLicenseFactory.isProToggleEnabled(display)).to.be.false;
+    });
+
+    it('should return false if plan is unlimited', function () {
+      currentPlanFactory.isUnlimitedPlan.returns(true);
 
       expect(playerLicenseFactory.isProToggleEnabled(display)).to.be.false;
     });

@@ -6,12 +6,12 @@ angular.module('risevision.common.header')
     'TIMEZONES', 'getCompany', 'regenerateCompanyField', '$loading',
     'humanReadableError', 'userState', 'userAuthFactory', 'deleteCompany',
     'companyTracker', 'confirmModal', '$modal',
-    'COMPANY_INDUSTRY_FIELDS', 'COMPANY_SIZE_FIELDS', 'addressFactory',
+    'COMPANY_INDUSTRY_FIELDS', 'COMPANY_SIZE_FIELDS', 'addressFactory', 'currentPlanFactory',
     function ($scope, $modalInstance, updateCompany, companyId,
       countries, REGIONS_CA, REGIONS_US, TIMEZONES, getCompany,
       regenerateCompanyField, $loading, humanReadableError,
       userState, userAuthFactory, deleteCompany, companyTracker, confirmModal,
-      $modal, COMPANY_INDUSTRY_FIELDS, COMPANY_SIZE_FIELDS, addressFactory) {
+      $modal, COMPANY_INDUSTRY_FIELDS, COMPANY_SIZE_FIELDS, addressFactory, currentPlanFactory) {
 
       $scope.company = {
         id: companyId
@@ -23,6 +23,7 @@ angular.module('risevision.common.header')
       $scope.COMPANY_INDUSTRY_FIELDS = COMPANY_INDUSTRY_FIELDS;
       $scope.COMPANY_SIZE_FIELDS = COMPANY_SIZE_FIELDS;
       $scope.isRiseStoreAdmin = userState.isRiseStoreAdmin();
+      $scope.currentPlanFactory = currentPlanFactory;
       _clearErrorMessages();
 
       $scope.$watch('loading', function (loading) {
