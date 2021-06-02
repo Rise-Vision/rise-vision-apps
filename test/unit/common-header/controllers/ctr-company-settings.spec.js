@@ -83,6 +83,9 @@ describe("controller: company settings", function() {
         return deferred.promise;
       };
     });
+    $provide.service("currentPlanFactory", function () {
+      return {};
+    });
 
     $translateProvider.useLoader("customLoader");
 
@@ -198,6 +201,7 @@ describe("controller: company settings", function() {
     expect($scope.deleteCompany).to.exist;
     expect($scope.resetAuthKey).to.exist;
     expect($scope.resetClaimId).to.exist;
+    expect($scope.currentPlanFactory).to.exist;
   });
 
   it("should load current company",function(done){
