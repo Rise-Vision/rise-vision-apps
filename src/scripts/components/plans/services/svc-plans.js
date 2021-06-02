@@ -77,11 +77,10 @@
           'RELIGIOUS_INSTITUTIONS'
         ]
       }, {
-        name: 'Unlimited',
+        name: 'Unlimited License',
         type: 'unlimited',
         productId: '336',
         productCode: '154d8443702f3b6bcf2eaf33ac73a407b0d447cb',
-        proLicenseCount: 1,
         yearly: {
           billAmount: 999
         }
