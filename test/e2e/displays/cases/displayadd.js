@@ -96,7 +96,7 @@ var DisplayAddScenarios = function() {
         
         expect(downloadPlayerModalPage.getDownloadPlayerModal().isDisplayed()).to.eventually.be.true;
 
-        expect(downloadPlayerModalPage.getTitle().getText()).to.eventually.equal('Install Rise Player');
+        expect(downloadPlayerModalPage.getTitle().getText()).to.eventually.equal('Install Rise Player on:');
         
         expect(downloadPlayerModalPage.getDownloadWindows32Link().isDisplayed()).to.eventually.be.true;
       });
