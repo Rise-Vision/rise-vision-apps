@@ -11,14 +11,38 @@
       <form role="form" name="pricingForm" ng-submit="updatePlan()" class="madero-style">
 
         <div class="border-container text-center p-5 u_margin-md-bottom">
-          <p class="text-xl font-weight-bold">How many displays do you want?</p>
-          <input class="display-count-input mt-3" type="number" name="displayCount" ng-model="displayCount" min="1" ng-pattern="/^[0-9]+$/" required/>
           <div class="row">
-            <div class="col-md-offset-1 col-md-10">
-              <rzslider rz-slider-model="displayCount" rz-slider-options="sliderOptions"></rzslider>
+            <div class="col-sm-offset-1 col-sm-10">
+              <p class="text-xl font-weight-bold">How many displays do you want?</p>
+              <div class="hidden-xs">
+                <div class="btn-group btn-group-justified btn-group-period">
+                  <button type="button" class="btn w-50" ng-class="{'btn-toggle-blue-off' : isUnlimitedPlan, 'btn-toggle-blue-on' : !isUnlimitedPlan}" ng-click="isUnlimitedPlan = false">
+                    Let Me Choose
+                    <streamline-icon name="checkmark" ng-show="!isUnlimitedPlan"></streamline-icon>
+                  </button>
+                  <button type="button" class="btn w-50" ng-class="{'btn-toggle-blue-off' : !isUnlimitedPlan, 'btn-toggle-blue-on' : isUnlimitedPlan}" ng-click="isUnlimitedPlan = true">
+                    Unlimited
+                    <streamline-icon name="checkmark" ng-show="isUnlimitedPlan"></streamline-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="visible-xs">
+                <div class="btn-group-vertical w-100 btn-group-period">
+                  <button type="button" class="btn" ng-class="{'btn-toggle-blue-off' : isUnlimitedPlan, 'btn-toggle-blue-on' : !isUnlimitedPlan}" ng-click="isUnlimitedPlan = false">
+                    Let Me Choose
+                    <streamline-icon name="checkmark" ng-show="!isUnlimitedPlan"></streamline-icon>
+                  </button>
+                  <button type="button" class="btn" ng-class="{'btn-toggle-blue-off' : !isUnlimitedPlan, 'btn-toggle-blue-on' : isUnlimitedPlan}" ng-click="isUnlimitedPlan = true">
+                    Unlimited
+                    <streamline-icon name="checkmark" ng-show="isUnlimitedPlan"></streamline-icon>
+                  </button>
+                </div>
+              </div>
+              <input class="display-count-input mt-4" type="number" name="displayCount" ng-model="displayCount" min="1" ng-pattern="/^[0-9]+$/" required/>
+              <rzslider rz-slider-model="displayCount" rz-slider-options="sliderOptions"></rzslider>            
+              <p class="mt-3 mb-0">For each display, you need to buy one display license.</p>
             </div>
-          </div>
-          <p class="mt-3 mb-0">For each display, you need to buy one display license.</p>
+          </div>          
         </div>
 
         <div class="border-container text-center madero-style p-5 mb-5">

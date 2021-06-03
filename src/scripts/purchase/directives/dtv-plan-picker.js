@@ -19,6 +19,8 @@ angular.module('risevision.apps.purchase')
               ceil: 100
             };
 
+            $scope.isUnlimitedPlan = false;
+
             $scope.displayCount = purchaseFactory.purchase.plan.displays;
             $scope.periodMonthly = purchaseFactory.purchase.plan.isMonthly;
             $scope.applyDiscount = userState.isDiscountCustomer();
@@ -40,10 +42,14 @@ angular.module('risevision.apps.purchase')
             });
 
             $scope.updatePlan = function () {
-              if ($scope.displayCount === 0 || $scope.displayCount === '0') {
-                return;
-              }
-              purchaseFactory.updatePlan($scope.displayCount, $scope.periodMonthly, $scope.totalPrice);
+              if ($scope.isUnlimitedPlan) {
+                purchaseFactory.updatePlan(null, false, 999, true);
+              } else {
+                if ($scope.displayCount === 0 || $scope.displayCount === '0') {
+                  return;
+                }
+                purchaseFactory.updatePlan($scope.displayCount, $scope.periodMonthly, $scope.totalPrice, false);
+              }              
               $scope.setNextStep();
             };
 

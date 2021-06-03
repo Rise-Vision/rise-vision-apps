@@ -55,20 +55,33 @@
 
         };
 
-        factory.updatePlan = function (displays, isMonthly, total) {
-          var period = !isMonthly ? 'Yearly' : 'Monthly';
-          var s = displays > 1 ? 's' : '';
-          var planName = '' + displays + ' Display License' + s + ' (' + period + ')';
+        factory.updatePlan = function (displays, isMonthly, total, isUnlimited) {
+          if (isUnlimited) {
+            var unlimitedPlan = plansService.getUnlimitedPlan();
+            factory.purchase.plan.name = unlimitedPlan.name;
+            factory.purchase.plan.productId = unlimitedPlan.productId;
+            factory.purchase.plan.productCode = unlimitedPlan.productCode;
+            factory.purchase.plan.displays = null;
+            factory.purchase.plan.additionalDisplayLicenses = null;
+            factory.purchase.plan.isMonthly = false;
+            factory.purchase.plan.monthly = null;
+            factory.purchase.plan.yearly.billAmount = unlimitedPlan.yearly.billAmount;
 
-          factory.purchase.plan.name = planName;
-          factory.purchase.plan.displays = displays;
-          factory.purchase.plan.isMonthly = isMonthly;
-          if (isMonthly) {
-            factory.purchase.plan.monthly.billAmount = total;
           } else {
-            factory.purchase.plan.yearly.billAmount = total;
-          }
+            //TODO update to match volume plan, similar to above
+            var period = !isMonthly ? 'Yearly' : 'Monthly';
+            var s = displays > 1 ? 's' : '';
+            var planName = '' + displays + ' Display License' + s + ' (' + period + ')';
 
+            factory.purchase.plan.name = planName;
+            factory.purchase.plan.displays = displays;
+            factory.purchase.plan.isMonthly = isMonthly;
+            if (isMonthly) {
+              factory.purchase.plan.monthly.billAmount = total;
+            } else {
+              factory.purchase.plan.yearly.billAmount = total;
+            }
+          }
           purchaseFlowTracker.trackProductAdded(factory.purchase.plan);
         };
 
