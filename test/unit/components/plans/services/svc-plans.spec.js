@@ -4,8 +4,6 @@
 describe("Services: plans service", function() {
 
   beforeEach(module("risevision.common.components.plans"));
-  beforeEach(module(function ($provide) {
-  }));
 
   var plansService, PLANS_LIST;
 
@@ -21,6 +19,7 @@ describe("Services: plans service", function() {
     expect(plansService.getPlan).to.be.a('function');
     expect(plansService.getPlanById).to.be.a('function');
     expect(plansService.getFreePlan).to.be.a('function');
+    expect(plansService.getUnlimitedPlan).to.be.a('function');
     expect(plansService.getVolumePlan).to.be.a('function');
     expect(plansService.isVolumePlan).to.be.a('function');
   });
@@ -49,6 +48,10 @@ describe("Services: plans service", function() {
 
   it("getFreePlan:", function() {
     expect(plansService.getFreePlan().type).to.equal('free');
+  });
+
+  it("getUnlimitedPlan:", function() {
+    expect(plansService.getUnlimitedPlan().type).to.equal('unlimited');
   });
 
   it("getVolumePlan:", function() {
