@@ -15,15 +15,17 @@
         // Stop spinner - workaround for spinner not rendering
         factory.loading = false;
 
-        factory._setupVolumePlan = function () {
+        factory._setupVolumePlan = function (displays, isMonthly) {
           var volumePlan = plansService.getVolumePlan();
-
+          var period = !isMonthly ? 'Yearly' : 'Monthly';
+          var s = displays > 1 ? 's' : '';
+          var planName = '' + displays + ' Display License' + s + ' (' + period + ')';
           var plan = {
-            name: '5 Display Licenses (Yearly)',
+            name: planName,
             productId: volumePlan.productId,
             productCode: volumePlan.productCode,
-            displays: 5,
-            isMonthly: false,
+            displays: displays,
+            isMonthly: isMonthly,
             additionalDisplayLicenses: 0,
             yearly: {
               billAmount: volumePlan.yearly.billAmount
@@ -37,7 +39,7 @@
 
         factory.init = function () {
           factory.purchase = {};
-          factory._setupVolumePlan();
+          factory._setupVolumePlan(5, false);
           factory.purchase.couponCode = '';
 
           factory.purchase.billingAddress = addressService.copyAddress(userState.getCopyOfSelectedCompany());
@@ -58,9 +60,8 @@
 
         };
 
-        factory.updateToUnlimitedPlan = function() {
+        factory.pickUnlimitedPlan = function() {
           var unlimitedPlan = plansService.getUnlimitedPlan();
-
           var plan = {
             name: unlimitedPlan.name,
             productId: unlimitedPlan.productId,
@@ -72,17 +73,11 @@
             }
           };
           factory.purchase.plan = plan;
+          purchaseFlowTracker.trackProductAdded(factory.purchase.plan);
         };
 
-        factory.updatePlan = function (displays, isMonthly, total) {
-          factory._setupVolumePlan();
-          var period = !isMonthly ? 'Yearly' : 'Monthly';
-          var s = displays > 1 ? 's' : '';
-          var planName = '' + displays + ' Display License' + s + ' (' + period + ')';
-
-          factory.purchase.plan.name = planName;
-          factory.purchase.plan.displays = displays;
-          factory.purchase.plan.isMonthly = isMonthly;
+        factory.pickVolumePlan = function (displays, isMonthly, total) {
+          factory._setupVolumePlan(displays, isMonthly);
           if (isMonthly) {
             factory.purchase.plan.monthly.billAmount = total;
           } else {

@@ -53,13 +53,13 @@ angular.module('risevision.apps.purchase')
 
             $scope.updatePlan = function () {
               if ($scope.isUnlimitedPlan) {
-                purchaseFactory.updateToUnlimitedPlan();
+                purchaseFactory.pickUnlimitedPlan();
               } else {
                 if ($scope.displayCount === 0 || $scope.displayCount === '0') {
                   return;
                 }
-                purchaseFactory.updatePlan($scope.displayCount, $scope.periodMonthly, $scope.totalPrice, false);
-              }              
+                purchaseFactory.pickVolumePlan($scope.displayCount, $scope.periodMonthly, $scope.totalPrice);
+              }
               $scope.setNextStep();
             };
 
