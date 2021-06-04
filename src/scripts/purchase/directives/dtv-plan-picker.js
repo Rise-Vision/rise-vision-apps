@@ -19,6 +19,7 @@ angular.module('risevision.apps.purchase')
               ceil: 100
             };
 
+            $scope.canAccessUnlimitedPlan = userState.isK12Customer();
             $scope.isUnlimitedPlan = false;
 
             $scope.displayCount = purchaseFactory.purchase.plan.displays;
