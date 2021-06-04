@@ -15,7 +15,7 @@
         // Stop spinner - workaround for spinner not rendering
         factory.loading = false;
 
-        factory.init = function () {
+        factory._setupVolumePlan = function () {
           var volumePlan = plansService.getVolumePlan();
 
           var plan = {
@@ -32,9 +32,12 @@
               billAmount: volumePlan.monthly.billAmount
             }
           };
-
-          factory.purchase = {};
           factory.purchase.plan = plan;
+        };
+
+        factory.init = function () {
+          factory.purchase = {};
+          factory._setupVolumePlan();
           factory.purchase.couponCode = '';
 
           factory.purchase.billingAddress = addressService.copyAddress(userState.getCopyOfSelectedCompany());
@@ -55,32 +58,35 @@
 
         };
 
-        factory.updatePlan = function (displays, isMonthly, total, isUnlimited) {
-          if (isUnlimited) {
-            var unlimitedPlan = plansService.getUnlimitedPlan();
-            factory.purchase.plan.name = unlimitedPlan.name;
-            factory.purchase.plan.productId = unlimitedPlan.productId;
-            factory.purchase.plan.productCode = unlimitedPlan.productCode;
-            factory.purchase.plan.displays = null;
-            factory.purchase.plan.additionalDisplayLicenses = null;
-            factory.purchase.plan.isMonthly = false;
-            factory.purchase.plan.monthly = null;
-            factory.purchase.plan.yearly.billAmount = unlimitedPlan.yearly.billAmount;
+        factory.updateToUnlimitedPlan = function() {
+          var unlimitedPlan = plansService.getUnlimitedPlan();
 
-          } else {
-            //TODO update to match volume plan, similar to above
-            var period = !isMonthly ? 'Yearly' : 'Monthly';
-            var s = displays > 1 ? 's' : '';
-            var planName = '' + displays + ' Display License' + s + ' (' + period + ')';
-
-            factory.purchase.plan.name = planName;
-            factory.purchase.plan.displays = displays;
-            factory.purchase.plan.isMonthly = isMonthly;
-            if (isMonthly) {
-              factory.purchase.plan.monthly.billAmount = total;
-            } else {
-              factory.purchase.plan.yearly.billAmount = total;
+          var plan = {
+            name: unlimitedPlan.name,
+            productId: unlimitedPlan.productId,
+            productCode: unlimitedPlan.productCode,
+            isMonthly: false,
+            additionalDisplayLicenses: 0,
+            yearly: {
+              billAmount: unlimitedPlan.yearly.billAmount
             }
+          };
+          factory.purchase.plan = plan;
+        };
+
+        factory.updatePlan = function (displays, isMonthly, total) {
+          factory._setupVolumePlan();
+          var period = !isMonthly ? 'Yearly' : 'Monthly';
+          var s = displays > 1 ? 's' : '';
+          var planName = '' + displays + ' Display License' + s + ' (' + period + ')';
+
+          factory.purchase.plan.name = planName;
+          factory.purchase.plan.displays = displays;
+          factory.purchase.plan.isMonthly = isMonthly;
+          if (isMonthly) {
+            factory.purchase.plan.monthly.billAmount = total;
+          } else {
+            factory.purchase.plan.yearly.billAmount = total;
           }
           purchaseFlowTracker.trackProductAdded(factory.purchase.plan);
         };

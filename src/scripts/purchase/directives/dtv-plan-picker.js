@@ -53,7 +53,7 @@ angular.module('risevision.apps.purchase')
 
             $scope.updatePlan = function () {
               if ($scope.isUnlimitedPlan) {
-                purchaseFactory.updatePlan(null, false, $scope.totalPrice, true);
+                purchaseFactory.updateToUnlimitedPlan();
               } else {
                 if ($scope.displayCount === 0 || $scope.displayCount === '0') {
                   return;
