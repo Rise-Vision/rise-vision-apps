@@ -3,8 +3,8 @@
 
 angular.module('risevision.apps.purchase')
 
-  .directive('planPicker', ['$templateCache', 'userState', 'purchaseFactory', 'pricingFactory',
-    function ($templateCache, userState, purchaseFactory, pricingFactory) {
+  .directive('planPicker', ['$templateCache', 'userState', 'purchaseFactory', 'pricingFactory', 'plansService',
+    function ($templateCache, userState, purchaseFactory, pricingFactory, plansService) {
       return {
         restrict: 'E',
         template: $templateCache.get('partials/purchase/checkout-plan-picker.html'),
@@ -42,9 +42,18 @@ angular.module('risevision.apps.purchase')
                 .totalPrice;
             });
 
+            $scope.$watch('isUnlimitedPlan', function() {
+              if ($scope.isUnlimitedPlan) {
+                $scope.totalPrice = plansService.getUnlimitedPlan().yearly.billAmount;
+              } else {
+                $scope.totalPrice = pricingFactory.getTotalPrice($scope.periodMonthly, $scope.displayCount, $scope
+                  .applyDiscount);
+              }
+            });
+
             $scope.updatePlan = function () {
               if ($scope.isUnlimitedPlan) {
-                purchaseFactory.updatePlan(null, false, 999, true);
+                purchaseFactory.updatePlan(null, false, $scope.totalPrice, true);
               } else {
                 if ($scope.displayCount === 0 || $scope.displayCount === '0') {
                   return;
