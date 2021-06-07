@@ -103,6 +103,12 @@ angular.module('risevision.apps')
             purchaseAction: 'remove'
           }
         })
+        .state('apps.purchase.licenses.unlimited', {
+          url: '/unlimited/:subscriptionId',
+          params: {
+            purchaseAction: 'unlimited'
+          }
+        })
 
         .state('apps.purchase.frequency', {
           url: '/frequency/:subscriptionId',

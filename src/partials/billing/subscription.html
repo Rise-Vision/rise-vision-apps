@@ -32,7 +32,7 @@
             <span ng-show="isDisplayLicensePlan(subscriptionFactory.getItemSubscription())">
               <a id="addLicenses" class="btn btn-default btn-block" ui-sref="apps.purchase.licenses.add({subscriptionId: subscriptionFactory.getItemSubscription().id})">Add Display Licenses</a>
               <a id="removeLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.purchase.licenses.remove({subscriptionId: subscriptionFactory.getItemSubscription().id})" ng-hide="subscriptionFactory.getItemSubscription().plan_quantity < 2">Remove Display Licenses</a>
-              <a id="manageLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.billing.licenses.manage({subscriptionId: subscriptionFactory.getItemSubscription().id})" ng-if="false">Manage Network Licenses</a>
+              <a id="unlimitedLicenses" class="btn btn-default btn-block mt-3" ui-sref="apps.purchase.licenses.unlimited({subscriptionId: subscriptionFactory.getItemSubscription().id})" ng-if="true">Upgrade to Unlimited</a>
             </span>
           </div>
         </div>

@@ -23,6 +23,7 @@
         factory.init = function (purchaseAction) {
           _clearMessages();
 
+          factory._purchaseAction = purchaseAction;
           factory.purchase = {};
           factory.purchase.completed = false;
           factory.purchase.licensesToAdd = purchaseAction === 'add' ? $state.params.displayCount : 0;
@@ -34,6 +35,8 @@
 
             if (factory.purchase.planId && purchaseAction === 'annual') {
               factory.purchase.planId = factory.purchase.planId.replace('1m', '1y');
+            } else if (purchaseAction === 'unlimited'){
+              factory.purchase.planId = '154d8443702f3b6bcf2eaf33ac73a407b0d447cb-cad01y'
             }
 
             factory.getEstimate();
@@ -54,6 +57,9 @@
         };
 
         factory.getTotalDisplayCount = function () {
+          if (factory._purchaseAction === 'unlimited') {
+            return null;
+          }
           return factory.getCurrentDisplayCount() + _getChangeInLicenses();
         };
 
@@ -104,7 +110,9 @@
             .then(function (result) {
               factory.estimate = result.item;
 
-              _updatePerDisplayPrice();
+              if (factory._purchaseAction !== 'unlimited') {
+                _updatePerDisplayPrice();
+              }
 
               analyticsFactory.track('Subscription Update Estimated', _getTrackingProperties());
             })

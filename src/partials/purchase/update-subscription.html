@@ -4,6 +4,7 @@
     <h1 class="app-header-title" ng-show="purchaseAction === 'add'">Add Display Licenses</h1>
     <h1 class="app-header-title" ng-show="purchaseAction === 'remove'">Remove Display Licenses</h1>
     <h1 class="app-header-title" ng-show="purchaseAction === 'annual'">Adjust Billing Frequency</h1>
+    <h1 class="app-header-title" ng-show="purchaseAction === 'unlimited'">Update Subscription</h1>
 
   </div>
 
@@ -29,7 +30,17 @@
           <input class="display-count-input text-md mt-0 pull-right" type="number" name="licensesToRemove" ng-model="factory.purchase.licensesToRemove" min="1" max="{{factory.getCurrentDisplayCount()-1}}" ng-pattern="/^[0-9]+$/" required ng-change="getEstimate()" ng-model-options="{ debounce: 1000 }" autofocus />
         </div>
 
-        <div class="border-bottom py-4 mb-4" ng-show="purchaseAction !== 'annual'">
+        <div class="border-bottom py-4 mb-4" ng-show="purchaseAction === 'unlimited'">
+          <div class="left-right-aligner">
+            <label for="licensesToAdd" class="control-label">Upgrade to an Unlimited License subscription</label>            
+          </div>
+          <p class="left-right-aligner mb-0">
+            <span class="font-weight-bold">Total number of display licenses for this subscription:</span>
+            <span>Unlimited</span>
+          </p>
+        </div>
+
+        <div class="border-bottom py-4 mb-4" ng-show="purchaseAction !== 'annual' && purchaseAction !== 'unlimited'">
           <p class="left-right-aligner mb-0">
             <span class="font-weight-bold">Total number of display licenses for this subscription:</span>
             <span>
