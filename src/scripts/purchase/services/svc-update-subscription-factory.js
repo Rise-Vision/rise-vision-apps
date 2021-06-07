@@ -7,9 +7,9 @@
   angular.module('risevision.apps.purchase')
     .factory('updateSubscriptionFactory', ['$log', '$timeout', '$state', 'userState',
       'billing', 'analyticsFactory', 'pricingFactory', 'subscriptionFactory',
-      'processErrorCode',
+      'processErrorCode', 'plansService',
       function ($log, $timeout, $state, userState, billing, analyticsFactory,
-        pricingFactory, subscriptionFactory, processErrorCode) {
+        pricingFactory, subscriptionFactory, processErrorCode, plansService) {
         var factory = {};
         factory.userEmail = userState.getUserEmail();
 
@@ -35,8 +35,11 @@
 
             if (factory.purchase.planId && purchaseAction === 'annual') {
               factory.purchase.planId = factory.purchase.planId.replace('1m', '1y');
-            } else if (purchaseAction === 'unlimited'){
-              factory.purchase.planId = '154d8443702f3b6bcf2eaf33ac73a407b0d447cb-cad01y'
+
+            } else if (purchaseAction === 'unlimited') {
+              var productCode = plansService.getUnlimitedPlan().productCode;
+              var currency = subscriptionFactory.getItemSubscription().currency_code.toLowerCase();
+              factory.purchase.planId = productCode + '-' + currency + '01y';
             }
 
             factory.getEstimate();
