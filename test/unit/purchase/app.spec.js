@@ -316,6 +316,47 @@ describe('app:', function() {
     });
   });
 
+  describe('state apps.purchase.licenses.unlimited:',function(){
+    it('should register state',function(){
+      var state = $state.get('apps.purchase.licenses.unlimited');
+      expect(state).to.be.ok;
+      expect(state.url).to.equal('/unlimited/:subscriptionId');
+      expect(state.params).to.deep.equal({purchaseAction: 'unlimited'});
+    });
+
+    it('should check apps access', function() {
+      $state.go('apps.purchase.licenses.unlimited');
+      $rootScope.$digest();
+      canAccessApps.should.have.been.called;
+    });
+
+    it('should redirect to apps.purchase.home if no subscriptionId is provided and company does not have a plan', function(done) {
+      currentPlanFactory.isSubscribed.returns(false);
+
+      $state.go('apps.purchase.licenses.unlimited');
+      $rootScope.$digest();
+
+      setTimeout(function(){
+        $state.go.should.have.been.calledWith('apps.purchase.home');
+
+        done();
+      },10);
+    });
+
+    it('should not redirect to apps.purchase.home if subscriptionId is not provided but company has a plan', function(done) {
+      currentPlanFactory.isSubscribed.returns(true);
+
+      $state.go('apps.purchase.licenses.unlimited');
+      $rootScope.$digest();
+      
+      setTimeout(function(){
+        $state.go.should.not.have.been.calledWith('apps.purchase.home');
+
+        done();
+      },10);
+    });
+  });
+
   describe('state apps.purchase.frequency:',function(){
     it('should register state',function(){
       var state = $state.get('apps.purchase.frequency');
