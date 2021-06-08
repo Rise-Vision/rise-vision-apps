@@ -49,6 +49,19 @@ angular.module('risevision.template-editor.services')
         return service.extractFileNamesFrom(metadata).join('|');
       };
 
+      service.filesAttributeToArray = function (files) {
+        var fileNames;
+
+        if (files) {
+          fileNames = Array.isArray(files) ?
+            angular.copy(files) : files.split('|');
+        } else {
+          fileNames = [];
+        }
+
+        return fileNames;
+      };
+
       service.metadataWithFile = function (previousMetadata, defaultThumbnailUrl, files, alwaysAppend) {
         var metadata = _.cloneDeep(previousMetadata);
 

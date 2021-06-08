@@ -91,6 +91,31 @@ describe('service: fileMetadataUtilsService:', function() {
 
   });
 
+  describe('filesAttributeToArray', function() {
+
+    it('should extract file names from separated string', function() {
+      var filesAttribute = fileMetadataUtilsService.filesAttributeToArray('a.txt|b.txt|c.txt');
+
+      expect(filesAttribute).to.deep.equal(['a.txt', 'b.txt', 'c.txt']);
+    });
+
+    it('should handle array and copy it', function() {
+      var filesArray = ['a.txt', 'b.txt', 'c.txt'];
+      var filesAttribute = fileMetadataUtilsService.filesAttributeToArray(filesArray);
+
+      expect(filesAttribute).to.not.equal(filesArray);
+      expect(filesAttribute).to.deep.equal(filesArray);
+    });
+
+    it('should handle undefined parameter', function() {
+      var filesArray = ['a.txt', 'b.txt', 'c.txt'];
+      var filesAttribute = fileMetadataUtilsService.filesAttributeToArray();
+
+      expect(filesAttribute).to.deep.equal([]);
+    });
+
+  });
+
   describe('metadataWithFile', function() {
 
     it('should add to metadata', function() {
