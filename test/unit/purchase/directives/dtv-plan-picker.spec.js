@@ -25,9 +25,14 @@ describe("directive: plan picker", function() {
         }
       })
     });
+    $provide.value("pricingFactory",  pricingFactory = {
+      getTotalPrice: sinon.stub().returns(495),
+      getBasePricePerDisplay: sinon.stub().returns(10),
+      getPricePerDisplay: sinon.stub().returns(8.25)
+    });
   }));
 
-  var $scope, element, purchaseFactory, plansService;
+  var $scope, element, purchaseFactory, plansService, pricingFactory;
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
     $templateCache.put("partials/purchase/checkout-plan-picker.html", "<p>mock</p>");
@@ -106,23 +111,31 @@ describe("directive: plan picker", function() {
 
       $scope.$digest();
 
-      expect($scope.totalPrice).to.equal(108.9);
+      expect($scope.totalPrice).to.equal(495);
     });
   });
 
   describe("watchGroup:", function() {
     it("should update calculation when displayCount changes", function() {
+      pricingFactory.getBasePricePerDisplay.returns(11);
+      pricingFactory.getPricePerDisplay.returns(9.08);
+      pricingFactory.getTotalPrice.returns(108.9);
+
       $scope.displayCount = 1;
 
       $scope.$digest();
 
       expect($scope.basePricePerDisplay).to.equal(11);
-      expect($scope.pricePerDisplay).to.be.closeTo(9.08,0.01);
+      expect($scope.pricePerDisplay).to.equal(9.08);
       expect($scope.totalPrice).to.equal(108.9);
       expect($scope.yearlySavings).to.be.closeTo(23.09,0.01);
     });
 
     it("should update calculation when periodMonthly changes", function() {
+      pricingFactory.getBasePricePerDisplay.returns(10);
+      pricingFactory.getPricePerDisplay.returns(9);
+      pricingFactory.getTotalPrice.returns(45);
+
       $scope.periodMonthly = true;
 
       $scope.$digest();
