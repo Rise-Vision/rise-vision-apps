@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { EditorModule } from './editor/editor.module';
 import { analyticsFactoryProvider, canvaTypePickerProvider, templateEditorFactoryProvider, templateEditorUtilsProvider } from './ajs-upgraded-providers';
 import { TemplateEditorModule } from './template-editor/template-editor.module';
+import { PurchaseModule } from './purchase/purchase.module';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { TemplateEditorModule } from './template-editor/template-editor.module';
     UpgradeModule,
     HttpClientModule,
     EditorModule,
+    PurchaseModule,
     TemplateEditorModule
   ],
   declarations: [

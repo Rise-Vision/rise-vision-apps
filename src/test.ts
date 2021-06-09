@@ -28,6 +28,7 @@ declare global {
 export {};
 
 angular.module('risevision.editor.directives',[])
+angular.module('risevision.apps.purchase',[])
 angular.module('risevision.template-editor.services',[])
 
 // First, initialize the Angular testing environment.

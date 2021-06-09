@@ -347,7 +347,6 @@
               "src/scripts/purchase/filters/ftr-country-name.js",
               "src/scripts/purchase/filters/ftr-padded-month.js",
 
-              "src/scripts/purchase/services/svc-pricing-factory.js",
               "src/scripts/purchase/services/svc-tax-exemption-factory.js",
               "src/scripts/purchase/services/svc-purchase-factory.js",
               "src/scripts/purchase/services/svc-update-subscription-factory.js",
