@@ -52,6 +52,8 @@ export class BlueprintService {
             attributes.maxfontsize = this.templateEditorUtils.intValueFor(attributes.maxfontsize, null);
           }
         });
+      } else if (component && component.type === 'rise-play-until-done') {
+        component.nonEditable = true;
       }
     });
   }
