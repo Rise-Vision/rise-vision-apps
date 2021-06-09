@@ -1,31 +1,29 @@
-/*jshint expr:true */
-"use strict";
+import {expect} from 'chai';
+import { TestBed } from '@angular/core/testing';
 
-describe("Services: tax exemption factory", function() {
-  beforeEach(module("risevision.apps.purchase"));
-  beforeEach(module(function ($provide) {
-    $provide.service("userState", function() {
-      return {
-        getSelectedCompanyId: sinon.stub().returns('selectedCompany')
-      };
+import { TaxExemptionService } from './tax-exemption.service';
+import { StoreService, UserState } from 'src/app/ajs-upgraded-providers';
+
+describe('TaxExemptionService', () => {
+  let taxExemptionFactory: TaxExemptionService;
+  let mockUserState;
+  let storeService;
+
+  beforeEach(() => {
+    mockUserState = {
+      getSelectedCompanyId: sinon.stub().returns('selectedCompany')
+    }
+    storeService = {
+      addTaxExemption: sinon.stub().resolves(Promise.resolve()),
+      uploadTaxExemptionCertificate: sinon.stub().returns(Promise.resolve("url"))
+    };
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: UserState, useValue: mockUserState},
+        {provide: StoreService, useValue: storeService}        
+      ]
     });
-    $provide.service("storeService", function() {
-      return {
-        addTaxExemption: sinon.stub().returns(Q.resolve()),
-        uploadTaxExemptionCertificate: sinon.stub().returns(Q.resolve("url"))
-      };
-    });
-
-  }));
-
-  var taxExemptionFactory, userState, storeService;
-
-  beforeEach(function() {
-    inject(function($injector) {
-      userState = $injector.get("userState");
-      storeService = $injector.get("storeService");
-      taxExemptionFactory = $injector.get("taxExemptionFactory");
-    });
+    taxExemptionFactory = TestBed.inject(TaxExemptionService);
   });
 
   it("should exist", function() {
@@ -80,8 +78,8 @@ describe("Services: tax exemption factory", function() {
     it("should successfully submit", function (done) {
       taxExemptionFactory.submitTaxExemption().then(function () {
         expect(taxExemptionFactory.taxExemption.error).to.not.be.ok;
-        expect(storeService.uploadTaxExemptionCertificate).to.have.been.calledWith('file');
-        expect(storeService.addTaxExemption).to.have.been.calledWith('selectedCompany', taxExemptionFactory.taxExemption, 'url');
+        storeService.uploadTaxExemptionCertificate.should.have.been.calledWith('file');
+        storeService.addTaxExemption.should.have.been.calledWith('selectedCompany', taxExemptionFactory.taxExemption, 'url');
 
         expect(taxExemptionFactory.taxExemption.sent).to.be.true;
 
@@ -100,12 +98,12 @@ describe("Services: tax exemption factory", function() {
     });
 
     it("should fail to submit when uploading tax exemption certificate fails", function (done) {
-      storeService.uploadTaxExemptionCertificate.returns(Q.reject({}));
+      storeService.uploadTaxExemptionCertificate.returns(Promise.reject({}));
 
-      taxExemptionFactory.submitTaxExemption(callback).then(function () {
+      taxExemptionFactory.submitTaxExemption().then(function () {
         expect(taxExemptionFactory.taxExemption.error).to.equal('Something went wrong. Please try again.');
-        expect(storeService.uploadTaxExemptionCertificate).to.have.been.called;
-        expect(storeService.addTaxExemption).to.not.have.been.called;
+        storeService.uploadTaxExemptionCertificate.should.have.been.called;
+        storeService.addTaxExemption.should.not.have.been.called;
 
         callback.should.not.have.been.called;
 
@@ -116,7 +114,7 @@ describe("Services: tax exemption factory", function() {
     });
 
     it("should stop spinner and show error on failure", function (done) {
-      storeService.uploadTaxExemptionCertificate.returns(Q.reject({message: 'error'}));
+      storeService.uploadTaxExemptionCertificate.returns(Promise.reject({message: 'error'}));
 
       taxExemptionFactory.submitTaxExemption().then(function () {
         expect(taxExemptionFactory.taxExemption.error).to.equal('error');
@@ -128,12 +126,12 @@ describe("Services: tax exemption factory", function() {
     });
 
     it("should fail to submit when sending tax exemption fails", function (done) {
-      storeService.addTaxExemption.returns(Q.reject({}));
+      storeService.addTaxExemption.returns(Promise.reject({}));
 
       taxExemptionFactory.submitTaxExemption().then(function () {
         expect(taxExemptionFactory.taxExemption.error).to.be.ok;
-        expect(storeService.uploadTaxExemptionCertificate).to.have.been.called;
-        expect(storeService.addTaxExemption).to.have.been.called;
+        storeService.uploadTaxExemptionCertificate.should.have.been.called;
+        storeService.addTaxExemption.should.have.been.called;
 
         callback.should.not.have.been.called;
 

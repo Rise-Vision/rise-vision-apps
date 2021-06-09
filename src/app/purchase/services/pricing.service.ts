@@ -214,7 +214,7 @@ export class PricingService {
 
   constructor() { }
 
-  _getTierPrice = function (isMonthly, displayCount) {
+  _getTierPrice(isMonthly, displayCount) {
     var period = isMonthly ? 'month' : 'year';
 
     var matchedPlan = _.find(PricingService.PRICING_DATA, function (plan) {
@@ -229,11 +229,11 @@ export class PricingService {
     return priceInCents / 100;
   };
 
-  getBasePricePerDisplay = function (displayCount) {
+  getBasePricePerDisplay(displayCount) {
     return this._getTierPrice(true, displayCount);
   };
 
-  getPricePerDisplay = function (isMonthly, displayCount, isEducation?) {
+  getPricePerDisplay(isMonthly, displayCount, isEducation?) {
     var tierPrice = this._getTierPrice(isMonthly, displayCount);
     var pricePerDisplay = isMonthly ? tierPrice : tierPrice / 12;
 
@@ -244,7 +244,7 @@ export class PricingService {
     return pricePerDisplay;
   };
 
-  getTotalPrice = function (isMonthly, displayCount, isEducation?) {
+  getTotalPrice(isMonthly, displayCount, isEducation?) {
     var pricePerDisplay = this._getTierPrice(isMonthly, displayCount);
     if (isEducation) {
       pricePerDisplay = pricePerDisplay * 0.9;
