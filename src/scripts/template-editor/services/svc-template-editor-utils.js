@@ -11,10 +11,6 @@ angular.module('risevision.template-editor.services')
         return isNaN(intValue) ? defaultValue : intValue;
       };
 
-      svc.fileNameOf = function (path) {
-        return path.split('/').pop();
-      };
-
       svc.addOrRemove = function (list, oldItem, newItem) {
         var idx = _.findIndex(list, oldItem);
 

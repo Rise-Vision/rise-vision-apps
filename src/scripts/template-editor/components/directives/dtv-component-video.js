@@ -86,7 +86,9 @@ angular.module('risevision.template-editor.directives')
             var metadata = attributeDataFactory.getAttributeData(componentId, 'metadata');
 
             if (!metadata) {
-              return attributeDataFactory.getBlueprintData(componentId, 'files');
+              var files = attributeDataFactory.getAvailableAttributeData(componentId, 'files');
+
+              return fileMetadataUtilsService.filesAttributeToArray(files);
             }
 
             return fileMetadataUtilsService.extractFileNamesFrom(metadata);

@@ -96,14 +96,14 @@ describe('directive: templateComponentVideo', function() {
     describe('getName:', function() {
       beforeEach(function() {
         attributeDataFactory.getAttributeData.reset();
-        attributeDataFactory.getBlueprintData.reset();
+        attributeDataFactory.getAvailableAttributeData.reset();
       });
 
       it('should return null if data is not found', function() {
         expect(componentsFactory.registerDirective.getCall(0).args[0].getName('component1')).to.be.null;
 
         attributeDataFactory.getAttributeData.should.have.been.calledWith('component1', 'metadata');
-        attributeDataFactory.getBlueprintData.should.have.been.calledWith('component1', 'files');
+        attributeDataFactory.getAvailableAttributeData.should.have.been.calledWith('component1', 'files');
       });
 
       it('should get first file name from attribute data', function() {
@@ -115,11 +115,11 @@ describe('directive: templateComponentVideo', function() {
         expect(componentsFactory.registerDirective.getCall(0).args[0].getName('component1')).to.equal('video.webm');
 
         attributeDataFactory.getAttributeData.should.have.been.calledWith('component1', 'metadata');
-        attributeDataFactory.getBlueprintData.should.not.have.been.called;
+        attributeDataFactory.getAvailableAttributeData.should.not.have.been.called;
       });
 
       it('should fallback to blueprint data', function() {
-        attributeDataFactory.getBlueprintData.returns([
+        attributeDataFactory.getAvailableAttributeData.returns([
           'bucketid/someFolder/video.webm',
           'video2.mpg'
         ]);
@@ -127,7 +127,7 @@ describe('directive: templateComponentVideo', function() {
         expect(componentsFactory.registerDirective.getCall(0).args[0].getName('component1')).to.equal('video.webm');
 
         attributeDataFactory.getAttributeData.should.have.been.calledWith('component1', 'metadata');
-        attributeDataFactory.getBlueprintData.should.have.been.calledWith('component1', 'files');
+        attributeDataFactory.getAvailableAttributeData.should.have.been.calledWith('component1', 'files');
       });
 
       it('should return null if files list is empty', function() {
