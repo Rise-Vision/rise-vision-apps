@@ -203,6 +203,26 @@ describe('BlueprintService', () => {
           ]
         });
       });
+
+      it('should sanitize set play until done component to non editable', function(done) {
+        blueprintFactory.getBlueprintCached(PRODUCT_CODE)
+          .then(function(resp) {
+            expect(resp).to.be.an('object');
+            expect(resp.components[0].nonEditable).to.be.true;
+
+            done();
+          });
+
+        $httpBackend.expectOne('https://widgets.risevision.com/staging/templates/template123/blueprint.json').flush({
+          components: [
+            {
+              type: 'rise-play-until-done',
+              nonEditable: false
+            }
+          ]
+        });
+      });
+
     });
 
     it('should populate factory object on api response',function(done) {
