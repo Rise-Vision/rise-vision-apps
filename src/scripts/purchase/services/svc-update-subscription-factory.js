@@ -7,9 +7,9 @@
   angular.module('risevision.apps.purchase')
     .factory('updateSubscriptionFactory', ['$log', '$timeout', '$state', 'userState',
       'billing', 'analyticsFactory', 'pricingFactory', 'subscriptionFactory',
-      'processErrorCode',
+      'processErrorCode', 'plansService',
       function ($log, $timeout, $state, userState, billing, analyticsFactory,
-        pricingFactory, subscriptionFactory, processErrorCode) {
+        pricingFactory, subscriptionFactory, processErrorCode, plansService) {
         var factory = {};
         factory.userEmail = userState.getUserEmail();
 
@@ -23,6 +23,7 @@
         factory.init = function (purchaseAction) {
           _clearMessages();
 
+          factory._purchaseAction = purchaseAction;
           factory.purchase = {};
           factory.purchase.completed = false;
           factory.purchase.licensesToAdd = purchaseAction === 'add' ? $state.params.displayCount : 0;
@@ -34,6 +35,11 @@
 
             if (factory.purchase.planId && purchaseAction === 'annual') {
               factory.purchase.planId = factory.purchase.planId.replace('1m', '1y');
+
+            } else if (purchaseAction === 'unlimited') {
+              var productCode = plansService.getUnlimitedPlan().productCode;
+              var currency = subscriptionFactory.getItemSubscription().currency_code.toLowerCase();
+              factory.purchase.planId = productCode + '-' + currency + '01y';
             }
 
             factory.getEstimate();
@@ -54,6 +60,9 @@
         };
 
         factory.getTotalDisplayCount = function () {
+          if (factory._purchaseAction === 'unlimited') {
+            return null;
+          }
           return factory.getCurrentDisplayCount() + _getChangeInLicenses();
         };
 
@@ -104,7 +113,9 @@
             .then(function (result) {
               factory.estimate = result.item;
 
-              _updatePerDisplayPrice();
+              if (factory._purchaseAction !== 'unlimited') {
+                _updatePerDisplayPrice();
+              }
 
               analyticsFactory.track('Subscription Update Estimated', _getTrackingProperties());
             })

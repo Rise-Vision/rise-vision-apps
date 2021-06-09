@@ -48,6 +48,14 @@ describe("Services: purchase licenses factory", function() {
       };
     });
 
+    $provide.service("plansService", function() {
+      return {
+        getUnlimitedPlan: sinon.stub().returns({
+          productCode: 'unlimitedProductCode'
+        })
+      };
+    });
+
     $provide.service("subscriptionFactory", function() {
       return {
         getSubscription: sinon.stub().resolves(),
@@ -55,7 +63,8 @@ describe("Services: purchase licenses factory", function() {
           id: 'subscriptionId',
           customer_id: 'customerId',
           plan_quantity: 2,
-          plan_id: 'somePlanId-1m'
+          plan_id: 'somePlanId-1m',
+          currency_code: 'CAD'
         })
       };
     });
@@ -102,7 +111,8 @@ describe("Services: purchase licenses factory", function() {
       expect(updateSubscriptionFactory.purchase.completed).to.be.false;
       expect(updateSubscriptionFactory.purchase.licensesToAdd).to.equal('displayCount');
       expect(updateSubscriptionFactory.purchase.licensesToRemove).to.equal(0);
-      expect(updateSubscriptionFactory.purchase.couponCode).to.equal('')
+      expect(updateSubscriptionFactory.purchase.couponCode).to.equal('');
+      expect(updateSubscriptionFactory._purchaseAction).to.equal('add');
 
       subscriptionFactory.getSubscription.should.have.been.calledWith('subscriptionId');
     });
@@ -114,7 +124,8 @@ describe("Services: purchase licenses factory", function() {
       expect(updateSubscriptionFactory.purchase.completed).to.be.false;
       expect(updateSubscriptionFactory.purchase.licensesToAdd).to.equal(0);
       expect(updateSubscriptionFactory.purchase.licensesToRemove).to.equal('displayCount');
-      expect(updateSubscriptionFactory.purchase.couponCode).to.equal('')
+      expect(updateSubscriptionFactory.purchase.couponCode).to.equal('');
+      expect(updateSubscriptionFactory._purchaseAction).to.equal('remove');
 
       subscriptionFactory.getSubscription.should.have.been.calledWith('subscriptionId');
     });
@@ -141,6 +152,15 @@ describe("Services: purchase licenses factory", function() {
       }, 10);
     });
 
+    it('should update the plan id to unlimited', function(done) {
+      updateSubscriptionFactory.init('unlimited');
+
+      setTimeout(function() {
+        expect(updateSubscriptionFactory.purchase.planId).to.equal('unlimitedProductCode-cad01y')
+
+        done();
+      }, 10);
+    });
   });
 
   describe("getCurrentDisplayCount:", function() {
@@ -156,6 +176,28 @@ describe("Services: purchase licenses factory", function() {
       var count = updateSubscriptionFactory.getCurrentDisplayCount();
 
       expect(count).to.equal(0);
+    });
+  });
+
+  describe('getTotalDisplayCount:', function() {
+    it("should calculate if addig licenses", function() {
+      updateSubscriptionFactory.purchase = {
+        licensesToAdd: 5,
+      };
+      expect(updateSubscriptionFactory.getTotalDisplayCount()).to.equal(7);
+    });
+
+    it("should calculate if removing licenses", function() {
+      updateSubscriptionFactory.purchase = {
+        licensesToRemove: 1,
+      };
+      expect(updateSubscriptionFactory.getTotalDisplayCount()).to.equal(1);
+    });
+
+    it("should return null if plan is changing to unlimited", function() {
+      updateSubscriptionFactory.init('unlimited');
+
+      expect(updateSubscriptionFactory.getTotalDisplayCount()).to.equal(null);
     });
   });
 
@@ -292,6 +334,28 @@ describe("Services: purchase licenses factory", function() {
           .then(function() {
             expect(updateSubscriptionFactory.purchase.currentPricePerDisplay).to.equal('false2true');
             expect(updateSubscriptionFactory.purchase.newPricePerDisplay).to.equal('false7true');
+
+            done();
+          });
+      });
+
+      it('should not calculate per display price if plan is unlimited', function(done) {
+        billing.estimateSubscriptionUpdate.returns(Q.resolve({
+          item: {
+            next_invoice_estimate: {
+              line_items: [{
+                entity_id: 'productCode-y'
+              }],
+              line_item_discounts: []
+            }
+          }
+        }));
+        updateSubscriptionFactory._purchaseAction = 'unlimited';
+
+        updateSubscriptionFactory.getEstimate()
+          .then(function() {
+            expect(updateSubscriptionFactory.purchase.currentPricePerDisplay).to.equal(undefined);
+            expect(updateSubscriptionFactory.purchase.newPricePerDisplay).to.equal(undefined);
 
             done();
           });

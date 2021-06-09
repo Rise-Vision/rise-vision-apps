@@ -1,7 +1,7 @@
 <div id="checkout-success" class="checkout-centered-panel">
   <span>
     <h4 class="u_margin-md-bottom">
-      <span ng-if="purchaseAction === 'add'">A great big thank you!</span>
+      <span ng-if="purchaseAction === 'add' || purchaseAction === 'unlimited'">A great big thank you!</span>
       <span ng-if="purchaseAction === 'remove'">Display licenses have been removed.</span>
       <span ng-if="purchaseAction === 'annual'">Billing frequency has been adjusted.</span>
     </h4>
@@ -19,6 +19,9 @@
       </span>
       <span ng-if="purchaseAction === 'annual'">
         You’ve changed your billing frequency to <b>Annual</b>.
+      </span>
+      <span ng-if="purchaseAction === 'unlimited'">
+        You’ve added <b>unlimited display licenses</b> to your subscription.<br/>
       </span>
 
       <span ng-if="factory.estimate.invoice_estimate.amount_due && !factory.getCreditTotal()">

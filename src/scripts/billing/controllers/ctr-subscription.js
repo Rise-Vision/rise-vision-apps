@@ -15,6 +15,7 @@ angular.module('risevision.apps.billing.controllers')
       $scope.taxExemptionFactory = taxExemptionFactory;
       $scope.helpWidgetFactory = helpWidgetFactory;
       $scope.company = userState.getCopyOfSelectedCompany();
+      $scope.canAccessUnlimitedPlan = userState.isK12Customer();
 
       $scope.$watchGroup(['subscriptionFactory.loading', 'taxExemptionFactory.loading',
         'paymentSourcesFactory.loading'

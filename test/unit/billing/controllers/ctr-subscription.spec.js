@@ -24,7 +24,8 @@ describe('controller: SubscriptionCtrl', function () {
         },
         getCopyOfSelectedCompany: function () {
           return {};
-        }
+        },
+        isK12Customer: sandbox.stub().returns(true)
       };
     });
     $provide.service('subscriptionFactory', function() {
@@ -84,6 +85,7 @@ describe('controller: SubscriptionCtrl', function () {
     expect($scope.taxExemptionFactory).to.equal(taxExemptionFactory);
     expect($scope.helpWidgetFactory).to.equal('helpWidgetFactory');
     expect($scope.company).to.be.ok;
+    expect($scope.canAccessUnlimitedPlan).to.be.true;
 
     expect($scope.isDisplayLicensePlan).to.be.a('function');
     expect($scope.isVolumePlan).to.be.a('function');
