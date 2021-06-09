@@ -15,21 +15,18 @@ describe("Services: purchase factory", function() {
         monthly: {
           billAmount: 'monthlyBillAmount'
         }
+      }),
+      getUnlimitedPlan: sinon.stub().returns({
+        name: 'Unlimited License',
+        type: 'unlimited',
+        productId: 'unlimitedProductId',
+        productCode: 'unlimitedProductCode',
+        yearly: {
+          billAmount: 'unlimitedYearlyBillAmount'
+        }
       })
     });
     $provide.service("$q", function() {return Q;});
-    $provide.service("$modal", function() {
-      return {
-        open: sinon.stub().returns({
-          result: Q.resolve("result")
-        })
-      };
-    });
-    $provide.service("$state", function() {
-      return {
-        go: sinon.spy()
-      };
-    });
     $provide.service("userState", function() {
       return userState = {
         getCopyOfSelectedCompany: sinon.stub().returns({
@@ -98,14 +95,12 @@ describe("Services: purchase factory", function() {
 
   }));
 
-  var $rootScope, $modal, $state, $timeout, purchaseFactory, creditCardFactory, userState, storeService, purchaseFlowTracker, validate, RPP_ADDON_ID;
+  var $rootScope, $timeout, purchaseFactory, creditCardFactory, userState, storeService, purchaseFlowTracker, validate, RPP_ADDON_ID;
 
   beforeEach(function() {
     inject(function($injector) {
       RPP_ADDON_ID = $injector.get("RPP_ADDON_ID");
       $rootScope = $injector.get("$rootScope");
-      $modal = $injector.get("$modal");
-      $state = $injector.get("$state");
       $timeout = $injector.get("$timeout");
       purchaseFactory = $injector.get("purchaseFactory");
       creditCardFactory = $injector.get("creditCardFactory");
@@ -115,7 +110,8 @@ describe("Services: purchase factory", function() {
   it("should exist", function() {
     expect(purchaseFactory).to.be.ok;
     expect(purchaseFactory.init).to.be.a("function");
-    expect(purchaseFactory.updatePlan).to.be.a("function");
+    expect(purchaseFactory.pickUnlimitedPlan).to.be.a("function");
+    expect(purchaseFactory.pickVolumePlan).to.be.a("function");
     expect(purchaseFactory.validatePaymentMethod).to.be.a("function");
     expect(purchaseFactory.getEstimate).to.be.a("function");
     expect(purchaseFactory.completePayment).to.be.a("function");
@@ -195,11 +191,29 @@ describe("Services: purchase factory", function() {
     });
   });
 
-  describe("updatePlan:", function() {
+  describe("pickUnlimitedPlan:", function() {
     it("should update plan with new details", function() {
       purchaseFactory.init();
 
-      purchaseFactory.updatePlan(2,false,242);
+      purchaseFactory.pickUnlimitedPlan();
+
+      expect(purchaseFactory.purchase.plan).to.be.ok;
+      expect(purchaseFactory.purchase.plan.name).to.equal("Unlimited License");
+      expect(purchaseFactory.purchase.plan.productId).to.equal("unlimitedProductId");
+      expect(purchaseFactory.purchase.plan.productCode).to.equal("unlimitedProductCode");
+      expect(purchaseFactory.purchase.plan.isMonthly).to.be.false;
+      expect(purchaseFactory.purchase.plan.yearly.billAmount).to.equal("unlimitedYearlyBillAmount");
+      expect(purchaseFactory.purchase.plan.displays).to.not.exist;
+
+      purchaseFlowTracker.trackProductAdded.should.have.been.calledWith(purchaseFactory.purchase.plan);
+    });
+  });
+
+  describe("pickVolumePlan:", function() {
+    it("should update plan with new details", function() {
+      purchaseFactory.init();
+
+      purchaseFactory.pickVolumePlan(2,false,242);
 
       expect(purchaseFactory.purchase.plan).to.be.ok;
       expect(purchaseFactory.purchase.plan.name).to.equal("2 Display Licenses (Yearly)");
@@ -213,7 +227,7 @@ describe("Services: purchase factory", function() {
     it("should update monthly plan with new details", function() {
       purchaseFactory.init();
 
-      purchaseFactory.updatePlan(1,true,11);
+      purchaseFactory.pickVolumePlan(1,true,11);
 
       expect(purchaseFactory.purchase.plan).to.be.ok;
       expect(purchaseFactory.purchase.plan.name).to.equal("1 Display License (Monthly)");
@@ -251,7 +265,7 @@ describe("Services: purchase factory", function() {
     });
 
     describe("card:", function() {
-      var card;
+
       beforeEach(function() {
         creditCardFactory.paymentMethods.paymentMethod = "card";
       });

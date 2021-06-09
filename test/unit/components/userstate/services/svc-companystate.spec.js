@@ -109,7 +109,7 @@ describe("Services: company state", function() {
       "getSelectedCompanyName", "getSelectedCompanyCountry",
       "getCopyOfUserCompany", "getCopyOfSelectedCompany",
       "isSubcompanySelected", "isTestCompanySelected", "isSeller",
-      "isEducationCustomer", "isDiscountCustomer"].forEach(
+      "isEducationCustomer", "isDiscountCustomer", "isK12Customer"].forEach(
       function (method) {
         expect(companyState).to.have.property(method);
         expect(companyState[method]).to.be.a("function");
@@ -430,6 +430,45 @@ describe("Services: company state", function() {
         companyState.updateCompanySettings(subCompanyWithNewSettings);
 
         expect(companyState.isDiscountCustomer(true)).to.be.true;
+      });
+    });
+
+    describe("isK12Customer:", function(){
+      beforeEach(function(done){
+        companyState.init();
+
+        setTimeout(done, 10);
+      });
+
+      it("should flag k-12 education customers", function(){
+        subCompanyWithNewSettings.companyIndustry = "PRIMARY_SECONDARY_EDUCATION";
+        companyState.updateCompanySettings(subCompanyWithNewSettings);
+
+        expect(companyState.isK12Customer()).to.be.true;
+      });
+
+      it("should not flag other industries", function(){
+        subCompanyWithNewSettings.companyIndustry = "HIGHER_EDUCATION";
+        companyState.updateCompanySettings(subCompanyWithNewSettings);
+
+        expect(companyState.isK12Customer()).to.be.false;
+      });
+
+      it("should not flag undefined industry", function(){
+        subCompanyWithNewSettings.companyIndustry = undefined;
+        companyState.updateCompanySettings(subCompanyWithNewSettings);
+
+        expect(companyState.isK12Customer()).to.be.false;
+      });    
+
+      it("should use own company if parameter is true", function() {
+        companyWithNewSettings.companyIndustry = "PRIMARY_SECONDARY_EDUCATION";
+        subCompanyWithNewSettings.companyIndustry = "MARKETING";
+        
+        companyState.updateCompanySettings(companyWithNewSettings);
+        companyState.updateCompanySettings(subCompanyWithNewSettings);
+
+        expect(companyState.isK12Customer(true)).to.be.true;
       });
     });
   });

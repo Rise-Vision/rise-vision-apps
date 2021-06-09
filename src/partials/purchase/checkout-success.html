@@ -5,10 +5,10 @@
   </p>
   <p>
     <b>Details:</b><br />
-    You’ve purchased a subscription to <b>{{purchase.plan.displays}} display licenses</b>.<br />
+    You’ve purchased a subscription to <b>{{purchase.plan.name}}</b>.<br />
     You will be 
-    <span ng-show="purchase.paymentMethods.paymentMethod === 'invoice'">invoiced</span>
-    <span ng-show="purchase.paymentMethods.paymentMethod === 'card'">charged</span>
+    <span ng-show="paymentMethods.paymentMethod === 'invoice'">invoiced</span>
+    <span ng-show="paymentMethods.paymentMethod === 'card'">charged</span>
     <b>${{purchase.estimate.total | number:2}}</b>.
   </p>
   <div class="button-row mt-5">

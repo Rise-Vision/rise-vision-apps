@@ -14,10 +14,10 @@
 
   <div class="border-bottom py-4 mb-4">
     <p class="mb-0">
-      <span class="font-weight-bold">{{purchase.plan.displays}} Display License<span ng-show="purchase.plan.displays !== 1">s</span>:</span>
+      <span class="font-weight-bold">{{purchase.plan.name}}:</span>
       <span class="pull-right">${{purchase.estimate.subTotal}}</span>
     </p>
-    <p class="mb-0">
+    <p class="mb-0" ng-show="purchase.plan.displays">
       <span>${{(purchase.estimate.subTotal / purchase.plan.displays / (purchase.plan.isMonthly ? 1 : 12)) | number:2}} per display license, per month.</span>
       <span class="pull-right">
         <a aria-label="Edit Subscription Details" class="madero-link u_clickable" ng-click="setCurrentStep(0)" tabindex="1">Edit</a>

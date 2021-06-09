@@ -75,7 +75,7 @@ describe("Services: userState", function() {
       "getCopyOfSelectedCompany", "isSubcompanySelected", 
       "isTestCompanySelected", "isRootCompany", "updateCompanySettings", 
       "updateUserCompanySettings", "resetCompany", "switchCompany", 
-      "isSeller", "isEducationCustomer", "isDiscountCustomer"];
+      "isSeller", "isEducationCustomer", "isDiscountCustomer", "isK12Customer"];
 
     userMethods = ["getUsername", "getUserEmail", "getCopyOfProfile", 
       "getUserPicture", "hasRole", "inRVAFrame", "isRiseAdmin", 

@@ -11,14 +11,23 @@ describe("directive: plan picker", function() {
           isMonthly: false
         }
       },
-      updatePlan: sinon.stub()
+      pickVolumePlan: sinon.stub(),
+      pickUnlimitedPlan: sinon.stub()
     });
     $provide.value("userState", {
-      isDiscountCustomer: sinon.stub().returns(true)
+      isDiscountCustomer: sinon.stub().returns(true),
+      isK12Customer: sinon.stub().returns(true)
+    });
+    $provide.value("plansService",  plansService = {
+      getUnlimitedPlan: sinon.stub().returns({
+        yearly: {
+          billAmount: 999
+        }
+      })
     });
   }));
 
-  var $scope, element, purchaseFactory;
+  var $scope, element, purchaseFactory, plansService;
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
     $templateCache.put("partials/purchase/checkout-plan-picker.html", "<p>mock</p>");
@@ -38,6 +47,8 @@ describe("directive: plan picker", function() {
     expect($scope.displayCount).to.equal(5);
     expect($scope.periodMonthly).to.be.false;
     expect($scope.applyDiscount).to.be.true;
+    expect($scope.canAccessUnlimitedPlan).to.be.true;
+    expect($scope.isUnlimitedPlan).to.be.false;
 
     expect($scope.updatePlan).to.be.a("function");
 
@@ -49,20 +60,53 @@ describe("directive: plan picker", function() {
   });
 
   describe("updatePlan:", function() {
-    it("should update plan in factory and move to next step", function() {
-      $scope.updatePlan();
-
-      purchaseFactory.updatePlan.should.have.been.calledWith($scope.displayCount, $scope.periodMonthly, $scope.totalPrice);
-      $scope.setNextStep.should.have.been.called;
+    describe("volume plan:", function() {
+      it("should update plan in factory and move to next step", function() {
+        $scope.updatePlan();
+  
+        purchaseFactory.pickVolumePlan.should.have.been.calledWith($scope.displayCount, $scope.periodMonthly, $scope.totalPrice);
+        $scope.setNextStep.should.have.been.called;
+      });
+  
+      it("should not update plan id display count is invalid", function() {
+        $scope.displayCount = 0;
+  
+        $scope.updatePlan();
+  
+        purchaseFactory.pickVolumePlan.should.not.have.been.called;
+        $scope.setNextStep.should.not.have.been.called;
+      });
     });
 
-    it("should not update plan id display count is invalid", function() {
-      $scope.displayCount = 0;
+    describe("unlimited plan:", function() {
+      beforeEach(function() {
+        $scope.isUnlimitedPlan = true;
+      });
+      it("should update plan in factory and move to next step", function() {
+        $scope.updatePlan();
+  
+        purchaseFactory.pickUnlimitedPlan.should.have.been.called;        
+        $scope.setNextStep.should.have.been.called;        
+      });
+    });    
+  });
 
-      $scope.updatePlan();
+  describe('isUnlimitedPlan:', function() {
+    it("should calculate totalPrice when switching to unlimited plan", function() {
+      $scope.isUnlimitedPlan = true;
+      $scope.$digest();
 
-      purchaseFactory.updatePlan.should.not.have.been.called;
-      $scope.setNextStep.should.not.have.been.called;
+      expect($scope.totalPrice).to.equal(999);
+      plansService.getUnlimitedPlan.should.have.been.called;
+    });
+
+    it("should calculate totalPrice when switching to volume plan", function() {
+      $scope.displayCount = 1;
+      $scope.isUnlimitedPlan = false;
+
+      $scope.$digest();
+
+      expect($scope.totalPrice).to.equal(108.9);
     });
   });
 

@@ -194,6 +194,11 @@
             var company = checkUserCompany ? _state.userCompany : _state.selectedCompany;
 
             return company && DISCOUNT_INDUSTRIES.indexOf(company.companyIndustry) !== -1;
+          },
+          isK12Customer: function (checkUserCompany) {
+            var company = checkUserCompany ? _state.userCompany : _state.selectedCompany;
+
+            return company && company.companyIndustry === 'PRIMARY_SECONDARY_EDUCATION';
           }
         };
 

@@ -233,6 +233,12 @@
           });
         };
 
+        _factory.getUnlimitedPlan = function () {
+          return _.find(PLANS_LIST, {
+            type: 'unlimited'
+          });
+        };
+
         _factory.getVolumePlan = function () {
           return _.find(PLANS_LIST, {
             type: 'volume'

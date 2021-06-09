@@ -165,6 +165,7 @@
           isSelectedCompanyChargebee: companyState.isSelectedCompanyChargebee,
           isEducationCustomer: companyState.isEducationCustomer,
           isDiscountCustomer: companyState.isDiscountCustomer,
+          isK12Customer: companyState.isK12Customer,
           // company functions
           updateCompanySettings: companyState.updateCompanySettings,
           updateUserCompanySettings: companyState.updateUserCompanySettings,

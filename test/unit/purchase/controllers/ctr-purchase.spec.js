@@ -9,11 +9,6 @@ describe("controller: purchase", function() {
         stop: sandbox.stub()
       };
     });
-    $provide.service("$state", function() {
-      return {
-        go: sandbox.spy()
-      }
-    });
     $provide.service("addressFactory", function() {
       return {
         validateAddress: sinon.spy(function(addressObject) {
@@ -49,7 +44,7 @@ describe("controller: purchase", function() {
     });    
   }));
 
-  var sandbox, $scope, $state, $loading, validate, purchaseFactory, addressFactory, taxExemptionFactory, $location, redirectTo;
+  var sandbox, $scope, $loading, validate, purchaseFactory, addressFactory, taxExemptionFactory, $location, redirectTo;
 
   beforeEach(function() {
     validate = true;
@@ -57,7 +52,6 @@ describe("controller: purchase", function() {
 
     inject(function($injector, $rootScope, $controller) {
       $scope = $rootScope.$new();
-      $state = $injector.get("$state");
       $loading = $injector.get("$loading");
       addressFactory = $injector.get("addressFactory");
       purchaseFactory = $injector.get("purchaseFactory");
