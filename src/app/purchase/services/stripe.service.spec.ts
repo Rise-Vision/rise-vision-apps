@@ -2,30 +2,32 @@ import {expect} from 'chai';
 import { TestBed } from '@angular/core/testing';
 
 import { StripeService } from './stripe.service';
-import { StripeLoader } from 'src/app/ajs-upgraded-providers';
+import { StripeLoaderService } from './stripe-loader.service';
 
 describe('StripeService', () => {
   let stripeService: StripeService;
-  let stripeLoader: StripeLoader;
+  let stripeLoader: any;
   let elements: any;
   let stripeClient: any;  
   
   beforeEach(() => {
-    stripeLoader = function() {
-      elements = {
-        create: sinon.stub().returns('result')
-      };
-      return Promise.resolve(stripeClient = {
-        createPaymentMethod: sinon.stub().returns(Promise.resolve()),
-        handleCardAction: sinon.stub().returns(Promise.resolve()),
-        confirmCardSetup: sinon.stub().returns(Promise.resolve()),
-        elements: sinon.stub().returns(elements)
-      });
-    };
+    stripeLoader = {
+      load: function() {
+        elements = {
+          create: sinon.stub().returns('result')
+        };
+        return Promise.resolve(stripeClient = {
+          createPaymentMethod: sinon.stub().returns(Promise.resolve()),
+          handleCardAction: sinon.stub().returns(Promise.resolve()),
+          confirmCardSetup: sinon.stub().returns(Promise.resolve()),
+          elements: sinon.stub().returns(elements)
+        });
+      }
+    }
 
     TestBed.configureTestingModule({
       providers: [
-        {provide: StripeLoader, useValue: stripeLoader}        
+        {provide: StripeLoaderService, useValue: stripeLoader}        
       ]
     });
     stripeService = TestBed.inject(StripeService);

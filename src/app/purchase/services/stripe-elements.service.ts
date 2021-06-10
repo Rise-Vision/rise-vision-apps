@@ -48,7 +48,7 @@ export class StripeElementsService {
 
     this.stripeService.initializeStripeElements(stripeElements, elementOptions)
       .then( (elements) => {
-        elements.forEach((el, idx) => {
+        elements.forEach((el:any, idx) => {
           this.stripeElements[stripeElements[idx]] = el;
           el.mount(stripeElementSelectors[idx]);
 

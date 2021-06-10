@@ -27,6 +27,12 @@ describe("Services: credit card factory", function() {
       init: sinon.stub().returns(Q.resolve())
     });
 
+    $provide.value('stripeElementsFactory', {
+      stripeElements: {
+        cardNumber: 'cardNumber'
+      }
+    });
+
   }));
 
   var creditCardFactory, stripeService, userState, userAuthFactory, paymentSourcesFactory;
@@ -207,10 +213,9 @@ describe("Services: credit card factory", function() {
     });
 
     describe("existing card: ", function() {
-      var card;
       beforeEach(function() {
         creditCardFactory.paymentMethods = {
-          selectedCard: card = {
+          selectedCard: {
             isNew: true,
             number: "123"
           }
