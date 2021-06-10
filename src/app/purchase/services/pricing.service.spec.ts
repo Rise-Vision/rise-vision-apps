@@ -1,18 +1,14 @@
-/*jshint expr:true */
-"use strict";
+import {expect} from 'chai';
+import { TestBed } from '@angular/core/testing';
 
-describe("Services: pricing factory", function() {
-  beforeEach(module("risevision.apps.purchase"));
+import { PricingService } from './pricing.service';
 
-  beforeEach(module(function ($provide) {
-  }));
+describe('PricingService', () => {
+  let pricingFactory: PricingService;
 
-  var pricingFactory;
-
-  beforeEach(function() {
-    inject(function($injector) {
-      pricingFactory = $injector.get("pricingFactory");
-    });
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    pricingFactory = TestBed.inject(PricingService);
   });
 
   it("should exist", function() {

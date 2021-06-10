@@ -40,3 +40,25 @@ export const templateEditorUtilsProvider = {
   },
   deps: ['$injector']
 };
+
+export abstract class UserState {
+  [key: string]: any;
+}
+export const userStateProvider = {
+  provide: UserState,
+  useFactory: function ($injector: any) {
+    return $injector.get('userState');
+  },
+  deps: ['$injector']
+};
+
+export abstract class StoreService {
+  [key: string]: any;
+}
+export const storeServiceProvider = {
+  provide: StoreService,
+  useFactory: function ($injector: any) {
+    return $injector.get('storeService');
+  },
+  deps: ['$injector']
+};
