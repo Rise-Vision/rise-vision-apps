@@ -53,6 +53,9 @@
         };
 
         var _getChangeInLicenses = function () {
+          if (factory._purchaseAction === 'unlimited') {
+            return null;
+          }
           var licensesToAdd = factory.purchase.licensesToAdd || 0;
           var licensesToRemove = factory.purchase.licensesToRemove || 0;
 
@@ -69,6 +72,7 @@
         var _getTrackingProperties = function () {
           return {
             subscriptionId: subscriptionFactory.getItemSubscription().id,
+            planType: factory._purchaseAction === 'unlimited' ? 'unlimited' : 'volume',
             paymentTerm: factory.purchase.planId.endsWith('m') ? 'monthly' : 'yearly',
             changeInLicenses: _getChangeInLicenses(),
             totalLicenses: factory.getTotalDisplayCount(),
