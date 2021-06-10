@@ -71,8 +71,7 @@ describe("Services: purchase licenses factory", function() {
 
   }));
 
-  var $modal, $timeout, updateSubscriptionFactory,
-    userState, billing, analyticsFactory, subscriptionFactory, validate;
+  var $timeout, updateSubscriptionFactory, userState, billing, analyticsFactory, subscriptionFactory, validate;
 
   beforeEach(function() {
     inject(function($injector) {
@@ -228,6 +227,7 @@ describe("Services: purchase licenses factory", function() {
 
         expect(analyticsFactory.track).to.have.been.calledWith('Subscription Update Estimated', {
           subscriptionId: 'subscriptionId',
+          planType: 'volume',
           paymentTerm: 'yearly',
           changeInLicenses: 5,
           totalLicenses: 7,
@@ -357,6 +357,15 @@ describe("Services: purchase licenses factory", function() {
             expect(updateSubscriptionFactory.purchase.currentPricePerDisplay).to.equal(undefined);
             expect(updateSubscriptionFactory.purchase.newPricePerDisplay).to.equal(undefined);
 
+            expect(analyticsFactory.track).to.have.been.calledWith('Subscription Update Estimated', {
+              subscriptionId: 'subscriptionId',
+              planType: 'unlimited',
+              paymentTerm: 'yearly',
+              changeInLicenses: null,
+              totalLicenses: null,
+              companyId: 'customerId'
+            });
+
             done();
           });
       });
@@ -433,6 +442,7 @@ describe("Services: purchase licenses factory", function() {
 
         expect(analyticsFactory.track).to.have.been.calledWith('Subscription Update Estimated', {
           subscriptionId: 'subscriptionId',
+          planType: 'volume',
           paymentTerm: 'monthly',
           changeInLicenses: -1,
           totalLicenses: 1,
@@ -502,6 +512,7 @@ describe("Services: purchase licenses factory", function() {
       setTimeout(function() {
         analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
           subscriptionId: 'subscriptionId',
+          planType: 'volume',
           paymentTerm: 'yearly',
           changeInLicenses: 5,
           totalLicenses: 7,
@@ -606,6 +617,7 @@ describe("Services: purchase licenses factory", function() {
       setTimeout(function() {
         analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
           subscriptionId: 'subscriptionId',
+          planType: 'volume',
           paymentTerm: 'yearly',
           changeInLicenses: -1,
           totalLicenses: 1,
