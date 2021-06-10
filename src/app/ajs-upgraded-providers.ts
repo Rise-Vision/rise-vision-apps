@@ -62,3 +62,14 @@ export const storeServiceProvider = {
   },
   deps: ['$injector']
 };
+
+export abstract class StripeLoader extends Function{
+  [key: string]: any;
+}
+export const stripeLoaderProvider = {
+  provide: StripeLoader,
+  useFactory: function ($injector: any) {
+    return $injector.get('stripeLoader');
+  },
+  deps: ['$injector']
+};

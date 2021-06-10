@@ -353,7 +353,6 @@
               "src/scripts/purchase/services/svc-payment-sources-factory.js",
               "src/scripts/purchase/services/svc-stripe-elements-factory.js",
               "src/scripts/purchase/services/svc-stripe-loader.js",
-              "src/scripts/purchase/services/svc-stripe.js",
 
               "src/scripts/schedules/app.js",
               "src/scripts/schedules/services/svc-schedule.js",
