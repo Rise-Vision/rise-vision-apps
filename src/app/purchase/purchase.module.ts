@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PricingService } from './services/pricing.service';
 import { TaxExemptionService } from './services/tax-exemption.service';
 import { StripeService } from './services/stripe.service';
+import { StripeElementsService } from './services/stripe-elements.service';
 
 @NgModule({
   declarations: [],
@@ -11,5 +12,5 @@ import { StripeService } from './services/stripe.service';
   ]
 })
 export class PurchaseModule {
-  static providers = [ PricingService, StripeService, TaxExemptionService ]
+  static providers = [ PricingService, StripeService, StripeElementsService, TaxExemptionService ]
 }
