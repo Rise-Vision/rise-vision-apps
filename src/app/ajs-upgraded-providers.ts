@@ -115,3 +115,37 @@ export const processErrorCodeProvider = {
   },
   deps: ['$injector']
 };
+
+export abstract class AjsState {
+  [key: string]: any;
+}
+export const $stateProvider = {
+  provide: AjsState,
+  useFactory: function ($injector: any) {
+    return $injector.get('$state');
+  },
+  deps: ['$injector']
+};
+
+export abstract class SubscriptionFactory {
+  [key: string]: any;
+}
+export const subscriptionFactoryProvider = {
+  provide: SubscriptionFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('subscriptionFactory');
+  },
+  deps: ['$injector']
+};
+
+export abstract class PlansService {
+  [key: string]: any;
+}
+export const plansServiceProvider = {
+  provide: PlansService,
+  useFactory: function ($injector: any) {
+    return $injector.get('plansService');
+  },
+  deps: ['$injector']
+};
+

@@ -1,13 +1,16 @@
 import {expect} from 'chai';
 
 import { 
-  AddressService, addressServiceProvider,
+  $stateProvider, AjsState,
+  AddressService, addressServiceProvider,  
   AnalyticsFactory, analyticsFactoryProvider, 
   Billing, billingProvider, 
   CanvaTypePicker, canvaTypePickerProvider, 
   ConfirmModal, confirmModalProvider, 
+  PlansService, plansServiceProvider, 
   ProcessErrorCode, processErrorCodeProvider, 
   StoreService, storeServiceProvider,
+  SubscriptionFactory, subscriptionFactoryProvider,
   TemplateEditorFactory, templateEditorFactoryProvider,
   TemplateEditorUtils, templateEditorUtilsProvider,
   UserAuthFactory, userAuthFactoryProvider,
@@ -83,6 +86,21 @@ describe('ajs-upgraded-providers', () => {
   it('processErrorCode:', () => {
     testRegisterProvider(processErrorCodeProvider, ProcessErrorCode);
     testAngularJsService(processErrorCodeProvider, 'processErrorCode');
+  });
+
+  it('$state:', () => {
+    testRegisterProvider($stateProvider, AjsState);
+    testAngularJsService($stateProvider, '$state');
+  });
+
+  it('subscriptionFactory:', () => {
+    testRegisterProvider(subscriptionFactoryProvider, SubscriptionFactory);
+    testAngularJsService(subscriptionFactoryProvider, 'subscriptionFactory');
+  });
+
+  it('plansService:', () => {
+    testRegisterProvider(plansServiceProvider, PlansService);
+    testAngularJsService(plansServiceProvider, 'plansService');
   });
 
 });
