@@ -62,3 +62,36 @@ export const storeServiceProvider = {
   },
   deps: ['$injector']
 };
+
+export abstract class AddressService {
+  [key: string]: any;
+}
+export const addressServiceProvider = {
+  provide: AddressService,
+  useFactory: function ($injector: any) {
+    return $injector.get('addressService');
+  },
+  deps: ['$injector']
+};
+
+export abstract class UserAuthFactory {
+  [key: string]: any;
+}
+export const userAuthFactoryProvider = {
+  provide: UserAuthFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('userAuthFactory');
+  },
+  deps: ['$injector']
+};
+
+export abstract class PaymentSourcesFactory {
+  [key: string]: any;
+}
+export const paymentSourcesFactoryProvider = {
+  provide: PaymentSourcesFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('paymentSourcesFactory');
+  },
+  deps: ['$injector']
+};

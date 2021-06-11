@@ -349,7 +349,6 @@
 
               "src/scripts/purchase/services/svc-purchase-factory.js",
               "src/scripts/purchase/services/svc-update-subscription-factory.js",
-              "src/scripts/purchase/services/svc-credit-card-factory.js",
               "src/scripts/purchase/services/svc-payment-sources-factory.js",
 
               "src/scripts/schedules/app.js",
