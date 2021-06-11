@@ -6,6 +6,7 @@ import { StripeService } from './services/stripe.service';
 import { StripeElementsService } from './services/stripe-elements.service';
 import { CreditCardService } from './services/credit-card.service';
 import { CardDescriptionPipe } from './pipes/card-description.pipe';
+import { PaymentSourcesService } from './services/payment-sources.service';
 
 @NgModule({
   declarations: [
@@ -16,5 +17,5 @@ import { CardDescriptionPipe } from './pipes/card-description.pipe';
   ]
 })
 export class PurchaseModule {
-  static providers = [ CreditCardService, PricingService, StripeService, StripeElementsService, TaxExemptionService ]
+  static providers = [ CreditCardService, PaymentSourcesService, PricingService, StripeService, StripeElementsService, TaxExemptionService ]
 }

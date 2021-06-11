@@ -85,13 +85,33 @@ export const userAuthFactoryProvider = {
   deps: ['$injector']
 };
 
-export abstract class PaymentSourcesFactory {
+export abstract class ConfirmModal extends Function {
+}
+export const confirmModalProvider = {
+  provide: ConfirmModal,
+  useFactory: function ($injector: any) {
+    return $injector.get('confirmModal');
+  },
+  deps: ['$injector']
+};
+
+export abstract class Billing {
   [key: string]: any;
 }
-export const paymentSourcesFactoryProvider = {
-  provide: PaymentSourcesFactory,
+export const billingProvider = {
+  provide: Billing,
   useFactory: function ($injector: any) {
-    return $injector.get('paymentSourcesFactory');
+    return $injector.get('billing');
+  },
+  deps: ['$injector']
+};
+
+export abstract class ProcessErrorCode extends Function {
+}
+export const processErrorCodeProvider = {
+  provide: ProcessErrorCode,
+  useFactory: function ($injector: any) {
+    return $injector.get('processErrorCode');
   },
   deps: ['$injector']
 };

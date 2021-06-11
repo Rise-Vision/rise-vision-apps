@@ -3,8 +3,9 @@ import { TestBed } from '@angular/core/testing';
 
 import { CreditCardService } from './credit-card.service';
 import { StripeService } from './stripe.service';
-import { AddressService, PaymentSourcesFactory, UserAuthFactory, UserState } from 'src/app/ajs-upgraded-providers';
+import { AddressService, UserAuthFactory, UserState } from 'src/app/ajs-upgraded-providers';
 import { StripeElementsService } from './stripe-elements.service';
+import { PaymentSourcesService } from './payment-sources.service';
 
 describe('CreditCardService', () => {
   let creditCardFactory: CreditCardService;
@@ -59,7 +60,7 @@ describe('CreditCardService', () => {
         {provide: StripeService, useValue: stripeService},
         {provide: UserState, useValue: userState},
         {provide: UserAuthFactory, useValue: userAuthFactory},
-        {provide: PaymentSourcesFactory, useValue: paymentSourcesFactory},
+        {provide: PaymentSourcesService, useValue: paymentSourcesFactory},
         {provide: StripeElementsService, useValue: stripeElementsFactory},
         {provide: AddressService, useValue: addressService}
       ]      

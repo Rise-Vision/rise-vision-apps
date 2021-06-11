@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AddressService, PaymentSourcesFactory, UserAuthFactory, UserState } from 'src/app/ajs-upgraded-providers';
+import { AddressService, UserAuthFactory, UserState } from 'src/app/ajs-upgraded-providers';
 import { StripeElementsService } from './stripe-elements.service';
 import { StripeService } from './stripe.service';
 import * as angular from 'angular';
 import { downgradeInjectable } from '@angular/upgrade/static';
+import { PaymentSourcesService } from './payment-sources.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class CreditCardService {
     private stripeService: StripeService, 
     private userState: UserState, 
     private userAuthFactory: UserAuthFactory, 
-    private paymentSourcesFactory: PaymentSourcesFactory,
+    private paymentSourcesFactory: PaymentSourcesService,
     private stripeElementsFactory: StripeElementsService,
     private addressService: AddressService) {      
   }

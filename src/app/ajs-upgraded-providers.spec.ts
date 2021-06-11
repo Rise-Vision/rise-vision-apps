@@ -3,7 +3,10 @@ import {expect} from 'chai';
 import { 
   AddressService, addressServiceProvider,
   AnalyticsFactory, analyticsFactoryProvider, 
+  Billing, billingProvider, 
   CanvaTypePicker, canvaTypePickerProvider, 
+  ConfirmModal, confirmModalProvider, 
+  ProcessErrorCode, processErrorCodeProvider, 
   StoreService, storeServiceProvider,
   TemplateEditorFactory, templateEditorFactoryProvider,
   TemplateEditorUtils, templateEditorUtilsProvider,
@@ -65,6 +68,21 @@ describe('ajs-upgraded-providers', () => {
   it('userAuthFactory:', () => {
     testRegisterProvider(userAuthFactoryProvider, UserAuthFactory);
     testAngularJsService(userAuthFactoryProvider, 'userAuthFactory');
+  });
+
+  it('confirmModal:', () => {
+    testRegisterProvider(confirmModalProvider, ConfirmModal);
+    testAngularJsService(confirmModalProvider, 'confirmModal');
+  });
+
+  it('billing:', () => {
+    testRegisterProvider(billingProvider, Billing);
+    testAngularJsService(billingProvider, 'billing');
+  });
+
+  it('processErrorCode:', () => {
+    testRegisterProvider(processErrorCodeProvider, ProcessErrorCode);
+    testAngularJsService(processErrorCodeProvider, 'processErrorCode');
   });
 
 });
