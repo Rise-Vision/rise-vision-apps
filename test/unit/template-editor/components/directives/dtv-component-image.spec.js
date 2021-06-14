@@ -47,6 +47,7 @@ describe('directive: TemplateComponentImage', function() {
     });
     $provide.service('logoImageFactory', function() {
       return {
+        getAvailableAttributeData: sinon.stub(),
         getBlueprintData: sandbox.stub().returns({}),
         getImagesAsMetadata: sandbox.stub().returns([]),
         areChecksCompleted: sandbox.stub().returns(true),
@@ -57,6 +58,7 @@ describe('directive: TemplateComponentImage', function() {
     });
     $provide.service('baseImageFactory', function() {
       return {
+        getAvailableAttributeData: sinon.stub(),
         getBlueprintData: sandbox.stub().returns({}),
         getImagesAsMetadata: sandbox.stub().returns([]),
         areChecksCompleted: sandbox.stub().returns(true),

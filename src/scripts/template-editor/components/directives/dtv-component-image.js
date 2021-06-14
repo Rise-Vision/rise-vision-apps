@@ -76,43 +76,6 @@ angular.module('risevision.template-editor.directives')
             }
           }
 
-          function _loadDuration() {
-            var duration = imageFactory.getDuration();
-
-            if (!duration) {
-              duration = _getDefaultDurationAttribute();
-            }
-
-            duration = parseInt(duration, 10);
-
-            // default to value 10 if duration not defined
-            $scope.values.duration = (duration && !isNaN(duration)) ? duration : 10;
-          }
-
-          function _loadTransition() {
-            var transition = imageFactory.getTransition();
-            if (!transition) {
-              transition = _getBlueprint('transition');
-            }
-            $scope.values.transition = transition;
-          }
-
-          function _loadHelpText() {
-            $scope.helpText = imageFactory.getHelpText();
-          }
-
-          function _getBlueprint(key) {
-            return imageFactory.getBlueprintData(key);
-          }
-
-          function _getDefaultFilesAttribute() {
-            return _getBlueprint('files');
-          }
-
-          function _getDefaultDurationAttribute() {
-            return _getBlueprint('duration');
-          }
-
           function _getFilesFor(componentId) {
             var metadata = attributeDataFactory.getAttributeData(componentId, 'metadata');
 
@@ -159,7 +122,7 @@ angular.module('risevision.template-editor.directives')
             }
 
             $scope.selectedImages = selectedImages;
-            $scope.isDefaultImageList = filesAttribute === _getDefaultFilesAttribute();
+            $scope.isDefaultImageList = filesAttribute === imageFactory.getBlueprintData('files');
           }
 
           _reset();
@@ -183,9 +146,13 @@ angular.module('risevision.template-editor.directives')
 
             _loadSelectedImages();
 
-            _loadDuration();
-            _loadTransition();
-            _loadHelpText();
+            var duration = imageFactory.getAvailableAttributeData('duration');
+
+            // default to value 10 if duration not defined
+            $scope.values.duration = templateEditorUtils.intValueFor(duration, 10);
+
+            $scope.values.transition = imageFactory.getAvailableAttributeData('transition');
+            $scope.helpText = imageFactory.getHelpText();
           };
 
           var componentDirective = {

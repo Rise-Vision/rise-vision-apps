@@ -19,14 +19,6 @@ angular.module('risevision.template-editor.services')
         }
       };
 
-      factory.getDuration = function () {
-        return null;
-      };
-
-      factory.getTransition = function () {
-        return null;
-      };
-
       factory.setDuration = function (duration) {
         return;
       };
@@ -50,6 +42,10 @@ angular.module('risevision.template-editor.services')
         }
         brandingFactory.setUnsavedChanges();
         return brandingFactory.brandingSettings.logoFileMetadata;
+      };
+
+      factory.getAvailableAttributeData = function (key) {
+        return null;
       };
 
       factory.getBlueprintData = function (key) {
