@@ -35,8 +35,8 @@ angular.module('risevision.template-editor.services')
         return blueprintFactory.getBlueprintData(factory.componentId, key);
       };
 
-      factory.areChecksCompleted = function (checksCompleted) {
-        return !!checksCompleted && checksCompleted[factory.componentId] !== false;
+      factory.areChecksCompleted = function () {
+        return !!factory.checksCompleted && factory.checksCompleted[factory.componentId] !== false;
       };
 
       factory.isSetAsLogo = function () {

@@ -116,7 +116,7 @@ describe('directive: TemplateComponentImage', function() {
     $templateCache.put('partials/template-editor/components/component-image.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
-    $scope.fileExistenceChecksCompleted = {};
+    baseImageFactory.checksCompleted = {};
 
     timeout = $timeout;
     element = $compile("<template-component-image></template-component-image>")($scope);
@@ -201,13 +201,31 @@ describe('directive: TemplateComponentImage', function() {
       });
 
       describe('onPresentationOpen:', function() {
-        it('should check file existence when presentation opens', function(done) {
-          // I had to mock as this because directly setting $q provider above broke registerDirective() call
-          $scope.waitForPresentationId = function(metadata) {
-            return Q.resolve(metadata);
+        var directive;
+
+        beforeEach(function() {
+          directive = componentsFactory.registerDirective.getCall(0).args[0];
+        });
+
+        it('should reset factory', function() {
+          baseImageFactory.componentId = 'selected';
+          baseImageFactory.checksCompleted = {
+            oldComponent: true
           };
 
-          var directive = componentsFactory.registerDirective.getCall(0).args[0];
+          directive.onPresentationOpen();
+
+          expect(baseImageFactory.componentId).to.not.be.ok;
+          expect(baseImageFactory.checksCompleted).to.not.have.property('oldComponent');
+        });
+
+        it('should filter image components', function() {
+          directive.onPresentationOpen();
+
+          attributeDataFactory.getComponentIds.should.have.been.calledWith({type: 'rise-image'});
+        });
+
+        it('should check file existence when presentation opens', function(done) {
           var sampleImages = [
             { "file": 'image.png', "thumbnail-url": "http://image" },
             { "file": 'test.jpg', "thumbnail-url": "http://test.jpg" }
@@ -222,13 +240,13 @@ describe('directive: TemplateComponentImage', function() {
 
           directive.onPresentationOpen();
 
-          expect($scope.fileExistenceChecksCompleted).to.deep.equal({
+          expect(baseImageFactory.checksCompleted).to.deep.equal({
             component1: false,
             component2: false
           });
 
           setTimeout(function() {
-            expect($scope.fileExistenceChecksCompleted).to.deep.equal({
+            expect(baseImageFactory.checksCompleted).to.deep.equal({
               component1: true,
               component2: true
             });

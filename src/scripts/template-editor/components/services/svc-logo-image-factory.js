@@ -56,7 +56,7 @@ angular.module('risevision.template-editor.services')
         return null;
       };
 
-      factory.areChecksCompleted = function (checksCompleted) {
+      factory.areChecksCompleted = function () {
         return !!brandingFactory.brandingSettings.logoFileMetadata;
       };
 
