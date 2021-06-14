@@ -93,7 +93,10 @@ angular.module('risevision.template-editor.services')
       iconType: 'streamline',
       icon: 'slides',
       title: 'Google Slides',
-      visual: true
+      visual: true,
+      defaultAttributes: {
+        src: ''
+      }
     },
     'rise-storage-selector': {
       type: 'rise-storage-selector',
