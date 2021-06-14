@@ -51,7 +51,7 @@ describe("controller: Company Role Modal", function() {
   it("should initialize", function() {
     expect($scope.user.username).to.equal("user@example.io");
     
-    expect($scope.COMPANY_ROLE_FIELDS).to.have.length(13);
+    expect($scope.COMPANY_ROLE_FIELDS).to.have.length(16);
   });
   
   it("should close modal on save and send user objects", function() {
