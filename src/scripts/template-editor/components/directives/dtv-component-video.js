@@ -5,9 +5,11 @@ angular.module('risevision.template-editor.directives')
   .constant('SUPPORTED_VIDEO_TYPES', '.mp4, .webm')
   .directive('templateComponentVideo', ['$log', '$timeout', '$loading', 'componentsFactory', 'templateEditorFactory',
     'attributeDataFactory', 'storageManagerFactory', 'templateEditorUtils', 'fileExistenceCheckService', 
-    'fileMetadataUtilsService', 'DEFAULT_VIDEO_THUMBNAIL', 'SUPPORTED_VIDEO_TYPES',
+    'fileMetadataUtilsService', '$rootScope', 'plansFactory', 'currentPlanFactory',
+    'DEFAULT_VIDEO_THUMBNAIL', 'SUPPORTED_VIDEO_TYPES',
     function ($log, $timeout, $loading, componentsFactory, templateEditorFactory, attributeDataFactory, 
       storageManagerFactory, templateEditorUtils, fileExistenceCheckService, fileMetadataUtilsService,
+      $rootScope, plansFactory, currentPlanFactory,
       DEFAULT_VIDEO_THUMBNAIL, SUPPORTED_VIDEO_TYPES) {
       return {
         restrict: 'E',
@@ -16,6 +18,14 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.templateEditorFactory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_VIDEO_TYPES;
+
+          $scope.plansFactory = plansFactory;
+          $scope.isPlanActive = currentPlanFactory.isPlanActive();
+
+          $rootScope.$on('risevision.plan.loaded', function () {
+            $scope.isPlanActive = currentPlanFactory.isPlanActive();
+          });
+
           $scope.uploadManager = {
             onUploadStatus: function (isUploading) {
               $scope.isUploading = isUploading;

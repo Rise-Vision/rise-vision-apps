@@ -2,8 +2,9 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('componentStorageSelector', ['$loading', 'filterFilter', 'componentsFactory', 'storageManagerFactory',
-    'templateEditorUtils',
-    function ($loading, filterFilter, componentsFactory, storageManagerFactory, templateEditorUtils) {
+    'templateEditorUtils', '$rootScope', 'plansFactory', 'currentPlanFactory',
+    function ($loading, filterFilter, componentsFactory, storageManagerFactory, templateEditorUtils,
+    $rootScope, plansFactory, currentPlanFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -20,6 +21,13 @@ angular.module('risevision.template-editor.directives')
             doSearch: function () {},
             reverse: false
           };
+
+          $scope.plansFactory = plansFactory;
+          $scope.isPlanActive = currentPlanFactory.isPlanActive();
+
+          $rootScope.$on('risevision.plan.loaded', function () {
+            $scope.isPlanActive = currentPlanFactory.isPlanActive();
+          });
 
           $scope.storageSelectorId = 'storage-selector';
           $scope.storageUploadManager = {

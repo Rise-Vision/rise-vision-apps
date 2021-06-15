@@ -112,11 +112,14 @@
     ng-class="{ 'no-files': !hasRegularFileItems() }"
   >
     <div class="upload-files">
+      <button id="upload-{{fileType}}-unsubscribed" class="btn btn-default btn-block" ng-click="plansFactory.showUnlockThisFeatureModal()" ng-hide="isPlanActive">
+        <strong>{{ ( 'template.' + fileType + '.upload' ) | translate }}</strong>
+      </button>
       <label id="{{storageSelectorId}}-uploader-label"
         class="btn btn-block"
         ng-class="hasRegularFileItems() ? 'btn-default' : 'btn-primary'"
         for="{{storageSelectorId}}-uploader"
-        ng-disabled="isUploading"
+        ng-disabled="isUploading" ng-show="isPlanActive"
       >
         <strong>
           {{ ( 'template.' + fileType + '.upload' ) | translate }}
