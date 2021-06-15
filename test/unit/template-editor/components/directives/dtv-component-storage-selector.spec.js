@@ -37,9 +37,6 @@ describe('directive: componentStorageSelector', function() {
           isPlanActive: sinon.stub().returns(true)
       };
     });
-    $provide.service('plansFactory',function(){
-      return {};
-    });
 
   }));
 
@@ -81,7 +78,7 @@ describe('directive: componentStorageSelector', function() {
     expect($scope.dateModifiedOrderFunction).to.be.a('function');
     expect($scope.fileNameOrderFunction).to.be.a('function');
 
-    expect($scope.plansFactory).to.be.ok;
+    expect($scope.currentPlanFactory).to.be.ok;
   });
 
   it('should initialize isPlanActive', function() {

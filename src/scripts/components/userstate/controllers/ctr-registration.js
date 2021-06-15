@@ -6,12 +6,12 @@ angular.module('risevision.common.components.userstate')
     '$loading', 'addAccount', '$exceptionHandler',
     'userState', 'pick', 'messageBox', 'humanReadableError',
     'agreeToTermsAndUpdateUser', 'account', 'analyticsFactory',
-    'bigQueryLogging', 'updateCompany', 'plansFactory',
+    'bigQueryLogging', 'updateCompany', 'currentPlanFactory',
     'COMPANY_INDUSTRY_FIELDS', 'urlStateService', 'hubspot',
     function ($q, $scope, $rootScope, $loading, addAccount,
       $exceptionHandler, userState, pick, messageBox, humanReadableError,
       agreeToTermsAndUpdateUser, account, analyticsFactory, bigQueryLogging,
-      updateCompany, plansFactory, COMPANY_INDUSTRY_FIELDS, urlStateService, hubspot) {
+      updateCompany, currentPlanFactory, COMPANY_INDUSTRY_FIELDS, urlStateService, hubspot) {
 
       $scope.newUser = !account;
       $scope.DROPDOWN_INDUSTRY_FIELDS = COMPANY_INDUSTRY_FIELDS;
@@ -55,7 +55,7 @@ angular.module('risevision.common.components.userstate')
               userState.refreshProfile()
                 .finally(function () {
                   if ($scope.newUser) {
-                    plansFactory.initVolumePlanTrial();
+                    currentPlanFactory.initVolumePlanTrial();
                   }
 
                   var userCompany = userState.getCopyOfUserCompany();

@@ -112,9 +112,6 @@ describe('directive: TemplateComponentImage', function() {
           isPlanActive: sandbox.stub().returns(true)
       };
     });
-    $provide.service('plansFactory',function(){
-      return {};
-    });
 
   }));
 
@@ -149,7 +146,7 @@ describe('directive: TemplateComponentImage', function() {
     expect($scope.saveDuration).to.be.a('function');
     expect($scope.saveTransition).to.be.a('function');
 
-    expect($scope.plansFactory).to.be.ok;
+    expect($scope.currentPlanFactory).to.be.ok;
   });
 
   it('should initialize isPlanActive', function() {

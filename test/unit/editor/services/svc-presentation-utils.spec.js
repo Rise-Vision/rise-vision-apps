@@ -11,14 +11,9 @@ describe('service: presentationUtils:', function() {
       };
     });
 
-    $provide.service('plansFactory', function() {
-      return plansFactory = {
-        showPurchaseOptions: sinon.stub()
-      }
-    })
   }));
 
-  var presentationUtils, HTML_TEMPLATE_TYPE, HTML_PRESENTATION_TYPE, $state, plansFactory;
+  var presentationUtils, HTML_TEMPLATE_TYPE, HTML_PRESENTATION_TYPE, $state;
 
   beforeEach(function() {
     inject(function($injector) {

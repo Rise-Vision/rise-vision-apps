@@ -56,9 +56,6 @@ describe('directive: templateComponentVideo', function() {
           isPlanActive: sinon.stub().returns(true)
       };
     });
-    $provide.service('plansFactory',function(){
-      return {};
-    });
 
   }));
 
@@ -86,7 +83,7 @@ describe('directive: templateComponentVideo', function() {
     expect($scope.templateEditorFactory).to.be.ok;
     expect($scope.sortItem).to.be.a('function');
 
-    expect($scope.plansFactory).to.be.ok;
+    expect($scope.currentPlanFactory).to.be.ok;
   });
 
   it('should initialize isPlanActive', function() {

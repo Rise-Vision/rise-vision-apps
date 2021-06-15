@@ -61,7 +61,7 @@
 
 <div class="file-component-list-action-button-bar">
   <div class="upload-files">
-    <button id="upload-images-unsubscribed" class="btn btn-default btn-block" ng-click="plansFactory.showUnlockThisFeatureModal()" ng-hide="isPlanActive">
+    <button id="upload-images-unsubscribed" class="btn btn-default btn-block" ng-click="currentPlanFactory.showUnlockThisFeatureModal()" ng-hide="isPlanActive">
       <strong ng-if="!isEditingLogo()">Upload Images</strong>
       <strong ng-if="isEditingLogo()">Upload A Logo</strong>
     </button>
@@ -75,7 +75,7 @@
     </label>
   </div>
   <div class="edit-in-canva u_margin-sm-top">
-    <button id="canva-unsubscribed" class="btn btn-default btn-block" ng-click="plansFactory.showUnlockThisFeatureModal()" ng-hide="isPlanActive">
+    <button id="canva-unsubscribed" class="btn btn-default btn-block" ng-click="currentPlanFactory.showUnlockThisFeatureModal()" ng-hide="isPlanActive">
       <strong>Design With Canva</strong>
     </button>
     <canva-button (design-published)="onDesignPublished($event)" [disabled]="isUploading" ng-show="isPlanActive"></canva-button>

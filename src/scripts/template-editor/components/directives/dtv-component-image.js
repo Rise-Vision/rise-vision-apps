@@ -8,12 +8,12 @@ angular.module('risevision.template-editor.directives')
   .directive('templateComponentImage', ['$log', '$timeout', '$loading', 'componentsFactory', 'templateEditorFactory',
     'attributeDataFactory', 'storageManagerFactory', 'fileExistenceCheckService', 'fileMetadataUtilsService',
     'logoImageFactory', 'baseImageFactory', 'fileDownloader', 'templateEditorUtils', 
-    '$rootScope', 'plansFactory', 'currentPlanFactory',
+    '$rootScope', 'currentPlanFactory',
     'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES', 'CANVA_FOLDER',
     function ($log, $timeout, $loading, componentsFactory, templateEditorFactory, attributeDataFactory,
       storageManagerFactory, fileExistenceCheckService, fileMetadataUtilsService,
       logoImageFactory, baseImageFactory, fileDownloader, templateEditorUtils,
-      $rootScope, plansFactory, currentPlanFactory,
+      $rootScope, currentPlanFactory,
       DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES, CANVA_FOLDER) {
       return {
         restrict: 'E',
@@ -25,7 +25,7 @@ angular.module('risevision.template-editor.directives')
           $scope.templateEditorFactory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_IMAGE_TYPES;
 
-          $scope.plansFactory = plansFactory;
+          $scope.currentPlanFactory = currentPlanFactory;
           $scope.isPlanActive = currentPlanFactory.isPlanActive();
 
           $rootScope.$on('risevision.plan.loaded', function () {

@@ -3,9 +3,9 @@
 angular.module('risevision.displays.directives')
   .directive('displayFields', ['$sce', 'userState', 'display', 'displayFactory', 'playerLicenseFactory',
     'playerProFactory', 'displayControlFactory', 'playerActionsFactory', 'scheduleFactory',
-    'plansFactory', 'messageBox', 'confirmModal', 'SHARED_SCHEDULE_URL',
+    'currentPlanFactory', 'messageBox', 'confirmModal', 'SHARED_SCHEDULE_URL',
     function ($sce, userState, display, displayFactory, playerLicenseFactory, playerProFactory,
-      displayControlFactory, playerActionsFactory, scheduleFactory, plansFactory,
+      displayControlFactory, playerActionsFactory, scheduleFactory, currentPlanFactory,
       messageBox, confirmModal, SHARED_SCHEDULE_URL) {
       return {
         restrict: 'E',
@@ -20,7 +20,7 @@ angular.module('risevision.displays.directives')
             if (!playerLicenseFactory.isProAvailable(displayFactory.display) && !displayFactory.display
               .originalPlayerProAuthorized) {
               displayFactory.display.playerProAuthorized = false;
-              plansFactory.confirmAndPurchase();
+              currentPlanFactory.confirmAndPurchase();
             } else {
               playerLicenseFactory.updateDisplayLicenseLocal(displayFactory.display);
             }

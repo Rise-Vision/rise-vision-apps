@@ -1,6 +1,6 @@
 'use strict';
 describe('directive: share-schedule-button', function() {
-  var $scope, $rootScope, element, $timeout, innerElementStub, currentPlanFactory, plansFactory, outsideClickHandler,
+  var $scope, $rootScope, element, $timeout, innerElementStub, currentPlanFactory, outsideClickHandler,
     sandbox = sinon.sandbox.create();
 
 
@@ -8,11 +8,7 @@ describe('directive: share-schedule-button', function() {
   beforeEach(module(function ($provide) {
     $provide.service('currentPlanFactory', function() {
       return {
-        isPlanActive: sinon.stub().returns(true)
-      };
-    });
-    $provide.service('plansFactory', function() {
-      return {
+        isPlanActive: sinon.stub().returns(true),
         showUnlockThisFeatureModal: sinon.stub()
       };
     });
@@ -29,7 +25,6 @@ describe('directive: share-schedule-button', function() {
     $rootScope = $injector.get('$rootScope');
     $timeout = $injector.get('$timeout');
     currentPlanFactory = $injector.get('currentPlanFactory');
-    plansFactory = $injector.get('plansFactory');
     outsideClickHandler = $injector.get('outsideClickHandler');
 
     innerElementStub = {
@@ -94,7 +89,7 @@ describe('directive: share-schedule-button', function() {
       currentPlanFactory.isPlanActive.returns(false);
       $scope.toggleTooltip();
 
-      plansFactory.showUnlockThisFeatureModal.should.have.been.called;
+      currentPlanFactory.showUnlockThisFeatureModal.should.have.been.called;
     });
   });
 
@@ -120,7 +115,7 @@ describe('directive: share-schedule-button', function() {
       currentPlanFactory.isPlanActive.returns(false);
       $scope.toggleActionSheet();
       
-      plansFactory.showUnlockThisFeatureModal.should.have.been.called;
+      currentPlanFactory.showUnlockThisFeatureModal.should.have.been.called;
     });
 
     it('should bind to window resize on open', function() {

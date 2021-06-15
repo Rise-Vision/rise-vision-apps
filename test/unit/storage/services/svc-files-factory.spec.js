@@ -30,7 +30,7 @@ describe('service: FilesFactory:', function() {
       return function() { return 'error'; };
     });
 
-    $provide.factory("plansFactory", function() {
+    $provide.factory("currentPlanFactory", function() {
       return {
         showPurchaseOptions: sinon.stub()
       };

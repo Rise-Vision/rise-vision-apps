@@ -16,18 +16,14 @@ describe("controller: plan banner", function() {
         isSubscribed: sinon.stub().returns(false),
         isOnTrial: sinon.stub().returns(false),
         isTrialExpired: sinon.stub().returns(false),
-        isSuspended: sinon.stub().returns(false)
+        isSuspended: sinon.stub().returns(false),
+        showPurchaseOptions: sinon.stub()
       };
     });
     $provide.factory("userState", function() {
       return {
         _restoreState: function () {},
         isSelectedCompanyChargebee: sinon.stub().returns(true)
-      };
-    });
-    $provide.factory("plansFactory", function() {
-      return {
-        showPurchaseOptions: sinon.stub()
       };
     });
   }));
