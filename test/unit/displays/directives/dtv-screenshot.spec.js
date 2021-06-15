@@ -17,13 +17,6 @@ describe('directive: screenshot', function() {
         screenshot: {}
       };
     });
-    
-    $provide.service('playerProFactory', function() {
-      return {
-        isScreenshotCompatiblePlayer: sinon.stub().returns(true),
-        isChromeOSPlayer: sinon.stub().returns(false)
-      };
-    });
 
     $provide.service('displayFactory', function() {
       return {
@@ -33,13 +26,12 @@ describe('directive: screenshot', function() {
     });
   }));
   
-  var elm, $scope, $compile, displayFactory, screenshotFactory, playerProFactory, display;
+  var elm, $scope, $compile, displayFactory, screenshotFactory, display;
 
   beforeEach(inject(function($rootScope, $injector, _$compile_, $templateCache) {
     display = $injector.get('display');
     displayFactory = $injector.get('displayFactory');
     screenshotFactory = $injector.get('screenshotFactory');
-    playerProFactory = $injector.get('playerProFactory')
 
     $templateCache.put('partials/displays/screenshot.html', '<p>Screenshot</p>');
     $scope = $rootScope.$new();
@@ -144,18 +136,9 @@ describe('directive: screenshot', function() {
       });
     });
 
-    it('chrome os', function() {
-      displayFactory.display = { os: 'cros-x64' };
+    it('no display', function() {
+      displayFactory.display = null;
       expect($scope.reloadScreenshotEnabled()).to.be.false;
-    });
-
-    it('not compatible', function() {
-      displayFactory.display = { os: 'windows-x64' };
-      playerProFactory.isScreenshotCompatiblePlayer.returns(false);
-
-      expect($scope.reloadScreenshotEnabled()).to.be.false;
-
-      playerProFactory.isScreenshotCompatiblePlayer.should.have.been.called;
     });
 
     it('online', function() {
@@ -163,8 +146,6 @@ describe('directive: screenshot', function() {
         onlineStatus: 'online'
       };
       expect($scope.reloadScreenshotEnabled()).to.be.true;
-
-      playerProFactory.isScreenshotCompatiblePlayer.should.have.been.called;
     });
 
     it('offline', function() {
@@ -172,8 +153,6 @@ describe('directive: screenshot', function() {
         onlineStatus: 'offline'
       };
       expect($scope.reloadScreenshotEnabled()).to.be.false;
-
-      playerProFactory.isScreenshotCompatiblePlayer.should.have.been.called;
     });
 
   });

@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('risevision.displays.directives')
-  .directive('screenshot', ['display', 'screenshotFactory',
-    'playerProFactory', 'displayFactory',
-    function (displayService, screenshotFactory, playerProFactory, displayFactory) {
+  .directive('screenshot', ['display', 'screenshotFactory', 'displayFactory',
+    function (displayService, screenshotFactory, displayFactory) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/screenshot.html',
@@ -35,10 +34,6 @@ angular.module('risevision.displays.directives')
               return false;
             } else if (displayService.statusLoading || screenshotFactory.screenshotLoading || !screenshotFactory
               .screenshot) {
-              return false;
-            } else if (displayFactory.display.os && displayFactory.display.os.indexOf('cros') === 0) {
-              return false;
-            } else if (!playerProFactory.isScreenshotCompatiblePlayer(displayFactory.display)) {
               return false;
             } else if (displayFactory.display.onlineStatus === 'online') {
               return true;

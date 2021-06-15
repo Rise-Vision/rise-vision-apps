@@ -84,12 +84,8 @@ angular.module('risevision.displays.directives')
             $scope[picker] = !$scope[picker];
           };
 
-          $scope.configureDisplayControl = function (display) {
-            if (playerProFactory.isDisplayControlCompatiblePlayer(display)) {
-              displayControlFactory.openDisplayControlModal();
-            } else {
-              $scope.displayControlError = true;
-            }
+          $scope.configureDisplayControl = function () {
+            displayControlFactory.openDisplayControlModal();
           };
 
           $scope.installationInstructionsModal = function () {
