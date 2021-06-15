@@ -107,10 +107,10 @@
               </span>
             </td>
             <td class="table-body__cell display-schedule">
-              <a class="madero-link u_ellipsis-md schedule-view" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })">
+              <a class="madero-link u_ellipsis-md schedule-view" ng-if="displayFactory.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })">
                 {{display.scheduleName}}
               </a>
-              <span class="u_ellipsis-md" ng-if="!playerNotInstalled(display) && !displayService.hasSchedule(display)">
+              <span class="u_ellipsis-md" ng-if="!playerNotInstalled(display) && !displayFactory.hasSchedule(display)">
                 No Schedule Selected
               </span>
             </td>
