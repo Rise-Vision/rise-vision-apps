@@ -16,6 +16,7 @@ describe('service: baseImageFactory', function() {
     $provide.service('attributeDataFactory', function() {
       return {
         getAttributeData: sandbox.stub().returns('data'),
+        getAvailableAttributeData: sandbox.stub().returns('availabledata'),
         setAttributeData: sandbox.stub()
       };
     });
@@ -51,13 +52,12 @@ describe('service: baseImageFactory', function() {
   it('should initialize', function () {
     expect(baseImageFactory).to.be.ok;
     expect(baseImageFactory.getImagesAsMetadata).to.be.a('function');
-    expect(baseImageFactory.getDuration).to.be.a('function');
+    expect(baseImageFactory.getAvailableAttributeData).to.be.a('function');
     expect(baseImageFactory.setDuration).to.be.a('function');
     expect(baseImageFactory.getBlueprintData).to.be.a('function');
     expect(baseImageFactory.areChecksCompleted).to.be.a('function');
     expect(baseImageFactory.removeImage).to.be.a('function');
     expect(baseImageFactory.updateMetadata).to.be.a('function');
-    expect(baseImageFactory.getTransition).to.be.a('function');
     expect(baseImageFactory.setTransition).to.be.a('function');
   });
 
@@ -72,10 +72,10 @@ describe('service: baseImageFactory', function() {
 
   describe('getDuration: ', function() {
     it('should return Template Editor attributes duration', function() {
-      var data = baseImageFactory.getDuration();      
+      var data = baseImageFactory.getAvailableAttributeData('duration');      
 
-      expect(data).to.equals('data');
-      attributeDataFactory.getAttributeData.should.have.been.calledWith('componentId','duration');
+      expect(data).to.equals('availabledata');
+      attributeDataFactory.getAvailableAttributeData.should.have.been.calledWith('componentId','duration');
     });
   });
 
@@ -227,15 +227,6 @@ describe('service: baseImageFactory', function() {
         attributeDataFactory.getAttributeData.returns(false);
         expect(baseImageFactory.isSetAsLogo()).to.equals(false);
       });
-    });
-  });
-
-  describe('getTransition: ', function() {
-    it('should return Template Editor transition attribute', function() {
-      var data = baseImageFactory.getTransition();
-
-      expect(data).to.equals('data');
-      attributeDataFactory.getAttributeData.should.have.been.calledWith('componentId','transition');
     });
   });
 

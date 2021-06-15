@@ -37,7 +37,7 @@ describe('service: logoImageFactory', function() {
   it('should initialize', function () {
     expect(logoImageFactory).to.be.ok;
     expect(logoImageFactory.getImagesAsMetadata).to.be.a('function');
-    expect(logoImageFactory.getDuration).to.be.a('function');
+    expect(logoImageFactory.getAvailableAttributeData).to.be.a('function');
     expect(logoImageFactory.setDuration).to.be.a('function');
     expect(logoImageFactory.getBlueprintData).to.be.a('function');
     expect(logoImageFactory.areChecksCompleted).to.be.a('function');
@@ -74,9 +74,9 @@ describe('service: logoImageFactory', function() {
     });
   });
 
-  describe('getDuration: ', function() {
+  describe('getAvailableAttributeData: ', function() {
     it('should return null, as it does not apply to logo', function() {
-      var data = logoImageFactory.getDuration();      
+      var data = logoImageFactory.getAvailableAttributeData();      
       expect(data).to.be.null;
     });
   });
@@ -84,7 +84,6 @@ describe('service: logoImageFactory', function() {
   describe('setDuration: ', function() {
     it('should not perform any action, as it does not apply to logo', function() {
       logoImageFactory.setDuration(55);      
-      expect(logoImageFactory.getDuration()).to.be.null;
     });
   });
 
@@ -201,17 +200,9 @@ describe('service: logoImageFactory', function() {
     });
   });
 
-  describe('getTransition: ', function() {
-    it('should return null, as it does not apply to logo', function() {
-      var data = logoImageFactory.getTransition();      
-      expect(data).to.be.null;
-    });
-  });
-
   describe('setTransition: ', function() {
     it('should not perform any action, as it does not apply to logo', function() {
       logoImageFactory.setTransition('fadeIn');      
-      expect(logoImageFactory.getTransition()).to.be.null;
     });
   });
 

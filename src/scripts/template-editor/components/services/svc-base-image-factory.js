@@ -11,14 +11,6 @@ angular.module('risevision.template-editor.services')
         return _getAttributeData('metadata');
       };
 
-      factory.getDuration = function () {
-        return _getAttributeData('duration');
-      };
-
-      factory.getTransition = function () {
-        return _getAttributeData('transition');
-      };
-
       factory.setDuration = function (duration) {
         _setAttributeData('duration', duration);
       };
@@ -69,6 +61,10 @@ angular.module('risevision.template-editor.services')
         }
 
         return selectedImages;
+      };
+
+      factory.getAvailableAttributeData = function (key) {
+        return attributeDataFactory.getAvailableAttributeData(factory.componentId, key);
       };
 
       var _getAttributeData = function (key) {
