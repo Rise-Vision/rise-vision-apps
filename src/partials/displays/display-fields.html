@@ -18,12 +18,12 @@
           <div class="dropdown-menu playlist-menu" role="menu">
             <ul>
               <li>
-                <button type="button" class="btn-dropdown u_clickable" ng-hide="!displayService.statusLoading && (factory.display.onlineStatus) === 'not_activated'" ng-disabled="!factory.display.playerVersion" ng-click="playerActionsFactory.confirm(factory.display.id, factory.display.name, 'restart')" require-role="da">
+                <button type="button" class="btn-dropdown u_clickable" ng-hide="!displayService.statusLoading && factory.display.onlineStatus === 'not_activated' || playerProFactory.isWebPlayer(factory.display) || playerProFactory.isAndroidPlayer(factory.display)" ng-disabled="!factory.display.playerVersion" ng-click="playerActionsFactory.confirm(factory.display.id, factory.display.name, 'restart')" require-role="da">
                   <span translate>displays-app.fields.controls.restart.name</span>
                 </button>
               </li>
               <li>
-                <button type="button" class="btn-dropdown u_clickable" ng-hide="!displayService.statusLoading && factory.display.onlineStatus === 'not_activated'" ng-disabled="!factory.display.playerVersion || !canReboot(factory.display)" ng-click="playerActionsFactory.confirm(factory.display.id, factory.display.name, 'reboot')" require-role="da">
+                <button type="button" class="btn-dropdown u_clickable" ng-hide="!displayService.statusLoading && factory.display.onlineStatus === 'not_activated' || playerProFactory.isWebPlayer(factory.display) || playerProFactory.isAndroidPlayer(factory.display)" ng-disabled="!factory.display.playerVersion || !canReboot(factory.display)" ng-click="playerActionsFactory.confirm(factory.display.id, factory.display.name, 'reboot')" require-role="da">
                   <span translate>displays-app.fields.controls.reboot.name</span>
                 </button>
               </li>
@@ -122,7 +122,7 @@
       </div>
 
       <!-- SCREENSHOT  -->
-      <screenshot></screenshot>
+      <screenshot ng-show="!playerProFactory.isWebPlayer(factory.display) && !playerProFactory.isAndroidPlayer(factory.display)"></screenshot>
 
       <div class="list-group-item flex-row form-group mb-0" ng-hide="!displayService.statusLoading && factory.display.onlineStatus === 'not_activated'">
         <div class="row-entry">
@@ -166,7 +166,7 @@
         </div>
       </div>
 
-      <div class="list-group-item">
+      <div class="list-group-item" ng-show="!playerProFactory.isWebPlayer(factory.display) && !playerProFactory.isAndroidPlayer(factory.display)">
         <div class="flex-row form-group mb-0">
           <div class="row-entry">
             <label class="control-label pull-left mb-0">Reboot Media Player Daily At</label>
@@ -179,7 +179,7 @@
         <restart-time-picker ng-model="factory.display.restartTime" ng-show="!factory.showLicenseRequired() && factory.display.restartEnabled"></restart-time-picker>
       </div>
 
-      <div class="list-group-item" ng-if="!playerProFactory.isCROSLegacy(factory.display) && !playerProFactory.isChromeOSPlayer(factory.display)">
+      <div class="list-group-item" ng-if="!playerProFactory.isCROSLegacy(factory.display) && !playerProFactory.isChromeOSPlayer(factory.display) && !playerProFactory.isWebPlayer(factory.display) && !playerProFactory.isAndroidPlayer(factory.display)">
         <div class="flex-row form-group mb-0">
           <div class="row-entry">
             <label class="control-label pull-left mb-0" translate>displays-app.fields.player.displayControl.label</label>
@@ -226,7 +226,7 @@
 
       <display-address display="factory.display"></display-address>
 
-      <div class="list-group-item flex-row form-group mb-0">
+      <div class="list-group-item flex-row form-group mb-0" ng-show="factory.display.playerLocalIpAddress">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.ipAddress</label>
           <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
@@ -246,7 +246,7 @@
         </div>
       </div>
 
-      <div class="list-group-item flex-row form-group mb-0">
+      <div class="list-group-item flex-row form-group mb-0" ng-show="factory.display.os">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.operatingSystem</label>
           <span class="mr-auto">
@@ -255,7 +255,7 @@
         </div>
       </div>
 
-      <div class="list-group-item flex-row form-group mb-0">
+      <div class="list-group-item flex-row form-group mb-0" ng-show="factory.display.playerName || factory.display.playerVersion">
         <div class="row-entry">
           <label class="control-label pull-left mb-0 aligner-item--top" translate>displays-app.fields.player.playerVersion</label>
           <span class="mr-auto">
