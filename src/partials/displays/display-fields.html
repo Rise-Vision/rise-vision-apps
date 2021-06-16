@@ -122,7 +122,7 @@
       </div>
 
       <!-- SCREENSHOT  -->
-      <screenshot ng-show="!playerProFactory.isWebPlayer(factory.display) && !playerProFactory.isAndroidPlayer(factory.display)"></screenshot>
+      <screenshot ng-if="playerProFactory.isScreenshotCompatiblePlayer(factory.display)"></screenshot>
 
       <div class="list-group-item flex-row form-group mb-0" ng-hide="factory.display.onlineStatus === 'not_activated'">
         <div class="row-entry">
@@ -178,7 +178,7 @@
         <restart-time-picker ng-model="factory.display.restartTime" ng-show="!factory.showLicenseRequired() && factory.display.restartEnabled"></restart-time-picker>
       </div>
 
-      <div class="list-group-item" ng-if="!playerProFactory.isCROSLegacy(factory.display) && !playerProFactory.isChromeOSPlayer(factory.display) && !playerProFactory.isWebPlayer(factory.display) && !playerProFactory.isAndroidPlayer(factory.display)">
+      <div class="list-group-item" ng-if="playerProFactory.isDisplayControlCompatiblePlayer(factory.display)">
         <div class="flex-row form-group mb-0">
           <div class="row-entry">
             <label class="control-label pull-left mb-0" translate>displays-app.fields.player.displayControl.label</label>
@@ -192,11 +192,8 @@
           </div>
         </div>
 
-        <div class="mt-2" ng-show="!factory.showLicenseRequired() && !displayControlError">
+        <div class="mt-2" ng-show="!factory.showLicenseRequired()">
           <span translate>displays-app.fields.player.displayControl.description</span>
-        </div>
-        <div class="text-danger mt-2" ng-show="!factory.showLicenseRequired() && displayControlError">
-          <span translate>displays-app.fields.player.displayControl.unsupported</span>
         </div>
       </div>
 

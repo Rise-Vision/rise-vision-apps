@@ -144,7 +144,6 @@
         "label": "Display Control",
         "configure": "Configure",
         "description": "Turn screen ON/OFF based on schedule.",
-        "unsupported": "Display control isn’t supported on this Rise Player version. Please upgrade.",
         "configureModal": {
           "title": "Configure Display Control",
           "help": "Need help configuring Display Control?",

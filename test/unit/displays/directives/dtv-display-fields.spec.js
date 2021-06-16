@@ -6,9 +6,7 @@ describe('directive: display fields', function() {
   beforeEach(module('risevision.displays.directives'));
   beforeEach(module(function ($provide) {
     $provide.service('playerProFactory', function() {
-      return {        
-        isDisplayControlCompatiblePlayer: sandbox.stub().returns(true)
-      };
+      return {};
     });
     $provide.service('displayFactory', function() {
       return {
@@ -75,7 +73,7 @@ describe('directive: display fields', function() {
     $provide.value('SHARED_SCHEDULE_URL','https://widgets.risevision.com/viewer/?type=sharedschedule&id=SCHEDULE_ID');
   }));
   
-  var elm, $scope, $compile, $sce, playerProFactory, displayFactory, displayControlFactory, playerLicenseFactory,
+  var elm, $scope, $compile, $sce, displayFactory, displayControlFactory, playerLicenseFactory,
     scheduleFactory, plansFactory, confirmModal, messageBox;
   var company;
 
@@ -83,7 +81,6 @@ describe('directive: display fields', function() {
     company = {};
 
     $sce = $injector.get('$sce');
-    playerProFactory = $injector.get('playerProFactory');
     displayFactory = $injector.get('displayFactory');
     displayControlFactory = $injector.get('displayControlFactory');
     playerLicenseFactory = $injector.get('playerLicenseFactory');
@@ -110,6 +107,7 @@ describe('directive: display fields', function() {
   it('should compile html', function() {
     expect(elm.html()).to.equal('<p>Fields</p>');
     expect($scope.userState).to.be.ok;
+    expect($scope.playerProFactory).to.be.ok;
     
     expect($scope.toggleProAuthorized).to.be.a('function');
     expect($scope.scheduleSelected).to.be.a('function');
@@ -306,23 +304,10 @@ describe('directive: display fields', function() {
     expect($scope.timePickerKey).to.be.false;
   });
 
-  describe('configureDisplayControl:', function() {
-    it('should show error message if unsupported', function() {
-      playerProFactory.isDisplayControlCompatiblePlayer.returns(false);
+  it('configureDisplayControl:', function() {
+    $scope.configureDisplayControl();
 
-      $scope.configureDisplayControl();
-
-      displayControlFactory.openDisplayControlModal.should.not.have.been.called;
-      expect($scope.displayControlError).to.be.true;
-    });
-
-    it('should open configure modal', function() {
-      $scope.configureDisplayControl();
-
-      displayControlFactory.openDisplayControlModal.should.have.been.called;
-      expect($scope.displayControlError).to.not.be.ok;
-    });
-
+    displayControlFactory.openDisplayControlModal.should.have.been.called;
   });
 
   it('installationInstructionsModal:', function() {

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.displays.directives')
-  .directive('screenshot', ['screenshotFactory', 'playerProFactory', 'displayFactory',
-    function (screenshotFactory, playerProFactory, displayFactory) {
+  .directive('screenshot', ['screenshotFactory', 'displayFactory',
+    function (screenshotFactory, displayFactory) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/screenshot.html',
@@ -32,10 +32,6 @@ angular.module('risevision.displays.directives')
             if (displayFactory.showLicenseRequired()) {
               return false;
             } else if (screenshotFactory.screenshotLoading || !screenshotFactory.screenshot) {
-              return false;
-            } else if (displayFactory.display.os && displayFactory.display.os.indexOf('cros') === 0) {
-              return false;
-            } else if (!playerProFactory.isScreenshotCompatiblePlayer(displayFactory.display)) {
               return false;
             } else if (displayFactory.display.onlineStatus === 'online') {
               return true;
