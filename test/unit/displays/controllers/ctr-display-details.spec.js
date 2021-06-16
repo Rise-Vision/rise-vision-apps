@@ -25,11 +25,7 @@ describe('controller: display details', function() {
         },
         deleteDisplay: function() {
           deleteCalled = true;
-        }
-      };
-    });
-    $provide.service('display', function() {
-      return {
+        },
         hasSchedule: function(display) {
           return display.scheduleId;
         }
@@ -78,7 +74,6 @@ describe('controller: display details', function() {
       $scope = $rootScope.$new();
       $controller('displayDetails', {
         $scope : $scope,
-        display:$injector.get('display'),
         displayFactory: displayFactory,
         $state : $state,
         $log : $injector.get('$log')

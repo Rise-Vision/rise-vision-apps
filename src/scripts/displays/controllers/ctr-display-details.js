@@ -2,16 +2,16 @@
 
 angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$q',
-    'displayFactory', 'display', 'screenshotFactory', '$loading', '$log', 'confirmModal',
+    'displayFactory', 'screenshotFactory', '$loading', '$log', 'confirmModal',
     'displayId', 'playerLicenseFactory', '$state',
-    function ($scope, $q, displayFactory, display, screenshotFactory,
+    function ($scope, $q, displayFactory, screenshotFactory,
       $loading, $log, confirmModal, displayId, playerLicenseFactory, $state) {
       $scope.factory = displayFactory;
       $scope.playerLicenseFactory = playerLicenseFactory;
       $scope.selectedSchedule = null;
 
       displayFactory.getDisplay(displayId).then(function () {
-        if (display.hasSchedule(displayFactory.display)) {
+        if (displayFactory.hasSchedule(displayFactory.display)) {
           $scope.selectedSchedule = {
             id: displayFactory.display.scheduleId,
             name: displayFactory.display.scheduleName,
