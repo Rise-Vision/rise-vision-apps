@@ -11,14 +11,6 @@ angular.module('risevision.template-editor.services')
         return _getAttributeData('metadata');
       };
 
-      factory.getDuration = function () {
-        return _getAttributeData('duration');
-      };
-
-      factory.getTransition = function () {
-        return _getAttributeData('transition');
-      };
-
       factory.setDuration = function (duration) {
         _setAttributeData('duration', duration);
       };
@@ -35,8 +27,8 @@ angular.module('risevision.template-editor.services')
         return blueprintFactory.getBlueprintData(factory.componentId, key);
       };
 
-      factory.areChecksCompleted = function (checksCompleted) {
-        return !!checksCompleted && checksCompleted[factory.componentId] !== false;
+      factory.areChecksCompleted = function () {
+        return !!factory.checksCompleted && factory.checksCompleted[factory.componentId] !== false;
       };
 
       factory.isSetAsLogo = function () {
@@ -69,6 +61,10 @@ angular.module('risevision.template-editor.services')
         }
 
         return selectedImages;
+      };
+
+      factory.getAvailableAttributeData = function (key) {
+        return attributeDataFactory.getAvailableAttributeData(factory.componentId, key);
       };
 
       var _getAttributeData = function (key) {

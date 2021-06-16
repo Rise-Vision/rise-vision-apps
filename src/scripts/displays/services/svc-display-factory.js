@@ -224,6 +224,10 @@ angular.module('risevision.displays.services')
         return display && !display.playerProAuthorized && !userState.isRiseAdmin();
       };
 
+      factory.hasSchedule = function (display) {
+        return display && display.scheduleId && display.scheduleId !== 'DEMO';
+      };
+
       return factory;
     }
   ]);

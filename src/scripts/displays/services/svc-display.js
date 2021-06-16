@@ -221,10 +221,6 @@
 
             return deferred.promise;
           },
-          hasSchedule: function (display) {
-            return display && display.scheduleId && display.scheduleId !==
-              'DEMO';
-          },
           requestScreenshot: function (displayId) {
             $log.debug('request screenshot called with', displayId);
 
