@@ -19,7 +19,6 @@ angular.module('risevision.displays.controllers')
 
       $scope.selectedCompayId = userState.getSelectedCompanyId();
       $scope.displayFactory = displayFactory;
-      $scope.displayService = display;
       $scope.playerLicenseFactory = playerLicenseFactory;
       $scope.displaySummaryFactory = displaySummaryFactory;
 

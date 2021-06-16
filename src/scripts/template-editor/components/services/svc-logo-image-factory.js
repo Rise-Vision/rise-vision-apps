@@ -19,14 +19,6 @@ angular.module('risevision.template-editor.services')
         }
       };
 
-      factory.getDuration = function () {
-        return null;
-      };
-
-      factory.getTransition = function () {
-        return null;
-      };
-
       factory.setDuration = function (duration) {
         return;
       };
@@ -52,11 +44,15 @@ angular.module('risevision.template-editor.services')
         return brandingFactory.brandingSettings.logoFileMetadata;
       };
 
+      factory.getAvailableAttributeData = function (key) {
+        return null;
+      };
+
       factory.getBlueprintData = function (key) {
         return null;
       };
 
-      factory.areChecksCompleted = function (checksCompleted) {
+      factory.areChecksCompleted = function () {
         return !!brandingFactory.brandingSettings.logoFileMetadata;
       };
 

@@ -3,14 +3,6 @@ describe('directive: screenshot', function() {
   beforeEach(module('risevision.displays.directives'));
 
   beforeEach(module(function ($provide) {
-    $provide.service('display', function() {
-      return {
-        hasSchedule: function(display) {
-          return display.scheduleId;
-        },
-        statusLoading: false
-      };
-    });
     $provide.service('screenshotFactory', function() {
       return {
         screenshotLoading: false,
@@ -26,10 +18,9 @@ describe('directive: screenshot', function() {
     });
   }));
   
-  var elm, $scope, $compile, displayFactory, screenshotFactory, display;
+  var elm, $scope, $compile, displayFactory, screenshotFactory;
 
   beforeEach(inject(function($rootScope, $injector, _$compile_, $templateCache) {
-    display = $injector.get('display');
     displayFactory = $injector.get('displayFactory');
     screenshotFactory = $injector.get('screenshotFactory');
 
@@ -65,12 +56,6 @@ describe('directive: screenshot', function() {
     describe('loading: ', function() {
       it('no display', function() {
         displayFactory.display = null;
-        expect($scope.screenshotState()).to.equal('loading');
-      });
-
-      it('status loading', function() {
-        display.statusLoading = true;
-
         expect($scope.screenshotState()).to.equal('loading');
       });
 
@@ -117,12 +102,6 @@ describe('directive: screenshot', function() {
     });
 
     describe('loading: ', function() {
-      it('status loading', function() {
-        display.statusLoading = true;
-
-        expect($scope.reloadScreenshotEnabled()).to.be.false;
-      });
-
       it('screenshot loading', function() {
         screenshotFactory.screenshotLoading = true;
 

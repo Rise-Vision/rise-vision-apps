@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.displays.directives')
-  .directive('screenshot', ['display', 'screenshotFactory', 'displayFactory',
-    function (displayService, screenshotFactory, displayFactory) {
+  .directive('screenshot', ['screenshotFactory', 'displayFactory',
+    function (screenshotFactory, displayFactory) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/screenshot.html',
@@ -13,8 +13,7 @@ angular.module('risevision.displays.directives')
           $scope.screenshotState = function () {
             if (displayFactory.showLicenseRequired()) {
               return 'no-license';
-            } else if (!displayFactory.display || displayService.statusLoading || screenshotFactory
-              .screenshotLoading) {
+            } else if (!displayFactory.display || screenshotFactory.screenshotLoading) {
               return 'loading';
             } else if (screenshotFactory.screenshot && screenshotFactory.screenshot.lastModified) {
               return 'screenshot-loaded';
@@ -32,8 +31,7 @@ angular.module('risevision.displays.directives')
 
             if (displayFactory.showLicenseRequired()) {
               return false;
-            } else if (displayService.statusLoading || screenshotFactory.screenshotLoading || !screenshotFactory
-              .screenshot) {
+            } else if (screenshotFactory.screenshotLoading || !screenshotFactory.screenshot) {
               return false;
             } else if (displayFactory.display.onlineStatus === 'online') {
               return true;

@@ -583,14 +583,6 @@ describe('service: display:', function() {
     });
   });
 
-  describe('hasSchedule', function() {
-    it('should validate if a display has an associated schedule', function() {
-      expect(display.hasSchedule({ scheduleId: "1" })).to.be.ok;
-      expect(display.hasSchedule({ scheduleId: "" })).to.be.falsey;
-      expect(display.hasSchedule({ scheduleId: "DEMO" })).to.be.falsey;
-    });
-  });
-
   describe('requestScreenshot', function() {
     it('should successfully request a screenshot', function() {
       screenshotRequesterMock = function($q) {
