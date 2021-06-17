@@ -61,21 +61,16 @@ describe('controller: Files List', function() {
     $provide.service('FileUploader',function(){
       return {}
     });
-    $provide.service('currentPlanFactory',function(){
-      return {
-          isPlanActive: sinon.stub().returns(true)
-      };
-    });
+    $provide.service('currentPlanFactory',function(){});
 
     $provide.value('SELECTOR_TYPES', {SINGLE_FILE: 'single-file'});
   }));
-  var $scope, onFileSelect, changeFolder, storageFactory, currentPlanFactory;
+  var $scope, onFileSelect, changeFolder, storageFactory;
   beforeEach(function(){
     onFileSelect = changeFolder = false;
     
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
-      currentPlanFactory = $injector.get('currentPlanFactory');
 
       $controller('FilesListController', {
         $scope : $scope,
@@ -126,21 +121,6 @@ describe('controller: Files List', function() {
   it('should watch loading variable', function() {
     expect($scope.$$watchers[0].exp).to.equal('filesFactory.loadingItems');
   });
-
-  it('should initialize isPlanActive', function() {
-    currentPlanFactory.isPlanActive.should.have.been.calledOnce;
-    expect($scope.isPlanActive).to.be.true;
-  });
-
-  it('should update isPlanActive on plan updates', function() {
-    currentPlanFactory.isPlanActive.returns(false);
-
-    $scope.$emit('risevision.plan.loaded');
-    $scope.$digest();
-    
-    currentPlanFactory.isPlanActive.should.have.been.calledTwice;
-    expect($scope.isPlanActive).to.be.false;
-  });  
   
   it('setSelectorType: ', function() {
     expect(storageFactory.storageFull).to.be.true;
