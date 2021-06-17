@@ -343,14 +343,10 @@
               "src/scripts/purchase/directives/dtv-suggest-general-delivery.js",
               "src/scripts/purchase/directives/dtv-year-selector.js",
 
-              "src/scripts/purchase/filters/ftr-card-description.js",
               "src/scripts/purchase/filters/ftr-country-name.js",
               "src/scripts/purchase/filters/ftr-padded-month.js",
 
               "src/scripts/purchase/services/svc-purchase-factory.js",
-              "src/scripts/purchase/services/svc-update-subscription-factory.js",
-              "src/scripts/purchase/services/svc-credit-card-factory.js",
-              "src/scripts/purchase/services/svc-payment-sources-factory.js",
 
               "src/scripts/schedules/app.js",
               "src/scripts/schedules/services/svc-schedule.js",

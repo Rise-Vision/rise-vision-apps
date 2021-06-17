@@ -10,7 +10,7 @@ export class StripeElementsService {
 
   constructor(@Inject('$rootScope') private $rootScope:any, private stripeService: StripeService) { }
 
-  public stripeElements = {};
+  public stripeElements: any = {};
 
   init() {
     var elementOptions = {

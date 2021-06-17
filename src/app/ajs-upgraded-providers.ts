@@ -62,3 +62,90 @@ export const storeServiceProvider = {
   },
   deps: ['$injector']
 };
+
+export abstract class AddressService {
+  [key: string]: any;
+}
+export const addressServiceProvider = {
+  provide: AddressService,
+  useFactory: function ($injector: any) {
+    return $injector.get('addressService');
+  },
+  deps: ['$injector']
+};
+
+export abstract class UserAuthFactory {
+  [key: string]: any;
+}
+export const userAuthFactoryProvider = {
+  provide: UserAuthFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('userAuthFactory');
+  },
+  deps: ['$injector']
+};
+
+export abstract class ConfirmModal extends Function {
+}
+export const confirmModalProvider = {
+  provide: ConfirmModal,
+  useFactory: function ($injector: any) {
+    return $injector.get('confirmModal');
+  },
+  deps: ['$injector']
+};
+
+export abstract class Billing {
+  [key: string]: any;
+}
+export const billingProvider = {
+  provide: Billing,
+  useFactory: function ($injector: any) {
+    return $injector.get('billing');
+  },
+  deps: ['$injector']
+};
+
+export abstract class ProcessErrorCode extends Function {
+}
+export const processErrorCodeProvider = {
+  provide: ProcessErrorCode,
+  useFactory: function ($injector: any) {
+    return $injector.get('processErrorCode');
+  },
+  deps: ['$injector']
+};
+
+export abstract class AjsState {
+  [key: string]: any;
+}
+export const $stateProvider = {
+  provide: AjsState,
+  useFactory: function ($injector: any) {
+    return $injector.get('$state');
+  },
+  deps: ['$injector']
+};
+
+export abstract class SubscriptionFactory {
+  [key: string]: any;
+}
+export const subscriptionFactoryProvider = {
+  provide: SubscriptionFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('subscriptionFactory');
+  },
+  deps: ['$injector']
+};
+
+export abstract class PlansService {
+  [key: string]: any;
+}
+export const plansServiceProvider = {
+  provide: PlansService,
+  useFactory: function ($injector: any) {
+    return $injector.get('plansService');
+  },
+  deps: ['$injector']
+};
+

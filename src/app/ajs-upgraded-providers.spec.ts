@@ -1,110 +1,106 @@
 import {expect} from 'chai';
 
 import { 
+  $stateProvider, AjsState,
+  AddressService, addressServiceProvider,  
   AnalyticsFactory, analyticsFactoryProvider, 
+  Billing, billingProvider, 
   CanvaTypePicker, canvaTypePickerProvider, 
+  ConfirmModal, confirmModalProvider, 
+  PlansService, plansServiceProvider, 
+  ProcessErrorCode, processErrorCodeProvider, 
   StoreService, storeServiceProvider,
+  SubscriptionFactory, subscriptionFactoryProvider,
   TemplateEditorFactory, templateEditorFactoryProvider,
   TemplateEditorUtils, templateEditorUtilsProvider,
+  UserAuthFactory, userAuthFactoryProvider,
   UserState, userStateProvider
 } from './ajs-upgraded-providers';
 
 describe('ajs-upgraded-providers', () => {
 
-  describe('canvaTypePicker:', () => {    
-    it('should register provider', () => {
-      expect(canvaTypePickerProvider.provide).to.equal(CanvaTypePicker);
-      expect(canvaTypePickerProvider.deps).to.deep.equal(['$injector']);
-      expect(canvaTypePickerProvider.useFactory).to.be.a('function');
-    });
+  var testRegisterProvider = function(provider, provided) {
+    expect(provider.provide).to.equal(provided);
+    expect(provider.deps).to.deep.equal(['$injector']);
+    expect(provider.useFactory).to.be.a('function');
+  };
 
-    it('should get AngularJS service', () => {
-      const $injector = {
-        get: sinon.stub().returns('service')
-      }
-      expect(canvaTypePickerProvider.useFactory($injector)).to.equal('service');
-      $injector.get.should.have.been.calledWith('canvaTypePicker');
-    });
+  var testAngularJsService = function(provider, angularJsService) {
+    const $injector = {
+      get: sinon.stub().returns('service')
+    }
+    expect(provider.useFactory($injector)).to.equal('service');
+    $injector.get.should.have.been.calledWith(angularJsService);
+  };
+
+  it('canvaTypePicker:', () => {
+    testRegisterProvider(canvaTypePickerProvider, CanvaTypePicker);
+    testAngularJsService(canvaTypePickerProvider, 'canvaTypePicker');
   });
 
-  describe('analyticsFactory:', () => {    
-    it('should register provider', () => {
-      expect(analyticsFactoryProvider.provide).to.equal(AnalyticsFactory);
-      expect(analyticsFactoryProvider.deps).to.deep.equal(['$injector']);
-      expect(analyticsFactoryProvider.useFactory).to.be.a('function');
-    });
-
-    it('should get AngularJS service', () => {
-      const $injector = {
-        get: sinon.stub().returns('service')
-      }
-      expect(analyticsFactoryProvider.useFactory($injector)).to.equal('service');
-      $injector.get.should.have.been.calledWith('analyticsFactory');
-    });
+  it('analyticsFactory:', () => {
+    testRegisterProvider(analyticsFactoryProvider, AnalyticsFactory);
+    testAngularJsService(analyticsFactoryProvider, 'analyticsFactory');
   });
 
-  describe('templateEditorFactory:', () => {    
-    it('should register provider', () => {
-      expect(templateEditorFactoryProvider.provide).to.equal(TemplateEditorFactory);
-      expect(templateEditorFactoryProvider.deps).to.deep.equal(['$injector']);
-      expect(templateEditorFactoryProvider.useFactory).to.be.a('function');
-    });
-
-    it('should get AngularJS service', () => {
-      const $injector = {
-        get: sinon.stub().returns('service')
-      }
-      expect(templateEditorFactoryProvider.useFactory($injector)).to.equal('service');
-      $injector.get.should.have.been.calledWith('templateEditorFactory');
-    });
+  it('templateEditorFactory:', () => {
+    testRegisterProvider(templateEditorFactoryProvider, TemplateEditorFactory);
+    testAngularJsService(templateEditorFactoryProvider, 'templateEditorFactory');
   });
 
-  describe('templateEditorUtils:', () => {    
-    it('should register provider', () => {
-      expect(templateEditorUtilsProvider.provide).to.equal(TemplateEditorUtils);
-      expect(templateEditorUtilsProvider.deps).to.deep.equal(['$injector']);
-      expect(templateEditorUtilsProvider.useFactory).to.be.a('function');
-    });
-
-    it('should get AngularJS service', () => {
-      const $injector = {
-        get: sinon.stub().returns('service')
-      }
-      expect(templateEditorUtilsProvider.useFactory($injector)).to.equal('service');
-      $injector.get.should.have.been.calledWith('templateEditorUtils');
-    });
+  it('templateEditorUtils:', () => {
+    testRegisterProvider(templateEditorUtilsProvider, TemplateEditorUtils);
+    testAngularJsService(templateEditorUtilsProvider, 'templateEditorUtils');
   });
 
-  describe('userState:', () => {    
-    it('should register provider', () => {
-      expect(userStateProvider.provide).to.equal(UserState);
-      expect(userStateProvider.deps).to.deep.equal(['$injector']);
-      expect(userStateProvider.useFactory).to.be.a('function');
-    });
-
-    it('should get AngularJS service', () => {
-      const $injector = {
-        get: sinon.stub().returns('service')
-      }
-      expect(userStateProvider.useFactory($injector)).to.equal('service');
-      $injector.get.should.have.been.calledWith('userState');
-    });
+  it('userState:', () => {
+    testRegisterProvider(userStateProvider, UserState);
+    testAngularJsService(userStateProvider, 'userState');
   });
 
-
-  describe('storeService:', () => {    
-    it('should register provider', () => {
-      expect(storeServiceProvider.provide).to.equal(StoreService);
-      expect(storeServiceProvider.deps).to.deep.equal(['$injector']);
-      expect(storeServiceProvider.useFactory).to.be.a('function');
-    });
-
-    it('should get AngularJS service', () => {
-      const $injector = {
-        get: sinon.stub().returns('service')
-      }
-      expect(storeServiceProvider.useFactory($injector)).to.equal('service');
-      $injector.get.should.have.been.calledWith('storeService');
-    });
+  it('storeService:', () => {
+    testRegisterProvider(storeServiceProvider, StoreService);
+    testAngularJsService(storeServiceProvider, 'storeService');
   });
+
+  it('addressService:', () => {
+    testRegisterProvider(addressServiceProvider, AddressService);
+    testAngularJsService(addressServiceProvider, 'addressService');
+  });
+
+  it('userAuthFactory:', () => {
+    testRegisterProvider(userAuthFactoryProvider, UserAuthFactory);
+    testAngularJsService(userAuthFactoryProvider, 'userAuthFactory');
+  });
+
+  it('confirmModal:', () => {
+    testRegisterProvider(confirmModalProvider, ConfirmModal);
+    testAngularJsService(confirmModalProvider, 'confirmModal');
+  });
+
+  it('billing:', () => {
+    testRegisterProvider(billingProvider, Billing);
+    testAngularJsService(billingProvider, 'billing');
+  });
+
+  it('processErrorCode:', () => {
+    testRegisterProvider(processErrorCodeProvider, ProcessErrorCode);
+    testAngularJsService(processErrorCodeProvider, 'processErrorCode');
+  });
+
+  it('$state:', () => {
+    testRegisterProvider($stateProvider, AjsState);
+    testAngularJsService($stateProvider, '$state');
+  });
+
+  it('subscriptionFactory:', () => {
+    testRegisterProvider(subscriptionFactoryProvider, SubscriptionFactory);
+    testAngularJsService(subscriptionFactoryProvider, 'subscriptionFactory');
+  });
+
+  it('plansService:', () => {
+    testRegisterProvider(plansServiceProvider, PlansService);
+    testAngularJsService(plansServiceProvider, 'plansService');
+  });
+
 });

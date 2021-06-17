@@ -1,37 +1,37 @@
-/*jshint expr:true */
-"use strict";
+import {expect} from 'chai';
+import { TestBed } from '@angular/core/testing';
 
-describe("Services: payment sources factory", function() {
-  beforeEach(module("risevision.apps.purchase"));
-  beforeEach(module(function ($provide) {
-    $provide.service("$q", function() {return Q;});
+import { PaymentSourcesService } from './payment-sources.service';
+import { ConfirmModal, Billing, ProcessErrorCode } from 'src/app/ajs-upgraded-providers';
 
-    $provide.service('processErrorCode',function() {
-      return function(err) {
+describe('PaymentSourcesService', () => {
+  let paymentSourcesFactory: PaymentSourcesService;
+  let processErrorCode, billing, confirmModal;
+
+  beforeEach(() => {
+    processErrorCode = function(err) {
         return 'processed ' + err;
-      };
-    });
+    };
 
-    $provide.value('billing', {
-      getCreditCards: sinon.stub().returns(Q.resolve({
+    billing = {
+      getCreditCards: sinon.stub().returns(Promise.resolve({
         items: []
       })),
-      deletePaymentSource: sinon.stub().returns(Q.resolve({}))
-    });
-    $provide.factory('confirmModal', function() {
-      return sinon.stub().returns(Q.resolve());
-    });
-  }));
+      deletePaymentSource: sinon.stub().returns(Promise.resolve({}))
+    };
 
-  var paymentSourcesFactory, confirmModal, billing;
+    confirmModal = sinon.stub().returns(Promise.resolve());    
 
-  beforeEach(function() {
-    inject(function($injector) {
-      confirmModal = $injector.get('confirmModal');
-      billing = $injector.get('billing');
-      paymentSourcesFactory = $injector.get("paymentSourcesFactory");
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: ConfirmModal, useValue: confirmModal},
+        {provide: Billing, useValue: billing},
+        {provide: ProcessErrorCode, useValue: processErrorCode}
+      ]
     });
+    paymentSourcesFactory = TestBed.inject(PaymentSourcesService);
   });
+
 
   it("should exist", function() {
     expect(paymentSourcesFactory).to.be.ok;
@@ -68,7 +68,7 @@ describe("Services: payment sources factory", function() {
       });
 
       it('should set selected card to the first item if available', function(done) {
-        billing.getCreditCards.returns(Q.resolve({items: ['card1']}))
+        billing.getCreditCards.returns(Promise.resolve({items: ['card1']}))
 
         paymentSourcesFactory.init()
           .then(function() {
@@ -104,7 +104,7 @@ describe("Services: payment sources factory", function() {
     });
 
     it('should not delete if user does not confirm', function(done) {
-      confirmModal.returns(Q.reject());
+      confirmModal.returns(Promise.reject());
 
       paymentSourcesFactory.removePaymentMethod({
         payment_source: {}
@@ -141,7 +141,7 @@ describe("Services: payment sources factory", function() {
       });
 
       it('should stop spinner and not reload list on failure', function(done) {
-        billing.deletePaymentSource.returns(Q.reject('error'));
+        billing.deletePaymentSource.returns(Promise.reject('error'));
 
         paymentSourcesFactory.removePaymentMethod({
           payment_source: {}
@@ -159,6 +159,4 @@ describe("Services: payment sources factory", function() {
     });
 
   });
-
-
 });
