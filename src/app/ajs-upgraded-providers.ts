@@ -1,57 +1,41 @@
-export abstract class CanvaTypePicker extends Function {
-}
-export const canvaTypePickerProvider = {
-  provide: CanvaTypePicker,
-  useFactory: function ($injector: any) {
-    return $injector.get('canvaTypePicker');
-  },
-  deps: ['$injector']
-};
-
-export abstract class AnalyticsFactory {
+// AngularJS
+export abstract class AjsState {
   [key: string]: any;
 }
-export const analyticsFactoryProvider = {
-  provide: AnalyticsFactory,
+export const $stateProvider = {
+  provide: AjsState,
   useFactory: function ($injector: any) {
-    return $injector.get('analyticsFactory');
+    return $injector.get('$state');
   },
   deps: ['$injector']
 };
 
-export abstract class TemplateEditorFactory {
+
+// billing/services
+export abstract class Billing {
   [key: string]: any;
 }
-export const templateEditorFactoryProvider = {
-  provide: TemplateEditorFactory,
+export const billingProvider = {
+  provide: Billing,
   useFactory: function ($injector: any) {
-    return $injector.get('templateEditorFactory');
+    return $injector.get('billing');
   },
   deps: ['$injector']
 };
 
-export abstract class TemplateEditorUtils {
+export abstract class SubscriptionFactory {
   [key: string]: any;
 }
-export const templateEditorUtilsProvider = {
-  provide: TemplateEditorUtils,
+export const subscriptionFactoryProvider = {
+  provide: SubscriptionFactory,
   useFactory: function ($injector: any) {
-    return $injector.get('templateEditorUtils');
+    return $injector.get('subscriptionFactory');
   },
   deps: ['$injector']
 };
 
-export abstract class UserState {
-  [key: string]: any;
-}
-export const userStateProvider = {
-  provide: UserState,
-  useFactory: function ($injector: any) {
-    return $injector.get('userState');
-  },
-  deps: ['$injector']
-};
 
+// common-header/services
 export abstract class StoreService {
   [key: string]: any;
 }
@@ -74,17 +58,20 @@ export const addressServiceProvider = {
   deps: ['$injector']
 };
 
-export abstract class UserAuthFactory {
-  [key: string]: any;
+
+// components/canva-type-picker
+export abstract class CanvaTypePicker extends Function {
 }
-export const userAuthFactoryProvider = {
-  provide: UserAuthFactory,
+export const canvaTypePickerProvider = {
+  provide: CanvaTypePicker,
   useFactory: function ($injector: any) {
-    return $injector.get('userAuthFactory');
+    return $injector.get('canvaTypePicker');
   },
   deps: ['$injector']
 };
 
+
+// components/confirm-modal
 export abstract class ConfirmModal extends Function {
 }
 export const confirmModalProvider = {
@@ -95,49 +82,21 @@ export const confirmModalProvider = {
   deps: ['$injector']
 };
 
-export abstract class Billing {
+
+// components/logging
+export abstract class AnalyticsFactory {
   [key: string]: any;
 }
-export const billingProvider = {
-  provide: Billing,
+export const analyticsFactoryProvider = {
+  provide: AnalyticsFactory,
   useFactory: function ($injector: any) {
-    return $injector.get('billing');
+    return $injector.get('analyticsFactory');
   },
   deps: ['$injector']
 };
 
-export abstract class ProcessErrorCode extends Function {
-}
-export const processErrorCodeProvider = {
-  provide: ProcessErrorCode,
-  useFactory: function ($injector: any) {
-    return $injector.get('processErrorCode');
-  },
-  deps: ['$injector']
-};
 
-export abstract class AjsState {
-  [key: string]: any;
-}
-export const $stateProvider = {
-  provide: AjsState,
-  useFactory: function ($injector: any) {
-    return $injector.get('$state');
-  },
-  deps: ['$injector']
-};
-
-export abstract class SubscriptionFactory {
-  [key: string]: any;
-}
-export const subscriptionFactoryProvider = {
-  provide: SubscriptionFactory,
-  useFactory: function ($injector: any) {
-    return $injector.get('subscriptionFactory');
-  },
-  deps: ['$injector']
-};
-
+// components/plans
 export abstract class PlansService {
   [key: string]: any;
 }
@@ -149,3 +108,62 @@ export const plansServiceProvider = {
   deps: ['$injector']
 };
 
+
+// components/scrolling-list
+export abstract class ProcessErrorCode extends Function {
+}
+export const processErrorCodeProvider = {
+  provide: ProcessErrorCode,
+  useFactory: function ($injector: any) {
+    return $injector.get('processErrorCode');
+  },
+  deps: ['$injector']
+};
+
+
+// components/userstate
+export abstract class UserState {
+  [key: string]: any;
+}
+export const userStateProvider = {
+  provide: UserState,
+  useFactory: function ($injector: any) {
+    return $injector.get('userState');
+  },
+  deps: ['$injector']
+};
+
+export abstract class UserAuthFactory {
+  [key: string]: any;
+}
+export const userAuthFactoryProvider = {
+  provide: UserAuthFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('userAuthFactory');
+  },
+  deps: ['$injector']
+};
+
+
+// template-editor/services
+export abstract class TemplateEditorFactory {
+  [key: string]: any;
+}
+export const templateEditorFactoryProvider = {
+  provide: TemplateEditorFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('templateEditorFactory');
+  },
+  deps: ['$injector']
+};
+
+export abstract class TemplateEditorUtils {
+  [key: string]: any;
+}
+export const templateEditorUtilsProvider = {
+  provide: TemplateEditorUtils,
+  useFactory: function ($injector: any) {
+    return $injector.get('templateEditorUtils');
+  },
+  deps: ['$injector']
+};
