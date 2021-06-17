@@ -565,21 +565,17 @@ describe('service: storage:', function() {
         });
     });
 
-    it('should fail after the third attempt', function(done) {
-      var getStub = sinon.stub(storage.files, 'get');
+    it('should return files on third failure attempt', function(done) {
+      sinon.stub(storage.files, 'get').resolves({
+        files: [{ metadata: { 'needs-thumbnail-update': 'true' } }]
+      });
 
-      getStub.onCall(0).returns(Q.resolve({
-        files: [{ metadata: { 'needs-thumbnail-update': 'true' } }]
-      }));
-      getStub.onCall(1).returns(Q.resolve({
-        files: [{ metadata: { 'needs-thumbnail-update': 'true' } }]
-      }));
-      getStub.onCall(2).returns(Q.resolve({
-        files: [{ metadata: { 'needs-thumbnail-update': 'true' } }]
-      }));
 
       storage.refreshFileMetadata('file1')
-        .catch(function(err) {
+        .then(function(result) {
+          expect(result).to.be.ok;
+          expect(storage.files.get).have.been.calledThrice;
+
           done();
         });
     });

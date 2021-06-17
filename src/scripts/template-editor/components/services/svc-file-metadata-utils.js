@@ -1,11 +1,15 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .service('fileMetadataUtilsService', ['templateEditorUtils',
-    function (templateEditorUtils) {
+  .service('fileMetadataUtilsService', ['templateEditorUtils', 'storageUtils',
+    function (templateEditorUtils, storageUtils) {
       var service = {};
 
       function _addFileToSet(selectedImages, defaultThumbnailUrl, file, alwaysAppend) {
+        if (!file.bucket) {
+          file.bucket = storageUtils.getBucketName();
+        }
+
         var filePath = file.bucket + '/' + file.name;
         var initialLength = selectedImages.length;
         var timeCreated = service.timeCreatedFor(file);
