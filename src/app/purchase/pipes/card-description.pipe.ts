@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import * as angular from 'angular';
 
 @Pipe({
   name: 'cardDescription'
@@ -29,3 +30,8 @@ export class CardDescriptionPipe implements PipeTransform {
   }
 
 }
+
+angular.module('risevision.apps.purchase')
+  .filter('cardDescription', () =>  { 
+    return (card) => new CardDescriptionPipe().transform(card);
+  })

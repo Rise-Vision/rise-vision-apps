@@ -343,7 +343,6 @@
               "src/scripts/purchase/directives/dtv-suggest-general-delivery.js",
               "src/scripts/purchase/directives/dtv-year-selector.js",
 
-              "src/scripts/purchase/filters/ftr-card-description.js",
               "src/scripts/purchase/filters/ftr-country-name.js",
               "src/scripts/purchase/filters/ftr-padded-month.js",
 

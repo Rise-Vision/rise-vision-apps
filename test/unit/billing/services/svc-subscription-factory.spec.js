@@ -28,7 +28,11 @@ describe('service: subscriptionFactory:', function() {
         return 'processed ' + err;
       };
     });
-
+    $provide.service('$filter',function() {
+      return function() {
+        return sinon.stub().returns('cardDescription');
+      };
+    });
   }));
 
   beforeEach(function() {
@@ -425,7 +429,7 @@ describe('service: subscriptionFactory:', function() {
 
       confirmModal.should.have.been.calledWith(
         'Change Payment Method',
-        'Are you sure you want to change the payment method? The <strong>Credit Card ending in ****</strong> will be used for this subscription.',
+        'Are you sure you want to change the payment method? The <strong>cardDescription</strong> will be used for this subscription.',
         'Yes, Change', 'Cancel', 'madero-style centered-modal',
         'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
       );
