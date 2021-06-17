@@ -291,7 +291,7 @@ angular.module('risevision.storage.services')
         },
 
         refreshFileMetadata: function (fileName) {
-          return _refreshFileMetadata(fileName, 3);
+          return _refreshFileMetadata(fileName, 2);
 
           function _refreshFileMetadata(fileName, remainingAttempts) {
             console.log('Attempt #' + remainingAttempts + ' to get metadata for: ' + fileName);
@@ -307,7 +307,9 @@ angular.module('risevision.storage.services')
                 } else if (file && remainingAttempts > 0) {
                   return _refreshFileMetadata(fileName, remainingAttempts - 1);
                 } else {
-                  return $q.reject();
+                  console.log('Error refreshing metadata', file.name);
+
+                  return $q.resolve(file);
                 }
               });
           }

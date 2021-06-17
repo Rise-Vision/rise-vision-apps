@@ -139,6 +139,7 @@ describe('service: displayFactory:', function() {
     expect(displayFactory.deleteDisplay).to.be.a('function'); 
 
     expect(displayFactory.showLicenseRequired).to.be.a('function');
+    expect(displayFactory.hasSchedule).to.be.a('function');
   });
   
   it('should initialize',function(){
@@ -639,6 +640,15 @@ describe('service: displayFactory:', function() {
     });
 
   });
+
+  
+    describe('hasSchedule', function() {
+      it('should validate if a display has an associated schedule', function() {
+        expect(displayFactory.hasSchedule({ scheduleId: "1" })).to.be.ok;
+        expect(displayFactory.hasSchedule({ scheduleId: "" })).to.be.falsey;
+        expect(displayFactory.hasSchedule({ scheduleId: "DEMO" })).to.be.falsey;
+      });
+    });
 
 
 });
