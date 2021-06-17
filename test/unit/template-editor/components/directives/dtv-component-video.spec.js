@@ -2,7 +2,6 @@
 
 describe('directive: templateComponentVideo', function() {
   var $scope,
-      $rootScope,
       element,
       templateEditorFactory,
       componentsFactory,
@@ -10,8 +9,7 @@ describe('directive: templateComponentVideo', function() {
       storageManagerFactory,
       testMetadata,
       $loading,
-      $timeout,
-      currentPlanFactory;
+      $timeout;
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(function ($provide) {
@@ -51,24 +49,17 @@ describe('directive: templateComponentVideo', function() {
       };
     });
 
-    $provide.service('currentPlanFactory',function(){
-      return {
-          isPlanActive: sinon.stub().returns(true)
-      };
-    });
+    $provide.service('currentPlanFactory',function(){});
 
   }));
 
-  beforeEach(inject(function($compile, _$rootScope_, $templateCache, $injector){
-    $rootScope = _$rootScope_;
-
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
     $timeout = $injector.get('$timeout');
     $loading = $injector.get('$loading');
     templateEditorFactory = $injector.get('templateEditorFactory');
     componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
     storageManagerFactory = $injector.get('storageManagerFactory');
-    currentPlanFactory = $injector.get('currentPlanFactory');
 
     $templateCache.put('partials/template-editor/components/component-video.html', '<p>mock</p>');
     $scope = $rootScope.$new();
@@ -84,21 +75,6 @@ describe('directive: templateComponentVideo', function() {
     expect($scope.sortItem).to.be.a('function');
 
     expect($scope.currentPlanFactory).to.be.ok;
-  });
-
-  it('should initialize isPlanActive', function() {
-    currentPlanFactory.isPlanActive.should.have.been.calledOnce;
-    expect($scope.isPlanActive).to.be.true;
-  });
-
-  it('should update isPlanActive on plan updates', function() {
-    currentPlanFactory.isPlanActive.returns(false);
-
-    $scope.$emit('risevision.plan.loaded');
-    $scope.$digest();
-    
-    currentPlanFactory.isPlanActive.should.have.been.calledTwice;
-    expect($scope.isPlanActive).to.be.false;
   });
 
   describe('registerDirective:', function() {

@@ -61,24 +61,24 @@
 
 <div class="file-component-list-action-button-bar">
   <div class="upload-files">
-    <button id="upload-images-unsubscribed" class="btn btn-default btn-block" ng-click="currentPlanFactory.showUnlockThisFeatureModal()" ng-hide="isPlanActive">
+    <button id="upload-images-unsubscribed" class="btn btn-default btn-block" ng-click="currentPlanFactory.showUnlockThisFeatureModal()" ng-hide="currentPlanFactory.isPlanActive()">
       <strong ng-if="!isEditingLogo()">Upload Images</strong>
       <strong ng-if="isEditingLogo()">Upload A Logo</strong>
     </button>
     <label id="image-list-uploader-label"
       class="btn btn-default btn-block"
       for="image-list-uploader"
-      ng-disabled="isUploading" ng-show="isPlanActive"
+      ng-disabled="isUploading" ng-show="currentPlanFactory.isPlanActive()"
     >
       <strong ng-if="!isEditingLogo()">Upload Images</strong>
       <strong ng-if="isEditingLogo()">Upload A Logo</strong>
     </label>
   </div>
   <div class="edit-in-canva u_margin-sm-top">
-    <button id="canva-unsubscribed" class="btn btn-default btn-block" ng-click="currentPlanFactory.showUnlockThisFeatureModal()" ng-hide="isPlanActive">
+    <button id="canva-unsubscribed" class="btn btn-default btn-block" ng-click="currentPlanFactory.showUnlockThisFeatureModal()" ng-hide="currentPlanFactory.isPlanActive()">
       <strong>Design With Canva</strong>
     </button>
-    <canva-button (design-published)="onDesignPublished($event)" [disabled]="isUploading" ng-show="isPlanActive"></canva-button>
+    <canva-button (design-published)="onDesignPublished($event)" [disabled]="isUploading" ng-show="currentPlanFactory.isPlanActive()"></canva-button>
   </div>
   <div class="select-from-storage">
     <button id="image-list-storage-button" class="btn btn-default btn-block" ng-click="selectFromStorage()" ng-disabled="isUploading">

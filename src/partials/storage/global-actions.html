@@ -3,18 +3,18 @@
   <span translate>storage-client.new-folder</span>
 </button>
 
-<label id="uploadButtonUnsubscribed" class="btn btn-primary" ng-click="currentPlanFactory.showUnlockThisFeatureModal()" ng-disabled="filesFactory.isTrashFolder()" ng-hide="isPlanActive">
+<label id="uploadButtonUnsubscribed" class="btn btn-primary" ng-click="currentPlanFactory.showUnlockThisFeatureModal()" ng-disabled="filesFactory.isTrashFolder()" ng-hide="currentPlanFactory.isPlanActive()">
   <span translate>storage-client.upload-files</span>
 </label>
-<label id="uploadButton" class="btn btn-primary" for="upload-files" ng-disabled="filesFactory.isTrashFolder()" ng-show="isPlanActive">
+<label id="uploadButton" class="btn btn-primary" for="upload-files" ng-disabled="filesFactory.isTrashFolder()" ng-show="currentPlanFactory.isPlanActive()">
   <span translate>storage-client.upload-files</span>
 </label>
 
-<label id="uploadFolderButtonUnsubscribed" class="btn btn-primary" ng-click="currentPlanFactory.showUnlockThisFeatureModal()" ng-disabled="filesFactory.isTrashFolder()" ng-hide="isPlanActive">
+<label id="uploadFolderButtonUnsubscribed" class="btn btn-primary" ng-click="currentPlanFactory.showUnlockThisFeatureModal()" ng-disabled="filesFactory.isTrashFolder()" ng-hide="currentPlanFactory.isPlanActive()">
   <span translate>storage-client.upload-folder</span>
   <i class="fa fa-folder icon-right hidden-xs"></i>
 </label>
-<label id="uploadFolderButton" class="btn btn-primary" for="upload-folder" ng-disabled="filesFactory.isTrashFolder()" ng-show="isPlanActive">
+<label id="uploadFolderButton" class="btn btn-primary" for="upload-folder" ng-disabled="filesFactory.isTrashFolder()" ng-show="currentPlanFactory.isPlanActive()">
   <span translate>storage-client.upload-folder</span>
   <i class="fa fa-folder icon-right hidden-xs"></i>
 </label>
