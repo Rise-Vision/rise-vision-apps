@@ -1,34 +1,36 @@
-/*jshint expr:true */
-"use strict";
+import {expect} from 'chai';
+import { TestBed } from '@angular/core/testing';
 
-describe("Services: stripe service", function() {
-  beforeEach(module("risevision.apps.purchase"));
-  beforeEach(module(function ($provide) {
-    $provide.service("$q", function() {return Q;});
-    $provide.service("stripeLoader", function() {
-      elements = {
-        create: sinon.stub().returns('result')
-      };
+import { StripeService } from './stripe.service';
+import { StripeLoaderService } from './stripe-loader.service';
 
-      return function() {
-        return Q.resolve(stripeClient = {
-          createPaymentMethod: sinon.stub().returns(Q.resolve()),
-          handleCardAction: sinon.stub().returns(Q.resolve()),
-          confirmCardSetup: sinon.stub().returns(Q.resolve()),
+describe('StripeService', () => {
+  let stripeService: StripeService;
+  let stripeLoader: any;
+  let elements: any;
+  let stripeClient: any;  
+  
+  beforeEach(() => {
+    stripeLoader = {
+      load: function() {
+        elements = {
+          create: sinon.stub().returns('result')
+        };
+        return Promise.resolve(stripeClient = {
+          createPaymentMethod: sinon.stub().returns(Promise.resolve()),
+          handleCardAction: sinon.stub().returns(Promise.resolve()),
+          confirmCardSetup: sinon.stub().returns(Promise.resolve()),
           elements: sinon.stub().returns(elements)
         });
-      };
-    });
-  }));
+      }
+    }
 
-  var $window, stripeService, stripeClient, elements;
-  var createTokenResponse;
-
-  beforeEach(function() {
-    inject(function($injector) {
-      $window = $injector.get("$window");
-      stripeService = $injector.get("stripeService");
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: StripeLoaderService, useValue: stripeLoader}        
+      ]
     });
+    stripeService = TestBed.inject(StripeService);
   });
 
   it("should exist", function() {

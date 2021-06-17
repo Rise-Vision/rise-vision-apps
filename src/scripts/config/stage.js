@@ -41,8 +41,6 @@
     .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services-stage.risevision.com/oauthtokenprovider/')
     .value('TWITTER_SERVICE_URL', 'https://services-stage.risevision.com/twitter/')
     .value('OAUTH_PUBLIC_KEY', 'EJMI-lB9hB55OYEsYmjXDNfRGoY')
-    .value('STRIPE_PROD_KEY', 'pk_test_GrMIAHSoqhaik4tcHepsxjOR')
-    .value('STRIPE_TEST_KEY', 'pk_test_GrMIAHSoqhaik4tcHepsxjOR')
     .value('HUBSPOT_ACCOUNT', '2939619')
     .value('HTML_TEMPLATE_URL', 'https://widgets.risevision.com/staging/templates/PRODUCT_CODE/src/template.html');
 

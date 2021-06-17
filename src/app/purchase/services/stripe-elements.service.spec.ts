@@ -1,11 +1,15 @@
-/*jshint expr:true */
-"use strict";
+import {expect} from 'chai';
+import { TestBed } from '@angular/core/testing';
 
-describe("Services: stripe elements factory", function() {
-  beforeEach(module("risevision.apps.purchase"));
-  beforeEach(module(function ($provide) {
-    $provide.service("$q", function() {return Q;});
+import { StripeElementsService } from './stripe-elements.service';
+import { StripeService } from './stripe.service';
 
+describe('StripeElementsService', () => {
+  let stripeElementsFactory: StripeElementsService;
+  let stripeService: any;
+  let $rootScope: any;
+
+  beforeEach(() => {
     var _generateElement = function(id) {
       return {
         id: id,
@@ -14,21 +18,23 @@ describe("Services: stripe elements factory", function() {
       };
     };
 
-    $provide.value("stripeService", {
-      initializeStripeElements: sinon.stub().returns(Q.resolve([_generateElement(1), _generateElement(2), _generateElement(3)]))
+    stripeService = {
+      initializeStripeElements: sinon.stub().returns(Promise.resolve([_generateElement(1), _generateElement(2), _generateElement(3)]))
+    };
+
+    $rootScope = {
+      $digest: sinon.stub()
+    };
+
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: StripeService, useValue: stripeService},
+        {provide: '$rootScope', useValue: $rootScope}
+      ]
     });
-
-  }));
-
-  var $rootScope, stripeElementsFactory, stripeService;
-
-  beforeEach(function() {
-    inject(function($injector) {
-      $rootScope = $injector.get('$rootScope');
-      stripeService = $injector.get("stripeService");
-      stripeElementsFactory = $injector.get("stripeElementsFactory");
-    });
+    stripeElementsFactory = TestBed.inject(StripeElementsService);
   });
+
 
   it("should exist", function() {
     expect(stripeElementsFactory).to.be.ok;
@@ -67,29 +73,25 @@ describe("Services: stripe elements factory", function() {
     });
 
     it('should $digest on blur', function() {
-      sinon.spy($rootScope, '$digest');
-
       stripeElementsFactory.stripeElements['cardNumber'].on.getCall(0).args[1]();
 
       $rootScope.$digest.should.have.been.called;
     });
 
     it('should add dirty class and $digest on change', function() {
-      var cardElement = angular.element('<div id="new-card-number"/>').appendTo('body');
-
-      sinon.spy($rootScope, '$digest');
+      var cardElement = document.createElement('div');
+      cardElement.id = 'new-card-number';
+      document.body.appendChild(cardElement);
 
       stripeElementsFactory.stripeElements['cardNumber'].on.getCall(1).args[1]();
 
-      expect(cardElement[0].className).to.contain('dirty');
+      expect(cardElement.className).to.contain('dirty');
       $rootScope.$digest.should.have.been.called;
 
       cardElement.remove();
     });
 
     it('should handle failure to get element', function() {
-      sinon.spy($rootScope, '$digest');
-
       stripeElementsFactory.stripeElements['cardNumber'].on.getCall(1).args[1]();
 
       $rootScope.$digest.should.have.been.called;

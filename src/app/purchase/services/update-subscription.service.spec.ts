@@ -1,87 +1,76 @@
-/*jshint expr:true */
-"use strict";
+import {expect} from 'chai';
+import { TestBed } from '@angular/core/testing';
 
-describe("Services: purchase licenses factory", function() {
-  beforeEach(module("risevision.apps.purchase"));
-  beforeEach(module(function ($provide) {
-    $provide.service("$q", function() {return Q;});
-    $provide.value("$state", {
+import { UpdateSubscriptionService } from './update-subscription.service';
+import { AjsState, UserState, Billing, AnalyticsFactory, SubscriptionFactory, ProcessErrorCode, PlansService } from 'src/app/ajs-upgraded-providers';
+import { PricingService } from './pricing.service';
+import { assert } from 'sinon';
+
+describe('UpdateSubscriptionService', () => {
+  let updateSubscriptionFactory: UpdateSubscriptionService;
+  let $state, userState, billing, analyticsFactory, pricingService, subscriptionFactory, processErrorCode, plansService, validate;
+
+  beforeEach(() => {
+    $state = {
       params: {
         displayCount: 'displayCount',
         subscriptionId: 'subscriptionId'
       }
-    });
-    $provide.service('processErrorCode',function() {
-      return function(err) {
-        return 'processed ' + err;
-      };
-    });
-    $provide.service("userState", function() {
-      return {
-        reloadSelectedCompany: sinon.stub().returns(Q.resolve("success")),
-        getUserEmail: sinon.stub().returns('userEmail')
-      };
-    });
-    $provide.service("billing", function() {
-      return {
-        estimateSubscriptionUpdate: sinon.stub().returns(Q.resolve({item: 'estimateResponse'})),
-        updateSubscription: sinon.spy(function() {
-          if (validate) {
-            return Q.resolve("success");
-          } else {
-            return Q.reject('error');
-          }
-        })
-      };
-    });
-    $provide.service("pricingFactory", function() {
-      return {
-        getPricePerDisplay: function(isMonthly, currentDisplayCount, isEducation) {
-          return '' + isMonthly + currentDisplayCount + isEducation;
+    };
+    processErrorCode = function(err) {
+      return 'processed ' + err;
+    };
+    userState = {
+      reloadSelectedCompany: sinon.stub().returns(Promise.resolve("success")),
+      getUserEmail: sinon.stub().returns('userEmail')
+    };
+    billing = {
+      estimateSubscriptionUpdate: sinon.stub().returns(Promise.resolve({item: 'estimateResponse'})),
+      updateSubscription: sinon.spy(function() {
+        if (validate) {
+          return Promise.resolve("success");
+        } else {
+          return Promise.reject('error');
         }
-      };
+      })
+    };
+    pricingService = {
+      getPricePerDisplay: function(isMonthly, currentDisplayCount, isEducation) {
+        return '' + isMonthly + currentDisplayCount + isEducation;
+      }
+    };
+    analyticsFactory = {
+      track: sinon.stub()
+    };
+    plansService = {
+      getUnlimitedPlan: sinon.stub().returns({
+        productCode: 'unlimitedProductCode'
+      })
+    };
+    subscriptionFactory = {
+      getSubscription: sinon.stub().resolves(),
+      getItemSubscription: sinon.stub().returns({
+        id: 'subscriptionId',
+        customer_id: 'customerId',
+        plan_quantity: 2,
+        plan_id: 'somePlanId-1m',
+        currency_code: 'CAD'
+      })
+    };
+
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: AjsState, useValue: $state},
+        {provide: UserState, useValue: userState},
+        {provide: Billing, useValue: billing},
+        {provide: AnalyticsFactory, useValue: analyticsFactory},
+        {provide: PricingService, useValue: pricingService},
+        {provide: SubscriptionFactory, useValue: subscriptionFactory},
+        {provide: ProcessErrorCode, useValue: processErrorCode},
+        {provide: PlansService, useValue: plansService},
+      ]
     });
-
-    $provide.service("analyticsFactory", function() {
-      return {
-        track: sinon.stub()
-      };
-    });
-
-    $provide.service("plansService", function() {
-      return {
-        getUnlimitedPlan: sinon.stub().returns({
-          productCode: 'unlimitedProductCode'
-        })
-      };
-    });
-
-    $provide.service("subscriptionFactory", function() {
-      return {
-        getSubscription: sinon.stub().resolves(),
-        getItemSubscription: sinon.stub().returns({
-          id: 'subscriptionId',
-          customer_id: 'customerId',
-          plan_quantity: 2,
-          plan_id: 'somePlanId-1m',
-          currency_code: 'CAD'
-        })
-      };
-    });
-
-  }));
-
-  var $timeout, updateSubscriptionFactory, userState, billing, analyticsFactory, subscriptionFactory, validate;
-
-  beforeEach(function() {
-    inject(function($injector) {
-      $timeout = $injector.get("$timeout");
-      userState = $injector.get('userState');
-      billing = $injector.get('billing');
-      analyticsFactory = $injector.get('analyticsFactory');
-      updateSubscriptionFactory = $injector.get("updateSubscriptionFactory");
-      subscriptionFactory = $injector.get("subscriptionFactory");
-    });
+    updateSubscriptionFactory = TestBed.inject(UpdateSubscriptionService);
   });
 
   it("should exist", function() {
@@ -100,7 +89,7 @@ describe("Services: purchase licenses factory", function() {
     });
 
     afterEach(function() {
-      updateSubscriptionFactory.getEstimate.restore();
+      (updateSubscriptionFactory.getEstimate as any).restore();
     });
 
     it("should initialize values on add and retrieve estimate", function() {
@@ -139,6 +128,7 @@ describe("Services: purchase licenses factory", function() {
 
         done();
       }, 10);
+
     });
 
     it('should update the plan id to annual', function(done) {
@@ -225,7 +215,7 @@ describe("Services: purchase licenses factory", function() {
       .then(function() {
         expect(updateSubscriptionFactory.estimate).to.equal('estimateResponse');
 
-        expect(analyticsFactory.track).to.have.been.calledWith('Subscription Update Estimated', {
+        analyticsFactory.track.should.have.been.calledWith('Subscription Update Estimated', {
           subscriptionId: 'subscriptionId',
           planType: 'volume',
           paymentTerm: 'yearly',
@@ -238,7 +228,7 @@ describe("Services: purchase licenses factory", function() {
       })
       .then(null,function(e) {
         console.error(e);
-        done("error");
+        assert.fail("error");
       });
     });
 
@@ -273,7 +263,7 @@ describe("Services: purchase licenses factory", function() {
       });
 
       it('should update prices for yearly subscriptions', function(done) {
-        billing.estimateSubscriptionUpdate.returns(Q.resolve({
+        billing.estimateSubscriptionUpdate.returns(Promise.resolve({
           item: {
             next_invoice_estimate: {
               line_items: [{
@@ -294,7 +284,7 @@ describe("Services: purchase licenses factory", function() {
       });
 
       it('should update prices for monthly subscriptions', function(done) {
-        billing.estimateSubscriptionUpdate.returns(Q.resolve({
+        billing.estimateSubscriptionUpdate.returns(Promise.resolve({
           item: {
             next_invoice_estimate: {
               line_items: [{
@@ -317,7 +307,7 @@ describe("Services: purchase licenses factory", function() {
       });
 
       it('should detect education discount', function(done) {
-        billing.estimateSubscriptionUpdate.returns(Q.resolve({
+        billing.estimateSubscriptionUpdate.returns(Promise.resolve({
           item: {
             next_invoice_estimate: {
               line_items: [{
@@ -340,7 +330,7 @@ describe("Services: purchase licenses factory", function() {
       });
 
       it('should not calculate per display price if plan is unlimited', function(done) {
-        billing.estimateSubscriptionUpdate.returns(Q.resolve({
+        billing.estimateSubscriptionUpdate.returns(Promise.resolve({
           item: {
             next_invoice_estimate: {
               line_items: [{
@@ -357,7 +347,7 @@ describe("Services: purchase licenses factory", function() {
             expect(updateSubscriptionFactory.purchase.currentPricePerDisplay).to.equal(undefined);
             expect(updateSubscriptionFactory.purchase.newPricePerDisplay).to.equal(undefined);
 
-            expect(analyticsFactory.track).to.have.been.calledWith('Subscription Update Estimated', {
+            analyticsFactory.track.should.have.been.calledWith('Subscription Update Estimated', {
               subscriptionId: 'subscriptionId',
               planType: 'unlimited',
               paymentTerm: 'yearly',
@@ -373,7 +363,7 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should show estimate error if call fails", function(done) {
-      billing.estimateSubscriptionUpdate.returns(Q.reject('error'));
+      billing.estimateSubscriptionUpdate.returns(Promise.reject('error'));
 
       updateSubscriptionFactory.getEstimate()
       .then(function() {
@@ -382,12 +372,12 @@ describe("Services: purchase licenses factory", function() {
         done();
       })
       .then(null,function() {
-        done("error");
+        assert.fail("error");
       });
     });
 
     it("should not clear previous estimate on error", function(done) {
-      billing.estimateSubscriptionUpdate.returns(Q.reject());
+      billing.estimateSubscriptionUpdate.returns(Promise.reject());
       updateSubscriptionFactory.estimate = 'previousEstimate';
 
       updateSubscriptionFactory.getEstimate()
@@ -397,7 +387,7 @@ describe("Services: purchase licenses factory", function() {
         done();
       })
       .then(null,function() {
-        done("error");
+        assert.fail("error");
       });
     });
 
@@ -440,7 +430,7 @@ describe("Services: purchase licenses factory", function() {
       .then(function() {
         expect(updateSubscriptionFactory.estimate).to.equal('estimateResponse');
 
-        expect(analyticsFactory.track).to.have.been.calledWith('Subscription Update Estimated', {
+        analyticsFactory.track.should.have.been.calledWith('Subscription Update Estimated', {
           subscriptionId: 'subscriptionId',
           planType: 'volume',
           paymentTerm: 'monthly',
@@ -453,7 +443,7 @@ describe("Services: purchase licenses factory", function() {
       })
       .then(null,function(e) {
         console.error(e);
-        done("error");
+        assert.fail("error");
       });
     });
 
@@ -535,6 +525,8 @@ describe("Services: purchase licenses factory", function() {
     });
 
     it("should reloadSelectedCompany on purchase", function(done) {
+      sinon.stub(updateSubscriptionFactory,'_wait').resolves();
+
       updateSubscriptionFactory.completePayment()
         .then(function() {
           userState.reloadSelectedCompany.should.have.been.called;
@@ -545,17 +537,14 @@ describe("Services: purchase licenses factory", function() {
           done();
         })
         .then(null,function() {
-          done("error");
+          assert.fail("error");
         });
-
-      // Flush asynchronously
-      setTimeout(function() {
-        $timeout.flush(10000);
-      }, 10);
     });
 
     it("should handle failure to reloadSelectedCompany", function(done) {
-      userState.reloadSelectedCompany.returns(Q.reject());
+      sinon.stub(updateSubscriptionFactory,'_wait').resolves();
+
+      userState.reloadSelectedCompany.returns(Promise.reject());
       updateSubscriptionFactory.completePayment()
         .then(function() {
           userState.reloadSelectedCompany.should.have.been.called;
@@ -566,13 +555,8 @@ describe("Services: purchase licenses factory", function() {
           done();
         })
         .then(null,function() {
-          done("error");
+          assert.fail("error");
         });
-
-        // Flush asynchronously
-        setTimeout(function() {
-          $timeout.flush(10000);
-        }, 10);
     });
 
     it("should show payment error if call fails", function(done) {
@@ -587,7 +571,7 @@ describe("Services: purchase licenses factory", function() {
           done();
         })
         .then(null,function() {
-          done("error");
+          assert.fail("error");
         });
     });
 
@@ -662,5 +646,4 @@ describe("Services: purchase licenses factory", function() {
       });
     });
   });
-
 });

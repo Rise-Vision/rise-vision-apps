@@ -1,44 +1,71 @@
-/*jshint expr:true */
-"use strict";
+import {assert, expect} from 'chai';
+import { TestBed } from '@angular/core/testing';
 
-describe("Services: credit card factory", function() {
-  beforeEach(module("risevision.apps.purchase"));
-  beforeEach(module(function ($provide) {
-    $provide.service("$q", function() {return Q;});
+import { CreditCardService } from './credit-card.service';
+import { StripeService } from './stripe.service';
+import { AddressService, UserAuthFactory, UserState } from 'src/app/ajs-upgraded-providers';
+import { StripeElementsService } from './stripe-elements.service';
+import { PaymentSourcesService } from './payment-sources.service';
 
-    $provide.value("stripeService", {
-      createPaymentMethod: sinon.stub().returns(Q.resolve({})),
-      handleCardAction: sinon.stub().returns(Q.resolve({})),
-      confirmCardSetup: sinon.stub().returns(Q.resolve({}))
-    });
+describe('CreditCardService', () => {
+  let creditCardFactory: CreditCardService;
+  let stripeService, userState, userAuthFactory, paymentSourcesFactory, stripeElementsFactory, addressService;
 
-    $provide.value("userState", {
+  beforeEach(() => {
+    stripeService = {
+      createPaymentMethod: sinon.stub().returns(Promise.resolve({})),
+      handleCardAction: sinon.stub().returns(Promise.resolve({})),
+      confirmCardSetup: sinon.stub().returns(Promise.resolve({}))
+    };
+
+    userState = {
       getCopyOfSelectedCompany: sinon.stub().returns({
         id: "id",
         street: "billingStreet",
       })
+    };
+
+    userAuthFactory = {
+      authenticate: sinon.stub().returns(Promise.resolve())
+    };
+
+    paymentSourcesFactory = {
+      init: sinon.stub().returns(Promise.resolve())
+    };
+
+    stripeElementsFactory = {
+      stripeElements: {
+        cardNumber: 'cardNumber'
+      }
+    };
+    addressService = {
+      copyAddress: function (src, dest) {
+        if (!dest) {
+          dest = {};
+        }
+        dest.id = src.id;
+        dest.name = src.name;
+        dest.street = src.street;
+        dest.unit = src.unit;
+        dest.city = src.city;
+        dest.country = src.country;
+        dest.postalCode = src.postalCode;
+        dest.province = src.province;
+        return dest;
+      }
+    };
+
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: StripeService, useValue: stripeService},
+        {provide: UserState, useValue: userState},
+        {provide: UserAuthFactory, useValue: userAuthFactory},
+        {provide: PaymentSourcesService, useValue: paymentSourcesFactory},
+        {provide: StripeElementsService, useValue: stripeElementsFactory},
+        {provide: AddressService, useValue: addressService}
+      ]      
     });
-
-    $provide.value('userAuthFactory', {
-      authenticate: sinon.stub().returns(Q.resolve())
-    });
-
-    $provide.value('paymentSourcesFactory', {
-      init: sinon.stub().returns(Q.resolve())
-    });
-
-  }));
-
-  var creditCardFactory, stripeService, userState, userAuthFactory, paymentSourcesFactory;
-
-  beforeEach(function() {
-    inject(function($injector) {
-      stripeService = $injector.get("stripeService");
-      userState = $injector.get('userState');
-      userAuthFactory = $injector.get('userAuthFactory');
-      paymentSourcesFactory = $injector.get('paymentSourcesFactory');
-      creditCardFactory = $injector.get("creditCardFactory");
-    });
+    creditCardFactory = TestBed.inject(CreditCardService);
   });
 
   it("should exist", function() {
@@ -109,7 +136,7 @@ describe("Services: credit card factory", function() {
     });
 
     it('should not update address on authentication failure', function(done) {
-      userAuthFactory.authenticate.returns(Q.reject());
+      userAuthFactory.authenticate.returns(Promise.reject());
 
       creditCardFactory.initPaymentMethods(false)
         .catch(function() {
@@ -149,7 +176,7 @@ describe("Services: credit card factory", function() {
 
     describe('_loadCreditCards:', function() {
       it('should handle failure to authenticate', function(done) {
-        userAuthFactory.authenticate.returns(Q.reject());
+        userAuthFactory.authenticate.returns(Promise.reject());
 
         creditCardFactory.initPaymentMethods(true)
           .catch(function() {
@@ -207,10 +234,9 @@ describe("Services: credit card factory", function() {
     });
 
     describe("existing card: ", function() {
-      var card;
       beforeEach(function() {
         creditCardFactory.paymentMethods = {
-          selectedCard: card = {
+          selectedCard: {
             isNew: true,
             number: "123"
           }
@@ -225,16 +251,16 @@ describe("Services: credit card factory", function() {
           done();
         })
         .then(null,function(error) {
-          done(error);
+          assert.fail(error);
         });
       });
 
       it("should validate and not proceed if there are errors", function(done) {
-        stripeService.createPaymentMethod.returns(Q.resolve({error: {}}));
+        stripeService.createPaymentMethod.returns(Promise.resolve({error: {}}));
 
         creditCardFactory.validatePaymentMethod()
         .then(function () {
-          done("Should not be here");
+          assert.fail("Should not be here");
         }, function() {
           stripeService.createPaymentMethod.should.have.been.called;
           done();
@@ -267,7 +293,7 @@ describe("Services: credit card factory", function() {
       });
 
       it("should validate and not proceed if there are errors", function(done) {
-        stripeService.createPaymentMethod.returns(Q.resolve({error: {message: "tokenError"}}));
+        stripeService.createPaymentMethod.returns(Promise.resolve({error: {message: "tokenError"}}));
 
         creditCardFactory.validatePaymentMethod()
         .then(null, function() {
@@ -278,7 +304,7 @@ describe("Services: credit card factory", function() {
           done();
         })
         .then(null,function() {
-          done("should not be here");
+          assert.fail("should not be here");
         });
       });
 
@@ -312,7 +338,7 @@ describe("Services: credit card factory", function() {
     });
 
     it("should validate and not proceed if there are errors", function(done) {
-      stripeService.handleCardAction.returns(Q.resolve({error: "tokenError"}));
+      stripeService.handleCardAction.returns(Promise.resolve({error: "tokenError"}));
 
       creditCardFactory.handleCardAction()
         .then(null, function() {
@@ -324,7 +350,7 @@ describe("Services: credit card factory", function() {
     });
 
     it("should handle reject errors", function(done) {
-      stripeService.handleCardAction.returns(Q.reject({}));
+      stripeService.handleCardAction.returns(Promise.reject({}));
 
       creditCardFactory.handleCardAction()
         .then(null, function() {
@@ -353,7 +379,7 @@ describe("Services: credit card factory", function() {
     });
 
     it("should validate and not proceed if there are errors", function(done) {
-      stripeService.confirmCardSetup.returns(Q.resolve({error: "tokenError"}));
+      stripeService.confirmCardSetup.returns(Promise.resolve({error: "tokenError"}));
 
       creditCardFactory.confirmCardSetup()
         .then(null, function() {
@@ -365,7 +391,7 @@ describe("Services: credit card factory", function() {
     });
 
     it("should handle reject errors", function(done) {
-      stripeService.confirmCardSetup.returns(Q.reject({}));
+      stripeService.confirmCardSetup.returns(Promise.reject({}));
 
       creditCardFactory.confirmCardSetup()
         .then(null, function() {
@@ -415,5 +441,4 @@ describe("Services: credit card factory", function() {
     });
 
   });
-
 });
