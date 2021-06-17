@@ -8,7 +8,7 @@ import { assert } from 'sinon';
 
 describe('UpdateSubscriptionService', () => {
   let updateSubscriptionFactory: UpdateSubscriptionService;
-  let clock, $state, userState, billing, analyticsFactory, pricingService, subscriptionFactory, processErrorCode, plansService, validate;
+  let $state, userState, billing, analyticsFactory, pricingService, subscriptionFactory, processErrorCode, plansService, validate;
 
   beforeEach(() => {
     $state = {
@@ -71,13 +71,6 @@ describe('UpdateSubscriptionService', () => {
       ]
     });
     updateSubscriptionFactory = TestBed.inject(UpdateSubscriptionService);
-
-    clock = sinon.useFakeTimers();
-  });
-
-
-  afterEach(function () {
-    clock.restore();
   });
 
   it("should exist", function() {
@@ -125,37 +118,38 @@ describe('UpdateSubscriptionService', () => {
       subscriptionFactory.getSubscription.should.have.been.calledWith('subscriptionId');
     });
 
-    // it('should update the plan id and get an estimate', function(done) {
-    //   updateSubscriptionFactory.init('remove');
+    it('should update the plan id and get an estimate', function(done) {
+      updateSubscriptionFactory.init('remove');
 
-    //   setTimeout(function() {
-    //     expect(updateSubscriptionFactory.purchase.planId).to.equal('somePlanId-1m')
+      setTimeout(function() {
+        expect(updateSubscriptionFactory.purchase.planId).to.equal('somePlanId-1m')
 
-    //     updateSubscriptionFactory.getEstimate.should.have.been.called;
+        updateSubscriptionFactory.getEstimate.should.have.been.called;
 
-    //     done();
-    //   }, 10);
-    // });
+        done();
+      }, 10);
 
-    // it('should update the plan id to annual', function(done) {
-    //   updateSubscriptionFactory.init('annual');
+    });
 
-    //   setTimeout(function() {
-    //     expect(updateSubscriptionFactory.purchase.planId).to.equal('somePlanId-1y')
+    it('should update the plan id to annual', function(done) {
+      updateSubscriptionFactory.init('annual');
 
-    //     done();
-    //   }, 10);
-    // });
+      setTimeout(function() {
+        expect(updateSubscriptionFactory.purchase.planId).to.equal('somePlanId-1y')
 
-    // it('should update the plan id to unlimited', function(done) {
-    //   updateSubscriptionFactory.init('unlimited');
+        done();
+      }, 10);
+    });
 
-    //   setTimeout(function() {
-    //     expect(updateSubscriptionFactory.purchase.planId).to.equal('unlimitedProductCode-cad01y')
+    it('should update the plan id to unlimited', function(done) {
+      updateSubscriptionFactory.init('unlimited');
 
-    //     done();
-    //   }, 10);
-    // });
+      setTimeout(function() {
+        expect(updateSubscriptionFactory.purchase.planId).to.equal('unlimitedProductCode-cad01y')
+
+        done();
+      }, 10);
+    });
   });
 
   describe("getCurrentDisplayCount:", function() {
@@ -397,17 +391,17 @@ describe('UpdateSubscriptionService', () => {
       });
     });
 
-    // it("should start and stop spinner", function(done) {
-    //   updateSubscriptionFactory.getEstimate();
+    it("should start and stop spinner", function(done) {
+      updateSubscriptionFactory.getEstimate();
 
-    //   expect(updateSubscriptionFactory.loading).to.be.true;
+      expect(updateSubscriptionFactory.loading).to.be.true;
 
-    //   setTimeout(function() {
-    //     expect(updateSubscriptionFactory.loading).to.be.false;
+      setTimeout(function() {
+        expect(updateSubscriptionFactory.loading).to.be.false;
 
-    //     done();
-    //   }, 10);
-    // });
+        done();
+      }, 10);
+    });
 
   });
 
@@ -502,68 +496,68 @@ describe('UpdateSubscriptionService', () => {
       billing.updateSubscription.should.have.been.calledWith(7, 'subscriptionId', 'planId', 'customerId', 'couponCode');
     });
 
-    // it("should track purchase", function(done) {
-    //   updateSubscriptionFactory.completePayment();
+    it("should track purchase", function(done) {
+      updateSubscriptionFactory.completePayment();
 
-    //   setTimeout(function() {
-    //     analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
-    //       subscriptionId: 'subscriptionId',
-    //       planType: 'volume',
-    //       paymentTerm: 'yearly',
-    //       changeInLicenses: 5,
-    //       totalLicenses: 7,
-    //       companyId: 'customerId'
-    //     });
+      setTimeout(function() {
+        analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
+          subscriptionId: 'subscriptionId',
+          planType: 'volume',
+          paymentTerm: 'yearly',
+          changeInLicenses: 5,
+          totalLicenses: 7,
+          companyId: 'customerId'
+        });
 
-    //     done();
-    //   }, 10);
-    // });
+        done();
+      }, 10);
+    });
 
-    // it("should not reload company right away", function(done) {
-    //   updateSubscriptionFactory.completePayment();
+    it("should not reload company right away", function(done) {
+      updateSubscriptionFactory.completePayment();
 
-    //   setTimeout(function() {
-    //     expect(updateSubscriptionFactory.purchase.completed).to.not.be.ok;
-    //     userState.reloadSelectedCompany.should.not.have.been.called;
+      setTimeout(function() {
+        expect(updateSubscriptionFactory.purchase.completed).to.not.be.ok;
+        userState.reloadSelectedCompany.should.not.have.been.called;
 
-    //     done();
-    //   }, 10);
-    // });
+        done();
+      }, 10);
+    });
 
-    // it("should reloadSelectedCompany on purchase", function(done) {
-    //   updateSubscriptionFactory.completePayment()
-    //     .then(function() {
-    //       userState.reloadSelectedCompany.should.have.been.called;
-    //       expect(updateSubscriptionFactory.purchase.completed).to.be.true;
+    it("should reloadSelectedCompany on purchase", function(done) {
+      sinon.stub(updateSubscriptionFactory,'_wait').resolves();
 
-    //       expect(updateSubscriptionFactory.loading).to.be.false;
+      updateSubscriptionFactory.completePayment()
+        .then(function() {
+          userState.reloadSelectedCompany.should.have.been.called;
+          expect(updateSubscriptionFactory.purchase.completed).to.be.true;
 
-    //       done();
-    //     })
-    //     .then(null,function() {
-    //       assert.fail("error");
-    //     });
+          expect(updateSubscriptionFactory.loading).to.be.false;
 
-    //   clock.tick(10000);
-    // });
+          done();
+        })
+        .then(null,function() {
+          assert.fail("error");
+        });
+    });
 
-    // it("should handle failure to reloadSelectedCompany", function(done) {
-    //   userState.reloadSelectedCompany.returns(Promise.reject());
-    //   updateSubscriptionFactory.completePayment()
-    //     .then(function() {
-    //       userState.reloadSelectedCompany.should.have.been.called;
-    //       expect(updateSubscriptionFactory.purchase.completed).to.be.true;
+    it("should handle failure to reloadSelectedCompany", function(done) {
+      sinon.stub(updateSubscriptionFactory,'_wait').resolves();
 
-    //       expect(updateSubscriptionFactory.loading).to.be.false;
+      userState.reloadSelectedCompany.returns(Promise.reject());
+      updateSubscriptionFactory.completePayment()
+        .then(function() {
+          userState.reloadSelectedCompany.should.have.been.called;
+          expect(updateSubscriptionFactory.purchase.completed).to.be.true;
 
-    //       done();
-    //     })
-    //     .then(null,function() {
-    //       assert.fail("error");
-    //     });
+          expect(updateSubscriptionFactory.loading).to.be.false;
 
-    //     clock.tick(10000);
-    // });
+          done();
+        })
+        .then(null,function() {
+          assert.fail("error");
+        });
+    });
 
     it("should show payment error if call fails", function(done) {
       validate = false;
@@ -602,21 +596,21 @@ describe('UpdateSubscriptionService', () => {
       billing.updateSubscription.should.have.been.calledWith(1, 'subscriptionId', 'planId', 'customerId', '');
     });
 
-    // it("should track purchase", function(done) {
-    //   updateSubscriptionFactory.completePayment();
-    //   setTimeout(function() {
-    //     analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
-    //       subscriptionId: 'subscriptionId',
-    //       planType: 'volume',
-    //       paymentTerm: 'yearly',
-    //       changeInLicenses: -1,
-    //       totalLicenses: 1,
-    //       companyId: 'customerId'
-    //     });
+    it("should track purchase", function(done) {
+      updateSubscriptionFactory.completePayment();
+      setTimeout(function() {
+        analyticsFactory.track.should.have.been.calledWith('Subscription Updated', {
+          subscriptionId: 'subscriptionId',
+          planType: 'volume',
+          paymentTerm: 'yearly',
+          changeInLicenses: -1,
+          totalLicenses: 1,
+          companyId: 'customerId'
+        });
 
-    //     done();
-    //   }, 10);
-    // });
+        done();
+      }, 10);
+    });
 
     describe("getCreditTotal:", function() {
       it("should get credit total 0 if there are no credit notes", function() {
