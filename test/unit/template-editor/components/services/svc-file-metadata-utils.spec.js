@@ -5,6 +5,14 @@ describe('service: fileMetadataUtilsService:', function() {
 
   var fileMetadataUtilsService;
 
+  beforeEach(module(function ($provide) {
+    $provide.service('storageUtils',function(){
+      return {
+        getBucketName: sinon.stub().returns('bucket-name')
+      };
+    });
+  }));
+
   beforeEach(function() {
     inject(function($injector) {
       fileMetadataUtilsService = $injector.get('fileMetadataUtilsService');
@@ -137,6 +145,31 @@ describe('service: fileMetadataUtilsService:', function() {
       expect(metadata).to.deep.equal([
         {
           file: 'x/d.txt',
+          exists: true,
+          'time-created': 200,
+          'thumbnail-url': 'http://thumbnail?_=200'
+        }
+      ]);
+    });
+
+    it('should retrieve bucket name if missing', function() {
+      var metadata = fileMetadataUtilsService.metadataWithFile([],
+        'http://default-thumbnail', [
+          {
+            name: 'd.txt',
+            metadata: {
+              thumbnail: 'http://thumbnail'
+            },
+            timeCreated: {
+              value: 200
+            }
+          }
+        ]
+      );
+
+      expect(metadata).to.deep.equal([
+        {
+          file: 'bucket-name/d.txt',
           exists: true,
           'time-created': 200,
           'thumbnail-url': 'http://thumbnail?_=200'
