@@ -33,16 +33,6 @@
   overflow-x: hidden;
   overflow-y: auto;
 
-  .templates-row {
-    min-height: 45px;
-    display: flex;
-    align-items: center;
-
-    @media (max-width: $screen-sm) {
-      min-height: 40px;
-    }
-  }
-
   .templates-list-empty {
     margin: 20px;
 
@@ -74,22 +64,13 @@
   &.active-search {
     height: calc(var(--selector-body-height) - var(--playlist-selected-title-height) - var(--selector-search-box-height) - var(--playlist-button-bar-height));
   }
-
-  .templates-row {
-    min-height: 45px;
-    display: flex;
-    align-items: center;
-
-    @media (max-width: $screen-sm) {
-      min-height: 40px;
-    }
-  }
 }
 
   .playlist-templates-title {
+    @extend .border-bottom;
+
     height: var(--playlist-selected-title-height);
     margin: 0px 20px 0px;
-    border-bottom: 1px solid #999999;
 
     &.active-search {
       border: none;
@@ -107,9 +88,30 @@
 }
 
 .templates-row {
-  border-bottom: 1px solid #999999;
+  @extend .flex-row;
+  @extend .border-bottom;
+
+  min-height: 45px;
+
+  @media (max-width: $screen-sm) {
+    min-height: 40px;
+  }
+
   margin-left: 20px;
   margin-right: 20px;
+
+  .rv-sortable-handle {
+    streamline-icon {
+      svg {
+        height: 20px;
+
+        @media (max-width: $screen-sm) {
+          height: 18px;
+        }
+      }
+    }    
+  }
+
 }
 
 .templates-name {
@@ -182,10 +184,11 @@
 
 .templates-row {
   &.draggable-mirror {
+    @extend .border-bottom;
+
     min-height: 45px;
     display: flex;
     align-items: center; 
     background: rgba(242, 242, 242, 0.85);
-    border-bottom: 1px solid $madero-gray;
   }
 }

@@ -1,7 +1,8 @@
 <div class="pl-0 file-component-list-file-row rv-sortable-item">
-  <div class="list-grip pr-4 rv-sortable-handle" ng-if="showGripHandle">
-    <img class="img-responsive" src="../images/navigation-menu-vertical.svg">
+  <div class="rv-sortable-handle" ng-if="showGripHandle">
+    <streamline-icon class="streamline-component-icon" name="navigation-menu-vertical" width="8" height="24"></streamline-icon>    
   </div>
+
   <div class="file-thumbnail">
     <div class="file-helper"></div>
     <img ng-src="{{ entry['thumbnail-url'] }}"
