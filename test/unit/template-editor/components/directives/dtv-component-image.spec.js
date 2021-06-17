@@ -2,6 +2,7 @@
 
 describe('directive: TemplateComponentImage', function() {
   var $scope,
+    $rootScope,
     element,
     templateEditorFactory,
     componentsFactory,
@@ -11,6 +12,7 @@ describe('directive: TemplateComponentImage', function() {
     baseImageFactory,
     logoImageFactory,
     storageManagerFactory,
+    currentPlanFactory,
     sandbox = sinon.sandbox.create(),
     fileDownloader = sandbox.stub();
 
@@ -104,9 +106,21 @@ describe('directive: TemplateComponentImage', function() {
     $provide.factory('fileDownloader', function() {
       return fileDownloader;
     });
+
+    $provide.service('currentPlanFactory',function(){
+      return {
+          isPlanActive: sandbox.stub().returns(true)
+      };
+    });
+    $provide.service('plansFactory',function(){
+      return {};
+    });
+
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout, $injector){
+  beforeEach(inject(function($compile, _$rootScope_, $templateCache, $timeout, $injector){
+    $rootScope = _$rootScope_;
+
     $loading = $injector.get('$loading');
     templateEditorFactory = $injector.get('templateEditorFactory');
     componentsFactory = $injector.get('componentsFactory');
@@ -114,6 +128,7 @@ describe('directive: TemplateComponentImage', function() {
     baseImageFactory = $injector.get('baseImageFactory');
     logoImageFactory = $injector.get('logoImageFactory');
     storageManagerFactory = $injector.get('storageManagerFactory');
+    currentPlanFactory = $injector.get('currentPlanFactory');
 
     $templateCache.put('partials/template-editor/components/component-image.html', '<p>mock</p>');
     $scope = $rootScope.$new();
@@ -133,6 +148,23 @@ describe('directive: TemplateComponentImage', function() {
     expect($scope.sortItem).to.be.a('function');
     expect($scope.saveDuration).to.be.a('function');
     expect($scope.saveTransition).to.be.a('function');
+
+    expect($scope.plansFactory).to.be.ok;
+  });
+
+  it('should initialize isPlanActive', function() {
+    currentPlanFactory.isPlanActive.should.have.been.calledOnce;
+    expect($scope.isPlanActive).to.be.true;
+  });
+
+  it('should update isPlanActive on plan updates', function() {
+    currentPlanFactory.isPlanActive.returns(false);
+
+    $scope.$emit('risevision.plan.loaded');
+    $scope.$digest();
+    
+    currentPlanFactory.isPlanActive.should.have.been.calledTwice;
+    expect($scope.isPlanActive).to.be.false;
   });
 
   describe('registerDirective:', function() {

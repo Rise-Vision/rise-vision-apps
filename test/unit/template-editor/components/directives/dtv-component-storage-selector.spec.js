@@ -2,7 +2,7 @@
 
 describe('directive: componentStorageSelector', function() {
   var sandbox = sinon.sandbox.create(),
-      $scope, element, $loading, componentsFactory, templateEditorUtils, storageManagerFactory;
+      $scope, $rootScope, element, $loading, componentsFactory, templateEditorUtils, storageManagerFactory, currentPlanFactory;
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(function ($provide) {
@@ -32,13 +32,25 @@ describe('directive: componentStorageSelector', function() {
       };
     });
 
+    $provide.service('currentPlanFactory',function(){
+      return {
+          isPlanActive: sinon.stub().returns(true)
+      };
+    });
+    $provide.service('plansFactory',function(){
+      return {};
+    });
+
   }));
 
-  beforeEach(inject(function($injector, $compile, $rootScope, $templateCache) {
+  beforeEach(inject(function($injector, $compile, _$rootScope_, $templateCache) {
+    $rootScope = _$rootScope_;
+
     $loading = $injector.get('$loading');
     componentsFactory = $injector.get('componentsFactory');
     templateEditorUtils = $injector.get('templateEditorUtils');
     storageManagerFactory = $injector.get('storageManagerFactory');
+    currentPlanFactory = $injector.get('currentPlanFactory');
 
     $templateCache.put('partials/template-editor/components/component-storage-selector.html', '<p>mock</p>');
     $scope = $rootScope.$new();
@@ -68,6 +80,23 @@ describe('directive: componentStorageSelector', function() {
     expect($scope.sortBy).to.be.a('function');
     expect($scope.dateModifiedOrderFunction).to.be.a('function');
     expect($scope.fileNameOrderFunction).to.be.a('function');
+
+    expect($scope.plansFactory).to.be.ok;
+  });
+
+  it('should initialize isPlanActive', function() {
+    currentPlanFactory.isPlanActive.should.have.been.calledOnce;
+    expect($scope.isPlanActive).to.be.true;
+  });
+
+  it('should update isPlanActive on plan updates', function() {
+    currentPlanFactory.isPlanActive.returns(false);
+
+    $scope.$emit('risevision.plan.loaded');
+    $scope.$digest();
+    
+    currentPlanFactory.isPlanActive.should.have.been.calledTwice;
+    expect($scope.isPlanActive).to.be.false;
   });
 
   it('should init default values', function() {
