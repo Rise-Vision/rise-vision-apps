@@ -81,7 +81,7 @@
   </div><!--modal-body-->
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary btn-fixed-width" id="itemSave" ng-click="save()" ng-disabled="playlistItemFields.$invalid && (playlistItemFields.$dirty || isNew)">{{isNew ? 'common.add' : 'common.apply' | translate}} <i class="fa fa-white fa-check icon-right"></i></button>
+    <button type="button" class="btn btn-primary btn-fixed-width" id="itemSave" ng-click="save()" ng-disabled="playlistItemFields.itemDuration.$invalid || (playlistItemFields.urlField.$invalid && (playlistItemFields.urlField.$dirty || isNew))">{{isNew ? 'common.add' : 'common.apply' | translate}} <i class="fa fa-white fa-check icon-right"></i></button>
     <button type="button" class="btn btn-default btn-fixed-width" ng-click="dismiss()">{{'common.cancel' | translate}} <i class="fa fa-times icon-right"></i></button>
   </div>
 </div>
