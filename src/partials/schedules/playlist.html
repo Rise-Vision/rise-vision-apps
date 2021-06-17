@@ -1,11 +1,11 @@
 <div rv-sortable on-sort="sortItem(evt)" class="scrollable-list sortable-list border-container">
   <div class="list-group-item rv-sortable-item flex-row" ng-repeat="playlistItem in playlistItems track by $index">
     <div class="row-entry">
-      <div class="pr-4 rv-sortable-handle u_clickable">
-        <img class="img-responsive" src="../images/navigation-menu-vertical.svg">
+      <div class="rv-sortable-handle">
+        <streamline-icon class="streamline-component-icon" name="navigation-menu-vertical" width="8" height="24"></streamline-icon>    
       </div>
 
-      <div ng-click="manage(playlistItem)" class="playlist-item-name mr-auto w-75 u_clickable">
+      <div ng-click="manage(playlistItem)" class="playlist-item-name mr-auto u_clickable">
         <p class="madero-link u_remove-bottom u_ellipsis-lg" id="playlistItemNameCell" ng-if="playlistItem.type !== 'presentation'"><strong>{{playlistItem.name}}</strong></p>
         <p class="madero-link u_remove-bottom u_ellipsis-lg" id="presentationNameCell" ng-if="playlistItem.type === 'presentation'"><strong presentation-name="playlistItem.objectReference">Presentation Item</strong></p>
         <p class="text-sm text-gray u_remove-bottom">
@@ -13,14 +13,13 @@
           {{ factory.getItemTimeline(playlistItem) }} • {{ playlistItem.playUntilDone ? 'Play Until Done' : playlistItem.duration + 's' }} • {{ factory.getItemTransition(playlistItem) }}
         </p>
       </div>
-      <div class="u_float-left mr-0 flex-row">
-        <button type="button" class="btn-icon p-0" id="duplicateButton" ng-click="factory.duplicatePlaylistItem(playlistItem)">
-          <streamline-icon name="copy" width="16" height="18"></streamline-icon>
-        </button>
-        <button type="button" class="btn-icon ml-3 p-0" id="removeButton" ng-click="remove(playlistItem)">
-           <streamline-icon name="trash" width="16" height="18"></streamline-icon>
-         </button>
-      </div>
+
+      <button type="button" class="btn-icon p-0" id="duplicateButton" ng-click="factory.duplicatePlaylistItem(playlistItem)">
+        <streamline-icon class="streamline-component-icon mr-3" name="copy" width="16" height="18"></streamline-icon>
+      </button>
+      <button type="button" class="btn-icon p-0" id="removeButton" ng-click="remove(playlistItem)">
+         <streamline-icon class="streamline-component-icon m-0" name="trash" width="16" height="18"></streamline-icon>
+       </button>
     </div>
   </div>
 </div>

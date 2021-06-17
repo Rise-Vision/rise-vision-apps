@@ -357,7 +357,7 @@ $short-phone-height: 570px;
     }
   }
 
-  & .streamline-component-icon {
+  & .streamline-component-icon :not(.rv-sortable-handle) {
     top: 2px;
 
     @media (max-width: $screen-sm) {
@@ -1629,16 +1629,4 @@ $short-phone-height: 570px;
       fill: $madero-light-blue;
     }
   }
-}
-
-.streamline-component-icon {
-  display: inline-block;
-  margin-right: .5rem;
-  position: relative;
-  top: 3px;
-}
-
-.list-grip {
-  cursor: move;
-  cursor: -webkit-grabbing;
 }

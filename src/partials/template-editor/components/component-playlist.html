@@ -29,31 +29,29 @@ rv-spinner rv-spinner-key="rise-playlist-loader">
 
   <div class="templates-selector te-scrollable-container" ng-show="playlistItems.length">
     <div rv-sortable on-sort="sortItem(evt)" append-to=".component-container" class="sortable-list">
-      <div class="row templates-row  rv-sortable-item"
+      <div class="row templates-row rv-sortable-item"
           ng-repeat="(key, value) in playlistItems">
-        <div class="list-grip pr-4 rv-sortable-handle">
-          <img class="img-responsive" src="../images/navigation-menu-vertical.svg">          
+        <div class="rv-sortable-handle">
+          <streamline-icon class="streamline-component-icon" name="navigation-menu-vertical" width="8" height="24"></streamline-icon>    
         </div>
-        <div class="col-xs-1 pl-0 pr-0">
+        <div>
           <component-icon ng-show="isEmbeddedTemplate(value)" icon="embedded-template" type="streamline"></component-icon>  
           <component-icon ng-hide="isEmbeddedTemplate(value)" icon="{{ getComponentByType(value.tagName).icon }}" type="{{ getComponentByType(value.tagName).iconType }}"></component-icon>  
         </div>
-        <div class="col-xs-9 u_text-ellipsis">
+        <div class="px-2 mr-auto u_text-ellipsis">
           <span class="templates-name" ng-show="isEmbeddedTemplate(value)">{{ value.name }}</span>
           <a class="madero-link" href="#" ng-click="editPlaylistItem(key)" ng-hide="isEmbeddedTemplate(value)">
             <span class="templates-name">{{ getComponentName(value) }}</span>
           </a>
           <div class="templates-status templates-status-inline" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised' || value.removed}" ng-show="isEmbeddedTemplate(value)">{{ value.revisionStatusName }}</div>
         </div>
-        <div class="u_float-left mr-0 flex-row">
-          <a class="madero-link" href="#" ng-click="editProperties(key)" ng-hide="value.removed">{{ durationToText(value) }}</a>
-          <a href="#" ng-click="copyItem(key)">
-            <streamline-icon class="ml-3 mr-0 streamline-component-icon" name="copy" width="16" height="18"></streamline-icon>
-          </a>
-          <a href="#" ng-click="removeItem(key)">
-            <streamline-icon class="ml-3 streamline-component-icon" name="trash" width="16" height="18"></streamline-icon>
-          </a>
-        </div>
+        <a class="madero-link u_text-ellipsis" href="#" ng-click="editProperties(key)" ng-hide="value.removed">{{ durationToText(value) }}</a>
+        <a href="#" ng-click="copyItem(key)">
+          <streamline-icon class="ml-3 mr-0 streamline-component-icon" name="copy" width="16" height="18"></streamline-icon>
+        </a>
+        <a href="#" ng-click="removeItem(key)">
+          <streamline-icon class="ml-3 streamline-component-icon" name="trash" width="16" height="18"></streamline-icon>
+        </a>
       </div>
     </div>
   </div>

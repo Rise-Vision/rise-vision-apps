@@ -169,6 +169,28 @@
     }
   }
 
+  .streamline-component-icon {
+    display: inline-block;
+    margin-right: .5rem;
+    position: relative;
+    top: 3px;
+  }
+
+  .rv-sortable-item .rv-sortable-handle {
+    @extend .pr-3;
+
+    cursor: move;
+    cursor: -webkit-grabbing;
+
+    streamline-icon {
+      display: block;
+
+      svg {
+        fill: $mid-gray;
+      }
+    }    
+  }
+
   .progress {
     height: 10px;
     box-shadow: none;
