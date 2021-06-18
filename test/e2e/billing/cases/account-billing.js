@@ -62,7 +62,7 @@
 
         it('should show subscriptions list header Renewal Amount', function () {
           expect(accountBillingPage.getSubscriptionsTableHeaderRenewalAmount().isPresent()).to.eventually.be.true;
-          expect(accountBillingPage.getSubscriptionsTableHeaderRenewalAmount().getText()).to.eventually.equal('Renewal Amount');
+          expect(accountBillingPage.getSubscriptionsTableHeaderRenewalAmount().getText()).to.eventually.equal('Plan Amount');
         });
 
         it('should show at least one subscription', function () {

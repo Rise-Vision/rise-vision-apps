@@ -41,10 +41,9 @@
     <div class="col-md-4 col-xs-12">
       <div class="border-container subscription-card">
         <div class="panel-body">
-          <label ng-show="subscriptionFactory.isInvoiced()">Next Invoice</label>
-          <label ng-show="!subscriptionFactory.isInvoiced()">Next Payment</label>
+          <label>Plan Amount</label>
           <h1 class="mb-4">${{subscriptionFactory.getItemSubscription().plan_amount / 100 | number:2}}</h1>
-          <p>On {{subscriptionFactory.getItemSubscription().current_term_end * 1000 | date:'d-MMM-yyyy'}}</p>
+          <p><b>Renewing On:</b> {{subscriptionFactory.getItemSubscription().current_term_end * 1000 | date:'d-MMM-yyyy'}}</p>
           <p><b>Billing Frequency:</b> {{subscriptionFactory.getItemSubscription().billing_period_unit === 'month' ? 'Monthly' : subscriptionFactory.getItemSubscription().billing_period === 1 ? 'Yearly' : subscriptionFactory.getItemSubscription().billing_period + ' Years'}}</p>
 
           <a id="switchToAnnual" class="btn btn-default btn-block mt-3" ui-sref="apps.purchase.frequency({subscriptionId: subscriptionFactory.getItemSubscription().id})" ng-show="subscriptionFactory.getItemSubscription().billing_period_unit === 'month'">Switch To Annual Billing (Save 10%)</a>
