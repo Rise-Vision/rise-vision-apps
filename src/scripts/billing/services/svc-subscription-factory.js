@@ -23,10 +23,6 @@ angular.module('risevision.apps.billing.services')
         return factory.item && factory.item.customer || {};
       };
 
-      factory.getRenewalEstimate = function () {
-        return factory.renewalEstimate && factory.renewalEstimate.next_invoice_estimate || null;
-      };
-
       factory.isInvoiced = function () {
         if (factory.getItemSubscription().auto_collection) {
           return factory.getItemSubscription().auto_collection === 'off';
