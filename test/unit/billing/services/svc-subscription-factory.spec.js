@@ -11,6 +11,7 @@ describe('service: subscriptionFactory:', function() {
     $provide.service('billing',function() {
       return {
         getSubscription: sinon.stub().returns(Q.resolve({item: 'subscription'})),
+        estimateSubscriptionRenewal: sinon.stub().returns(Q.resolve({item: 'subscription renewal'})),
         changePoNumber: sinon.stub().returns(Q.resolve({item: {subscription: {po_number: 'updatedPo'}}})),
         changePaymentSource: sinon.stub().returns(Q.resolve({item: {payment_source: 'paymentSource'}}))
       }
@@ -266,8 +267,29 @@ describe('service: subscriptionFactory:', function() {
 
         expect(subscriptionFactory.item).to.equal('subscription');
 
+        expect(subscriptionFactory.renewalEstimate).to.not.be.ok;
+
         done();
       }, 10);
+    });
+
+    it('should retrieve subscription estimate if flag is set', function(done) {
+      billing.getSubscription.returns(Q.resolve({
+        item: {
+          subscription: {}
+        }
+      }));
+
+      subscriptionFactory.getSubscription('subscriptionId', true)
+        .then(function() {
+          expect(subscriptionFactory.loading).to.be.false;
+
+          billing.estimateSubscriptionRenewal.should.have.been.calledWith('subscriptionId');
+
+          expect(subscriptionFactory.renewalEstimate).to.equal('subscription renewal');
+
+          done();          
+        });
     });
 
     describe('_updatePaymentSourceId:', function() {

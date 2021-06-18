@@ -44,10 +44,10 @@
           <label>Plan Amount</label>
           <h1 class="mb-4">${{subscriptionFactory.getItemSubscription().plan_amount / 100 | number:2}}</h1>
           <p><b>Renewing On:</b> {{subscriptionFactory.getItemSubscription().current_term_end * 1000 | date:'d-MMM-yyyy'}}</p>
-          <p ng-show="subscriptionFactory.getRenewalEstimate()">
+          <p ng-show="subscriptionFactory.renewalEstimate.invoice_estimate">
             <b ng-show="subscriptionFactory.isInvoiced()">Next Invoice:</b>
             <b ng-show="!subscriptionFactory.isInvoiced()">Next Payment:</b>
-            ${{subscriptionFactory.getRenewalEstimate().total / 100 | number:2}}
+            ${{subscriptionFactory.renewalEstimate.invoice_estimate.total / 100 | number:2}}
           </p>
           <p><b>Billing Frequency:</b> {{subscriptionFactory.getItemSubscription().billing_period_unit === 'month' ? 'Monthly' : subscriptionFactory.getItemSubscription().billing_period === 1 ? 'Yearly' : subscriptionFactory.getItemSubscription().billing_period + ' Years'}}</p>
 
