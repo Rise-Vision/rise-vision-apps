@@ -51,7 +51,7 @@ angular.module('risevision.apps.billing.services')
         }
       };
 
-      factory.getSubscription = function (subscriptionId) {
+      factory.getSubscription = function (subscriptionId, estimateRenewal) {
         if (!subscriptionId) {
           subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
         }
@@ -66,6 +66,15 @@ angular.module('risevision.apps.billing.services')
             factory.item = resp.item;
 
             _updatePaymentSourceId();
+
+            if (estimateRenewal) {
+              return billing.estimateSubscriptionRenewal(subscriptionId);
+            } else {
+              return;
+            }
+          })
+          .then(function (resp) {
+            factory.renewalEstimate = resp && resp.item;
           })
           .catch(function (e) {
             _showErrorMessage(e);
