@@ -58,6 +58,17 @@ export const addressServiceProvider = {
   deps: ['$injector']
 };
 
+export abstract class ContactService {
+  [key: string]: any;
+}
+export const contactServiceProvider = {
+  provide: ContactService,
+  useFactory: function ($injector: any) {
+    return $injector.get('contactService');
+  },
+  deps: ['$injector']
+};
+
 
 // components/canva-type-picker
 export abstract class CanvaTypePicker extends Function {
@@ -91,6 +102,17 @@ export const analyticsFactoryProvider = {
   provide: AnalyticsFactory,
   useFactory: function ($injector: any) {
     return $injector.get('analyticsFactory');
+  },
+  deps: ['$injector']
+};
+
+export abstract class PurchaseFlowTracker {
+  [key: string]: any;
+}
+export const purchaseFlowTrackerProvider = {
+  provide: PurchaseFlowTracker,
+  useFactory: function ($injector: any) {
+    return $injector.get('purchaseFlowTracker');
   },
   deps: ['$injector']
 };

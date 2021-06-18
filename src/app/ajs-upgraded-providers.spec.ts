@@ -14,7 +14,7 @@ import {
   TemplateEditorFactory, templateEditorFactoryProvider,
   TemplateEditorUtils, templateEditorUtilsProvider,
   UserAuthFactory, userAuthFactoryProvider,
-  UserState, userStateProvider
+  UserState, userStateProvider, purchaseFlowTrackerProvider, PurchaseFlowTracker, contactServiceProvider, ContactService
 } from './ajs-upgraded-providers';
 
 describe('ajs-upgraded-providers', () => {
@@ -103,4 +103,15 @@ describe('ajs-upgraded-providers', () => {
     testAngularJsService(plansServiceProvider, 'plansService');
   });
 
+  it('purchaseFlowTracker:', () => {
+    testRegisterProvider(purchaseFlowTrackerProvider, PurchaseFlowTracker);
+    testAngularJsService(purchaseFlowTrackerProvider, 'purchaseFlowTracker');
+  });
+
+  it('contactService:', () => {
+    testRegisterProvider(contactServiceProvider, ContactService);
+    testAngularJsService(contactServiceProvider, 'contactService');
+  });
+
+  
 });
