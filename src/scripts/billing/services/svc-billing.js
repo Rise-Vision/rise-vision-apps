@@ -57,6 +57,29 @@ angular.module('risevision.apps.billing.services')
 
           return deferred.promise;
         },
+        estimateSubscriptionRenewal: function (subscriptionId) {
+          var deferred = $q.defer();
+
+          var obj = {
+            subscriptionId: subscriptionId,
+            companyId: userState.getSelectedCompanyId()
+          };
+
+          $log.debug('Store integrations.subscription.estimateRenewal called with', obj);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.integrations.subscription.estimateRenewal(obj);
+            })
+            .then(function (resp) {
+              $log.debug('integrations.subscription.estimateRenewal resp', resp);
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to retrieve subscription renewal estimate.', e);
+              deferred.reject(e);
+            });
+          return deferred.promise;
+        },
         estimateSubscriptionUpdate: function (displayCount, subscriptionId, planId, companyId, couponCode) {
           var deferred = $q.defer();
 

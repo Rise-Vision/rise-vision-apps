@@ -23,6 +23,10 @@ angular.module('risevision.apps.billing.services')
         return factory.item && factory.item.customer || {};
       };
 
+      factory.getRenewalEstimate = function () {
+        return factory.renewalEstimate && factory.renewalEstimate.next_invoice_estimate || null;
+      };
+
       factory.isInvoiced = function () {
         if (factory.getItemSubscription().auto_collection) {
           return factory.getItemSubscription().auto_collection === 'off';
@@ -51,7 +55,7 @@ angular.module('risevision.apps.billing.services')
         }
       };
 
-      factory.getSubscription = function (subscriptionId) {
+      factory.getSubscription = function (subscriptionId, estimateRenewal) {
         if (!subscriptionId) {
           subscriptionId = currentPlanFactory.currentPlan.subscriptionId;
         }
@@ -66,6 +70,15 @@ angular.module('risevision.apps.billing.services')
             factory.item = resp.item;
 
             _updatePaymentSourceId();
+
+            if (estimateRenewal) {
+              return billing.estimateSubscriptionRenewal(subscriptionId);
+            } else {
+              return;
+            }
+          })
+          .then(function (resp) {
+            factory.renewalEstimate = resp && resp.item;
           })
           .catch(function (e) {
             _showErrorMessage(e);
