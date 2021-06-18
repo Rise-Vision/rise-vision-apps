@@ -26,9 +26,11 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.loadPresentationNames = function(presentations) {
-        var presentationIds = _.map(presentations, function (item) {
-          return 'id:' + item.id;
-        });
+        var presentationIds = _.uniq(
+          _.map(presentations, function (item) {
+            return 'id:' + item.id;
+          })
+        );
 
         var search = {
           filter: presentationIds.join(' OR ')
