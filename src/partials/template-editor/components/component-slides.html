@@ -1,11 +1,9 @@
 <div class="attribute-editor-component" rv-spinner rv-spinner-key="slides-editor-loader" rv-spinner-start-active="1">
   <div class="attribute-editor-row">
-    <!-- Use the <form> tag in order to handle "debounce" option correctly for the <input ng-model="src">.
-         That way the model value is processed immeditly on Form submit and saveSrc() is called only once. -->
     <form>
       <div class="form-group has-feedback" ng-class="{ 'has-error': validationResult && validationResult !== 'VALID', 'has-success': validationResult === 'VALID' && src !== '' }">
         <label class="control-label" for="te-slides-src">Google Slides URL:</label>
-        <input type="text" id="te-slides-src" class="form-control u_ellipsis" ng-model="src" placeholder="Enter URL" ng-model-options="{ debounce: 1000 }" ng-change="saveSrc()" >
+        <input type="text" id="te-slides-src" class="form-control u_ellipsis" ng-model="src" placeholder="Enter URL" ng-change="saveSrc()" >
         <streamline-icon class="overlay-icon form-control-feedback" aria-hidden="true" name="{{validationResult && validationResult !== 'VALID' ? 'exclamation' : 'checkmark'}}" width="14" height="12"></streamline-icon>
         <p class="help-block" ng-switch on="validationResult">
           <span ng-switch-when="DELETED">Your Google Slideshow is no longer accessible, please check if it’s been deleted.</span>

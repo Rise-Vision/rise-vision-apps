@@ -75,7 +75,7 @@ rv-spinner rv-spinner-key="rise-playlist-loader">
     </div>
 
     <div class="attribute-editor-row input-group" ng-show="!selectedItem['play-until-done']">
-      <input type="number" id="te-playlist-item-duration" class="form-control" ng-class="{'duration-input-group' : selectedItem['play-until-done-supported']}" ng-model="selectedItem.duration" placeholder="Enter duration" ng-model-options="{ debounce: 1000 }" ng-change="saveProperties()">
+      <input type="number" id="te-playlist-item-duration" class="form-control" ng-class="{'duration-input-group' : selectedItem['play-until-done-supported']}" ng-model="selectedItem.duration" placeholder="Enter duration" ng-change="saveProperties()">
       <span class="input-group-addon">Seconds</span>
     </div>
 

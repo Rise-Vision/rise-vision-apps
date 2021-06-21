@@ -2,7 +2,7 @@
   <div class="attribute-editor-row">
     <div class="form-group has-feedback" ng-class="{ 'has-error': validationResult && validationResult !== 'VALID', 'has-success': validationResult === 'VALID' && feed !== '' }">
       <label class="control-label" for="te-rss-feed">Enter the link to your RSS feed:</label>
-      <input type="text" id="te-rss-feed" class="form-control u_ellipsis" ng-model="feedUrl" placeholder="Enter the link to your RSS feed" ng-model-options="{ debounce: 1000 }" ng-disabled="spinner" ng-change="saveFeed()" >
+      <input type="text" id="te-rss-feed" class="form-control u_ellipsis" ng-model="feedUrl" placeholder="Enter the link to your RSS feed" ng-disabled="spinner" ng-change="saveFeed()" >
       <streamline-icon class="overlay-icon form-control-feedback" aria-hidden="true" name="{{validationResult && validationResult !== 'VALID' ? 'exclamation' : 'checkmark'}}" width="14" height="12"></streamline-icon>
       <p class="help-block" ng-switch on="validationResult">
         <span ng-switch-when="INVALID_URL">Please provide a valid URL.</span>
