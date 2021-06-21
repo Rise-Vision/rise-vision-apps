@@ -43,7 +43,7 @@ angular.module('risevision.apps')
             invoiceInfo: ['canAccessApps', 'subscriptionFactory', '$stateParams',
               function (canAccessApps, subscriptionFactory, $stateParams) {
                 return canAccessApps().then(function () {
-                  subscriptionFactory.getSubscription($stateParams.subscriptionId);
+                  subscriptionFactory.getSubscription($stateParams.subscriptionId, true);
                 });
               }
             ]

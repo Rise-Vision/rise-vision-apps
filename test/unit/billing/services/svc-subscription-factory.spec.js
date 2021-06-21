@@ -11,6 +11,7 @@ describe('service: subscriptionFactory:', function() {
     $provide.service('billing',function() {
       return {
         getSubscription: sinon.stub().returns(Q.resolve({item: 'subscription'})),
+        estimateSubscriptionRenewal: sinon.stub().returns(Q.resolve({item: 'subscription renewal'})),
         changePoNumber: sinon.stub().returns(Q.resolve({item: {subscription: {po_number: 'updatedPo'}}})),
         changePaymentSource: sinon.stub().returns(Q.resolve({item: {payment_source: 'paymentSource'}}))
       }
@@ -242,6 +243,7 @@ describe('service: subscriptionFactory:', function() {
     it('should get subscription, show spinner and reset errors', function() {
       subscriptionFactory.apiError = 'someError';
       subscriptionFactory.item = 'someSubscription';
+      subscriptionFactory.renewalEstimate = 'someEstimate';
 
       subscriptionFactory.getSubscription('subscriptionId');
 
@@ -249,6 +251,7 @@ describe('service: subscriptionFactory:', function() {
 
       expect(subscriptionFactory.apiError).to.not.be.ok;
       expect(subscriptionFactory.item).to.not.be.ok;
+      expect(subscriptionFactory.renewalEstimate).to.not.be.ok;
       expect(subscriptionFactory.loading).to.be.true;
     });
 
@@ -265,6 +268,8 @@ describe('service: subscriptionFactory:', function() {
         expect(subscriptionFactory.loading).to.be.false;
 
         expect(subscriptionFactory.item).to.equal('subscription');
+
+        expect(subscriptionFactory.renewalEstimate).to.not.be.ok;
 
         done();
       }, 10);
@@ -323,6 +328,47 @@ describe('service: subscriptionFactory:', function() {
         done();
       });
     });
+
+    describe('_estimateSubscriptionRenewal', function() {
+      beforeEach(function() {
+        billing.getSubscription.returns(Q.resolve({
+          item: {
+            subscription: {}
+          }
+        }));
+      });
+
+      it('should retrieve subscription estimate in parallel if flag is set', function(done) {
+        subscriptionFactory.getSubscription('subscriptionId', true)
+          .then(function() {
+            expect(subscriptionFactory.loading).to.be.false;
+
+            expect(subscriptionFactory.renewalEstimate).to.equal('subscription renewal');
+
+            done();          
+          });
+
+          billing.estimateSubscriptionRenewal.should.have.been.calledWith('subscriptionId');
+      });
+
+      it('should silently handle failure to retrieve subscription estimate', function(done) {
+        billing.estimateSubscriptionRenewal.returns(Q.reject('error'));
+
+        subscriptionFactory.getSubscription('subscriptionId', true)
+          .then(function() {
+            expect(subscriptionFactory.loading).to.be.false;
+
+            billing.estimateSubscriptionRenewal.should.have.been.calledWith('subscriptionId');
+
+            expect(subscriptionFactory.item).to.be.ok;
+            expect(subscriptionFactory.renewalEstimate).to.not.be.ok;
+
+            done();
+          });
+      });
+
+    });
+
   });
 
   describe('changePoNumber:', function() {
