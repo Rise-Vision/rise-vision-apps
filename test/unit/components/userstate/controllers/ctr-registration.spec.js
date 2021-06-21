@@ -162,8 +162,7 @@ describe("controller: registration", function() {
       email: "e@mail.com",
       firstName: "first",
       lastName: "last",
-      accepted: false,
-      mailSyncEnabled: true
+      accepted: false
     });
 
     expect($scope.registering).to.be.false;

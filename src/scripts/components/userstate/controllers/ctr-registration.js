@@ -7,11 +7,11 @@ angular.module('risevision.common.components.userstate')
     'userState', 'pick', 'messageBox', 'humanReadableError',
     'agreeToTermsAndUpdateUser', 'account', 'analyticsFactory',
     'bigQueryLogging', 'updateCompany', 'currentPlanFactory',
-    'COMPANY_INDUSTRY_FIELDS', 'urlStateService', 'hubspot',
+    'COMPANY_INDUSTRY_FIELDS', 'EDUCATION_INDUSTRIES', 'urlStateService', 'hubspot',
     function ($q, $scope, $rootScope, $loading, addAccount,
       $exceptionHandler, userState, pick, messageBox, humanReadableError,
       agreeToTermsAndUpdateUser, account, analyticsFactory, bigQueryLogging,
-      updateCompany, currentPlanFactory, COMPANY_INDUSTRY_FIELDS, urlStateService, hubspot) {
+      updateCompany, currentPlanFactory, COMPANY_INDUSTRY_FIELDS, EDUCATION_INDUSTRIES, urlStateService, hubspot) {
 
       $scope.newUser = !account;
       $scope.DROPDOWN_INDUSTRY_FIELDS = COMPANY_INDUSTRY_FIELDS;
@@ -27,9 +27,6 @@ angular.module('risevision.common.components.userstate')
       $scope.profile.accepted =
         angular.isDefined(copyOfProfile.termsAcceptanceDate) &&
         copyOfProfile.termsAcceptanceDate !== null;
-      // Automatically subscribe users on registration
-      $scope.profile.mailSyncEnabled = true;
-
       $scope.save = function () {
         $scope.forms.registrationForm.accepted.$pristine = false;
         $scope.forms.registrationForm.firstName.$pristine = false;
@@ -44,9 +41,15 @@ angular.module('risevision.common.components.userstate')
 
           var action;
           if ($scope.newUser) {
+            // Automatically subscribe education users on registration
+            var mailSyncEnabled = EDUCATION_INDUSTRIES.indexOf($scope.company.companyIndustry) !== -1;
+
             action = addAccount($scope.profile.firstName, $scope.profile.lastName, $scope.company.name, $scope
-              .company.companyIndustry, $scope.profile.mailSyncEnabled);
+              .company.companyIndustry, mailSyncEnabled);
           } else {
+            // Automatically subscribe education users on registration
+            $scope.profile.mailSyncEnabled = EDUCATION_INDUSTRIES.indexOf(account.companyIndustry) !== -1;
+
             action = agreeToTermsAndUpdateUser(userState.getUsername(), $scope.profile);
           }
 
