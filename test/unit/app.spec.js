@@ -31,17 +31,12 @@ describe('app:', function() {
         }
       });
 
-      $provide.service('plansFactory', function() {
-        return {}
-      });
-
       $provide.value('$exceptionHandler', sinon.stub());
     });
 
     inject(function ($injector) {
       $state = $injector.get('$state');
       canAccessApps = $injector.get('canAccessApps');
-      plansFactory = $injector.get('plansFactory');
       userState = $injector.get('userState');
       $rootScope = $injector.get('$rootScope');
       $location = $injector.get('$location');
@@ -51,7 +46,7 @@ describe('app:', function() {
     });
   });
 
-  var $state, canAccessApps, plansFactory, userState, $rootScope, $location, $modal, $modalStack, $exceptionHandler;
+  var $state, canAccessApps, userState, $rootScope, $location, $modal, $modalStack, $exceptionHandler;
 
   it('$stateChangeError:', function() {
     $rootScope.$broadcast('$stateChangeError', '', '', '', '', 'error');

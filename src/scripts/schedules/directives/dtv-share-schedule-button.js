@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.schedules.directives')
-  .directive('shareScheduleButton', ['$timeout', 'currentPlanFactory', 'plansFactory', '$window', 'outsideClickHandler',
-    function ($timeout, currentPlanFactory, plansFactory, $window, outsideClickHandler) {
+  .directive('shareScheduleButton', ['$timeout', 'currentPlanFactory', '$window', 'outsideClickHandler',
+    function ($timeout, currentPlanFactory, $window, outsideClickHandler) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/share-schedule-button.html',
@@ -33,7 +33,7 @@ angular.module('risevision.schedules.directives')
 
           $scope.toggleTooltip = function () {
             if (!currentPlanFactory.isPlanActive()) {
-              return plansFactory.showUnlockThisFeatureModal();
+              return currentPlanFactory.showUnlockThisFeatureModal();
             }
             $timeout(function () {
               if (isTooltipOpen) {
@@ -51,7 +51,7 @@ angular.module('risevision.schedules.directives')
 
           $scope.toggleActionSheet = function () {
             if (!currentPlanFactory.isPlanActive()) {
-              return plansFactory.showUnlockThisFeatureModal();
+              return currentPlanFactory.showUnlockThisFeatureModal();
             }
             if (isActionSheetOpen) {
               _closeActionSheet();

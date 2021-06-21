@@ -47,7 +47,7 @@ describe('directive: display fields', function() {
         requiresLicense: sandbox.stub().returns(false)
       };
     });
-    $provide.factory('plansFactory', function() {
+    $provide.factory('currentPlanFactory', function() {
       return {
         confirmAndPurchase: sandbox.spy()
       };
@@ -74,7 +74,7 @@ describe('directive: display fields', function() {
   }));
   
   var elm, $scope, $compile, $sce, displayFactory, displayControlFactory, playerLicenseFactory,
-    scheduleFactory, plansFactory, confirmModal, messageBox;
+    scheduleFactory, currentPlanFactory, confirmModal, messageBox;
   var company;
 
   beforeEach(inject(function($rootScope, $injector, _$compile_, $templateCache) {
@@ -85,7 +85,7 @@ describe('directive: display fields', function() {
     displayControlFactory = $injector.get('displayControlFactory');
     playerLicenseFactory = $injector.get('playerLicenseFactory');
     scheduleFactory = $injector.get('scheduleFactory');
-    plansFactory = $injector.get('plansFactory');
+    currentPlanFactory = $injector.get('currentPlanFactory');
 
     confirmModal = $injector.get('confirmModal');
     messageBox = $injector.get('messageBox');
@@ -125,7 +125,7 @@ describe('directive: display fields', function() {
       playerLicenseFactory.isProAvailable.returns(false);
 
       $scope.toggleProAuthorized();
-      expect(plansFactory.confirmAndPurchase).to.have.been.called;
+      expect(currentPlanFactory.confirmAndPurchase).to.have.been.called;
       expect(displayFactory.display.playerProAuthorized).to.be.false;
     });
 
@@ -137,7 +137,7 @@ describe('directive: display fields', function() {
 
       $scope.toggleProAuthorized();
 
-      expect(plansFactory.confirmAndPurchase).to.not.have.been.called;
+      expect(currentPlanFactory.confirmAndPurchase).to.not.have.been.called;
       expect(playerLicenseFactory.updateDisplayLicenseLocal).to.have.been.called;
     });
 
@@ -151,7 +151,7 @@ describe('directive: display fields', function() {
       $scope.toggleProAuthorized();
 
       expect(playerLicenseFactory.updateDisplayLicenseLocal).to.have.been.called;
-      expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
+      expect(currentPlanFactory.confirmAndPurchase).to.have.not.been.called;
     });
   });
 

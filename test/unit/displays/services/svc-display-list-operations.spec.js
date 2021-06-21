@@ -18,14 +18,6 @@ describe('service: DisplayListOperations:', function() {
       };
     });
     
-    $provide.service('plansFactory', function() {
-      return {
-        confirmAndPurchase: sinon.spy(),
-        showPurchaseOptions: sinon.stub(),
-        showUnlockThisFeatureModal: sinon.stub()
-      };
-    });
-
     $provide.service('confirmModal', function() {
       return sinon.stub().returns(Q.resolve());
     });
@@ -61,7 +53,10 @@ describe('service: DisplayListOperations:', function() {
 
     $provide.service('currentPlanFactory', function() {
       return {
-        isPlanActive: sinon.stub().returns(true)
+        isPlanActive: sinon.stub().returns(true),
+        confirmAndPurchase: sinon.spy(),
+        showPurchaseOptions: sinon.stub(),
+        showUnlockThisFeatureModal: sinon.stub()
       };
     });
 
@@ -90,19 +85,18 @@ describe('service: DisplayListOperations:', function() {
     });
 
   }));
-  var displayListOperations, displayFactory, playerLicenseFactory, plansFactory,
-    confirmModal, messageBox, $modal, scheduleFactory, currentPlanFactory;
+  var displayListOperations, displayFactory, playerLicenseFactory, currentPlanFactory,
+    confirmModal, messageBox, $modal, scheduleFactory;
   beforeEach(function(){
     inject(function($injector){
       var DisplayListOperations = $injector.get('DisplayListOperations');
       displayFactory = $injector.get('displayFactory');
       playerLicenseFactory = $injector.get('playerLicenseFactory');
-      plansFactory = $injector.get('plansFactory');
+      currentPlanFactory = $injector.get('currentPlanFactory');
       confirmModal = $injector.get('confirmModal');
       messageBox = $injector.get('messageBox');
       $modal = $injector.get('$modal');
       scheduleFactory = $injector.get('scheduleFactory');
-      currentPlanFactory = $injector.get('currentPlanFactory');
       displayListOperations = new DisplayListOperations();
     });
   });
@@ -214,7 +208,7 @@ describe('service: DisplayListOperations:', function() {
 
         licenseOperation.beforeBatchAction(selected)
           .catch(function() {
-            plansFactory.confirmAndPurchase.should.have.been.calledWith(1);
+            currentPlanFactory.confirmAndPurchase.should.have.been.calledWith(1);
 
             done();
           });        
@@ -338,7 +332,7 @@ describe('service: DisplayListOperations:', function() {
               '2 of your selected displays are not licensed and to perform this action they need to be. You have 1 available license and you need to subscribe for 1 more to license these displays.',
               'Subscribe', 'Cancel', 'madero-style centered-modal','partials/components/confirm-modal/madero-confirm-modal.html','sm');
 
-            plansFactory.showPurchaseOptions.should.have.been.calledWith(1);
+            currentPlanFactory.showPurchaseOptions.should.have.been.calledWith(1);
 
             done();
           },10);
@@ -788,7 +782,7 @@ describe('Reboot Media Player:', function() {
       it('should show unlock this feature modal if plan is not active', function(done) {
         currentPlanFactory.isPlanActive.returns(false);
         operation.beforeBatchAction(selected).catch(function() {
-          plansFactory.showUnlockThisFeatureModal.should.have.been.called;
+          currentPlanFactory.showUnlockThisFeatureModal.should.have.been.called;
           done();
         });
       });

@@ -2,9 +2,9 @@
 
 angular.module('risevision.displays.services')
   .service('DisplayListOperations', ['$q', 'displayFactory', 'enableCompanyProduct', 'playerLicenseFactory',
-    'plansFactory', 'confirmModal', 'messageBox', 'playerActionsFactory', '$modal', 'userState', 'display',
+    'confirmModal', 'messageBox', 'playerActionsFactory', '$modal', 'userState', 'display',
     'currentPlanFactory', 'scheduleFactory', 'displayControlFactory',
-    function ($q, displayFactory, enableCompanyProduct, playerLicenseFactory, plansFactory,
+    function ($q, displayFactory, enableCompanyProduct, playerLicenseFactory,
       confirmModal, messageBox, playerActionsFactory, $modal, userState, display, currentPlanFactory,
       scheduleFactory, displayControlFactory) {
       return function () {
@@ -19,7 +19,7 @@ angular.module('risevision.displays.services')
               'sm');
             return $q.reject();
           } else if (playerLicenseFactory.getProAvailableLicenseCount() < selected.length) {
-            plansFactory.confirmAndPurchase(selected.length - playerLicenseFactory.getProAvailableLicenseCount());
+            currentPlanFactory.confirmAndPurchase(selected.length - playerLicenseFactory.getProAvailableLicenseCount());
             return $q.reject();
           } else {
             return confirmModal(
@@ -77,7 +77,7 @@ angular.module('risevision.displays.services')
                 ' more to license ' + (notAuthorized.length > 1 ? 'these displays.' : 'this display.'),
                 'Subscribe', 'Cancel', 'madero-style centered-modal',
                 'partials/components/confirm-modal/madero-confirm-modal.html', 'sm').then(function () {
-                plansFactory.showPurchaseOptions(notAuthorized.length - availableLicenses);
+                currentPlanFactory.showPurchaseOptions(notAuthorized.length - availableLicenses);
                 return $q.reject();
               });
             }
@@ -195,7 +195,7 @@ angular.module('risevision.displays.services')
 
         var _confirmExport = function (selectedItems) {
           if (!currentPlanFactory.isPlanActive()) {
-            plansFactory.showUnlockThisFeatureModal();
+            currentPlanFactory.showUnlockThisFeatureModal();
             return $q.reject();
           }
           return confirmModal('Export displays?',

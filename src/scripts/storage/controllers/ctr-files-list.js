@@ -1,9 +1,9 @@
 'use strict';
 angular.module('risevision.storage.controllers')
-  .controller('FilesListController', ['$scope', '$rootScope', 'StorageFactory', 'FilesFactory', 'storageUtils',
-    'FileUploader', '$loading', '$translate', '$timeout', 'currentPlanFactory', 'plansFactory',
-    function ($scope, $rootScope, StorageFactory, FilesFactory, storageUtils, FileUploader,
-      $loading, $translate, $timeout, currentPlanFactory, plansFactory) {
+  .controller('FilesListController', ['$scope', 'StorageFactory', 'FilesFactory', 'storageUtils',
+    'FileUploader', '$loading', '$translate', '$timeout', 'currentPlanFactory',
+    function ($scope, StorageFactory, FilesFactory, storageUtils, FileUploader,
+      $loading, $translate, $timeout, currentPlanFactory) {
       $scope.search = {
         doSearch: function () {},
         reverse: false
@@ -18,12 +18,7 @@ angular.module('risevision.storage.controllers')
       $scope.fileUploader = FileUploader;
       $scope.isListView = false;
 
-      $scope.plansFactory = plansFactory;
-      $scope.isPlanActive = currentPlanFactory.isPlanActive();
-
-      $rootScope.$on('risevision.plan.loaded', function () {
-        $scope.isPlanActive = currentPlanFactory.isPlanActive();
-      });
+      $scope.currentPlanFactory = currentPlanFactory;
 
       $scope.setSelectorType = function (type, filter) {
         storageFactory.setSelectorType(type, filter);

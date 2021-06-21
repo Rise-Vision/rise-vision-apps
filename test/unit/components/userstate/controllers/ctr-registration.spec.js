@@ -68,8 +68,8 @@ describe("controller: registration", function() {
       return registrationService("agreeToTerms");
     });
 
-    $provide.service("plansFactory", function() {
-      return plansFactory = {
+    $provide.service("currentPlanFactory", function() {
+      return currentPlanFactory = {
         initVolumePlanTrial: sinon.spy()
       };
     });
@@ -113,7 +113,7 @@ describe("controller: registration", function() {
   }));
   var $scope, userProfile, userState, newUser;
   var registerUser, account, analyticsFactory, bqCalled,
-    updateCompanyCalled, plansFactory, hubspot;
+    updateCompanyCalled, currentPlanFactory, hubspot;
   
   beforeEach(function() {
     registerUser = true;
@@ -190,7 +190,7 @@ describe("controller: registration", function() {
       var profileSpy = sinon.spy(userState, "refreshProfile");
       setTimeout(function() {
         expect(newUser).to.be.true;
-        plansFactory.initVolumePlanTrial.should.have.been.called;
+        currentPlanFactory.initVolumePlanTrial.should.have.been.called;
         expect(analyticsFactory.track).to.have.been.calledWith("User Registered",{
           companyId: "some_company_id",
           companyName: "company_name",
@@ -217,7 +217,7 @@ describe("controller: registration", function() {
       var profileSpy = sinon.spy(userState, "refreshProfile");
       setTimeout(function(){
         expect(newUser).to.be.true;
-        plansFactory.initVolumePlanTrial.should.not.have.been.called;
+        currentPlanFactory.initVolumePlanTrial.should.not.have.been.called;
         expect(analyticsFactory.track).to.not.have.been.called;
         expect(bqCalled).to.not.be.ok;
         hubspot.loadAs.should.not.have.been.called;
@@ -250,7 +250,7 @@ describe("controller: registration", function() {
       var profileSpy = sinon.spy(userState, "refreshProfile");
       setTimeout(function() {
         expect(newUser).to.be.false;
-        plansFactory.initVolumePlanTrial.should.not.have.been.called;
+        currentPlanFactory.initVolumePlanTrial.should.not.have.been.called;
         expect(analyticsFactory.track).to.have.been.calledWithMatch("User Registered",{
           companyId: "some_company_id",
           companyName: "company_name",
