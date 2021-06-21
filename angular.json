@@ -345,8 +345,6 @@
               "src/scripts/purchase/filters/ftr-country-name.js",
               "src/scripts/purchase/filters/ftr-padded-month.js",
 
-              "src/scripts/purchase/services/svc-purchase-factory.js",
-
               "src/scripts/schedules/app.js",
               "src/scripts/schedules/services/svc-schedule.js",
               "src/scripts/schedules/services/svc-schedule-factory.js",

@@ -1,10 +1,22 @@
-/*jshint expr:true */
-"use strict";
+import {expect} from 'chai';
+import { TestBed } from '@angular/core/testing';
 
-describe("Services: purchase factory", function() {
-  beforeEach(module("risevision.apps.purchase"));
-  beforeEach(module(function ($provide) {
-    $provide.value("plansService", {
+import { PurchaseService } from './purchase.service';
+import { assert } from 'sinon';
+import { UserState, StoreService, AddressService, ContactService, PurchaseFlowTracker, PlansService } from 'src/app/ajs-upgraded-providers';
+import { CreditCardService } from './credit-card.service';
+
+describe('PurchaseService', () => {
+  let purchaseFactory: PurchaseService;
+  let $rootScope, creditCardFactory, userState, storeService, addressService, contactService, plansService, purchaseFlowTracker, validate;
+
+  beforeEach(() => {
+
+    $rootScope = {
+      $emit: sinon.stub()
+    };
+
+    plansService = {
       getVolumePlan: sinon.stub().returns({
         type: 'volume',
         productId: 'productId',
@@ -25,87 +37,111 @@ describe("Services: purchase factory", function() {
           billAmount: 'unlimitedYearlyBillAmount'
         }
       })
-    });
-    $provide.service("$q", function() {return Q;});
-    $provide.service("userState", function() {
-      return userState = {
-        getCopyOfSelectedCompany: sinon.stub().returns({
-          id: "id",
-          street: "billingStreet",
-        }),
-        getCopyOfProfile: sinon.stub().returns({
-          username: "username",
-          uselessProperty: "value"
-        }),
-        reloadSelectedCompany: sinon.spy(function() {
-          if (validate) {
-            return Q.resolve("success");
-          } else {
-            return Q.reject();
-          }
-        }),
-        getSelectedCompanyId: sinon.stub().returns('selectedCompany')
-      };
-    });
-    $provide.service("storeService", function() {
-      return storeService = {
-        calculateTaxes: sinon.spy(function() {
-          if (validate) {
-            return Q.resolve({
-              result: true,
-              taxes: [],
-              total: "total",
-              totalTax: "totalTax",
-              couponAmount: "couponAmount",
-              subTotal: "subTotal",
-              shippingTotal: "shippingTotal"
-            });
-          } else {
-            return Q.reject();
-          }
-        }),
-        preparePurchase: sinon.stub().returns(Q.resolve('intentResponse')),
-        purchase: sinon.spy(function() {
-          if (validate) {
-            return Q.resolve("success");
-          } else {
-            return Q.reject();
-          }
-        })
-      };
-    });
+    };
+    
+    userState = {
+      getCopyOfSelectedCompany: sinon.stub().returns({
+        id: "id",
+        street: "billingStreet",
+      }),
+      getCopyOfProfile: sinon.stub().returns({
+        username: "username",
+        uselessProperty: "value"
+      }),
+      reloadSelectedCompany: sinon.stub().resolves("success"),
+      getSelectedCompanyId: sinon.stub().returns('selectedCompany')
+    };
 
-    $provide.value("creditCardFactory", {
-      initPaymentMethods: sinon.stub().returns(Q.resolve()),
-      validatePaymentMethod: sinon.stub().returns(Q.resolve({})),
-      handleCardAction: sinon.stub().returns(Q.resolve()),
+    storeService = {
+      calculateTaxes: sinon.spy(function() {
+        if (validate) {``
+          return Promise.resolve({
+            result: true,
+            taxes: [],
+            total: "total",
+            totalTax: "totalTax",
+            couponAmount: "couponAmount",
+            subTotal: "subTotal",
+            shippingTotal: "shippingTotal"
+          });
+        } else {
+          return Promise.reject();
+        }
+      }),
+      preparePurchase: sinon.stub().returns(Promise.resolve('intentResponse')),
+      purchase: sinon.spy(function() {
+        if (validate) {
+          return Promise.resolve("success");
+        } else {
+          return Promise.reject();
+        }
+      })
+    };
+
+    creditCardFactory = {
+      initPaymentMethods: sinon.stub().returns(Promise.resolve()),
+      validatePaymentMethod: sinon.stub().returns(Promise.resolve({})),
+      handleCardAction: sinon.stub().returns(Promise.resolve()),
       paymentMethods: {
         newCreditCard: {}
       },
       getPaymentMethodId: sinon.stub().returns('paymentMethodId')
+    };
+
+    purchaseFlowTracker = {
+      trackProductAdded: sinon.stub(),
+      trackPlaceOrderClicked: sinon.stub(),
+      trackOrderPayNowClicked: sinon.stub()
+    };
+    
+    addressService = {
+      copyAddress: function (src, dest) {
+        if (!dest) {
+          dest = {};
+        }
+        dest.id = src.id;
+        dest.name = src.name;
+        dest.street = src.street;
+        dest.unit = src.unit;
+        dest.city = src.city;
+        dest.country = src.country;
+        dest.postalCode = src.postalCode;
+        dest.province = src.province;
+        return dest;
+      }
+    };
+
+    contactService = {
+      copyContactObj: function (src, dest) {
+        if (!dest) {
+          dest = {};
+        }
+
+        dest.username = src.username;
+        dest.firstName = src.firstName;
+        dest.lastName = src.lastName;
+        dest.email = src.email;
+        dest.telephone = src.telephone;
+
+        return dest;
+      }
+    };
+
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: '$rootScope', useValue: $rootScope},
+        {provide: UserState, useValue: userState},
+        {provide: StoreService, useValue: storeService},
+        {provide: AddressService, useValue: addressService},
+        {provide: ContactService, useValue: contactService},
+        {provide: CreditCardService, useValue: creditCardFactory},
+        {provide: PurchaseFlowTracker, useValue: purchaseFlowTracker},
+        {provide: PlansService, useValue: plansService}
+      ]
     });
-
-    $provide.service("purchaseFlowTracker", function() {
-      return purchaseFlowTracker = {
-        trackProductAdded: sinon.stub(),
-        trackPlaceOrderClicked: sinon.stub(),
-        trackOrderPayNowClicked: sinon.stub()
-      };
-    });
-
-  }));
-
-  var $rootScope, $timeout, purchaseFactory, creditCardFactory, userState, storeService, purchaseFlowTracker, validate, RPP_ADDON_ID;
-
-  beforeEach(function() {
-    inject(function($injector) {
-      RPP_ADDON_ID = $injector.get("RPP_ADDON_ID");
-      $rootScope = $injector.get("$rootScope");
-      $timeout = $injector.get("$timeout");
-      purchaseFactory = $injector.get("purchaseFactory");
-      creditCardFactory = $injector.get("creditCardFactory");
-    });
+    purchaseFactory = TestBed.inject(PurchaseService);
   });
+
 
   it("should exist", function() {
     expect(purchaseFactory).to.be.ok;
@@ -252,7 +288,7 @@ describe("Services: purchase factory", function() {
           done();
         })
         .then(null, function() {
-          done("error");
+          assert.fail("error");
         });
     });
 
@@ -324,14 +360,14 @@ describe("Services: purchase factory", function() {
     it("should call set correct currency & billing period values", function() {
       purchaseFactory.getEstimate();
 
-      storeService.calculateTaxes.should.have.been.calledWith("id", "productCode-" + "usd" + "01m", 5, RPP_ADDON_ID + "-" + "usd" + "01m" + "pro", 3, purchaseFactory.purchase.billingAddress);
+      storeService.calculateTaxes.should.have.been.calledWith("id", "productCode-" + "usd" + "01m", 5, PurchaseService.RPP_ADDON_ID + "-" + "usd" + "01m" + "pro", 3, purchaseFactory.purchase.billingAddress);
 
       purchaseFactory.purchase.billingAddress.country = "CA";
       purchaseFactory.purchase.plan.isMonthly = false;
 
       purchaseFactory.getEstimate();
 
-      storeService.calculateTaxes.should.have.been.calledWith("id", "productCode-" + "cad" + "01y", 5, RPP_ADDON_ID + "-" + "cad" + "01y" + "pro", 3, purchaseFactory.purchase.billingAddress);
+      storeService.calculateTaxes.should.have.been.calledWith("id", "productCode-" + "cad" + "01y", 5, PurchaseService.RPP_ADDON_ID + "-" + "cad" + "01y" + "pro", 3, purchaseFactory.purchase.billingAddress);
     });
 
     it("should populate estimate object if call succeeds", function(done) {
@@ -353,7 +389,7 @@ describe("Services: purchase factory", function() {
           shippingTotal: "shippingTotal",
         }, "not deep equal");
 
-        expect(purchaseFlowTracker.trackPlaceOrderClicked).to.have.been.calledWith({
+        purchaseFlowTracker.trackPlaceOrderClicked.should.have.been.calledWith({
           currency: "usd",
           discount: "couponAmount",
           displaysCount: 3,
@@ -367,7 +403,7 @@ describe("Services: purchase factory", function() {
       })
       .then(null,function(e) {
         console.error(e);
-        done("error");
+        assert.fail("error");
       });
     });
 
@@ -386,7 +422,7 @@ describe("Services: purchase factory", function() {
       })
       .then(null,function(e) {
         console.error(e);
-        done("error");
+        assert.fail("error");
       });
     });
 
@@ -401,7 +437,7 @@ describe("Services: purchase factory", function() {
         done();
       })
       .then(null,function() {
-        done("error");
+        assert.fail("error");
       });
     });
 
@@ -417,7 +453,7 @@ describe("Services: purchase factory", function() {
         done();
       })
       .then(null,function() {
-        done("error");
+        assert.fail("error");
       });
     });
 
@@ -434,7 +470,7 @@ describe("Services: purchase factory", function() {
         done();
       })
       .then(null,function() {
-        done("error");
+        assert.fail("error");
       });
     });
 
@@ -504,7 +540,7 @@ describe("Services: purchase factory", function() {
     });
 
     it('should handle failure to prepare payment intent', function(done) {
-      storeService.preparePurchase.returns(Q.resolve({error: {message: 'errorMessage'}}));
+      storeService.preparePurchase.returns(Promise.resolve({error: {message: 'errorMessage'}}));
 
       purchaseFactory.preparePaymentIntent()
         .catch(function() {
@@ -516,7 +552,7 @@ describe("Services: purchase factory", function() {
     });
 
     it('should handle rejection to prepare payment intent', function(done) {
-      storeService.preparePurchase.returns(Q.reject('error'));
+      storeService.preparePurchase.returns(Promise.reject('error'));
 
       purchaseFactory.preparePaymentIntent()
         .catch(function() {
@@ -529,7 +565,7 @@ describe("Services: purchase factory", function() {
 
     describe('handleCardAction:', function() {
       it('should handleCardAction if authentication is required', function(done) {
-        storeService.preparePurchase.returns(Q.resolve({
+        storeService.preparePurchase.returns(Promise.resolve({
           authenticationRequired: true,
           intentSecret: 'intentSecret'
         }));
@@ -543,11 +579,11 @@ describe("Services: purchase factory", function() {
       });
 
       it('should handle failure to handleCardAction', function(done) {
-        storeService.preparePurchase.returns(Q.resolve({
+        storeService.preparePurchase.returns(Promise.resolve({
           authenticationRequired: true,
           intentSecret: 'intentSecret'
         }));
-        creditCardFactory.handleCardAction.returns(Q.reject({message: 'error'}));
+        creditCardFactory.handleCardAction.returns(Promise.reject({message: 'error'}));
 
         purchaseFactory.preparePaymentIntent()
           .catch(function() {
@@ -601,8 +637,6 @@ describe("Services: purchase factory", function() {
         },
         purchaseOrderNumber: "purchaseOrderNumber"
       };
-
-      sinon.spy($rootScope, "$emit");
 
     });
 
@@ -672,7 +706,7 @@ describe("Services: purchase factory", function() {
       purchaseFactory.completePayment()
       .then(function() {
         expect(purchaseFactory.purchase.checkoutError).to.not.be.ok;
-        expect(purchaseFlowTracker.trackOrderPayNowClicked).to.have.been.calledWith({
+        purchaseFlowTracker.trackOrderPayNowClicked.should.have.been.calledWith({
           currency: "usd",
           discount: "couponAmount",
           displaysCount: 3,
@@ -685,17 +719,17 @@ describe("Services: purchase factory", function() {
         done();
       })
       .then(null,function() {
-        done("error");
+        assert.fail("error");
       });
     });
 
     it("should reloadSelectedCompany on purchase", function(done) {
+      sinon.stub(purchaseFactory,'_wait').resolves();
+
       purchaseFactory.completePayment()
       .then(function() {
         expect(purchaseFactory.purchase.reloadingCompany).to.be.true;
-        userState.reloadSelectedCompany.should.not.have.been.called;
 
-        $timeout.flush(10000);
         setTimeout(function() {
           userState.reloadSelectedCompany.should.have.been.called;
 
@@ -707,19 +741,20 @@ describe("Services: purchase factory", function() {
           }, 10);
         }, 10);
       })
-      .then(null,function() {
-        done("error");
+      .then(null,function(e) {
+        assert.fail("error");
       });
     });
 
     it("should handle failure to reloadSelectedCompany", function(done) {
+      sinon.stub(purchaseFactory,'_wait').resolves();
+      userState.reloadSelectedCompany.rejects();
+
       purchaseFactory.completePayment()
       .then(function() {
         expect(purchaseFactory.purchase.reloadingCompany).to.be.true;
-        userState.reloadSelectedCompany.should.not.have.been.called;
 
         validate = false;
-        $timeout.flush(10000);
         setTimeout(function() {
           userState.reloadSelectedCompany.should.have.been.called;
 
@@ -731,8 +766,8 @@ describe("Services: purchase factory", function() {
           }, 10);
         }, 10);
       })
-      .then(null,function() {
-        done("error");
+      .then(null,function(e) {
+        assert.fail(e);
       });
     });
 
@@ -746,7 +781,7 @@ describe("Services: purchase factory", function() {
         done();
       })
       .then(null,function() {
-        done("error");
+        assert.fail("error");
       });
     });
 
@@ -763,5 +798,5 @@ describe("Services: purchase factory", function() {
     });
 
   });
-
+  
 });
