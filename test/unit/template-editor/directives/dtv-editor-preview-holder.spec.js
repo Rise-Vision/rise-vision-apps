@@ -203,7 +203,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
   });
 
   describe('attribute data debouncing', function() {
-    it('should post attribute data after 1 seconds to prevent performance issues', function() {
+    it('should post attribute data after 500 ms to prevent performance issues', function() {
       iframe.onload();
       $timeout.flush();      
       iframe.contentWindow.postMessage.reset();
@@ -211,10 +211,10 @@ describe('directive: TemplateEditorPreviewHolder', function() {
       $scope.$digest();
       iframe.contentWindow.postMessage.should.not.have.been.called;
 
-      $timeout.flush(500);
+      $timeout.flush(250);
       iframe.contentWindow.postMessage.should.not.have.been.called;
       
-      $timeout.flush(500);
+      $timeout.flush(250);
       iframe.contentWindow.postMessage.should.have.been.calledOnce;
       expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"attributeData","value":{"components":[{"id":"image","metadata":"newMetadata"},{"id":"logo","metadata":"logoMetadata"}]}}', 'https://widgets.risevision.com']);
     });
@@ -228,15 +228,15 @@ describe('directive: TemplateEditorPreviewHolder', function() {
       $scope.$digest();
       iframe.contentWindow.postMessage.should.not.have.been.called;
       
-      $timeout.flush(500);
+      $timeout.flush(250);
       iframe.contentWindow.postMessage.should.not.have.been.called;
 
       templateEditorFactory.presentation.templateAttributeData.components[0].metadata = 'newMetadata2';
       $scope.$digest();
-      $timeout.flush(500);
+      $timeout.flush(250);
       iframe.contentWindow.postMessage.should.not.have.been.called;
       
-      $timeout.flush(500);
+      $timeout.flush(250);
       iframe.contentWindow.postMessage.should.have.been.calledOnce;
       expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"attributeData","value":{"components":[{"id":"image","metadata":"newMetadata2"},{"id":"logo","metadata":"logoMetadata"}]}}', 'https://widgets.risevision.com']);
     });

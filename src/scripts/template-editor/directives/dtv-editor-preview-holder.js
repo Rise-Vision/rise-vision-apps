@@ -181,7 +181,7 @@ angular.module('risevision.template-editor.directives')
           var debounceAttributeDataTimer;
           var debounceAttributeData = function (callback){
             $timeout.cancel(debounceAttributeDataTimer);
-            debounceAttributeDataTimer = $timeout(callback, 1000);
+            debounceAttributeDataTimer = $timeout(callback, 500);
           };
 
           $scope.$watch('templateEditorFactory.presentation.templateAttributeData', function (value) {
