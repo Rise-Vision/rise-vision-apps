@@ -14,7 +14,7 @@ describe('controller: display add', function() {
         addDisplay: sinon.spy()
       };
     });
-    $provide.service('plansFactory', function() {
+    $provide.service('currentPlanFactory', function() {
       return {
         confirmAndPurchase: sandbox.stub()
       };
@@ -43,11 +43,11 @@ describe('controller: display add', function() {
     });
 
   }));
-  var $scope, $loading, displayFactory, plansFactory, scheduleFactory;
+  var $scope, $loading, displayFactory, currentPlanFactory, scheduleFactory;
   beforeEach(function(){
     inject(function($injector, $controller){
       displayFactory = $injector.get('displayFactory');
-      plansFactory = $injector.get('plansFactory');
+      currentPlanFactory = $injector.get('currentPlanFactory');
       scheduleFactory = $injector.get('scheduleFactory');
       $loading = $injector.get('$loading');
 
@@ -102,7 +102,7 @@ describe('controller: display add', function() {
     });
 
     it('should not show license modal if licenses are available', function() {
-      plansFactory.confirmAndPurchase.should.not.have.been.called;
+      currentPlanFactory.confirmAndPurchase.should.not.have.been.called;
     });
   });
 
@@ -112,7 +112,7 @@ describe('controller: display add', function() {
     });
 
     it('should show license modal if no licenses are available', function() {
-      plansFactory.confirmAndPurchase.should.have.been.called;
+      currentPlanFactory.confirmAndPurchase.should.have.been.called;
     });
   });
 

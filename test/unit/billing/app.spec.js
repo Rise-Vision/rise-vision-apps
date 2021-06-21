@@ -80,7 +80,7 @@ describe('app:', function() {
       $state.get('apps.billing.subscription').resolve.invoiceInfo[3](canAccessApps, subscriptionFactory, $stateParams);
       setTimeout(function() {
         canAccessApps.should.have.been.called.once;
-        subscriptionFactory.getSubscription.should.have.been.calledWith('subscriptionId');
+        subscriptionFactory.getSubscription.should.have.been.calledWith('subscriptionId', true);
 
         done();
       }, 10);

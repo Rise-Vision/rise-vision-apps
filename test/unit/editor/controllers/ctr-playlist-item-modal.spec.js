@@ -63,12 +63,6 @@ describe('controller: playlist item modal', function() {
       }
     });
 
-    $provide.service('plansFactory', function() {
-      return {
-        showPurchaseOptions: sinon.stub()
-      };
-    });
-
   }));
   var $scope, $modalInstance, $modalInstanceDismissSpy, itemProperties, itemType, 
   itemUpdated, presentation;

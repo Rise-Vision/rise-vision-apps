@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.displays.services')
-  .factory('playerLicenseFactory', ['userState', 'currentPlanFactory', 'plansFactory', 'confirmModal',
+  .factory('playerLicenseFactory', ['userState', 'currentPlanFactory', 'confirmModal',
     'enableCompanyProduct', 'processErrorCode', '$log', 'PLAYER_PRO_PRODUCT_CODE', '$q',
-    function (userState, currentPlanFactory, plansFactory, confirmModal, enableCompanyProduct, processErrorCode, $log,
+    function (userState, currentPlanFactory, confirmModal, enableCompanyProduct, processErrorCode, $log,
       PLAYER_PRO_PRODUCT_CODE, $q) {
       var factory = {};
 
@@ -118,7 +118,7 @@ angular.module('risevision.displays.services')
             if (factory.getProAvailableLicenseCount() >= displayIds.length) {
               return _licenseDisplays(displayIds);
             } else {
-              plansFactory.confirmAndPurchase(displayIds.length - factory.getProAvailableLicenseCount());
+              currentPlanFactory.confirmAndPurchase(displayIds.length - factory.getProAvailableLicenseCount());
               return $q.reject();
             }
           });

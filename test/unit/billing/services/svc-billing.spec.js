@@ -40,6 +40,16 @@ describe('service: billing:', function() {
                   return Q.reject('API Failed');
                 }
               }),
+              estimateRenewal: sinon.spy(function() {
+                if (!failedResponse) {
+                  return Q.resolve({
+                    result: 'subscription renewal estimate'
+                  });
+                }
+                else {
+                  return Q.reject('API Failed');
+                }
+              }),
               estimate: sinon.spy(function() {
                 if (!failedResponse) {
                   return Q.resolve({
@@ -212,6 +222,7 @@ describe('service: billing:', function() {
     expect(billing).to.be.ok;
     expect(billing.getSubscriptions).to.be.a.function;
     expect(billing.getSubscription).to.be.a.function;
+    expect(billing.estimateSubscriptionRenewal).to.be.a.function;
     expect(billing.estimateSubscriptionUpdate).to.be.a.function;
     expect(billing.updateSubscription).to.be.a.function;
     expect(billing.changePoNumber).to.be.a.function;
@@ -286,6 +297,38 @@ describe('service: billing:', function() {
       failedResponse = true;
 
       billing.getSubscription('subscriptionId')
+      .then(function(subscription) {
+        done(subscription);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      });
+    });
+  });
+
+  describe('estimateSubscriptionRenewal:', function() {
+    it('should return a subscription renewal estimate', function(done) {
+      failedResponse = false;
+
+      billing.estimateSubscriptionRenewal('subscriptionId')
+      .then(function(result) {
+        storeApi.integrations.subscription.estimateRenewal.should.have.been.called;
+        storeApi.integrations.subscription.estimateRenewal.should.have.been.calledWith({
+          subscriptionId: 'subscriptionId',
+          companyId: 'testId1'
+        });
+
+        expect(result).to.be.ok;
+        expect(result).to.equal('subscription renewal estimate');
+        done();
+      });
+    });
+
+    it('should handle failure to estimate subscription renewal correctly', function(done) {
+      failedResponse = true;
+
+      billing.estimateSubscriptionRenewal('subscriptionId')
       .then(function(subscription) {
         done(subscription);
       })

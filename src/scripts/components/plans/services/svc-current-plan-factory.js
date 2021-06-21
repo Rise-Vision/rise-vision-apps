@@ -2,8 +2,10 @@
 
   'use strict';
   angular.module('risevision.common.components.plans')
-    .factory('currentPlanFactory', ['$log', '$rootScope', '$timeout', 'userState', 'plansService',
-      function ($log, $rootScope, $timeout, userState, plansService) {
+    .factory('currentPlanFactory', ['$log', '$rootScope', '$state', '$modal',
+    'userState', 'plansService', 'analyticsFactory', 'confirmModal', 'messageBox',
+      function ($log, $rootScope, $state, $modal,
+        userState, plansService, analyticsFactory, confirmModal, messageBox) {
         var _factory = {};
 
         var _loadCurrentPlan = function () {
@@ -43,21 +45,6 @@
 
           $log.debug('Current plan', plan);
           $rootScope.$emit('risevision.plan.loaded', plan);
-        };
-
-        var _reloadCurrentPlan = function () {
-          $log.debug('Reloading current plan');
-
-          $timeout(function () {
-            userState.reloadSelectedCompany()
-              .then(_loadCurrentPlan)
-              .catch(function (err) {
-                $log.error('Error reloading plan information', err);
-              })
-              .finally(function () {
-                $log.debug('Finished reloading current plan');
-              });
-          }, 10000);
         };
 
         _factory.isPlanActive = function () {
@@ -115,6 +102,73 @@
         $rootScope.$on('risevision.company.updated', function () {
           _loadCurrentPlan();
         });
+
+        // old plans factory
+        _factory.showPurchaseOptions = function (displayCount) {
+          $state.go('apps.purchase.home', {
+            displayCount: displayCount
+          });
+        };
+
+        _factory.confirmAndPurchase = function (displayCount) {
+          if (_factory.isParentPlan() || _factory.currentPlan.isPurchasedByParent) {
+            var contactInfo = _factory.currentPlan.parentPlanContactEmail ? ' at ' +
+              _factory.currentPlan.parentPlanContactEmail : '';
+            messageBox('Almost there!',
+              'There aren\'t available display licenses to assign to the selected displays. Contact your account administrator' +
+              contactInfo + ' for additional display licenses.',
+              'Okay, I Got It', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
+              );
+          } else {
+            confirmModal('Almost there!',
+                'There aren\'t available display licenses to assign to the selected displays. Subscribe to additional licenses?',
+                'Yes', 'No', 'madero-style centered-modal',
+                'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+              .then(function () {
+                _factory.showPurchaseOptions(displayCount);
+              });
+          }
+        };
+
+        _factory.showUnlockThisFeatureModal = function () {
+          analyticsFactory.track('free user popup seen', {
+            source: 'share schedule button'
+          });
+          $modal.open({
+            templateUrl: 'partials/plans/unlock-this-feature-modal.html',
+            controller: 'confirmModalController',
+            windowClass: 'madero-style centered-modal unlock-this-feature-modal',
+            size: 'sm',
+            resolve: {
+              confirmationTitle: null,
+              confirmationMessage: null,
+              confirmationButton: null,
+              cancelButton: null
+            }
+          }).result.then(function () {
+            _factory.showPurchaseOptions();
+          });
+        };
+
+        _factory.initVolumePlanTrial = function () {
+          var plan = plansService.getVolumePlan();
+
+          var licenses = plan.proLicenseCount;
+          var selectedCompany = userState.getCopyOfSelectedCompany(true);
+          var trialExpiry = new Date();
+          trialExpiry.setDate(trialExpiry.getDate() + plan.trialPeriod);
+          // Round down the date otherwise the subtraction may calculate an extra day
+          trialExpiry.setHours(trialExpiry.getHours() - 1);
+
+          selectedCompany.planProductCode = plan.productCode;
+          selectedCompany.planTrialPeriod = plan.trialPeriod;
+          selectedCompany.planTrialExpiryDate = trialExpiry;
+          selectedCompany.planSubscriptionStatus = 'Trial';
+          selectedCompany.playerProTotalLicenseCount = licenses;
+          selectedCompany.playerProAvailableLicenseCount = licenses;
+
+          userState.updateCompanySettings(selectedCompany);
+        };
 
         return _factory;
       }

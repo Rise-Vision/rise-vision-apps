@@ -204,7 +204,6 @@
               "src/scripts/components/plans/services/svc-currency.js",
               "src/scripts/components/plans/services/svc-plans.js",
               "src/scripts/components/plans/services/svc-current-plan-factory.js",
-              "src/scripts/components/plans/services/svc-plans-factory.js",
 
               "src/scripts/components/password-input/dtv-password-input.js",
 
@@ -345,8 +344,6 @@
 
               "src/scripts/purchase/filters/ftr-country-name.js",
               "src/scripts/purchase/filters/ftr-padded-month.js",
-
-              "src/scripts/purchase/services/svc-purchase-factory.js",
 
               "src/scripts/schedules/app.js",
               "src/scripts/schedules/services/svc-schedule.js",
@@ -771,7 +768,6 @@
                 "src/scripts/components/plans/services/svc-currency.js",
                 "src/scripts/components/plans/services/svc-plans.js",
                 "src/scripts/components/plans/services/svc-current-plan-factory.js",
-                "src/scripts/components/plans/services/svc-plans-factory.js",
 
                 "src/scripts/components/password-input/dtv-password-input.js",
 

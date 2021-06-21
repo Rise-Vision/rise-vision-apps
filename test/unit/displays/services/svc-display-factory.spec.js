@@ -86,11 +86,6 @@ describe('service: displayFactory:', function() {
         updateDisplayLicense: sinon.stub().returns(Q.resolve())
       };
     });
-    $provide.factory('plansFactory', function() {
-      return {
-        showPurchaseOptions: sinon.spy()
-      };
-    });
     $provide.factory('scheduleFactory', function() {
       return {
         addToDistribution: sinon.stub().returns(Q.resolve())
@@ -102,7 +97,7 @@ describe('service: displayFactory:', function() {
 
   }));
   var displayFactory, $rootScope, $state, userState, trackerCalled, updateDisplay, returnList, 
-  displayListSpy, displayAddSpy, playerLicenseFactory, plansFactory, display, scheduleFactory, processErrorCode;
+  displayListSpy, displayAddSpy, playerLicenseFactory, display, scheduleFactory, processErrorCode;
   beforeEach(function(){
     trackerCalled = undefined;
     updateDisplay = true;
@@ -111,7 +106,6 @@ describe('service: displayFactory:', function() {
     inject(function($injector){
       displayFactory = $injector.get('displayFactory');
       playerLicenseFactory = $injector.get('playerLicenseFactory');
-      plansFactory = $injector.get('plansFactory');
       display = $injector.get('display');
       scheduleFactory = $injector.get('scheduleFactory');
       $rootScope = $injector.get('$rootScope');

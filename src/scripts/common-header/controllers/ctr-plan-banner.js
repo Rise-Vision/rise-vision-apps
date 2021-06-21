@@ -2,12 +2,12 @@
 
 angular.module('risevision.common.header')
   .value('ACCOUNT_PATH', 'account?cid=companyId')
-  .controller('PlanBannerCtrl', ['$scope', '$rootScope', 'userState', 'plansFactory',
+  .controller('PlanBannerCtrl', ['$scope', '$rootScope', 'userState',
     'currentPlanFactory', 'STORE_URL', 'ACCOUNT_PATH',
-    function ($scope, $rootScope, userState, plansFactory, currentPlanFactory,
+    function ($scope, $rootScope, userState, currentPlanFactory,
       STORE_URL, ACCOUNT_PATH) {
       $scope.plan = {};
-      $scope.showPlans = plansFactory.showPurchaseOptions;
+      $scope.showPlans = currentPlanFactory.showPurchaseOptions;
       $scope.storeAccountUrl = STORE_URL + ACCOUNT_PATH;
 
       $rootScope.$on('risevision.plan.loaded', function () {

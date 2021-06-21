@@ -33,11 +33,7 @@ describe('Services: playerLicenseFactory', function() {
         currentPlan: {
           playerProTotalLicenseCount: 2,
           playerProAvailableLicenseCount: 1
-        }
-      };
-    });
-    $provide.service('plansFactory', function() {
-      return plansFactory = {
+        },
         confirmAndPurchase: sandbox.stub()
       };
     });
@@ -60,7 +56,7 @@ describe('Services: playerLicenseFactory', function() {
     
   }));
 
-  var sandbox, userState, playerLicenseFactory, currentPlanFactory, plansFactory, confirmModal, enableCompanyProduct;
+  var sandbox, userState, playerLicenseFactory, currentPlanFactory, confirmModal, enableCompanyProduct;
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
@@ -583,7 +579,7 @@ describe('Services: playerLicenseFactory', function() {
 
       playerLicenseFactory.confirmAndLicense(['displayId']).catch(function() {
         confirmModal.should.have.been.called;
-        plansFactory.confirmAndPurchase.should.have.been.calledWith(1);
+        currentPlanFactory.confirmAndPurchase.should.have.been.calledWith(1);
 
         done();
       });

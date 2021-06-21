@@ -2,7 +2,7 @@
   
 describe('service: storageUtils:', function() {
   beforeEach(module('risevision.storage.services'));
-  var storageUtils, SELECTOR_FILTERS, currentPlanFactory, plansFactory;
+  var storageUtils, SELECTOR_FILTERS, currentPlanFactory;
   var $modal, modalSuccess, modalOpenObj;
 
   beforeEach(module(function ($provide) {
@@ -46,11 +46,7 @@ describe('service: storageUtils:', function() {
     });
     $provide.service('currentPlanFactory',function(){
       return {
-        isPlanActive: sinon.stub().returns(true)
-      };
-    });
-    $provide.service('plansFactory',function(){
-      return {
+        isPlanActive: sinon.stub().returns(true),
         showUnlockThisFeatureModal: sinon.stub()
       };
     });
@@ -62,7 +58,6 @@ describe('service: storageUtils:', function() {
       storageUtils = $injector.get('storageUtils');
       $modal = $injector.get('$modal');
       currentPlanFactory = $injector.get('currentPlanFactory');
-      plansFactory = $injector.get('plansFactory');
       SELECTOR_FILTERS = $injector.get('SELECTOR_FILTERS');
     });
   });
@@ -176,7 +171,7 @@ describe('service: storageUtils:', function() {
       storageUtils.addFolder();
 
       currentPlanFactory.isPlanActive.should.have.been.called;
-      plansFactory.showUnlockThisFeatureModal.should.not.have.been.called;
+      currentPlanFactory.showUnlockThisFeatureModal.should.not.have.been.called;
 
       expect(modalOpenObj.templateUrl).to.equal('partials/storage/new-folder-modal.html');
       expect(modalOpenObj.controller).to.equal('NewFolderModalCtrl');
@@ -190,7 +185,7 @@ describe('service: storageUtils:', function() {
       storageUtils.addFolder();
 
       currentPlanFactory.isPlanActive.should.have.been.called;
-      plansFactory.showUnlockThisFeatureModal.should.have.been.called;
+      currentPlanFactory.showUnlockThisFeatureModal.should.have.been.called;
 
       expect(modalOpenObj).to.not.be.ok;
     });

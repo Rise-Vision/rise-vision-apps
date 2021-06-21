@@ -90,7 +90,9 @@ angular.module('risevision.apps.purchase')
         }
 
         purchaseFactory.validatePaymentMethod()
-          .then(purchaseFactory.preparePaymentIntent)
+          .then(function() {
+            return purchaseFactory.preparePaymentIntent();
+          })
           .then($scope.completePayment);
       };
 

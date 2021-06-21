@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('displayAdd', ['$scope', '$log', '$loading', 'displayFactory', 'plansFactory',
+  .controller('displayAdd', ['$scope', '$log', '$loading', 'displayFactory', 'currentPlanFactory',
     'playerLicenseFactory', 'scheduleFactory',
-    function ($scope, $log, $loading, displayFactory, plansFactory, playerLicenseFactory,
+    function ($scope, $log, $loading, displayFactory, currentPlanFactory, playerLicenseFactory,
       scheduleFactory) {
       $scope.factory = displayFactory;
       $scope.playerLicenseFactory = playerLicenseFactory;
@@ -34,7 +34,7 @@ angular.module('risevision.displays.controllers')
       };
 
       if (!playerLicenseFactory.isProAvailable(displayFactory.display)) {
-        plansFactory.confirmAndPurchase();
+        currentPlanFactory.confirmAndPurchase();
       }
     }
   ]);
