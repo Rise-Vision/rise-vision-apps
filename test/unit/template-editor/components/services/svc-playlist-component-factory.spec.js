@@ -151,6 +151,46 @@ describe('service: playlistComponentFactory:', function() {
       }, 10);
     });
 
+    it('should load presentation names once for repeated ids', function(done) {
+      var presentations = [
+        {
+          id: 'presentation-id-1'
+        },
+        {
+          id: 'presentation-id-2'
+        },
+        {
+          id: 'presentation-id-2'
+        },
+        {
+          id: 'presentation-id-2'
+        }
+      ];
+
+      playlistComponentFactory.loadPresentationNames(presentations);
+
+      expect(playlistComponentFactory.loading).to.be.true;
+
+      presentation.list.should.have.been.calledWith({
+        filter: 'id:presentation-id-1 OR id:presentation-id-2'
+      });
+
+      setTimeout(function() {
+        expect(presentations[0].name).to.equal('some name');
+        expect(presentations[0].revisionStatusName).to.equal('revised');
+        expect(presentations[0].removed).to.be.false;
+
+        expect(presentations[1].name).to.equal('some name 2');
+        expect(presentations[1].revisionStatusName).to.equal('published');
+        expect(presentations[1].removed).to.be.false;
+
+        expect(playlistComponentFactory.loading).to.be.false;
+
+        done();
+      }, 10);
+
+    });
+
   });
 
   describe('addTemplates:', function() {
