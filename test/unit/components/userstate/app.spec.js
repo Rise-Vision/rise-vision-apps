@@ -25,16 +25,32 @@ describe("app:", function() {
   beforeEach(function () {
     module("risevision.common.components.userstate");
 
+    module(function ($provide) {
+      $provide.service('userState',function(){
+        return {
+          getUsername: sinon.stub().returns('username'),
+          _restoreState: sinon.stub()
+        };
+      });
+
+      $provide.service('getUserProfile',function(){
+        return sinon.stub().rejects();
+      });
+
+    });
+
     inject(function ($injector) {
       $state = $injector.get("$state");
       $rootScope = $injector.get("$rootScope");
       urlStateService = $injector.get("urlStateService");
+      userState = $injector.get('userState');
+      getUserProfile = $injector.get('getUserProfile');
 
       sinon.stub(urlStateService, "redirectToState");
     });
   });
 
-  var $state, $rootScope, urlStateService;
+  var $state, $rootScope, urlStateService, userState, getUserProfile;
   var locationProvider, urlRouterProvider, urlMatcherFactoryProvider, stateProvider;
 
   describe("mappings: ", function() {
@@ -250,6 +266,69 @@ describe("app:", function() {
         joinAccount: true
       });
     });
+
+    describe('common.auth.unregistered', function() {
+      it("should exist", function() {
+        var state = $state.get('common.auth.unregistered');
+        expect(state).to.be.ok;
+        expect(state.templateUrl).to.equal('partials/components/userstate/signup.html');
+        expect(state.url).to.equal("/unregistered/:state");
+        expect(state.controller).to.equal("RegistrationCtrl");
+
+        expect(state.resolve).to.be.ok;
+        expect(state.resolve.newUser).to.be.ok;
+        expect(state.resolve.account).to.be.ok;
+      });      
+
+      describe('newUser:', function() {
+        it('should handle getUserProfile error without a message', function(done) {
+          $state.get('common.auth.unregistered').resolve.newUser[2](userState, getUserProfile)
+            .then(function(result) {
+              getUserProfile.should.have.been.calledWith('username');
+
+              expect(result).to.be.true;
+
+              done();
+            });
+        });
+
+        it('should detect existing user', function(done) {
+          getUserProfile.rejects({
+            message: 'User has not yet accepted the Terms of Service'
+          });
+
+          $state.get('common.auth.unregistered').resolve.newUser[2](userState, getUserProfile)
+            .then(function(result) {
+              getUserProfile.should.have.been.calledWith('username');
+
+              expect(result).to.be.false;
+
+              done();
+            });
+        });
+      });
+
+      describe('account:', function() {
+        it('should return account', function(done) {
+          $state.get('common.auth.unregistered').resolve.account[1](sinon.stub().resolves('account response'))
+            .then(function(result) {
+              expect(result).to.equal('account response');
+
+              done();
+            });
+        });
+
+        it('should handle failure to get account', function(done) {
+          $state.get('common.auth.unregistered').resolve.account[1](sinon.stub().rejects())
+            .then(function(result) {
+              expect(result).to.be.null;
+
+              done();
+            });
+        });
+      });
+    });
+
   });
 
   describe("listeners: ", function() {

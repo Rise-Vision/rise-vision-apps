@@ -2,31 +2,28 @@
 
 angular.module('risevision.common.components.userstate')
   .controller('RegistrationCtrl', [
-    '$q', '$scope', '$rootScope',
+    '$scope', '$rootScope',
     '$loading', 'addAccount', '$exceptionHandler',
     'userState', 'pick', 'messageBox', 'humanReadableError',
-    'agreeToTermsAndUpdateUser', 'account', 'analyticsFactory',
-    'bigQueryLogging', 'updateCompany', 'currentPlanFactory',
+    'agreeToTermsAndUpdateUser', 'newUser', 'account', 'analyticsFactory',
+    'bigQueryLogging', 'currentPlanFactory',
     'COMPANY_INDUSTRY_FIELDS', 'EDUCATION_INDUSTRIES', 'urlStateService', 'hubspot',
-    function ($q, $scope, $rootScope, $loading, addAccount,
+    function ($scope, $rootScope, $loading, addAccount,
       $exceptionHandler, userState, pick, messageBox, humanReadableError,
-      agreeToTermsAndUpdateUser, account, analyticsFactory, bigQueryLogging,
-      updateCompany, currentPlanFactory, COMPANY_INDUSTRY_FIELDS, EDUCATION_INDUSTRIES, urlStateService, hubspot) {
+      agreeToTermsAndUpdateUser, newUser, account, analyticsFactory, bigQueryLogging,
+      currentPlanFactory, COMPANY_INDUSTRY_FIELDS, EDUCATION_INDUSTRIES, urlStateService, hubspot) {
 
-      $scope.newUser = !account;
+      $scope.newUser = newUser;
       $scope.DROPDOWN_INDUSTRY_FIELDS = COMPANY_INDUSTRY_FIELDS;
 
-      var copyOfProfile = account ? account : userState.getCopyOfProfile() || {};
+      var copyOfProfile = account || {};
 
       $scope.company = {};
 
-      $scope.profile = pick(copyOfProfile, 'email', 'firstName', 'lastName');
+      $scope.profile = pick(copyOfProfile, 'email', 'firstName', 'lastName', 'mailSyncEnabled');
       $scope.profile.email = $scope.profile.email || userState.getUsername();
       $scope.registering = false;
 
-      $scope.profile.accepted =
-        angular.isDefined(copyOfProfile.termsAcceptanceDate) &&
-        copyOfProfile.termsAcceptanceDate !== null;
       $scope.save = function () {
         $scope.forms.registrationForm.accepted.$pristine = false;
         $scope.forms.registrationForm.firstName.$pristine = false;
@@ -41,14 +38,14 @@ angular.module('risevision.common.components.userstate')
 
           var action;
           if ($scope.newUser) {
-            // Automatically subscribe education users on registration
-            var mailSyncEnabled = EDUCATION_INDUSTRIES.indexOf($scope.company.companyIndustry) !== -1;
+            // Automatically subscribe education users on registration or if they were already subscribed
+            $scope.profile.mailSyncEnabled = $scope.profile.mailSyncEnabled || isEducation($scope.company.companyIndustry);
 
             action = addAccount($scope.profile.firstName, $scope.profile.lastName, $scope.company.name, $scope
-              .company.companyIndustry, mailSyncEnabled);
+              .company.companyIndustry, $scope.profile.mailSyncEnabled);
           } else {
-            // Automatically subscribe education users on registration
-            $scope.profile.mailSyncEnabled = EDUCATION_INDUSTRIES.indexOf(account.companyIndustry) !== -1;
+            // Automatically subscribe education users on registration or if they were already subscribed
+            $scope.profile.mailSyncEnabled = $scope.profile.mailSyncEnabled || isEducation(copyOfProfile.companyIndustry);
 
             action = agreeToTermsAndUpdateUser(userState.getUsername(), $scope.profile);
           }
@@ -92,6 +89,10 @@ angular.module('risevision.common.components.userstate')
             });
         }
 
+      };
+
+      var isEducation = function (companyIndustry) {
+        return EDUCATION_INDUSTRIES.indexOf(companyIndustry) !== -1;
       };
 
       var populateIndustryFromUrl = function () {

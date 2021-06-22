@@ -8,8 +8,10 @@ describe("controller: registration", function() {
   beforeEach(module(function ($provide) {
     $provide.service("userState", function(){
       return {
-        getCopyOfProfile : function(){
-          return userProfile;
+        getCopyOfProfile: function() {
+          return {
+            creationDate: 'creationDate'
+          };
         },
         getUsername: function() {
           return "e@mail.com";
@@ -109,21 +111,24 @@ describe("controller: registration", function() {
       };
     });
 
+    $provide.factory('account', function() {
+      return account;
+    });
+
     $provide.value('COMPANY_INDUSTRY_FIELDS', []);
   }));
-  var $scope, userProfile, userState, newUser;
+  var $scope, userState, newUser;
   var registerUser, account, analyticsFactory, bqCalled,
     updateCompanyCalled, currentPlanFactory, hubspot;
   
   beforeEach(function() {
     registerUser = true;
     bqCalled = undefined;
-    userProfile = {
+    account = {
       id : "RV_user_id",
       firstName : "first",
       lastName : "last",
-      telephone : "telephone",
-      creationDate: "creationDate"
+      telephone : "telephone"
     };
     
     inject(function($injector,$rootScope, $controller){
@@ -132,13 +137,9 @@ describe("controller: registration", function() {
       userState = $injector.get("userState");
       hubspot = $injector.get('hubspot');
       $controller("RegistrationCtrl", {
-        $scope : $scope,
-        $cookies: $injector.get("$cookies"),
-        userState : userState,
-        updateCompany: $injector.get("updateCompany"),
-        agreeToTermsAndUpdateUser:$injector.get("agreeToTermsAndUpdateUser"),
-        addAccount:$injector.get("addAccount"),
-        account: account
+        $scope: $scope,
+        account: account,
+        newUser: true
       });
       $scope.$digest();
       $scope.forms = {
@@ -161,8 +162,7 @@ describe("controller: registration", function() {
     expect($scope.profile).to.deep.equal({
       email: "e@mail.com",
       firstName: "first",
-      lastName: "last",
-      accepted: false
+      lastName: "last"
     });
 
     expect($scope.registering).to.be.false;
@@ -227,12 +227,57 @@ describe("controller: registration", function() {
         done();
       },10);
     });
-  
+
+    describe('mailSyncEnabled', function() {
+      it('should enable for education', function() {
+        $scope.forms.registrationForm.$invalid = false;
+        $scope.company.companyIndustry = 'PRIMARY_SECONDARY_EDUCATION';
+        $scope.save();
+        
+        expect($scope.profile.mailSyncEnabled).to.be.true;
+      });
+
+      it('should disable for non education', function() {
+        $scope.forms.registrationForm.$invalid = false;
+        $scope.company.companyIndustry = 'MISC';
+        $scope.save();
+        
+        expect($scope.profile.mailSyncEnabled).to.be.false;
+      });
+
+      it('should not override existing subscription', function() {
+        $scope.forms.registrationForm.$invalid = false;
+        $scope.profile.mailSyncEnabled = true
+        $scope.company.companyIndustry = 'MISC';
+        $scope.save();
+        
+        expect($scope.profile.mailSyncEnabled).to.be.true;
+      });
+    });
+
   });
     
   describe("save existing user: ", function() {
     beforeEach(function() {
-      account = userProfile;
+      inject(function($controller){
+        $controller("RegistrationCtrl", {
+          $scope: $scope,
+          account: account,
+          newUser: false
+        });
+        $scope.$digest();
+        $scope.forms = {
+          registrationForm: {
+            accepted: {},
+            firstName: {},
+            lastName: {},
+            companyName: {},
+            companyIndustry: {},
+            email: {}
+          }
+        };
+      });
+
     });
     
     it("should not save if form is invalid", function() {
@@ -286,7 +331,35 @@ describe("controller: registration", function() {
         done();
       },10);
     });
-      
+
+    describe('mailSyncEnabled', function() {
+      it('should enable for education', function() {
+        $scope.forms.registrationForm.$invalid = false;
+        account.companyIndustry = 'PRIMARY_SECONDARY_EDUCATION';
+        $scope.save();
+        
+        expect($scope.profile.mailSyncEnabled).to.be.true;
+      });
+
+      it('should disable for non education', function() {
+        $scope.forms.registrationForm.$invalid = false;
+        account.companyIndustry = 'MISC';
+        $scope.save();
+        
+        expect($scope.profile.mailSyncEnabled).to.be.false;
+      });
+
+      it('should not override existing subscription', function() {
+        $scope.forms.registrationForm.$invalid = false;
+        $scope.profile.mailSyncEnabled = true
+        account.companyIndustry = 'MISC';
+        $scope.save();
+        
+        expect($scope.profile.mailSyncEnabled).to.be.true;
+      });
+
+    });
+
   });
 
 });
