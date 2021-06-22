@@ -178,12 +178,18 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
+          var debounceAttributeDataTimer;
+          var debounceAttributeData = function (callback){
+            $timeout.cancel(debounceAttributeDataTimer);
+            debounceAttributeDataTimer = $timeout(callback, 500);
+          };
+
           $scope.$watch('templateEditorFactory.presentation.templateAttributeData', function (value) {
-            _postAttributeData();
+            debounceAttributeData(_postAttributeData);
           }, true);
 
           $scope.$watch('brandingFactory.brandingSettings.logoFileMetadata', function (value) {
-            _postAttributeData();
+            debounceAttributeData(_postAttributeData);
           }, true);
 
           $scope.$watchGroup([

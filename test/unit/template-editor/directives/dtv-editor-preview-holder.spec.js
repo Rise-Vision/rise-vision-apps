@@ -170,6 +170,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
   describe('_updateLogoData', function() {
     it('posts logo data when metadata has changed', function(done) {
       iframe.onload();
+      $timeout.flush();
       iframe.contentWindow.postMessage.reset();
       $scope.brandingFactory.brandingSettings.logoFileMetadata = 'newMetadata';
       $scope.$digest();
@@ -185,6 +186,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
     it('should not post metadata if component is not a logo', function(done) {
       iframe.onload();
+      $timeout.flush();      
       iframe.contentWindow.postMessage.reset();
       templateEditorFactory.presentation.templateAttributeData.components[1].isLogo = false;
       $scope.brandingFactory.brandingSettings.logoFileMetadata = 'newMetadata';
@@ -197,6 +199,46 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
         done();
       },10);
+    });
+  });
+
+  describe('attribute data debouncing', function() {
+    it('should post attribute data after 500 ms to prevent performance issues', function() {
+      iframe.onload();
+      $timeout.flush();      
+      iframe.contentWindow.postMessage.reset();
+      templateEditorFactory.presentation.templateAttributeData.components[0].metadata = 'newMetadata';
+      $scope.$digest();
+      iframe.contentWindow.postMessage.should.not.have.been.called;
+
+      $timeout.flush(250);
+      iframe.contentWindow.postMessage.should.not.have.been.called;
+      
+      $timeout.flush(250);
+      iframe.contentWindow.postMessage.should.have.been.calledOnce;
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"attributeData","value":{"components":[{"id":"image","metadata":"newMetadata"},{"id":"logo","metadata":"logoMetadata"}]}}', 'https://widgets.risevision.com']);
+    });
+
+    it('should debounce and post attribute data only once', function() {
+      iframe.onload();
+      $timeout.flush();      
+      iframe.contentWindow.postMessage.reset();
+
+      templateEditorFactory.presentation.templateAttributeData.components[0].metadata = 'newMetadata';
+      $scope.$digest();
+      iframe.contentWindow.postMessage.should.not.have.been.called;
+      
+      $timeout.flush(250);
+      iframe.contentWindow.postMessage.should.not.have.been.called;
+
+      templateEditorFactory.presentation.templateAttributeData.components[0].metadata = 'newMetadata2';
+      $scope.$digest();
+      $timeout.flush(250);
+      iframe.contentWindow.postMessage.should.not.have.been.called;
+      
+      $timeout.flush(250);
+      iframe.contentWindow.postMessage.should.have.been.calledOnce;
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"attributeData","value":{"components":[{"id":"image","metadata":"newMetadata2"},{"id":"logo","metadata":"logoMetadata"}]}}', 'https://widgets.risevision.com']);
     });
   });
 
