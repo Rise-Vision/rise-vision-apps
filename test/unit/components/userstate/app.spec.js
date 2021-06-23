@@ -281,25 +281,37 @@ describe("app:", function() {
       });      
 
       describe('authenticate:', function() {
+        var $stateParams;
+
+        beforeEach(function() {
+          sinon.spy($state, 'go');
+
+          $stateParams = 'stateParams';
+        });
+
         it('should check if user is authenticated', function(done) {
-          $state.get('common.auth.unregistered').resolve.authenticate[2](userAuthFactory, registrationFactory)
+          $state.get('common.auth.unregistered').resolve.authenticate[4]($state, $stateParams, userAuthFactory, registrationFactory)
             .then(function() {
               userAuthFactory.authenticate.should.have.been.calledWith(false);
 
               registrationFactory.init.should.have.been.called;
 
+              $state.go.should.not.have.been.called;
+
               done();
             });
         });
 
-        it('should not proceed if user is not authenticated', function(done) {
+        it('should redirect user to login page if not authenticated', function(done) {
           userAuthFactory.authenticate.rejects();
 
-          $state.get('common.auth.unregistered').resolve.authenticate[2](userAuthFactory, registrationFactory)
+          $state.get('common.auth.unregistered').resolve.authenticate[4]($state, $stateParams, userAuthFactory, registrationFactory)
             .then(function() {
               userAuthFactory.authenticate.should.have.been.calledWith(false);
 
               registrationFactory.init.should.not.have.been.called;
+
+              $state.go.should.have.been.calledWith('common.auth.unauthorized', 'stateParams');
 
               done();
             });
