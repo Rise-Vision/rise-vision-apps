@@ -140,23 +140,14 @@
             url: '/unregistered/:state',
             controller: 'RegistrationCtrl',
             resolve: {
-              newUser: ['userState', 'getUserProfile',
-                function(userState, getUserProfile) {
-                  return getUserProfile(userState.getUsername())
-                    .catch(function (resp) {
-                      if (resp && resp.message === 'User has not yet accepted the Terms of Service') {
-                        return false;
-                      } else {
-                        return true;
-                      }
-                    });
-                }
-              ],
-              account: ['getAccount',
-                function (getAccount) {
-                  return getAccount()
+              authenticate: ['userAuthFactory', 'registrationFactory',
+                function(userAuthFactory, registrationFactory) {
+                  return userAuthFactory.authenticate(false)
+                    .then(function () {
+                      registrationFactory.init();
+                    })
                     .catch(function () {
-                      return null;
+                      // return to signin page
                     });
                 }
               ]

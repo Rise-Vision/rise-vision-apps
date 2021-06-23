@@ -26,15 +26,16 @@ describe("app:", function() {
     module("risevision.common.components.userstate");
 
     module(function ($provide) {
-      $provide.service('userState',function(){
+      $provide.service('userAuthFactory',function(){
         return {
-          getUsername: sinon.stub().returns('username'),
-          _restoreState: sinon.stub()
+          authenticate: sinon.stub().resolves()
         };
       });
 
-      $provide.service('getUserProfile',function(){
-        return sinon.stub().rejects();
+      $provide.service('registrationFactory',function(){
+        return {
+          init: sinon.stub()
+        };
       });
 
     });
@@ -43,14 +44,14 @@ describe("app:", function() {
       $state = $injector.get("$state");
       $rootScope = $injector.get("$rootScope");
       urlStateService = $injector.get("urlStateService");
-      userState = $injector.get('userState');
-      getUserProfile = $injector.get('getUserProfile');
+      userAuthFactory = $injector.get('userAuthFactory');
+      registrationFactory = $injector.get('registrationFactory');
 
       sinon.stub(urlStateService, "redirectToState");
     });
   });
 
-  var $state, $rootScope, urlStateService, userState, getUserProfile;
+  var $state, $rootScope, urlStateService, userAuthFactory, registrationFactory;
   var locationProvider, urlRouterProvider, urlMatcherFactoryProvider, stateProvider;
 
   describe("mappings: ", function() {
@@ -276,57 +277,35 @@ describe("app:", function() {
         expect(state.controller).to.equal("RegistrationCtrl");
 
         expect(state.resolve).to.be.ok;
-        expect(state.resolve.newUser).to.be.ok;
-        expect(state.resolve.account).to.be.ok;
+        expect(state.resolve.authenticate).to.be.ok;
       });      
 
-      describe('newUser:', function() {
-        it('should handle getUserProfile error without a message', function(done) {
-          $state.get('common.auth.unregistered').resolve.newUser[2](userState, getUserProfile)
-            .then(function(result) {
-              getUserProfile.should.have.been.calledWith('username');
+      describe('authenticate:', function() {
+        it('should check if user is authenticated', function(done) {
+          $state.get('common.auth.unregistered').resolve.authenticate[2](userAuthFactory, registrationFactory)
+            .then(function() {
+              userAuthFactory.authenticate.should.have.been.calledWith(false);
 
-              expect(result).to.be.true;
-
-              done();
-            });
-        });
-
-        it('should detect existing user', function(done) {
-          getUserProfile.rejects({
-            message: 'User has not yet accepted the Terms of Service'
-          });
-
-          $state.get('common.auth.unregistered').resolve.newUser[2](userState, getUserProfile)
-            .then(function(result) {
-              getUserProfile.should.have.been.calledWith('username');
-
-              expect(result).to.be.false;
-
-              done();
-            });
-        });
-      });
-
-      describe('account:', function() {
-        it('should return account', function(done) {
-          $state.get('common.auth.unregistered').resolve.account[1](sinon.stub().resolves('account response'))
-            .then(function(result) {
-              expect(result).to.equal('account response');
+              registrationFactory.init.should.have.been.called;
 
               done();
             });
         });
 
-        it('should handle failure to get account', function(done) {
-          $state.get('common.auth.unregistered').resolve.account[1](sinon.stub().rejects())
-            .then(function(result) {
-              expect(result).to.be.null;
+        it('should not proceed if user is not authenticated', function(done) {
+          userAuthFactory.authenticate.rejects();
+
+          $state.get('common.auth.unregistered').resolve.authenticate[2](userAuthFactory, registrationFactory)
+            .then(function() {
+              userAuthFactory.authenticate.should.have.been.calledWith(false);
+
+              registrationFactory.init.should.not.have.been.called;
 
               done();
             });
         });
       });
+
     });
 
   });
