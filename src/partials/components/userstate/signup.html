@@ -3,7 +3,7 @@
 <div class="border-container mx-auto">
   <div class="panel-body">
 
-    <div rv-spinner rv-spinner-key="registration-modal" rv-spinner-start-active="0">
+    <div rv-spinner rv-spinner-key="registration-loader" rv-spinner-start-active="0">
       <h4>Help us personalize your experience.</h4>
 
       <div id="registration-modal" stop-event="touchend">
@@ -14,7 +14,7 @@
               <!-- First Name -->
               <div class="form-group" ng-class="{ 'has-error' : forms.registrationForm.firstName.$invalid && !forms.registrationForm.firstName.$pristine }">
                 <label for="firstName">First Name: *</label>
-                <input type="text" class="form-control firstName" name="firstName" id="firstName" autocomplete="fname" aria-required="true" tabindex="1" ng-model="profile.firstName" autofocus required>
+                <input type="text" class="form-control firstName" name="firstName" id="firstName" autocomplete="fname" aria-required="true" tabindex="1" ng-model="registrationFactory.profile.firstName" autofocus required>
                 <p ng-show="forms.registrationForm.firstName.$invalid && !forms.registrationForm.firstName.$pristine"
                   class="help-block validation-error-message-first-name">Enter a First Name.</p>
               </div>
@@ -22,23 +22,23 @@
               <!-- Last Name -->
               <div class="form-group" ng-class="{ 'has-error' : forms.registrationForm.lastName.$invalid && !forms.registrationForm.lastName.$pristine }">
                 <label for="lastName">Last Name: *</label>
-                <input type="text" class="form-control lastName" name="lastName" id="lastName" autocomplete="lname" aria-required="true" tabindex="1" ng-model="profile.lastName" required>
+                <input type="text" class="form-control lastName" name="lastName" id="lastName" autocomplete="lname" aria-required="true" tabindex="1" ng-model="registrationFactory.profile.lastName" required>
                 <p ng-show="forms.registrationForm.lastName.$invalid && !forms.registrationForm.lastName.$pristine"
                   class="help-block validation-error-message-last-name">Enter a Last Name.</p>
               </div>
 
               <!-- Organization -->
-              <div class="form-group" ng-class="{'has-error': forms.registrationForm.companyName.$invalid && !forms.registrationForm.companyName.$pristine}" ng-show="newUser">
+              <div class="form-group" ng-class="{'has-error': forms.registrationForm.companyName.$invalid && !forms.registrationForm.companyName.$pristine}" ng-show="registrationFactory.newUser">
                 <label for="companyName">Organization: *</label>
-                <input type="text" class="form-control companyName" name="companyName" id="companyName" tabindex="1" aria-required="true" ng-model="company.name" ng-required="newUser">
+                <input type="text" class="form-control companyName" name="companyName" id="companyName" tabindex="1" aria-required="true" ng-model="registrationFactory.company.name" ng-required="registrationFactory.newUser">
                 <p ng-show="forms.registrationForm.companyName.$invalid && !forms.registrationForm.companyName.$pristine"
                   class="help-block validation-error-message-company-name">Enter an Organization.</p>
               </div>
 
               <!-- Industry -->
-              <div class="form-group" ng-class="{'has-error': forms.registrationForm.companyIndustry.$invalid && !forms.registrationForm.companyIndustry.$pristine}" ng-show="newUser">
+              <div class="form-group" ng-class="{'has-error': forms.registrationForm.companyIndustry.$invalid && !forms.registrationForm.companyIndustry.$pristine}" ng-show="registrationFactory.newUser">
                 <label for="companyIndustry">Tell us your Industry to help us make your displays look great: *</label>
-                <select class="form-control selectpicker companyIndustry" name="companyIndustry" id="companyIndustry" tabindex="1" aria-required="true" ng-model="company.companyIndustry" ng-required="newUser">
+                <select class="form-control selectpicker companyIndustry" name="companyIndustry" id="companyIndustry" tabindex="1" aria-required="true" ng-model="registrationFactory.company.companyIndustry" ng-required="registrationFactory.newUser">
                   <option value="" ng-show="false">&lt; Select Industry &gt;</option>
                   <option class="companyIndustryOption"
                     ng-repeat="industry in DROPDOWN_INDUSTRY_FIELDS | orderBy:industry[0]" value="{{industry[1]}}">{{industry[0]}}
@@ -52,7 +52,7 @@
               <div class="form-group">
                 <div class="checkbox" ng-class="{ 'has-error' : forms.registrationForm.accepted.$invalid && !userForm.accepted.$pristine }">
                   <label for="accepted">
-                    <input type="checkbox" id="accepted" name="accepted" class="accept-terms-checkbox" ng-model="profile.accepted" tabindex="1" required />
+                    <input type="checkbox" id="accepted" name="accepted" class="accept-terms-checkbox" ng-model="registrationFactory.profile.accepted" tabindex="1" required />
                     <span>
                        I accept the
                        <a class="madero-link" href="https://help.risevision.com/hc/en-us/articles/360000924446-Terms-of-Service" target="_blank" tabindex="1">Terms of Service</a>
