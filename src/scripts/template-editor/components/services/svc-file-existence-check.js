@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .service('fileExistenceCheckService', ['$q', '$log', 'storageAPILoader', 'fileMetadataUtilsService', 'APPS_ENV',
-    function ($q, $log, storageAPILoader, fileMetadataUtilsService, APPS_ENV) {
+  .service('fileExistenceCheckService', ['$q', '$log', 'storageAPILoader', 'fileMetadataUtilsService', 'environment',
+    function ($q, $log, storageAPILoader, fileMetadataUtilsService, environment) {
       var service = {};
 
       function _requestFileData(companyId, file) {
@@ -18,7 +18,7 @@ angular.module('risevision.template-editor.services')
       }
 
       function _isDefaultImageOnTestAppsEnvironment(fileName) {
-        if (APPS_ENV !== 'TEST') {
+        if (environment.APPS_ENV !== 'TEST') {
           return false;
         }
 

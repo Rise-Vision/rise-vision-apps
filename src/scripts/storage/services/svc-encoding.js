@@ -1,6 +1,8 @@
 'use strict';
 
 angular.module('risevision.storage.services')
+  .value('ENCODING_MASTER_SWITCH_URL',
+    'https://storage.googleapis.com/risemedialibrary/encoding-switch-on')
   .service('encoding', ['ENCODING_MASTER_SWITCH_URL', '$q', '$log', '$http', 'storageAPILoader', 'userState',
     'bigQueryLogging', '$timeout',
     function (switchURL, $q, $log, $http, storageAPILoader, userState, bigQueryLogging, $timeout) {

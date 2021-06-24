@@ -20,11 +20,6 @@
     .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api'); // override default core value
 
   angular.module('risevision.apps.config', [])
-    .value('APPS_ENV', 'TEST')
-    .value('ENCODING_MASTER_SWITCH_URL',
-      'https://storage.googleapis.com/risemedialibrary/encoding-switch-on')
-    .value('STORAGE_API_ROOT',
-      'https://storage-dot-rvacore-test.appspot.com/_ah/api')
     .value('STORE_ENDPOINT_URL',
       'https://store-dot-rvacore-test.appspot.com/_ah/api') // override default Store server value
     .value('STORE_SERVER_URL', 'https://store-dot-rvacore-test.appspot.com/')
