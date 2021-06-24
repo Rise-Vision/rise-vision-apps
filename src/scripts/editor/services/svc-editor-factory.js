@@ -8,13 +8,13 @@ angular.module('risevision.editor.services')
   )
   .factory('editorFactory', ['$q', '$state', 'userState', 'userAuthFactory',
     'presentation', 'presentationParser', 'distributionParser',
-    'presentationTracker', 'storeProduct', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
+    'presentationTracker', 'storeProduct', 'environment', 'REVISION_STATUS_REVISED',
     'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT',
     '$modal', '$rootScope', '$window', 'createFirstSchedule', 'processErrorCode', 'messageBox',
     '$templateCache', '$log', 'presentationUtils', 'showLegacyWarning',
     function ($q, $state, userState, userAuthFactory, presentation,
       presentationParser, distributionParser, presentationTracker, storeProduct,
-      VIEWER_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
+      environment, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
       DEFAULT_LAYOUT, $modal, $rootScope, $window,
       createFirstSchedule, processErrorCode, messageBox, $templateCache, $log,
       presentationUtils, showLegacyWarning) {
@@ -480,7 +480,7 @@ angular.module('risevision.editor.services')
 
       var _getPreviewUrl = function (presentationId) {
         if (presentationId) {
-          return VIEWER_URL + '/?type=presentation&id=' + presentationId;
+          return environment.VIEWER_URL + '/?type=presentation&id=' + presentationId;
         }
         return null;
       };

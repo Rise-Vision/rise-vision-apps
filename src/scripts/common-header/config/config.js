@@ -23,14 +23,11 @@
   angular.module('risevision.common.config')
     .value('environment', {
       CORE_URL: 'https://rvaserver2.appspot.com/_ah/api',
+      STORE_SERVER_URL: 'https://store-dot-rvaserver2.appspot.com/',
       STORE_ENDPOINT_URL: 'https://store-dot-rvacore-test.appspot.com/_ah/api',
-      STORAGE_ENDPOINT_URL: 'https://storage-dot-rvacore-test.appspot.com/_ah/api'
+      STORAGE_ENDPOINT_URL: 'https://storage-dot-rvacore-test.appspot.com/_ah/api',
+      APPS_URL: '',
+      ENV_NAME: '',
     })
-    .value('ENABLE_EXTERNAL_LOGGING', true)
-    .value('STORE_URL', 'https://store.risevision.com/')
-    .value('STORE_SERVER_URL',
-      'https://store-dot-rvaserver2.appspot.com/')
-    .value('APPS_URL', 'https://apps.risevision.com')
-    .value('STRIPE_PROD_KEY', 'pk_live_31dWkTWQU125m2RcWpK4HQBR')
-    .value('STRIPE_TEST_KEY', 'pk_test_GrMIAHSoqhaik4tcHepsxjOR');
+    .value('ENABLE_EXTERNAL_LOGGING', true);
 })(angular);

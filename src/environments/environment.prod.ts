@@ -5,6 +5,7 @@ export const environment = {
   // AngularJS config
   APPS_ENV: 'PROD',
   CORE_URL: 'https://rvaserver2.appspot.com/_ah/api',
+  STORE_SERVER_URL: 'https://store-dot-rvaserver2.appspot.com/',
   STORE_ENDPOINT_URL: 'https://store-dot-rvaserver2.appspot.com/_ah/api',
   RVA_URL: 'http://rva.risevision.com',
   VIEWER_URL: 'https://widgets.risevision.com/viewer',

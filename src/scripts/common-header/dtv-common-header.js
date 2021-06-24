@@ -52,8 +52,6 @@ angular.module('risevision.common.header', [
     }
   ])
 
-  .value('ENV_NAME', '')
-
   // Fix issue with modal closing when clicking inside the modal, dragging the
   // mouse button and releasing it outside
   // https://github.com/angular-ui/bootstrap/issues/5810#issuecomment-486149448
@@ -94,11 +92,11 @@ angular.module('risevision.common.header', [
   .directive('commonHeader', ['$rootScope', '$q', '$loading',
     '$interval', '$log',
     '$templateCache', 'userState', '$location', 'bindToScopeWithWatch',
-    '$document', 'cookieTester', 'companyIcpFactory', 'ENV_NAME', '$window', 'APPS_URL', 'helpWidgetFactory',
+    '$document', 'cookieTester', 'companyIcpFactory', 'environment', '$window', 'helpWidgetFactory',
     function ($rootScope, $q, $loading, $interval,
       $log, $templateCache, userState, $location,
       bindToScopeWithWatch, $document, cookieTester, companyIcpFactory,
-      ENV_NAME, $window, APPS_URL, helpWidgetFactory) {
+      environment, $window, helpWidgetFactory) {
       return {
         restrict: 'E',
         template: $templateCache.get('partials/common-header/common-header.html'),
@@ -114,7 +112,7 @@ angular.module('risevision.common.header', [
           $scope.inRVAFrame = userState.inRVAFrame();
           $scope.isSubcompanySelected = userState.isSubcompanySelected;
           $scope.isTestCompanySelected = userState.isTestCompanySelected;
-          $scope.ENV_NAME = ENV_NAME;
+          $scope.ENV_NAME = environment.ENV_NAME;
           $scope.helpWidgetFactory = helpWidgetFactory;
 
           // If nav options not provided use defaults
@@ -140,7 +138,7 @@ angular.module('risevision.common.header', [
             attr.hideHelpMenu !== 'false';
 
           $scope.isApps = function () {
-            return APPS_URL === '' || $window.location.href.startsWith(APPS_URL);
+            return environment.APPS_URL === '' || $window.location.href.startsWith(environment.APPS_URL);
           };
 
           // used by userState; determines if the URL root is used for

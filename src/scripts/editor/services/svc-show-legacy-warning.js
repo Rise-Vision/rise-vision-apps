@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.editor.services')
-  .factory('showLegacyWarning', ['$window', '$modal', 'RVA_URL',
-    function ($window, $modal, RVA_URL) {
+  .factory('showLegacyWarning', ['$window', '$modal', 'environment',
+    function ($window, $modal, environment) {
       return function (presentation) {
         var modalInstance = $modal.open({
           templateUrl: 'partials/components/confirm-modal/confirm-modal.html',
@@ -26,7 +26,7 @@ angular.module('risevision.editor.services')
 
         return modalInstance.result
           .then(function () {
-            $window.location.href = RVA_URL +
+            $window.location.href = environment.RVA_URL +
               '/#/PRESENTATION_MANAGE/id=' + presentation.id +
               '?cid=' + presentation.companyId;
           })
