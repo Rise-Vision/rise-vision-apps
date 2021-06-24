@@ -575,8 +575,7 @@
             "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true,
-            "preserveSymlinks": true
+            "namedChunks": true
           },
           "configurations": {
             "deployment": {
@@ -818,8 +817,8 @@
                 "src/scripts/storage/services/svc-upload-overwrite-warning.js",
                 "src/scripts/storage/services/svc-pending-operations-factory.js",
                 "src/scripts/storage/services/svc-encoding.js",
-                "src/node_modules/tus-js-client/dist/tus.min.js",
-                "src/node_modules/compressorjs/dist/compressor.min.js",
+                "node_modules/tus-js-client/dist/tus.min.js",
+                "node_modules/compressorjs/dist/compressor.min.js",
 
                 "src/scripts/storage/filters/ftr-filters.js",
                 "src/scripts/storage/directives/dtv-storage-file-select.js",
