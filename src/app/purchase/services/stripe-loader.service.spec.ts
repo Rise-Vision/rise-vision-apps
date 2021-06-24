@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import { TestBed } from '@angular/core/testing';
 
 import { StripeLoaderService } from './stripe-loader.service';
-import { fail } from 'assert';
+import { assert } from 'sinon';
 import { UserState } from 'src/app/ajs-upgraded-providers';
 
 describe('StripeLoaderService', () => {
@@ -44,7 +44,7 @@ describe('StripeLoaderService', () => {
   it("should not resolve if Stripe object is not present", function(done) {
     stripeLoader.load()
     .then(function() {
-      fail("failed");
+      assert.fail("failed");
     });
 
     clock.tick(100);
