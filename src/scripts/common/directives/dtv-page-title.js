@@ -23,9 +23,6 @@ angular.module('risevision.apps.directives')
             case 'common.auth.resetpassword':
               return 'Reset Password';
 
-            case 'common.auth.confirmaccount':
-              return 'Confirm Account';
-
             case 'common.auth.unsubscribe':
               return 'Unsubscribe';
 

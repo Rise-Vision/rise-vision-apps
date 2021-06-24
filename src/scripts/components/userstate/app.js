@@ -140,20 +140,14 @@
             url: '/unregistered/:state',
             controller: 'RegistrationCtrl',
             resolve: {
-              account: ['userState', 'getUserProfile', 'getAccount',
-                function (userState, getUserProfile, getAccount) {
-                  return getUserProfile(userState.getUsername())
-                    .then(null, function (resp) {
-                      if (resp && resp.message ===
-                        'User has not yet accepted the Terms of Service'
-                      ) {
-                        return getAccount();
-                      } else {
-                        return null;
-                      }
+              authenticate: ['$state', '$stateParams', 'userAuthFactory', 'registrationFactory',
+                function($state, $stateParams, userAuthFactory, registrationFactory) {
+                  return userAuthFactory.authenticate(false)
+                    .then(function () {
+                      registrationFactory.init();
                     })
                     .catch(function () {
-                      return null;
+                      $state.go('common.auth.unauthorized', $stateParams);
                     });
                 }
               ]
@@ -212,8 +206,7 @@
         $rootScope.$on('risevision.user.authorized', function () {
           var currentState = $state.current.name;
 
-          if (currentState.indexOf('common.auth') !== -1 && currentState !== 'common.auth.unsubscribe' &&
-            currentState !== 'common.auth.confirmaccount') {
+          if (currentState.indexOf('common.auth') !== -1 && currentState !== 'common.auth.unsubscribe') {
             urlStateService.redirectToState($stateParams.state);
           }
         });
