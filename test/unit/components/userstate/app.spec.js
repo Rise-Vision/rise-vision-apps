@@ -25,16 +25,33 @@ describe("app:", function() {
   beforeEach(function () {
     module("risevision.common.components.userstate");
 
+    module(function ($provide) {
+      $provide.service('userAuthFactory',function(){
+        return {
+          authenticate: sinon.stub().resolves()
+        };
+      });
+
+      $provide.service('registrationFactory',function(){
+        return {
+          init: sinon.stub()
+        };
+      });
+
+    });
+
     inject(function ($injector) {
       $state = $injector.get("$state");
       $rootScope = $injector.get("$rootScope");
       urlStateService = $injector.get("urlStateService");
+      userAuthFactory = $injector.get('userAuthFactory');
+      registrationFactory = $injector.get('registrationFactory');
 
       sinon.stub(urlStateService, "redirectToState");
     });
   });
 
-  var $state, $rootScope, urlStateService;
+  var $state, $rootScope, urlStateService, userAuthFactory, registrationFactory;
   var locationProvider, urlRouterProvider, urlMatcherFactoryProvider, stateProvider;
 
   describe("mappings: ", function() {
@@ -250,6 +267,59 @@ describe("app:", function() {
         joinAccount: true
       });
     });
+
+    describe('common.auth.unregistered', function() {
+      it("should exist", function() {
+        var state = $state.get('common.auth.unregistered');
+        expect(state).to.be.ok;
+        expect(state.templateUrl).to.equal('partials/components/userstate/signup.html');
+        expect(state.url).to.equal("/unregistered/:state");
+        expect(state.controller).to.equal("RegistrationCtrl");
+
+        expect(state.resolve).to.be.ok;
+        expect(state.resolve.authenticate).to.be.ok;
+      });      
+
+      describe('authenticate:', function() {
+        var $stateParams;
+
+        beforeEach(function() {
+          sinon.spy($state, 'go');
+
+          $stateParams = 'stateParams';
+        });
+
+        it('should check if user is authenticated', function(done) {
+          $state.get('common.auth.unregistered').resolve.authenticate[4]($state, $stateParams, userAuthFactory, registrationFactory)
+            .then(function() {
+              userAuthFactory.authenticate.should.have.been.calledWith(false);
+
+              registrationFactory.init.should.have.been.called;
+
+              $state.go.should.not.have.been.called;
+
+              done();
+            });
+        });
+
+        it('should redirect user to login page if not authenticated', function(done) {
+          userAuthFactory.authenticate.rejects();
+
+          $state.get('common.auth.unregistered').resolve.authenticate[4]($state, $stateParams, userAuthFactory, registrationFactory)
+            .then(function() {
+              userAuthFactory.authenticate.should.have.been.calledWith(false);
+
+              registrationFactory.init.should.not.have.been.called;
+
+              $state.go.should.have.been.calledWith('common.auth.unauthorized', 'stateParams');
+
+              done();
+            });
+        });
+      });
+
+    });
+
   });
 
   describe("listeners: ", function() {

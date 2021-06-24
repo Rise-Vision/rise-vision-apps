@@ -67,8 +67,6 @@ describe('directive: page title', function() {
     checkState('common.auth.requestpasswordreset', 'Reset Password');
     checkState('common.auth.resetpassword', 'Reset Password');
 
-    checkState('common.auth.confirmaccount', 'Confirm Account');
-
     checkState('common.auth.unsubscribe', 'Unsubscribe');
 
     // Apps auth routes:
