@@ -13,13 +13,11 @@
   'use strict';
 
   angular.module('risevision.common.config')
-    .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api'); // override default core value
-
-  angular.module('risevision.apps.config', [])
     // Mock Angular environment variable
     .value('environment', {
       APPS_ENV: 'TEST',
       // override default Store server value
+      CORE_URL: 'https://rvacore-test.appspot.com/_ah/api',
       STORE_ENDPOINT_URL: 'https://store-dot-rvacore-test.appspot.com/_ah/api',
       STORE_SERVER_URL: 'https://store-dot-rvacore-test.appspot.com/',
       RVA_URL: 'http://rva-test.appspot.com',
@@ -39,6 +37,7 @@
       HUBSPOT_ACCOUNT: '2939619',
       HTML_TEMPLATE_URL: 'https://widgets.risevision.com/staging/templates/PRODUCT_CODE/src/template.html'
     })
+    .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api') // override default core value
     .value('STORE_ENDPOINT_URL',
       'https://store-dot-rvacore-test.appspot.com/_ah/api') // override default Store server value
     .value('STORE_SERVER_URL', 'https://store-dot-rvacore-test.appspot.com/')

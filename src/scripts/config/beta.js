@@ -12,7 +12,7 @@
 
   'use strict';
 
-  angular.module('risevision.apps.config', [])
+  angular.module('risevision.common.config')
     .value('STORE_ENDPOINT_URL',
       'https://store-dot-rvaserver2.appspot.com/_ah/api')
     .value('RVA_URL', 'http://rva.risevision.com')

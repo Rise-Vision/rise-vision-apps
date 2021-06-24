@@ -4,6 +4,7 @@ export const environment = {
   canvaApiKey: '_Ow6FgJpQ3S_k0Mgyo1UX2nM',
   // AngularJS config
   APPS_ENV: 'PROD',
+  CORE_URL: 'https://rvaserver2.appspot.com/_ah/api',
   STORE_ENDPOINT_URL: 'https://store-dot-rvaserver2.appspot.com/_ah/api',
   RVA_URL: 'http://rva.risevision.com',
   VIEWER_URL: 'https://widgets.risevision.com/viewer',

@@ -130,9 +130,9 @@ angular.module('risevision.apps')
   ]);
 
 angular.module('risevision.displays.services', [
+  'risevision.common.config',
   'risevision.common.header',
   'risevision.common.gapi',
-  'risevision.apps.config',
   'risevision.apps.services'
 ]);
 angular.module('risevision.displays.filters', []);

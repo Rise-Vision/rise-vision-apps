@@ -8,7 +8,8 @@ export const environment = {
   canvaApiKey: 'EwLWFws4Qjpa-n_2ZJgBMQbz',
   // AngularJS config
   APPS_ENV: 'TEST',
-  STORE_ENDPOINT_URL: 'https://store-dot-rvacore-test.appspot.com/_ah/api', // override default Store server value
+  CORE_URL: 'https://rvacore-test.appspot.com/_ah/api',
+  STORE_ENDPOINT_URL: 'https://store-dot-rvacore-test.appspot.com/_ah/api',
   STORE_SERVER_URL: 'https://store-dot-rvacore-test.appspot.com/',
   RVA_URL: 'http://rva-test.appspot.com',
   VIEWER_URL: 'https://widgets.risevision.com/viewer-stage-0',
