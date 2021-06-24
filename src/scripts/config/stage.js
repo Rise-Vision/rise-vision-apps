@@ -13,9 +13,6 @@
   'use strict';
 
   angular.module('risevision.common.config')
-    .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api') // override default core value
-    .value('STORE_ENDPOINT_URL',
-      'https://store-dot-rvacore-test.appspot.com/_ah/api') // override default Store server value
     .value('STORE_SERVER_URL', 'https://store-dot-rvacore-test.appspot.com/')
     .value('RVA_URL', 'http://rva-test.appspot.com')
     .value('VIEWER_URL', 'https://widgets.risevision.com/viewer-stage-0')
@@ -25,8 +22,6 @@
     .value('TAG_MANAGER_CONTAINER_ID', 'GTM-MMTK3JH')
     .value('TAG_MANAGER_AUTH', 'Ry3lxk_Xrlx2qhbXmLA-Pg')
     .value('TAG_MANAGER_ENV', 'env-254')
-    .value('STORAGE_ENDPOINT_URL',
-      'https://storage-dot-rvacore-test.appspot.com/_ah/api')
     .value('MESSAGING_PRIMUS_URL',
       'https://services-stage.risevision.com/messaging/primus?displayId=apps&machineId=1')
     .value('APPS_URL', '')

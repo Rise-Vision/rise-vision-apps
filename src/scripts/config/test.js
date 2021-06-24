@@ -17,8 +17,6 @@
     .value('environment', {
       APPS_ENV: 'TEST',
       // override default Store server value
-      CORE_URL: 'https://rvacore-test.appspot.com/_ah/api',
-      STORE_ENDPOINT_URL: 'https://store-dot-rvacore-test.appspot.com/_ah/api',
       STORE_SERVER_URL: 'https://store-dot-rvacore-test.appspot.com/',
       RVA_URL: 'http://rva-test.appspot.com',
       VIEWER_URL: 'https://widgets.risevision.com/viewer-stage-0',
@@ -27,7 +25,6 @@
       TAG_MANAGER_CONTAINER_ID: null,
       TAG_MANAGER_AUTH: null,
       TAG_MANAGER_ENV: null,
-      STORAGE_ENDPOINT_URL: 'https://storage-dot-rvacore-test.appspot.com/_ah/api',
       MESSAGING_PRIMUS_URL: 'https://services-stage.risevision.com/messaging/primus?displayId=apps&machineId=1',
       APPS_URL: '',
       ENV_NAME: 'TEST',
@@ -37,9 +34,6 @@
       HUBSPOT_ACCOUNT: '2939619',
       HTML_TEMPLATE_URL: 'https://widgets.risevision.com/staging/templates/PRODUCT_CODE/src/template.html'
     })
-    .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api') // override default core value
-    .value('STORE_ENDPOINT_URL',
-      'https://store-dot-rvacore-test.appspot.com/_ah/api') // override default Store server value
     .value('STORE_SERVER_URL', 'https://store-dot-rvacore-test.appspot.com/')
     .value('RVA_URL', 'http://rva-test.appspot.com')
     .value('VIEWER_URL', 'https://widgets.risevision.com/viewer-stage-0')
@@ -49,8 +43,6 @@
     .value('TAG_MANAGER_CONTAINER_ID', null)
     .value('TAG_MANAGER_AUTH', null)
     .value('TAG_MANAGER_ENV', null)
-    .value('STORAGE_ENDPOINT_URL',
-      'https://storage-dot-rvacore-test.appspot.com/_ah/api')
     .value('MESSAGING_PRIMUS_URL',
       'https://services-stage.risevision.com/messaging/primus?displayId=apps&machineId=1')
     .value('APPS_URL', '')

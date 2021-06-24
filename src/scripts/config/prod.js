@@ -13,8 +13,6 @@
   'use strict';
 
   angular.module('risevision.common.config')
-    .value('STORE_ENDPOINT_URL',
-      'https://store-dot-rvaserver2.appspot.com/_ah/api')
     .value('RVA_URL', 'http://rva.risevision.com')
     .value('VIEWER_URL', 'https://widgets.risevision.com/viewer')
     .value('SHARED_SCHEDULE_URL', 'https://widgets.risevision.com/viewer/?type=sharedschedule&id=SCHEDULE_ID')
@@ -23,8 +21,6 @@
     .value('TAG_MANAGER_CONTAINER_ID', 'GTM-MMTK3JH')
     .value('TAG_MANAGER_AUTH', null)
     .value('TAG_MANAGER_ENV', null)
-    .value('STORAGE_ENDPOINT_URL',
-      'https://storage-dot-rvaserver2.appspot.com/_ah/api')
     .value('MESSAGING_PRIMUS_URL',
       'https://services.risevision.com/messaging/primus?displayId=apps&machineId=1')
     .value('APPS_URL', '')
