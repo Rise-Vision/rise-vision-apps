@@ -1,7 +1,7 @@
 /*jshint expr:true */
 "use strict";
 
-describe("Services: selected company url handler", function() {
+xdescribe("Services: selected company url handler", function() {
 
   beforeEach(module("risevision.common.components.userstate"));
   beforeEach(module(function ($provide) {

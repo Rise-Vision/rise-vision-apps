@@ -22,7 +22,7 @@ angular.module('risevision.apps')
           controller: 'TemplateEditorController',
           params: {
             productDetails: null,
-            productId: ""
+            productId: ''
           },
           resolve: {
             presentationInfo: ['$stateParams', 'canAccessApps', 'editorFactory', 'templateEditorFactory',

@@ -253,7 +253,8 @@ describe("app:", function() {
       expect(state.controller).to.equal("LoginCtrl");
       expect(state.params).to.deep.equal({
         isSignUp: true,
-        joinAccount: false
+        joinAccount: false,
+        state: ''
       });
     });
 
@@ -264,7 +265,8 @@ describe("app:", function() {
       expect(state.controller).to.equal("LoginCtrl");
       expect(state.params).to.deep.equal({
         isSignUp: true,
-        joinAccount: true
+        joinAccount: true,
+        companyName: ''
       });
     });
 

@@ -112,7 +112,7 @@
               isSignUp: false,
               passwordReset: null,
               authError: null,
-              state: ""
+              state: ''
             }
           })
 
@@ -123,7 +123,7 @@
             params: {
               isSignUp: true,
               joinAccount: false,
-              state: ""
+              state: ''
             }
           })
 
@@ -134,7 +134,7 @@
             params: {
               isSignUp: true,
               joinAccount: true,
-              companyName: ""
+              companyName: ''
             }
           })
 
@@ -142,7 +142,7 @@
             templateUrl: 'partials/components/userstate/signup.html',
             url: '/unregistered/:state',
             params: {
-              state: ""
+              state: ''
             },
             controller: 'RegistrationCtrl',
             resolve: {
@@ -170,8 +170,8 @@
             templateUrl: 'partials/components/userstate/reset-password-confirm.html',
             url: '/resetpassword/:user/:token',
             params: {
-              user: "",
-              token: ""
+              user: '',
+              token: ''
             },
             controller: 'ResetPasswordConfirmCtrl'
           })

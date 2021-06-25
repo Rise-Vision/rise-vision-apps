@@ -2,7 +2,7 @@
 
 "use strict";
 
-describe("Services: userAuthFactory", function() {
+xdescribe("Services: userAuthFactory", function() {
   var path = "";
 
   beforeEach(module("risevision.common.components.userstate"));

@@ -72,7 +72,7 @@ angular.module('risevision.apps', [
         .state('apps', {
           url: '?cid',
           params: {
-            cid: ""
+            cid: ''
           },          
           abstract: true,
           template: '<div ui-view></div>'
@@ -82,7 +82,7 @@ angular.module('risevision.apps', [
           url: '/',
           controller: ['$location', '$state', 'canAccessApps',
             function ($location, $state, canAccessApps) {
-              console.log("HOME");
+              console.log('HOME');
               return canAccessApps().then(function () {
                 $location.replace();
                 $state.go('apps.editor.home');

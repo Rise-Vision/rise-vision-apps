@@ -1,7 +1,7 @@
 /*jshint expr:true */
 "use strict";
 
-describe("Services: company state", function() {
+xdescribe("Services: company state", function() {
 
   beforeEach(module("risevision.common.components.userstate"));
   beforeEach(module(function ($provide) {

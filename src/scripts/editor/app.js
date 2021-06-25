@@ -69,7 +69,7 @@ angular.module('risevision.apps')
           controller: 'WorkspaceController',
           params: {
             isLoaded: false,
-            presentationId: ""
+            presentationId: ''
           },
           resolve: {
             presentationInfo: ['canAccessApps', 'editorFactory', '$stateParams',

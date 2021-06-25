@@ -1,5 +1,5 @@
 "use strict";
-describe("service: access:", function() {
+xdescribe("service: access:", function() {
   beforeEach(module("risevision.common.components.userstate"));
 
   beforeEach(module(function ($provide) {
