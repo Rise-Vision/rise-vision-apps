@@ -73,13 +73,13 @@ var unitTestFiles = [
   "src/scripts/purchase/**/*.js",
   "src/scripts/billing/**/*.js",
   "src/scripts/common/**/*.js",
-  "src/scripts/config/test.js",
   "src/scripts/displays/**/*.js",
   "src/scripts/editor/**/*.js",
   "src/scripts/schedules/**/*.js",
   "src/scripts/storage/**/*.js",
   "src/scripts/template-editor/**/*.js",
   "src/scripts/widgets/**/*.js",
+  "test/unit/config/test.js",
   "test/unit/**/mocks/*.js",
   "test/unit/**/*.spec.js",
   "test/unit/common-header/services/svc-help-widget-override.js"
@@ -197,16 +197,7 @@ gulp.task("html2js", function() {
     .pipe(gulp.dest("./dist/tmp/"));
 });
 
-gulp.task("config", function() {
-  var env = process.env.NODE_ENV || "dev";
-  log("Environment is", env);
-
-  return gulp.src(["./src/scripts/config/" + env + ".js"])
-    .pipe(rename("config.js"))
-    .pipe(gulp.dest("./src/scripts/config"));
-});
-
-gulp.task('build-pieces', gulp.series("clean", gulp.parallel('config', 'i18n-build', 'html2js')));
+gulp.task('build-pieces', gulp.series("clean", gulp.parallel('i18n-build', 'html2js')));
 
 gulp.task('build', gulp.series('lint', 'build-pieces', "html-user-manager-silent"));
 
@@ -232,7 +223,7 @@ gulp.task("test:unit", factory.testUnitAngular({
     testFiles: unitTestFiles
 }));
 
-gulp.task("test", gulp.series("config", "test:unit"));
+gulp.task("test", gulp.series("test:unit"));
 
 /*---- e2e testing ----*/
 

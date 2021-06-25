@@ -20,15 +20,9 @@ describe("controller: plan banner", function() {
         showPurchaseOptions: sinon.stub()
       };
     });
-    $provide.factory("userState", function() {
-      return {
-        _restoreState: function () {},
-        isSelectedCompanyChargebee: sinon.stub().returns(true)
-      };
-    });
   }));
 
-  var sandbox, $scope, $rootScope, currentPlanFactory, userState;
+  var sandbox, $scope, $rootScope, currentPlanFactory;
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
@@ -37,12 +31,10 @@ describe("controller: plan banner", function() {
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
       currentPlanFactory = $injector.get("currentPlanFactory");
-      userState = $injector.get("userState");
 
       $controller("PlanBannerCtrl", {
         $scope: $scope,
-        currentPlanFactory: currentPlanFactory,
-        userState: userState
+        currentPlanFactory: currentPlanFactory
       });
 
       $scope.$digest();
@@ -55,7 +47,6 @@ describe("controller: plan banner", function() {
 
   it("should initialize",function() {
     expect($scope.showPlans).to.be.ok;
-    expect($scope.storeAccountUrl).to.equal("https://store.risevision.com/account?cid=companyId");
     expect($scope.getVisibleBanner).to.be.a("function");
   });
 
@@ -128,9 +119,6 @@ describe("controller: plan banner", function() {
     setTimeout(function () {
       expect($scope.plan).to.be.not.null;
       expect($scope.plan.type).to.equal("basic");
-
-      expect(userState.isSelectedCompanyChargebee).to.have.been.called;
-      expect($scope.isChargebee).to.be.true;
 
       done();
     }, 0);

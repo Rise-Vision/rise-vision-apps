@@ -5,11 +5,11 @@ angular.module('risevision.common.header')
     'userState', 'userAuthFactory', 'canAccessApps',
     '$loading',
     '$log', 'uiFlowManager', 'bindToScopeWithWatch',
-    '$window', 'APPS_URL',
+    '$window', 'environment',
     function ($scope, $state, $modal, $templateCache, userState, userAuthFactory,
       canAccessApps,
       $loading, $log, uiFlowManager,
-      bindToScopeWithWatch, $window, APPS_URL) {
+      bindToScopeWithWatch, $window, environment) {
 
       window.$loading = $loading; //DEBUG
 
@@ -69,7 +69,7 @@ angular.module('risevision.common.header')
 
       // Show Alert Settings page
       $scope.alertSettings = function () {
-        var alertsUrl = APPS_URL + '/alerts?cid=' + userState.getSelectedCompanyId();
+        var alertsUrl = environment.APPS_URL + '/alerts?cid=' + userState.getSelectedCompanyId();
 
         $window.location.href = alertsUrl;
       };

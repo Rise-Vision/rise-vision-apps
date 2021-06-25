@@ -2,7 +2,9 @@
 describe('controller: SharedSchedulePopoverController', function() {
   beforeEach(module('risevision.schedules.controllers'));
   beforeEach(module(function ($provide) {
-    $provide.value('SHARED_SCHEDULE_URL','https://widgets.risevision.com/viewer/?type=sharedschedule&id=SCHEDULE_ID');
+    $provide.value('environment', {
+      SHARED_SCHEDULE_URL: 'https://widgets.risevision.com/viewer/?type=sharedschedule&id=SCHEDULE_ID'
+    });
 
     $provide.service("scheduleFactory", function() {
        return {};

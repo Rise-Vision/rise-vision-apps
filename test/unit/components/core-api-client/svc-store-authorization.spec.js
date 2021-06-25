@@ -6,7 +6,9 @@ describe("service: storeAuthorization:", function() {
   beforeEach(module("risevision.store.authorization"));
 
   beforeEach(module(function ($provide) {
-    $provide.value("STORE_SERVER_URL", STORE_SERVER_URL);
+    $provide.value("environment", {
+      STORE_SERVER_URL: STORE_SERVER_URL
+    });
     $provide.service("$q", function() {return Q;});
     $provide.service("userState",function(){
       return {

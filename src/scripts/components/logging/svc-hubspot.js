@@ -3,8 +3,8 @@
   'use strict';
 
   angular.module('risevision.common.components.logging')
-    .factory('hubspot', ['$window', 'HUBSPOT_ACCOUNT',
-      function ($window, hubspotAccount) {
+    .factory('hubspot', ['$window', 'environment',
+      function ($window, environment) {
         var service = {};
         var loaded = false;
 
@@ -21,7 +21,7 @@
             e.defer = !0;
             e.async = !0;
             e.id = 'hs-script-loader';
-            e.src = '//js.hs-scripts.com/' + hubspotAccount + '.js';
+            e.src = '//js.hs-scripts.com/' + environment.HUBSPOT_ACCOUNT + '.js';
             var n = document.getElementsByTagName('script')[0];
             n.parentNode.insertBefore(e, n);
 

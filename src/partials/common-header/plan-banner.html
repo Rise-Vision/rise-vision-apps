@@ -18,9 +18,8 @@
     <div class="u_margin-right">
       <span class="font-weight-bold">Your subscription expires on {{ plan.currentPeriodEndDate | date : 'd-MMM-yyyy'}}</span>
 
-      <a ng-hide="isChargebee" class="ml-3 btn btn-xs btn-primary" href="{{storeAccountUrl}}" target="_blank" link-cid>Account Settings</a>
-      <a ng-show="isChargebee" ng-if="!isApps()" class="ml-3 btn btn-xs btn-primary" href="https://apps.risevision.com/billing" target="_blank" link-cid>Account Settings</a>
-      <a ng-show="isChargebee" ng-if="isApps()" class="ml-3 btn btn-xs btn-primary" ui-sref="apps.billing.home">Account Settings</a>
+      <a ng-if="!isApps()" class="ml-3 btn btn-xs btn-primary" href="https://apps.risevision.com/billing" target="_blank" link-cid>Account Settings</a>
+      <a ng-if="isApps()" class="ml-3 btn btn-xs btn-primary" ui-sref="apps.billing.home">Account Settings</a>
     </div>
   </div>
 
@@ -45,9 +44,8 @@
     <div class="u_margin-right">
       <span class="font-weight-bold">There was an issue processing your payment. Please update your billing information. Your Displays may be affected.</span>
 
-      <a ng-hide="isChargebee" class="ml-3 btn btn-xs btn-primary" href="{{storeAccountUrl}}" target="_blank" link-cid>Update Billing</a>
-      <a ng-show="isChargebee" ng-if="!isApps()" class="ml-3 btn btn-xs btn-primary" href="https://apps.risevision.com/billing" target="_blank" link-cid>Update Billing</a>
-      <a ng-show="isChargebee" ng-if="isApps()" class="ml-3 btn btn-xs btn-primary" ui-sref="apps.billing.home">Update Billing</a>
+      <a ng-if="!isApps()" class="ml-3 btn btn-xs btn-primary" href="https://apps.risevision.com/billing" target="_blank" link-cid>Update Billing</a>
+      <a ng-if="isApps()" class="ml-3 btn btn-xs btn-primary" ui-sref="apps.billing.home">Update Billing</a>
     </div>
   </div>
 </div>
