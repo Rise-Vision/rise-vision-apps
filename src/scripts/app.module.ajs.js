@@ -2,6 +2,7 @@
 
 angular.module('risevision.apps', [
     'ui.router',
+    'ui.router.state.events',
     'ngTouch',
     'ui.bootstrap',
     'ui.codemirror',
@@ -70,6 +71,9 @@ angular.module('risevision.apps', [
       $stateProvider
         .state('apps', {
           url: '?cid',
+          params: {
+            cid: ""
+          },          
           abstract: true,
           template: '<div ui-view></div>'
         })
@@ -78,6 +82,7 @@ angular.module('risevision.apps', [
           url: '/',
           controller: ['$location', '$state', 'canAccessApps',
             function ($location, $state, canAccessApps) {
+              console.log("HOME");
               return canAccessApps().then(function () {
                 $location.replace();
                 $state.go('apps.editor.home');

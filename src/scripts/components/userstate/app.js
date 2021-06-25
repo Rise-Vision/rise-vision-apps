@@ -111,7 +111,8 @@
             params: {
               isSignUp: false,
               passwordReset: null,
-              authError: null
+              authError: null,
+              state: ""
             }
           })
 
@@ -121,7 +122,8 @@
             controller: 'LoginCtrl',
             params: {
               isSignUp: true,
-              joinAccount: false
+              joinAccount: false,
+              state: ""
             }
           })
 
@@ -131,13 +133,17 @@
             controller: 'LoginCtrl',
             params: {
               isSignUp: true,
-              joinAccount: true
+              joinAccount: true,
+              companyName: ""
             }
           })
 
           .state('common.auth.unregistered', {
             templateUrl: 'partials/components/userstate/signup.html',
             url: '/unregistered/:state',
+            params: {
+              state: ""
+            },
             controller: 'RegistrationCtrl',
             resolve: {
               authenticate: ['$state', '$stateParams', 'userAuthFactory', 'registrationFactory',
@@ -163,6 +169,10 @@
           .state('common.auth.resetpassword', {
             templateUrl: 'partials/components/userstate/reset-password-confirm.html',
             url: '/resetpassword/:user/:token',
+            params: {
+              user: "",
+              token: ""
+            },
             controller: 'ResetPasswordConfirmCtrl'
           })
 

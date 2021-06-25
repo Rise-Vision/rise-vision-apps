@@ -21,7 +21,8 @@ angular.module('risevision.apps')
           reloadOnSearch: false,
           controller: 'TemplateEditorController',
           params: {
-            productDetails: null
+            productDetails: null,
+            productId: ""
           },
           resolve: {
             presentationInfo: ['$stateParams', 'canAccessApps', 'editorFactory', 'templateEditorFactory',
