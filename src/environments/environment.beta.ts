@@ -3,7 +3,6 @@ export const environment = {
   BLUEPRINT_URL: 'https://widgets.risevision.com/staging/templates/PRODUCT_CODE/blueprint.json',
   canvaApiKey: '_Ow6FgJpQ3S_k0Mgyo1UX2nM',
   // AngularJS config
-  APPS_ENV: 'PROD',
   CORE_URL: 'https://rvaserver2.appspot.com/_ah/api',
   STORE_SERVER_URL: 'https://store-dot-rvaserver2.appspot.com/',
   STORE_ENDPOINT_URL: 'https://store-dot-rvaserver2.appspot.com/_ah/api',
