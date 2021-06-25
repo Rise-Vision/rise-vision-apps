@@ -6,8 +6,6 @@ describe('service: showLegacyWarning:', function() {
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
 
-    $provide.value('RVA_URL',"http://rva-test.appspot.com");
-
     $provide.value('$window', {
       location: {}
     });
@@ -18,6 +16,10 @@ describe('service: showLegacyWarning:', function() {
         modalInstance: modalInstance,
         open: sinon.stub().returns(modalInstance)
       };
+    });
+
+    $provide.value('environment', {
+      'RVA_URL': 'http://rva-test.appspot.com'
     });
 
   }));

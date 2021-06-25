@@ -1,18 +1,13 @@
 'use strict';
 
 angular.module('risevision.common.header')
-  .value('ACCOUNT_PATH', 'account?cid=companyId')
-  .controller('PlanBannerCtrl', ['$scope', '$rootScope', 'userState',
-    'currentPlanFactory', 'STORE_URL', 'ACCOUNT_PATH',
-    function ($scope, $rootScope, userState, currentPlanFactory,
-      STORE_URL, ACCOUNT_PATH) {
+  .controller('PlanBannerCtrl', ['$scope', '$rootScope', 'currentPlanFactory',
+    function ($scope, $rootScope, currentPlanFactory) {
       $scope.plan = {};
       $scope.showPlans = currentPlanFactory.showPurchaseOptions;
-      $scope.storeAccountUrl = STORE_URL + ACCOUNT_PATH;
 
       $rootScope.$on('risevision.plan.loaded', function () {
         $scope.plan = currentPlanFactory.currentPlan;
-        $scope.isChargebee = userState.isSelectedCompanyChargebee();
       });
 
       $scope.isEnterpriseSubCompany = currentPlanFactory.isEnterpriseSubCompany;

@@ -143,7 +143,9 @@ describe('service: editorFactory:', function() {
         }
       };
     });
-    $provide.value('VIEWER_URL', 'http://rvaviewer-test.appspot.com');
+    $provide.value('environment', {
+      VIEWER_URL: 'http://rvaviewer-test.appspot.com'
+    });
     $provide.value('TEMPLATES_TYPE', 'Templates');
     $provide.factory('messageBox', function() {
       return messageBoxStub;

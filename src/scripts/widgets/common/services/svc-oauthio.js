@@ -1,5 +1,6 @@
 'use strict';
 angular.module('risevision.widgets.services')
+  .value('OAUTH_PUBLIC_KEY', 'EJMI-lB9hB55OYEsYmjXDNfRGoY')
   .factory('OAuthio', ['OAUTH_PUBLIC_KEY', '$window', '$q', '$log',
     function (OAUTH_PUBLIC_KEY, $window, $q, $log) {
       var svc = {};

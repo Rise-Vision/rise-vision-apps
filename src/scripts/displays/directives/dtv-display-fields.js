@@ -3,10 +3,10 @@
 angular.module('risevision.displays.directives')
   .directive('displayFields', ['$sce', 'userState', 'display', 'displayFactory', 'playerLicenseFactory',
     'playerProFactory', 'displayControlFactory', 'playerActionsFactory', 'scheduleFactory',
-    'currentPlanFactory', 'messageBox', 'confirmModal', 'SHARED_SCHEDULE_URL',
+    'currentPlanFactory', 'messageBox', 'confirmModal', 'environment',
     function ($sce, userState, display, displayFactory, playerLicenseFactory, playerProFactory,
       displayControlFactory, playerActionsFactory, scheduleFactory, currentPlanFactory,
-      messageBox, confirmModal, SHARED_SCHEDULE_URL) {
+      messageBox, confirmModal, environment) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/display-fields.html',
@@ -71,7 +71,7 @@ angular.module('risevision.displays.directives')
               return null;
             }
 
-            var url = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', scheduleId) +
+            var url = environment.SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', scheduleId) +
               '&env=apps_display';
 
             return $sce.trustAsResourceUrl(url);

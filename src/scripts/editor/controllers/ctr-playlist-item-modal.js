@@ -3,10 +3,10 @@
 angular.module('risevision.editor.controllers')
   .controller('PlaylistItemModalController', ['$scope',
     'placeholderPlaylistFactory', 'settingsFactory', 'gadgetFactory', '$modalInstance',
-    'item', 'editorFactory', 'userState', 'RVA_URL',
+    'item', 'editorFactory', 'userState', 'environment',
     function ($scope, placeholderPlaylistFactory, settingsFactory, gadgetFactory,
-      $modalInstance, item, editorFactory, userState, RVA_URL) {
-      $scope.PREVIOUS_EDITOR_URL = RVA_URL + '/#/PRESENTATION_MANAGE' + ((
+      $modalInstance, item, editorFactory, userState, environment) {
+      $scope.PREVIOUS_EDITOR_URL = environment.RVA_URL + '/#/PRESENTATION_MANAGE' + ((
           editorFactory.presentation.id) ? '/id=' + editorFactory.presentation
         .id : '') + '?cid=' + userState.getSelectedCompanyId();
       $scope.item = angular.copy(item);
