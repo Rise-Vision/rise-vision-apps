@@ -7,13 +7,3 @@
  * dev.js, test.js & prod.js
  *
  */
-
-(function (angular) {
-
-  'use strict';
-
-  angular.module('risevision.common.config')
-    .value('SHARED_SCHEDULE_URL', 'https://widgets.risevision.com/viewer-stage-0/?type=sharedschedule&id=SCHEDULE_ID')
-    .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services-stage.risevision.com/oauthtokenprovider/');
-
-})(angular);

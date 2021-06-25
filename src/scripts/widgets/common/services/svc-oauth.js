@@ -3,8 +3,8 @@
 
 'use strict';
 angular.module('risevision.widgets.services')
-  .factory('OAuthService', ['$http', 'OAUTH_TOKEN_PROVIDER_URL', 'OAuthio', '$q', '$log', 'userState',
-    function ($http, OAUTH_TOKEN_PROVIDER_URL, OAuthio, $q, $log, userState) {
+  .factory('OAuthService', ['$http', 'environment', 'OAuthio', '$q', '$log', 'userState',
+    function ($http, environment, OAuthio, $q, $log, userState) {
       var svc = {};
       var provider = '';
       var key = '';
@@ -30,7 +30,7 @@ angular.module('risevision.widgets.services')
 
       var _getStatus = function () {
         var deferred = $q.defer();
-        $http.post(OAUTH_TOKEN_PROVIDER_URL + 'status', {
+        $http.post(environment.OAUTH_TOKEN_PROVIDER_URL + 'status', {
             'companyId': userState.getSelectedCompanyId(),
             'provider': provider
           }, _getRequestOptions())
@@ -63,7 +63,7 @@ angular.module('risevision.widgets.services')
 
       var _getStateToken = function () {
         var deferred = $q.defer();
-        $http.get(OAUTH_TOKEN_PROVIDER_URL + 'authenticate', _getRequestOptions())
+        $http.get(environment.OAUTH_TOKEN_PROVIDER_URL + 'authenticate', _getRequestOptions())
           .then(function (response) {
             if (response.data && response.data.token) {
               deferred.resolve(response.data.token);
@@ -90,7 +90,7 @@ angular.module('risevision.widgets.services')
 
       var _authenticateWithOauthTokenProvider = function (code) {
         var deferred = $q.defer();
-        $http.post(OAUTH_TOKEN_PROVIDER_URL + 'authenticate', {
+        $http.post(environment.OAUTH_TOKEN_PROVIDER_URL + 'authenticate', {
             'code': code,
             'companyId': userState.getSelectedCompanyId(),
             'provider': provider
@@ -117,7 +117,7 @@ angular.module('risevision.widgets.services')
 
       svc.revoke = function () {
         var deferred = $q.defer();
-        $http.post(OAUTH_TOKEN_PROVIDER_URL + 'revoke', {
+        $http.post(environment.OAUTH_TOKEN_PROVIDER_URL + 'revoke', {
             'key': key
           }, _getRequestOptions())
           .then(function (response) {
