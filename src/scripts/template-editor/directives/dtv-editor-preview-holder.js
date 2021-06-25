@@ -2,9 +2,9 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateEditorPreviewHolder', ['$window', '$timeout', '$sce', 'userState', 'templateEditorFactory',
-    'blueprintFactory', 'brandingFactory', 'componentsFactory', 'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL',
+    'blueprintFactory', 'brandingFactory', 'componentsFactory', 'HTML_TEMPLATE_DOMAIN', 'environment',
     function ($window, $timeout, $sce, userState, templateEditorFactory, blueprintFactory, brandingFactory,
-      componentsFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL) {
+      componentsFactory, HTML_TEMPLATE_DOMAIN, environment) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/preview-holder.html',
@@ -47,7 +47,7 @@ angular.module('risevision.template-editor.directives')
             var productCode = templateEditorFactory.presentation.productCode;
             var presentationId = templateEditorFactory.presentation.id;
 
-            var url = HTML_TEMPLATE_URL.replace('PRODUCT_CODE', productCode) + '?type=preview&presentationId=' +
+            var url = environment.HTML_TEMPLATE_URL.replace('PRODUCT_CODE', productCode) + '?type=preview&presentationId=' +
               presentationId;
 
             return $sce.trustAsResourceUrl(url);

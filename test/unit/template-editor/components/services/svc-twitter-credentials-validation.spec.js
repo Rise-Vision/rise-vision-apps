@@ -7,6 +7,9 @@ describe('service: twitterCredentialsValidation:', function() {
     $provide.service('$q', function () {
       return Q;
     });
+    $provide.value('environment', {
+      TWITTER_SERVICE_URL: 'https://services-stage.risevision.com/twitter/'
+    });
   }));
 
   var twitterCredentialsValidation, $httpBackend;
