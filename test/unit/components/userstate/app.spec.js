@@ -1,6 +1,6 @@
 "use strict";
 
-describe("app:", function() {
+xdescribe("app:", function() {
   beforeEach(function() {
     module(function($locationProvider) {
       locationProvider = $locationProvider;

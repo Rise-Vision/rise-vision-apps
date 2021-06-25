@@ -72,8 +72,8 @@ angular.module('risevision.apps', [
         .state('apps', {
           url: '?cid',
           params: {
-            cid: ' '
-          },          
+            cid: ''
+          },
           abstract: true,
           template: '<div ui-view></div>'
         })
