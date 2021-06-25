@@ -88,8 +88,6 @@ describe("Services: Company Core API Service", function() {
         return deferred.promise;
       };
     });
-
-    $provide.value("CORE_URL", "");
   }));
   
   // New service format:

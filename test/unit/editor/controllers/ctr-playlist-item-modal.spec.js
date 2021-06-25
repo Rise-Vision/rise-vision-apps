@@ -51,7 +51,9 @@ describe('controller: playlist item modal', function() {
       }
     });
 
-    $provide.value('RVA_URL', 'http://rva.risevision.com');
+    $provide.value('environment', {
+      'RVA_URL': 'http://rva.risevision.com'
+    });
 
     $provide.value('EMBEDDED_PRESENTATIONS_CODE', 'test-code');
 

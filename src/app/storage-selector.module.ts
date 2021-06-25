@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
+import { environment } from 'src/environments/environment';
+import * as angular from 'angular';
 
 @NgModule({
   imports: [
@@ -23,3 +25,6 @@ export class SelectorModule {
     this.upgrade.bootstrap(document.documentElement, ['risevision.apps.storage.storage-selector']);
   }
 }
+
+angular.module('risevision.common.config')
+  .value('environment', environment);

@@ -5,9 +5,9 @@ describe("Services: hubspot", function() {
 
   beforeEach(module("risevision.common.components.logging"));
   beforeEach(module(function ($provide) {
-    $provide.factory("HUBSPOT_ACCOUNT", [function () {
-      return "0000";
-    }]);
+    $provide.value("environment", {
+      HUBSPOT_ACCOUNT: "0000"
+    });
   }));
 
   var hubspot, $window;

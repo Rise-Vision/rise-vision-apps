@@ -63,9 +63,9 @@ angular.module('risevision.apps')
 
 // Template Editor
 angular.module('risevision.template-editor.services', [
+  'risevision.common.config',
   'risevision.common.header',
   'risevision.common.gapi',
-  'risevision.apps.config',
   'risevision.editor.services',
   'risevision.schedules.services',
   'risevision.storage.services'

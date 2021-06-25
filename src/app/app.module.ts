@@ -51,5 +51,5 @@ export class AppModule {
   }
 }
 
-angular.module('risevision.apps.config')
+angular.module('risevision.common.config')
   .value('environment', environment);

@@ -82,7 +82,6 @@ describe("Services: Countries Core API Service", function() {
         deferred.resolve(gapi);
         return deferred.promise;
     });
-    $provide.value("CORE_URL", "");
   }));
 
 

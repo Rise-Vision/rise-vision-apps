@@ -3,7 +3,6 @@ describe('service: encoding:', function() {
   var encoding, $httpBackend, authRequestHandler, $timeout;
 
   beforeEach(module('risevision.storage.services'));
-  beforeEach(module('risevision.apps.config'));
 
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});

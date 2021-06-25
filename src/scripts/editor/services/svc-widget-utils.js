@@ -184,12 +184,16 @@ angular.module('risevision.editor.services')
         }
       };
 
+      var _getEnv = function() {
+        return environment.production ? 'PROD' : 'TEST';
+      };
+
       factory.getWidgetId = function (type) {
         if (!type) {
           return null;
         }
         if (WIDGETS_INFO[type.toUpperCase()]) {
-          return WIDGETS_INFO[type.toUpperCase()].ids[environment.APPS_ENV];
+          return WIDGETS_INFO[type.toUpperCase()].ids[_getEnv()];
         }
         return null;
       };
@@ -211,7 +215,7 @@ angular.module('risevision.editor.services')
 
       factory.getProfessionalWidgets = function () {
         return _.filter(PROFESSIONAL_WIDGETS, function (item) {
-          return !item.env || item.env === environment.APPS_ENV;
+          return !item.env || item.env === _getEnv();
         });
       };
 

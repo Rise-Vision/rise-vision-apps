@@ -8,9 +8,11 @@ describe("Services: gapi", function() {
     beforeEach(module(function ($provide) {
       //stub services
       $provide.service("$q", function() {return Q;});
-      $provide.value("CORE_URL", "coreUrl");
-      $provide.value("STORE_ENDPOINT_URL", "storeUrl");
-      $provide.value("STORAGE_ENDPOINT_URL", "storageUrl");
+      $provide.value("environment", {
+        CORE_URL: "coreUrl",
+        STORE_ENDPOINT_URL: "storeUrl",
+        STORAGE_ENDPOINT_URL: "storageUrl"
+      });
       
       $provide.value("$location", {
         search: sinon.stub().returns({}),
@@ -537,8 +539,10 @@ describe("Services: gapi", function() {
 
   describe("DedupingGenerator:", function () {
     beforeEach(module(function ($provide) {
-      $provide.value("CORE_URL", "coreUrl");
-      $provide.value("STORE_ENDPOINT_URL", "storeUrl");
+      $provide.value("environment", {
+        CORE_URL: "coreUrl",
+        STORE_ENDPOINT_URL: "storeUrl"
+      });
 
       $provide.service("gapiClientLoaderGenerator", function() {
         return sinon.stub().returns(generatorFn = sinon.stub().returns(Q.resolve()));
@@ -626,9 +630,11 @@ describe("Services: gapi", function() {
   describe("client API loaders:", function() {
     beforeEach(module(function ($provide) {
       //stub services
-      $provide.value("CORE_URL", "coreUrl");
-      $provide.value("STORE_ENDPOINT_URL", "storeUrl");
-      $provide.value("STORAGE_ENDPOINT_URL", "storageUrl");
+      $provide.value("environment", {
+        CORE_URL: "coreUrl",
+        STORE_ENDPOINT_URL: "storeUrl",
+        STORAGE_ENDPOINT_URL: "storageUrl"
+      });
       
       $provide.value("$location", {
         search: sinon.stub().returns({})

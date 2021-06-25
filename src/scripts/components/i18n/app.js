@@ -1,12 +1,6 @@
 'use strict';
 /* global angular */
 
-try {
-  angular.module('risevision.common.i18n.config');
-} catch (err) {
-  angular.module('risevision.common.i18n.config', []);
-}
-
 /**
  * Reimplementation of $translateStaticFilesLoader to handle missing files and locale hierarchy (en/en_US)
  */
@@ -56,9 +50,10 @@ angular.module('pascalprecht.translate')
   ]);
 
 angular.module('risevision.common.i18n', [
-    'pascalprecht.translate',
-    'risevision.common.i18n.config'
+    'pascalprecht.translate'
   ])
+  .constant('LOCALES_PREFIX', 'locales/translation_')
+  .constant('LOCALES_SUFIX', '.json')
   .config(['$translateProvider', 'LOCALES_PREFIX', 'LOCALES_SUFIX',
     function ($translateProvider, LOCALES_PREFIX, LOCALES_SUFIX) {
       // Tries to determine the browsers locale

@@ -3,7 +3,9 @@ describe('controller: AlertsCrtl', function() {
   beforeEach(module('risevision.displays.controllers'));
 
   beforeEach(module(function ($provide) {
-    $provide.value('ALERTS_WS_URL','http://www.example.com/');
+    $provide.value('environment', {
+      ALERTS_WS_URL: 'http://www.example.com/'
+    });
     $provide.factory('alertsFactory',function(){
       return {
         loadSettings: function(){},

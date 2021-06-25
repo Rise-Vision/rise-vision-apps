@@ -7,8 +7,8 @@ export const environment = {
   BLUEPRINT_URL: 'https://widgets.risevision.com/staging/templates/PRODUCT_CODE/blueprint.json',
   canvaApiKey: 'EwLWFws4Qjpa-n_2ZJgBMQbz',
   // AngularJS config
-  APPS_ENV: 'TEST',
-  STORE_ENDPOINT_URL: 'https://store-dot-rvacore-test.appspot.com/_ah/api', // override default Store server value
+  CORE_URL: 'https://rvacore-test.appspot.com/_ah/api',
+  STORE_ENDPOINT_URL: 'https://store-dot-rvacore-test.appspot.com/_ah/api',
   STORE_SERVER_URL: 'https://store-dot-rvacore-test.appspot.com/',
   RVA_URL: 'http://rva-test.appspot.com',
   VIEWER_URL: 'https://widgets.risevision.com/viewer-stage-0',
@@ -23,7 +23,6 @@ export const environment = {
   ENV_NAME: 'DEV',
   OAUTH_TOKEN_PROVIDER_URL: 'https://services-stage.risevision.com/oauthtokenprovider/',
   TWITTER_SERVICE_URL: 'https://services-stage.risevision.com/twitter/',
-  OAUTH_PUBLIC_KEY: 'EJMI-lB9hB55OYEsYmjXDNfRGoY',
   HUBSPOT_ACCOUNT: '2939619',
   HTML_TEMPLATE_URL: 'https://widgets.risevision.com/staging/templates/PRODUCT_CODE/src/template.html'
 };
