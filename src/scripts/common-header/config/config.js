@@ -28,6 +28,11 @@
       STORAGE_ENDPOINT_URL: 'https://storage-dot-rvacore-test.appspot.com/_ah/api',
       APPS_URL: '',
       ENV_NAME: '',
+      // Google Tag Manager Live environment
+      TAG_MANAGER_CONTAINER_ID: 'GTM-MMTK3JH',
+      TAG_MANAGER_AUTH: null,
+      TAG_MANAGER_ENV: null,
+      HUBSPOT_ACCOUNT: '2700250'
     })
     .value('ENABLE_EXTERNAL_LOGGING', true);
 })(angular);

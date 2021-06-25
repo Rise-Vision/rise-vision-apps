@@ -19,7 +19,6 @@ export const environment = {
   APPS_URL: '',
   ENV_NAME: 'BETA',
   OAUTH_TOKEN_PROVIDER_URL: 'https://services.risevision.com/oauthtokenprovider/',
-  OAUTH_PUBLIC_KEY: 'EJMI-lB9hB55OYEsYmjXDNfRGoY',
   TWITTER_SERVICE_URL: 'https://services.risevision.com/twitter/',
   HUBSPOT_ACCOUNT: '2700250',
   HTML_TEMPLATE_URL: 'https://widgets.risevision.com/staging/templates/PRODUCT_CODE/src/template.html'

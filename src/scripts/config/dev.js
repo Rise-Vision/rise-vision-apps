@@ -18,17 +18,6 @@
 
   angular.module('risevision.common.config')
     .value('SHARED_SCHEDULE_URL', 'https://widgets.risevision.com/viewer-stage-0/?type=sharedschedule&id=SCHEDULE_ID')
-    .value('ALERTS_WS_URL',
-      'https://rvacore-test.appspot.com/alerts/cap')
-    .value('TAG_MANAGER_CONTAINER_ID', null)
-    .value('TAG_MANAGER_AUTH', null)
-    .value('TAG_MANAGER_ENV', null)
-    .value('MESSAGING_PRIMUS_URL',
-      'https://services-stage.risevision.com/messaging/primus?displayId=apps&machineId=1')
-    .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services-stage.risevision.com/oauthtokenprovider/')
-    .value('TWITTER_SERVICE_URL', 'https://services-stage.risevision.com/twitter/')
-    .value('OAUTH_PUBLIC_KEY', 'EJMI-lB9hB55OYEsYmjXDNfRGoY')
-    .value('HUBSPOT_ACCOUNT', '2939619')
-    .value('HTML_TEMPLATE_URL', 'https://widgets.risevision.com/staging/templates/PRODUCT_CODE/src/template.html');
+    .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services-stage.risevision.com/oauthtokenprovider/');
 
 })(angular);

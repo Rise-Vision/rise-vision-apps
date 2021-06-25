@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('AlertsCtrl', ['$scope', 'alertsFactory', 'ALERTS_WS_URL',
-    function ($scope, alertsFactory, ALERTS_WS_URL) {
-      $scope.ALERTS_WS_URL = ALERTS_WS_URL;
+  .controller('AlertsCtrl', ['$scope', 'alertsFactory', 'environment',
+    function ($scope, alertsFactory, environment) {
+      $scope.ALERTS_WS_URL = environment.ALERTS_WS_URL;
       alertsFactory.loadSettings();
 
       $scope.factory = alertsFactory;
