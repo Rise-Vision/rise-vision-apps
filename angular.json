@@ -281,7 +281,6 @@
               "src/scripts/components/url-field/svc-insecure-url.js",
               "src/scripts/components/url-field/svc-response-header-analyzer.js",
 
-              "src/scripts/config/config.js",
               "src/scripts/app.module.ajs.js",
 
               "src/scripts/common/app.js",
@@ -805,7 +804,6 @@
 
                 "src/tmp/partials.js",
 
-                "src/scripts/config/config.js",
                 "src/scripts/storage-selector.module.ajs.js",
 
                 "src/scripts/common/services/svc-gadgets-api.js",
