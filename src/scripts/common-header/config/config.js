@@ -16,10 +16,6 @@
     angular.module('risevision.common.config', []);
   }
 
-  angular.module('risevision.common.i18n.config', [])
-    .constant('LOCALES_PREFIX', 'locales/translation_')
-    .constant('LOCALES_SUFIX', '.json');
-
   angular.module('risevision.common.config')
     .value('environment', {
       CORE_URL: 'https://rvaserver2.appspot.com/_ah/api',

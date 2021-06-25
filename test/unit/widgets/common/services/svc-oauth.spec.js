@@ -25,7 +25,9 @@ describe('service: OAuthService:', function() {
         debug : function(){}
       }
     });
-    $provide.value('OAUTH_TOKEN_PROVIDER_URL', OAUTH_TOKEN_PROVIDER_URL);
+    $provide.value('environment', {
+      OAUTH_TOKEN_PROVIDER_URL: OAUTH_TOKEN_PROVIDER_URL
+    });
     $provide.service('OAuthio',function(){
       return {
         initialize : sinon.stub(),

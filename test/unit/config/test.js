@@ -13,7 +13,15 @@
   'use strict';
 
   angular.module('risevision.common.config')
-    .value('SHARED_SCHEDULE_URL', 'https://widgets.risevision.com/viewer/?type=sharedschedule&id=SCHEDULE_ID')
-    .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services.risevision.com/oauthtokenprovider/');
+    // Mock Angular environment variable
+    .value('environment', {
+      production: false,
+      TAG_MANAGER_CONTAINER_ID: null,
+      TAG_MANAGER_AUTH: null,
+      TAG_MANAGER_ENV: null,
+      APPS_URL: '',
+      ENV_NAME: 'TEST',
+      HTML_TEMPLATE_URL: 'https://widgets.risevision.com/staging/templates/PRODUCT_CODE/src/template.html'
+    });
 
 })(angular);

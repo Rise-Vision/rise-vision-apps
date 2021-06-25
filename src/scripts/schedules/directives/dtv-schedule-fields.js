@@ -2,8 +2,8 @@
 
 angular.module('risevision.schedules.directives')
   .directive('scheduleFields', ['$modal', 'scheduleFactory', 'playlistFactory', 'playerLicenseFactory', '$sce',
-    'SHARED_SCHEDULE_URL',
-    function ($modal, scheduleFactory, playlistFactory, playerLicenseFactory, $sce, SHARED_SCHEDULE_URL) {
+    'environment',
+    function ($modal, scheduleFactory, playlistFactory, playerLicenseFactory, $sce, environment) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/schedule-fields.html',
@@ -67,7 +67,7 @@ angular.module('risevision.schedules.directives')
             if (!scheduleFactory.schedule) {
               return null;
             }
-            var url = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', scheduleFactory.schedule.id) +
+            var url = environment.SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', scheduleFactory.schedule.id) +
               '&env=apps_schedule';
 
             if (!$scope.applyTimeline) {
