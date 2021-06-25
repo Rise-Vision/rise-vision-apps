@@ -15,7 +15,7 @@
   angular.module('risevision.common.config')
     // Mock Angular environment variable
     .value('environment', {
-      APPS_ENV: 'TEST',
+      production: false,
       TAG_MANAGER_CONTAINER_ID: null,
       TAG_MANAGER_AUTH: null,
       TAG_MANAGER_ENV: null,
