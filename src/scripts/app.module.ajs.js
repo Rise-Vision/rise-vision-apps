@@ -82,7 +82,6 @@ angular.module('risevision.apps', [
           url: '/',
           controller: ['$location', '$state', 'canAccessApps',
             function ($location, $state, canAccessApps) {
-              console.log('HOME');
               return canAccessApps().then(function () {
                 $location.replace();
                 $state.go('apps.editor.home');
@@ -136,7 +135,6 @@ angular.module('risevision.apps', [
             }
           ]
         });
-
     }
   ])
   .config(['$tooltipProvider',
