@@ -10,7 +10,7 @@ var colors = require("colors");
 
 var paths = {
   localesJson: "./src/locales",
-  tmpLocales: "./src/tmp/locales",
+  tmpLocales: "./src/locales",
   distLocales: "./dist/locales"
 };
 

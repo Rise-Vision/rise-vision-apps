@@ -7,13 +7,3 @@
  * dev.js, test.js & prod.js
  *
  */
-
-(function (angular) {
-
-  'use strict';
-
-  angular.module('risevision.common.i18n.config', [])
-    .constant('LOCALES_PREFIX', 'tmp/locales/translation_')
-    .constant('LOCALES_SUFIX', '.json');
-
-})(angular);

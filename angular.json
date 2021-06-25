@@ -28,7 +28,7 @@
               "src/assets",
               "src/images",
               "src/vendor",
-              "src/tmp/locales",
+              "src/locales",
               "src/bower_components/oidc-client/dist/oidc-client.js",
               "src/scripts/user-manager-silent.js",
               "src/user-manager-silent.html"
