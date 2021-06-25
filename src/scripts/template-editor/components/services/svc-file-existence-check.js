@@ -18,7 +18,7 @@ angular.module('risevision.template-editor.services')
       }
 
       function _isDefaultImageOnTestAppsEnvironment(fileName) {
-        if (environment.APPS_ENV !== 'TEST') {
+        if (environment.production) {
           return false;
         }
 
