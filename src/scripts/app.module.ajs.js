@@ -157,8 +157,8 @@ angular.module('risevision.apps', [
       }
     }
   ])
-  .run(['$rootScope', '$state', '$exceptionHandler',
-    function ($rootScope, $state, $exceptionHandler) {
+  .run(['$rootScope', '$state', '$stateParams', '$exceptionHandler',
+    function ($rootScope, $state, $stateParams, $exceptionHandler) {
 
       $rootScope.$on('risevision.user.signedOut', function () {
         $state.go('common.auth.unauthorized');
@@ -186,7 +186,7 @@ angular.module('risevision.apps', [
           $state.current.name === 'apps.storage.home' ||
           $state.current.name === 'apps.home') {
 
-          $state.go($state.current, null, {
+          $state.go($state.current, $stateParams, {
             reload: true
           });
         } else if (($state.current.name.indexOf('apps.purchase') !== -1 ||
