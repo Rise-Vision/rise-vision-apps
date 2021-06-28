@@ -2,7 +2,7 @@
 
 "use strict";
 
-xdescribe("Services: urlStateService", function() {
+describe("Services: urlStateService", function() {
   beforeEach(module("risevision.common.components.userstate"));
 
   beforeEach(module(function ($provide) {
@@ -22,7 +22,11 @@ xdescribe("Services: urlStateService", function() {
       $$search: null,
       $$path: null,
       search: function() { return this.$$search; },
-      path: function() { return this.$$path; }
+      path: function() { return this.$$path; },
+      hash: sinon.spy(),
+      port: sinon.spy(),
+      protocol: sinon.spy(),
+      host: sinon.spy()
     });
     $provide.service("userState", function() {
       return userState = {

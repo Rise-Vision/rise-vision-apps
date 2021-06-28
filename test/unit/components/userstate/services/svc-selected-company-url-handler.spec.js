@@ -1,7 +1,7 @@
 /*jshint expr:true */
 "use strict";
 
-xdescribe("Services: selected company url handler", function() {
+describe("Services: selected company url handler", function() {
 
   beforeEach(module("risevision.common.components.userstate"));
   beforeEach(module(function ($provide) {
@@ -19,7 +19,11 @@ xdescribe("Services: selected company url handler", function() {
       destUrl: "",
       replace: function() {},
       path: function() { return "";},
-      url: function() {}
+      url: function() {},
+      hash: sinon.spy(),
+      port: sinon.spy(),
+      protocol: sinon.spy(),
+      host: sinon.spy()
     });
     $provide.factory("userState", [function () {
       return {

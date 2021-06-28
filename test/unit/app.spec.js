@@ -309,13 +309,11 @@ describe('app:', function() {
 
     it('should show white background for the Schedule page page',function() {
       $rootScope.$broadcast('$stateChangeSuccess', {name:'apps.schedules.details'});
-      $rootScope.$digest();
       expect($rootScope.showWhiteBackground).to.be.true;
     });
 
-    xit('should not show white background for other pages',function() {
+    it('should not show white background for other pages',function() {
       $rootScope.$broadcast('$stateChangeSuccess', {name:'apps.storage.home'});
-      $rootScope.$digest();
       expect($rootScope.showWhiteBackground).to.be.false;
     });
 

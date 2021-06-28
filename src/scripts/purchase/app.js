@@ -94,19 +94,22 @@ angular.module('risevision.apps')
         .state('apps.purchase.licenses.add', {
           url: '/add/:subscriptionId',
           params: {
-            purchaseAction: 'add'
+            purchaseAction: 'add',
+            subscriptionId: ''
           }
         })
         .state('apps.purchase.licenses.remove', {
           url: '/remove/:subscriptionId',
           params: {
-            purchaseAction: 'remove'
+            purchaseAction: 'remove',
+            subscriptionId: ''
           }
         })
         .state('apps.purchase.licenses.unlimited', {
           url: '/unlimited/:subscriptionId',
           params: {
-            purchaseAction: 'unlimited'
+            purchaseAction: 'unlimited',
+            subscriptionId: ''
           }
         })
 
@@ -115,7 +118,8 @@ angular.module('risevision.apps')
           templateUrl: 'partials/purchase/update-subscription.html',
           controller: 'UpdateSubscriptionCtrl',
           params: {
-            purchaseAction: 'annual'
+            purchaseAction: 'annual',
+            subscriptionId: ''
           },
           resolve: {
             canAccessApps: ['canAccessApps',

@@ -1,6 +1,6 @@
 'use strict';
 
-xdescribe('app:', function() {
+describe('app:', function() {
   beforeEach(function () {
     angular.module('risevision.apps.partials',[]);
 
@@ -101,7 +101,6 @@ xdescribe('app:', function() {
       currentPlanFactory.isSubscribed.returns(false);
 
       $state.go('apps.purchase.home');
-      $rootScope.$digest();
 
       setTimeout(function(){
         $state.go.should.have.been.calledOnce;
@@ -125,8 +124,7 @@ xdescribe('app:', function() {
           'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
         );
 
-        // $state.current.name exists; should not redirect to home
-        expect($state.go).to.not.have.been.calledWith('apps.home');
+        expect($state.go).to.have.been.calledWith('apps.home');
         expect($state.go).to.not.have.been.calledWith('apps.purchase.licenses.add');
         done();
       },10);
@@ -147,8 +145,7 @@ xdescribe('app:', function() {
           'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
         );
 
-        // $state.current.name exists; should not redirect to home
-        expect($state.go).to.not.have.been.calledWith('apps.home');
+        expect($state.go).to.have.been.calledWith('apps.home');
         expect($state.go).to.not.have.been.calledWith('apps.purchase.licenses.add');
         done();
       },10);
@@ -239,7 +236,7 @@ xdescribe('app:', function() {
       var state = $state.get('apps.purchase.licenses.add');
       expect(state).to.be.ok;
       expect(state.url).to.equal('/add/:subscriptionId');
-      expect(state.params).to.deep.equal({purchaseAction: 'add'});
+      expect(state.params).to.deep.equal({purchaseAction: 'add', subscriptionId: ''});
     });
 
     it('should check apps access', function() {
@@ -280,7 +277,7 @@ xdescribe('app:', function() {
       var state = $state.get('apps.purchase.licenses.remove');
       expect(state).to.be.ok;
       expect(state.url).to.equal('/remove/:subscriptionId');
-      expect(state.params).to.deep.equal({purchaseAction: 'remove'});
+      expect(state.params).to.deep.equal({purchaseAction: 'remove', subscriptionId: ''});
     });
 
     it('should check apps access', function() {
@@ -321,7 +318,7 @@ xdescribe('app:', function() {
       var state = $state.get('apps.purchase.licenses.unlimited');
       expect(state).to.be.ok;
       expect(state.url).to.equal('/unlimited/:subscriptionId');
-      expect(state.params).to.deep.equal({purchaseAction: 'unlimited'});
+      expect(state.params).to.deep.equal({purchaseAction: 'unlimited', subscriptionId: ''});
     });
 
     it('should check apps access', function() {
@@ -364,7 +361,7 @@ xdescribe('app:', function() {
       expect(state.url).to.equal('/frequency/:subscriptionId');
       expect(state.templateUrl).to.equal('partials/purchase/update-subscription.html');
       expect(state.controller).to.equal('UpdateSubscriptionCtrl');
-      expect(state.params).to.deep.equal({purchaseAction: 'annual'});
+      expect(state.params).to.deep.equal({purchaseAction: 'annual', subscriptionId: ''});
     });
 
     it('should check apps access', function() {

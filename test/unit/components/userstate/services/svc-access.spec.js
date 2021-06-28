@@ -1,5 +1,5 @@
 "use strict";
-xdescribe("service: access:", function() {
+describe("service: access:", function() {
   beforeEach(module("risevision.common.components.userstate"));
 
   beforeEach(module(function ($provide) {
@@ -42,7 +42,14 @@ xdescribe("service: access:", function() {
     });
     $provide.service("$location", function() {
       return $location = {
-        replace: sinon.spy()
+        replace: sinon.spy(),
+        path: sinon.spy(),
+        search: sinon.spy(),
+        hash: sinon.spy(),
+        port: sinon.spy(),
+        protocol: sinon.spy(),
+        host: sinon.spy(),
+        url: sinon.spy()
       };
     });
     $provide.service("urlStateService", function() {

@@ -1,6 +1,6 @@
 "use strict";
 
-xdescribe("app:", function() {
+describe("app:", function() {
   beforeEach(function() {
     module(function($locationProvider) {
       locationProvider = $locationProvider;
@@ -158,21 +158,21 @@ xdescribe("app:", function() {
         var args = urlRouterProvider.when.getCall(1).args[1];
         rootMatcher = args[4];
 
-        sinon.stub($state, "go");
+        sinon.stub($state, "go").returns('apps.home');
       });
 
-      it("should return false if there's no hash and no search code", function() {
+      it("should return 'apps.home' if there's no hash and no search code", function() {
         var response = rootMatcher(location, $state, userAuthFactory, openidConnect)
 
-        expect(response).to.be.false;
+        expect(response).to.equal('apps.home');
       });
 
-      it("should return false if there's hash but with no tokens", function() {
+      it("should return 'apps.home' if there's hash but with no tokens", function() {
         location.hash = function() { return 'some_hash' };
 
         var response = rootMatcher(location, $state, userAuthFactory, openidConnect)
 
-        expect(response).to.be.false;
+        expect(response).to.equal('apps.home');
       });
 
       it("should signin redirect callback if there's hash with id_token", function(done) {
@@ -370,8 +370,6 @@ xdescribe("app:", function() {
       it("should not redirect for null state", function() {
         $rootScope.$broadcast("$stateChangeStart", {});
 
-        $rootScope.$digest();
-
         $state.go.should.not.have.been.called;
       });
 
@@ -379,8 +377,6 @@ xdescribe("app:", function() {
         $rootScope.$broadcast("$stateChangeStart", {
           name: "common.auth.randomState"
         });
-
-        $rootScope.$digest();
 
         $state.go.should.not.have.been.called;
       });
@@ -391,8 +387,6 @@ xdescribe("app:", function() {
         }, {}, null, {
           state: "existingState"
         });
-
-        $rootScope.$digest();
 
         $state.go.should.have.been.calledWith("common.auth.unauthorized", {
           state: "existingState"
@@ -406,8 +400,6 @@ xdescribe("app:", function() {
           state: "existingState"
         }, null, {});
 
-        $rootScope.$digest();
-
         $state.go.should.not.have.been.called;
       });
 
@@ -415,8 +407,6 @@ xdescribe("app:", function() {
         $rootScope.$broadcast("$stateChangeStart", {
           name: "common.auth.unregistered"
         }, {}, null, {});
-
-        $rootScope.$digest();
 
         $state.go.should.not.have.been.called;
       });
@@ -427,8 +417,6 @@ xdescribe("app:", function() {
         }, {}, null, {
           state: "existingState"
         });
-
-        $rootScope.$digest();
 
         $state.go.should.have.been.calledWith("common.auth.unregistered", {
           state: "existingState"
@@ -441,8 +429,6 @@ xdescribe("app:", function() {
         }, {}, null, {
           state: "existingState"
         });
-
-        $rootScope.$digest();
 
         $state.go.should.have.been.calledWith("common.auth.createaccount", {
           state: "existingState"
