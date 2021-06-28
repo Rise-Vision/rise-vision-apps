@@ -23,15 +23,15 @@ Regards,\n\
 USER_FIRST_NAME')
   .controller('SharedSchedulePopoverController', ['$scope', '$window', 'scheduleFactory', 'scheduleTracker',
     'userState',
-    'SHARED_SCHEDULE_URL', 'SHARED_SCHEDULE_EMBED_CODE', 'SHARED_SCHEDULE_INVITE_MESSAGE', '$state',
+    'environment', 'SHARED_SCHEDULE_EMBED_CODE', 'SHARED_SCHEDULE_INVITE_MESSAGE', '$state',
     function ($scope, $window, scheduleFactory, scheduleTracker, userState,
-      SHARED_SCHEDULE_URL, SHARED_SCHEDULE_EMBED_CODE, SHARED_SCHEDULE_INVITE_MESSAGE, $state) {
+      environment, SHARED_SCHEDULE_EMBED_CODE, SHARED_SCHEDULE_INVITE_MESSAGE, $state) {
       $scope.scheduleFactory = scheduleFactory;
       $scope.isScheduleDetails = $state.current.name === 'apps.schedules.details';
       $scope.currentTab = 'link';
 
       $scope.getLink = function () {
-        return $scope.schedule ? SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', $scope.schedule.id) : '';
+        return $scope.schedule ? environment.SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', $scope.schedule.id) : '';
       };
 
       $scope.getEnterpriseLink = function () {

@@ -3,7 +3,6 @@
 describe('Services: uploader', function() {
   'use strict';
 
-  beforeEach(module('risevision.apps.config'));
   beforeEach(module('risevision.storage.services'));
 
   beforeEach(module(function ($provide) {

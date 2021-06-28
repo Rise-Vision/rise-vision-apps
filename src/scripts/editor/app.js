@@ -123,10 +123,10 @@ angular.module('risevision.apps')
   ]);
 
 angular.module('risevision.editor.services', [
+  'risevision.common.config',
   'risevision.common.header',
   'risevision.common.gapi',
   'risevision.store.product',
-  'risevision.apps.config',
   'risevision.displays.services'
 ]);
 angular.module('risevision.editor.filters', []);

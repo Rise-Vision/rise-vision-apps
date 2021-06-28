@@ -6,6 +6,8 @@ import { EditorModule } from './editor/editor.module';
 import { $stateProvider, addressServiceProvider, analyticsFactoryProvider, billingProvider, canvaTypePickerProvider, confirmModalProvider, contactServiceProvider, plansServiceProvider, processErrorCodeProvider, purchaseFlowTrackerProvider, storeServiceProvider, subscriptionFactoryProvider, templateEditorFactoryProvider, templateEditorUtilsProvider, userAuthFactoryProvider, userStateProvider } from './ajs-upgraded-providers';
 import { TemplateEditorModule } from './template-editor/template-editor.module';
 import { PurchaseModule } from './purchase/purchase.module';
+import { environment } from 'src/environments/environment';
+import * as angular from 'angular';
 
 @NgModule({
   imports: [
@@ -48,3 +50,6 @@ export class AppModule {
     this.upgrade.bootstrap(document.documentElement, ['risevision.apps']);
   }
 }
+
+angular.module('risevision.common.config')
+  .value('environment', environment);

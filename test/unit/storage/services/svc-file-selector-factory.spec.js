@@ -8,6 +8,13 @@ describe('service: FileSelectorFactory (aka FilesFactory):', function() {
     $provide.service('processErrorCode', function() {
       return function() { return 'error'; };
     });
+    $provide.service('storage', function() {
+      return {
+        files: {
+          get: sinon.stub().resolves()
+        }
+      }
+    });
     $provide.factory("currentPlanFactory", function() {
       return {
         showPurchaseOptions: sinon.stub()

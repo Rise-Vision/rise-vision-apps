@@ -22,7 +22,6 @@ describe("Services: Display Core API Service", function() {
         deffered.resolve(gapi);
         return deffered.promise;
     });
-    $provide.value("CORE_URL", "");
   }));
 
 

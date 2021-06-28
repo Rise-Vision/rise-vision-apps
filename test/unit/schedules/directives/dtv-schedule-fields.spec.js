@@ -38,7 +38,9 @@ describe('directive: scheduleFields', function() {
       };
     });
 
-    $provide.value('SHARED_SCHEDULE_URL','https://widgets.risevision.com/viewer/?type=sharedschedule&id=SCHEDULE_ID');
+    $provide.value('environment', {
+      SHARED_SCHEDULE_URL: 'https://widgets.risevision.com/viewer/?type=sharedschedule&id=SCHEDULE_ID'
+    });
   }));
 
   beforeEach(inject(function($compile, _$rootScope_, $templateCache, $injector){

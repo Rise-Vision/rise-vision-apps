@@ -70,7 +70,9 @@ describe('directive: display fields', function() {
     });
 
     $provide.value('PLAYER_PRO_PRODUCT_CODE','productCode');
-    $provide.value('SHARED_SCHEDULE_URL','https://widgets.risevision.com/viewer/?type=sharedschedule&id=SCHEDULE_ID');
+    $provide.value('environment', {
+      SHARED_SCHEDULE_URL: 'https://widgets.risevision.com/viewer/?type=sharedschedule&id=SCHEDULE_ID'
+    });
   }));
   
   var elm, $scope, $compile, $sce, displayFactory, displayControlFactory, playerLicenseFactory,

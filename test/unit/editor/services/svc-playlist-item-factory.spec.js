@@ -1,7 +1,6 @@
 'use strict';
   
 describe('service: playlistItemFactory:', function() {
-  beforeEach(module('risevision.apps.config'));
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(function ($provide) {
     item = {

@@ -47,7 +47,6 @@ describe("User Profile: getUserProfile", function() {
       deffered.resolve(gapi);
       return deffered.promise;
     });
-    $provide.value("CORE_URL", "");
     $provide.service("userTracker", function() { 
       return sinon.spy();
     });

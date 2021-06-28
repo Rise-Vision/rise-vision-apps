@@ -2,16 +2,16 @@
 
 angular.module('risevision.template-editor.services')
   .constant('VERIFY_CREDENTIALS', 'verify-credentials')
-  .service('twitterCredentialsValidation', ['$q', '$http', '$window', '$log', 'TWITTER_SERVICE_URL',
+  .service('twitterCredentialsValidation', ['$q', '$http', '$window', '$log', 'environment',
     'VERIFY_CREDENTIALS',
-    function ($q, $http, $window, $log, TWITTER_SERVICE_URL, VERIFY_CREDENTIALS) {
+    function ($q, $http, $window, $log, environment, VERIFY_CREDENTIALS) {
       var factory = {};
 
       factory.verifyCredentials = function (companyId) {
         var deferred = $q.defer();
 
         $http({
-          url: TWITTER_SERVICE_URL + VERIFY_CREDENTIALS,
+          url: environment.TWITTER_SERVICE_URL + VERIFY_CREDENTIALS,
           method: 'GET',
           withCredentials: true,
           responseType: 'json',
