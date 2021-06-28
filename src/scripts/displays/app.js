@@ -58,7 +58,8 @@ angular.module('risevision.apps')
                   }
 
                   $state.go('apps.displays.details', {
-                    displayId: $stateParams.displayId
+                    displayId: $stateParams.displayId,
+                    cid: $stateParams.companyId
                   });
                 });
             }

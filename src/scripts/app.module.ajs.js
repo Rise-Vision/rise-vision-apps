@@ -193,7 +193,7 @@ angular.module('risevision.apps', [
             $state.current.name.indexOf('apps.billing') !== -1) &&
           $state.current.forceAuth !== false) {
 
-          $state.go('apps.billing.home', null, {
+          $state.go('apps.billing.home', $stateParams, {
             reload: true
           });
         }
