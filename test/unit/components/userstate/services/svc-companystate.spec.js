@@ -1,7 +1,7 @@
 /*jshint expr:true */
 "use strict";
 
-xdescribe("Services: company state", function() {
+describe("Services: company state", function() {
 
   beforeEach(module("risevision.common.components.userstate"));
   beforeEach(module(function ($provide) {
@@ -19,7 +19,12 @@ xdescribe("Services: company state", function() {
       path: function() {
         return "";
       },
-      url: function() {}
+      url: function() {},
+      replace: sinon.spy(),
+      hash: sinon.spy(),
+      port: sinon.spy(),
+      protocol: sinon.spy(),
+      host: sinon.spy()
     });
     $provide.factory("$state", function() {
       return {
