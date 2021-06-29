@@ -17,11 +17,7 @@ angular.module('risevision.apps')
 
         .state('apps.purchase.plans', {
           url: '/plans',
-          controller: ['$state',
-            function ($state) {
-              $state.go('apps.purchase.home');
-            }
-          ]
+          redirectTo: 'apps.purchase.home'
         })
 
         .state('apps.purchase.home', {

@@ -1,17 +1,13 @@
 'use strict';
 
 angular.module('risevision.common.components.userstate')
-  .factory('canAccessApps', ['$q', '$state', '$location',
+  .factory('canAccessApps', ['$q', '$state',
     'userState', 'userAuthFactory', 'urlStateService',
-    function ($q, $state, $location, userState, userAuthFactory,
-      urlStateService) {
+    function ($q, $state, userState, userAuthFactory, urlStateService) {
       return function (signup, allowReturn) {
-        var deferred = $q.defer();
-        userAuthFactory.authenticate(false)
+        return userAuthFactory.authenticate(false)
           .then(function () {
-            if (userState.isRiseVisionUser()) {
-              deferred.resolve();
-            } else {
+            if (!userState.isRiseVisionUser()) {
               return $q.reject();
             }
           })
@@ -32,19 +28,13 @@ angular.module('risevision.common.components.userstate')
               $state.go(newState, {
                 state: urlStateService.get()
               }, {
-                reload: true
+                reload: true,
+                location: allowReturn ? true : 'replace'
               });
 
-              if (!allowReturn) {
-                $location.replace();
-              }
-
-              deferred.reject();
-            } else {
-              deferred.resolve();
+              return $q.reject();
             }
           });
-        return deferred.promise;
       };
     }
   ]);

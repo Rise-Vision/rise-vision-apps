@@ -82,9 +82,8 @@ angular.module('risevision.editor.controllers')
       });
 
       var _bypass = false;
-      $scope.$on('$stateChangeStart', function (event, toState, toParams) {
+      $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         if (_bypass) {
-          _bypass = false;
           return;
         }
         if ($scope.hasUnsavedChanges && $scope.hasContentEditorRole() && (toState.name !==

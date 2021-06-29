@@ -41,25 +41,12 @@ describe('app:', function() {
 
   var $state, canAccessApps, currentPlanFactory, userState, $rootScope, messageBoxStub, $location;
 
-  describe('state apps.purchase.plans:',function(){
-    it('should register state',function(){
-      var state = $state.get('apps.purchase.plans');
-      expect(state).to.be.ok;
-      expect(state.url).to.equal('/plans');
-      expect(state.controller).to.be.ok;
-    });
-
-    it('should navigate the purchase page',function(done){
-      $state.get('apps.purchase.plans').controller[1]($state);
-      setTimeout(function() {
-        $state.go.should.have.been.calledWith('apps.purchase.home');
-
-        done();
-      }, 10);
-    });
-
+  it('state apps.purchase.plans:',function(){
+    var state = $state.get('apps.purchase.plans');
+    expect(state).to.be.ok;
+    expect(state.url).to.equal('/plans');
+    expect(state.redirectTo).to.equal('apps.purchase.home');
   });
-
 
   describe('state apps.purchase.home:', function(){
     it('should register state',function(){
@@ -124,8 +111,7 @@ describe('app:', function() {
           'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
         );
 
-        // $state.current.name exists; should not redirect to home
-        expect($state.go).to.not.have.been.calledWith('apps.home');
+        expect($state.go).to.have.been.calledWith('apps.home');
         expect($state.go).to.not.have.been.calledWith('apps.purchase.licenses.add');
         done();
       },10);
@@ -146,8 +132,7 @@ describe('app:', function() {
           'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
         );
 
-        // $state.current.name exists; should not redirect to home
-        expect($state.go).to.not.have.been.calledWith('apps.home');
+        expect($state.go).to.have.been.calledWith('apps.home');
         expect($state.go).to.not.have.been.calledWith('apps.purchase.licenses.add');
         done();
       },10);
