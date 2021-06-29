@@ -57,28 +57,24 @@
                 });
             }
           ])
-          .when('/', ['$location', '$state', 'userAuthFactory', 'openidConnect',
-            function ($location, $state, userAuthFactory, openidConnect) {
-              var hash = $location.hash();
-
-              if (hash && hash.match(/.*(id_token|access_token)=.*/)) {
-                console.log('Google Auth result received');
-
-                openidConnect.signinRedirectCallback()
-                  .then(function (user) {
-                    return userAuthFactory.authenticate(true);
-                  })
-                  .then(function () {
-                    window.location.hash = '';
-                  })
-                  .catch(function (e) {
-                    return $state.go('common.auth.unauthorized', {
-                      authError: e
-                    });
+          .when(function(url) {
+            return url.hash && url.hash.match(/.*(id_token|access_token)=.*/);
+          }, ['$state', 'userAuthFactory', 'openidConnect',
+            function ($state, userAuthFactory, openidConnect) {
+              console.log('Google Auth result received');
+        
+              openidConnect.signinRedirectCallback()
+                .then(function (user) {
+                  return userAuthFactory.authenticate(true);
+                })
+                .then(function () {
+                  window.location.hash = '';
+                })
+                .catch(function (e) {
+                  return $state.go('common.auth.unauthorized', {
+                    authError: e
                   });
-              } else {
-                return $state.go('apps.home');
-              }
+                });
             }
           ])
           .otherwise('/');

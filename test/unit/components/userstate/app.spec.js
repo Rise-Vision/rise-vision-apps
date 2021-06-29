@@ -91,8 +91,8 @@ describe("app:", function() {
         ).to.be.false;
       });
 
-      describe('matcher:', function() {
-        var $window, userAuthFactory, openidConnect, rootMatcher;
+      describe('handler:', function() {
+        var $window, userAuthFactory, openidConnect, rootHandler;
 
         beforeEach(function () {
           $window = {
@@ -104,11 +104,11 @@ describe("app:", function() {
           openidConnect = { signinRedirectCallback: sinon.stub().returns(Q.resolve()) };
 
           var args = urlRouterProvider.when.getCall(0).args[1];
-          rootMatcher = args[3];
+          rootHandler = args[3];
         });
 
         it("should signin redirect callback", function(done) {
-          rootMatcher($window, userAuthFactory, openidConnect);
+          rootHandler($window, userAuthFactory, openidConnect);
 
           setTimeout(function() {
             openidConnect.signinRedirectCallback.should.have.been.calledWith('https://apps.risevision.com/#id_token=1234&client_id=A1223');
@@ -121,7 +121,7 @@ describe("app:", function() {
 
         it("should clear hash even if there's an issue with signing redirect", function(done) {
           openidConnect.signinRedirectCallback.returns(Q.reject());
-          rootMatcher($window, userAuthFactory, openidConnect); // force a null pointer error
+          rootHandler($window, userAuthFactory, openidConnect); // force a null pointer error
 
           setTimeout(function() {
             openidConnect.signinRedirectCallback.should.have.been.calledOnce;
@@ -135,51 +135,63 @@ describe("app:", function() {
     });
 
     it("validates root hash matcher", function() {
+      var matcher = urlRouterProvider.when.getCall(1).args[0];
+
+      expect(matcher).to.be.ok;
+      expect(matcher).to.be.a("function");
+
       var args = urlRouterProvider.when.getCall(1).args[1];
 
       expect(args).to.be.ok;
-      expect(args.length).to.equal(5);
+      expect(args.length).to.equal(4);
 
-      var matcher = args[4];
-      expect(matcher).to.be.ok;
-      expect(matcher).to.be.a("function");
+      var handler = args[3];
+      expect(handler).to.be.ok;
+      expect(handler).to.be.a("function");
     });
 
-    describe("root matcher: ", function() {
-      var location, userAuthFactory, openidConnect, rootMatcher;
+    describe('root matcher:', function() {
+      var rootMatcher;
 
       beforeEach(function () {
-        location = {
-          hash: function() { return null }
-        };
+        rootMatcher = urlRouterProvider.when.getCall(1).args[0];
+      });
+
+      it("should return false if there's no hash and no search code", function() {
+        expect(rootMatcher({})).to.not.be.ok;
+      });
+
+      it("should return false if there's hash but with no tokens", function() {
+        expect(rootMatcher({
+          hash: 'some hash'
+        })).to.not.be.ok;
+      });
+
+      it("should signin redirect callback if there's hash with id_token", function() {
+        expect(rootMatcher({
+          hash: '&id_token=1234'
+        })).to.be.ok;
+      });
+
+    });
+
+    describe("root handler: ", function() {
+      var userAuthFactory, openidConnect, rootHandler;
+
+      beforeEach(function () {
         userAuthFactory = { authenticate: sinon.stub().resolves() };
         openidConnect = { signinRedirectCallback: sinon.stub().resolves() };
 
         var args = urlRouterProvider.when.getCall(1).args[1];
-        rootMatcher = args[4];
+        rootHandler = args[3];
 
-        sinon.stub($state, "go").returns('apps.home');
-      });
-
-      it("should return 'apps.home' if there's no hash and no search code", function() {
-        var response = rootMatcher(location, $state, userAuthFactory, openidConnect)
-
-        expect(response).to.equal('apps.home');
-      });
-
-      it("should return 'apps.home' if there's hash but with no tokens", function() {
-        location.hash = function() { return 'some_hash' };
-
-        var response = rootMatcher(location, $state, userAuthFactory, openidConnect)
-
-        expect(response).to.equal('apps.home');
+        sinon.stub($state, "go");
       });
 
       it("should signin redirect callback if there's hash with id_token", function(done) {
         window.location.hash = '&id_token=1234';
-        location.hash = function() { return '&id_token=1234' };
 
-        rootMatcher(location, $state, userAuthFactory, openidConnect);
+        rootHandler($state, userAuthFactory, openidConnect);
 
         setTimeout(function() {
           openidConnect.signinRedirectCallback.should.have.been.calledOnce;
@@ -192,9 +204,8 @@ describe("app:", function() {
 
       it("should signin redirect callback if there's hash with access_token", function(done) {
         window.location.hash = '&access_token=1234';
-        location.hash = function() { return '&access_token=1234' };
 
-        rootMatcher(location, $state, userAuthFactory, openidConnect);
+        rootHandler($state, userAuthFactory, openidConnect);
 
         setTimeout(function() {
           openidConnect.signinRedirectCallback.should.have.been.calledOnce;
@@ -206,10 +217,9 @@ describe("app:", function() {
       });
 
       it("should redirect to unauthorized page on signing redirect callback failure", function(done) {
-        location.hash = function() { return '&access_token=1234' };
         openidConnect.signinRedirectCallback.returns(Q.reject('error'));
 
-        rootMatcher(location, $state, userAuthFactory, openidConnect);
+        rootHandler($state, userAuthFactory, openidConnect);
 
         setTimeout(function() {
           $state.go.should.have.been.calledWith('common.auth.unauthorized', {
@@ -224,7 +234,7 @@ describe("app:", function() {
         location.hash = function() { return '&access_token=1234' };
         userAuthFactory.authenticate.returns(Q.reject('authError'));
 
-        rootMatcher(location, $state, userAuthFactory, openidConnect);
+        rootHandler($state, userAuthFactory, openidConnect);
 
         setTimeout(function() {
           $state.go.should.have.been.calledWith('common.auth.unauthorized', {

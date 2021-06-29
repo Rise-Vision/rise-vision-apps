@@ -189,7 +189,7 @@ describe("controller: Log In", function() {
           $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
           uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
-          expect($scope.errors.messageTitle).to.equal('translated apps-common.errors.messagePrefix');
+          expect($scope.errors.messageTitle).to.equal('Something went wrong.');
           expect($scope.errors.message).to.equal('Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.');
           expect($scope.errors.genericError).to.be.falsey;
           expect($scope.errors.userAccountLockoutError).to.be.falsey;
@@ -283,7 +283,7 @@ describe("controller: Log In", function() {
           $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
           uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
-          expect($scope.errors.messageTitle).to.equal('translated apps-common.errors.messagePrefix');
+          expect($scope.errors.messageTitle).to.equal('Something went wrong.');
           expect($scope.errors.message).to.equal('Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.');
           expect($scope.errors.genericError).to.be.falsey;
           expect($scope.messages.isGoogleAccount).to.be.falsey;
@@ -305,7 +305,7 @@ describe("controller: Log In", function() {
           $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
           uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
-          expect($scope.errors.messageTitle).to.equal('translated apps-common.errors.messagePrefix');
+          expect($scope.errors.messageTitle).to.equal('Something went wrong.');
           expect($scope.errors.message).to.equal('Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.');
           expect($scope.errors.genericError).to.be.falsey;
           expect($scope.errors.userAccountLockoutError).to.be.falsey;
@@ -326,7 +326,7 @@ describe("controller: Log In", function() {
           $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
           uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
-          expect($scope.errors.messageTitle).to.equal('translated apps-common.errors.messagePrefix');
+          expect($scope.errors.messageTitle).to.equal('Something went wrong.');
           expect($scope.errors.message).to.equal('Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.');
           expect($scope.errors.genericError).to.be.falsey;
           expect($scope.messages.isGoogleAccount).to.be.falsey;
@@ -346,7 +346,7 @@ describe("controller: Log In", function() {
           $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
           uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
-          expect($scope.errors.messageTitle).to.equal('translated apps-common.errors.messagePrefix');
+          expect($scope.errors.messageTitle).to.equal('Something went wrong.');
           expect($scope.errors.message).to.equal('Server error');
           expect($scope.errors.genericError).to.be.falsey;
           expect($scope.messages.isGoogleAccount).to.be.falsey;
@@ -366,7 +366,7 @@ describe("controller: Log In", function() {
           $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
           uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
-          expect($scope.errors.messageTitle).to.equal('translated apps-common.errors.messagePrefix');
+          expect($scope.errors.messageTitle).to.equal('Something went wrong.');
           expect($scope.errors.message).to.equal('translated apps-common.errors.checkConnection');
           expect($scope.errors.genericError).to.be.falsey;
           expect($scope.messages.isGoogleAccount).to.be.falsey;
@@ -435,7 +435,7 @@ describe("controller: Log In", function() {
         $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
         uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
-        expect($scope.errors.messageTitle).to.equal('translated apps-common.errors.messagePrefix');
+        expect($scope.errors.messageTitle).to.equal('Something went wrong.');
 
         done();
       },10);
@@ -456,7 +456,7 @@ describe("controller: Log In", function() {
         $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
         uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
-        expect($scope.errors.messageTitle).to.equal('translated apps-common.errors.messagePrefix');
+        expect($scope.errors.messageTitle).to.equal('Something went wrong.');
 
         done();
       },10);
