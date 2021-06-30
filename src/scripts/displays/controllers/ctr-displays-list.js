@@ -2,9 +2,9 @@
 
 angular.module('risevision.displays.controllers')
   .controller('displaysList', ['$scope', '$rootScope', '$q', 'userState', 'display',
-    'ScrollingListService', '$loading', '$filter', 'displayFactory', 'playerLicenseFactory',
+    'ScrollingListService', '$filter', 'displayFactory', 'playerLicenseFactory',
     '$modal', 'displaySummaryFactory', 'DisplayListOperations',
-    function ($scope, $rootScope, $q, userState, display, ScrollingListService, $loading,
+    function ($scope, $rootScope, $q, userState, display, ScrollingListService,
       $filter, displayFactory, playerLicenseFactory, $modal, displaySummaryFactory,
       DisplayListOperations) {
       $scope.search = {
@@ -28,14 +28,6 @@ angular.module('risevision.displays.controllers')
         placeholder: $filter('translate')(
           'displays-app.list.filter.placeholder')
       };
-
-      $scope.$watch('displays.loadingItems', function (loading) {
-        if (loading) {
-          $loading.start('displays-list-loader');
-        } else {
-          $loading.stop('displays-list-loader');
-        }
-      });
 
       $scope.$on('displayCreated', function () {
         // use doSearch because it clears the list

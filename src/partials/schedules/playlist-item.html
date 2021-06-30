@@ -6,7 +6,7 @@
     <h3 class="modal-title">{{isNew ? 'common.add' : 'common.edit' | translate}} {{'schedules-app.playlist.item.title' | translate}}</h3>
   </div>
 
-  <div class="modal-body" stop-event="touchend" rv-spinner rv-spinner-key="playlist-item-modal-loader" rv-spinner-start-active="1">
+  <div class="modal-body" stop-event="touchend" rv-spinner rv-spinner-key="playlist-item-modal-loader">
     <form role="form" name="playlistItemFields" ng-enter="save()" novalidate>
       <div class="form-group" ng-if="playlistItem.type !== 'presentation'">
         <label class="control-label" translate>schedules-app.playlist.item.name</label>

@@ -8,9 +8,7 @@
   <div class="scrollable-list mt-3 mb-3"
     scrolling-list="factory.unselectedSchedules.load()"
     rv-spinner
-    rv-spinner-key="selected-schedules-spinner"
-    rv-spinner-start-active="0"
-  >
+    rv-spinner-key="selected-schedules-spinner">
     <div class="flex-row" ng-repeat="schedule in factory.selectedSchedules | filter:factory.search.query track by $index">
       <div class="row-entry">
         <madero-checkbox ng-click="factory.selectItem(schedule, true)" ng-value="factory.isSelected(schedule, true)"></madero-checkbox>

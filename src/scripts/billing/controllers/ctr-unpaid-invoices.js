@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.apps.billing.controllers')
-  .controller('UnpaidInvoicesCtrl', ['$scope', '$loading', '$stateParams',
+  .controller('UnpaidInvoicesCtrl', ['$scope', '$stateParams',
     'billing', 'invoiceFactory', 'ScrollingListService',
-    function ($scope, $loading, $stateParams, billing, invoiceFactory, ScrollingListService) {
+    function ($scope, $stateParams, billing, invoiceFactory, ScrollingListService) {
 
       $scope.invoiceFactory = invoiceFactory;
 
@@ -11,14 +11,6 @@ angular.module('risevision.apps.billing.controllers')
         companyId: $stateParams.cid,
         token: $stateParams.token,
         name: 'Unpaid Invoices'
-      });
-
-      $scope.$watch('unpaidInvoices.loadingItems', function (newValue) {
-        if (newValue) {
-          $loading.start('unpaid-invoice-loader');
-        } else {
-          $loading.stop('unpaid-invoice-loader');
-        }
       });
 
     }

@@ -8,9 +8,7 @@
   <div class="storage-selector-component te-scrollable-container"
     ng-class="{ 'no-files': !hasRegularFileItems() }"
     rv-spinner
-    rv-spinner-key="component-storage-selector-spinner"
-    rv-spinner-start-active="1"
-  >
+    rv-spinner-key="component-storage-selector-spinner">
 
     <div class="file-component-list" ng-show="folderItems.length > 0 && !isUploading" ng-if="storageManagerFactory.isListView">
       <div class="pl-0 file-component-list-header" ng-hide="filteredItems.length === 0">

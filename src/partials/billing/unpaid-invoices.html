@@ -15,7 +15,7 @@
     <h4>Unpaid Invoices</h4>
   </div>
 
-  <div rv-spinner rv-spinner-key="unpaid-invoice-loader" rv-spinner-start-active="1"></div>
+  <div rv-spinner rv-spinner-key="unpaid-invoice-loader" rv-show-spinner="unpaidInvoices.loadingItems"></div>
   <div id="errorBox" ng-show="unpaidInvoices.apiError" class="madero-style alert alert-danger" role="alert">
     <p><strong>{{unpaidInvoices.errorMessage}}</strong></p>
     {{unpaidInvoices.apiError}}
