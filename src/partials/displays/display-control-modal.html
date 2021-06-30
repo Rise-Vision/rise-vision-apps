@@ -21,7 +21,7 @@
 
     <button id="saveButton" type="submit" class="btn btn-primary"
             ng-click="saveConfiguration()" ng-disabled="displayDetails.$invalid" require-role="da"
-            rv-spinner rv-spinner-key="saving-display-control">
+            rv-spinner rv-spinner-key="saving-display-control" rv-show-spinner="loading">
       {{ factory.savingDisplay ? ('common.saving' | translate) : ('common.save' | translate)}}
       <i class="fa fa-check icon-right"></i>
     </button>

@@ -1,11 +1,13 @@
 'use strict';
 angular.module('risevision.displays.controllers')
   .controller('DisplayControlModalCtrl', ['$scope', '$modalInstance',
-    'displayControlFactory', '$loading',
-    function ($scope, $modalInstance, displayControlFactory, $loading) {
+    'displayControlFactory',
+    function ($scope, $modalInstance, displayControlFactory) {
       $scope.formData = {};
 
       var _loadConfiguration = function () {
+        $scope.loading = true;
+
         displayControlFactory.getConfiguration()
           .then(function (config) {
             $scope.formData.displayControlContents = config;
@@ -13,13 +15,16 @@ angular.module('risevision.displays.controllers')
           .catch(function (err) {
             console.log('Failed to load config; showing default', err);
             $scope.resetForm();
+          })
+          .finally(function () {
+            $scope.loading = false;
           });
       };
 
       _loadConfiguration();
 
       $scope.saveConfiguration = function () {
-        $loading.start('saving-display-control');
+        $scope.loading = true;
 
         displayControlFactory.updateConfiguration($scope.formData.displayControlContents)
           .then(function () {
@@ -29,7 +34,7 @@ angular.module('risevision.displays.controllers')
             console.log('Failed to save configuration file', err);
           })
           .finally(function () {
-            $loading.stop('saving-display-control');
+            $scope.loading = false;
           });
       };
 
