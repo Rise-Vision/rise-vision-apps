@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <div rv-spinner rv-spinner-key="invoice-loader"></div>
+  <div rv-spinner rv-spinner-key="invoice-loader" rv-show-spinner="invoiceFactory.loading"></div>
 
   <div id="errorBox" ng-show="invoiceFactory.apiError" class="madero-style alert alert-danger" role="alert">
     <strong>{{invoiceFactory.apiError}}</strong>

@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.common.header')
-  .controller('companySelectorCtr', ['$scope', '$loading', '$modalInstance',
+  .controller('companySelectorCtr', ['$scope', '$modalInstance',
     'companyService', 'companyId', 'ScrollingListService',
-    function ($scope, $loading, $modalInstance, companyService,
+    function ($scope, $modalInstance, companyService,
       companyId, ScrollingListService) {
 
       $scope.search = {
@@ -18,14 +18,6 @@ angular.module('risevision.common.header')
       $scope.filterConfig = {
         placeholder: 'Search Companies'
       };
-
-      $scope.$watch('companies.loadingItems', function (loading) {
-        if (loading) {
-          $loading.start('company-selector-modal-list');
-        } else {
-          $loading.stop('company-selector-modal-list');
-        }
-      });
 
       $scope.closeModal = function () {
         $modalInstance.dismiss('cancel');

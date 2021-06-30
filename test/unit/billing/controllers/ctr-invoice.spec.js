@@ -1,18 +1,11 @@
 'use strict';
 describe('controller: InvoiceCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $scope, $loading, invoiceFactory;
+  var $scope, invoiceFactory;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
   beforeEach(module(function ($provide) {
-    $provide.service('$loading', function () {
-      return {
-        start: sandbox.stub(),
-        stop: sandbox.stub()
-      };
-    });
-
     $provide.value('invoiceFactory', {
       payInvoice: sandbox.spy(),
       invoice: {}
@@ -22,7 +15,6 @@ describe('controller: InvoiceCtrl', function () {
 
   beforeEach(inject(function($injector, $rootScope, $controller) {
     $scope = $rootScope.$new();
-    $loading = $injector.get('$loading');
     invoiceFactory = $injector.get('invoiceFactory');
 
     $scope.form = {
@@ -45,22 +37,6 @@ describe('controller: InvoiceCtrl', function () {
     expect($scope.invoiceFactory).to.be.ok;
 
     expect($scope.completeCardPayment).to.be.a('function');
-  });
-  
-  describe('$loading: ', function() {
-    it('should stop spinner', function() {
-      $loading.stop.should.have.been.calledWith('invoice-loader');
-    });
-
-    it('should start spinner', function(done) {
-      $scope.invoiceFactory.loading = true;
-      $scope.$digest();
-      setTimeout(function() {
-        $loading.start.should.have.been.calledWith('invoice-loader');
-
-        done();
-      }, 10);
-    });
   });
 
   describe('completeCardPayment:', function() {
