@@ -20,7 +20,7 @@ angular.module('risevision.common.components.userstate')
 
       var _processErrorCode = function (e, actionName) {
         var error = getError(e);
-        var messageTitle = $filter('translate')('apps-common.errors.messagePrefix');
+        var messageTitle = 'Something went wrong.';
         var message = error.message ? error.message :
           'Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.';
 
