@@ -80,14 +80,7 @@ angular.module('risevision.apps', [
 
         .state('apps.home', {
           url: '/',
-          controller: ['$location', '$state', 'canAccessApps',
-            function ($location, $state, canAccessApps) {
-              return canAccessApps().then(function () {
-                $location.replace();
-                $state.go('apps.editor.home');
-              });
-            }
-          ]
+          redirectTo: 'apps.editor.home'
         })
 
         .state('apps.users', {
@@ -157,8 +150,8 @@ angular.module('risevision.apps', [
       }
     }
   ])
-  .run(['$rootScope', '$state', '$stateParams', '$exceptionHandler',
-    function ($rootScope, $state, $stateParams, $exceptionHandler) {
+  .run(['$rootScope', '$state', '$exceptionHandler',
+    function ($rootScope, $state, $exceptionHandler) {
 
       $rootScope.$on('risevision.user.signedOut', function () {
         $state.go('common.auth.unauthorized');
@@ -186,14 +179,14 @@ angular.module('risevision.apps', [
           $state.current.name === 'apps.storage.home' ||
           $state.current.name === 'apps.home') {
 
-          $state.go($state.current, $stateParams, {
+          $state.go($state.current, $state.params, {
             reload: true
           });
         } else if (($state.current.name.indexOf('apps.purchase') !== -1 ||
             $state.current.name.indexOf('apps.billing') !== -1) &&
           $state.current.forceAuth !== false) {
 
-          $state.go('apps.billing.home', $stateParams, {
+          $state.go('apps.billing.home', $state.params, {
             reload: true
           });
         }

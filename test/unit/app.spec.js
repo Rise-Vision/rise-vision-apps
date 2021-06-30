@@ -160,52 +160,11 @@ describe('app:', function() {
 
   });
 
-  describe('state apps.home:',function(){
-    it('should register state',function(){
-      var state = $state.get('apps.home');
-      expect(state).to.be.ok;
-      expect(state.url).to.equal('/');
-      expect(state.controller).to.be.ok;
-    });
-
-    it('should redirect to editor',function(done){
-      var $location = {
-        replace: sinon.spy()
-      };
-
-      sinon.spy($state,'go');
-      
-      $state.get('apps.home').controller[3]($location, $state, canAccessApps);
-
-      setTimeout(function() {
-        canAccessApps.should.have.been.called;
-
-        $location.replace.should.have.been.called;
-        $state.go.should.have.been.calledWith('apps.editor.home');
-
-        done();
-      }, 10);
-    });
-
-    it('should not redirect if user is not logged in',function(done){
-      canAccessApps.returns(Q.reject());
-
-      var $location = {
-        replace: sinon.spy()
-      };
-
-      sinon.spy($state,'go');
-      
-      $state.get('apps.home').controller[3]($location, $state, canAccessApps);
-
-      setTimeout(function() {
-        $location.replace.should.not.have.been.called;
-        $state.go.should.not.have.been.called;
-
-        done();
-      }, 10);
-    });
-
+  it('state apps.home:',function(){
+    var state = $state.get('apps.home');
+    expect(state).to.be.ok;
+    expect(state.url).to.equal('/');
+    expect(state.redirectTo).to.equal('apps.editor.home');
   });
 
   describe('state common.auth.signup:',function(){
