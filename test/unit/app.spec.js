@@ -123,18 +123,13 @@ describe('app:', function() {
     });
 
     it('should redirect to home',function(done){
-      var $location = {
-        search: function() { 
-          return {};
-        },
-        replace: sinon.spy()
-      };
       sinon.spy($state,'go');
       
-      $state.get('apps.users.add').controller[2]($location, $state);
+      $state.get('apps.users.add').controller[1]($state);
       setTimeout(function() {
-        $location.replace.should.have.been.called;
-        $state.go.should.have.been.calledWith('apps.home');
+        $state.go.should.have.been.calledWith('apps.home', null, {
+          location: 'replace'
+        });
 
         done();
       }, 10);
@@ -229,14 +224,11 @@ describe('app:', function() {
     it('should redirect to home',function(done){
       sinon.spy($state,'go');
 
-      var $location = {
-        replace: sinon.spy()
-      };
-
-      $state.get('common.auth.signin').controller[3]($state, canAccessApps, $location);
+      $state.get('common.auth.signin').controller[2]($state, canAccessApps);
       setTimeout(function() {
-        $location.replace.should.have.been.called;
-        $state.go.should.have.been.calledWith('apps.home');
+        $state.go.should.have.been.calledWith('apps.home', null, {
+          location: 'replace'
+        });
 
         done();
       }, 10);
@@ -247,13 +239,8 @@ describe('app:', function() {
 
       sinon.spy($state,'go');
 
-      var $location = {
-        replace: sinon.spy()
-      };
-
-      $state.get('common.auth.signin').controller[3]($state, canAccessApps, $location);
+      $state.get('common.auth.signin').controller[2]($state, canAccessApps);
       setTimeout(function() {
-        $location.replace.should.not.have.been.called;
         $state.go.should.not.have.been.called;
 
         done();
