@@ -49,7 +49,10 @@ angular.module('risevision.apps.storage.storage-selector', [
         .state('apps.storage', {
           url: '?cid',
           abstract: true,
-          template: '<div class="storage-app" ui-view></div>'
+          template: '<div class="storage-app" ui-view></div>',
+          data: {
+            requiresAuth: true
+          }
         })
 
         .state('apps.storage.home', {
@@ -60,11 +63,6 @@ angular.module('risevision.apps.storage.storage-selector', [
           }],
           controller: 'StorageSelectorIFrameController',
           resolve: {
-            canAccessApps: ['canAccessApps',
-              function (canAccessApps) {
-                return canAccessApps();
-              }
-            ],
             selectorType: ['$location',
               function ($location) {
                 return $location.search()['selector-type'];

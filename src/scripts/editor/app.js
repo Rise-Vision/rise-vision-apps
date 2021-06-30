@@ -9,7 +9,10 @@ angular.module('risevision.apps')
       $stateProvider
         .state('apps.editor', {
           abstract: true,
-          template: '<div class="editor-app" ui-view></div>'
+          template: '<div class="editor-app" ui-view></div>',
+          data: {
+            requiresAuth: true
+          }
         })
 
         .state('apps.editor.home', {
@@ -23,32 +26,23 @@ angular.module('risevision.apps')
             return $templateCache.get(
               'partials/editor/presentation-list.html');
           }],
-          controller: 'PresentationListController',
-          resolve: {
-            canAccess: ['canAccessApps',
-              function (canAccessApps) {
-                return canAccessApps();
-              }
-            ]
-          }
+          controller: 'PresentationListController'
         })
 
         .state('apps.editor.add', {
           url: '/editor/add/:productId',
-          controller: ['$state', '$stateParams', '$location', 'canAccessApps', 'editorFactory',
-            function ($state, $stateParams, $location, canAccessApps, editorFactory) {
-              canAccessApps().then(function () {
-                if ($stateParams.productId) {
-                  editorFactory.addFromProductId($stateParams.productId)
-                    .then(function () {
-                      $location.replace();
-                    });
-                } else {
-                  editorFactory.addPresentationModal();
+          controller: ['$state', '$stateParams', '$location', 'editorFactory',
+            function ($state, $stateParams, $location, editorFactory) {
+              if ($stateParams.productId) {
+                editorFactory.addFromProductId($stateParams.productId)
+                  .then(function () {
+                    $location.replace();
+                  });
+              } else {
+                editorFactory.addPresentationModal();
 
-                  $state.go('apps.editor.list');
-                }
-              });
+                $state.go('apps.editor.list');
+              }
             }
           ]
         })
@@ -63,6 +57,9 @@ angular.module('risevision.apps')
           params: {
             isLoaded: false,
             presentationId: ''
+          },
+          data: {
+            requiresAuth: false
           },
           resolve: {
             presentationInfo: ['canAccessApps', 'editorFactory', '$stateParams',

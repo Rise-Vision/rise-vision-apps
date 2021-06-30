@@ -9,21 +9,17 @@ angular.module('risevision.apps')
       $stateProvider
         .state('apps.storage', {
           abstract: true,
-          template: '<div class="storage-app" ui-view></div>'
+          template: '<div class="storage-app" ui-view></div>',
+          data: {
+            requiresAuth: true
+          }
         })
 
         .state('apps.storage.home', {
           url: '/storage',
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/storage/home.html');
-          }],
-          resolve: {
-            canAccessApps: ['canAccessApps',
-              function (canAccessApps) {
-                return canAccessApps();
-              }
-            ]
-          }
+          }]
         });
 
     }

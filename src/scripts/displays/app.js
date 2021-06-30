@@ -9,7 +9,10 @@ angular.module('risevision.apps')
       $stateProvider
         .state('apps.displays', {
           abstract: true,
-          template: '<div class="container displays-app" ui-view></div>'
+          template: '<div class="container displays-app" ui-view></div>',
+          data: {
+            requiresAuth: true
+          }
         })
 
         .state('apps.displays.home', {
@@ -23,38 +26,31 @@ angular.module('risevision.apps')
             return $templateCache.get(
               'partials/displays/displays-list.html');
           }],
-          controller: 'displaysList',
-          resolve: {
-            canAccessApps: ['canAccessApps',
-              function (canAccessApps) {
-                return canAccessApps();
-              }
-            ]
-          }
+          controller: 'displaysList'
         })
 
         .state('apps.displays.change', {
           url: '/displays/change/:displayId/:companyId',
-          controller: ['canAccessApps', 'userState', '$stateParams',
-            '$state', '$location',
-            function (canAccessApps, userState, $stateParams, $state, $location) {
+          controller: ['userState', '$stateParams', '$state',
+            function (userState, $stateParams, $state) {
               var companyChangeRequired = userState.getSelectedCompanyId() !== $stateParams.companyId;
 
-              return canAccessApps().then(function () {
-                  if (companyChangeRequired) {
-                    return userState.switchCompany($stateParams.companyId);
-                  }
-                })
-                .then(function () {
-                  if (companyChangeRequired) {
-                    $location.replace();
-                  }
-
+                if (companyChangeRequired) {
+                  return userState.switchCompany($stateParams.companyId)
+                    .then(function() {
+                      $state.go('apps.displays.details', {
+                        displayId: $stateParams.displayId,
+                        cid: $stateParams.companyId
+                      }, {
+                        location: 'replace'
+                      });
+                    });
+                } else {
                   $state.go('apps.displays.details', {
                     displayId: $stateParams.displayId,
                     cid: $stateParams.companyId
-                  });
-                });
+                  });                  
+                }
             }
           ]
         })
@@ -67,13 +63,11 @@ angular.module('risevision.apps')
           }],
           controller: 'displayDetails',
           resolve: {
-            displayId: ['canAccessApps', '$stateParams', 'displayFactory',
-              function (canAccessApps, $stateParams, displayFactory) {
-                return canAccessApps().then(function () {
-                  displayFactory.init();
+            displayId: ['$stateParams', 'displayFactory',
+              function ($stateParams, displayFactory) {
+                displayFactory.init();
 
-                  return $stateParams.displayId;
-                });
+                return $stateParams.displayId;
               }
             ]
           }
@@ -90,16 +84,14 @@ angular.module('risevision.apps')
           },
           controller: 'displayAdd',
           resolve: {
-            scheduleInfo: ['$stateParams', 'canAccessApps', 'displayFactory', 'screenshotFactory',
-              function ($stateParams, canAccessApps, displayFactory, screenshotFactory) {
-                return canAccessApps().then(function () {
-                  displayFactory.newDisplay();
-                  delete screenshotFactory.screenshot;
+            scheduleInfo: ['$stateParams', 'displayFactory', 'screenshotFactory',
+              function ($stateParams, displayFactory, screenshotFactory) {
+                displayFactory.newDisplay();
+                delete screenshotFactory.screenshot;
 
-                  if ($stateParams.schedule) {
-                    displayFactory.setAssignedSchedule($stateParams.schedule);
-                  }
-                });
+                if ($stateParams.schedule) {
+                  displayFactory.setAssignedSchedule($stateParams.schedule);
+                }
               }
             ]
           }
@@ -110,14 +102,7 @@ angular.module('risevision.apps')
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/displays/alerts.html');
           }],
-          controller: 'AlertsCtrl',
-          resolve: {
-            canAccessApps: ['canAccessApps',
-              function (canAccessApps) {
-                return canAccessApps();
-              }
-            ]
-          }
+          controller: 'AlertsCtrl'
         });
 
     }

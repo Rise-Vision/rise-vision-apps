@@ -9,7 +9,10 @@ angular.module('risevision.apps')
       $stateProvider
         .state('apps.schedules', {
           abstract: true,
-          template: '<div class="container schedules-app" ui-view></div>'
+          template: '<div class="container schedules-app" ui-view></div>',
+          data: {
+            requiresAuth: true
+          }
         })
 
         .state('apps.schedules.home', {
@@ -23,14 +26,7 @@ angular.module('risevision.apps')
             return $templateCache.get(
               'partials/schedules/schedules-list.html');
           }],
-          controller: 'schedulesList',
-          resolve: {
-            canAccessApps: ['canAccessApps',
-              function (canAccessApps) {
-                return canAccessApps();
-              }
-            ]
-          }
+          controller: 'schedulesList'
         })
 
         .state('apps.schedules.details', {
@@ -41,13 +37,10 @@ angular.module('risevision.apps')
           }],
           controller: 'scheduleDetails',
           resolve: {
-            scheduleInfo: ['canAccessApps', 'scheduleFactory',
-              '$stateParams',
-              function (canAccessApps, scheduleFactory, $stateParams) {
-                return canAccessApps().then(function () {
-                  //load the schedule based on the url param
-                  return scheduleFactory.getSchedule($stateParams.scheduleId);
-                });
+            scheduleInfo: ['scheduleFactory', '$stateParams',
+              function (scheduleFactory, $stateParams) {
+                //load the schedule based on the url param
+                return scheduleFactory.getSchedule($stateParams.scheduleId);
               }
             ]
           }
@@ -64,15 +57,13 @@ angular.module('risevision.apps')
           },
           controller: 'scheduleAdd',
           resolve: {
-            scheduleInfo: ['$stateParams', 'canAccessApps', 'scheduleFactory', 'playlistFactory',
-              function ($stateParams, canAccessApps, scheduleFactory, playlistFactory) {
-                return canAccessApps().then(function () {
-                  scheduleFactory.newSchedule();
+            scheduleInfo: ['$stateParams', 'scheduleFactory', 'playlistFactory',
+              function ($stateParams, scheduleFactory, playlistFactory) {
+                scheduleFactory.newSchedule();
 
-                  if ($stateParams.presentationItem) {
-                    return playlistFactory.addPresentationItem($stateParams.presentationItem);
-                  }
-                });
+                if ($stateParams.presentationItem) {
+                  return playlistFactory.addPresentationItem($stateParams.presentationItem);
+                }
               }
             ]
           }

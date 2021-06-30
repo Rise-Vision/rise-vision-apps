@@ -9,7 +9,10 @@ angular.module('risevision.apps')
       $stateProvider
         .state('apps.billing', {
           abstract: true,
-          template: '<div class="container billing-app" ui-view></div>'
+          template: '<div class="container billing-app" ui-view></div>',
+          data: {
+            requiresAuth: true
+          }
         })
 
         .state('apps.billing.home', {
@@ -17,12 +20,10 @@ angular.module('risevision.apps')
           templateUrl: 'partials/billing/app-billing.html',
           controller: 'BillingCtrl',
           resolve: {
-            canAccessApps: ['canAccessApps', 'invoiceFactory',
-              function (canAccessApps, invoiceFactory) {
-                return canAccessApps().then(function () {
-                  // Clear potential error messages
-                  invoiceFactory.init();
-                });
+            init: ['invoiceFactory',
+              function (invoiceFactory) {
+                // Clear potential error messages
+                invoiceFactory.init();
               }
             ]
           }
@@ -32,7 +33,10 @@ angular.module('risevision.apps')
           url: '/billing/unpaid?:token',
           templateUrl: 'partials/billing/unpaid-invoices.html',
           controller: 'UnpaidInvoicesCtrl',
-          forceAuth: false
+          forceAuth: false,
+          data: {
+            requiresAuth: false
+          }
         })
 
         .state('apps.billing.subscription', {
@@ -40,11 +44,9 @@ angular.module('risevision.apps')
           templateUrl: 'partials/billing/subscription.html',
           controller: 'SubscriptionCtrl',
           resolve: {
-            invoiceInfo: ['canAccessApps', 'subscriptionFactory', '$stateParams',
-              function (canAccessApps, subscriptionFactory, $stateParams) {
-                return canAccessApps().then(function () {
-                  subscriptionFactory.getSubscription($stateParams.subscriptionId, true);
-                });
+            invoiceInfo: ['subscriptionFactory', '$stateParams',
+              function (subscriptionFactory, $stateParams) {
+                subscriptionFactory.getSubscription($stateParams.subscriptionId, true);
               }
             ]
           }
@@ -55,11 +57,9 @@ angular.module('risevision.apps')
           templateUrl: 'partials/billing/add-payment-source.html',
           controller: 'AddPaymentSourceCtrl',
           resolve: {
-            invoiceInfo: ['canAccessApps', 'subscriptionFactory', '$stateParams',
-              function (canAccessApps, subscriptionFactory, $stateParams) {
-                return canAccessApps().then(function () {
-                  subscriptionFactory.getSubscription($stateParams.subscriptionId);
-                });
+            invoiceInfo: ['subscriptionFactory', '$stateParams',
+              function (subscriptionFactory, $stateParams) {
+                subscriptionFactory.getSubscription($stateParams.subscriptionId);
               }
             ]
           }
@@ -77,7 +77,10 @@ angular.module('risevision.apps')
               }
             ]
           },
-          forceAuth: false
+          forceAuth: false,
+          data: {
+            requiresAuth: false
+          }
         });
     }
   ]);

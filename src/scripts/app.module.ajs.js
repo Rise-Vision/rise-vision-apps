@@ -150,8 +150,8 @@ angular.module('risevision.apps', [
       }
     }
   ])
-  .run(['$rootScope', '$state', '$exceptionHandler',
-    function ($rootScope, $state, $exceptionHandler) {
+  .run(['$rootScope', '$state', '$transitions', '$exceptionHandler', 'canAccessApps',
+    function ($rootScope, $state, $transitions, $exceptionHandler, canAccessApps) {
 
       $rootScope.$on('risevision.user.signedOut', function () {
         $state.go('common.auth.unauthorized');
@@ -168,8 +168,16 @@ angular.module('risevision.apps', [
       });
 
       $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, err) {
+        if (err && err.detail === 'unauthenticated') {
+          return;
+        }
+
         $exceptionHandler(err, 'UI Router Error.', true);
       });
+
+      $transitions.onBefore({
+        to: state => state.data && state.data.requiresAuth
+      }, () => canAccessApps());
 
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
         if ($state.current.name === 'apps.schedules.list' ||

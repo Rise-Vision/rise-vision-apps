@@ -32,7 +32,7 @@ angular.module('risevision.common.components.userstate')
                 location: allowReturn ? true : 'replace'
               });
 
-              return $q.reject();
+              return $q.reject('unauthenticated');
             }
           });
       };
