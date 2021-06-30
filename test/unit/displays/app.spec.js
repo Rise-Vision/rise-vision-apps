@@ -65,7 +65,8 @@ describe('app:', function() {
         userState.switchCompany.should.not.have.been.called;
 
         $state.go.should.have.been.calledWith('apps.displays.details', {
-          displayId: 'displayId'
+          displayId: 'displayId',
+          cid: 'id'
         });
 
         done();
@@ -81,7 +82,8 @@ describe('app:', function() {
         userState.switchCompany.should.have.been.calledWith('otherId');
 
         $state.go.should.have.been.calledWith('apps.displays.details', {
-          displayId: 'displayId'
+          displayId: 'displayId',
+          cid: 'otherId'
         });
 
         done();

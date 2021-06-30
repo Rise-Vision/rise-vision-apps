@@ -2,6 +2,7 @@
 
 angular.module('risevision.apps', [
     'ui.router',
+    'ui.router.state.events',
     'ngTouch',
     'ui.bootstrap',
     'ui.codemirror',
@@ -70,20 +71,16 @@ angular.module('risevision.apps', [
       $stateProvider
         .state('apps', {
           url: '?cid',
+          params: {
+            cid: ''
+          },
           abstract: true,
           template: '<div ui-view></div>'
         })
 
         .state('apps.home', {
           url: '/',
-          controller: ['$location', '$state', 'canAccessApps',
-            function ($location, $state, canAccessApps) {
-              return canAccessApps().then(function () {
-                $location.replace();
-                $state.go('apps.editor.home');
-              });
-            }
-          ]
+          redirectTo: 'apps.editor.home'
         })
 
         .state('apps.users', {
@@ -131,7 +128,6 @@ angular.module('risevision.apps', [
             }
           ]
         });
-
     }
   ])
   .config(['$tooltipProvider',
@@ -183,14 +179,14 @@ angular.module('risevision.apps', [
           $state.current.name === 'apps.storage.home' ||
           $state.current.name === 'apps.home') {
 
-          $state.go($state.current, null, {
+          $state.go($state.current, $state.params, {
             reload: true
           });
         } else if (($state.current.name.indexOf('apps.purchase') !== -1 ||
             $state.current.name.indexOf('apps.billing') !== -1) &&
           $state.current.forceAuth !== false) {
 
-          $state.go('apps.billing.home', null, {
+          $state.go('apps.billing.home', $state.params, {
             reload: true
           });
         }

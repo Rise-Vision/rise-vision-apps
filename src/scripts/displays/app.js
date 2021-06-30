@@ -14,14 +14,7 @@ angular.module('risevision.apps')
 
         .state('apps.displays.home', {
           url: '/displays',
-          controller: ['canAccessApps', '$state', '$location',
-            function (canAccessApps, $state, $location) {
-              canAccessApps().then(function () {
-                $location.replace();
-                $state.go('apps.displays.list');
-              });
-            }
-          ]
+          redirectTo: 'apps.displays.list'
         })
 
         .state('apps.displays.list', {
@@ -58,7 +51,8 @@ angular.module('risevision.apps')
                   }
 
                   $state.go('apps.displays.details', {
-                    displayId: $stateParams.displayId
+                    displayId: $stateParams.displayId,
+                    cid: $stateParams.companyId
                   });
                 });
             }

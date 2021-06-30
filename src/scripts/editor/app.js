@@ -14,14 +14,7 @@ angular.module('risevision.apps')
 
         .state('apps.editor.home', {
           url: '/editor',
-          controller: ['canAccessApps', '$state', '$location',
-            function (canAccessApps, $state, $location) {
-              canAccessApps().then(function () {
-                $location.replace();
-                $state.go('apps.editor.list');
-              });
-            }
-          ]
+          redirectTo: 'apps.editor.list'
         })
 
         .state('apps.editor.list', {
@@ -68,7 +61,8 @@ angular.module('risevision.apps')
           }],
           controller: 'WorkspaceController',
           params: {
-            isLoaded: false
+            isLoaded: false,
+            presentationId: ''
           },
           resolve: {
             presentationInfo: ['canAccessApps', 'editorFactory', '$stateParams',

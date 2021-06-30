@@ -40,11 +40,6 @@ describe("service: access:", function() {
         })
       };
     });
-    $provide.service("$location", function() {
-      return $location = {
-        replace: sinon.spy()
-      };
-    });
     $provide.service("urlStateService", function() {
       return {
         get: function() {
@@ -54,7 +49,7 @@ describe("service: access:", function() {
     });
   }));
   
-  var canAccessApps, $location, $state, stateAvailable, authenticate, isRiseVisionUser, isLoggedIn;
+  var canAccessApps, $state, stateAvailable, authenticate, isRiseVisionUser, isLoggedIn;
   beforeEach(function(){
     isRiseVisionUser = true;
     authenticate = true;
@@ -94,10 +89,9 @@ describe("service: access:", function() {
       $state.go.should.have.been.calledWith("common.auth.unregistered", {
         state: "newState"
       }, {
-        reload: true
+        reload: true,
+        location: 'replace'
       });
-
-      $location.replace.should.have.been.called;
 
       done();
     });  
@@ -116,10 +110,9 @@ describe("service: access:", function() {
       $state.go.should.have.been.calledWith("common.auth.unregistered", {
         state: "newState"
       }, {
-        reload: true
+        reload: true,
+        location: true
       });
-
-      $location.replace.should.not.have.been.called;
 
       done();
     });  
@@ -134,8 +127,6 @@ describe("service: access:", function() {
     canAccessApps()
     .then(function() {
       $state.go.should.not.have.been.called;
-
-      $location.replace.should.not.have.been.called;
 
       done();
     })
@@ -157,10 +148,9 @@ describe("service: access:", function() {
       $state.go.should.have.been.calledWith("common.auth.unauthorized", {
         state: "newState"
       }, {
-        reload: true
+        reload: true,
+        location: 'replace'
       });
-
-      $location.replace.should.have.been.called;
 
       done();
     });
@@ -179,10 +169,9 @@ describe("service: access:", function() {
       $state.go.should.have.been.calledWith("common.auth.unauthorized", {
         state: "newState"
       }, {
-        reload: true
+        reload: true,
+        location: 'replace'
       });
-
-      $location.replace.should.have.been.called;
 
       done();
     });
@@ -201,10 +190,9 @@ describe("service: access:", function() {
       $state.go.should.have.been.calledWith("common.auth.createaccount", {
         state: "newState"
       }, {
-        reload: true
+        reload: true,
+        location: 'replace'
       });
-
-      $location.replace.should.have.been.called;
 
       done();
     });

@@ -50,6 +50,7 @@
               "src/bower_components/angular-touch/angular-touch.js",
               "src/bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
               "src/bower_components/angular-ui-router/release/angular-ui-router.js",
+              "src/bower_components/angular-ui-router/release/stateEvents.js",              
               "src/bower_components/angular-translate/angular-translate.js",
               "src/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js",
               "src/bower_components/checklist-model/checklist-model.js",

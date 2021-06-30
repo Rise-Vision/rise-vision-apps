@@ -32,6 +32,11 @@ describe("Services: userState", function() {
     });
     
     $provide.value("$location", {
+      replace: sinon.spy(),
+      hash: sinon.spy(),
+      port: sinon.spy(),
+      protocol: sinon.spy(),
+      host: sinon.spy(),
       search: function () {
         return {
           inRVA: "true"

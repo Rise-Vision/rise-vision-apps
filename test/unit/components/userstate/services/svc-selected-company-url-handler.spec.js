@@ -19,7 +19,11 @@ describe("Services: selected company url handler", function() {
       destUrl: "",
       replace: function() {},
       path: function() { return "";},
-      url: function() {}
+      url: function() {},
+      hash: sinon.spy(),
+      port: sinon.spy(),
+      protocol: sinon.spy(),
+      host: sinon.spy()
     });
     $provide.factory("userState", [function () {
       return {

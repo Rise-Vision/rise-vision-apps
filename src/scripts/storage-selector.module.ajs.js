@@ -80,10 +80,10 @@ angular.module('risevision.apps.storage.storage-selector', [
 
     }
   ])
-  .run(['$rootScope', '$state',
-    function ($rootScope, $state) {
+  .run(['$rootScope', '$state', '$stateParams',
+    function ($rootScope, $state, $stateParams) {
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
-        $state.go('apps.storage.home', null, {
+        $state.go('apps.storage.home', $stateParams, {
           reload: true
         });
       });

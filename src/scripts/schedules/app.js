@@ -14,14 +14,7 @@ angular.module('risevision.apps')
 
         .state('apps.schedules.home', {
           url: '/schedules',
-          controller: ['canAccessApps', '$state', '$location',
-            function (canAccessApps, $state, $location) {
-              canAccessApps().then(function () {
-                $location.replace();
-                $state.go('apps.schedules.list');
-              });
-            }
-          ]
+          redirectTo: 'apps.schedules.list'
         })
 
         .state('apps.schedules.list', {

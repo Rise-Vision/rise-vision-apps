@@ -4,7 +4,7 @@ var helper = require('rv-common-e2e').helper;
 
 var TemplateEditorPage = function() {
   var seePlansLink = element(by.xpath('//a[contains(text(), "See Our Plans")]'));
-  var presentationsListLink = element(by.css('[ng-href="/editor"]'));
+  var presentationsListLink = element(by.css('[ng-href="/editor?cid="]'));
   var templateEditorContainer = element(by.id('template-editor'));
   var attributeList = element(by.css('.attribute-list'));
   var componentItems = element.all(by.repeater('comp in components track by $index'));

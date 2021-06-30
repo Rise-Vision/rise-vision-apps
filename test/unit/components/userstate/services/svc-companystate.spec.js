@@ -19,7 +19,12 @@ describe("Services: company state", function() {
       path: function() {
         return "";
       },
-      url: function() {}
+      url: function() {},
+      replace: sinon.spy(),
+      hash: sinon.spy(),
+      port: sinon.spy(),
+      protocol: sinon.spy(),
+      host: sinon.spy()
     });
     $provide.factory("$state", function() {
       return {

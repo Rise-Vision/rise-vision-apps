@@ -11,6 +11,10 @@ describe("Services: userAuthFactory", function() {
     //stub services
     $provide.service("$q", function() {return Q;});
     $provide.value("$location", {
+      replace: sinon.spy(),
+      hash: sinon.spy(),
+      port: sinon.spy(),
+      host: sinon.spy(),
       search: function () {
         return {};
       },
