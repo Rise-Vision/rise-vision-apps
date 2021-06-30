@@ -7,25 +7,29 @@ angular.module('risevision.common.components.loading')
         scope: {
           backdropClass: '@rvSpinnerBackdropClass',
           rvSpinnerKey: '@rvSpinnerKey',
-          rvSpinnerStartActive: '=?rvSpinnerStartActive',
-          rvSpinnerOptions: '=rvSpinner'
+          rvSpinnerOptions: '=rvSpinner',
+          rvShowSpinner: '=?rvShowSpinner'
         },
         link: function postLink(scope, $element, iAttrs) {
-          scope.active = angular.isDefined(iAttrs.rvSpinnerStartActive) &&
-            iAttrs.rvSpinnerStartActive === '1';
+          scope.active = true;
           var tpl =
             '<div ng-show="active" class="spinner-backdrop fade {{backdropClass}}"' +
             ' ng-class="{in: active}" us-spinner="rvSpinnerOptions"' +
-            ' spinner-key="{{rvSpinnerKey}}"';
-
-          if (iAttrs.rvSpinnerStartActive && iAttrs.rvSpinnerStartActive ===
-            '1') {
-            tpl += ' spinner-start-active="1"></div>';
-          } else {
-            tpl += '></div>';
-          }
+            ' spinner-key="{{rvSpinnerKey}}" spinner-start-active="1"></div>';
 
           $element.prepend($compile(tpl)(scope));
+
+          if (angular.isDefined(scope.rvShowSpinner)) {
+            scope.$watch('rvShowSpinner', function (loading) {
+              if (loading) {
+                usSpinnerService.spin(scope.rvSpinnerKey);
+                scope.active = true;
+              } else {
+                usSpinnerService.stop(scope.rvSpinnerKey);
+                scope.active = false;
+              }
+            });            
+          }
 
           scope.$on('rv-spinner:start', function (event, key) {
             if (key === scope.rvSpinnerKey) {

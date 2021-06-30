@@ -30,13 +30,6 @@ describe('controller: displays list', function() {
       };
     });
 
-    $provide.service('$loading',function(){
-      return {
-        start : sinon.spy(),
-        stop : sinon.spy()
-      }
-    });
-    
     $provide.value('translateFilter', function(){
       return function(key){
         return key;
@@ -64,19 +57,17 @@ describe('controller: displays list', function() {
       };
     });
   }));
-  var $scope, $loading, $filter, $window, displaySummaryFactory, ScrollingListService;
+  var $scope, $filter, $window, displaySummaryFactory, ScrollingListService;
   beforeEach(function(){
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $scope.listLimit = 5;
       $filter = $injector.get('$filter');
-      $loading = $injector.get('$loading');
       displaySummaryFactory = $injector.get('displaySummaryFactory');
       ScrollingListService = $injector.get('ScrollingListService');
       $window = $injector.get('$window');
       $controller('displaysList', {
         $scope : $scope,
-        $loading: $loading,
         $filter: $filter,
         $window: $window
       });
@@ -115,22 +106,6 @@ describe('controller: displays list', function() {
     expect($scope.search.count).to.equal(5);
 
     displaySummaryFactory.loadSummary.should.have.been.caled;
-  });
-
-  describe('$loading: ', function() {
-    it('should stop spinner', function() {
-      $loading.stop.should.have.been.calledWith('displays-list-loader');
-    });
-    
-    it('should start spinner', function(done) {
-      $scope.displays.loadingItems = true;
-      $scope.$digest();
-      setTimeout(function() {
-        $loading.start.should.have.been.calledWith('displays-list-loader');
-        
-        done();
-      }, 10);
-    });
   });
   
   it('should reload list when a Display is created', function() {

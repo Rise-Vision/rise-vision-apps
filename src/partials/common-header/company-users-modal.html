@@ -17,8 +17,7 @@
   <div class="panel panel-default scrollable-list company-users-list u_margin-sm-top"
     scrolling-list="users.load()"
     rv-spinner
-    rv-spinner-key="company-users-list"
-    rv-spinner-start-active="1">
+    rv-spinner-key="company-users-list">
     <div class="list-group-item company-users-list-item"
       ng-repeat="user in users.items.list | orderBy:sort.field:sort.descending | filter:userSearchString" ng-click="editUser(user.username)">
       <p class="list-group-item-text"><strong>{{user.firstName}} {{user.lastName}}</strong> <small class="text-muted">{{user.email}}</small></p>
