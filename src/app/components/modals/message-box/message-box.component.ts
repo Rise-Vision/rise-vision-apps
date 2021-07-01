@@ -16,4 +16,8 @@ export class MessageBoxComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  close() {
+    this.modalRef.hide()
+  }
+
 }

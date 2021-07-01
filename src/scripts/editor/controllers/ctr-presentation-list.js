@@ -5,11 +5,16 @@ angular.module('risevision.editor.controllers')
   })
   .controller('PresentationListController', ['$scope',
     'ScrollingListService', 'presentation', 'editorFactory', 'templateEditorFactory', '$loading',
-    '$filter', 'presentationUtils', 'PRESENTATION_SEARCH', 'ngMessageBox',
+    '$filter', 'presentationUtils', 'PRESENTATION_SEARCH', 'ngModalService',
     function ($scope, ScrollingListService, presentation, editorFactory, templateEditorFactory,
-      $loading, $filter, presentationUtils, PRESENTATION_SEARCH, ngMessageBox) {
+      $loading, $filter, presentationUtils, PRESENTATION_SEARCH, ngModalService) {
 
-      ngMessageBox.open('title', 'message');
+      ngModalService.confirm('title', 'message')
+      .then(function() {
+        console.log('confirmed');
+      }).catch(function() {
+        console.log('cancelled');
+      });
 
       $scope.search = {
         sortBy: 'changeDate',
