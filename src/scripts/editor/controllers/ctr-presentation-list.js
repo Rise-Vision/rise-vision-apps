@@ -5,9 +5,12 @@ angular.module('risevision.editor.controllers')
   })
   .controller('PresentationListController', ['$scope',
     'ScrollingListService', 'presentation', 'editorFactory', 'templateEditorFactory', '$loading',
-    '$filter', 'presentationUtils', 'PRESENTATION_SEARCH',
+    '$filter', 'presentationUtils', 'PRESENTATION_SEARCH', 'ngMessageBox',
     function ($scope, ScrollingListService, presentation, editorFactory, templateEditorFactory,
-      $loading, $filter, presentationUtils, PRESENTATION_SEARCH) {
+      $loading, $filter, presentationUtils, PRESENTATION_SEARCH, ngMessageBox) {
+
+      ngMessageBox.open('title', 'message');
+
       $scope.search = {
         sortBy: 'changeDate',
         reverse: true,

@@ -8,12 +8,18 @@ import { TemplateEditorModule } from './template-editor/template-editor.module';
 import { PurchaseModule } from './purchase/purchase.module';
 import { environment } from 'src/environments/environment';
 import * as angular from 'angular';
+import { ComponentsModule } from './components/components.module';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   imports: [
     BrowserModule,
     UpgradeModule,
     HttpClientModule,
+
+    ModalModule.forRoot(),
+
+    ComponentsModule,
     EditorModule,
     PurchaseModule,
     TemplateEditorModule
