@@ -4,6 +4,7 @@ import * as angular from 'angular';
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { MessageBoxComponent } from './message-box/message-box.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
+import { ProductDetailsModalComponent } from 'src/app/editor/components/product-details-modal/product-details-modal.component';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,11 @@ export class ModalService {
       initialState
     }));
 
+    return modalInstance.content.promise;
+  }
+
+  showComponent(component, params) {
+    const modalInstance = this.modalService.show(ProductDetailsModalComponent, Object.assign({}, params));
     return modalInstance.content.promise;
   }
 

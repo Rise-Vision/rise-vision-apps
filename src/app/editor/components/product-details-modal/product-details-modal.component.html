@@ -1,0 +1,20 @@
+<div id="productDetailsModal">
+    <div class="modal-header"> <button id="closeButton" type="button" class="close" (click)="close()"> <i class="fa fa-times"></i> </button> 
+      <h3 class="modal-title">{{product.name}}</h3>
+    </div>
+  
+    <div class="row modal-body u_padding-lg">
+      <div class="row">
+        <div class="col-md-8 col-xs-12">
+          <img class="img-responsive" src="{{product.imageUrl}}">
+          <p class="u_margin-md-top">{{product.descriptionShort}}</p>
+        </div>
+        <div class="col-md-4 col-xs-12">
+          <a id="useProductButton" href="" class="btn btn-primary btn-lg btn-block" (click)="confirm()">
+            Start with this Template <i class="fa fa-plus icon-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  

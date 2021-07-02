@@ -1,9 +1,9 @@
 'use strict';
 angular.module('risevision.editor.controllers')
   .controller('storeTemplatesModal', ['$scope', '$loading', '$filter', '$modal', '$modalInstance',
-    'userState', 'ScrollingListService', 'productsFactory', 'templateCategoryFilter',
+    'userState', 'ScrollingListService', 'productsFactory', 'templateCategoryFilter', 'ngModalService',
     function ($scope, $loading, $filter, $modal, $modalInstance,
-      userState, ScrollingListService, productsFactory, templateCategoryFilter) {
+      userState, ScrollingListService, productsFactory, templateCategoryFilter, ngModalService) {
       var defaultCount = 1000;
 
       $scope.isEducationCustomer = userState.isEducationCustomer();
@@ -55,18 +55,13 @@ angular.module('risevision.editor.controllers')
       });
 
       $scope.select = function (product) {
-        var productDetailsModal = $modal.open({
-          templateUrl: 'partials/editor/product-details-modal.html',
-          size: 'lg',
-          windowClass: 'product-preview-modal',
-          controller: 'ProductDetailsModalController',
-          resolve: {
-            product: function () {
-              return product;
-            }
+        var params = {
+          class: 'product-preview-modal modal-lg',
+          initialState: {
+            product: product
           }
-        });
-        productDetailsModal.result.then(function () {
+        };
+        ngModalService.showComponent('ProductDetailsModal', params).then(function() {
           $modalInstance.close(product);
         });
       };
