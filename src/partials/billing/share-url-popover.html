@@ -1,12 +1,1 @@
-<div id="share-url-popover" ng-controller="ShareUrlController">
-  <span class="text-sm font-weight-bold">Share</span>
-  <button type="button" class="close" ng-click="dismiss()" aria-hidden="true">
-    <streamline-icon name="close" width="10" height="10"></streamline-icon>
-  </button>
-
-  <div class="aligner mt-3">
-    <input class="form-control copy-text-box w-100" type="text" readonly="readonly" value="{{getUrl()}}" ng-focus="onTextFocus($event)" focus-me="true"/>
-    <button type="button" id="copyUrlButton" class="btn btn-primary ml-2" ng-click="copyToClipboard(getUrl())" aria-label="Copy">Copy</button>
-  </div>
-
-</div>
+<share-url [close-action]="dismiss"></share-url>

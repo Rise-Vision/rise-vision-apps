@@ -8,12 +8,14 @@ import { TemplateEditorModule } from './template-editor/template-editor.module';
 import { PurchaseModule } from './purchase/purchase.module';
 import { environment } from 'src/environments/environment';
 import * as angular from 'angular';
+import { BillingModule } from './billing/billing.module';
 
 @NgModule({
   imports: [
     BrowserModule,
     UpgradeModule,
     HttpClientModule,
+    BillingModule,
     EditorModule,
     PurchaseModule,
     TemplateEditorModule
