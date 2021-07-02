@@ -498,7 +498,6 @@
               "src/scripts/template-editor/directives/dtv-basic-uploader.js",
               "src/scripts/template-editor/directives/dtv-file-entry.js",
               "src/scripts/template-editor/directives/dtv-empty-file-list.js",
-              "src/scripts/template-editor/directives/dtv-streamline-icon.js",
               "src/scripts/template-editor/directives/dtv-time-picker.js",
 
               "src/scripts/template-editor/components/directives/dtv-component-storage-selector.js",
