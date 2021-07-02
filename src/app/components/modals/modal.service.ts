@@ -19,7 +19,7 @@ export class ModalService {
     };
 
     this.modalService.show(MessageBoxComponent, Object.assign({}, { 
-      class: 'madero-style centered-modal modal-sm',
+      class: 'madero-style modal-sm',
       initialState
     }));
   }
@@ -33,7 +33,7 @@ export class ModalService {
     };
 
     const modalInstance = this.modalService.show(ConfirmModalComponent, Object.assign({}, { 
-      class: 'madero-style centered-modal modal-sm',
+      class: 'madero-style modal-sm',
       initialState
     }));
 
