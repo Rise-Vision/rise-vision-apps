@@ -12,6 +12,9 @@ import { StreamlineIconComponent } from './components/streamline-icon/streamline
   declarations: [
     CanvaButtonComponent,
     StreamlineIconComponent
+  ],
+  exports: [
+    StreamlineIconComponent
   ]
 })
 export class TemplateEditorModule {

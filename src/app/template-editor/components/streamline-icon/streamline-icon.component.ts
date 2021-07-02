@@ -4,7 +4,7 @@ import { downgradeComponent } from '@angular/upgrade/static';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-streamline-icon',
+  selector: 'streamline-icon',
   templateUrl: './streamline-icon.component.html',
   styleUrls: ['./streamline-icon.component.scss']
 })
