@@ -24,19 +24,32 @@ export class ModalService {
     }));
   }
 
-  confirm(title: string, message: string) {
+  confirm(title: string, message: string, confirmButton?: string, cancelButton?: string) {
     const initialState = {
       title,
       message,
-      confirmButton: 'Ok',
-      cancelButton: 'Cancel'
+      confirmButton: confirmButton || 'Ok',
+      cancelButton: cancelButton || 'Cancel'
     };
+    return this._showConfirmModal(initialState);
+  }
 
+  confirmDanger(title: string, message: string, confirmButton?: string, cancelButton?: string) {
+    const initialState = {
+      title,
+      message,
+      confirmButton: confirmButton || 'Ok',
+      confirmButtonClass: 'btn-danger',
+      cancelButton: cancelButton || 'Cancel'
+    };
+    return this._showConfirmModal(initialState);
+  }
+
+  _showConfirmModal(initialState: any) {
     const modalInstance = this.modalService.show(ConfirmModalComponent, Object.assign({}, { 
-      class: 'madero-style modal-sm',
+      class: 'madero-style modal-md',
       initialState
     }));
-
     return modalInstance.content.promise;
   }
 

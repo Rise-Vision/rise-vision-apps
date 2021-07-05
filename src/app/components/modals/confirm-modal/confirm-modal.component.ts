@@ -12,6 +12,7 @@ export class ConfirmModalComponent implements OnInit {
   message: string;
   cancelButton: string;
   confirmButton: string;
+  confirmButtonClass = 'btn-primary';
 
   promise: Promise<void>;
   private reject: any;
