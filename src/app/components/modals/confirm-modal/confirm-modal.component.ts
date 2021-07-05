@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -6,16 +6,18 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
   templateUrl: './confirm-modal.component.html',
   styleUrls: ['./confirm-modal.component.scss']
 })
-export class ConfirmModalComponent implements OnInit {
+export class ConfirmModalComponent {
 
   title: string;
   message: string;
   cancelButton: string;
   confirmButton: string;
+  confirmButtonClass = 'btn-primary';
 
   promise: Promise<void>;
   private reject: any;
-  private resolve: any
+  private resolve: any;
+  private isConfirmed = false;
   
   constructor(public modalRef: BsModalRef) {
     this.promise = new Promise((resolve, reject) => {
@@ -23,24 +25,22 @@ export class ConfirmModalComponent implements OnInit {
       this.reject = reject;
     });
 
-    this.modalRef.onHide.subscribe((reason: string | any) => {
-      if (typeof reason === 'string') {
-        this.close();
+    this.modalRef.onHide.subscribe(() => {
+      if (this.isConfirmed) {
+        this.resolve();
+      } else {
+        this.reject();
       }
     });
   }
 
-  ngOnInit(): void {
-  }
-
   confirm() {
+    this.isConfirmed = true;
     this.modalRef.hide();
-    this.resolve();
   }
 
   close() {
     this.modalRef.hide();
-    this.reject();
   }
 
 }
