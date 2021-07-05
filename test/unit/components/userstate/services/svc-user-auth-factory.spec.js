@@ -276,7 +276,6 @@ describe("Services: userAuthFactory", function() {
           userState.refreshProfile.should.not.have.been.called;
 
           $broadcastSpy.should.not.have.been.calledWith("risevision.user.authorized");
-          $broadcastSpy.should.not.have.been.calledWith("risevision.user.userSignedIn");
 
           done();
         })
@@ -296,7 +295,6 @@ describe("Services: userAuthFactory", function() {
           userState.refreshProfile.should.have.been.called;
 
           $broadcastSpy.should.have.been.calledWith("risevision.user.authorized");
-          $broadcastSpy.should.have.been.calledWith("risevision.user.userSignedIn");
 
           done();
         })
@@ -333,7 +331,6 @@ describe("Services: userAuthFactory", function() {
           userState.refreshProfile.should.have.been.called;
 
           $broadcastSpy.should.have.been.calledWith("risevision.user.authorized");
-          $broadcastSpy.should.have.been.calledWith("risevision.user.userSignedIn");
 
           done();
         })

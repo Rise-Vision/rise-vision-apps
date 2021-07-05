@@ -5,9 +5,9 @@
     .factory('urlStateService', ['$window', '$location', 'userState',
       function ($window, $location, userState) {
 
-        var urlStateService = {};
+        var service = {};
 
-        urlStateService.get = function () {
+        service.get = function () {
           var state = '';
           var stateObject = {
             p: null,
@@ -47,7 +47,7 @@
           return state;
         };
 
-        urlStateService.redirectToState = function (stateString) {
+        service.redirectToState = function (stateString) {
           var state = _parseState(stateString);
 
           if (state.u || !$location.$$html5) { // hash found, assume non HTML5 mode
@@ -69,7 +69,7 @@
           }
         };
 
-        urlStateService.clearStatePath = function (stateString) {
+        service.clearStatePath = function (stateString) {
           var state = _parseState(stateString);
 
           state.p = undefined;
@@ -78,7 +78,7 @@
           return encodeURIComponent(JSON.stringify(state));
         };
 
-        urlStateService.getUrlParam = function (paramName) {
+        service.getUrlParam = function (paramName) {
           // if page is reloaded, then you can get param from $location.search()
           // otherwise you need to parse $location.path()
 
@@ -93,7 +93,7 @@
           }
         };
 
-        return urlStateService;
+        return service;
       }
     ]);
 

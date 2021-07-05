@@ -109,8 +109,6 @@
          *
          */
         var _authorize = function (authenticatedUser) {
-          var attemptImmediate = false;
-
           if (_authorizeDeferred) {
             return _authorizeDeferred.promise;
           }
@@ -144,11 +142,6 @@
                   _authorizeDeferred.resolve();
 
                   $rootScope.$broadcast('risevision.user.authorized');
-
-                  if (!attemptImmediate) {
-                    $rootScope.$broadcast(
-                      'risevision.user.userSignedIn');
-                  }
 
                   _authorizeDeferred = undefined;
                 });
