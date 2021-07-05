@@ -19,10 +19,7 @@ describe('MessageBoxComponent', () => {
 
   beforeEach(async () => {
     modalRef = {
-      onHide: {
-        subscribe: sinon.stub()
-      },
-      hide: sinon.stub()
+       hide: sinon.stub()
     }
     await TestBed.configureTestingModule({
       declarations: [ MessageBoxComponent, MockStreamlineIcon ],
@@ -42,4 +39,11 @@ describe('MessageBoxComponent', () => {
   it('should create', () => {
     expect(component).to.exist;
   });
+
+  describe('close:', ()=> {
+    it('should hide modal', () => {
+      component.close();      
+      modalRef.hide.should.have.been.called;
+    });
+  });  
 });

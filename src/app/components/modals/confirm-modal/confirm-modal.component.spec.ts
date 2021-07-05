@@ -12,7 +12,7 @@ import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 class MockStreamlineIcon {
 }
 
-describe.only('ConfirmModalComponent', () => {
+describe('ConfirmModalComponent', () => {
   let component: ConfirmModalComponent;
   let fixture: ComponentFixture<ConfirmModalComponent>;
   let modalRef;
