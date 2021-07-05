@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -6,15 +6,12 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
   templateUrl: './message-box.component.html',
   styleUrls: ['./message-box.component.scss']
 })
-export class MessageBoxComponent implements OnInit {
+export class MessageBoxComponent {
 
   title: string;
   message: string;
 
   constructor(public modalRef: BsModalRef) { }
-
-  ngOnInit(): void {
-  }
 
   close() {
     this.modalRef.hide()
