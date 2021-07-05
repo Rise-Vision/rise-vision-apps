@@ -142,11 +142,16 @@
             },
             controller: 'RegistrationCtrl',
             resolve: {
-              authenticate: ['$state', '$stateParams', 'userAuthFactory', 'registrationFactory',
-                function($state, $stateParams, userAuthFactory, registrationFactory) {
+              authenticate: ['$state', '$stateParams', 'userState', 'userAuthFactory', 'registrationFactory',
+                'urlStateService',
+                function($state, $stateParams, userState, userAuthFactory, registrationFactory, urlStateService) {
                   return userAuthFactory.authenticate(false)
                     .then(function () {
-                      registrationFactory.init();
+                      if (!userState.isRiseVisionUser()) {
+                        registrationFactory.init();
+                      } else {
+                        urlStateService.redirectToState($stateParams.state);
+                      }
                     })
                     .catch(function () {
                       $state.go('common.auth.unauthorized', $stateParams);

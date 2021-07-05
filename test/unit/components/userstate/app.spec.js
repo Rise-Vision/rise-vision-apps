@@ -43,15 +43,17 @@ describe("app:", function() {
     inject(function ($injector) {
       $state = $injector.get("$state");
       $rootScope = $injector.get("$rootScope");
+      userState = $injector.get('userState');
       urlStateService = $injector.get("urlStateService");
       userAuthFactory = $injector.get('userAuthFactory');
       registrationFactory = $injector.get('registrationFactory');
 
+      sinon.stub(userState, 'isRiseVisionUser').returns(false);
       sinon.stub(urlStateService, "redirectToState");
     });
   });
 
-  var $state, $rootScope, urlStateService, userAuthFactory, registrationFactory;
+  var $state, $rootScope, userState, urlStateService, userAuthFactory, registrationFactory;
   var locationProvider, urlRouterProvider, urlMatcherFactoryProvider, stateProvider;
 
   describe("mappings: ", function() {
@@ -298,15 +300,34 @@ describe("app:", function() {
         beforeEach(function() {
           sinon.spy($state, 'go');
 
-          $stateParams = 'stateParams';
+          $stateParams = {
+            state: 'redirectState'
+          };
         });
 
         it('should check if user is authenticated', function(done) {
-          $state.get('common.auth.unregistered').resolve.authenticate[4]($state, $stateParams, userAuthFactory, registrationFactory)
+          $state.get('common.auth.unregistered').resolve.authenticate[6]($state, $stateParams, userState, userAuthFactory, registrationFactory, urlStateService)
             .then(function() {
               userAuthFactory.authenticate.should.have.been.calledWith(false);
 
               registrationFactory.init.should.have.been.called;
+              urlStateService.redirectToState.should.not.have.been.called;
+
+              $state.go.should.not.have.been.called;
+
+              done();
+            });
+        });
+
+        it('should redirect to app if user is already registered', function(done) {
+          userState.isRiseVisionUser.returns(true)
+
+          $state.get('common.auth.unregistered').resolve.authenticate[6]($state, $stateParams, userState, userAuthFactory, registrationFactory, urlStateService)
+            .then(function() {
+              userAuthFactory.authenticate.should.have.been.calledWith(false);
+
+              registrationFactory.init.should.not.have.been.called;
+              urlStateService.redirectToState.should.have.been.calledWith($stateParams.state);
 
               $state.go.should.not.have.been.called;
 
@@ -317,13 +338,14 @@ describe("app:", function() {
         it('should redirect user to login page if not authenticated', function(done) {
           userAuthFactory.authenticate.rejects();
 
-          $state.get('common.auth.unregistered').resolve.authenticate[4]($state, $stateParams, userAuthFactory, registrationFactory)
+          $state.get('common.auth.unregistered').resolve.authenticate[6]($state, $stateParams, userState, userAuthFactory, registrationFactory, urlStateService)
             .then(function() {
               userAuthFactory.authenticate.should.have.been.calledWith(false);
 
               registrationFactory.init.should.not.have.been.called;
+              urlStateService.redirectToState.should.not.have.been.called;
 
-              $state.go.should.have.been.calledWith('common.auth.unauthorized', 'stateParams');
+              $state.go.should.have.been.calledWith('common.auth.unauthorized', $stateParams);
 
               done();
             });
