@@ -12,7 +12,7 @@ export class ModalService {
 
   constructor(private modalService: BsModalService) { }
 
-  show(title: string, message: string) {
+  showMessage(title: string, message: string) {
     const initialState = {
       title,
       message
