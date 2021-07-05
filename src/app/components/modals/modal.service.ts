@@ -24,25 +24,23 @@ export class ModalService {
     }));
   }
 
-  confirm(title: string, message: string, confirmButton?: string, cancelButton?: string) {
-    const initialState = {
+  confirm(title: string, message: string, confirmButton = 'Ok', cancelButton = 'Cancel') {
+    return this._showConfirmModal({
       title,
       message,
-      confirmButton: confirmButton || 'Ok',
-      cancelButton: cancelButton || 'Cancel'
-    };
-    return this._showConfirmModal(initialState);
+      confirmButton,
+      cancelButton
+    });
   }
 
-  confirmDanger(title: string, message: string, confirmButton?: string, cancelButton?: string) {
-    const initialState = {
+  confirmDanger(title: string, message: string, confirmButton = 'Ok', cancelButton = 'Cancel') {
+    return this._showConfirmModal({
+      confirmButtonClass: 'btn-danger',
       title,
       message,
-      confirmButton: confirmButton || 'Ok',
-      confirmButtonClass: 'btn-danger',
-      cancelButton: cancelButton || 'Cancel'
-    };
-    return this._showConfirmModal(initialState);
+      confirmButton,
+      cancelButton
+    });
   }
 
   _showConfirmModal(initialState: any) {
