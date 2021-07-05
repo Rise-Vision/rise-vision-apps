@@ -7,6 +7,12 @@ describe('service: logoImageFactory', function() {
   beforeEach(module(mockTranslate()));
 
   beforeEach(module(function($provide) {
+    $provide.service('ngModalService', function() {
+      return {
+        confirmDanger: sandbox.stub().resolves()
+      }
+    });
+
     $provide.service('brandingFactory', function() {
       return {
         brandingSettings: {},
@@ -18,7 +24,7 @@ describe('service: logoImageFactory', function() {
     });
   }));
 
-  var logoImageFactory, brandingFactory, $modal;
+  var logoImageFactory, brandingFactory, ngModalService;
   var sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
@@ -26,7 +32,7 @@ describe('service: logoImageFactory', function() {
       logoImageFactory = $injector.get('logoImageFactory');
      
       brandingFactory = $injector.get('brandingFactory');
-      $modal = $injector.get('$modal');
+      ngModalService = $injector.get('ngModalService');
     });
   });
 
@@ -172,13 +178,13 @@ describe('service: logoImageFactory', function() {
 
   describe('_canRemoveImage: ', function() {
     it('should show confirmation modal and resolve on confirm', function(done) {      
-      sandbox.stub($modal,'open').returns({result: Q.resolve()});
 
       logoImageFactory._canRemoveImage().then(function(){
-        $modal.open.should.have.been.calledWithMatch({
-          controller: "confirmModalController",
-          windowClass: 'madero-style centered-modal'
-        });        
+        ngModalService.confirmDanger.should.have.been.calledWith('Are you sure you want to remove your logo?',
+          'This will remove your logo from all Templates.',
+          'Yes, Remove It',
+          'No, Keep It'
+        );
         done();
       }).catch(function(){
         done('Should not reject');
@@ -186,7 +192,7 @@ describe('service: logoImageFactory', function() {
     });
 
     it('should show confirmation modal and reject on close', function() {      
-      sandbox.stub($modal,'open').returns({result: Q.reject()});
+      ngModalService.confirmDanger.rejects();
 
       logoImageFactory._canRemoveImage().then(function(){
         done('Should not resolve');

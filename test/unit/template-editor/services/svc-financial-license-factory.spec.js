@@ -11,15 +11,20 @@ describe('service: financialLicenseFactory:', function() {
         blueprintData: {}
       };
     });
+    $provide.service('ngModalService',function(){
+      return {
+        confirm : sandbox.stub().resolves()
+      };
+    });
   }));
 
-  var financialLicenseFactory, $modal, $window, blueprintFactory;
+  var financialLicenseFactory, ngModalService, $window, blueprintFactory;
 
   beforeEach(function() {
     inject(function($injector) {
       financialLicenseFactory = $injector.get('financialLicenseFactory');
       blueprintFactory = $injector.get('blueprintFactory');
-      $modal = $injector.get('$modal');
+      ngModalService = $injector.get('ngModalService');
       $window = $injector.get('$window');
     });
   });
@@ -68,32 +73,22 @@ describe('service: financialLicenseFactory:', function() {
 
   describe('showFinancialDataLicenseRequiredMessage',function() {
     it('should open modal',function(){
-      sandbox.stub($modal,'open').returns({ result: { then: sandbox.stub() } });
-
       financialLicenseFactory.showFinancialDataLicenseRequiredMessage();
       
-      $modal.open.should.have.been.calledWithMatch({
-        controller: "confirmModalController",
-        windowClass: 'madero-style centered-modal financial-data-license-message'
-      });
-
-      var resolve = $modal.open.getCall(0).args[0].resolve;
-      
-      expect(resolve.confirmationTitle()).to.be.a('string');
-      expect(resolve.confirmationMessage()).to.be.a('string');
-      expect(resolve.confirmationButton()).to.be.a('string');
-      expect(resolve.cancelButton()).to.be.a('string');
+      ngModalService.confirm.should.have.been.calledWith(
+        'Financial Data License Required',
+        'This Presentation requires a Financial Data License to show on your Display(s). Contact <a href="mailto:sales@risevision.com">sales@risevision.com</a> for a 30 day free trial.',
+        'Get a 30 Day Free Trial', 
+        'Close'
+      );
     });
 
-    it('should dismiss and open Contact Us on page confirm', function(done){
-      var modalInstance = { result: Q.resolve(), dismiss: sinon.stub() };           
-      sandbox.stub($modal,'open').returns(modalInstance);
+    it('should open Contact Us on page confirm', function(done){
       sandbox.stub($window,'open');
 
       financialLicenseFactory.showFinancialDataLicenseRequiredMessage();
 
       setTimeout(function(){
-        modalInstance.dismiss.should.have.been.called;
         $window.open.should.have.been.calledWith('https://www.risevision.com/contact-us?form_selected=sales&content_hide=true', "_blank"); 
         done() 
       },10);
