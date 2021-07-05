@@ -89,10 +89,11 @@ angular.module('risevision.apps', [
         })
         .state('apps.users.add', {
           url: '/users/add',
-          controller: ['$location', '$state',
-            function ($location, $state) {
-              $location.replace();
-              $state.go('apps.home');
+          controller: ['$state',
+            function ($state) {
+              $state.go('apps.home', null, {
+                location: 'replace'
+              });
             }
           ]
         })
@@ -119,11 +120,12 @@ angular.module('risevision.apps', [
 
         .state('common.auth.signin', {
           url: '/signin',
-          controller: ['$state', 'canAccessApps', '$location',
-            function ($state, canAccessApps, $location) {
+          controller: ['$state', 'canAccessApps',
+            function ($state, canAccessApps) {
               canAccessApps().then(function () {
-                $location.replace();
-                $state.go('apps.home');
+                $state.go('apps.home', null, {
+                  location: 'replace'
+                });
               });
             }
           ]

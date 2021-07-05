@@ -30,14 +30,12 @@ describe('app:', function() {
 
       inject(function ($injector) {
         $state = $injector.get('$state');
-        $location = $injector.get('$location');
         userState = $injector.get('userState');
         displayFactory = $injector.get('displayFactory');
         screenshotFactory = $injector.get('screenshotFactory');
         canAccessApps = $injector.get('canAccessApps');
 
         sinon.stub($state, 'go');
-        sinon.stub($location, 'replace');
 
         sinon.stub(userState, 'getSelectedCompanyId').returns('id');
         sinon.stub(userState, 'switchCompany').returns(Q.resolve());
@@ -45,7 +43,7 @@ describe('app:', function() {
       });
   });
 
-  var $state, $location, userState, displayFactory, screenshotFactory, canAccessApps;
+  var $state, userState, displayFactory, screenshotFactory, canAccessApps;
 
   describe('state apps.displays.change:',function(){
 
@@ -57,16 +55,17 @@ describe('app:', function() {
     });
 
     it('should navigate the display page',function(done){
-      $state.get('apps.displays.change').controller[5](canAccessApps, userState, {displayId: 'displayId', companyId: 'id'}, $state, $location);
+      $state.get('apps.displays.change').controller[4](canAccessApps, userState, {displayId: 'displayId', companyId: 'id'}, $state);
       setTimeout(function() {
         canAccessApps.should.have.been.called;
 
-        $location.replace.should.not.have.been.called;
         userState.switchCompany.should.not.have.been.called;
 
         $state.go.should.have.been.calledWith('apps.displays.details', {
           displayId: 'displayId',
           cid: 'id'
+        }, {
+          location: true
         });
 
         done();
@@ -74,16 +73,17 @@ describe('app:', function() {
     });
 
     it('should change company if ids dont match',function(done){
-      $state.get('apps.displays.change').controller[5](canAccessApps, userState, {displayId: 'displayId', companyId: 'otherId'}, $state, $location);
+      $state.get('apps.displays.change').controller[4](canAccessApps, userState, {displayId: 'displayId', companyId: 'otherId'}, $state);
       setTimeout(function() {
         canAccessApps.should.have.been.called;
 
-        $location.replace.should.have.been.called;
         userState.switchCompany.should.have.been.calledWith('otherId');
 
         $state.go.should.have.been.calledWith('apps.displays.details', {
           displayId: 'displayId',
           cid: 'otherId'
+        }, {
+          location: 'replace'
         });
 
         done();
