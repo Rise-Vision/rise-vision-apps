@@ -414,6 +414,8 @@ describe("app:", function() {
       });
 
       it("should redirect and use existing state variable", function() {
+        $state.params.param = 'existingParam';
+
         $rootScope.$broadcast("$stateChangeStart", {
           name: "common.auth.unauthorized"
         }, {}, null, {
@@ -421,6 +423,7 @@ describe("app:", function() {
         });
 
         $state.go.should.have.been.calledWith("common.auth.unauthorized", {
+          param: 'existingParam',
           state: "existingState"
         });
       });

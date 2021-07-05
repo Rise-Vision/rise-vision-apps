@@ -205,11 +205,11 @@
               toState.name === 'common.auth.createaccount') && !toParams.state) {
 
             if (fromParams.state) {
-              toParams.state = fromParams.state;
+              $state.params.state = fromParams.state;
 
               event.preventDefault();
 
-              $state.go(toState.name, toParams);
+              $state.go(toState.name, $state.params);
             }
           }
         });

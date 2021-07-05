@@ -85,7 +85,9 @@ describe("service: access:", function() {
     .then(function() {
       done("authenticated");
     })
-    .then(null, function() {
+    .then(null, function(result) {
+      expect(result).to.equal('unauthenticated');
+
       $state.go.should.have.been.calledWith("common.auth.unregistered", {
         state: "newState"
       }, {
