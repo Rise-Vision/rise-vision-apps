@@ -89,7 +89,7 @@ angular.module('risevision.template-editor.services')
       };
 
       svc.showMessageWindow = function (title, message) {
-        ngModalService.show(title, message);
+        ngModalService.showMessage(title, message);
       };
 
       svc.showInvalidExtensionsMessage = function (validExtensions) {
