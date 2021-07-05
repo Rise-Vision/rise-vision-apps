@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('templateEditorUtils', ['messageBox', '$window',
-    function (messageBox, $window) {
+  .factory('templateEditorUtils', ['$window', 'ngModalService',
+    function ($window, ngModalService) {
       var svc = {};
 
       svc.intValueFor = function (providedValue, defaultValue) {
@@ -88,11 +88,8 @@ angular.module('risevision.template-editor.services')
         }
       };
 
-      svc.showMessageWindow = function (title, message, buttonLabel) {
-        var partial = 'partials/template-editor/message-box.html';
-        var windowClass = 'madero-style centered-modal';
-
-        messageBox(title, message, buttonLabel, windowClass, partial);
+      svc.showMessageWindow = function (title, message) {
+        ngModalService.showMessage(title, message);
       };
 
       svc.showInvalidExtensionsMessage = function (validExtensions) {

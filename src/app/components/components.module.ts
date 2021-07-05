@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ModalService } from './modals/modal.service';
 import { MessageBoxComponent } from './modals/message-box/message-box.component';
 import { ConfirmModalComponent } from './modals/confirm-modal/confirm-modal.component';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TemplateEditorModule } from '../template-editor/template-editor.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +12,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
   ],
   imports: [
     CommonModule,
-    BsDropdownModule
+    TemplateEditorModule
   ]
 })
 export class ComponentsModule {

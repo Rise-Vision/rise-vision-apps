@@ -82,3 +82,20 @@ iframe.modal-dialog {
   margin-top: 42px;
 }
 
+modal-container {
+  display: flex !important;
+  align-items: center;
+  text-align: center;
+
+  .cdk-visually-hidden {
+    display: none;
+  }
+
+  .modal-dialog {
+    width: 460px;
+
+    &.modal-sm {
+      width: 365px;
+    }
+  }
+}

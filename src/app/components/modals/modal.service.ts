@@ -12,31 +12,42 @@ export class ModalService {
 
   constructor(private modalService: BsModalService) { }
 
-  show(title: string, message: string) {
+  showMessage(title: string, message: string) {
     const initialState = {
       title,
       message
     };
 
     this.modalService.show(MessageBoxComponent, Object.assign({}, { 
-      class: 'madero-style centered-modal modal-sm',
+      class: 'madero-style modal-sm',
       initialState
     }));
   }
 
-  confirm(title: string, message: string) {
-    const initialState = {
+  confirm(title: string, message: string, confirmButton = 'Ok', cancelButton = 'Cancel') {
+    return this._showConfirmModal({
       title,
       message,
-      confirmButton: 'Ok',
-      cancelButton: 'Cancel'
-    };
+      confirmButton,
+      cancelButton
+    });
+  }
 
+  confirmDanger(title: string, message: string, confirmButton = 'Ok', cancelButton = 'Cancel') {
+    return this._showConfirmModal({
+      confirmButtonClass: 'btn-danger',
+      title,
+      message,
+      confirmButton,
+      cancelButton
+    });
+  }
+
+  _showConfirmModal(initialState: any) {
     const modalInstance = this.modalService.show(ConfirmModalComponent, Object.assign({}, { 
-      class: 'madero-style centered-modal modal-sm',
+      class: 'madero-style modal-md',
       initialState
     }));
-
     return modalInstance.content.promise;
   }
 

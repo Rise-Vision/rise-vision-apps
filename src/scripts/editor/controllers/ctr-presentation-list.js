@@ -5,17 +5,9 @@ angular.module('risevision.editor.controllers')
   })
   .controller('PresentationListController', ['$scope',
     'ScrollingListService', 'presentation', 'editorFactory', 'templateEditorFactory', '$loading',
-    '$filter', 'presentationUtils', 'PRESENTATION_SEARCH', 'ngModalService',
+    '$filter', 'presentationUtils', 'PRESENTATION_SEARCH',
     function ($scope, ScrollingListService, presentation, editorFactory, templateEditorFactory,
-      $loading, $filter, presentationUtils, PRESENTATION_SEARCH, ngModalService) {
-
-      ngModalService.confirm('title', 'message')
-      .then(function() {
-        console.log('confirmed');
-      }).catch(function() {
-        console.log('cancelled');
-      });
-
+      $loading, $filter, presentationUtils, PRESENTATION_SEARCH) {
       $scope.search = {
         sortBy: 'changeDate',
         reverse: true,
