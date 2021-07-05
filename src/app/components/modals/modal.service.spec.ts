@@ -1,3 +1,4 @@
+import {expect} from 'chai';
 import { TestBed } from '@angular/core/testing';
 
 import { ModalService } from './modal.service';
@@ -11,6 +12,6 @@ describe('MessageBoxService', () => {
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(service).to.exist;
   });
 });

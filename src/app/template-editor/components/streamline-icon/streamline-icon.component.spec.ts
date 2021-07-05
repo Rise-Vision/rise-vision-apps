@@ -1,3 +1,4 @@
+import {expect} from 'chai';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StreamlineIconComponent } from './streamline-icon.component';
@@ -20,6 +21,6 @@ describe('StreamlineIconComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).to.exist;
   });
 });

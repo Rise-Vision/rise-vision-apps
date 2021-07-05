@@ -1,3 +1,4 @@
+import {expect} from 'chai';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MessageBoxComponent } from './message-box.component';
@@ -20,6 +21,6 @@ describe('MessageBoxComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).to.exist;
   });
 });
