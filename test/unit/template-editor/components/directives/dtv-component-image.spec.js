@@ -26,6 +26,9 @@ describe('directive: TemplateComponentImage', function() {
         stop: sandbox.stub()
       };
     });
+    $provide.service('ngModalService', function() {
+      return {};
+    });
     $provide.service('templateEditorFactory', function() {
       return {};
     });

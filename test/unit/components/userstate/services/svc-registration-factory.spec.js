@@ -208,7 +208,7 @@ describe('service: registrationFactory:', function() {
         expect(registrationFactory.loading).to.be.false;
 
         done();
-      });
+      }, 10);
     });
 
     it('should use username as email',function(done){
@@ -224,7 +224,7 @@ describe('service: registrationFactory:', function() {
         });
 
         done();
-      });
+      }, 10);
     });
 
     it('should handle failure to getAccount',function(done){
@@ -242,7 +242,7 @@ describe('service: registrationFactory:', function() {
         });
 
         done();
-      });
+      }, 10);
     });
 
   });

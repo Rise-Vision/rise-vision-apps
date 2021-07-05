@@ -11,6 +11,10 @@ describe('service: fileExistenceCheckService:', function() {
       return Q;
     });
 
+    $provide.service('ngModalService', function() {
+      return {};
+    });
+
     $provide.service('storageAPILoader', function() {
       return function() {
         return Q.resolve({

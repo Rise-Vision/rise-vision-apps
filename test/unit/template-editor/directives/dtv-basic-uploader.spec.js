@@ -12,6 +12,10 @@ describe('directive: basicUploader', function () {
       }
     };
 
+    $provide.service('ngModalService', function() {
+      return {};
+    });
+
     $provide.constant('STORAGE_UPLOAD_CHUNK_SIZE', 1024);
 
     $provide.factory('fileUploaderFactory', function () {

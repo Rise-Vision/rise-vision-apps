@@ -11,6 +11,10 @@ describe('service: fileMetadataUtilsService:', function() {
         getBucketName: sinon.stub().returns('bucket-name')
       };
     });
+
+    $provide.service('ngModalService', function() {
+      return {};
+    });
   }));
 
   beforeEach(function() {
