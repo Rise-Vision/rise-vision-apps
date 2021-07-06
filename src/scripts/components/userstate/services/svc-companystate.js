@@ -16,9 +16,9 @@
       'RELIGIOUS_INSTITUTIONS'
     ])
     .factory('companyState', ['$location', '$state', 'getCompany', 'objectHelper',
-      '$rootScope', '$log', '$q', 'EDUCATION_INDUSTRIES', 'DISCOUNT_INDUSTRIES',
+      '$rootScope', '$log', '$q', 'EDUCATION_INDUSTRIES', 'DISCOUNT_INDUSTRIES', 'broadcaster',
       function ($location, $state, getCompany, objectHelper, $rootScope, $log, $q,
-        EDUCATION_INDUSTRIES, DISCOUNT_INDUSTRIES) {
+        EDUCATION_INDUSTRIES, DISCOUNT_INDUSTRIES, broadcaster) {
         var pendingSelectedCompany;
 
         var _state = {
@@ -74,7 +74,7 @@
                 objectHelper.clearAndCopy(company, _state.selectedCompany);
 
                 deferred.resolve();
-                $rootScope.$broadcast(
+                broadcaster.emit(
                   'risevision.company.selectedCompanyChanged');
               })
               .then(null, function (resp) {
@@ -99,7 +99,7 @@
               objectHelper.clearAndCopy(company, _state.selectedCompany);
 
               deferred.resolve();
-              $rootScope.$broadcast('risevision.company.updated', {
+              broadcaster.emit('risevision.company.updated', {
                 'companyId': company.id
               });
             })
@@ -124,14 +124,14 @@
               objectHelper.clearAndCopy(company, _state.userCompany);
             }
 
-            $rootScope.$broadcast('risevision.company.updated', {
+            broadcaster.emit('risevision.company.updated', {
               'companyId': company.id
             });
           },
           resetCompany: function () {
             objectHelper.clearAndCopy(_state.userCompany, _state.selectedCompany);
 
-            $rootScope.$broadcast('risevision.company.selectedCompanyChanged');
+            broadcaster.emit('risevision.company.selectedCompanyChanged');
           },
           resetCompanyState: _resetCompanyState,
           getUserCompanyId: function () {
