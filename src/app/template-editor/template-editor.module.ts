@@ -27,6 +27,6 @@ import { TemplateEditorPreviewHolderComponent } from './components/template-edit
 export class TemplateEditorModule {
   //workaround for including downgraded components into build files
   //https://github.com/angular/angular/issues/35314#issuecomment-584821399
-  static entryComponents = [ CanvaButtonComponent ]
+  static entryComponents = [ CanvaButtonComponent, TemplateEditorComponent ]
   static providers = [ AttributeDataService, BlueprintService ]
 }

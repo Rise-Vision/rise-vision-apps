@@ -14,9 +14,8 @@ import { BroadcasterService } from '../../services/broadcaster.service';
 export class TemplateEditorComponent {
   private presentationDiffer: KeyValueDiffer<string, any>;
 
-  private autoSaveService;
+  private autoSaveService: any;
   private _bypassUnsaved = false;
-  private _initializing = false;
 
   @HostListener('window:beforeunload')
   checkUnsaved() {
@@ -64,7 +63,7 @@ export class TemplateEditorComponent {
         });
     });
 
-    broadcaster.subscribe({
+    this.broadcaster.subscribe({
       next: (event: String) => {
         switch (event) {
         case 'presentationCreated':
