@@ -1,6 +1,6 @@
 import { Component, HostListener } from '@angular/core';
-import { KeyValueChanges, KeyValueDiffer, KeyValueDiffers } from '@angular/core';
 
+import * as _ from 'lodash';
 import * as angular from 'angular';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { AjsState, AjsTransitions, ComponentsFactory, TemplateEditorFactory, AutoSaveService, PresentationUtils } from 'src/app/ajs-upgraded-providers';
@@ -12,7 +12,7 @@ import { BroadcasterService } from '../../services/broadcaster.service';
   styleUrls: ['./template-editor.component.scss']
 })
 export class TemplateEditorComponent {
-  private presentationDiffer: KeyValueDiffer<string, any>;
+  private _oldPresentation: any;
 
   private autoSaveService: any;
   private _bypassUnsaved = false;
@@ -25,7 +25,6 @@ export class TemplateEditorComponent {
   }
 
   constructor(
-    private differs: KeyValueDiffers,
     private $state: AjsState,
     private $transitions: AjsTransitions,
     private broadcaster: BroadcasterService,
@@ -34,8 +33,6 @@ export class TemplateEditorComponent {
     private AutoSaveService: AutoSaveService,
     private presentationUtils: PresentationUtils) {
     const that = this;
-
-    this.presentationDiffer = this.differs.find(this.templateEditorFactory.presentation).create();
 
     this.autoSaveService = this.AutoSaveService(this.templateEditorFactory.save);
 
@@ -88,7 +85,7 @@ export class TemplateEditorComponent {
 
   }
 
-  _presentationChanged(changes: KeyValueChanges<string, any>) {
+  _checkPresentationChanged() {
     if (!this.templateEditorFactory.hasContentEditorRole()) {
       return;
     }
@@ -97,23 +94,24 @@ export class TemplateEditorComponent {
       'id', 'companyId', 'revisionStatus', 'revisionStatusName',
       'changeDate', 'changedBy', 'creationDate', 'publish', 'layout'
     ];
-  
-    if (this.templateEditorFactory.hasUnsavedChanges) {
-      return;
-    }
-  
-    changes.forEachChangedItem(record => {
-      if (!ignoredFields.includes(record.key) && !this.templateEditorFactory.hasUnsavedChanges) {
+    
+    if (!_.isEqual(_.omit(this.templateEditorFactory.presentation, ignoredFields), _.omit(this._oldPresentation, ignoredFields))) {
+      this._oldPresentation = _.cloneDeep(this.templateEditorFactory.presentation);
+
+      if (!this.templateEditorFactory.hasUnsavedChanges) {
         this._setUnsavedChanges(true);
       }
-    });
+    }
 
   }
 
   ngDoCheck(): void {
-    const changes = this.presentationDiffer.diff(this.templateEditorFactory.presentation);
-    if (changes) {
-      this._presentationChanged(changes);
+    if (!this.templateEditorFactory.presentation) {
+      return;
+    } else if (!this._oldPresentation) {
+      this._oldPresentation = _.cloneDeep(this.templateEditorFactory.presentation);
+    } else {
+      this._checkPresentationChanged();
     }
   }
 
