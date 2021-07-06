@@ -48,11 +48,6 @@ describe('directive: TemplateComponentFinancial', function() {
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(function ($provide) {
-    $provide.service('templateEditorFactory',function() {
-      return {       
-      }
-    });
-  
     $provide.service('componentsFactory', function() {
       return {
         selected: { id: "TEST-ID" },

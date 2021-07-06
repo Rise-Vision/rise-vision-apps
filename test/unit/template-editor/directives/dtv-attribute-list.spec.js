@@ -23,10 +23,6 @@ describe('directive: attribute-list', function() {
       };
     });
 
-    $provide.service('ngModalService', function() {
-      return {};
-    });
-
     $provide.service('brandingFactory', function() {
       return {
         getBrandingComponent: function() {

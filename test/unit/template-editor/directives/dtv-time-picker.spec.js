@@ -6,12 +6,6 @@ describe('directive: time-picker', function() {
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(mockTranslate()));
 
-  beforeEach(module(function ($provide) {
-    $provide.service('ngModalService', function() {
-      return {};
-    });
-  }));  
-
   beforeEach(inject(function($compile, $rootScope, $templateCache) {
     $templateCache.put('partials/template-editor/time-picker.html', '<p>mock</p>');
     $scope = $rootScope.$new();

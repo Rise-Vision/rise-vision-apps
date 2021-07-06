@@ -12,10 +12,6 @@ describe('service: storageManagerFactory:', function() {
         }
       };
     });
-
-    $provide.service('ngModalService', function() {
-      return {};
-    });
   }));
 
   var storageManagerFactory, storage;

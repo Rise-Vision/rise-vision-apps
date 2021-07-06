@@ -17,11 +17,6 @@ describe('directive: templateComponentText', function() {
       };
     });
 
-    $provide.service('ngModalService', function() {
-      return {
-      };
-    });
-
     $provide.service('attributeDataFactory', function() {
       return {
         setAttributeData: sinon.stub(),

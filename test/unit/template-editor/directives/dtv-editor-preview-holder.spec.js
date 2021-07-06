@@ -24,8 +24,6 @@ describe('directive: TemplateEditorPreviewHolder', function() {
       }
     };
     userState = {
-      getUsername: sandbox.stub().returns('username'),
-      getSelectedCompanyId: sandbox.stub().returns('selectedCompanyId'),
       getCopyOfSelectedCompany: sandbox.stub().returns({}),
       _restoreState: sandbox.stub()
     }
@@ -37,11 +35,6 @@ describe('directive: TemplateEditorPreviewHolder', function() {
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
-    $provide.service('ngModalService',function(){
-      return {
-        confirmDanger : sinon.stub().resolves()
-      };
-    });
     $provide.service('templateEditorFactory', function() {
       return {
         presentation: {

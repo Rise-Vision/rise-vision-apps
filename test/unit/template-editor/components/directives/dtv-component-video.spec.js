@@ -20,10 +20,6 @@ describe('directive: templateComponentVideo', function() {
       };
     });
 
-    $provide.service('ngModalService', function() {
-      return {};
-    });
-
     $provide.service('templateEditorFactory', function() {
       return {};
     });

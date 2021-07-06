@@ -13,11 +13,6 @@ describe('directive: componentStorageSelector', function() {
       };
     });
 
-    $provide.service('ngModalService', function() {
-      return {
-      };
-    });
-
     $provide.service('componentsFactory', function() {
       return {
         selected: { id: "TEST-ID" },

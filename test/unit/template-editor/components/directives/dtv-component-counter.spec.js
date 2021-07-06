@@ -5,7 +5,6 @@ describe('directive: templateComponentCounter', function() {
     element,
     componentsFactory,
     attributeDataFactory,
-    templateEditorUtils,
     sandbox = sinon.sandbox.create();
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -22,20 +21,11 @@ describe('directive: templateComponentCounter', function() {
         setAttributeData: sandbox.stub()
       };
     });
-
-    $provide.service('templateEditorUtils',function() {
-      return {
-        meridianTimeToAbsolute: sandbox.stub().returns('18:30'),
-        formatISODate: sandbox.stub().returns('2019-10-25'),
-        absoluteTimeToMeridian: sandbox.stub().returns('06:30 PM')
-      }
-    })
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
     componentsFactory = $injector.get('componentsFactory');
     attributeDataFactory = $injector.get('attributeDataFactory');
-    templateEditorUtils = $injector.get('templateEditorUtils');
 
     $templateCache.put('partials/template-editor/components/component-counter.html', '<p>mock</p>');
     $scope = $rootScope.$new();
@@ -78,8 +68,7 @@ describe('directive: templateComponentCounter', function() {
     }
 
     it('should load the date', function () {
-      _initLoad('down', '2019-10-25', null);      
-      templateEditorUtils.absoluteTimeToMeridian.returns(null);
+      _initLoad('down', '2019-10-25', null);
 
       $scope.load();
 
@@ -97,7 +86,6 @@ describe('directive: templateComponentCounter', function() {
 
     it('should load the date and time', function () {
       _initLoad('down', '2019-10-25', '15:27');
-      templateEditorUtils.absoluteTimeToMeridian.returns('03:27 PM');
 
       $scope.load();
 
@@ -177,8 +165,6 @@ describe('directive: templateComponentCounter', function() {
     });
 
     it('should save the date and time', function () {
-      templateEditorUtils.meridianTimeToAbsolute.returns('15:27');
-
       $scope.targetDateTime = '03:27 PM';
       $scope.targetUnit = 'targetDate';
       $scope.save();
