@@ -4,13 +4,16 @@ import * as angular from 'angular';
 import * as _ from 'lodash';
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { BlueprintService } from './blueprint.service';
+import { BroadcasterService } from './broadcaster.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AttributeDataService {
 
-  constructor(private blueprintFactory: BlueprintService, private templateEditorFactory: TemplateEditorFactory) {}
+  constructor(private broadcaster: BroadcasterService,
+    private blueprintFactory: BlueprintService,
+    private templateEditorFactory: TemplateEditorFactory) {}
 
   getBlueprintData(componentId, attributeKey?) {
     return this.blueprintFactory.getBlueprintData(componentId, attributeKey);
@@ -57,6 +60,8 @@ export class AttributeDataService {
     } else {
       component[attributeKey] = value;
     }
+
+    this.broadcaster.emit('presentationUnsavedChanges');
   }
 
   getAttributeDataGlobal(attributeKey) {
@@ -65,6 +70,8 @@ export class AttributeDataService {
 
   setAttributeDataGlobal(attributeKey, value) {
     this.templateEditorFactory.presentation.templateAttributeData[attributeKey] = value;
+
+    this.broadcaster.emit('presentationUnsavedChanges');
   }
 
   // updateAttributeData: do not update the object on getAttributeData
@@ -103,6 +110,8 @@ export class AttributeDataService {
 
       if (updateAttributeData) {
         attributeData.components.push(component);
+
+        this.broadcaster.emit('presentationUnsavedChanges');
       }
     }
 
