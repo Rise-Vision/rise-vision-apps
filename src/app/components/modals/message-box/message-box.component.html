@@ -1,0 +1,20 @@
+<form id="messageForm">
+<div class="modal-header">
+    <button type="button" class="close" (click)="close()">
+    <streamline-icon name="close" width="12" height="12"></streamline-icon>
+    </button>
+</div>
+<div class="modal-body" stop-event="touchend">
+    <h4>{{title}}</h4>
+    <p class="text-left">{{message}}</p>
+</div>
+<div class="modal-footer">
+    <div class="row">
+    <div class="col-xs-12">
+        <button type="button" class="btn btn-primary w-100" (click)="close()">
+        <span>Okay, I Got It</span>
+        </button>
+    </div>
+    </div>
+</div>
+</form>

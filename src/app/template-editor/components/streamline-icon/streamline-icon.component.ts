@@ -1,41 +1,16 @@
-/*jshint maxlen: false */
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import * as angular from 'angular';
+import { downgradeComponent } from '@angular/upgrade/static';
+import { DomSanitizer } from '@angular/platform-browser';
 
-'use strict';
+@Component({
+  selector: 'streamline-icon',
+  templateUrl: './streamline-icon.component.html',
+  styleUrls: ['./streamline-icon.component.scss']
+})
+export class StreamlineIconComponent implements OnInit {
 
-angular.module('risevision.template-editor.directives')
-  .directive('streamlineIcon', ['streamlineIconsList',
-    function (iconsList) {
-      return {
-        restrict: 'E',
-        scope: {
-          name: '@',
-          width: '@',
-          height: '@'
-        },
-        link: function ($scope, element) {
-          var _path = function (name) {
-            var iconDef = iconsList[name];
-            var width = $scope.width || 32;
-            var height = $scope.height || 32;
-            var size = ' width="' + width + '" height="' + height + '"';
-            var viewBox = ' viewBox="' + iconDef.viewBox + '"';
-            var paths = iconDef.paths.map(function (p) {
-              return '<path d="' + p + '" />';
-            }).join('\n');
-
-            return '<svg xmlns="http://www.w3.org/2000/svg"' + size + viewBox + '>' + paths + '</svg>';
-          };
-
-          $scope.$watch('name', function (name) {
-            if (name) {
-              element.html(_path(name));
-            }
-          });
-        }
-      };
-    }
-  ])
-  .constant('streamlineIconsList', {
+  public static ICONS_LIST = {
     checkmark: {
       viewBox: '0 0 14 12',
       paths: [
@@ -267,4 +242,38 @@ angular.module('risevision.template-editor.directives')
         'M0.75,20.75a3.25,3.25 0 1,0 6.5,0a3.25,3.25 0 1,0 -6.5,0'
       ]
     }
-  });
+  }
+
+  @Input() name;
+  @Input() width = 32;
+  @Input() height = 32;
+  
+  paths: any;
+  viewBox: string;
+
+  constructor(private sanitizer:DomSanitizer) { }
+
+  ngOnInit(): void {
+    if (this.name) {
+      const iconDef = StreamlineIconComponent.ICONS_LIST[this.name];
+      this.viewBox = iconDef.viewBox;
+      this.paths = iconDef.paths.map(function (p) {
+        return '<path d="' + p + '" />';
+      }).join('\n');
+      this.paths = this.sanitizer.bypassSecurityTrustHtml(this.paths);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {        
+    this.ngOnInit(); 
+  }
+}
+
+
+angular.module('risevision.template-editor.directives')
+  .directive(
+    'streamlineIcon', 
+    downgradeComponent({
+      component: StreamlineIconComponent
+    }) as angular.IDirectiveFactory
+  );

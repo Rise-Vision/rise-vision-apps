@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('logoImageFactory', ['DEFAULT_IMAGE_THUMBNAIL', 'brandingFactory', '$modal', '$templateCache', '$q',
-    function (DEFAULT_IMAGE_THUMBNAIL, brandingFactory, $modal, $templateCache, $q) {
+  .factory('logoImageFactory', ['DEFAULT_IMAGE_THUMBNAIL', 'brandingFactory', '$q', 'ngModalService',
+    function (DEFAULT_IMAGE_THUMBNAIL, brandingFactory, $q, ngModalService) {
       var factory = {};
 
       factory.getImagesAsMetadata = function () {
@@ -57,26 +57,11 @@ angular.module('risevision.template-editor.services')
       };
 
       factory._canRemoveImage = function () {
-        var modalInstance = $modal.open({
-          template: $templateCache.get('partials/components/confirm-modal/madero-confirm-danger-modal.html'),
-          controller: 'confirmModalController',
-          windowClass: 'madero-style centered-modal',
-          resolve: {
-            confirmationTitle: function () {
-              return 'Are you sure you want to remove your logo?';
-            },
-            confirmationMessage: function () {
-              return 'This will remove your logo from all Templates.';
-            },
-            confirmationButton: function () {
-              return 'Yes, Remove It';
-            },
-            cancelButton: function () {
-              return 'No, Keep It';
-            }
-          }
-        });
-        return modalInstance.result;
+        return ngModalService.confirmDanger('Are you sure you want to remove your logo?',
+          'This will remove your logo from all Templates.',
+          'Yes, Remove It',
+          'No, Keep It'
+        );
       };
 
       factory.removeImage = function (image, currentMetadata) {

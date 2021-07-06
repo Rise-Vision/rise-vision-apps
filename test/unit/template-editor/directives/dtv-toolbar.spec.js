@@ -1,7 +1,7 @@
 'use strict';
 
 describe('directive: toolbar', function() {
-  var element, $scope, $modal, $modalInstanceDismissSpy, templateEditorFactory;
+  var element, $scope, ngModalService, templateEditorFactory;
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(mockTranslate()));
@@ -15,23 +15,18 @@ describe('directive: toolbar', function() {
         deletePresentation: sinon.spy()
       };
     });
-    $provide.service('$modal',function(){
-      $modalInstanceDismissSpy = sinon.spy()
+    $provide.service('ngModalService',function(){
       return {
-        open : sinon.stub().returns({
-          result: Q.resolve(),
-          dismiss: $modalInstanceDismissSpy
-        })
+        confirmDanger : sinon.stub().resolves()
       };
     });
   }));
 
   beforeEach(inject(function($injector, $compile, $rootScope, $templateCache){
-    $modal = $injector.get('$modal');
+    ngModalService = $injector.get('ngModalService');
     templateEditorFactory = $injector.get('templateEditorFactory');
 
     $templateCache.put('partials/template-editor/toolbar.html', '<div></div>');
-    $templateCache.put('partials/components/confirm-modal/madero-confirm-danger-modal.html', '<p>modal</p>');
 
     $scope = $rootScope.$new();
     $scope.presentationName = 'presentationName';
@@ -54,27 +49,17 @@ describe('directive: toolbar', function() {
     it('should open modal to confirm',function(){
       $scope.confirmDelete();
 
-      $modal.open.should.have.been.calledWith({
-        template: sinon.match.string,
-        controller: 'confirmModalController',
-        windowClass: 'madero-style centered-modal',
-        resolve: sinon.match.object
-      });
-
-      var resolve = $modal.open.getCall(0).args[0].resolve;
-      
-      expect(resolve.confirmationTitle()).to.be.a('string');
-      expect(resolve.confirmationButton()).to.be.a('string');
-      expect(resolve.confirmationMessage).to.be.null;
-      expect(resolve.cancelButton).to.be.null;
-
+      ngModalService.confirmDanger.should.have.been.calledWith(
+        'Are you sure you want to delete this Presentation?',
+        null,
+        'Delete Forever'
+      );
     });
 
-    it('should dismiss modal and delete on confirm',function(done){
+    it('should delete on confirm',function(done){
       $scope.confirmDelete();
 
       setTimeout(function() {
-        $modalInstanceDismissSpy.should.have.been.called;
         templateEditorFactory.deletePresentation.should.have.been.called;
 
         done();

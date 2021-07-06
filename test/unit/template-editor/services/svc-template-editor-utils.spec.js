@@ -4,12 +4,20 @@ describe('service: templateEditorUtils:', function() {
   var sandbox = sinon.sandbox.create();
 
   beforeEach(module('risevision.template-editor.services'));
+  beforeEach(module(function ($provide) {
+    $provide.service('ngModalService',function(){
+      return {
+        showMessage : sandbox.stub()
+      };
+    });
+  }));
 
-  var templateEditorUtils;
+  var templateEditorUtils, ngModalService;
 
   beforeEach(function() {
     inject(function($injector) {
       templateEditorUtils = $injector.get('templateEditorUtils');
+      ngModalService = $injector.get('ngModalService');
     });
   });
 
@@ -284,5 +292,12 @@ describe('service: templateEditorUtils:', function() {
       expect(templateEditorUtils.meridianTimeToAbsolute('12:22 AM')).to.equal('00:22');
       expect(templateEditorUtils.meridianTimeToAbsolute('12:22 PM')).to.equal('12:22');
     });
+  });
+
+  describe('showMessageWindow', function() {
+    it('should show message', function() {
+      templateEditorUtils.showMessageWindow('title', 'message');
+      ngModalService.showMessage.should.have.been.calledWith('title','message');
+    })
   });
 });
