@@ -29,11 +29,11 @@
     });
 
     // These scenarios deal with the auto schedule modal, so they always should come first.
+    var brandingComponentScenarios = new BrandingComponentScenarios();
     var templateEditorAddScenarios = new TemplateEditorAddScenarios();
     var textComponentScenarios = new TextComponentScenarios();
     var financialComponentScenarios = new FinancialComponentScenarios();   
-    var weatherComponentScenarios = new WeatherComponentScenarios();
-    var brandingComponentScenarios = new BrandingComponentScenarios();
+    var weatherComponentScenarios = new WeatherComponentScenarios();    
 
     after(function() {
       // Loading the Presentation List is a workaround to a Chrome Driver issue that has it fail to click on elements over the Preview iframe

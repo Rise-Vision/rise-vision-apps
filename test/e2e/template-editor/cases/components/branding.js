@@ -173,7 +173,6 @@ var BrandingComponentScenarios = function () {
         var removeLink = imageComponentPage.getRemoveLinkFor('e2e-upload-image-2.png');
         helper.wait(removeLink, 'Image Row Remove');
         helper.clickWhenClickable(removeLink, 'Image Row Remove');
-        browser.sleep(5000);
 
         helper.wait(brandingComponentPage.getLogoRemovalConfirmationModal(),'Confirm Logo Removal');
         expect(brandingComponentPage.getLogoRemovalConfirmationModal().isDisplayed()).to.eventually.be.true;
@@ -181,6 +180,8 @@ var BrandingComponentScenarios = function () {
 
       it('should remove logo',function() {
         helper.clickWhenClickable(brandingComponentPage.getConfirmButton(),'Confirm Logo Removal');
+        browser.sleep(1000);
+        
         helper.wait(imageComponentPage.getEmptyListContainer(),'Empt Image List');
         expect(imageComponentPage.getEmptyListContainer().isDisplayed()).to.eventually.be.true;
       });
