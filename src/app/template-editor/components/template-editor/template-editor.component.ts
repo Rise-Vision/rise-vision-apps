@@ -36,9 +36,7 @@ export class TemplateEditorComponent {
     private presentationUtils: PresentationUtils) {
     const that = this;
 
-    if (this.templateEditorFactory.hasContentEditorRole()) {
-      this.presentationDiffer = this.differs.find(this.templateEditorFactory.presentation).create();
-    }
+    this.presentationDiffer = this.differs.find(this.templateEditorFactory.presentation).create();
 
     this.autoSaveService = this.AutoSaveService(this.templateEditorFactory.save);
 
@@ -92,6 +90,10 @@ export class TemplateEditorComponent {
   }
 
   _presentationChanged(changes: KeyValueChanges<string, any>) {
+    if (!this.templateEditorFactory.hasContentEditorRole()) {
+      return;
+    }
+
     var ignoredFields = [
       'id', 'companyId', 'revisionStatus', 'revisionStatusName',
       'changeDate', 'changedBy', 'creationDate', 'publish', 'layout'
@@ -139,37 +141,6 @@ export class TemplateEditorComponent {
       that._setUnsavedChanges(state);
     });
   };
-
-
-  // $scope.$watch('templateEditorFactory.presentation', function (newValue, oldValue) {
-  //   if (!this.templateEditorFactory.hasContentEditorRole()) {
-  //     return;
-  //   }
-  //   var ignoredFields = [
-  //     'id', 'companyId', 'revisionStatus', 'revisionStatusName',
-  //     'changeDate', 'changedBy', 'creationDate', 'publish', 'layout'
-  //   ];
-  // 
-  //   if (!newValue.id) {
-  //     this.templateEditorFactory.save();
-  //     return;
-  //   }
-  //   if (this.templateEditorFactory.hasUnsavedChanges) {
-  //     return;
-  //   }
-  // 
-  //   if (_initializing) {
-  //     $timeout(function () {
-  //       _initializing = false;
-  //     });
-  //   } else {
-  //     if (!_.isEqual(_.omit(newValue, ignoredFields), _.omit(oldValue, ignoredFields))) {
-  //       _setUnsavedChanges(true);
-  //     }
-  //   }
-  // }, true);
-  // 
-
 
 }
 
