@@ -10,6 +10,16 @@ export const $stateProvider = {
   deps: ['$injector']
 };
 
+export abstract class AjsTransitions {
+  [key: string]: any;
+}
+export const $transitionsProvider = {
+  provide: AjsTransitions,
+  useFactory: function ($injector: any) {
+    return $injector.get('$transitions');
+  },
+  deps: ['$injector']
+};
 
 // billing/services
 export abstract class Billing {
@@ -186,6 +196,38 @@ export const templateEditorUtilsProvider = {
   provide: TemplateEditorUtils,
   useFactory: function ($injector: any) {
     return $injector.get('templateEditorUtils');
+  },
+  deps: ['$injector']
+};
+
+export abstract class ComponentsFactory {
+  [key: string]: any;
+}
+export const componentsFactoryProvider = {
+  provide: ComponentsFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('componentsFactory');
+  },
+  deps: ['$injector']
+};
+
+export abstract class AutoSaveService extends Function {
+}
+export const autoSaveServiceProvider = {
+  provide: AutoSaveService,
+  useFactory: function ($injector: any) {
+    return $injector.get('AutoSaveService');
+  },
+  deps: ['$injector']
+};
+
+export abstract class PresentationUtils {
+  [key: string]: any;
+}
+export const presentationUtilsProvider = {
+  provide: PresentationUtils,
+  useFactory: function ($injector: any) {
+    return $injector.get('presentationUtils');
   },
   deps: ['$injector']
 };

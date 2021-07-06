@@ -14,6 +14,10 @@ angular.module('risevision.template-editor.services')
         hasUnsavedChanges: false
       };
 
+      factory.hasContentEditorRole = function () {
+        return userState.hasRole('ce');
+      };
+
       var _parseJSON = function (json) {
         try {
           return JSON.parse(json);

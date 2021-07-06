@@ -2,8 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonHeaderModule } from './common-header/common-header.module';
 import { EditorModule } from './editor/editor.module';
-import { $stateProvider, addressServiceProvider, analyticsFactoryProvider, billingProvider, canvaTypePickerProvider, confirmModalProvider, contactServiceProvider, plansServiceProvider, processErrorCodeProvider, purchaseFlowTrackerProvider, storeServiceProvider, subscriptionFactoryProvider, templateEditorFactoryProvider, templateEditorUtilsProvider, userAuthFactoryProvider, userStateProvider } from './ajs-upgraded-providers';
+import { $stateProvider, $transitionsProvider, addressServiceProvider, analyticsFactoryProvider, billingProvider, canvaTypePickerProvider, confirmModalProvider, contactServiceProvider, plansServiceProvider, processErrorCodeProvider, purchaseFlowTrackerProvider, storeServiceProvider, subscriptionFactoryProvider, templateEditorFactoryProvider, templateEditorUtilsProvider, componentsFactoryProvider, autoSaveServiceProvider, presentationUtilsProvider, userAuthFactoryProvider, userStateProvider } from './ajs-upgraded-providers';
 import { TemplateEditorModule } from './template-editor/template-editor.module';
 import { PurchaseModule } from './purchase/purchase.module';
 import { environment } from 'src/environments/environment';
@@ -14,6 +15,7 @@ import * as angular from 'angular';
     BrowserModule,
     UpgradeModule,
     HttpClientModule,
+    CommonHeaderModule,
     EditorModule,
     PurchaseModule,
     TemplateEditorModule
@@ -24,6 +26,7 @@ import * as angular from 'angular';
   ],
   providers: [
     $stateProvider,
+    $transitionsProvider,
     addressServiceProvider,
     analyticsFactoryProvider,
     contactServiceProvider,
@@ -37,6 +40,9 @@ import * as angular from 'angular';
     subscriptionFactoryProvider,
     templateEditorFactoryProvider,
     templateEditorUtilsProvider,
+    componentsFactoryProvider,
+    autoSaveServiceProvider,
+    presentationUtilsProvider,
     userAuthFactoryProvider,
     userStateProvider
   ],

@@ -3,7 +3,7 @@
     <div>
       <last-modified change-date="templateEditorFactory.presentation.changeDate" changed-by="templateEditorFactory.presentation.changedBy"></last-modified>
       •
-      <span ng-if="hasContentEditorRole()">
+      <span ng-if="templateEditorFactory.hasContentEditorRole()">
         <span ng-show="!templateEditorFactory.savingPresentation && templateEditorFactory.isUnsaved()">
           Unsaved changes
         </span>
@@ -14,7 +14,7 @@
           All changes saved <streamline-icon name="checkmark" width="12" height="12"></streamline-icon>
         </span>
       </span>
-      <span class="text-danger" ng-if="!hasContentEditorRole()">
+      <span class="text-danger" ng-if="!templateEditorFactory.hasContentEditorRole()">
         You don’t have permission to edit
       </span>
     </div>

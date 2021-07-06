@@ -21,6 +21,7 @@
     "pretest-e2e": "npm run ng-build",
     "test-e2e": "gulp test:e2e",
     "test-e2e-ci": "gulp test:e2e",
+    "ng": "ng",
     "ng-update": "ng update @angular/cli@^12 @angular/core@^12"
   },
   "private": true,
