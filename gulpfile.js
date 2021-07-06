@@ -81,6 +81,7 @@ var unitTestFiles = [
   "src/scripts/template-editor/**/*.js",
   "src/scripts/widgets/**/*.js",
   "test/unit/config/test.js",
+  "test/unit/ng-providers.js",
   "test/unit/**/mocks/*.js",
   "test/unit/**/*.spec.js",
   "test/unit/common-header/services/svc-help-widget-override.js"
