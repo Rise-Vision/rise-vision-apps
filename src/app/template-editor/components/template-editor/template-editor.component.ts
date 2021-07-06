@@ -12,15 +12,19 @@ import { BroadcasterService } from '../../services/broadcaster.service';
   styleUrls: ['./template-editor.component.scss']
 })
 export class TemplateEditorComponent {
+  private subscription: any;
   private _oldPresentation: any;
 
   private autoSaveService: any;
   private _bypassUnsaved = false;
 
   @HostListener('window:beforeunload')
-  checkUnsaved() {
+  checkUnsaved(e: Event) {
     if (this.templateEditorFactory.isUnsaved()) {
-      return 'Do you want to save changes before leaving?';
+      // Cancel the event
+      e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+      // Chrome requires returnValue to be set
+      e.returnValue = true;
     }
   }
 
@@ -46,21 +50,20 @@ export class TemplateEditorComponent {
         return;
       }
 
-      trans.abort();
-
       that.autoSaveService.clearSaveTimeout();
   
-      var savePromise = that.templateEditorFactory.isUnsaved() && that.templateEditorFactory.hasContentEditorRole() ? that.templateEditorFactory.save() :
-        Promise.resolve();
-  
-      savePromise
-        .finally(function () {
-          that._bypassUnsaved = true;
-          that.$state.go(trans.to().name, trans.to().params);
-        });
+      if (that.templateEditorFactory.isUnsaved() && that.templateEditorFactory.hasContentEditorRole()) {
+        trans.abort();
+
+        that.templateEditorFactory.save()
+          .finally(function () {
+            that._bypassUnsaved = true;
+            that.$state.go(trans.to().name, trans.to().params);
+          });  
+      }
     });
 
-    this.broadcaster.subscribe({
+    this.subscription = this.broadcaster.subscribe({
       next: (event: String) => {
         switch (event) {
         case 'presentationCreated':
@@ -113,6 +116,10 @@ export class TemplateEditorComponent {
     } else {
       this._checkPresentationChanged();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   considerChromeBarHeight() {
