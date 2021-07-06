@@ -5,7 +5,7 @@ var BrandingComponentPage = function() {
   var editLogoLink = element(by.id('edit-logo'));
   var editColorsLink = element(by.id('edit-colors'));
 
-  var logoRemovalConfirmationModal = element(by.id('confirmForm'));
+  var logoRemovalConfirmationModal = element(by.cssContainingText('.modal-dialog', 'Are you sure you want to remove your logo?'));
   var confirmButton = element(by.id('confirm-primary'));
 
   var colorsPanel = element(by.css('.branding-colors-container'));
