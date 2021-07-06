@@ -4,7 +4,7 @@ import * as angular from 'angular';
 import { CanvaApiService } from '../../services/canva-api.service';
 
 @Component({
-  selector: 'app-canva-button',
+  selector: 'canva-button',
   templateUrl: './canva-button.component.html',
   styleUrls: ['./canva-button.component.scss']
 })

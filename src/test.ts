@@ -29,6 +29,7 @@ export {};
 
 angular.module('risevision.editor.directives',[])
 angular.module('risevision.apps.purchase',[])
+angular.module('risevision.template-editor.directives',[])
 angular.module('risevision.template-editor.services',[])
 
 // First, initialize the Angular testing environment.

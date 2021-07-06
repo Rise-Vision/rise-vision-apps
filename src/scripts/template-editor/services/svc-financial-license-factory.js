@@ -3,9 +3,9 @@
 angular.module('risevision.template-editor.services')
   .constant('NEED_FINANCIAL_DATA_LICENSE', ['rise-data-financial'])
   .constant('CONTACT_US_URL', 'https://www.risevision.com/contact-us?form_selected=sales&content_hide=true')
-  .factory('financialLicenseFactory', ['$window', '$modal', '$templateCache', 'blueprintFactory',
-    'NEED_FINANCIAL_DATA_LICENSE', 'CONTACT_US_URL',
-    function ($window, $modal, $templateCache, blueprintFactory, NEED_FINANCIAL_DATA_LICENSE, CONTACT_US_URL) {
+  .factory('financialLicenseFactory', ['$window', 'blueprintFactory',
+    'NEED_FINANCIAL_DATA_LICENSE', 'CONTACT_US_URL', 'ngModalService',
+    function ($window, blueprintFactory, NEED_FINANCIAL_DATA_LICENSE, CONTACT_US_URL, ngModalService) {
       var factory = {};
 
       factory.needsFinancialDataLicense = function () {
@@ -19,28 +19,11 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.showFinancialDataLicenseRequiredMessage = function () {
-        var modalInstance = $modal.open({
-          template: $templateCache.get('partials/components/confirm-modal/madero-confirm-modal.html'),
-          controller: 'confirmModalController',
-          windowClass: 'madero-style centered-modal financial-data-license-message',
-          resolve: {
-            confirmationTitle: function () {
-              return 'Financial Data License Required';
-            },
-            confirmationMessage: function () {
-              return 'This Presentation requires a Financial Data License to show on your Display(s). Contact <a href="mailto:sales@risevision.com">sales@risevision.com</a> for a 30 day free trial.';
-            },
-            confirmationButton: function () {
-              return 'Get a 30 Day Free Trial';
-            },
-            cancelButton: function () {
-              return 'Close';
-            }
-          }
-        });
-
-        modalInstance.result.then(function () {
-          modalInstance.dismiss();
+        ngModalService.confirm('Financial Data License Required',
+          'This Presentation requires a Financial Data License to show on your Display(s). Contact <a href="mailto:sales@risevision.com">sales@risevision.com</a> for a 30 day free trial.',
+          'Get a 30 Day Free Trial', 
+          'Close'
+        ).then(function () {
           $window.open(CONTACT_US_URL, '_blank');
         });
       };
