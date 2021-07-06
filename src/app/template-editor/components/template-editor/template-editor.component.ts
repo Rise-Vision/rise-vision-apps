@@ -4,6 +4,7 @@ import { KeyValueChanges, KeyValueDiffer, KeyValueDiffers } from '@angular/core'
 import * as angular from 'angular';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { AjsState, AjsTransitions, ComponentsFactory, TemplateEditorFactory, AutoSaveService, PresentationUtils } from 'src/app/ajs-upgraded-providers';
+import { BroadcasterService } from '../../services/broadcaster.service';
 
 @Component({
   selector: 'app-template-editor',
@@ -13,9 +14,8 @@ import { AjsState, AjsTransitions, ComponentsFactory, TemplateEditorFactory, Aut
 export class TemplateEditorComponent {
   private presentationDiffer: KeyValueDiffer<string, any>;
 
-  private autoSaveService;
+  private autoSaveService: any;
   private _bypassUnsaved = false;
-  private _initializing = false;
 
   @HostListener('window:beforeunload')
   checkUnsaved() {
@@ -28,6 +28,7 @@ export class TemplateEditorComponent {
     private differs: KeyValueDiffers,
     private $state: AjsState,
     private $transitions: AjsTransitions,
+    private broadcaster: BroadcasterService,
     public componentsFactory: ComponentsFactory,
     private templateEditorFactory: TemplateEditorFactory,
     private AutoSaveService: AutoSaveService,
@@ -35,6 +36,7 @@ export class TemplateEditorComponent {
     const that = this;
 
     this.presentationDiffer = this.differs.find(this.templateEditorFactory.presentation).create();
+
     this.autoSaveService = this.AutoSaveService(this.templateEditorFactory.save);
 
     this.templateEditorFactory.hasUnsavedChanges = false;
@@ -60,22 +62,59 @@ export class TemplateEditorComponent {
           that.$state.go(trans.to().name, trans.to().params);
         });
     });
+
+    this.broadcaster.subscribe({
+      next: (event: String) => {
+        switch (event) {
+        case 'presentationCreated':
+        case 'presentationUpdated':
+        case 'presentationPublished':
+          that._setUnsavedChangesAsync(false);
+          break;
+        case 'presentationDeleted':
+          that._setUnsavedChanges(false);
+          break;
+        case 'risevision.template-editor.brandingUnsavedChanges':
+          that._setUnsavedChangesAsync(true);
+          break;
+        case 'presentationUnsavedChanges':
+          that._setUnsavedChangesAsync(true);
+          break;
+        default:
+          return;
+        }
+      }
+    });
+
   }
 
-  customerChanged(changes: KeyValueChanges<string, any>) {
-    console.log('changes', changes);
-    /* If you want to see details then use
-      changes.forEachRemovedItem((record) => ...);
-      changes.forEachAddedItem((record) => ...);
-      changes.forEachChangedItem((record) => ...);
-    */
+  _presentationChanged(changes: KeyValueChanges<string, any>) {
+    if (!this.templateEditorFactory.hasContentEditorRole()) {
+      return;
+    }
+
+    var ignoredFields = [
+      'id', 'companyId', 'revisionStatus', 'revisionStatusName',
+      'changeDate', 'changedBy', 'creationDate', 'publish', 'layout'
+    ];
+  
+    if (this.templateEditorFactory.hasUnsavedChanges) {
+      return;
+    }
+  
+    changes.forEachChangedItem(record => {
+      if (!ignoredFields.includes(record.key) && !this.templateEditorFactory.hasUnsavedChanges) {
+        this._setUnsavedChanges(true);
+      }
+    });
+
   }
 
   ngDoCheck(): void {
-      const changes = this.presentationDiffer.diff(this.templateEditorFactory.presentation);
-      if (changes) {
-        this.customerChanged(changes);
-      }
+    const changes = this.presentationDiffer.diff(this.templateEditorFactory.presentation);
+    if (changes) {
+      this._presentationChanged(changes);
+    }
   }
 
   considerChromeBarHeight() {
@@ -101,44 +140,6 @@ export class TemplateEditorComponent {
       that._setUnsavedChanges(state);
     });
   };
-
-
-  // $scope.$watch('templateEditorFactory.presentation', function (newValue, oldValue) {
-  //   if (!this.templateEditorFactory.hasContentEditorRole()) {
-  //     return;
-  //   }
-  //   var ignoredFields = [
-  //     'id', 'companyId', 'revisionStatus', 'revisionStatusName',
-  //     'changeDate', 'changedBy', 'creationDate', 'publish', 'layout'
-  //   ];
-  // 
-  //   if (!newValue.id) {
-  //     this.templateEditorFactory.save();
-  //     return;
-  //   }
-  //   if (this.templateEditorFactory.hasUnsavedChanges) {
-  //     return;
-  //   }
-  // 
-  //   if (_initializing) {
-  //     $timeout(function () {
-  //       _initializing = false;
-  //     });
-  //   } else {
-  //     if (!_.isEqual(_.omit(newValue, ignoredFields), _.omit(oldValue, ignoredFields))) {
-  //       _setUnsavedChanges(true);
-  //     }
-  //   }
-  // }, true);
-  // 
-  // $scope.$on('presentationCreated', _setUnsavedChangesAsync.bind(null, false));
-  // $scope.$on('presentationUpdated', _setUnsavedChangesAsync.bind(null, false));
-  // $scope.$on('presentationDeleted', _setUnsavedChanges.bind(null, false));
-  // $scope.$on('presentationPublished', _setUnsavedChangesAsync.bind(null, false));
-  // 
-  // $scope.$on('risevision.template-editor.brandingUnsavedChanges', _setUnsavedChangesAsync.bind(null, true));
-  // 
-
 
 }
 
