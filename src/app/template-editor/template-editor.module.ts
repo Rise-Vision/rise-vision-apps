@@ -4,6 +4,7 @@ import { CommonHeaderModule } from '../common-header/common-header.module';
 import { CanvaButtonComponent } from './components/canva-button/canva-button.component';
 import { AttributeDataService } from './services/attribute-data.service';
 import { BlueprintService } from './services/blueprint.service';
+import { FinancialLicenseService } from './services/financial-license.service';
 import { TemplateEditorFooterComponent } from './components/template-editor-footer/template-editor-footer.component';
 import { TemplateEditorComponent } from './components/template-editor/template-editor.component';
 import { TemplateEditorToolbarComponent } from './components/template-editor-toolbar/template-editor-toolbar.component';
@@ -33,5 +34,5 @@ export class TemplateEditorModule {
   //workaround for including downgraded components into build files
   //https://github.com/angular/angular/issues/35314#issuecomment-584821399
   static entryComponents = [ CanvaButtonComponent, TemplateEditorComponent, StreamlineIconComponent ]
-  static providers = [ AttributeDataService, BlueprintService ]
+  static providers = [ AttributeDataService, BlueprintService, FinancialLicenseService ]
 }
