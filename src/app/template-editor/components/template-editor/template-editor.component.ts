@@ -18,16 +18,6 @@ export class TemplateEditorComponent implements DoCheck, OnDestroy {
   private autoSaveService: any;
   private _bypassUnsaved = false;
 
-  @HostListener('window:beforeunload')
-  checkUnsaved(e: Event) {
-    if (this.templateEditorFactory.isUnsaved()) {
-      // Cancel the event
-      e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
-      // Chrome requires returnValue to be set
-      e.returnValue = true;
-    }
-  }
-
   constructor(
     private $state: AjsState,
     private $transitions: AjsTransitions,
@@ -62,6 +52,15 @@ export class TemplateEditorComponent implements DoCheck, OnDestroy {
           });  
       }
     });
+
+    window.onbeforeunload = (e: Event) => {
+      if (that.templateEditorFactory.isUnsaved()) {
+        // Cancel the event
+        e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+        // Chrome requires returnValue to be set
+        e.returnValue = true;
+      }
+    };
 
     this.subscription = this.broadcaster.subscribe({
       next: (event: String) => {
@@ -120,6 +119,8 @@ export class TemplateEditorComponent implements DoCheck, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+
+    window.onbeforeunload = undefined;
   }
 
   considerChromeBarHeight() {
