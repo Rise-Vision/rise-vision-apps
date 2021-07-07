@@ -15,7 +15,7 @@ describe('directive: loading', function() {
   beforeEach(inject(function($injector, $compile, $rootScope, $templateCache){
     usSpinnerService = $injector.get('usSpinnerService');
 
-    $rootScope.loadingItems = true;
+    $rootScope.loadingItems = undefined;
 
     var tpl = '<div rv-spinner rv-spinner-key="list-loader" rv-show-spinner="loadingItems"></div>';
 
@@ -29,11 +29,20 @@ describe('directive: loading', function() {
     expect(elm.html()).to.contain('us-spinner="rvSpinnerOptions" spinner-key="list-loader" spinner-start-active="1"');
 
     expect($scope.rvSpinnerKey).to.equal('list-loader');
-    expect($scope.rvShowSpinner).to.be.true;
+    expect($scope.rvShowSpinner).to.be.undefined;
   });
 
   describe('rvShowSpinner:', function() {
-    it('should start spinner', function() {
+    it('should not start or stop spinner if undefined', function() {
+      usSpinnerService.spin.should.not.have.been.called;
+      usSpinnerService.stop.should.not.have.been.called;
+      expect($scope.active).to.be.true;
+    });
+
+    it('should start spinner if true', function() {
+      $scope.rvShowSpinner = true;
+      $scope.$digest();
+
       usSpinnerService.spin.should.have.been.calledWith('list-loader');
       expect($scope.active).to.be.true;
     });

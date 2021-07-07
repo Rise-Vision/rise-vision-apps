@@ -2,7 +2,7 @@
 <div class="instrument-list te-scrollable-container"
     ng-class="{ 'instrument-list-show': enteringInstrumentSelector, 'instrument-list-cover': enteringSymbolSelector, 'instrument-list-uncover': exitingSymbolSelector }"
     ng-show="showInstrumentList || enteringInstrumentSelector || exitingSymbolSelector"
-    rv-spinner rv-spinner-key="template-editor-loader"  rv-show-spinner="templateEditorFactory.loadingPresentation">
+    rv-spinner rv-spinner-key="template-editor-loader" rv-show-spinner="templateEditorFactory.loadingPresentation">
   <div class="row instrument-row" ng-repeat="instr in instruments track by $index">
     <div class="col-xs-10 pl-0">
       <div class="instrument-name instrument-name-ellipsis">{{ instr.name | uppercase }}</div>

@@ -29,15 +29,17 @@ angular.module('risevision.common.components.loading')
             $scope.active = false;
           };
 
-          if (angular.isDefined($scope.rvShowSpinner)) {
-            $scope.$watch('rvShowSpinner', function (loading) {
-              if (loading) {
-                _startSpinner();
-              } else {
-                _stopSpinner();
-              }
-            });            
-          }
+          $scope.$watch('rvShowSpinner', function (loading) {
+            if (!angular.isDefined($scope.rvShowSpinner)) {
+              return;
+            }
+
+            if (loading) {
+              _startSpinner();
+            } else {
+              _stopSpinner();
+            }
+          });            
 
           $scope.$on('rv-spinner:start', function (event, key) {
             if (key === $scope.rvSpinnerKey) {
