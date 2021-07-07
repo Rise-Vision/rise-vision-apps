@@ -685,7 +685,6 @@
                 "src/scripts/common-header/controllers/ctr-user-add-modal.js",
                 "src/scripts/common-header/controllers/ctr-user-settings-modal.js",
 
-                "src/scripts/common-header/directives/dtv-common-header-height.js",
                 "src/scripts/common-header/directives/dtv-company-buttons.js",
                 "src/scripts/common-header/directives/dtv-emails-field.js",
                 "src/scripts/common-header/directives/dtv-empty-select-parser.js",
