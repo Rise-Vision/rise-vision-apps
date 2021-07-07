@@ -124,7 +124,7 @@
               objectHelper.clearAndCopy(company, _state.userCompany);
             }
 
-            broadcaster.emit('risevision.company.updated', {
+            broadcaster.emitWithParams('risevision.company.updated', {
               'companyId': company.id
             });
           },
