@@ -99,7 +99,7 @@
               objectHelper.clearAndCopy(company, _state.selectedCompany);
 
               deferred.resolve();
-              broadcaster.emit('risevision.company.updated', {
+              broadcaster.emitWithParams('risevision.company.updated', {
                 'companyId': company.id
               });
             })
