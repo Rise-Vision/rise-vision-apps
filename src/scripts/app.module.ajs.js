@@ -14,7 +14,6 @@ angular.module('risevision.apps', [
     'rzSlider',
     'risevision.common.config',
     'risevision.common.header',
-    'risevision.common.header.directives.common-header-height',
     'risevision.common.components.last-modified',
     'risevision.common.components.loading',
     'risevision.common.components.search-filter',
