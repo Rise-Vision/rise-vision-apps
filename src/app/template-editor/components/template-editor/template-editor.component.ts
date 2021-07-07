@@ -73,10 +73,8 @@ export class TemplateEditorComponent implements DoCheck, OnDestroy {
         case 'presentationDeleted':
           that._setUnsavedChanges(false);
           break;
-        case 'risevision.template-editor.brandingUnsavedChanges':
-          that._setUnsavedChangesAsync(true);
-          break;
         case 'presentationUnsavedChanges':
+        case 'risevision.template-editor.brandingUnsavedChanges':
           that._setUnsavedChangesAsync(true);
           break;
         default:

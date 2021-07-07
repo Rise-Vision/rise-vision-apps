@@ -484,8 +484,6 @@
               "src/scripts/template-editor/components/services/svc-timezones.js",
               "src/scripts/template-editor/components/services/svc-twitter-credentials-validation.js",
 
-              "src/scripts/template-editor/controllers/ctr-template-editor.js",
-
               "src/scripts/template-editor/filters/ftr-encode-link.js",
 
               "src/scripts/template-editor/directives/dtv-attribute-editor.js",

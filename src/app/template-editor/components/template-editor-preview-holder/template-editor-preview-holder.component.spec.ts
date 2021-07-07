@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TemplateEditorPreviewHolderComponent } from './template-editor-preview-holder.component';
 
-describe('TemplateEditorPreviewHolderComponent', () => {
+xdescribe('TemplateEditorPreviewHolderComponent', () => {
   let component: TemplateEditorPreviewHolderComponent;
   let fixture: ComponentFixture<TemplateEditorPreviewHolderComponent>;
 
