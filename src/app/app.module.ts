@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { HttpClientModule } from '@angular/common/http';
+import { SharedModule } from './shared/shared.module';
 import { CommonHeaderModule } from './common-header/common-header.module';
 import { EditorModule } from './editor/editor.module';
 import { $stateProvider, $transitionsProvider, addressServiceProvider, analyticsFactoryProvider, billingProvider, canvaTypePickerProvider, confirmModalProvider, contactServiceProvider, plansServiceProvider, processErrorCodeProvider, purchaseFlowTrackerProvider, storeServiceProvider, subscriptionFactoryProvider, templateEditorFactoryProvider, templateEditorUtilsProvider, componentsFactoryProvider, autoSaveServiceProvider, presentationUtilsProvider, userAuthFactoryProvider, userStateProvider } from './ajs-upgraded-providers';
@@ -12,7 +13,6 @@ import { environment } from 'src/environments/environment';
 import * as angular from 'angular';
 import { ComponentsModule } from './components/components.module';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   imports: [
@@ -23,8 +23,9 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
     ModalModule.forRoot(),
 
-    ComponentsModule,
+    SharedModule,
     CommonHeaderModule,
+    ComponentsModule,
     EditorModule,
     PurchaseModule,
     TemplateEditorModule

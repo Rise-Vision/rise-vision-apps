@@ -29,7 +29,8 @@ describe('service: templateEditorFactory:', function() {
       return {
         getUsername: function() {
           return 'testusername';
-        },
+        }, 
+        hasRole: sandbox.stub().returns(true),
         _restoreState: function() {}
       };
     });
@@ -84,12 +85,13 @@ describe('service: templateEditorFactory:', function() {
 
   }));
 
-  var $state, templateEditorFactory, templateEditorUtils, blueprintFactory, presentation, processErrorCode,
+  var $state, userState, templateEditorFactory, templateEditorUtils, blueprintFactory, presentation, processErrorCode,
     HTML_PRESENTATION_TYPE, storeProduct, createFirstSchedule, scheduleFactory, brandingFactory, scheduleSelectorFactory;
 
   beforeEach(function() {
     inject(function($injector) {
       $state = $injector.get('$state');
+      userState = $injector.get('userState');
       templateEditorFactory = $injector.get('templateEditorFactory');
 
       presentation = $injector.get('presentation');
@@ -118,6 +120,14 @@ describe('service: templateEditorFactory:', function() {
 
     expect(templateEditorFactory.getPresentation).to.be.a('function');
     expect(templateEditorFactory.addPresentation).to.be.a('function');
+  });
+
+  describe('hasContentEditorRole:', function() {
+    it('should check role and return result', function() {
+      expect(templateEditorFactory.hasContentEditorRole()).to.be.true;
+
+      userState.hasRole.should.have.been.calledWith('ce');
+    });
   });
 
   describe('addFromProduct:', function() {

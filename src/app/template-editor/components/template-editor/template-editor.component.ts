@@ -1,28 +1,22 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, DoCheck, OnDestroy } from '@angular/core';
 
 import * as _ from 'lodash';
 import * as angular from 'angular';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { AjsState, AjsTransitions, ComponentsFactory, TemplateEditorFactory, AutoSaveService, PresentationUtils } from 'src/app/ajs-upgraded-providers';
-import { BroadcasterService } from '../../services/broadcaster.service';
+import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
 
 @Component({
   selector: 'app-template-editor',
   templateUrl: './template-editor.component.html',
   styleUrls: ['./template-editor.component.scss']
 })
-export class TemplateEditorComponent {
+export class TemplateEditorComponent implements DoCheck, OnDestroy {
+  private subscription: any;
   private _oldPresentation: any;
 
   private autoSaveService: any;
   private _bypassUnsaved = false;
-
-  @HostListener('window:beforeunload')
-  checkUnsaved() {
-    if (this.templateEditorFactory.isUnsaved()) {
-      return 'Do you want to save changes before leaving?';
-    }
-  }
 
   constructor(
     private $state: AjsState,
@@ -46,21 +40,29 @@ export class TemplateEditorComponent {
         return;
       }
 
-      trans.abort();
-
       that.autoSaveService.clearSaveTimeout();
   
-      var savePromise = that.templateEditorFactory.isUnsaved() && that.templateEditorFactory.hasContentEditorRole() ? that.templateEditorFactory.save() :
-        Promise.resolve();
-  
-      savePromise
-        .finally(function () {
-          that._bypassUnsaved = true;
-          that.$state.go(trans.to().name, trans.to().params);
-        });
+      if (that.templateEditorFactory.isUnsaved() && that.templateEditorFactory.hasContentEditorRole()) {
+        trans.abort();
+
+        that.templateEditorFactory.save()
+          .finally(function () {
+            that._bypassUnsaved = true;
+            that.$state.go(trans.to().name, trans.to().params);
+          });  
+      }
     });
 
-    this.broadcaster.subscribe({
+    window.onbeforeunload = (e: Event) => {
+      if (that.templateEditorFactory.isUnsaved()) {
+        // Cancel the event
+        e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+        // Chrome requires returnValue to be set
+        e.returnValue = true;
+      }
+    };
+
+    this.subscription = this.broadcaster.subscribe({
       next: (event: String) => {
         switch (event) {
         case 'presentationCreated':
@@ -113,6 +115,12 @@ export class TemplateEditorComponent {
     } else {
       this._checkPresentationChanged();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+
+    window.onbeforeunload = undefined;
   }
 
   considerChromeBarHeight() {
