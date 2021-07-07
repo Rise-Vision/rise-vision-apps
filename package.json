@@ -21,7 +21,6 @@
     "pretest-e2e": "npm run ng-build",
     "test-e2e": "gulp test:e2e",
     "test-e2e-ci": "gulp test:e2e",
-    "ng": "ng",
     "ng-update": "ng update @angular/cli@^12 @angular/core@^12"
   },
   "private": true,
@@ -50,6 +49,7 @@
     "@angular-devkit/build-angular": "~12.0.5",
     "@angular/cli": "~12.0.5",
     "@angular/compiler-cli": "~12.0.5",
+    "@types/angular": "^1.8.2",
     "@types/chai": "~4.2.17",
     "@types/chai-as-promised": "~7.1.3",
     "@types/jasmine": "~3.6.0",
