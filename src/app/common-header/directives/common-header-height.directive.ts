@@ -44,18 +44,10 @@ export class CommonHeaderHeightDirectiveWrapper {
   constructor(directive: CommonHeaderHeightDirective){}
 }
 
+const allowAttribute = directiveFactory => [ '$injector', $injector =>
+    Object.assign($injector.invoke(directiveFactory), {restrict: 'EA'})
+];
 angular.module('risevision.common.header.directives')
-  .directive('commonHeaderHeight', downgradeComponent({
+  .directive('commonHeaderHeight', allowAttribute(downgradeComponent({
     component: CommonHeaderHeightDirectiveWrapper,
-  }))
-
-  .config([
-    '$provide',
-    function($provide) {
-      $provide.decorator('commonHeaderHeightDirective', [
-        '$delegate',
-        function logDecorator($delegate) {
-          $delegate[0].restrict += 'A';
-          return $delegate;
-        }])
-      }]);
+  })));
