@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TemplateEditorFooterComponent } from './template-editor-footer.component';
 
-describe('TemplateEditorFooterComponent', () => {
+xdescribe('TemplateEditorFooterComponent', () => {
   let component: TemplateEditorFooterComponent;
   let fixture: ComponentFixture<TemplateEditorFooterComponent>;
 
