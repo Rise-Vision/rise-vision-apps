@@ -2,12 +2,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { environment } from 'src/environments/environment';
+import { SharedModule } from './shared/shared.module';
+
 import * as angular from 'angular';
 
 @NgModule({
   imports: [
     BrowserModule,
-    UpgradeModule
+    UpgradeModule,
+
+    SharedModule
   ],
   declarations: [
   ],

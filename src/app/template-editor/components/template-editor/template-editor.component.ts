@@ -1,10 +1,10 @@
-import { Component, HostListener, DoCheck, OnDestroy } from '@angular/core';
+import { Component, DoCheck, OnDestroy } from '@angular/core';
 
 import * as _ from 'lodash';
 import * as angular from 'angular';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { AjsState, AjsTransitions, ComponentsFactory, TemplateEditorFactory, AutoSaveService, PresentationUtils } from 'src/app/ajs-upgraded-providers';
-import { BroadcasterService } from '../../services/broadcaster.service';
+import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
 
 @Component({
   selector: 'app-template-editor',

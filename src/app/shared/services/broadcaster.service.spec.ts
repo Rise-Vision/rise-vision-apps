@@ -1,3 +1,5 @@
+import {expect} from 'chai';
+
 import { TestBed } from '@angular/core/testing';
 
 import { BroadcasterService } from './broadcaster.service';
@@ -11,6 +13,6 @@ describe('BroadcasterService', () => {
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(service).to.be.ok;
   });
 });
