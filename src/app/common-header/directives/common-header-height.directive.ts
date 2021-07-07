@@ -1,5 +1,7 @@
-import { Directive, ElementRef, OnDestroy } from '@angular/core';
+import { Component, Directive, ElementRef, HostBinding, OnDestroy } from '@angular/core';
 import { BroadcasterService } from 'src/app/template-editor/services/broadcaster.service';
+import { downgradeComponent } from '@angular/upgrade/static';
+import * as angular from 'angular';
 
 @Directive({selector: '[common-header-height]'})
 export class CommonHeaderHeightDirective implements OnDestroy {
@@ -31,3 +33,22 @@ export class CommonHeaderHeightDirective implements OnDestroy {
   }
 
 }
+
+@Component({
+  selector: 'commonHeaderHeight',
+  template: `<ng-content></ng-content>`,
+  providers: [CommonHeaderHeightDirective]
+})
+export class CommonHeaderHeightDirectiveWrapper {
+  @HostBinding('attr.commonHeaderHeight') directive;
+  constructor(directive: CommonHeaderHeightDirective){}
+}
+
+angular.module('risevision.common.header.directives', [])
+  .directive('commonHeaderHeight', downgradeComponent({
+    component: CommonHeaderHeightDirectiveWrapper,
+  }))
+  .decorator('commonHeaderHeightDirective', $delegate => {
+    $delegate[0].restrict += 'A';
+    return $delegate;
+  });
