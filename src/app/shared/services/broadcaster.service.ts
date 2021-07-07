@@ -24,5 +24,5 @@ export class BroadcasterService extends EventEmitter {
   }
 }
 
-angular.module('risevision.template-editor.services')
+angular.module('risevision.apps.services')
   .factory('broadcaster', downgradeInjectable(BroadcasterService));

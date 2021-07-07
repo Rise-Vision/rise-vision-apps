@@ -1,3 +1,5 @@
+import {expect} from 'chai';
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TemplateEditorPreviewHolderComponent } from './template-editor-preview-holder.component';
@@ -20,6 +22,6 @@ describe('TemplateEditorPreviewHolderComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).to.be.ok;
   });
 });
