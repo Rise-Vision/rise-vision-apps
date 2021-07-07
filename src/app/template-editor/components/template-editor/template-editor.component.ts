@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, DoCheck, OnDestroy } from '@angular/core';
 
 import * as _ from 'lodash';
 import * as angular from 'angular';
@@ -11,7 +11,7 @@ import { BroadcasterService } from '../../services/broadcaster.service';
   templateUrl: './template-editor.component.html',
   styleUrls: ['./template-editor.component.scss']
 })
-export class TemplateEditorComponent {
+export class TemplateEditorComponent implements DoCheck, OnDestroy {
   private subscription: any;
   private _oldPresentation: any;
 
