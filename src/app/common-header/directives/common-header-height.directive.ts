@@ -44,7 +44,7 @@ export class CommonHeaderHeightDirectiveWrapper {
   constructor(directive: CommonHeaderHeightDirective){}
 }
 
-angular.module('risevision.common.header.directives', [])
+angular.module('risevision.common.header.directives')
   .directive('commonHeaderHeight', downgradeComponent({
     component: CommonHeaderHeightDirectiveWrapper,
   }))
