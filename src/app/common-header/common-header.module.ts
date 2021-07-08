@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CommonHeaderHeightDirective } from './directives/common-header-height.directive';
+import { CommonHeaderHeightDirective, CommonHeaderHeightDirectiveWrapper } from './directives/common-header-height.directive';
 
 @NgModule({
   declarations: [
@@ -13,4 +13,6 @@ import { CommonHeaderHeightDirective } from './directives/common-header-height.d
     CommonHeaderHeightDirective
   ]
 })
-export class CommonHeaderModule { }
+export class CommonHeaderModule {
+  static entryComponents = [ CommonHeaderHeightDirectiveWrapper ]
+}

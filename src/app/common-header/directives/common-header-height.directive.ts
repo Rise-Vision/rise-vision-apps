@@ -1,13 +1,53 @@
-import { Directive, Injector, ElementRef } from '@angular/core';
-// import { UpgradeComponent } from '@angular/upgrade/static';
+import { Component, Directive, ElementRef, HostBinding, OnDestroy } from '@angular/core';
+import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
+import { downgradeComponent } from '@angular/upgrade/static';
+import * as angular from 'angular';
 
-// This Angular directive will act as an interface to the "upgraded" AngularJS component
 @Directive({selector: '[common-header-height]'})
-export class CommonHeaderHeightDirective {
+export class CommonHeaderHeightDirective implements OnDestroy {
+  private subscription: any;
 
-  // constructor(elementRef: ElementRef, injector: Injector) {
-  //   // We must pass the name of the directive as used by AngularJS to the super
-  //   super('', elementRef, injector);
-  // }
+  constructor(private elementRef: ElementRef, private broadcaster: BroadcasterService) {
+    this._updateHeight();
+    this.subscription = this.broadcaster.subscribe((event: string) => {
+      if (['risevision.company.selectedCompanyChanged',
+          'risevision.company.updated'].indexOf(event) !== -1) {
+        this._updateHeight();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  _updateHeight() {
+    setTimeout(() => {
+      var commonHeaderDiv = window.document.getElementById('commonHeaderDiv');
+      var elemStyle = window.getComputedStyle(commonHeaderDiv);
+      var currentHeightPx = elemStyle.getPropertyValue('height');
+      var currentHeight = parseInt(currentHeightPx);
+
+      this.elementRef.nativeElement.style.setProperty('--common-header-height', currentHeight + 'px');
+    });
+  }
 
 }
+
+@Component({
+  selector: 'commonHeaderHeight',
+  template: `<ng-content></ng-content>`,
+  providers: [CommonHeaderHeightDirective]
+})
+export class CommonHeaderHeightDirectiveWrapper {
+  @HostBinding('attr.commonHeaderHeight') directive;
+  constructor(directive: CommonHeaderHeightDirective){}
+}
+
+const allowAttribute = directiveFactory => [ '$injector', $injector =>
+    Object.assign($injector.invoke(directiveFactory), {restrict: 'EA'})
+];
+angular.module('risevision.common.header.directives')
+  .directive('commonHeaderHeight', allowAttribute(downgradeComponent({
+    component: CommonHeaderHeightDirectiveWrapper,
+  })));
