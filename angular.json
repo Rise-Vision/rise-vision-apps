@@ -138,6 +138,7 @@
               "src/scripts/common-header/services/svc-address.js",
               "src/scripts/common-header/services/svc-contact.js",
 
+              "src/scripts/components/app.js",
               "src/scripts/components/action-sheet.js",
               "src/scripts/components/off-canvas-nav.js",
 
@@ -708,6 +709,7 @@
                 "src/scripts/common-header/services/svc-address.js",
                 "src/scripts/common-header/services/svc-contact.js",
 
+                "src/scripts/components/app.js",
                 "src/scripts/components/action-sheet.js",
                 "src/scripts/components/off-canvas-nav.js",
 

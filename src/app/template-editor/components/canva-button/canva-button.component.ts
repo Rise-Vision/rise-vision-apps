@@ -25,7 +25,7 @@ export class CanvaButtonComponent {
 
 }
 
-angular.module('risevision.editor.directives')
+angular.module('risevision.common.components')
   .directive(
     'canvaButton', 
     downgradeComponent({

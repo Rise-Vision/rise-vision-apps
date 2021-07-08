@@ -73,7 +73,3 @@ angular.module('risevision.template-editor.directives', [
   'risevision.template-editor.services',
   'risevision.template-editor.filters'
 ]);
-
-angular.module('risevision.template-editor.controllers', [
-  'risevision.template-editor.services'
-]);
