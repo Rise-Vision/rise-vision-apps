@@ -18,25 +18,22 @@ export class FinancialLicenseService {
     private blueprintFactory: BlueprintService) { }
 
   needsFinancialDataLicense() {
-    const that = this;
     if (!this.blueprintFactory.blueprintData) {
       return false;
     }
 
-    return _.some(this.blueprintFactory.blueprintData.components, function (component) {
-      return _.includes(that.NEED_FINANCIAL_DATA_LICENSE, component.type);
+    return _.some(this.blueprintFactory.blueprintData.components, component => {
+      return _.includes(this.NEED_FINANCIAL_DATA_LICENSE, component.type);
     });
   }
 
   showFinancialDataLicenseRequiredMessage() {
-    const that = this;
-
     this.modalService.confirm('Financial Data License Required',
       'This Presentation requires a Financial Data License to show on your Display(s). Contact <a href="mailto:sales@risevision.com">sales@risevision.com</a> for a 30 day free trial.',
       'Get a 30 Day Free Trial', 
       'Close'
-    ).then(function () {
-      window.open(that.CONTACT_US_URL, '_blank');
+    ).then(() => {
+      window.open(this.CONTACT_US_URL, '_blank');
     });
   }
 
