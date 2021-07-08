@@ -33,6 +33,7 @@ angular.module('risevision.common.header.directives',[])
 angular.module('risevision.apps.purchase',[])
 angular.module('risevision.template-editor.controllers',[])
 angular.module('risevision.template-editor.directives',[])
+angular.module('risevision.template-editor.filters',[])
 angular.module('risevision.template-editor.services',[])
 
 // First, initialize the Angular testing environment.
