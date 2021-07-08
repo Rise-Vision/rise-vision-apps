@@ -26,7 +26,6 @@ export class TemplateEditorComponent implements DoCheck, OnDestroy {
     private templateEditorFactory: TemplateEditorFactory,
     private AutoSaveService: AutoSaveService,
     private presentationUtils: PresentationUtils) {
-    const that = this;
 
     this.autoSaveService = this.AutoSaveService(this.templateEditorFactory.save);
 
@@ -34,27 +33,27 @@ export class TemplateEditorComponent implements DoCheck, OnDestroy {
 
     this.$transitions.onStart({
       to: (state: any) => state.name.indexOf('apps.editor.templates') === -1
-    }, function (trans: any) {
-      if (that._bypassUnsaved) {
-        that._bypassUnsaved = false;
+    }, (trans: any) => {
+      if (this._bypassUnsaved) {
+        this._bypassUnsaved = false;
         return;
       }
 
-      that.autoSaveService.clearSaveTimeout();
+      this.autoSaveService.clearSaveTimeout();
   
-      if (that.templateEditorFactory.isUnsaved() && that.templateEditorFactory.hasContentEditorRole()) {
+      if (this.templateEditorFactory.isUnsaved() && this.templateEditorFactory.hasContentEditorRole()) {
         trans.abort();
 
-        that.templateEditorFactory.save()
-          .finally(function () {
-            that._bypassUnsaved = true;
-            that.$state.go(trans.to().name, trans.to().params);
+        this.templateEditorFactory.save()
+          .finally(() => {
+            this._bypassUnsaved = true;
+            this.$state.go(trans.to().name, trans.to().params);
           });  
       }
     });
 
     window.onbeforeunload = (e: Event) => {
-      if (that.templateEditorFactory.isUnsaved()) {
+      if (this.templateEditorFactory.isUnsaved()) {
         // Cancel the event
         e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
         // Chrome requires returnValue to be set
@@ -68,14 +67,14 @@ export class TemplateEditorComponent implements DoCheck, OnDestroy {
         case 'presentationCreated':
         case 'presentationUpdated':
         case 'presentationPublished':
-          that._setUnsavedChangesAsync(false);
+          this._setUnsavedChangesAsync(false);
           break;
         case 'presentationDeleted':
-          that._setUnsavedChanges(false);
+          this._setUnsavedChanges(false);
           break;
         case 'presentationUnsavedChanges':
         case 'risevision.template-editor.brandingUnsavedChanges':
-          that._setUnsavedChangesAsync(true);
+          this._setUnsavedChangesAsync(true);
           break;
         default:
           return;
@@ -138,10 +137,8 @@ export class TemplateEditorComponent implements DoCheck, OnDestroy {
   };
 
   _setUnsavedChangesAsync = function (state: any) {
-    const that = this;
-
-    setTimeout(function () {
-      that._setUnsavedChanges(state);
+    setTimeout(() => {
+      this._setUnsavedChanges(state);
     });
   };
 

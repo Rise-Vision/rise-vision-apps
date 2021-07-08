@@ -80,9 +80,8 @@ export class TemplateEditorUtilsService {
   }
 
   hasRegularFileItems(folderItems) {
-    var that = this;
-    var regularFiles = _.filter(folderItems, function (item) {
-      return !that.isFolder(item.name);
+    var regularFiles = _.filter(folderItems, item => {
+      return !this.isFolder(item.name);
     });
 
     return regularFiles.length > 0;
