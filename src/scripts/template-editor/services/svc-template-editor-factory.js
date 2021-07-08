@@ -2,16 +2,20 @@
 
 angular.module('risevision.template-editor.services')
   .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
-  .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
+  .factory('templateEditorFactory', ['$q', '$log', '$state', 'broadcaster', 'presentation',
     'processErrorCode', 'userState', 'createFirstSchedule',
     'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationTracker',
     'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED', 'scheduleSelectorFactory',
-    function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
+    function ($q, $log, $state, broadcaster, presentation, processErrorCode, userState,
       createFirstSchedule, templateEditorUtils, brandingFactory, blueprintFactory, scheduleFactory,
       presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
       scheduleSelectorFactory) {
       var factory = {
         hasUnsavedChanges: false
+      };
+
+      factory.hasContentEditorRole = function () {
+        return userState.hasRole('ce');
       };
 
       var _parseJSON = function (json) {
@@ -40,7 +44,7 @@ angular.module('risevision.template-editor.services')
           factory.presentation = presentation;
         }
 
-        $rootScope.$broadcast('presentationUpdated');
+        broadcaster.emit('presentationUpdated');
       };
 
       var _getPresentationForUpdate = function () {
@@ -82,7 +86,7 @@ angular.module('risevision.template-editor.services')
         return presentation.add(presentationVal)
           .then(function (resp) {
             if (resp && resp.item && resp.item.id) {
-              $rootScope.$broadcast('presentationCreated');
+              broadcaster.emit('presentationCreated');
 
               _setPresentation(resp.item);
 
@@ -204,7 +208,7 @@ angular.module('risevision.template-editor.services')
           .then(function () {
             presentationTracker('Presentation Deleted', factory.presentation.id, factory.presentation.name);
 
-            $rootScope.$broadcast('presentationDeleted');
+            broadcaster.emit('presentationDeleted');
 
             factory.presentation = {};
 
@@ -277,7 +281,7 @@ angular.module('risevision.template-editor.services')
             factory.presentation.revisionStatusName = REVISION_STATUS_PUBLISHED;
             factory.presentation.changeDate = new Date();
             factory.presentation.changedBy = userState.getUsername();
-            $rootScope.$broadcast('presentationPublished');
+            broadcaster.emit('presentationPublished');
 
             return _createFirstSchedule();
           });

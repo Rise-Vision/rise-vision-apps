@@ -14,6 +14,7 @@ angular.module('risevision.apps', [
     'rzSlider',
     'risevision.common.config',
     'risevision.common.header',
+    'risevision.common.components',
     'risevision.common.components.last-modified',
     'risevision.common.components.loading',
     'risevision.common.components.search-filter',
@@ -60,8 +61,7 @@ angular.module('risevision.apps', [
     'risevision.widgets.filters',
     'risevision.widgets.twitter',
     'risevision.template-editor.services',
-    'risevision.template-editor.directives',
-    'risevision.template-editor.controllers'
+    'risevision.template-editor.directives'
   ])
   // Set up our mappings between URLs, templates, and controllers
   .config(['$stateProvider',

@@ -30,7 +30,6 @@ describe('directive: TemplateEditorPreviewHolder', function() {
   });
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
   beforeEach(module('risevision.template-editor.services'));
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(mockTranslate()));

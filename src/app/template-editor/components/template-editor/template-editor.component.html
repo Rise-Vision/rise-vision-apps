@@ -1,10 +1,10 @@
 <div id="template-editor" class="template-editor madero-style"
-     ng-class="{ 'active-component' : componentsFactory.selected,
+     [ngClass]="{ 'active-component' : componentsFactory.selected,
                  'desktop-mode': !considerChromeBarHeight }" common-header-height>
   <div>
     <template-editor-toolbar
       class="template-editor-toolbar"
-      ng-class="{ 'hidden-xs': componentsFactory.selected }">
+      [ngClass]="{ 'hidden-xs': componentsFactory.selected }">
     </template-editor-toolbar>
   </div>
   <div class="template-editor-body">
@@ -13,7 +13,7 @@
       </template-attribute-editor>
     </div>
     <div id="preview-holder" class="preview-holder"
-         ng-class="{ 'hidden-xs': componentsFactory.selected }">
+         [ngClass]="{ 'hidden-xs': componentsFactory.selected }">
       <template-editor-preview-holder>
       </template-editor-preview-holder>
     </div>
@@ -21,7 +21,7 @@
 
   <template-editor-footer
     class="template-editor-footer navbar-fixed-bottom visible-xs"
-    ng-class="{ 'hidden-xs': componentsFactory.selected }">
+    [ngClass]="{ 'hidden-xs': componentsFactory.selected }">
   </template-editor-footer>
 
 </div>

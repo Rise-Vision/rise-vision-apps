@@ -3,7 +3,7 @@ import {expect} from 'chai';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LastRevisedComponent } from './last-revised.component';
-import { UsernamePipe } from '../../pipes/username.pipe';
+import { UsernamePipe } from '../username.pipe';
 
 describe('LastRevisedComponent', () => {
   let component: LastRevisedComponent;

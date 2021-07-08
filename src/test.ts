@@ -27,8 +27,11 @@ declare global {
 }
 export {};
 
-angular.module('risevision.editor.directives',[])
+angular.module('risevision.common.components',[])
+angular.module('risevision.apps.services',[])
+angular.module('risevision.common.header.directives',[])
 angular.module('risevision.apps.purchase',[])
+angular.module('risevision.template-editor.controllers',[])
 angular.module('risevision.template-editor.directives',[])
 angular.module('risevision.template-editor.services',[])
 

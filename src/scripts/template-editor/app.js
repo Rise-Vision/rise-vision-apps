@@ -15,11 +15,8 @@ angular.module('risevision.apps')
 
         .state('apps.editor.templates.edit', {
           url: '/edit/:presentationId/:productId',
-          templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get('partials/template-editor/template-editor.html');
-          }],
+          component: 'ngTemplateEditor',
           reloadOnSearch: false,
-          controller: 'TemplateEditorController',
           params: {
             productDetails: null,
             productId: ''
@@ -75,8 +72,4 @@ angular.module('risevision.template-editor.filters', []);
 angular.module('risevision.template-editor.directives', [
   'risevision.template-editor.services',
   'risevision.template-editor.filters'
-]);
-
-angular.module('risevision.template-editor.controllers', [
-  'risevision.template-editor.services'
 ]);

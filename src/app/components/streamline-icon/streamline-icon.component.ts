@@ -270,7 +270,7 @@ export class StreamlineIconComponent implements OnInit {
 }
 
 
-angular.module('risevision.template-editor.directives')
+angular.module('risevision.common.components')
   .directive(
     'streamlineIcon', 
     downgradeComponent({

@@ -3,21 +3,31 @@ import { CommonModule } from '@angular/common';
 import { ModalService } from './modals/modal.service';
 import { MessageBoxComponent } from './modals/message-box/message-box.component';
 import { ConfirmModalComponent } from './modals/confirm-modal/confirm-modal.component';
+import { LastRevisedComponent } from './last-modified/last-revised/last-revised.component';
+import { UsernamePipe } from './last-modified/username.pipe';
+import { StreamlineIconComponent } from './streamline-icon/streamline-icon.component';
+
 import { TemplateEditorModule } from '../template-editor/template-editor.module';
 
 @NgModule({
   declarations: [
     MessageBoxComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    LastRevisedComponent, 
+    UsernamePipe,
+    StreamlineIconComponent
   ],
   imports: [
     CommonModule,
     TemplateEditorModule
+  ],
+  exports: [
+    StreamlineIconComponent
   ]
 })
 export class ComponentsModule {
   //workaround for including downgraded components into build files
   //https://github.com/angular/angular/issues/35314#issuecomment-584821399
-  static entryComponents = [ MessageBoxComponent, ConfirmModalComponent ]
+  static entryComponents = [ MessageBoxComponent, ConfirmModalComponent, LastRevisedComponent, StreamlineIconComponent ]
   static providers = [ ModalService ]
 }

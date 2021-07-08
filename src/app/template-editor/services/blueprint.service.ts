@@ -4,7 +4,7 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 import { environment } from 'src/environments/environment';
 import * as angular from 'angular';
 import * as _ from 'lodash';
-import { TemplateEditorUtils } from 'src/app/ajs-upgraded-providers';
+import { TemplateEditorUtilsService } from './template-editor-utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class BlueprintService {
   public loadingBlueprint = false;
   public blueprintData;
   
-  constructor(private httpClient: HttpClient, private templateEditorUtils: TemplateEditorUtils) {     
+  constructor(private httpClient: HttpClient, private templateEditorUtils: TemplateEditorUtilsService) {     
   }
 
   getBlueprintCached(productCode, readOnly?) {

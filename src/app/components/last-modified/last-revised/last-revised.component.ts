@@ -16,7 +16,7 @@ export class LastRevisedComponent {
 
 }
 
-angular.module('risevision.editor.directives')
+angular.module('risevision.common.components')
   .directive(
     'lastRevised', 
     downgradeComponent({

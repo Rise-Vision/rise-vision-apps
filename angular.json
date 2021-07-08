@@ -113,7 +113,6 @@
               "src/scripts/common-header/controllers/ctr-user-add-modal.js",
               "src/scripts/common-header/controllers/ctr-user-settings-modal.js",
 
-              "src/scripts/common-header/directives/dtv-common-header-height.js",
               "src/scripts/common-header/directives/dtv-company-buttons.js",
               "src/scripts/common-header/directives/dtv-emails-field.js",
               "src/scripts/common-header/directives/dtv-empty-select-parser.js",
@@ -138,6 +137,7 @@
               "src/scripts/common-header/services/svc-address.js",
               "src/scripts/common-header/services/svc-contact.js",
 
+              "src/scripts/components/app.js",
               "src/scripts/components/action-sheet.js",
               "src/scripts/components/off-canvas-nav.js",
 
@@ -467,7 +467,6 @@
               "src/scripts/template-editor/services/svc-template-editor-factory.js",
               "src/scripts/template-editor/services/svc-template-editor-utils.js",
               "src/scripts/template-editor/services/svc-auto-save-service.js",
-              "src/scripts/template-editor/services/svc-financial-license-factory.js",
               "src/scripts/template-editor/services/svc-components-factory.js",
 
               "src/scripts/template-editor/components/services/svc-storage-manager-factory.js",
@@ -483,8 +482,6 @@
               "src/scripts/template-editor/components/services/svc-component-utils.js",
               "src/scripts/template-editor/components/services/svc-timezones.js",
               "src/scripts/template-editor/components/services/svc-twitter-credentials-validation.js",
-
-              "src/scripts/template-editor/controllers/ctr-template-editor.js",
 
               "src/scripts/template-editor/filters/ftr-encode-link.js",
 
@@ -686,7 +683,6 @@
                 "src/scripts/common-header/controllers/ctr-user-add-modal.js",
                 "src/scripts/common-header/controllers/ctr-user-settings-modal.js",
 
-                "src/scripts/common-header/directives/dtv-common-header-height.js",
                 "src/scripts/common-header/directives/dtv-company-buttons.js",
                 "src/scripts/common-header/directives/dtv-emails-field.js",
                 "src/scripts/common-header/directives/dtv-empty-select-parser.js",
@@ -711,6 +707,7 @@
                 "src/scripts/common-header/services/svc-address.js",
                 "src/scripts/common-header/services/svc-contact.js",
 
+                "src/scripts/components/app.js",
                 "src/scripts/components/action-sheet.js",
                 "src/scripts/components/off-canvas-nav.js",
 
