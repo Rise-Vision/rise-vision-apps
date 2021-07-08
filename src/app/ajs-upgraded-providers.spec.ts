@@ -13,7 +13,6 @@ import {
   StoreService, storeServiceProvider,
   SubscriptionFactory, subscriptionFactoryProvider,
   TemplateEditorFactory, templateEditorFactoryProvider,
-  ComponentsFactory, componentsFactoryProvider,
   PresentationUtils, presentationUtilsProvider,
   UserAuthFactory, userAuthFactoryProvider,
   UserState, userStateProvider, purchaseFlowTrackerProvider, PurchaseFlowTracker, contactServiceProvider, ContactService
@@ -48,11 +47,6 @@ describe('ajs-upgraded-providers', () => {
   it('templateEditorFactory:', () => {
     testRegisterProvider(templateEditorFactoryProvider, TemplateEditorFactory);
     testAngularJsService(templateEditorFactoryProvider, 'templateEditorFactory');
-  });
-
-  it('componentsFactory:', () => {
-    testRegisterProvider(componentsFactoryProvider, ComponentsFactory);
-    testAngularJsService(componentsFactoryProvider, 'componentsFactory');
   });
 
   it('presentationUtils:', () => {

@@ -3,9 +3,10 @@ import { Component, DoCheck, OnDestroy } from '@angular/core';
 import * as _ from 'lodash';
 import * as angular from 'angular';
 import { downgradeComponent } from '@angular/upgrade/static';
-import { AjsState, AjsTransitions, ComponentsFactory, TemplateEditorFactory, PresentationUtils } from 'src/app/ajs-upgraded-providers';
+import { AjsState, AjsTransitions, TemplateEditorFactory, PresentationUtils } from 'src/app/ajs-upgraded-providers';
 import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
 import { AutoSaveService } from '../../services/auto-save.service';
+import { ComponentsService } from '../../services/components.service';
 
 
 export function AutoSaveServiceFactory(templateEditorFactory: TemplateEditorFactory) {
@@ -29,7 +30,7 @@ export class TemplateEditorComponent implements DoCheck, OnDestroy {
     private $state: AjsState,
     private $transitions: AjsTransitions,
     private broadcaster: BroadcasterService,
-    public componentsFactory: ComponentsFactory,
+    public componentsFactory: ComponentsService,
     private templateEditorFactory: TemplateEditorFactory,
     private autoSaveService: AutoSaveService,
     private presentationUtils: PresentationUtils) {

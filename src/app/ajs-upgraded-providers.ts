@@ -189,17 +189,6 @@ export const templateEditorFactoryProvider = {
   deps: ['$injector']
 };
 
-export abstract class ComponentsFactory {
-  [key: string]: any;
-}
-export const componentsFactoryProvider = {
-  provide: ComponentsFactory,
-  useFactory: function ($injector: any) {
-    return $injector.get('componentsFactory');
-  },
-  deps: ['$injector']
-};
-
 export abstract class PresentationUtils {
   [key: string]: any;
 }
