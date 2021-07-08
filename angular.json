@@ -192,9 +192,6 @@
               "src/scripts/components/userstate/services/svc-openid-connect.js",
               "src/scripts/components/userstate/services/svc-registration-factory.js",
 
-              "src/scripts/components/last-modified/dtv-last-modified.js",
-              "src/scripts/components/last-modified/ftr-username.js",
-
               "src/scripts/components/loading/app.js",
               "src/scripts/components/loading/dtv-global-spinner.js",
               "src/scripts/components/loading/dtv-loading.js",
@@ -753,9 +750,6 @@
                 "src/scripts/components/userstate/services/svc-userstate.js",
                 "src/scripts/components/userstate/services/svc-openid-connect.js",
                 "src/scripts/components/userstate/services/svc-registration-factory.js",
-
-                "src/scripts/components/last-modified/dtv-last-modified.js",
-                "src/scripts/components/last-modified/ftr-username.js",
 
                 "src/scripts/components/loading/app.js",
                 "src/scripts/components/loading/dtv-global-spinner.js",

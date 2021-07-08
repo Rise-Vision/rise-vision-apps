@@ -8,6 +8,7 @@ angular.module('risevision.common.header')
     function ($scope, $filter, addUser, $modalInstance, companyId,
       userState, userRoleMap, humanReadableError, messageBox, $loading,
       userTracker, COMPANY_ROLE_FIELDS, EDUCATION_COMPANY_ROLE_FIELDS) {
+      $scope.user = {};
       $scope.isAdd = true;
       $scope.isUserAdmin = userState.isUserAdmin();
 

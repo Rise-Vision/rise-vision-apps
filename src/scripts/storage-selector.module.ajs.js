@@ -10,7 +10,6 @@ angular.module('risevision.apps.storage.storage-selector', [
     'ui.bootstrap',
     'ngSanitize',
     'risevision.common.components',
-    'risevision.common.components.last-modified',
     'risevision.common.components.loading',
     'risevision.common.components.search-filter',
     'risevision.common.components.scrolling-list',

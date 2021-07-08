@@ -18,13 +18,13 @@
       <schedule-fields></schedule-fields>
       
       <div class="button-row text-right mt-5">
-        <p class="visible-sm visible-xs text-right"><last-modified change-date="factory.schedule.changeDate" changed-by="factory.schedule.changedBy"></last-modified></p>
+        <p class="visible-sm visible-xs text-right"><last-modified [change-date]="factory.schedule.changeDate" [changed-by]="factory.schedule.changedBy"></last-modified></p>
         <!-- Indicates delete or destructive action -->
         <button id="deleteButton" type="button" class="btn btn-danger btn-toolbar pull-left" ng-click="confirmDelete()">
           Delete Schedule
         </button>
         <div>
-        <span class="hidden-sm hidden-xs u_margin-right"><last-modified change-date="factory.schedule.changeDate" changed-by="factory.schedule.changedBy"></last-modified></span>
+        <span class="hidden-sm hidden-xs u_margin-right"><last-modified [change-date]="factory.schedule.changeDate" [changed-by]="factory.schedule.changedBy"></last-modified></span>
           <!-- Indicates cancel or non-destructive action -->
           <button type="button" ui-sref="apps.schedules.list" class="btn btn-default btn-toolbar mr-2">
             {{'common.cancel' | translate}}

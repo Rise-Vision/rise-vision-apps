@@ -130,7 +130,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <p class="visible-xs text-right"><last-modified change-date="company.changeDate" changed-by="company.changedBy"></last-modified></p>
+    <p class="visible-xs text-right"><last-modified [change-date]="company.changeDate" [changed-by]="company.changedBy"></last-modified></p>
     <button type="button" id="delete-button" class="btn btn-danger btn-fixed-width pull-left"
       ng-show="!isDeletingCompany" ng-click="deleteCompany()">
       Delete <i class="fa fa-white fa-trash-o icon-right"></i>
@@ -139,7 +139,7 @@
       Confirm Deletion <i class="fa fa-white fa-warning icon-right"></i>
     </button>
     <div class="pull-right">
-      <span class="hidden-xs"><last-modified change-date="company.changeDate" changed-by="company.changedBy"></last-modified></span>
+      <span class="hidden-xs"><last-modified [change-date]="company.changeDate" [changed-by]="company.changedBy"></last-modified></span>
       <button type="submit" form="forms.companyForm" id="save-button"
         class="btn btn-primary btn-fixed-width" ng-click="save()">Save
         <i class="fa fa-white fa-check icon-right"></i>

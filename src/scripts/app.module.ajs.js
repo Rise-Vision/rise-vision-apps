@@ -15,7 +15,6 @@ angular.module('risevision.apps', [
     'risevision.common.config',
     'risevision.common.header',
     'risevision.common.components',
-    'risevision.common.components.last-modified',
     'risevision.common.components.loading',
     'risevision.common.components.search-filter',
     'risevision.common.components.scrolling-list',
