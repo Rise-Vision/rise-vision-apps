@@ -1,0 +1,10 @@
+<div class="flex-row">
+
+  <input type="text" class="input-stretchy" (keydown)="inputKeyDown($event)"
+    [(ngModel)]="ngModel" (ngModelChange)="ngModelChange.emit(ngModel)" (blur)="onInputBlur()" [disabled]="!isEditingInput">
+  <div>
+    <button id="editButton" [disabled]="isEditingInput" type="button" class="btn-icon pr-0" (click)="isEditingInput=true">
+      <streamline-icon class="u_margin-left streamline-component-icon mb-1" name="pencil" width="16" height="16"></streamline-icon>
+    </button>
+  </div>
+</div>

@@ -289,7 +289,6 @@
               "src/scripts/common/directives/dtv-rv-sortable.js",
               "src/scripts/common/directives/dtv-guid-validator.js",
               "src/scripts/common/directives/dtv-tooltip-digest-on-resize.js",
-              "src/scripts/common/directives/dtv-stretchy-input.js",
               "src/scripts/common/directives/dtv-yes-no-toggle.js",
               "src/scripts/common/directives/dtv-madero-checkbox.js",
               "src/scripts/common/directives/dtv-weekly-templates.js",
