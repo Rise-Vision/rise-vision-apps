@@ -2,7 +2,7 @@ import {expect} from 'chai';
 
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { TemplateEditorUtils } from 'src/app/ajs-upgraded-providers';
+import { TemplateEditorUtilsService } from './template-editor-utils.service';
 import { BlueprintService } from './blueprint.service';
 
 describe('BlueprintService', () => {
@@ -54,7 +54,7 @@ describe('BlueprintService', () => {
         HttpClientTestingModule
       ],
       providers: [
-        {provide: TemplateEditorUtils, useValue: templateEditorUtils}        
+        {provide: TemplateEditorUtilsService, useValue: templateEditorUtils}        
       ]
     });
 
