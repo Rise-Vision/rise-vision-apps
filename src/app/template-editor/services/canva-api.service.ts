@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AnalyticsFactory, CanvaTypePicker } from 'src/app/ajs-upgraded-providers';
-import { environment } from './../../../environments/environment';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'

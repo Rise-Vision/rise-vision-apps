@@ -1,31 +1,24 @@
-import { Component, HostListener } from '@angular/core';
-import { KeyValueChanges, KeyValueDiffer, KeyValueDiffers } from '@angular/core';
+import { Component, DoCheck, OnDestroy } from '@angular/core';
 
+import * as _ from 'lodash';
 import * as angular from 'angular';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { AjsState, AjsTransitions, ComponentsFactory, TemplateEditorFactory, AutoSaveService, PresentationUtils } from 'src/app/ajs-upgraded-providers';
-import { BroadcasterService } from '../../services/broadcaster.service';
+import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
 
 @Component({
   selector: 'app-template-editor',
   templateUrl: './template-editor.component.html',
   styleUrls: ['./template-editor.component.scss']
 })
-export class TemplateEditorComponent {
-  private presentationDiffer: KeyValueDiffer<string, any>;
+export class TemplateEditorComponent implements DoCheck, OnDestroy {
+  private subscription: any;
+  private _oldPresentation: any;
 
   private autoSaveService: any;
   private _bypassUnsaved = false;
 
-  @HostListener('window:beforeunload')
-  checkUnsaved() {
-    if (this.templateEditorFactory.isUnsaved()) {
-      return 'Do you want to save changes before leaving?';
-    }
-  }
-
   constructor(
-    private differs: KeyValueDiffers,
     private $state: AjsState,
     private $transitions: AjsTransitions,
     private broadcaster: BroadcasterService,
@@ -34,8 +27,6 @@ export class TemplateEditorComponent {
     private AutoSaveService: AutoSaveService,
     private presentationUtils: PresentationUtils) {
     const that = this;
-
-    this.presentationDiffer = this.differs.find(this.templateEditorFactory.presentation).create();
 
     this.autoSaveService = this.AutoSaveService(this.templateEditorFactory.save);
 
@@ -49,21 +40,29 @@ export class TemplateEditorComponent {
         return;
       }
 
-      trans.abort();
-
       that.autoSaveService.clearSaveTimeout();
   
-      var savePromise = that.templateEditorFactory.isUnsaved() && that.templateEditorFactory.hasContentEditorRole() ? that.templateEditorFactory.save() :
-        Promise.resolve();
-  
-      savePromise
-        .finally(function () {
-          that._bypassUnsaved = true;
-          that.$state.go(trans.to().name, trans.to().params);
-        });
+      if (that.templateEditorFactory.isUnsaved() && that.templateEditorFactory.hasContentEditorRole()) {
+        trans.abort();
+
+        that.templateEditorFactory.save()
+          .finally(function () {
+            that._bypassUnsaved = true;
+            that.$state.go(trans.to().name, trans.to().params);
+          });  
+      }
     });
 
-    this.broadcaster.subscribe({
+    window.onbeforeunload = (e: Event) => {
+      if (that.templateEditorFactory.isUnsaved()) {
+        // Cancel the event
+        e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+        // Chrome requires returnValue to be set
+        e.returnValue = true;
+      }
+    };
+
+    this.subscription = this.broadcaster.subscribe({
       next: (event: String) => {
         switch (event) {
         case 'presentationCreated':
@@ -74,10 +73,8 @@ export class TemplateEditorComponent {
         case 'presentationDeleted':
           that._setUnsavedChanges(false);
           break;
-        case 'risevision.template-editor.brandingUnsavedChanges':
-          that._setUnsavedChangesAsync(true);
-          break;
         case 'presentationUnsavedChanges':
+        case 'risevision.template-editor.brandingUnsavedChanges':
           that._setUnsavedChangesAsync(true);
           break;
         default:
@@ -88,7 +85,7 @@ export class TemplateEditorComponent {
 
   }
 
-  _presentationChanged(changes: KeyValueChanges<string, any>) {
+  _checkPresentationChanged() {
     if (!this.templateEditorFactory.hasContentEditorRole()) {
       return;
     }
@@ -97,24 +94,31 @@ export class TemplateEditorComponent {
       'id', 'companyId', 'revisionStatus', 'revisionStatusName',
       'changeDate', 'changedBy', 'creationDate', 'publish', 'layout'
     ];
-  
-    if (this.templateEditorFactory.hasUnsavedChanges) {
-      return;
-    }
-  
-    changes.forEachChangedItem(record => {
-      if (!ignoredFields.includes(record.key) && !this.templateEditorFactory.hasUnsavedChanges) {
+    
+    if (!_.isEqual(_.omit(this.templateEditorFactory.presentation, ignoredFields), _.omit(this._oldPresentation, ignoredFields))) {
+      this._oldPresentation = _.cloneDeep(this.templateEditorFactory.presentation);
+
+      if (!this.templateEditorFactory.hasUnsavedChanges) {
         this._setUnsavedChanges(true);
       }
-    });
+    }
 
   }
 
   ngDoCheck(): void {
-    const changes = this.presentationDiffer.diff(this.templateEditorFactory.presentation);
-    if (changes) {
-      this._presentationChanged(changes);
+    if (!this.templateEditorFactory.presentation) {
+      return;
+    } else if (!this._oldPresentation) {
+      this._oldPresentation = _.cloneDeep(this.templateEditorFactory.presentation);
+    } else {
+      this._checkPresentationChanged();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+
+    window.onbeforeunload = undefined;
   }
 
   considerChromeBarHeight() {

@@ -1,8 +1,10 @@
+import {expect} from 'chai';
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TemplateEditorFooterComponent } from './template-editor-footer.component';
 
-describe('TemplateEditorFooterComponent', () => {
+xdescribe('TemplateEditorFooterComponent', () => {
   let component: TemplateEditorFooterComponent;
   let fixture: ComponentFixture<TemplateEditorFooterComponent>;
 
@@ -20,6 +22,6 @@ describe('TemplateEditorFooterComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).to.be.ok;
   });
 });

@@ -1,8 +1,10 @@
+import {expect} from 'chai';
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TemplateEditorToolbarComponent } from './template-editor-toolbar.component';
 
-describe('TemplateEditorToolbarComponent', () => {
+xdescribe('TemplateEditorToolbarComponent', () => {
   let component: TemplateEditorToolbarComponent;
   let fixture: ComponentFixture<TemplateEditorToolbarComponent>;
 
@@ -20,6 +22,6 @@ describe('TemplateEditorToolbarComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).to.be.ok;
   });
 });

@@ -2,6 +2,7 @@ import {expect} from 'chai';
 
 import { 
   $stateProvider, AjsState,
+  $transitionsProvider, AjsTransitions,
   AddressService, addressServiceProvider,  
   AnalyticsFactory, analyticsFactoryProvider, 
   Billing, billingProvider, 
@@ -12,7 +13,9 @@ import {
   StoreService, storeServiceProvider,
   SubscriptionFactory, subscriptionFactoryProvider,
   TemplateEditorFactory, templateEditorFactoryProvider,
-  TemplateEditorUtils, templateEditorUtilsProvider,
+  ComponentsFactory, componentsFactoryProvider,
+  AutoSaveService, autoSaveServiceProvider,
+  PresentationUtils, presentationUtilsProvider,
   UserAuthFactory, userAuthFactoryProvider,
   UserState, userStateProvider, purchaseFlowTrackerProvider, PurchaseFlowTracker, contactServiceProvider, ContactService
 } from './ajs-upgraded-providers';
@@ -48,9 +51,19 @@ describe('ajs-upgraded-providers', () => {
     testAngularJsService(templateEditorFactoryProvider, 'templateEditorFactory');
   });
 
-  it('templateEditorUtils:', () => {
-    testRegisterProvider(templateEditorUtilsProvider, TemplateEditorUtils);
-    testAngularJsService(templateEditorUtilsProvider, 'templateEditorUtils');
+  it('componentsFactory:', () => {
+    testRegisterProvider(componentsFactoryProvider, ComponentsFactory);
+    testAngularJsService(componentsFactoryProvider, 'componentsFactory');
+  });
+
+  it('autoSaveService:', () => {
+    testRegisterProvider(autoSaveServiceProvider, AutoSaveService);
+    testAngularJsService(autoSaveServiceProvider, 'AutoSaveService');
+  });
+
+  it('presentationUtils:', () => {
+    testRegisterProvider(presentationUtilsProvider, PresentationUtils);
+    testAngularJsService(presentationUtilsProvider, 'presentationUtils');
   });
 
   it('userState:', () => {
@@ -91,6 +104,11 @@ describe('ajs-upgraded-providers', () => {
   it('$state:', () => {
     testRegisterProvider($stateProvider, AjsState);
     testAngularJsService($stateProvider, '$state');
+  });
+
+  it('$transitions:', () => {
+    testRegisterProvider($transitionsProvider, AjsTransitions);
+    testAngularJsService($transitionsProvider, '$transitions');
   });
 
   it('subscriptionFactory:', () => {

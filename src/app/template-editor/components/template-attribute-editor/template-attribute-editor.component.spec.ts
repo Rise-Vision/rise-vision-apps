@@ -1,8 +1,10 @@
+import {expect} from 'chai';
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TemplateAttributeEditorComponent } from './template-attribute-editor.component';
 
-describe('TemplateAttributeEditorComponent', () => {
+xdescribe('TemplateAttributeEditorComponent', () => {
   let component: TemplateAttributeEditorComponent;
   let fixture: ComponentFixture<TemplateAttributeEditorComponent>;
 
@@ -20,6 +22,6 @@ describe('TemplateAttributeEditorComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).to.be.ok;
   });
 });
