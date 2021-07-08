@@ -10,6 +10,7 @@ import { TemplateEditorComponent } from './components/template-editor/template-e
 import { TemplateEditorToolbarComponent } from './components/template-editor-toolbar/template-editor-toolbar.component';
 import { TemplateAttributeEditorComponent } from './components/template-attribute-editor/template-attribute-editor.component';
 import { TemplateEditorPreviewHolderComponent } from './components/template-editor-preview-holder/template-editor-preview-holder.component';
+import { EncodeLinkPipe } from './pipes/encode-link.pipe';
 
 @NgModule({
   imports: [
@@ -22,12 +23,13 @@ import { TemplateEditorPreviewHolderComponent } from './components/template-edit
     TemplateEditorComponent,
     TemplateEditorToolbarComponent,
     TemplateAttributeEditorComponent,
-    TemplateEditorPreviewHolderComponent
+    TemplateEditorPreviewHolderComponent,
+    EncodeLinkPipe
   ]
 })
 export class TemplateEditorModule {
   //workaround for including downgraded components into build files
   //https://github.com/angular/angular/issues/35314#issuecomment-584821399
-  static entryComponents = [ CanvaButtonComponent, TemplateEditorComponent ]
+  static entryComponents = [ CanvaButtonComponent, TemplateEditorComponent, EncodeLinkPipe ]
   static providers = [ AttributeDataService, BlueprintService, FinancialLicenseService ]
 }
