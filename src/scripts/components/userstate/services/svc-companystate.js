@@ -16,8 +16,8 @@
       'RELIGIOUS_INSTITUTIONS'
     ])
     .factory('companyState', ['$location', '$state', 'getCompany', 'objectHelper',
-      '$rootScope', '$log', '$q', 'EDUCATION_INDUSTRIES', 'DISCOUNT_INDUSTRIES', 'broadcaster',
-      function ($location, $state, getCompany, objectHelper, $rootScope, $log, $q,
+      '$log', '$q', 'EDUCATION_INDUSTRIES', 'DISCOUNT_INDUSTRIES', 'broadcaster',
+      function ($location, $state, getCompany, objectHelper, $log, $q,
         EDUCATION_INDUSTRIES, DISCOUNT_INDUSTRIES, broadcaster) {
         var pendingSelectedCompany;
 
