@@ -14,7 +14,6 @@ import {
   SubscriptionFactory, subscriptionFactoryProvider,
   TemplateEditorFactory, templateEditorFactoryProvider,
   ComponentsFactory, componentsFactoryProvider,
-  AutoSaveService, autoSaveServiceProvider,
   PresentationUtils, presentationUtilsProvider,
   UserAuthFactory, userAuthFactoryProvider,
   UserState, userStateProvider, purchaseFlowTrackerProvider, PurchaseFlowTracker, contactServiceProvider, ContactService
@@ -54,11 +53,6 @@ describe('ajs-upgraded-providers', () => {
   it('componentsFactory:', () => {
     testRegisterProvider(componentsFactoryProvider, ComponentsFactory);
     testAngularJsService(componentsFactoryProvider, 'componentsFactory');
-  });
-
-  it('autoSaveService:', () => {
-    testRegisterProvider(autoSaveServiceProvider, AutoSaveService);
-    testAngularJsService(autoSaveServiceProvider, 'AutoSaveService');
   });
 
   it('presentationUtils:', () => {

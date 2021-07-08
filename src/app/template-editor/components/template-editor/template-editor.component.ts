@@ -3,19 +3,26 @@ import { Component, DoCheck, OnDestroy } from '@angular/core';
 import * as _ from 'lodash';
 import * as angular from 'angular';
 import { downgradeComponent } from '@angular/upgrade/static';
-import { AjsState, AjsTransitions, ComponentsFactory, TemplateEditorFactory, AutoSaveService, PresentationUtils } from 'src/app/ajs-upgraded-providers';
+import { AjsState, AjsTransitions, ComponentsFactory, TemplateEditorFactory, PresentationUtils } from 'src/app/ajs-upgraded-providers';
 import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
+import { AutoSaveService } from '../../services/auto-save.service';
 
+
+export function AutoSaveServiceFactory(templateEditorFactory: TemplateEditorFactory) {
+  return new AutoSaveService(templateEditorFactory.save);
+}
 @Component({
   selector: 'app-template-editor',
   templateUrl: './template-editor.component.html',
-  styleUrls: ['./template-editor.component.scss']
+  styleUrls: ['./template-editor.component.scss'],
+  providers: [
+    {provide: AutoSaveService, useFactory: AutoSaveServiceFactory, deps: [TemplateEditorFactory] }
+  ]
 })
 export class TemplateEditorComponent implements DoCheck, OnDestroy {
   private subscription: any;
   private _oldPresentation: any;
 
-  private autoSaveService: any;
   private _bypassUnsaved = false;
 
   constructor(
@@ -24,10 +31,8 @@ export class TemplateEditorComponent implements DoCheck, OnDestroy {
     private broadcaster: BroadcasterService,
     public componentsFactory: ComponentsFactory,
     private templateEditorFactory: TemplateEditorFactory,
-    private AutoSaveService: AutoSaveService,
+    private autoSaveService: AutoSaveService,
     private presentationUtils: PresentationUtils) {
-
-    this.autoSaveService = this.AutoSaveService(this.templateEditorFactory.save);
 
     this.templateEditorFactory.hasUnsavedChanges = false;
 

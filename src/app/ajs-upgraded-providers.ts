@@ -200,16 +200,6 @@ export const componentsFactoryProvider = {
   deps: ['$injector']
 };
 
-export abstract class AutoSaveService extends Function {
-}
-export const autoSaveServiceProvider = {
-  provide: AutoSaveService,
-  useFactory: function ($injector: any) {
-    return $injector.get('AutoSaveService');
-  },
-  deps: ['$injector']
-};
-
 export abstract class PresentationUtils {
   [key: string]: any;
 }
