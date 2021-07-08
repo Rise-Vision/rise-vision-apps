@@ -144,7 +144,7 @@ export class TemplateEditorComponent implements DoCheck, OnDestroy {
 
 }
 
-angular.module('risevision.template-editor.controllers')
+angular.module('risevision.template-editor.directives')
   .directive(
     'ngTemplateEditor', 
     downgradeComponent({
