@@ -113,8 +113,8 @@ describe("controller: user add", function() {
   });
     
   it("should exist",function(){
-    expect($scope).to.be.okay;
-    expect($scope.user).to.be.okay;
+    expect($scope).to.be.ok;
+    expect($scope.user).to.be.ok;
     
     expect($scope).to.have.property("availableRoles");
 
