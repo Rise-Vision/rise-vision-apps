@@ -58,7 +58,7 @@ describe('app:', function() {
       var state = $state.get('apps.editor.templates.edit');
       expect(state).to.be.ok;
       expect(state.url).to.equal('/edit/:presentationId/:productId');
-      expect(state.controller).to.be.ok;
+      expect(state.component).to.equal('ngTemplateEditor');
       expect(state.params).to.be.ok;
     });
 

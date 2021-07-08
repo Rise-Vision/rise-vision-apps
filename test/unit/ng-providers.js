@@ -6,4 +6,13 @@ beforeEach(module(function ($provide) {
         confirmDanger: sinon.stub().resolves()
       };
     });
+
+    $provide.service('broadcaster',function() {
+      return {
+        emit: sinon.stub(),
+        emitWithParams: sinon.stub(),
+        subscribe: sinon.stub()
+      };
+    });
+
   }));
