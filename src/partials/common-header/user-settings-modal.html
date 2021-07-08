@@ -171,7 +171,7 @@ rv-spinner-key="user-settings-modal">
     </form>
   </div>
   <div class="modal-footer">
-    <p class="text-right"><last-modified change-date="user.changeDate" changed-by="user.changedBy"></last-modified></p>
+    <p class="text-right"><last-modified [change-date]="user.changeDate" [changed-by]="user.changedBy"></last-modified></p>
     <button type="button" id="delete-button" class="btn btn-danger btn-fixed-width pull-left"
       ng-if="!isAdd && isUserAdmin" ng-click="deleteUser()">
       Delete <i class="fa fa-white fa-trash-o icon-right"></i>

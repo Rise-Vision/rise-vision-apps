@@ -25,7 +25,6 @@ angular.module('risevision.common.header', [
     'risevision.common.components.action-sheet',
     'risevision.common.components.off-canvas-nav',
     'risevision.common.components.userstate',
-    'risevision.common.components.last-modified',
     'risevision.common.components.loading',
     'risevision.common.components.plans',
     'risevision.common.components.search-filter',

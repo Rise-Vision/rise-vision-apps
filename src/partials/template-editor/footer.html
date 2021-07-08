@@ -1,7 +1,7 @@
 <div>
   <div class="auto-save text-center">
     <div>
-      <last-modified change-date="templateEditorFactory.presentation.changeDate" changed-by="templateEditorFactory.presentation.changedBy"></last-modified>
+      <last-modified [change-date]="templateEditorFactory.presentation.changeDate" [changed-by]="templateEditorFactory.presentation.changedBy"></last-modified>
       •
       <span ng-if="templateEditorFactory.hasContentEditorRole()">
         <span ng-show="!templateEditorFactory.savingPresentation && templateEditorFactory.isUnsaved()">

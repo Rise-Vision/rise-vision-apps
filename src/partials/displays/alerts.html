@@ -163,9 +163,9 @@
 		</div><!--warning-->
 
 		<div class="button-row text-right">
-	      <p class="visible-xs"><last-modified change-date="factory.changeDate" changed-by="factory.changedBy"></last-modified></p>
+	      <p class="visible-xs"><last-modified [change-date]="factory.changeDate" [changed-by]="factory.changedBy"></last-modified></p>
 
-	      <span class="hidden-xs u_margin-right"><last-modified change-date="factory.changeDate" changed-by="factory.changedBy"></last-modified></span>
+	      <span class="hidden-xs u_margin-right"><last-modified [change-date]="factory.changeDate" [changed-by]="factory.changedBy"></last-modified></span>
 
 	      <button id="saveButton" type="submit" class="btn btn-primary" ng-click="factory.save()" ng-disabled="factory.savingAlerts">
 	        {{ factory.savingAlerts ? ('common.saving' | translate) : ('common.save' | translate)}} 
