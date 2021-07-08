@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { Component } from '@angular/core';
 import { CommonHeaderHeightDirective } from './common-header-height.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BroadcasterService } from 'src/app/template-editor/services/broadcaster.service';
+import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
 import { By } from '@angular/platform-browser';
 
 

@@ -1,5 +1,5 @@
 import { Component, Directive, ElementRef, HostBinding, OnDestroy } from '@angular/core';
-import { BroadcasterService } from 'src/app/template-editor/services/broadcaster.service';
+import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
 import { downgradeComponent } from '@angular/upgrade/static';
 import * as angular from 'angular';
 
