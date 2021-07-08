@@ -1,1 +1,27 @@
-<p>template-editor-footer works!</p>
+<div>
+  <div class="auto-save text-center">
+    <div>
+      <last-modified [changeDate]="templateEditorFactory.presentation.changeDate" [changedBy]="templateEditorFactory.presentation.changedBy"></last-modified>
+      •
+      <span *ngIf="templateEditorFactory.hasContentEditorRole()">
+        <span [hidden]="templateEditorFactory.savingPresentation || !templateEditorFactory.isUnsaved()">
+          Unsaved changes
+        </span>
+        <span [hidden]="!templateEditorFactory.savingPresentation">
+          Saving changes...
+        </span>
+        <span [hidden]="templateEditorFactory.savingPresentation || templateEditorFactory.isUnsaved()">
+          All changes saved <streamline-icon name="checkmark" width="12" height="12"></streamline-icon>
+        </span>
+      </span>
+      <span class="text-danger" *ngIf="!templateEditorFactory.hasContentEditorRole()">
+        You don’t have permission to edit
+      </span>
+    </div>
+  </div>
+  <button id="publishButton" require-role="cp" class="btn btn-primary btn-block"
+          [disabled]="templateEditorFactory.isPublishDisabled()"
+          (click)="templateEditorFactory.publish()">
+    Publish
+  </button>
+</div>

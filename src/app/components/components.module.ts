@@ -8,8 +8,6 @@ import { LastRevisedComponent } from './last-modified/last-revised/last-revised.
 import { UsernamePipe } from './last-modified/username.pipe';
 import { StreamlineIconComponent } from './streamline-icon/streamline-icon.component';
 
-import { TemplateEditorModule } from '../template-editor/template-editor.module';
-
 @NgModule({
   declarations: [
     MessageBoxComponent,
@@ -20,8 +18,7 @@ import { TemplateEditorModule } from '../template-editor/template-editor.module'
     StreamlineIconComponent
   ],
   imports: [
-    CommonModule,
-    TemplateEditorModule
+    CommonModule
   ],
   exports: [
     LastModifiedComponent,
