@@ -232,7 +232,7 @@ export class ComponentsService {
         directive.show();
       }
 
-      this._showAttributeList(false, 300);
+      this._showAttributeList(false);
     };
 
     onBackButton() {
@@ -258,7 +258,7 @@ export class ComponentsService {
       this.selected = null;
       this.pages = [];
 
-      this._showAttributeList(true, 0);
+      this._showAttributeList(true);
     };
 
     getComponentIcon(component?) {
@@ -365,10 +365,8 @@ export class ComponentsService {
       }
     };
 
-    _showAttributeList(value, delay) {
-      setTimeout( () => {
+    _showAttributeList(value) {
         this.showAttributeList = value;
-      }, !isNaN(delay) ? delay : 500);
     }
 
     _removeAnimationClasses(element) {

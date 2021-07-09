@@ -471,10 +471,6 @@ describe('ComponentsService', () => {
       directive.element.show.should.have.been.called;
       directive.show.should.have.been.called;
 
-      expect(componentsFactory.showAttributeList).to.be.true;
-
-      clock.tick(500);
-
       expect(componentsFactory.showAttributeList).to.be.false;
     });    
   });
@@ -648,9 +644,6 @@ describe('ComponentsService', () => {
       directive.element.show.should.have.been.called;
       directive.show.should.have.been.called;
 
-      expect(componentsFactory.showAttributeList).to.be.true;
-
-      clock.tick(500);
       expect(componentsFactory.showAttributeList).to.be.false;
     });
 
@@ -694,9 +687,6 @@ describe('ComponentsService', () => {
       directive.element.show.should.have.been.called;
       directive.show.should.have.been.called;
 
-      expect(componentsFactory.showAttributeList).to.be.true;
-
-      clock.tick(500);
       expect(componentsFactory.showAttributeList).to.be.false;
     });
   });
@@ -719,16 +709,12 @@ describe('ComponentsService', () => {
 
       componentsFactory.registerDirective(directive);
       componentsFactory.editComponent(component);
-      clock.tick(500);
 
       componentsFactory.backToList();
 
       expect(componentsFactory.selected).to.be.null;
       directive.element.hide.should.have.been.calledTwice;
 
-      expect(componentsFactory.showAttributeList).to.be.false;
-
-      clock.tick(500);
       expect(componentsFactory.showAttributeList).to.be.true;
     });
   });
@@ -752,7 +738,6 @@ describe('ComponentsService', () => {
       componentsFactory.highlightComponent = sandbox.stub();
       componentsFactory.registerDirective(directive);
       componentsFactory.editComponent(component);
-      clock.tick(500);
 
       componentsFactory.onBackButton();
 
@@ -760,9 +745,6 @@ describe('ComponentsService', () => {
       directive.element.hide.should.have.been.calledTwice;
       componentsFactory.highlightComponent.should.have.been.calledOnce;
 
-      expect(componentsFactory.showAttributeList).to.be.false;
-
-      clock.tick(500);
       expect(componentsFactory.showAttributeList).to.be.true;
     });
 
@@ -785,7 +767,6 @@ describe('ComponentsService', () => {
       componentsFactory.highlightComponent = sandbox.stub();
       componentsFactory.registerDirective(directive);
       componentsFactory.editComponent(component);
-      clock.tick(500);
 
       componentsFactory.onBackButton();
 
@@ -793,9 +774,6 @@ describe('ComponentsService', () => {
       directive.element.hide.should.have.been.calledTwice;
       componentsFactory.highlightComponent.should.have.been.calledOnce;
 
-      expect(componentsFactory.showAttributeList).to.be.false;
-
-      clock.tick(500);
       expect(componentsFactory.showAttributeList).to.be.true;
     });
 
@@ -818,8 +796,6 @@ describe('ComponentsService', () => {
       componentsFactory.highlightComponent = sandbox.stub();
       componentsFactory.registerDirective(directive);
       componentsFactory.editComponent(component);
-      clock.tick(500);
-
       componentsFactory.onBackButton();
 
       expect(componentsFactory.selected).to.not.be.null;
@@ -848,7 +824,6 @@ describe('ComponentsService', () => {
 
       componentsFactory.registerDirective(directive);
       componentsFactory.editComponent(component);
-      clock.tick(500);
 
       var visible = componentsFactory.isHeaderBottomRuleVisible(component);
 
@@ -874,7 +849,6 @@ describe('ComponentsService', () => {
 
       componentsFactory.registerDirective(directive);
       componentsFactory.editComponent(component);
-      clock.tick(500);
 
       var visible = componentsFactory.isHeaderBottomRuleVisible(component);
 
@@ -900,7 +874,6 @@ describe('ComponentsService', () => {
 
       componentsFactory.registerDirective(directive);
       componentsFactory.editComponent(component);
-      clock.tick(500);
 
       var visible = componentsFactory.isHeaderBottomRuleVisible(component);
 
