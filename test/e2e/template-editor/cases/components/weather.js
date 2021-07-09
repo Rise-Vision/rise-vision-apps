@@ -33,7 +33,6 @@ var WeatherComponentScenarios = function () {
 
       it('should open properties of Weather Component', function () {
         templateEditorPage.selectComponent("Weather Forecast");
-        browser.sleep(500); //wait for sidebar animation
         expect(weatherComponentPage.getFarenheitOption().isSelected()).to.eventually.not.be.true;
         expect(weatherComponentPage.getCelsiusOption().isSelected()).to.eventually.be.true;
       });
