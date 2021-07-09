@@ -9,6 +9,11 @@ describe('service: brandingFactory', function() {
   beforeEach(module(function($provide) {
     $provide.service('$q', function() {return Q;});
 
+    $provide.service('broadcaster', function() {
+      return {
+        emit: sinon.stub()
+      };
+    });
     $provide.service('blueprintFactory', function() {
       return {
         hasBranding: sinon.stub()
@@ -32,13 +37,14 @@ describe('service: brandingFactory', function() {
     });
   }));
 
-  var brandingFactory, $rootScope, userState, blueprintFactory, updateCompany, fileExistenceCheckService;
+  var brandingFactory, $rootScope, broadcaster, userState, blueprintFactory, updateCompany, fileExistenceCheckService;
 
   beforeEach(function() {
     inject(function($injector) {
       brandingFactory = $injector.get('brandingFactory');
       
       $rootScope = $injector.get('$rootScope');
+      broadcaster = $injector.get('broadcaster');
       blueprintFactory = $injector.get('blueprintFactory');
       userState = $injector.get('userState');
       updateCompany = $injector.get('updateCompany');
@@ -416,16 +422,12 @@ describe('service: brandingFactory', function() {
 
   });
 
-  it('setUnsavedChanges: ', function(done) {
-    $rootScope.$on('risevision.template-editor.brandingUnsavedChanges', function() {
-      done();
-    });
-
+  it('setUnsavedChanges: ', function() {
     brandingFactory.setUnsavedChanges();
     
     expect(brandingFactory.hasUnsavedChanges).to.be.true;
 
-    $rootScope.$digest();
+    broadcaster.emit.should.have.been.calledWith('risevision.template-editor.brandingUnsavedChanges');
   });
 
   describe('isRevised', function() {
