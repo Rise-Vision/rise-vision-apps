@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CommonHeaderModule } from '../common-header/common-header.module';
 import { ComponentsModule } from '../components/components.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { CanvaButtonComponent } from './components/canva-button/canva-button.component';
 import { AttributeDataService } from './services/attribute-data.service';
@@ -18,7 +19,8 @@ import { EncodeLinkPipe } from './pipes/encode-link.pipe';
   imports: [
     CommonModule,
     CommonHeaderModule,
-    ComponentsModule
+    ComponentsModule,
+    SharedModule
   ],
   declarations: [
     CanvaButtonComponent,
