@@ -4,12 +4,12 @@ import * as angular from 'angular';
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { TemplateEditorUtilsService } from './template-editor-utils.service';
 import { BlueprintService } from './blueprint.service';
+import { TemplateEditorService } from './template-editor.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ComponentsService {
-  static readonly HTML_TEMPLATE_DOMAIN = 'https://widgets.risevision.com';
 
   static readonly COMPONENTS_MAP = {
     'rise-branding-colors': {
@@ -305,7 +305,7 @@ export class ComponentsService {
         value: componentId
       };
       var iframe = window.document.getElementById('template-editor-preview') as HTMLIFrameElement;
-      iframe.contentWindow.postMessage(JSON.stringify(message), ComponentsService.HTML_TEMPLATE_DOMAIN);
+      iframe.contentWindow.postMessage(JSON.stringify(message), TemplateEditorService.HTML_TEMPLATE_DOMAIN);
     };
 
     isHeaderBottomRuleVisible(component) {

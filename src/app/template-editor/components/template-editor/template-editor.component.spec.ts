@@ -1,12 +1,13 @@
 import {expect} from 'chai';
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AjsState, AjsTransitions, TemplateEditorFactory, PresentationUtils } from 'src/app/ajs-upgraded-providers';
+import { AjsState, AjsTransitions, PresentationUtils } from 'src/app/ajs-upgraded-providers';
 import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
 
 import { TemplateEditorComponent } from './template-editor.component';
 import { AutoSaveService } from '../../services/auto-save.service';
 import { ComponentsService } from '../../services/components.service';
+import { TemplateEditorService } from '../../services/template-editor.service';
 
 describe('TemplateEditorComponent', () => {
   let sandbox = sinon.sandbox.create();
@@ -60,7 +61,7 @@ describe('TemplateEditorComponent', () => {
         {provide: AjsTransitions, useValue: mockAjsTransitions},
         {provide: BroadcasterService, useValue: mockBroadcasterService},
         {provide: ComponentsService, useValue: componentsFactory},
-        {provide: TemplateEditorFactory, useValue: templateEditorFactory},
+        {provide: TemplateEditorService, useValue: templateEditorFactory},
         {provide: AutoSaveService, useValue: autoSaveService},
         {provide: PresentationUtils, useValue: presentationUtils}
       ]
