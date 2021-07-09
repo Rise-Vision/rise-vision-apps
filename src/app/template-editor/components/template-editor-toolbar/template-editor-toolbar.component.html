@@ -26,7 +26,7 @@
       You don’t have permission to edit
     </span>
   </div>
-  <button id="publishButtonDesktop" require-role="cp" class="btn btn-primary btn-fixed-width"
+  <button id="publishButtonDesktop" *requireRole="'cp'" class="btn btn-primary btn-fixed-width"
           [disabled]="templateEditorFactory.isPublishDisabled()"
           (click)="templateEditorFactory.publish()">
     Publish
