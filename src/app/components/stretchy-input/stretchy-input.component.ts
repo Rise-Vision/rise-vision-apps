@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, DoCheck } from '@angular/core';
+import { Component, ElementRef, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 
 import * as angular from 'angular';
 import { downgradeComponent } from '@angular/upgrade/static';
@@ -8,9 +8,8 @@ import { downgradeComponent } from '@angular/upgrade/static';
   templateUrl: './stretchy-input.component.html',
   styleUrls: ['./stretchy-input.component.scss']
 })
-export class StretchyInputComponent implements OnInit, OnChanges, DoCheck {
+export class StretchyInputComponent implements OnChanges {
   public isEditingInput = false;
-  private wasEditingInput = true;
   private defaultInputValue: string;
   private defaultInputWidth = '';
 
@@ -19,49 +18,12 @@ export class StretchyInputComponent implements OnInit, OnChanges, DoCheck {
 
   constructor(private elementRef: ElementRef) { }
 
-  ngOnInit(): void {
-    setTimeout(() => {
-      this._initStretchy();      
-    });
+  _getStretchyElement() {
+    return this.elementRef.nativeElement.querySelector('input.input-stretchy');
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    // resize input if model was externally modified/updated
-    if (changes && !this.isEditingInput) {
-      this.defaultInputValue = this.ngModel;
-      setTimeout(() => {
-        this._initStretchy();      
-      });
-    }
-  }
-
-  ngDoCheck(): void {
-    if (this.isEditingInput === this.wasEditingInput) {
-      return;
-    }
-
-    let stretchyInputElement = this.elementRef.nativeElement.querySelector('input.input-stretchy');
-    this.wasEditingInput = this.isEditingInput;
-    
-    if (this.isEditingInput) {
-      setTimeout(() => {
-        this._setFocus(stretchyInputElement);
-      });
-    } else {
-      var nameVal = stretchyInputElement.value.replace(/\s/g, '');
-    
-      if (!nameVal) {
-        // user deleted entire name, set the name and width values to the defaults
-        this.ngModel = this.defaultInputValue;
-        this.ngModelChange.emit(this.ngModel);
-
-        stretchyInputElement.style.width = this.defaultInputWidth;
-      }
-    }
-  }
-
-  _initStretchy = () => {
-    var stretchyInputElement = this.elementRef.nativeElement.querySelector('input.input-stretchy');
+  _initStretchy() {
+    let stretchyInputElement = this._getStretchyElement();
 
     if (window.Stretchy) {
       window.Stretchy.resize(stretchyInputElement);
@@ -70,18 +32,14 @@ export class StretchyInputComponent implements OnInit, OnChanges, DoCheck {
     this.defaultInputWidth = window.getComputedStyle(stretchyInputElement).getPropertyValue('width');
   };
 
-  onInputBlur() {
-    this.isEditingInput = false;
-  };
+  ngOnChanges(changes: SimpleChanges) {
+    // resize input if model was externally modified/updated
+    if (changes && !this.isEditingInput) {
+      this.defaultInputValue = this.ngModel;
 
-  inputKeyDown(keyEvent: KeyboardEvent) {
-    // handle enter key
-    if (keyEvent.which === 13 && this.isEditingInput) {
-      this.isEditingInput = false;
-
-      keyEvent.preventDefault();
+      setTimeout(this._initStretchy.bind(this));
     }
-  };
+  }
 
   _setFocus(elem: any) {
     if (elem !== null) {
@@ -99,6 +57,51 @@ export class StretchyInputComponent implements OnInit, OnChanges, DoCheck {
       }
     }
   }
+
+  setEditable() {
+    if (this.isEditingInput) {
+      return;
+    }
+
+    let stretchyInputElement = this._getStretchyElement();
+
+    setTimeout(this._setFocus.bind(this, stretchyInputElement));
+
+    this.isEditingInput = true;
+  }
+
+  _setNonEditable() {
+    if (!this.isEditingInput) {
+      return;
+    }
+
+    let stretchyInputElement = this._getStretchyElement();
+    let nameVal = stretchyInputElement.value.replace(/\s/g, '');
+    
+    if (!nameVal) {
+      // user deleted entire name, set the name and width values to the defaults
+      this.ngModel = this.defaultInputValue;
+      this.ngModelChange.emit(this.ngModel);
+
+      stretchyInputElement.value = this.ngModel;
+      stretchyInputElement.style.width = this.defaultInputWidth;
+    }
+
+    this.isEditingInput = false;
+  }
+
+  onInputBlur() {
+    this._setNonEditable();
+  };
+
+  inputKeyDown(keyEvent: KeyboardEvent) {
+    // handle enter key
+    if (keyEvent.which === 13 && this.isEditingInput) {
+      this._setNonEditable();
+
+      keyEvent.preventDefault();
+    }
+  };
 
 }
 
