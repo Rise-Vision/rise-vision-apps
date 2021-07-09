@@ -83,6 +83,8 @@ var TwitterComponentScenarios = function (subCompanyName) {
         presentationsListPage.loadPresentation(connectedPresentationName);
 
         templateEditorPage.selectComponent(componentLabel);
+        browser.sleep(500); //wait for sidebar animation
+        
         expect(twitterComponentPage.getUsername().isEnabled()).to.eventually.be.true;
         expect(twitterComponentPage.getMaxitems().isEnabled()).to.eventually.be.true;
         expect(twitterComponentPage.getConnectButton().isEnabled()).to.eventually.be.true;
