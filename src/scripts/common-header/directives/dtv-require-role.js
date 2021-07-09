@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.common.header.directives')
-  .directive('requireRole', ['userState',
+  .directive('requireRole2', ['userState',
     function (userState) {
       return {
         restrict: 'A',

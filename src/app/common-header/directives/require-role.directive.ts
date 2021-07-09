@@ -1,19 +1,20 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Component, Directive, ElementRef, Input } from '@angular/core';
 import { UserState } from 'src/app/ajs-upgraded-providers';
+import { downgradeComponent } from '@angular/upgrade/static';
+import * as angular from 'angular';
+import * as _ from 'lodash'
 
 @Directive({
-  selector: '[requireRole]'
+  selector: '[require-role]'
 })
 export class RequireRoleDirective {
-  private hasView = false;
 
   constructor(
-    private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef,
+    private elementRef: ElementRef,
     private userState: UserState
   ) { }
 
-  @Input() set requireRole(roles: string) {
+  @Input('require-role') set requireRole(roles: string) {
     var accessDenied = true;
     var requiredRoles = roles.split(' ');
     for (var i in requiredRoles) {
@@ -22,12 +23,27 @@ export class RequireRoleDirective {
       }
     }
     if (accessDenied) {
-      this.viewContainer.clear();
-      this.hasView = false;      
-    } else if (!this.hasView) {
-      this.viewContainer.createEmbeddedView(this.templateRef);
-      this.hasView = true;
+      this.elementRef.nativeElement.remove();
     }
   }
 
 }
+
+
+@Component({
+  selector: 'requireRole',
+  template: `<ng-content></ng-content>`,
+  providers: [RequireRoleDirective]
+})
+export class RequireRoleDirectiveWrapper {
+  constructor(directive: RequireRoleDirective, private hostElement: ElementRef){
+    directive.requireRole = this.hostElement.nativeElement.getAttribute('require-role');
+  }
+}
+const allowAttribute = directiveFactory => [ '$injector', $injector =>
+    Object.assign($injector.invoke(directiveFactory), {restrict: 'EA'})
+];
+angular.module('risevision.common.header.directives')
+  .directive('requireRole', allowAttribute(downgradeComponent({
+    component: RequireRoleDirectiveWrapper,
+  })));
