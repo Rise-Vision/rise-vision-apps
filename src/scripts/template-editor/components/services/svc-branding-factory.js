@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('brandingFactory', ['$rootScope', '$q', 'blueprintFactory', 'userState', 'updateCompany',
+  .factory('brandingFactory', ['$rootScope', '$q', 'broadcaster', 'blueprintFactory', 'userState', 'updateCompany',
     'fileExistenceCheckService', 'DEFAULT_IMAGE_THUMBNAIL', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
-    function ($rootScope, $q, blueprintFactory, userState, updateCompany, fileExistenceCheckService,
+    function ($rootScope, $q, broadcaster, blueprintFactory, userState, updateCompany, fileExistenceCheckService,
       DEFAULT_IMAGE_THUMBNAIL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var brandingComponent = {
         type: 'rise-branding'
@@ -96,7 +96,7 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.setUnsavedChanges = function () {
-        $rootScope.$broadcast('risevision.template-editor.brandingUnsavedChanges');
+        broadcaster.emit('risevision.template-editor.brandingUnsavedChanges');
 
         this.hasUnsavedChanges = true;
       };
