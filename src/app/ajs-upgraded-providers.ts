@@ -127,6 +127,17 @@ export const purchaseFlowTrackerProvider = {
   deps: ['$injector']
 };
 
+export abstract class PresentationTracker extends Function {
+}
+export const presentationTrackerProvider = {
+  provide: PresentationTracker,
+  useFactory: function ($injector: any) {
+    return $injector.get('presentationTracker');
+  },
+  deps: ['$injector']
+};
+
+
 
 // components/plans
 export abstract class PlansService {
@@ -177,29 +188,7 @@ export const userAuthFactoryProvider = {
 };
 
 
-// template-editor/services
-export abstract class TemplateEditorFactory {
-  [key: string]: any;
-}
-export const templateEditorFactoryProvider = {
-  provide: TemplateEditorFactory,
-  useFactory: function ($injector: any) {
-    return $injector.get('templateEditorFactory');
-  },
-  deps: ['$injector']
-};
-
-export abstract class ComponentsFactory {
-  [key: string]: any;
-}
-export const componentsFactoryProvider = {
-  provide: ComponentsFactory,
-  useFactory: function ($injector: any) {
-    return $injector.get('componentsFactory');
-  },
-  deps: ['$injector']
-};
-
+// editor/services
 export abstract class PresentationUtils {
   [key: string]: any;
 }
@@ -207,6 +196,64 @@ export const presentationUtilsProvider = {
   provide: PresentationUtils,
   useFactory: function ($injector: any) {
     return $injector.get('presentationUtils');
+  },
+  deps: ['$injector']
+};
+
+export abstract class PresentationService {
+  [key: string]: any;
+}
+export const presentationServiceProvider = {
+  provide: PresentationService,
+  useFactory: function ($injector: any) {
+    return $injector.get('presentation');
+  },
+  deps: ['$injector']
+};
+
+
+// template-editor/components/services
+export abstract class BrandingFactory {
+  [key: string]: any;
+}
+export const brandingFactoryProvider = {
+  provide: BrandingFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('brandingFactory');
+  },
+  deps: ['$injector']
+};
+
+
+//schedules/services
+export abstract class CreateFirstScheduleService extends Function {
+}
+export const createFirstScheduleServiceProvider = {
+  provide: CreateFirstScheduleService,
+  useFactory: function ($injector: any) {
+    return $injector.get('createFirstSchedule');
+  },
+  deps: ['$injector']
+};
+
+export abstract class ScheduleFactory {
+  [key: string]: any;
+}
+export const scheduleFactoryProvider = {
+  provide: ScheduleFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('scheduleFactory');
+  },
+  deps: ['$injector']
+};
+
+export abstract class ScheduleSelectorFactory {
+  [key: string]: any;
+}
+export const scheduleSelectorFactoryProvider = {
+  provide: ScheduleSelectorFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('scheduleSelectorFactory');
   },
   deps: ['$injector']
 };
