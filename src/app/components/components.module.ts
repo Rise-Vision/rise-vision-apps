@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from "@angular/forms";
+
 import { ModalService } from './modals/modal.service';
 import { MessageBoxComponent } from './modals/message-box/message-box.component';
 import { ConfirmModalComponent } from './modals/confirm-modal/confirm-modal.component';
@@ -7,6 +9,7 @@ import { LastModifiedComponent } from './last-modified/last-modified/last-modifi
 import { LastRevisedComponent } from './last-modified/last-revised/last-revised.component';
 import { UsernamePipe } from './last-modified/username.pipe';
 import { StreamlineIconComponent } from './streamline-icon/streamline-icon.component';
+import { StretchyInputComponent } from './stretchy-input/stretchy-input.component';
 
 @NgModule({
   declarations: [
@@ -15,16 +18,19 @@ import { StreamlineIconComponent } from './streamline-icon/streamline-icon.compo
     LastModifiedComponent,
     LastRevisedComponent, 
     UsernamePipe,
-    StreamlineIconComponent
+    StreamlineIconComponent,
+    StretchyInputComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   exports: [
     LastModifiedComponent,
     LastRevisedComponent,
     UsernamePipe,
-    StreamlineIconComponent
+    StreamlineIconComponent,
+    StretchyInputComponent
   ]
 })
 export class ComponentsModule {

@@ -9,16 +9,16 @@
 
 <div class="flex-row ml-auto hidden-xs">
   <div class="auto-save pr-4">
-    <last-modified change-date="templateEditorFactory.presentation.changeDate" changed-by="templateEditorFactory.presentation.changedBy"></last-modified>
+    <last-modified [changeDate]="templateEditorFactory.presentation.changeDate" [changedBy]="templateEditorFactory.presentation.changedBy"></last-modified>
     •
     <span id="autoSavingDesktop" *ngIf="templateEditorFactory.hasContentEditorRole()">
-      <span [hidden]="templateEditorFactory.savingPresentation || !templateEditorFactory.isUnsaved()">
+      <span [shown]="!templateEditorFactory.savingPresentation && templateEditorFactory.isUnsaved()">
         Unsaved changes
       </span>
-      <span [hidden]="!templateEditorFactory.savingPresentation">
+      <span [shown]="templateEditorFactory.savingPresentation">
         Saving changes...
       </span>
-      <span [hidden]="templateEditorFactory.savingPresentation || templateEditorFactory.isUnsaved()">
+      <span [shown]="!templateEditorFactory.savingPresentation && !templateEditorFactory.isUnsaved()">
         All changes saved <streamline-icon name="checkmark" width="12" height="12"></streamline-icon>
       </span>
     </span>
