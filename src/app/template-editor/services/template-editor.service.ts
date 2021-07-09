@@ -5,6 +5,7 @@ import { AjsState, BrandingFactory, CreateFirstScheduleService, PresentationServ
 import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
 import { TemplateEditorUtilsService } from './template-editor-utils.service';
 import { BlueprintService } from './blueprint.service';
+import { PromiseUtilsService } from 'src/app/shared/services/promise-utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,8 @@ export class TemplateEditorService {
   static readonly REVISION_STATUS_REVISED = 'Revised';
   static readonly HTML_PRESENTATION_TYPE = 'HTML Template';
 
-  hasUnsavedChanges: false;
-  presentation: any;
+  hasUnsavedChanges = false;
+  presentation;
   loadingPresentation;
   savingPresentation;
   errorMessage;
@@ -34,7 +35,8 @@ export class TemplateEditorService {
     private blueprintFactory: BlueprintService,
     private scheduleFactory: ScheduleFactory,
     private presentationTracker: PresentationTracker,
-    private scheduleSelectorFactory: ScheduleSelectorFactory) { 
+    private scheduleSelectorFactory: ScheduleSelectorFactory,
+    private promiseUtils: PromiseUtilsService) { 
       this._init();
     }
 
@@ -97,7 +99,7 @@ export class TemplateEditorService {
       this.presentationTracker('HTML Template Copied', productDetails.productCode, productDetails.name);
 
       return this.blueprintFactory.getBlueprintCached(this.presentation.productCode)
-        .then(this.save)
+        .then(this.save.bind(this))
         .then(null, (e) => {
           this._showErrorMessage('add', e);
           return Promise.reject(e);
@@ -154,7 +156,7 @@ export class TemplateEditorService {
     };
 
     save() {
-      var deferred = this._generateDeferredPromise(),
+      var deferred = this.promiseUtils.generateDeferredPromise(),
         saveFunction;
 
       if (this.presentation.id) {
@@ -188,8 +190,8 @@ export class TemplateEditorService {
       return deferred.promise;
     };
 
-    getPresentation(presentationId) {
-      var deferred = this._generateDeferredPromise();
+    getPresentation(presentationId?) {
+      var deferred = this.promiseUtils.generateDeferredPromise();
 
       this._clearMessages();
 
@@ -220,7 +222,7 @@ export class TemplateEditorService {
     };
 
     deletePresentation() {
-      var deferred = this._generateDeferredPromise();
+      var deferred = this.promiseUtils.generateDeferredPromise();
 
       this._clearMessages();
 
@@ -267,7 +269,7 @@ export class TemplateEditorService {
     };
 
     _publish() {
-      var deferred = this._generateDeferredPromise();
+      var deferred = this.promiseUtils.generateDeferredPromise();
 
       this._clearMessages();
 
@@ -341,16 +343,7 @@ export class TemplateEditorService {
 
       this._clearMessages();
     };
-
-    _generateDeferredPromise() {
-      let resolve;
-      let reject;
-      let p = new Promise((res, rej) => {
-        resolve = res;
-        reject = rej;
-      });
-      return { promise: p, reject, resolve };
-    }
+    
 }
 
 angular.module('risevision.template-editor.services')

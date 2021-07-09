@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .constant('HTML_TEMPLATE_DOMAIN2', 'https://widgets.risevision.com')
-  .factory('templateEditorFactory2', ['$q', '$log', '$state', 'broadcaster', 'presentation',
+  .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
+  .factory('templateEditorFactory', ['$q', '$log', '$state', 'broadcaster', 'presentation',
     'processErrorCode', 'userState', 'createFirstSchedule',
     'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationTracker',
     'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED', 'scheduleSelectorFactory',
