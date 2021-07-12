@@ -14,6 +14,7 @@ import {
   SubscriptionFactory, subscriptionFactoryProvider,
   PresentationUtils, presentationUtilsProvider,
   UserAuthFactory, userAuthFactoryProvider,
+  CompanySettingsFactory, companySettingsFactoryProvider,
   UserState, userStateProvider, purchaseFlowTrackerProvider, PurchaseFlowTracker, contactServiceProvider, ContactService, PresentationService, presentationServiceProvider, createFirstScheduleServiceProvider, CreateFirstScheduleService, brandingFactoryProvider, BrandingFactory, scheduleFactoryProvider, ScheduleFactory, PresentationTracker, presentationTrackerProvider, ScheduleSelectorFactory, scheduleSelectorFactoryProvider
 } from './ajs-upgraded-providers';
 
@@ -111,6 +112,11 @@ describe('ajs-upgraded-providers', () => {
   it('contactService:', () => {
     testRegisterProvider(contactServiceProvider, ContactService);
     testAngularJsService(contactServiceProvider, 'contactService');
+  });
+
+  it('companySettingsFactory:', () => {
+    testRegisterProvider(companySettingsFactoryProvider, CompanySettingsFactory);
+    testAngularJsService(companySettingsFactoryProvider, 'companySettingsFactory');
   });
 
   it('presentation:', () => {
