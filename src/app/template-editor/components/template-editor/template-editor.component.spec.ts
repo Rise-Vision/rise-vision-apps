@@ -1,10 +1,13 @@
 import {expect} from 'chai';
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AjsState, AjsTransitions, ComponentsFactory, TemplateEditorFactory, AutoSaveService, PresentationUtils } from 'src/app/ajs-upgraded-providers';
+import { AjsState, AjsTransitions, PresentationUtils } from 'src/app/ajs-upgraded-providers';
 import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
 
 import { TemplateEditorComponent } from './template-editor.component';
+import { AutoSaveService } from '../../services/auto-save.service';
+import { ComponentsService } from '../../services/components.service';
+import { TemplateEditorService } from '../../services/template-editor.service';
 
 describe('TemplateEditorComponent', () => {
   let sandbox = sinon.sandbox.create();
@@ -45,15 +48,21 @@ describe('TemplateEditorComponent', () => {
       isMobileBrowser: () => isMobileBrowser
     };
 
+    //override component-level provider
+    TestBed.overrideComponent( TemplateEditorComponent, {
+      set: {
+        providers: [{provide: AutoSaveService, useValue: autoSaveService }]
+      }
+    });
     await TestBed.configureTestingModule({
       declarations: [ TemplateEditorComponent ],
       providers: [
         {provide: AjsState, useValue: mockAjsState},
         {provide: AjsTransitions, useValue: mockAjsTransitions},
         {provide: BroadcasterService, useValue: mockBroadcasterService},
-        {provide: ComponentsFactory, useValue: componentsFactory},
-        {provide: TemplateEditorFactory, useValue: templateEditorFactory},
-        {provide: AutoSaveService, useValue: () => autoSaveService},
+        {provide: ComponentsService, useValue: componentsFactory},
+        {provide: TemplateEditorService, useValue: templateEditorFactory},
+        {provide: AutoSaveService, useValue: autoSaveService},
         {provide: PresentationUtils, useValue: presentationUtils}
       ]
     })
