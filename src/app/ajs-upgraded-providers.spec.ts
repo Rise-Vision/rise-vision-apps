@@ -12,12 +12,9 @@ import {
   ProcessErrorCode, processErrorCodeProvider, 
   StoreService, storeServiceProvider,
   SubscriptionFactory, subscriptionFactoryProvider,
-  TemplateEditorFactory, templateEditorFactoryProvider,
-  ComponentsFactory, componentsFactoryProvider,
-  AutoSaveService, autoSaveServiceProvider,
   PresentationUtils, presentationUtilsProvider,
   UserAuthFactory, userAuthFactoryProvider,
-  UserState, userStateProvider, purchaseFlowTrackerProvider, PurchaseFlowTracker, contactServiceProvider, ContactService
+  UserState, userStateProvider, purchaseFlowTrackerProvider, PurchaseFlowTracker, contactServiceProvider, ContactService, PresentationService, presentationServiceProvider, createFirstScheduleServiceProvider, CreateFirstScheduleService, brandingFactoryProvider, BrandingFactory, scheduleFactoryProvider, ScheduleFactory, PresentationTracker, presentationTrackerProvider, ScheduleSelectorFactory, scheduleSelectorFactoryProvider
 } from './ajs-upgraded-providers';
 
 describe('ajs-upgraded-providers', () => {
@@ -44,21 +41,6 @@ describe('ajs-upgraded-providers', () => {
   it('analyticsFactory:', () => {
     testRegisterProvider(analyticsFactoryProvider, AnalyticsFactory);
     testAngularJsService(analyticsFactoryProvider, 'analyticsFactory');
-  });
-
-  it('templateEditorFactory:', () => {
-    testRegisterProvider(templateEditorFactoryProvider, TemplateEditorFactory);
-    testAngularJsService(templateEditorFactoryProvider, 'templateEditorFactory');
-  });
-
-  it('componentsFactory:', () => {
-    testRegisterProvider(componentsFactoryProvider, ComponentsFactory);
-    testAngularJsService(componentsFactoryProvider, 'componentsFactory');
-  });
-
-  it('autoSaveService:', () => {
-    testRegisterProvider(autoSaveServiceProvider, AutoSaveService);
-    testAngularJsService(autoSaveServiceProvider, 'AutoSaveService');
   });
 
   it('presentationUtils:', () => {
@@ -131,5 +113,34 @@ describe('ajs-upgraded-providers', () => {
     testAngularJsService(contactServiceProvider, 'contactService');
   });
 
+  it('presentation:', () => {
+    testRegisterProvider(presentationServiceProvider, PresentationService);
+    testAngularJsService(presentationServiceProvider, 'presentation');
+  });
+
+  it('createFirstSchedule:', () => {
+    testRegisterProvider(createFirstScheduleServiceProvider, CreateFirstScheduleService);
+    testAngularJsService(createFirstScheduleServiceProvider, 'createFirstSchedule');
+  });
+
+  it('brandingFactory:', () => {
+    testRegisterProvider(brandingFactoryProvider, BrandingFactory);
+    testAngularJsService(brandingFactoryProvider, 'brandingFactory');
+  });
+
+  it('scheduleFactory:', () => {
+    testRegisterProvider(scheduleFactoryProvider, ScheduleFactory);
+    testAngularJsService(scheduleFactoryProvider, 'scheduleFactory');
+  });
+
+  it('presentationTracker:', () => {
+    testRegisterProvider(presentationTrackerProvider, PresentationTracker);
+    testAngularJsService(presentationTrackerProvider, 'presentationTracker');
+  });
+
+  it('scheduleSelectorFactory:', () => {
+    testRegisterProvider(scheduleSelectorFactoryProvider, ScheduleSelectorFactory);
+    testAngularJsService(scheduleSelectorFactoryProvider, 'scheduleSelectorFactory');
+  });  
   
 });

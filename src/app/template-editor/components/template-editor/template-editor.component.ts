@@ -3,31 +3,38 @@ import { Component, DoCheck, OnDestroy } from '@angular/core';
 import * as _ from 'lodash';
 import * as angular from 'angular';
 import { downgradeComponent } from '@angular/upgrade/static';
-import { AjsState, AjsTransitions, ComponentsFactory, TemplateEditorFactory, AutoSaveService, PresentationUtils } from 'src/app/ajs-upgraded-providers';
+import { AjsState, AjsTransitions, PresentationUtils } from 'src/app/ajs-upgraded-providers';
 import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
+import { AutoSaveService } from '../../services/auto-save.service';
+import { ComponentsService } from '../../services/components.service';
+import { TemplateEditorService } from '../../services/template-editor.service';
 
+
+export function AutoSaveServiceFactory(templateEditorFactory: TemplateEditorService) {
+  return new AutoSaveService(templateEditorFactory.save.bind(templateEditorFactory));
+}
 @Component({
   selector: 'app-template-editor',
   templateUrl: './template-editor.component.html',
-  styleUrls: ['./template-editor.component.scss']
+  styleUrls: ['./template-editor.component.scss'],
+  providers: [
+    {provide: AutoSaveService, useFactory: AutoSaveServiceFactory, deps: [TemplateEditorService] }
+  ]
 })
 export class TemplateEditorComponent implements DoCheck, OnDestroy {
   private subscription: any;
   private _oldPresentation: any;
 
-  private autoSaveService: any;
   private _bypassUnsaved = false;
 
   constructor(
     private $state: AjsState,
     private $transitions: AjsTransitions,
     private broadcaster: BroadcasterService,
-    public componentsFactory: ComponentsFactory,
-    private templateEditorFactory: TemplateEditorFactory,
-    private AutoSaveService: AutoSaveService,
+    public componentsFactory: ComponentsService,
+    private templateEditorFactory: TemplateEditorService,
+    private autoSaveService: AutoSaveService,
     private presentationUtils: PresentationUtils) {
-
-    this.autoSaveService = this.AutoSaveService(this.templateEditorFactory.save);
 
     this.templateEditorFactory.hasUnsavedChanges = false;
 

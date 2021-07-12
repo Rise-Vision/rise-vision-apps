@@ -459,10 +459,7 @@
               "src/scripts/editor/directives/dtv-presentation-name.js",
 
               "src/scripts/template-editor/app.js",
-              "src/scripts/template-editor/services/svc-template-editor-factory.js",
               "src/scripts/template-editor/services/svc-template-editor-utils.js",
-              "src/scripts/template-editor/services/svc-auto-save-service.js",
-              "src/scripts/template-editor/services/svc-components-factory.js",
 
               "src/scripts/template-editor/components/services/svc-storage-manager-factory.js",
               "src/scripts/template-editor/components/services/svc-playlist-component-factory.js",

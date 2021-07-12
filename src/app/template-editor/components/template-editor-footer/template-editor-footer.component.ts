@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { TemplateEditorFactory } from 'src/app/ajs-upgraded-providers';
+import { TemplateEditorService } from '../../services/template-editor.service';
 
 @Component({
   selector: 'template-editor-footer',
@@ -9,6 +9,6 @@ import { TemplateEditorFactory } from 'src/app/ajs-upgraded-providers';
 })
 export class TemplateEditorFooterComponent {
 
-  constructor(public templateEditorFactory: TemplateEditorFactory) {}
+  constructor(public templateEditorFactory: TemplateEditorService) {}
 
 }
