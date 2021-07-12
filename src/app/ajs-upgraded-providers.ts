@@ -79,6 +79,16 @@ export const contactServiceProvider = {
   deps: ['$injector']
 };
 
+export abstract class CompanySettingsFactory {
+  [key: string]: any;
+}
+export const companySettingsFactoryProvider = {
+  provide: CompanySettingsFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('companySettingsFactory');
+  },
+  deps: ['$injector']
+};
 
 // components/canva-type-picker
 export abstract class CanvaTypePicker extends Function {

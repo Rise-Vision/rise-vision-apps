@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+
+import * as $ from 'jquery';
+import * as jQuery from 'jquery';
 import * as _ from 'lodash';
 import * as angular from 'angular';
 import { downgradeInjectable } from '@angular/upgrade/static';
@@ -191,6 +194,10 @@ export class ComponentsService {
     };
 
     registerDirective(directive) {
+      if (!(directive.element instanceof jQuery)) {
+        directive.element = $(directive.element);
+      }
+
       directive.element.hide();
       this.directives[directive.type] = directive;
 

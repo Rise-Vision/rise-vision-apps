@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 import { TestBed } from '@angular/core/testing';
 
+import * as $ from 'jquery';
+
 import { ComponentsService } from './components.service';
 import { TemplateEditorUtilsService } from './template-editor-utils.service';
 import { BlueprintService } from './blueprint.service';
@@ -38,6 +40,15 @@ describe('ComponentsService', () => {
     });
     componentsFactory = TestBed.inject(ComponentsService);
   });
+
+  var getElement = () => {
+    var jqueryElement = $(document.createElement("div"));
+    
+    sandbox.spy(jqueryElement, 'hide');
+    sandbox.spy(jqueryElement, 'show');
+
+    return jqueryElement;
+  }
 
   afterEach(function() {
     clock.restore();
@@ -299,9 +310,7 @@ describe('ComponentsService', () => {
       var component = {
         type: 'rise-test',
         icon: 'fa-test',
-        element: {
-          hide: sandbox.stub()
-        },
+        element: getElement(),
         show: function() {}
       };
 
@@ -317,10 +326,7 @@ describe('ComponentsService', () => {
       var component = {
         type: 'rise-test',
         icon: 'fa-test',
-        element: {
-          hide: function() {},
-          show: function() {}
-        },
+        element: getElement(),
         onPresentationOpen: sandbox.stub()
       };
 
@@ -332,10 +338,7 @@ describe('ComponentsService', () => {
     it('should populate directive properties', function() {
       var directive :any = {
         type: 'rise-text',
-        element: {
-          hide: function() {},
-          show: function() {}
-        }
+        element: getElement()
       };
 
       componentsFactory.registerDirective(directive);
@@ -350,9 +353,7 @@ describe('ComponentsService', () => {
         var component = {
           type: 'rise-test',
           icon: 'fa-test',
-          element: {
-            hide: sandbox.stub()
-          }
+          element: getElement()
         };
 
         componentsFactory.registerDirective(component);
@@ -366,9 +367,7 @@ describe('ComponentsService', () => {
           type: 'rise-test',
           icon: 'fa-test',
           panel: '.component-panel',
-          element: {
-            hide: sandbox.stub()
-          }
+          element: getElement()
         };
 
         componentsFactory.registerDirective(component);
@@ -380,9 +379,7 @@ describe('ComponentsService', () => {
       it('should not override default directive panel', function() {
         var component = {
           type: 'rise-video',
-          element: {
-            hide: sandbox.stub()
-          }
+          element: getElement()
         };
 
         componentsFactory.registerDirective(component);
@@ -426,9 +423,7 @@ describe('ComponentsService', () => {
       it('should get directive from registered list', function() {
         var directive = {
           type: 'rise-text',
-          element: {
-            hide: function() {},
-          },
+          element: getElement(),
           show: sandbox.stub()
         };
 
@@ -452,10 +447,7 @@ describe('ComponentsService', () => {
       var directive = {
         type: 'rise-test',
         icon: 'fa-test',
-        element: {
-          hide: function() {},
-          show: sandbox.stub()
-        },
+        element: getElement(),
         show: sandbox.stub()
       };
 
@@ -574,9 +566,7 @@ describe('ComponentsService', () => {
       directive = {
         type: 'rise-test',
         title: 'directiveTitle',
-        element: {
-          hide: function() {}
-        }
+        element: getElement()
       };
 
       component = {
@@ -620,10 +610,7 @@ describe('ComponentsService', () => {
       var directive = {
         type: 'rise-test',
         icon: 'fa-test',
-        element: {
-          hide: function() {},
-          show: sandbox.stub()
-        },
+        element: getElement(),
         show: sandbox.stub()
       };
 
@@ -651,10 +638,7 @@ describe('ComponentsService', () => {
       var directive = {
         type: 'rise-test',
         icon: 'fa-test',
-        element: {
-          hide: function() {},
-          show: sandbox.stub()
-        },
+        element: getElement(),
         show: sandbox.stub()
       };
 
@@ -696,10 +680,7 @@ describe('ComponentsService', () => {
       var directive = {
         type: 'rise-test',
         icon: 'fa-test',
-        element: {
-          hide: sandbox.stub(),
-          show: function() {}
-        },
+        element: getElement(),
         show: function() {}
       };
 
@@ -724,10 +705,7 @@ describe('ComponentsService', () => {
       var directive = {
         type: 'rise-test',
         icon: 'fa-test',
-        element: {
-          hide: sandbox.stub(),
-          show: function() {}
-        },
+        element: getElement(),
         show: function() {}
       };
 
@@ -752,10 +730,7 @@ describe('ComponentsService', () => {
       var directive = {
         type: 'rise-test',
         icon: 'fa-test',
-        element: {
-          hide: sandbox.stub(),
-          show: function() {}
-        },
+        element: getElement(),
         show: function() {},
         onBackHandler: function() { return false; }
       };
@@ -781,10 +756,7 @@ describe('ComponentsService', () => {
       var directive = {
         type: 'rise-test',
         icon: 'fa-test',
-        element: {
-          hide: sandbox.stub(),
-          show: function() {}
-        },
+        element: getElement(),
         show: function() {},
         onBackHandler: function() { return true; }
       };
@@ -810,10 +782,7 @@ describe('ComponentsService', () => {
       var directive = {
         type: 'rise-test',
         icon: 'fa-test',
-        element: {
-          hide: sandbox.stub(),
-          show: function() {}
-        },
+        element: getElement(),
         show: function() {},
         onBackHandler: function() { return true; }
       };
@@ -859,10 +828,7 @@ describe('ComponentsService', () => {
       var directive = {
         type: 'rise-test',
         icon: 'fa-test',
-        element: {
-          hide: sandbox.stub(),
-          show: function() {}
-        },
+        element: getElement(),
         show: function() {},
         isHeaderBottomRuleVisible: function() { return false; },
         onBackHandler: function() { return true; }
@@ -906,19 +872,13 @@ describe('ComponentsService', () => {
         directive1 = {
           type: 'rise-test-1',
           panel: 'panel1',
-          element: {
-            hide: sandbox.stub(),
-            show: sandbox.stub()
-          },
+          element: getElement(),
           show: sandbox.stub()
         };
         directive2 = {
           type: 'rise-test-2',
           panel: 'panel2',
-          element: {
-            hide: sandbox.stub(),
-            show: sandbox.stub()
-          },
+          element: getElement(),
           show: sandbox.stub()
         };
 
@@ -1023,19 +983,13 @@ describe('ComponentsService', () => {
         directive1 = {
           type: 'rise-test-1',
           panel: 'panel1',
-          element: {
-            hide: sandbox.stub(),
-            show: sandbox.stub()
-          },
+          element: getElement(),
           show: sandbox.stub()
         };
         directive2 = {
           type: 'rise-test-2',
           panel: 'panel2',
-          element: {
-            hide: sandbox.stub(),
-            show: sandbox.stub()
-          },
+          element: getElement(),
           show: sandbox.stub()
         };
 
