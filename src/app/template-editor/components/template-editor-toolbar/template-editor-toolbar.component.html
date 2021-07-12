@@ -1,5 +1,5 @@
 <!-- Presentation Name -->
-<stretchy-input class="presentation-name" [(ngModel)]="templateEditorFactory.presentation.name"></stretchy-input>
+<stretchy-input class="presentation-name" [(ngModel)]="templateEditorFactory.presentation.name" ngDefaultControl></stretchy-input>
 
 <div>
   <button id="deleteButton" [disabled]="!templateEditorFactory.presentation.id" (click)="confirmDelete()" class="btn-icon pl-0">
