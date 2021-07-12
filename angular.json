@@ -118,7 +118,6 @@
               "src/scripts/common-header/directives/dtv-empty-select-parser.js",
               "src/scripts/common-header/directives/dtv-integer-parser.js",
               "src/scripts/common-header/directives/dtv-link-cid.js",
-              "src/scripts/common-header/directives/dtv-require-role.js",
               "src/scripts/common-header/directives/dtv-website-validator.js",
               "src/scripts/common-header/directives/dtv-email-validator.js",
 
@@ -289,7 +288,6 @@
               "src/scripts/common/directives/dtv-rv-sortable.js",
               "src/scripts/common/directives/dtv-guid-validator.js",
               "src/scripts/common/directives/dtv-tooltip-digest-on-resize.js",
-              "src/scripts/common/directives/dtv-stretchy-input.js",
               "src/scripts/common/directives/dtv-yes-no-toggle.js",
               "src/scripts/common/directives/dtv-madero-checkbox.js",
               "src/scripts/common/directives/dtv-weekly-templates.js",
@@ -480,8 +478,6 @@
               "src/scripts/template-editor/directives/dtv-attribute-editor.js",
               "src/scripts/template-editor/directives/dtv-attribute-list.js",
               "src/scripts/template-editor/directives/dtv-editor-preview-holder.js",
-              "src/scripts/template-editor/directives/dtv-footer.js",
-              "src/scripts/template-editor/directives/dtv-toolbar.js",
               "src/scripts/template-editor/directives/dtv-component.js",
               "src/scripts/template-editor/directives/dtv-component-icon.js",
               "src/scripts/template-editor/directives/dtv-basic-uploader.js",
@@ -680,7 +676,6 @@
                 "src/scripts/common-header/directives/dtv-empty-select-parser.js",
                 "src/scripts/common-header/directives/dtv-integer-parser.js",
                 "src/scripts/common-header/directives/dtv-link-cid.js",
-                "src/scripts/common-header/directives/dtv-require-role.js",
                 "src/scripts/common-header/directives/dtv-website-validator.js",
                 "src/scripts/common-header/directives/dtv-email-validator.js",
 
