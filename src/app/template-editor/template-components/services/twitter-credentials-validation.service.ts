@@ -28,15 +28,14 @@ export class TwitterCredentialsValidationService {
         }
       }
     );
-    this.httpClient.request(
-      request).toPromise().then((response: any) => {
-          if (response && response.data) {
-            deferred.resolve(response.data.success);
-          }
-        }, (err) => {
-          console.error('Failed to verify twitter credentials.', err);
-          deferred.reject(err);
-        });
+    this.httpClient.request(request).toPromise().then((response: any) => {
+      if (response && response.data) {
+        deferred.resolve(response.data.success);
+      }
+    }).catch( (err) => {
+      console.error('Failed to verify twitter credentials.', err);
+      deferred.reject(err);
+    });
 
     return deferred.promise;
   };

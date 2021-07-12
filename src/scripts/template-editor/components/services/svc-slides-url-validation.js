@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .service('slidesUrlValidationService', ['$q', '$http',
+  .service('slidesUrlValidationService2', ['$q', '$http',
     function ($q, $http) {
       var factory = {},
         proxyUrl = 'https://proxy.risevision.com/';
