@@ -469,7 +469,6 @@
               "src/scripts/template-editor/components/services/svc-instrument-search.js",
               "src/scripts/template-editor/components/services/svc-logo-image-factory.js",
               "src/scripts/template-editor/components/services/svc-base-image-factory.js",
-              "src/scripts/template-editor/components/services/svc-slides-url-validation.js",
               "src/scripts/template-editor/components/services/svc-rss-feed-validation.js",
               "src/scripts/template-editor/components/services/svc-file-existence-check.js",
               "src/scripts/template-editor/components/services/svc-file-metadata-utils.js",

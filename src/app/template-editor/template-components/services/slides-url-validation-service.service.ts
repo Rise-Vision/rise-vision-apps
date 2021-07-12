@@ -23,10 +23,12 @@ export class SlidesUrlValidationServiceService {
 
     var deferred = this.promiseUtils.generateDeferredPromise();
 
-    this.httpClient.get(SlidesUrlValidationServiceService.PROXY_URL + url)
+    this.httpClient.get( SlidesUrlValidationServiceService.PROXY_URL + url, { 
+      responseType: 'text',
+      observe: 'response'})
     .toPromise()
     .then((response: any) => {
-      var finalUrl = response.headers('x-final-url');
+      var finalUrl = response.headers.get('x-final-url');
       if (finalUrl !== url) {
         return deferred.resolve('NOT_PUBLIC');
       }
@@ -48,4 +50,4 @@ export class SlidesUrlValidationServiceService {
 }
 
 angular.module('risevision.template-editor.services')
-  .factory('twitterCredentialsValidation', downgradeInjectable(SlidesUrlValidationServiceService));
+  .factory('slidesUrlValidationService', downgradeInjectable(SlidesUrlValidationServiceService));
