@@ -1,52 +1,53 @@
 <div class="attribute-editor-component time-date-container">
-  <div class="attribute-editor-row" ng-show="!defaultType">
+  <div class="attribute-editor-row" [shown]="!defaultType">
     <label class="mb-0">Show:</label>
 
     <div class="madero-radio" id="timedateRadio">
-      <input type="radio" ng-model="type" value="timedate" id="timedate" name="timedate" ng-change="save()" aria-required="true" required>
+      <input type="radio" [ngModel]="type" value="timedate" id="timedate" name="typeRadio" (change)="save()" (click)="type = 'timedate'">
       <label for="timedate" id="timedateLabel">
         Time & Date
       </label>
     </div>
 
     <div class="madero-radio" id="dateRadio">
-      <input type="radio" ng-model="type" value="date" id="date" name="date" ng-change="save()" aria-required="true" required>
+      <input type="radio" [ngModel]="type" value="date" id="date" name="typeRadio" (change)="save()" (click)="type = 'date'">
       <label for="date" id="dateLabel">
         Date
       </label>
     </div>
 
     <div class="madero-radio" id="timeRadio">
-      <input type="radio" ng-model="type" value="time" id="time" name="time" ng-change="save()" aria-required="true" required>
+      <input type="radio" [ngModel]="type" value="time" id="time" name="typeRadio" (change)="save()" (click)="type = 'time'">
       <label for="time" id="timeLabel">
         Time
       </label>
     </div>
   </div>
 
-  <div class="attribute-editor-row" ng-show="type === 'timedate' || type === 'date'">
+  <div class="attribute-editor-row" [shown]="type === 'timedate' || type === 'date'">
     <div class="form-group">
       <label class="control-label u_margin-sm-top" for="te-td-date-format">Date format:</label>
       <select id="te-td-date-format"
               class="form-control"
-              ng-model="dateFormat"
-              ng-options="df.format as df.date for df in dateFormats"
-              ng-change="save()">
+              name="dateFormatSelect"
+              [(ngModel)]="dateFormat"
+              (change)="save()">
+        <option *ngFor="let df of dateFormats" [value]="df.format">{{df.date}}</option>
       </select>
     </div>
   </div>
-  <div class="attribute-editor-row" ng-show="type === 'timedate' || type === 'time'">
+  <div class="attribute-editor-row" [shown]="type === 'timedate' || type === 'time'">
     <label class="u_margin-sm-top mb-0">Time format:</label>
 
     <div class="madero-radio" id="time12HoursRadio">
-      <input type="radio" ng-model="timeFormat" value="Hours12" id="Hours12" name="Hours12" ng-change="save()" aria-required="true" required>
+      <input type="radio" [(ngModel)]="timeFormat" value="Hours12" id="Hours12" name="timeFormatRadio" (change)="save()">
       <label for="Hours12" id="Hours12Label">
         12 hour.
       </label>
     </div>
 
     <div class="madero-radio" id="time24HoursRadio">
-      <input type="radio" ng-model="timeFormat" value="Hours24" id="Hours24" name="Hours24" ng-change="save()" aria-required="true" required>
+      <input type="radio" [(ngModel)]="timeFormat" value="Hours24" id="Hours24" name="timeFormatRadio" (change)="save()">
       <label for="Hours24" id="Hours24Label">
         24 hour.
       </label>
@@ -57,23 +58,24 @@
     <label class="u_margin-sm-top mb-0">Show the time and date according to:</label>
 
     <div class="madero-radio" id="displayTzRadio">
-      <input type="radio" ng-model="timezoneType" value="DisplayTz" id="DisplayTz" name="DisplayTz" ng-change="save()" aria-required="true" required>
+      <input type="radio" [ngModel]="timezoneType" value="DisplayTz" id="DisplayTz" name="timezoneOptionRadio" (change)="save()" (click)="timezoneType = 'DisplayTz'">
       <label for="DisplayTz" id="DisplayTzLabel">
         The Display's time zone.
       </label>
     </div>
 
     <div class="madero-radio" id="specificTzRadio">
-      <input type="radio" ng-model="timezoneType" value="SpecificTz" id="SpecificTz" name="SpecificTz" ng-change="save()" aria-required="true" required>
+      <input type="radio" [ngModel]="timezoneType" value="SpecificTz" id="SpecificTz" name="timezoneOptionRadio" (change)="save()" (click)="timezoneType = 'SpecificTz'">
       <label for="SpecificTz" id="SpecificTzLabel">
         A specific time zone.
       </label>
       <select id="te-td-timezone"
+              name="timezoneSelect"
               class="form-control timezone-input-group"
-              ng-show="timezoneType === 'SpecificTz'"
-              ng-model="timezone"
-              ng-options="tz for tz in timezones"
-              ng-change="save()">
+              [shown]="timezoneType === 'SpecificTz'"
+              [(ngModel)]="timezone"
+              (change)="save()">
+        <option *ngFor="let tz of WORLD_TIMEZONES" [value]="tz">{{tz}}</option>
       </select>
     </div>
   </div>

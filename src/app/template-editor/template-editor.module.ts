@@ -16,7 +16,6 @@ import { TemplateEditorToolbarComponent } from './components/template-editor-too
 import { TemplateAttributeEditorComponent } from './components/template-attribute-editor/template-attribute-editor.component';
 import { TemplateEditorPreviewHolderComponent } from './components/template-editor-preview-holder/template-editor-preview-holder.component';
 import { EncodeLinkPipe } from './pipes/encode-link.pipe';
-import { WorldTimezonesService } from './template-components/services/world-timezones.service';
 import { TwitterCredentialsValidationService } from './template-components/services/twitter-credentials-validation.service';
 import { SlidesUrlValidationServiceService } from './template-components/services/slides-url-validation-service.service';
 import { RssFeedValidationService } from './template-components/services/rss-feed-validation.service';
@@ -24,6 +23,7 @@ import { InstrumentSearchService } from './template-components/services/instrume
 import { ComponentUtilsService } from './template-components/services/component-utils.service';
 import { FileMetadataUtilsService } from './template-components/services/file-metadata-utils.service';
 import { WeatherComponent } from './template-components/weather/weather.component';
+import { TimeDateComponent } from './template-components/time-date/time-date.component';
 
 @NgModule({
   imports: [
@@ -41,13 +41,14 @@ import { WeatherComponent } from './template-components/weather/weather.componen
     TemplateAttributeEditorComponent,
     TemplateEditorPreviewHolderComponent,
     EncodeLinkPipe,
-    WeatherComponent
+    WeatherComponent,
+    TimeDateComponent
   ]
 })
 export class TemplateEditorModule {
   //workaround for including downgraded components into build files
   //https://github.com/angular/angular/issues/35314#issuecomment-584821399
   static entryComponents = [ CanvaButtonComponent, TemplateEditorComponent, EncodeLinkPipe ]
-  static templateComponents = [ WeatherComponent ]
-  static providers = [ AttributeDataService, BlueprintService, ComponentUtilsService, FileMetadataUtilsService, FinancialLicenseService, InstrumentSearchService, RssFeedValidationService, SlidesUrlValidationServiceService, TwitterCredentialsValidationService, WorldTimezonesService ]
+  static templateComponents = [ WeatherComponent, TimeDateComponent ]
+  static providers = [ AttributeDataService, BlueprintService, ComponentUtilsService, FileMetadataUtilsService, FinancialLicenseService, InstrumentSearchService, RssFeedValidationService, SlidesUrlValidationServiceService, TwitterCredentialsValidationService ]
 }

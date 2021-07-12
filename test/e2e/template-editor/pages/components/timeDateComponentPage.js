@@ -2,7 +2,7 @@
 
 var TimeDateComponentPage = function() {
   var dateFormat = element(by.id('te-td-date-format'));
-  var dateFormatOptions = element.all(by.options('df.format as df.date for df in dateFormats'));
+  var dateFormatOptions = element.all(by.css('#te-td-date-format option'));
   var hours12 = element(by.id('Hours12'));
   var hours24 = element(by.id('Hours24'));
   var hours24Label = element(by.id('Hours24Label'));
@@ -10,7 +10,7 @@ var TimeDateComponentPage = function() {
   var specificTz = element(by.id('SpecificTz'));
   var specificTzLabel = element(by.id('SpecificTzLabel'));
   var timeZone = element(by.id('te-td-timezone'));
-  var timeZoneOptions = element.all(by.options('tz for tz in timezones'));
+  var timeZoneOptions = element.all(by.css('#te-td-timezone option'));
 
   this.getDateFormat = function () {
     return dateFormat;

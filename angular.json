@@ -489,7 +489,6 @@
               "src/scripts/template-editor/components/directives/dtv-component-video.js",
               "src/scripts/template-editor/components/directives/dtv-component-rss.js",
               "src/scripts/template-editor/components/directives/dtv-component-counter.js",
-              "src/scripts/template-editor/components/directives/dtv-component-time-date.js",
               "src/scripts/template-editor/components/directives/dtv-component-colors.js",
               "src/scripts/template-editor/components/directives/dtv-component-twitter.js",
               "src/scripts/template-editor/components/directives/dtv-component-presentation-selector.js",
