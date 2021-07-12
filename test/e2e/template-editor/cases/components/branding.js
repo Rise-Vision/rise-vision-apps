@@ -93,7 +93,7 @@ var BrandingComponentScenarios = function () {
     describe('Edit Branding Logo',function(){
       it('should edit logo and have logo by default',function() {
         helper.clickWhenClickable(brandingComponentPage.getEditLogoLink(),'Edit Logo Link')
-        browser.sleep(1000);
+        helper.waitAppearDisappear(imageComponentPage.getImageFileLoader(), 'Image Loader');
 
         expect(imageComponentPage.getEmptyListContainer().isDisplayed()).to.eventually.be.true;
       });
@@ -182,7 +182,7 @@ var BrandingComponentScenarios = function () {
 
       it('should remove logo',function() {
         helper.clickWhenClickable(brandingComponentPage.getConfirmButton(),'Confirm Logo Removal');
-        
+        browser.sleep(1000);
         helper.waitAppearDisappear(imageComponentPage.getImageFileLoader(), 'Image Loader');
         
         helper.wait(imageComponentPage.getEmptyListContainer(),'Empt Image List');
