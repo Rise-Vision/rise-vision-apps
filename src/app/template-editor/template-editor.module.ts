@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from "@angular/forms";
+
 import { CommonHeaderModule } from '../common-header/common-header.module';
 import { ComponentsModule } from '../components/components.module';
 import { SharedModule } from '../shared/shared.module';
@@ -14,13 +16,15 @@ import { TemplateEditorToolbarComponent } from './components/template-editor-too
 import { TemplateAttributeEditorComponent } from './components/template-attribute-editor/template-attribute-editor.component';
 import { TemplateEditorPreviewHolderComponent } from './components/template-editor-preview-holder/template-editor-preview-holder.component';
 import { EncodeLinkPipe } from './pipes/encode-link.pipe';
+import { WeatherComponent } from './template-components/weather/weather.component';
 
 @NgModule({
   imports: [
     CommonModule,
     CommonHeaderModule,
     ComponentsModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ],
   declarations: [
     CanvaButtonComponent,
@@ -29,12 +33,14 @@ import { EncodeLinkPipe } from './pipes/encode-link.pipe';
     TemplateEditorToolbarComponent,
     TemplateAttributeEditorComponent,
     TemplateEditorPreviewHolderComponent,
-    EncodeLinkPipe
+    EncodeLinkPipe,
+    WeatherComponent
   ]
 })
 export class TemplateEditorModule {
   //workaround for including downgraded components into build files
   //https://github.com/angular/angular/issues/35314#issuecomment-584821399
   static entryComponents = [ CanvaButtonComponent, TemplateEditorComponent, EncodeLinkPipe ]
+  static templateComponents = [ WeatherComponent ]
   static providers = [ AttributeDataService, BlueprintService, FinancialLicenseService ]
 }
