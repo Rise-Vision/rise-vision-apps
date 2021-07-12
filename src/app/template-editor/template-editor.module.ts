@@ -14,6 +14,7 @@ import { EncodeLinkPipe } from './pipes/encode-link.pipe';
 import { WorldTimezonesService } from './template-components/services/world-timezones.service';
 import { TwitterCredentialsValidationService } from './template-components/services/twitter-credentials-validation.service';
 import { SlidesUrlValidationServiceService } from './template-components/services/slides-url-validation-service.service';
+import { RssFeedValidationService } from './template-components/services/rss-feed-validation.service';
 
 @NgModule({
   imports: [
@@ -34,5 +35,5 @@ export class TemplateEditorModule {
   //workaround for including downgraded components into build files
   //https://github.com/angular/angular/issues/35314#issuecomment-584821399
   static entryComponents = [ CanvaButtonComponent, TemplateEditorComponent, EncodeLinkPipe ]
-  static providers = [ AttributeDataService, BlueprintService, FinancialLicenseService, SlidesUrlValidationServiceService, TwitterCredentialsValidationService, WorldTimezonesService ]
+  static providers = [ AttributeDataService, BlueprintService, FinancialLicenseService, RssFeedValidationService, SlidesUrlValidationServiceService, TwitterCredentialsValidationService, WorldTimezonesService ]
 }
