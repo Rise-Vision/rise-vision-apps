@@ -1,10 +1,10 @@
 import {expect} from 'chai';
 
 import { TestBed } from '@angular/core/testing';
-import { TemplateEditorFactory } from 'src/app/ajs-upgraded-providers';
 
 import { AttributeDataService } from './attribute-data.service';
 import { BlueprintService } from './blueprint.service';
+import { TemplateEditorService } from './template-editor.service';
 
 describe('AttributeDataService', () => {
   let sandbox = sinon.sandbox.create();
@@ -25,7 +25,7 @@ describe('AttributeDataService', () => {
     TestBed.configureTestingModule({
       providers: [
         {provide: BlueprintService, useValue: blueprintFactory},
-        {provide: TemplateEditorFactory, useValue: templateEditorFactory}        
+        {provide: TemplateEditorService, useValue: templateEditorFactory}        
       ]
     });
     attributeDataFactory = TestBed.inject(AttributeDataService);

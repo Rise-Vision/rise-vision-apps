@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { TemplateEditorFactory } from 'src/app/ajs-upgraded-providers';
 import * as angular from 'angular';
 import * as _ from 'lodash';
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { BlueprintService } from './blueprint.service';
+import { TemplateEditorService } from './template-editor.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AttributeDataService {
 
-  constructor(private blueprintFactory: BlueprintService, private templateEditorFactory: TemplateEditorFactory) {}
+  constructor(private blueprintFactory: BlueprintService, private templateEditorFactory: TemplateEditorService) {}
 
   getBlueprintData(componentId, attributeKey?) {
     return this.blueprintFactory.getBlueprintData(componentId, attributeKey);
