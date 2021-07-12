@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import { TestBed } from '@angular/core/testing';
 
 import { RssFeedValidationService } from './rss-feed-validation.service';
@@ -11,6 +12,6 @@ describe('RssFeedValidationService', () => {
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(service).to.exist;
   });
 });

@@ -1,4 +1,4 @@
-import { HttpClient, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { PromiseUtilsService } from 'src/app/shared/services/promise-utils.service';
 import { environment } from 'src/environments/environment';
@@ -23,14 +23,14 @@ export class TwitterCredentialsValidationService {
       environment.TWITTER_SERVICE_URL + TwitterCredentialsValidationService.VERIFY_CREDENTIALS, {
         withCredentials: true,
         responseType: 'json',
-        params: {
+        params: new HttpParams({fromObject:{
           companyId: companyId
-        }
+        }})
       }
     );
     this.httpClient.request(request).toPromise().then((response: any) => {
-      if (response && response.data) {
-        deferred.resolve(response.data.success);
+      if (response && response.body) {
+        deferred.resolve(response.body.success);
       }
     }).catch( (err) => {
       console.error('Failed to verify twitter credentials.', err);
