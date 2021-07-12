@@ -118,7 +118,6 @@
               "src/scripts/common-header/directives/dtv-empty-select-parser.js",
               "src/scripts/common-header/directives/dtv-integer-parser.js",
               "src/scripts/common-header/directives/dtv-link-cid.js",
-              "src/scripts/common-header/directives/dtv-require-role.js",
               "src/scripts/common-header/directives/dtv-website-validator.js",
               "src/scripts/common-header/directives/dtv-email-validator.js",
 
@@ -680,7 +679,6 @@
                 "src/scripts/common-header/directives/dtv-empty-select-parser.js",
                 "src/scripts/common-header/directives/dtv-integer-parser.js",
                 "src/scripts/common-header/directives/dtv-link-cid.js",
-                "src/scripts/common-header/directives/dtv-require-role.js",
                 "src/scripts/common-header/directives/dtv-website-validator.js",
                 "src/scripts/common-header/directives/dtv-email-validator.js",
 
