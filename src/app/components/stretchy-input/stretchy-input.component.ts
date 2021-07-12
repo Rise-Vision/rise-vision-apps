@@ -10,8 +10,8 @@ import { downgradeComponent } from '@angular/upgrade/static';
 })
 export class StretchyInputComponent implements OnChanges {
   public isEditingInput = false;
-  private defaultInputValue: string;
-  private defaultInputWidth = '';
+  public defaultInputValue: string;
+  public defaultInputWidth = '';
 
   @Input() ngModel: string;
   @Output() ngModelChange = new EventEmitter<string>();
@@ -96,7 +96,7 @@ export class StretchyInputComponent implements OnChanges {
 
   inputKeyDown(keyEvent: KeyboardEvent) {
     // handle enter key
-    if (keyEvent.which === 13 && this.isEditingInput) {
+    if (keyEvent.key === 'Enter' && this.isEditingInput) {
       this._setNonEditable();
 
       keyEvent.preventDefault();
