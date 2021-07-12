@@ -1,7 +1,11 @@
-'use strict';
+import { Injectable } from '@angular/core';
+import * as angular from 'angular';
 
-angular.module('risevision.template-editor.services')
-  .constant('WORLD_TIMEZONES', [
+@Injectable({
+  providedIn: 'root'
+})
+export class WorldTimezonesService {
+  public static readonly WORLD_TIMEZONES = [
     'Africa/Abidjan',
     'Africa/Accra',
     'Africa/Addis_Ababa',
@@ -595,4 +599,10 @@ angular.module('risevision.template-editor.services')
     'W-SU',
     'WET',
     'Zulu'
-  ]);
+  ]
+  
+  constructor() { }
+}
+
+angular.module('risevision.template-editor.services')
+  .constant('WORLD_TIMEZONES', WorldTimezonesService.WORLD_TIMEZONES);
