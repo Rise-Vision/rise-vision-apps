@@ -407,7 +407,7 @@ export class ComponentsService {
 
       var element = directive && directive.panel && this.templateEditorUtils.findElement(directive.panel, directive.element);
 
-      if (directive && directive.element && directive.element !== selectedDirective.element) {
+      if (directive && directive.element && !directive.element.is(selectedDirective.element)) {
         directive.element.hide();
       }
 
