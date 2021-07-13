@@ -1,0 +1,21 @@
+<div class="attribute-editor-component">
+  <div class="attribute-editor-row">
+    <p [shown]="!hasValidAddress && !canEditCompany">Set an address to see the weather. Please contact your System Administrator to set an address to your company.</p>
+    <p [shown]="!hasValidAddress && canEditCompany">Set an address to see the weather. Navigate to <a href="" (click)="companySettingsFactory.openCompanySettings()">Company Settings</a>, enter your address and click Save.</p>
+    <p [shown]="hasValidAddress">This Presentation will show the weather for the Address of the Display it is playing on.</p>    
+    <label class="u_margin-sm-top">Display weather in:</label>
+    <div class="madero-radio">
+      <input type="radio" [(ngModel)]="scale" (change)="save()" value="F" id="farenheit" name="temperatureUnit" aria-required="true" tabindex="1" required>
+      <label for="farenheit">
+        Farenheit
+      </label>
+    </div>
+
+    <div class="madero-radio">
+      <input type="radio" [(ngModel)]="scale" (change)="save()" value="C" id="celsius" name="temperatureUnit" aria-required="true" tabindex="1" required>
+      <label for="celsius">
+        Celsius
+      </label>
+    </div>
+  </div>
+</div>
