@@ -471,7 +471,6 @@
               "src/scripts/template-editor/directives/dtv-attribute-list.js",
               "src/scripts/template-editor/directives/dtv-editor-preview-holder.js",
               "src/scripts/template-editor/directives/dtv-component.js",
-              "src/scripts/template-editor/directives/dtv-component-icon.js",
               "src/scripts/template-editor/directives/dtv-basic-uploader.js",
               "src/scripts/template-editor/directives/dtv-file-entry.js",
               "src/scripts/template-editor/directives/dtv-empty-file-list.js",
