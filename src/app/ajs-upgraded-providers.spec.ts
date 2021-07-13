@@ -14,7 +14,7 @@ import {
   SubscriptionFactory, subscriptionFactoryProvider,
   PresentationUtils, presentationUtilsProvider,
   UserAuthFactory, userAuthFactoryProvider,
-  UserState, userStateProvider, purchaseFlowTrackerProvider, PurchaseFlowTracker, contactServiceProvider, ContactService, PresentationService, presentationServiceProvider, createFirstScheduleServiceProvider, CreateFirstScheduleService, brandingFactoryProvider, BrandingFactory, scheduleFactoryProvider, ScheduleFactory, PresentationTracker, presentationTrackerProvider, ScheduleSelectorFactory, scheduleSelectorFactoryProvider
+  UserState, userStateProvider, purchaseFlowTrackerProvider, PurchaseFlowTracker, contactServiceProvider, ContactService, PresentationService, presentationServiceProvider, createFirstScheduleServiceProvider, CreateFirstScheduleService, brandingFactoryProvider, BrandingFactory, scheduleFactoryProvider, ScheduleFactory, PresentationTracker, presentationTrackerProvider, ScheduleSelectorFactory, scheduleSelectorFactoryProvider, StorageUtils, storageUtilsProvider
 } from './ajs-upgraded-providers';
 
 describe('ajs-upgraded-providers', () => {
@@ -142,5 +142,9 @@ describe('ajs-upgraded-providers', () => {
     testRegisterProvider(scheduleSelectorFactoryProvider, ScheduleSelectorFactory);
     testAngularJsService(scheduleSelectorFactoryProvider, 'scheduleSelectorFactory');
   });  
-  
+
+  it('storageUtils:', () => {
+    testRegisterProvider(storageUtilsProvider, StorageUtils);
+    testAngularJsService(storageUtilsProvider, 'storageUtils');
+  });
 });
