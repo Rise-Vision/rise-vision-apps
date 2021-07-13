@@ -1,51 +1,57 @@
-'use strict';
+import { expect } from 'chai';
 
-xdescribe('directive: templateComponentTimeDate', function() {
-  var $scope,
-    element,
-    componentsFactory,
-    attributeDataFactory,
-    sandbox = sinon.sandbox.create();
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-  beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module(function ($provide) {
-    $provide.service('componentsFactory', function() {
-      return {
-        selected: { id: "TEST-ID" },
-        registerDirective: sandbox.stub()
-      };
-    });
+import { ComponentsService } from '../../services/components.service';
+import { AttributeDataService } from '../../services/attribute-data.service';
 
-    $provide.service('attributeDataFactory', function() {
-      return {
-        setAttributeData: sandbox.stub()
-      };
-    });
-  }));
+import { TimeDateComponent } from './time-date.component';
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
-    componentsFactory = $injector.get('componentsFactory');
-    attributeDataFactory = $injector.get('attributeDataFactory');
+describe('TimeDateComponent', () => {
+  let sandbox = sinon.sandbox.create();
 
-    $templateCache.put('partials/template-editor/components/component-time-date.html', '<p>mock</p>');
-    $scope = $rootScope.$new();
+  let component: TimeDateComponent;
+  let fixture: ComponentFixture<TimeDateComponent>;
+  let componentsFactory, attributeDataFactory;
 
-    element = $compile("<template-component-time-date></template-component-time-date>")($scope);
-    $scope = element.scope();
-    $scope.$digest();
-  }));
+  beforeEach(async () => {
+    componentsFactory = {
+      selected: { id: "TEST-ID" },
+      registerDirective: sinon.stub()
+    };
+    attributeDataFactory = {
+      setAttributeData: sinon.stub()
+    };
 
-  afterEach(function () {
-    sandbox.restore();
+    await TestBed.configureTestingModule({
+      providers: [
+        {provide: ComponentsService, useValue: componentsFactory},
+        {provide: AttributeDataService, useValue: attributeDataFactory},
+      ],
+      declarations: [ TimeDateComponent ]
+    })
+    .compileComponents();
   });
 
-  it('should exist', function() {
-    expect($scope).to.be.ok;
+  beforeEach(() => {
+    window.moment = window.moment || (() => {
+      return {
+        format: sinon.stub().returns('date')
+      };
+    });
+
+    fixture = TestBed.createComponent(TimeDateComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  afterEach(function() {
+    sandbox.restore();
   });
 
   describe('registerDirective:', function() {
     it('should initialize', function() {
-      expect(componentsFactory.registerDirective).to.have.been.called;
+      componentsFactory.registerDirective.should.have.been.called;
 
       var directive = componentsFactory.registerDirective.getCall(0).args[0];
       expect(directive).to.be.ok;
@@ -54,13 +60,13 @@ xdescribe('directive: templateComponentTimeDate', function() {
     });
 
     it('show:', function() {
-      sandbox.stub($scope, 'load');
+      sandbox.stub(component, 'load');
 
       componentsFactory.registerDirective.getCall(0).args[0].show();
 
-      expect($scope.componentId).to.equal('TEST-ID');
+      expect(component.componentId).to.equal('TEST-ID');
 
-      $scope.load.should.have.been.called;
+      component.load.should.have.been.called;
     });
   });
 
@@ -76,7 +82,7 @@ xdescribe('directive: templateComponentTimeDate', function() {
   });
 
   describe('load', function () {
-    function _initLoad(type, time, date, timezone) {
+    function _initLoad(type, time, date, timezone?) {
       attributeDataFactory.getBlueprintData = sandbox.stub().returns('timedate');
       attributeDataFactory.getAvailableAttributeData = sandbox.stub();
       attributeDataFactory.getAvailableAttributeData.onCall(0).returns(type);
@@ -86,17 +92,17 @@ xdescribe('directive: templateComponentTimeDate', function() {
     }
 
     it('should load the correct list of date formats', function () {
-      expect($scope.dateFormats.length).to.equal(4);
+      expect(component.dateFormats.length).to.equal(4);
     });
 
     it('should load the correct list of timezones', function () {
-      expect($scope.timezones.length).to.be.above(0);
+      expect(component.WORLD_TIMEZONES.length).to.be.above(0);
     });
 
     it('should initialize the time format from data', function () {
       _initLoad('time', 'Hours24', null, null);
 
-      $scope.load();
+      component.load();
 
       attributeDataFactory.getBlueprintData.should.have.been.calledWith(sinon.match.any, 'type');
       expect(attributeDataFactory.getAvailableAttributeData.getCall(0).args[1]).to.equal('type');
@@ -104,18 +110,18 @@ xdescribe('directive: templateComponentTimeDate', function() {
       expect(attributeDataFactory.getAvailableAttributeData.getCall(2).args[1]).to.equal('date');
       expect(attributeDataFactory.getAvailableAttributeData.getCall(3).args[1]).to.equal('timezone');
 
-      expect($scope.defaultType).to.equal('timedate');
-      expect($scope.type).to.equal('time');
-      expect($scope.dateFormat).to.not.be.ok;
-      expect($scope.timeFormat).to.equal('Hours24');
-      expect($scope.timezoneType).to.equal('DisplayTz');
-      expect($scope.timezone).to.not.be.ok;
+      expect(component.defaultType).to.equal('timedate');
+      expect(component.type).to.equal('time');
+      expect(component.dateFormat).to.not.be.ok;
+      expect(component.timeFormat).to.equal('Hours24');
+      expect(component.timezoneType).to.equal('DisplayTz');
+      expect(component.timezone).to.not.be.ok;
     });
 
     it('should initialize the date format from data', function () {
       _initLoad('date', null, 'DD/MM/YYYY', 'Atlantic/South_Georgia');
 
-      $scope.load();
+      component.load();
 
       attributeDataFactory.getBlueprintData.should.have.been.calledWith(sinon.match.any, 'type');
       expect(attributeDataFactory.getAvailableAttributeData.getCall(0).args[1]).to.equal('type');
@@ -123,18 +129,18 @@ xdescribe('directive: templateComponentTimeDate', function() {
       expect(attributeDataFactory.getAvailableAttributeData.getCall(2).args[1]).to.equal('date');
       expect(attributeDataFactory.getAvailableAttributeData.getCall(3).args[1]).to.equal('timezone');
 
-      expect($scope.defaultType).to.equal('timedate');
-      expect($scope.type).to.equal('date');
-      expect($scope.timeFormat).to.not.be.ok;
-      expect($scope.dateFormat).to.equal('DD/MM/YYYY');
-      expect($scope.timezoneType).to.equal('SpecificTz');
-      expect($scope.timezone).to.equal('Atlantic/South_Georgia');
+      expect(component.defaultType).to.equal('timedate');
+      expect(component.type).to.equal('date');
+      expect(component.timeFormat).to.not.be.ok;
+      expect(component.dateFormat).to.equal('DD/MM/YYYY');
+      expect(component.timezoneType).to.equal('SpecificTz');
+      expect(component.timezone).to.equal('Atlantic/South_Georgia');
     });
 
     it('should initialize the date and time formats from data', function () {
       _initLoad('timedate', 'Hours24', 'MMM DD YYYY', null);
 
-      $scope.load();
+      component.load();
 
       attributeDataFactory.getBlueprintData.should.have.been.calledWith(sinon.match.any, 'type');
       expect(attributeDataFactory.getAvailableAttributeData.getCall(0).args[1]).to.equal('type');
@@ -142,18 +148,18 @@ xdescribe('directive: templateComponentTimeDate', function() {
       expect(attributeDataFactory.getAvailableAttributeData.getCall(2).args[1]).to.equal('date');
       expect(attributeDataFactory.getAvailableAttributeData.getCall(3).args[1]).to.equal('timezone');
 
-      expect($scope.defaultType).to.equal('timedate');
-      expect($scope.type).to.equal('timedate');
-      expect($scope.timeFormat).to.equal('Hours24');
-      expect($scope.dateFormat).to.equal('MMM DD YYYY');
-      expect($scope.timezoneType).to.equal('DisplayTz');
-      expect($scope.timezone).to.not.be.ok;
+      expect(component.defaultType).to.equal('timedate');
+      expect(component.type).to.equal('timedate');
+      expect(component.timeFormat).to.equal('Hours24');
+      expect(component.dateFormat).to.equal('MMM DD YYYY');
+      expect(component.timezoneType).to.equal('DisplayTz');
+      expect(component.timezone).to.not.be.ok;
     });
 
     it('should initialize time and date formats with default values', function () {
       _initLoad('timedate', null, null);
 
-      $scope.load();
+      component.load();
 
       attributeDataFactory.getBlueprintData.should.have.been.calledWith(sinon.match.any, 'type');
       expect(attributeDataFactory.getAvailableAttributeData.getCall(0).args[1]).to.equal('type');
@@ -161,37 +167,37 @@ xdescribe('directive: templateComponentTimeDate', function() {
       expect(attributeDataFactory.getAvailableAttributeData.getCall(2).args[1]).to.equal('date');
       expect(attributeDataFactory.getAvailableAttributeData.getCall(3).args[1]).to.equal('timezone');
 
-      expect($scope.defaultType).to.equal('timedate');
-      expect($scope.type).to.equal('timedate');
-      expect($scope.timeFormat).to.equal('Hours12');
-      expect($scope.dateFormat).to.equal('MMMM DD, YYYY');
-      expect($scope.timezoneType).to.equal('DisplayTz');
-      expect($scope.timezone).to.not.be.ok;
+      expect(component.defaultType).to.equal('timedate');
+      expect(component.type).to.equal('timedate');
+      expect(component.timeFormat).to.equal('Hours12');
+      expect(component.dateFormat).to.equal('MMMM DD, YYYY');
+      expect(component.timezoneType).to.equal('DisplayTz');
+      expect(component.timezone).to.not.be.ok;
     });
   });
 
   describe('save', function () {
     beforeEach(function () {
-      $scope.defaultType = 'timedate';
-      $scope.type = 'timedate';
-      $scope.timeFormat = 'Hours12';
-      $scope.dateFormat = 'MMMM DD, YYYY';
+      component.defaultType = 'timedate';
+      component.type = 'timedate';
+      component.timeFormat = 'Hours12';
+      component.dateFormat = 'MMMM DD, YYYY';
     });
 
     it('should only update type if defaultType is blank', function () {
-      $scope.defaultType = undefined;
-      $scope.type = 'time';
+      component.defaultType = undefined;
+      component.type = 'time';
 
-      $scope.save();
+      component.save();
       expect(attributeDataFactory.setAttributeData.getCall(0).args[1]).to.equal('type');
       expect(attributeDataFactory.setAttributeData.getCall(0).args[2]).to.equal('time');
     });
 
     it('should only save time format and not save date format if type is "time"', function () {
-      $scope.type = 'time';
-      $scope.timeFormat = 'Hours24';
+      component.type = 'time';
+      component.timeFormat = 'Hours24';
 
-      $scope.save();
+      component.save();
       expect(attributeDataFactory.setAttributeData.getCall(0).args[1]).to.equal('time');
       expect(attributeDataFactory.setAttributeData.getCall(0).args[2]).to.equal('Hours24');
       expect(attributeDataFactory.setAttributeData.getCall(1).args[1]).to.equal('timezone');
@@ -199,10 +205,10 @@ xdescribe('directive: templateComponentTimeDate', function() {
     });
 
     it('should only save date format and not save time format if type is "date"', function () {
-      $scope.type = 'date';
-      $scope.dateFormat = 'DD/MM/YYYY';
+      component.type = 'date';
+      component.dateFormat = 'DD/MM/YYYY';
 
-      $scope.save();
+      component.save();
       expect(attributeDataFactory.setAttributeData.getCall(0).args[1]).to.equal('date');
       expect(attributeDataFactory.setAttributeData.getCall(0).args[2]).to.equal('DD/MM/YYYY');
       expect(attributeDataFactory.setAttributeData.getCall(1).args[1]).to.equal('timezone');
@@ -210,7 +216,7 @@ xdescribe('directive: templateComponentTimeDate', function() {
     });
 
     it('should save the time and date formats', function () {
-      $scope.save();
+      component.save();
 
       expect(attributeDataFactory.setAttributeData.getCall(0).args[1]).to.equal('time');
       expect(attributeDataFactory.setAttributeData.getCall(0).args[2]).to.equal('Hours12');
@@ -221,20 +227,20 @@ xdescribe('directive: templateComponentTimeDate', function() {
     });
 
     it('should save null timezone if Display timezone is selected', function () {
-      $scope.timezoneType = 'DisplayTz';
-      $scope.timezone = 'Not empty';
+      component.timezoneType = 'DisplayTz';
+      component.timezone = 'Not empty';
 
-      $scope.save();
+      component.save();
 
       expect(attributeDataFactory.setAttributeData.getCall(2).args[1]).to.equal('timezone');
       expect(attributeDataFactory.setAttributeData.getCall(2).args[2]).to.not.be.ok;
     });
 
     it('should save the timezone if specific timezone is selected', function () {
-      $scope.timezoneType = 'SpecificTz';
-      $scope.timezone = 'Selected timezone';
+      component.timezoneType = 'SpecificTz';
+      component.timezone = 'Selected timezone';
 
-      $scope.save();
+      component.save();
 
       expect(attributeDataFactory.setAttributeData.getCall(2).args[1]).to.equal('timezone');
       expect(attributeDataFactory.setAttributeData.getCall(2).args[2]).to.equal('Selected timezone');
