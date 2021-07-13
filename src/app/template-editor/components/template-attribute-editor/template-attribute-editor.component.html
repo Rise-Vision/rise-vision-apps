@@ -1,1 +1,7 @@
-<p>template-attribute-editor works!</p>
+<div class="attribute-list attribute-list-container te-scrollable-container" [ngClass]="{ 'attribute-list-hide': componentsFactory.selected }" [shown]="componentsFactory.showAttributeList">
+  <template-attribute-list></template-attribute-list>
+</div>
+
+<div class="attribute-component" [shown]="!componentsFactory.showAttributeList">
+  <template-component></template-component>
+</div>

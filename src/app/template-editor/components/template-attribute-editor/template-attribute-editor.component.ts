@@ -1,17 +1,38 @@
-import { Directive, Input, Output, EventEmitter, Injector, ElementRef } from '@angular/core';
-import { UpgradeComponent } from '@angular/upgrade/static';
+import { Component, OnDestroy } from '@angular/core';
 
-// This Angular directive will act as an interface to the "upgraded" AngularJS component
-@Directive({selector: 'template-attribute-editor'})
-export class TemplateAttributeEditorComponent extends UpgradeComponent {
-  // The names of the input and output properties here must match the names of the
-  // `<` and `&` bindings in the AngularJS component that is being wrapped
-  // @Input() hero!: String;
-  // @Output() onRemove!: EventEmitter<void>;
+import { ComponentsService } from '../../services/components.service';
 
-  constructor(elementRef: ElementRef, injector: Injector) {
-    // We must pass the name of the directive as used by AngularJS to the super
-    super('templateAttributeEditor', elementRef, injector);
+@Component({
+  selector: 'template-attribute-editor',
+  templateUrl: './template-attribute-editor.component.html',
+  styleUrls: ['./template-attribute-editor.component.scss']
+})
+export class TemplateAttributeEditorComponent implements OnDestroy {
+  private handleMessageBind;
+
+  constructor(public componentsFactory: ComponentsService) {
+    this.componentsFactory.reset();
+
+    this.handleMessageBind = this._handleMessageFromTemplate.bind(this);
+
+    window.addEventListener('message', this.handleMessageBind);
   }
 
+  ngOnDestroy(): void {
+    window.removeEventListener('message', this.handleMessageBind);
+  }
+
+  _handleMessageFromTemplate(event) {
+    var data = event.data;
+
+    if ('string' === typeof event.data) {
+      try {
+        data = JSON.parse(event.data);
+      } catch (e) {}
+    }
+
+    if (data.type === 'editComponent') {
+      this.componentsFactory.editHighlightedComponent(data.value);
+    }
+  }
 }
