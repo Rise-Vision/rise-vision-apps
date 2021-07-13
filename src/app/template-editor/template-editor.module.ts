@@ -19,6 +19,7 @@ import { InstrumentSearchService } from './template-components/services/instrume
 import { ComponentUtilsService } from './template-components/services/component-utils.service';
 import { FileMetadataUtilsService } from './template-components/services/file-metadata-utils.service';
 import { BaseImageService } from './template-components/services/base-image.service';
+import { LogoImageService } from './template-components/services/logo-image.service';
 
 @NgModule({
   imports: [
@@ -39,5 +40,5 @@ export class TemplateEditorModule {
   //workaround for including downgraded components into build files
   //https://github.com/angular/angular/issues/35314#issuecomment-584821399
   static entryComponents = [ CanvaButtonComponent, TemplateEditorComponent, EncodeLinkPipe ]
-  static providers = [ AttributeDataService, BaseImageService, BlueprintService, ComponentUtilsService, FileMetadataUtilsService, FinancialLicenseService, InstrumentSearchService, RssFeedValidationService, SlidesUrlValidationServiceService, TwitterCredentialsValidationService, WorldTimezonesService ]
+  static providers = [ AttributeDataService, BaseImageService, BlueprintService, ComponentUtilsService, FileMetadataUtilsService, FinancialLicenseService, InstrumentSearchService, LogoImageService, RssFeedValidationService, SlidesUrlValidationServiceService, TwitterCredentialsValidationService, WorldTimezonesService ]
 }
