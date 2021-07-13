@@ -1,1 +1,34 @@
-<p>template-editor-toolbar works!</p>
+<!-- Presentation Name -->
+<stretchy-input class="presentation-name" [(ngModel)]="templateEditorFactory.presentation.name" ngDefaultControl></stretchy-input>
+
+<div>
+  <button id="deleteButton" [disabled]="!templateEditorFactory.presentation.id" (click)="confirmDelete()" class="btn-icon pl-0">
+    <streamline-icon class="u_margin-left streamline-component-icon" name="trash" width="16" height="16"></streamline-icon>
+  </button>
+</div>
+
+<div class="flex-row ml-auto hidden-xs">
+  <div class="auto-save pr-4">
+    <last-modified [changeDate]="templateEditorFactory.presentation.changeDate" [changedBy]="templateEditorFactory.presentation.changedBy"></last-modified>
+    •
+    <span id="autoSavingDesktop" *ngIf="templateEditorFactory.hasContentEditorRole()">
+      <span [shown]="!templateEditorFactory.savingPresentation && templateEditorFactory.isUnsaved()">
+        Unsaved changes
+      </span>
+      <span [shown]="templateEditorFactory.savingPresentation">
+        Saving changes...
+      </span>
+      <span [shown]="!templateEditorFactory.savingPresentation && !templateEditorFactory.isUnsaved()">
+        All changes saved <streamline-icon name="checkmark" width="12" height="12"></streamline-icon>
+      </span>
+    </span>
+    <span class="text-danger" *ngIf="!templateEditorFactory.hasContentEditorRole()">
+      You don’t have permission to edit
+    </span>
+  </div>
+  <button id="publishButtonDesktop" require-role="cp" class="btn btn-primary btn-fixed-width"
+          [disabled]="templateEditorFactory.isPublishDisabled()"
+          (click)="templateEditorFactory.publish()">
+    Publish
+  </button>
+</div>

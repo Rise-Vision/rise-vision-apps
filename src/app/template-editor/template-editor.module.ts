@@ -1,6 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from "@angular/forms";
+
 import { CommonHeaderModule } from '../common-header/common-header.module';
+import { ComponentsModule } from '../components/components.module';
+import { SharedModule } from '../shared/shared.module';
+
 import { CanvaButtonComponent } from './components/canva-button/canva-button.component';
 import { AttributeDataService } from './services/attribute-data.service';
 import { BlueprintService } from './services/blueprint.service';
@@ -20,11 +25,15 @@ import { ComponentUtilsService } from './template-components/services/component-
 import { FileMetadataUtilsService } from './template-components/services/file-metadata-utils.service';
 import { BaseImageService } from './template-components/services/base-image.service';
 import { LogoImageService } from './template-components/services/logo-image.service';
+import { WeatherComponent } from './template-components/weather/weather.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    CommonHeaderModule
+    CommonHeaderModule,
+    ComponentsModule,
+    SharedModule,
+    FormsModule
   ],
   declarations: [
     CanvaButtonComponent,
@@ -33,12 +42,14 @@ import { LogoImageService } from './template-components/services/logo-image.serv
     TemplateEditorToolbarComponent,
     TemplateAttributeEditorComponent,
     TemplateEditorPreviewHolderComponent,
-    EncodeLinkPipe
+    EncodeLinkPipe,
+    WeatherComponent
   ]
 })
 export class TemplateEditorModule {
   //workaround for including downgraded components into build files
   //https://github.com/angular/angular/issues/35314#issuecomment-584821399
   static entryComponents = [ CanvaButtonComponent, TemplateEditorComponent, EncodeLinkPipe ]
+  static templateComponents = [ WeatherComponent ]
   static providers = [ AttributeDataService, BaseImageService, BlueprintService, ComponentUtilsService, FileMetadataUtilsService, FinancialLicenseService, InstrumentSearchService, LogoImageService, RssFeedValidationService, SlidesUrlValidationServiceService, TwitterCredentialsValidationService, WorldTimezonesService ]
 }

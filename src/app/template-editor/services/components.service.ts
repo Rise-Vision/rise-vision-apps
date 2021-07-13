@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+
+import * as $ from 'jquery';
+import * as jQuery from 'jquery';
 import * as _ from 'lodash';
 import * as angular from 'angular';
 import { downgradeInjectable } from '@angular/upgrade/static';
@@ -191,6 +194,10 @@ export class ComponentsService {
     };
 
     registerDirective(directive) {
+      if (!(directive.element instanceof jQuery)) {
+        directive.element = $(directive.element);
+      }
+
       directive.element.hide();
       this.directives[directive.type] = directive;
 
@@ -400,7 +407,7 @@ export class ComponentsService {
 
       var element = directive && directive.panel && this.templateEditorUtils.findElement(directive.panel, directive.element);
 
-      if (directive && directive.element && directive.element !== selectedDirective.element) {
+      if (directive && directive.element && !directive.element.is(selectedDirective.element)) {
         directive.element.hide();
       }
 
