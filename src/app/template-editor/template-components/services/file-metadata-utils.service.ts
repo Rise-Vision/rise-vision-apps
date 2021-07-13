@@ -42,7 +42,7 @@ export class FileMetadataUtilsService {
     }
   }
 
-  thumbnailFor(item, defaultThumbnailUrl) {
+  thumbnailFor(item, defaultThumbnailUrl?) {
     if (item.metadata && item.metadata.thumbnail) {
       return item.metadata.thumbnail + '?_=' + this.timeCreatedFor(item);
     } else {
@@ -64,7 +64,7 @@ export class FileMetadataUtilsService {
     return this.extractFileNamesFrom(metadata).join('|');
   };
 
-  filesAttributeToArray(files) {
+  filesAttributeToArray(files?) {
     var fileNames;
 
     if (files) {
@@ -77,7 +77,7 @@ export class FileMetadataUtilsService {
     return fileNames;
   };
 
-  metadataWithFile(previousMetadata, defaultThumbnailUrl, files, alwaysAppend) {
+  metadataWithFile(previousMetadata, defaultThumbnailUrl, files, alwaysAppend?) {
     var metadata = _.cloneDeep(previousMetadata);
 
     files.forEach((file) => {
