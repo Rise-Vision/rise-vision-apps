@@ -212,6 +212,19 @@ export const presentationServiceProvider = {
 };
 
 
+// storage/services
+export abstract class StorageUtils {
+  [key: string]: any;
+}
+export const storageUtilsProvider = {
+  provide: StorageUtils,
+  useFactory: function ($injector: any) {
+    return $injector.get('storageUtils');
+  },
+  deps: ['$injector']
+};
+
+
 // template-editor/components/services
 export abstract class BrandingFactory {
   [key: string]: any;
