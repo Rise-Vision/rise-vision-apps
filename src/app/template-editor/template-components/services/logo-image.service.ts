@@ -55,7 +55,7 @@ export class LogoImageService {
       return this.brandingFactory.brandingSettings.logoFileMetadata;
     };
 
-    getAvailableAttributeData(key) {
+    getAvailableAttributeData(key?) {
       return null;
     };
 

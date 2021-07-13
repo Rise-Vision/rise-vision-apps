@@ -569,6 +569,7 @@ describe('directive: TemplateComponentImage', function() {
 
       baseImageFactory.removeImage.should.have.been.calledWith(image);
       setTimeout(function(){
+        timeout.flush();
         expect($scope.selectedImages).to.deep.equal(expectedImages);
         done();
       },10);
