@@ -13,6 +13,8 @@ import { TemplateEditorService } from '../../services/template-editor.service';
 })
 export class BrandingService {
 
+  private subscription: any;
+
   brandingComponent = {
     type: 'rise-branding'
   };
@@ -21,17 +23,19 @@ export class BrandingService {
   hasUnsavedChanges = false;
 
   constructor(
-    @Inject('$rootScope') private $rootScope:any,
     private userState: UserState,
     private broadcaster: BroadcasterService,
     private blueprintFactory: BlueprintService,
     private updateCompany: UpdateCompany,
     private fileExistenceCheckService: FileExistenceCheckService ) {
-      this.$rootScope.$on('risevision.company.selectedCompanyChanged', () => {
+      this.subscription = this.broadcaster.on('risevision.company.selectedCompanyChanged', () => {
         this._loadBranding(true);
       });
     }
 
+    ngOnDestroy() {
+      this.subscription.unsubscribe();
+    }
 
     _refreshMetadata() {
       if (this.brandingSettings.logoFile) {

@@ -22,6 +22,15 @@ export class BroadcasterService extends EventEmitter {
 
     this.$rootScope.$broadcast(event, param);
   }
+
+  on(watchedEvent: String, callback: Function) {
+    const subscription = this.subscribe((event: string) => {
+      if (event === watchedEvent) {
+        callback();
+      }
+    });
+    return subscription;
+  }
 }
 
 angular.module('risevision.apps.services')
