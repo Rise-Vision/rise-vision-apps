@@ -8,7 +8,7 @@ import { AttributeDataService } from '../../services/attribute-data.service';
 @Injectable({
   providedIn: 'root'
 })
-export class BaseImageFactoryService {
+export class BaseImageService {
 
   componentId = null;
   checksCompleted;
@@ -88,5 +88,5 @@ export class BaseImageFactoryService {
 
 
 angular.module('risevision.template-editor.services')
-  .factory('baseImageFactory', downgradeInjectable(BaseImageFactoryService));
+  .factory('baseImageFactory', downgradeInjectable(BaseImageService));
 
