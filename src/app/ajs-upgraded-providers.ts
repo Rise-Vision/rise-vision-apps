@@ -114,6 +114,18 @@ export const confirmModalProvider = {
 };
 
 
+// components/core-api-client
+export abstract class UpdateCompany extends Function {
+}
+export const updateCompanyProvider = {
+  provide: UpdateCompany,
+  useFactory: function ($injector: any) {
+    return $injector.get('updateCompany');
+  },
+  deps: ['$injector']
+};
+
+
 // components/gapi
 export abstract class StorageAPILoader extends Function {
 }
@@ -242,19 +254,6 @@ export const storageUtilsProvider = {
   provide: StorageUtils,
   useFactory: function ($injector: any) {
     return $injector.get('storageUtils');
-  },
-  deps: ['$injector']
-};
-
-
-// template-editor/components/services
-export abstract class BrandingFactory {
-  [key: string]: any;
-}
-export const brandingFactoryProvider = {
-  provide: BrandingFactory,
-  useFactory: function ($injector: any) {
-    return $injector.get('brandingFactory');
   },
   deps: ['$injector']
 };

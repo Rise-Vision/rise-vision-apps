@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as angular from 'angular';
 import { downgradeInjectable } from '@angular/upgrade/static';
-import { BrandingFactory } from 'src/app/ajs-upgraded-providers';
 import { ModalService } from 'src/app/components/modals/modal.service';
 import { PromiseUtilsService } from 'src/app/shared/services/promise-utils.service';
+import { BrandingService } from './branding.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class LogoImageService {
   public static readonly DEFAULT_IMAGE_THUMBNAIL = 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png';
 
   constructor(
-    private brandingFactory: BrandingFactory,
+    private brandingFactory: BrandingService,
     private ngModalService: ModalService,
     private promiseUtils: PromiseUtilsService) { }
   

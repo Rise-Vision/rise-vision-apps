@@ -15,7 +15,7 @@ import {
   PresentationUtils, presentationUtilsProvider,
   UserAuthFactory, userAuthFactoryProvider,
   CompanySettingsFactory, companySettingsFactoryProvider,
-  UserState, userStateProvider, purchaseFlowTrackerProvider, PurchaseFlowTracker, contactServiceProvider, ContactService, PresentationService, presentationServiceProvider, createFirstScheduleServiceProvider, CreateFirstScheduleService, brandingFactoryProvider, BrandingFactory, scheduleFactoryProvider, ScheduleFactory, PresentationTracker, presentationTrackerProvider, ScheduleSelectorFactory, scheduleSelectorFactoryProvider, StorageUtils, storageUtilsProvider, StorageAPILoader, storageAPILoaderProvider
+  UserState, userStateProvider, purchaseFlowTrackerProvider, PurchaseFlowTracker, contactServiceProvider, ContactService, PresentationService, presentationServiceProvider, createFirstScheduleServiceProvider, CreateFirstScheduleService, scheduleFactoryProvider, ScheduleFactory, PresentationTracker, presentationTrackerProvider, ScheduleSelectorFactory, scheduleSelectorFactoryProvider, StorageUtils, storageUtilsProvider, StorageAPILoader, storageAPILoaderProvider, UpdateCompany, updateCompanyProvider
 } from './ajs-upgraded-providers';
 
 describe('ajs-upgraded-providers', () => {
@@ -129,11 +129,6 @@ describe('ajs-upgraded-providers', () => {
     testAngularJsService(createFirstScheduleServiceProvider, 'createFirstSchedule');
   });
 
-  it('brandingFactory:', () => {
-    testRegisterProvider(brandingFactoryProvider, BrandingFactory);
-    testAngularJsService(brandingFactoryProvider, 'brandingFactory');
-  });
-
   it('scheduleFactory:', () => {
     testRegisterProvider(scheduleFactoryProvider, ScheduleFactory);
     testAngularJsService(scheduleFactoryProvider, 'scheduleFactory');
@@ -159,5 +154,9 @@ describe('ajs-upgraded-providers', () => {
     testAngularJsService(storageAPILoaderProvider, 'storageAPILoader');
   });
 
+  it('updateCompany:', () => {
+    testRegisterProvider(updateCompanyProvider, UpdateCompany);
+    testAngularJsService(updateCompanyProvider, 'updateCompany');
+  });
   
 });

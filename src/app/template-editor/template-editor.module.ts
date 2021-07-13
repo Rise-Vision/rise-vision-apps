@@ -27,6 +27,7 @@ import { BaseImageService } from './template-components/services/base-image.serv
 import { LogoImageService } from './template-components/services/logo-image.service';
 import { WeatherComponent } from './template-components/weather/weather.component';
 import { FileExistenceCheckService } from './template-components/services/file-existence-check.service';
+import { BrandingService } from './template-components/services/branding.service';
 
 @NgModule({
   imports: [
@@ -52,5 +53,5 @@ export class TemplateEditorModule {
   //https://github.com/angular/angular/issues/35314#issuecomment-584821399
   static entryComponents = [ CanvaButtonComponent, TemplateEditorComponent, EncodeLinkPipe ]
   static templateComponents = [ WeatherComponent ]
-  static providers = [ AttributeDataService, BaseImageService, BlueprintService, ComponentUtilsService, FileExistenceCheckService, FileMetadataUtilsService, FinancialLicenseService, InstrumentSearchService, LogoImageService, RssFeedValidationService, SlidesUrlValidationServiceService, TwitterCredentialsValidationService, WorldTimezonesService ]
+  static providers = [ AttributeDataService, BaseImageService, BlueprintService, BrandingService, ComponentUtilsService, FileExistenceCheckService, FileMetadataUtilsService, FinancialLicenseService, InstrumentSearchService, LogoImageService, RssFeedValidationService, SlidesUrlValidationServiceService, TwitterCredentialsValidationService, WorldTimezonesService ]
 }

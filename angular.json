@@ -462,7 +462,6 @@
 
               "src/scripts/template-editor/components/services/svc-storage-manager-factory.js",
               "src/scripts/template-editor/components/services/svc-playlist-component-factory.js",
-              "src/scripts/template-editor/components/services/svc-branding-factory.js",
 
               "src/scripts/template-editor/directives/dtv-attribute-editor.js",
               "src/scripts/template-editor/directives/dtv-attribute-list.js",
