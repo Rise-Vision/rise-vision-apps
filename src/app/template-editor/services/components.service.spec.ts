@@ -69,7 +69,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-branding-colors');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.equal('palette');
       expect(directive.title).to.equal('Color Settings');
       expect(directive.panel).to.equal('.branding-colors-container');
@@ -80,7 +79,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-branding');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.equal('ratingStar');
       expect(directive.title).to.equal('Brand Settings');
       expect(directive.panel).to.equal('.branding-component-container');
@@ -91,7 +89,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-override-brand-colors');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.exist;
     });
 
@@ -100,7 +97,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-data-counter');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.exist;
     });
 
@@ -110,7 +106,6 @@ describe('ComponentsService', () => {
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-data-financial');
       expect(directive.icon).to.equal('financial');
-      expect(directive.iconType).to.equal('streamline');
     });
 
     it('rise-html', function() {
@@ -118,7 +113,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-html');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.equal('html');
     });
 
@@ -127,7 +121,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-image');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.equal('image');
       expect(directive.panel).to.equal('.image-component-container');
     });
@@ -137,7 +130,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-image-logo');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.equal('circleStar');
       expect(directive.title).to.equal('Logo Settings');
       expect(directive.panel).to.equal('.image-component-container');
@@ -148,7 +140,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal("rise-playlist");
-      expect(directive.iconType).to.equal("streamline");
       expect(directive.icon).to.exist;
       expect(directive.panel).to.equal(".rise-playlist-container");
     });
@@ -158,7 +149,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal("rise-playlist-item");
-      expect(directive.iconType).to.equal("streamline");
       expect(directive.icon).to.exist;
       expect(directive.panel).to.equal(".playlist-item-container");
     });
@@ -168,7 +158,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal("rise-presentation-selector");
-      expect(directive.iconType).to.equal("streamline");
       expect(directive.icon).to.exist;
       expect(directive.panel).to.equal(".presentation-selector-container");
     });
@@ -178,7 +167,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-data-rss');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.equal('rss');
     });
 
@@ -195,7 +183,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-slides');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.equal('slides');
     });
 
@@ -204,7 +191,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-storage-selector');
-      expect(directive.iconType).to.equal('riseSvg');
       expect(directive.icon).to.equal('riseStorage');
       expect(directive.panel).to.equal('.storage-selector-container');
       expect(directive.title).to.equal('Rise Storage');
@@ -215,7 +201,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-text');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.exist;
     });
 
@@ -224,7 +209,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-time-date');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.exist;
     });
 
@@ -233,7 +217,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-data-twitter');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.exist;
     });
 
@@ -242,7 +225,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-video');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.equal('video');
       expect(directive.panel).to.equal('.video-component-container');
     });
@@ -252,7 +234,6 @@ describe('ComponentsService', () => {
 
       expect(directive).to.be.ok;
       expect(directive.type).to.equal('rise-data-weather');
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.equal('sun');
     });
   });
@@ -343,7 +324,6 @@ describe('ComponentsService', () => {
 
       componentsFactory.registerDirective(directive);
 
-      expect(directive.iconType).to.equal('streamline');
       expect(directive.icon).to.equal('text');
       expect(directive.title).to.equal('Text');
     });
@@ -490,29 +470,6 @@ describe('ComponentsService', () => {
 
   });
 
-  describe('getComponentIconType:', function() {
-    it('should return empty if null', function() {
-      expect(componentsFactory.getComponentIconType()).to.equal('');
-    });
-
-    it('should return empty if directive is not found', function() {
-      var component = {};
-
-      expect(componentsFactory.getComponentIconType(component)).to.equal('');
-    });
-
-    it('should return directive icontype', function() {
-      var component = {
-        directive: {
-          iconType: 'iconType'
-        }
-      };
-
-      expect(componentsFactory.getComponentIconType(component)).to.equal('iconType');
-    });
-
-  });
-
   describe('getComponentTitle:', function() {
     it('should return empty if null', function() {
       expect(componentsFactory.getComponentTitle()).to.equal('');
@@ -655,7 +612,7 @@ describe('ComponentsService', () => {
 
       componentsFactory.selected = component;
       componentsFactory.pages = [{}, {}, {}];
-      componentsFactory.setPanelIcon('previous-icon', 'streamline');
+      componentsFactory.setPanelIcon('previous-icon');
       componentsFactory.setPanelTitle('Previous Title');
       
       componentsFactory.editHighlightedComponent(component.id);
@@ -665,7 +622,6 @@ describe('ComponentsService', () => {
       expect(componentsFactory.pages).to.have.length(1);
       expect(componentsFactory.pages[0]).to.equal(component);
       expect(componentsFactory.panelIcon).to.be.null;
-      expect(componentsFactory.panelIconType).to.be.null;
       expect(componentsFactory.panelTitle).to.be.null;
 
       directive.element.show.should.have.been.called;

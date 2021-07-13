@@ -35,8 +35,8 @@ rv-spinner rv-spinner-key="rise-playlist-loader">
           <streamline-icon class="streamline-component-icon" name="navigation-menu-vertical" width="8" height="24"></streamline-icon>    
         </div>
         <div>
-          <component-icon ng-show="isEmbeddedTemplate(value)" icon="embedded-template" type="streamline"></component-icon>  
-          <component-icon ng-hide="isEmbeddedTemplate(value)" icon="{{ getComponentByType(value.tagName).icon }}" type="{{ getComponentByType(value.tagName).iconType }}"></component-icon>  
+          <streamline-icon ng-show="isEmbeddedTemplate(value)" class="streamline-component-icon" name="embedded-template" width="24" height="18"></streamline-icon>
+          <streamline-icon ng-hide="isEmbeddedTemplate(value)" class="streamline-component-icon" name="{{ getComponentByType(value.tagName).icon }}" width="24" height="18"></streamline-icon>
         </div>
         <div class="px-2 mr-auto u_text-ellipsis">
           <span class="templates-name" ng-show="isEmbeddedTemplate(value)">{{ value.name }}</span>
