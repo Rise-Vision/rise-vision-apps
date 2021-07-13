@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { CommonHeaderModule } from './common-header/common-header.module';
 import { EditorModule } from './editor/editor.module';
-import { $stateProvider, $transitionsProvider, addressServiceProvider, analyticsFactoryProvider, billingProvider, canvaTypePickerProvider, confirmModalProvider, contactServiceProvider, companySettingsFactoryProvider, plansServiceProvider, processErrorCodeProvider, purchaseFlowTrackerProvider, storeServiceProvider, subscriptionFactoryProvider, presentationUtilsProvider, userAuthFactoryProvider, userStateProvider, presentationServiceProvider, createFirstScheduleServiceProvider, brandingFactoryProvider, scheduleFactoryProvider, presentationTrackerProvider, scheduleSelectorFactoryProvider } from './ajs-upgraded-providers';
+import { $stateProvider, $transitionsProvider, addressServiceProvider, analyticsFactoryProvider, billingProvider, canvaTypePickerProvider, confirmModalProvider, contactServiceProvider, companySettingsFactoryProvider, plansServiceProvider, processErrorCodeProvider, purchaseFlowTrackerProvider, storeServiceProvider, subscriptionFactoryProvider, presentationUtilsProvider, userAuthFactoryProvider, userStateProvider, presentationServiceProvider, createFirstScheduleServiceProvider, brandingFactoryProvider, scheduleFactoryProvider, presentationTrackerProvider, scheduleSelectorFactoryProvider, storageUtilsProvider } from './ajs-upgraded-providers';
 import { TemplateEditorModule } from './template-editor/template-editor.module';
 import { PurchaseModule } from './purchase/purchase.module';
 import { environment } from 'src/environments/environment';
@@ -53,6 +53,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     purchaseFlowTrackerProvider,
     scheduleFactoryProvider,
     scheduleSelectorFactoryProvider,
+    storageUtilsProvider,
     storeServiceProvider,
     subscriptionFactoryProvider,
     presentationUtilsProvider,

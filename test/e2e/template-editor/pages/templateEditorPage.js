@@ -147,6 +147,7 @@ var TemplateEditorPage = function() {
     helper.wait(this.getAttributeList(), 'Attribute List');
     helper.wait(componentEditLink, 'Component Edit');
     helper.clickWhenClickable(componentEditLink, 'Component Edit');
+    browser.sleep(1000); //wait animation
   }
 };
 

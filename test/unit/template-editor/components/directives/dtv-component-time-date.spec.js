@@ -1,6 +1,6 @@
 'use strict';
 
-describe('directive: templateComponentTimeDate', function() {
+xdescribe('directive: templateComponentTimeDate', function() {
   var $scope,
     element,
     componentsFactory,

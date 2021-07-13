@@ -1,26 +1,26 @@
-'use strict';
+import { expect } from 'chai';
+import { TestBed } from '@angular/core/testing';
 
-describe('service: instrumentSearchService:', function() {
-  beforeEach(module('risevision.template-editor.services'));
+import { InstrumentSearchService } from './instrument-search.service';
+import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
 
-  beforeEach(module(function ($provide) {
-    $provide.service('$q', function () {
-      return Q;
+describe('InstrumentSearchService', () => {
+  let instrumentSearchService: InstrumentSearchService;
+  let $httpBackend: HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ]
     });
-  }));
 
-  var instrumentSearchService, INSTRUMENT_SEARCH_BASE_URL, $httpBackend;
-
-  beforeEach(function () {
-    inject(function ($injector) {
-      $httpBackend = $injector.get('$httpBackend');
-      INSTRUMENT_SEARCH_BASE_URL = $injector.get('INSTRUMENT_SEARCH_BASE_URL');
-      instrumentSearchService = $injector.get('instrumentSearchService');
-    });
+    $httpBackend = TestBed.inject(HttpTestingController);
+    instrumentSearchService = TestBed.inject(InstrumentSearchService);
   });
 
   it('should initialize', function () {
-    expect(instrumentSearchService).to.be.truely;
+    expect(instrumentSearchService).to.exist;
 
     expect(instrumentSearchService.keywordSearch).to.be.a('function');
     expect(instrumentSearchService.popularSearch).to.be.a('function');
@@ -51,12 +51,6 @@ describe('service: instrumentSearchService:', function() {
         ]
       };
 
-      $httpBackend.when('GET', INSTRUMENT_SEARCH_BASE_URL + "instruments/common?category=stocks").respond(200, stocks);
-
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
-
       instrumentSearchService.popularSearch("stocks")
         .then(function (results) {
           expect(results).to.deep.equal(stocks.items);
@@ -66,9 +60,12 @@ describe('service: instrumentSearchService:', function() {
         .catch(function(err) {
           console.log("shouldn't be here", err);
         });
+
+      $httpBackend.expectOne(InstrumentSearchService.INSTRUMENT_SEARCH_BASE_URL + "instruments/common?category=stocks")
+        .flush(stocks);
     });
 
-    it("should filter out results with no symbols", function() {
+    it("should filter out results with no symbols", function(done) {
       var returnedStocks = {
         items: [
           {
@@ -90,13 +87,7 @@ describe('service: instrumentSearchService:', function() {
         ]
       };
 
-      $httpBackend.when('GET', INSTRUMENT_SEARCH_BASE_URL + "instruments/common?category=stocks").respond(200, returnedStocks);
-
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
-
-      return instrumentSearchService.popularSearch("stocks")
+      instrumentSearchService.popularSearch("stocks")
         .then(function (results) {
           expect(results).to.deep.equal([
             {
@@ -106,7 +97,11 @@ describe('service: instrumentSearchService:', function() {
               logo: "https://risecontentlogos.s3.amazonaws.com/financial/AAPL.svg"
             }
           ]);
+          done();
         });
+
+        $httpBackend.expectOne(InstrumentSearchService.INSTRUMENT_SEARCH_BASE_URL + "instruments/common?category=stocks")
+          .flush(returnedStocks);
     });
 
   });
@@ -134,11 +129,6 @@ describe('service: instrumentSearchService:', function() {
     };
 
     it("should return list of instruments by category and keyword", function(done) {
-      $httpBackend.when('GET', INSTRUMENT_SEARCH_BASE_URL + "instrument/search?category=Stocks&query=Amazon").respond(200, instruments);
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
-
       instrumentSearchService.keywordSearch("stocks", "Amazon")
         .then(function (results) {
           expect(results).to.deep.equal(instruments.items);
@@ -148,17 +138,12 @@ describe('service: instrumentSearchService:', function() {
         .catch(function(err) {
           console.log("shouldn't be here", err);
         });
+
+        $httpBackend.expectOne(InstrumentSearchService.INSTRUMENT_SEARCH_BASE_URL + "instrument/search?category=Stocks&query=Amazon")
+          .flush(instruments);
     });
 
-    it("should return list of instruments by category and keyword", function(done) {
-      $httpBackend.when('GET', INSTRUMENT_SEARCH_BASE_URL +
-        "instrument/search?category=World%20Indexes&query=Amazon")
-      .respond(200, instruments);
-
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
-
+    it("should return list of instruments by category and keyword", function(done) {     
       instrumentSearchService.keywordSearch("world indexes", "Amazon")
         .then(function (results) {
           expect(results).to.deep.equal(instruments.items);
@@ -168,9 +153,12 @@ describe('service: instrumentSearchService:', function() {
         .catch(function(err) {
           console.log("shouldn't be here", err);
         });
+
+        $httpBackend.expectOne(InstrumentSearchService.INSTRUMENT_SEARCH_BASE_URL + "instrument/search?category=World%20Indexes&query=Amazon")
+          .flush(instruments);
     });
 
-    it("should filter out results with no symbols", function() {
+    it("should filter out results with no symbols", function(done) {
       var returnedInstruments = {
         items: [
           {
@@ -191,12 +179,7 @@ describe('service: instrumentSearchService:', function() {
         ]
       };
 
-      $httpBackend.when('GET', INSTRUMENT_SEARCH_BASE_URL + "instrument/search?category=Stocks&query=Amazon").respond(200, returnedInstruments);
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
-
-      return instrumentSearchService.keywordSearch("stocks", "Amazon")
+     instrumentSearchService.keywordSearch("stocks", "Amazon")
         .then(function (results) {
           expect(results).to.deep.equal([
             {
@@ -210,7 +193,11 @@ describe('service: instrumentSearchService:', function() {
               category: "Stocks"
             }
           ]);
+          done();
         });
+      $httpBackend.expectOne(InstrumentSearchService.INSTRUMENT_SEARCH_BASE_URL + "instrument/search?category=Stocks&query=Amazon")
+        .flush(returnedInstruments);
+
     });
 
   });

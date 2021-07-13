@@ -1,25 +1,30 @@
-'use strict';
+import { assert, expect } from 'chai';
+import { TestBed } from '@angular/core/testing';
+import { RssFeedValidationService } from './rss-feed-validation.service';
+import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
+import { PromiseUtilsService } from 'src/app/shared/services/promise-utils.service';
 
-describe('service: rssFeedValidation:', function() {
-  beforeEach(module('risevision.template-editor.services'));
+describe('RssFeedValidationService', () => {
+  let rssFeedValidation: RssFeedValidationService;
 
-  beforeEach(module(function ($provide) {
-    $provide.service('$q', function () {
-      return Q;
+  let $httpBackend: HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ],
+      providers: [
+        {provide: PromiseUtilsService, useValue: new PromiseUtilsService()}        
+      ]
     });
-  }));
 
-  var rssFeedValidation, $httpBackend;
-
-  beforeEach(function () {
-    inject(function ($injector) {
-      $httpBackend = $injector.get('$httpBackend');
-      rssFeedValidation = $injector.get('rssFeedValidation');
-    });
+    $httpBackend = TestBed.inject(HttpTestingController);
+    rssFeedValidation = TestBed.inject(RssFeedValidationService);
   });
 
-  it('should initialize', function () {
-    expect(rssFeedValidation).to.be.truely;
+  it('should be created', () => {
+    expect(rssFeedValidation).to.exist;
     expect(rssFeedValidation.isParsable).to.be.a('function');
     expect(rssFeedValidation.isValid).to.be.a('function');
   });
@@ -36,19 +41,12 @@ describe('service: rssFeedValidation:', function() {
           done();
         })
         .catch(function(err) {
-          fail('Unexpected ' + err);
+          assert.fail('Unexpected ' + err);
         });
     });
 
     it("should return 'VALID' if response does not contain error", function( done ) {
       var url = "http://rss.cnn.com/rss/cnn_topstories.rss";
-
-      $httpBackend.when('GET', 'https://feed-parser.risevision.com/' + url).respond(200, [{"test":"rss"}]);
-
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
-
       rssFeedValidation.isParsable(url)
         .then(function (result) {
           expect(result).to.be.equal('VALID');
@@ -56,19 +54,14 @@ describe('service: rssFeedValidation:', function() {
           done();
         })
         .catch(function(err) {
-          fail('Unexpected ' + err);
+          assert.fail('Unexpected ' + err);
         });
+      $httpBackend.expectOne('https://feed-parser.risevision.com/' + url)
+        .flush([{"test":"rss"}]);
     });
 
     it("should return 'UNAUTHORIZED' if feed requires authentication", function( done ) {
       var url = "http://feeds.reuters.com/reuters/topNews";
-
-      $httpBackend.when('GET', 'https://feed-parser.risevision.com/' + url).respond(200, { Error: '401 Unauthorized' });
-
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
-
       rssFeedValidation.isParsable(url)
         .then(function (result) {
           expect(result).to.be.equal('UNAUTHORIZED');
@@ -76,19 +69,14 @@ describe('service: rssFeedValidation:', function() {
           done();
         })
         .catch(function(err) {
-          fail('Unexpected ' + err);
+          assert.fail('Unexpected ' + err);
         });
+      $httpBackend.expectOne('https://feed-parser.risevision.com/' + url)
+      .flush({ Error: '401 Unauthorized' });
     });
 
     it("should return 'NON_FEED' if url provided is not a RSS feed", function( done ) {
       var url = "http://tsn.ca";
-
-      $httpBackend.when('GET', 'https://feed-parser.risevision.com/' + url).respond(200, { Error: 'Not a feed' });
-
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
-
       rssFeedValidation.isParsable(url)
         .then(function (result) {
           expect(result).to.be.equal('NON_FEED');
@@ -96,19 +84,14 @@ describe('service: rssFeedValidation:', function() {
           done();
         })
         .catch(function(err) {
-          fail('Unexpected ' + err);
+          assert.fail('Unexpected ' + err);
         });
+      $httpBackend.expectOne('https://feed-parser.risevision.com/' + url)
+      .flush({ Error: 'Not a feed' });
     });
 
     it("should return 'NOT_FOUND' if url provided does not have a recognizable domain", function( done ) {
       var url = "http://ffasfsaa.com";
-
-      $httpBackend.when('GET', 'https://feed-parser.risevision.com/' + url).respond(200, { Error: 'getaddrinfo ENOTFOUND safasfsafsa.com safasfsafsa.com:80' });
-
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
-
       rssFeedValidation.isParsable(url)
         .then(function (result) {
           expect(result).to.be.equal('NOT_FOUND');
@@ -116,19 +99,14 @@ describe('service: rssFeedValidation:', function() {
           done();
         })
         .catch(function(err) {
-          fail('Unexpected ' + err);
-        });
+          assert.fail('Unexpected ' + err);
+        });      
+      $httpBackend.expectOne('https://feed-parser.risevision.com/' + url)
+      .flush({ Error: 'getaddrinfo ENOTFOUND safasfsafsa.com safasfsafsa.com:80' });
     });
 
     it("should return 'VALID' if response has error not pertaining to the feed", function( done ) {
       var url = "http://rss.cnn.com/rss/cnn_topstories.rss";
-
-      $httpBackend.when('GET', 'https://feed-parser.risevision.com/' + url).respond(200, { Error: 'ETIMEDOUT' });
-
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
-
       rssFeedValidation.isParsable(url)
         .then(function (result) {
           expect(result).to.be.equal('VALID');
@@ -136,10 +114,10 @@ describe('service: rssFeedValidation:', function() {
           done();
         })
         .catch(function(err) {
-          fail('Unexpected ' + err);
-        });
+          assert.fail('Unexpected ' + err);
+        });    
+      $httpBackend.expectOne('https://feed-parser.risevision.com/' + url)
+      .flush({ Error: 'ETIMEDOUT' });
     });
-
   } );
-
 });

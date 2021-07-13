@@ -1,26 +1,44 @@
-'use strict';
+import { expect } from 'chai';
+import { TestBed } from '@angular/core/testing';
+import * as _ from 'lodash';
+import { FileMetadataUtilsService } from './file-metadata-utils.service';
+import { TemplateEditorUtilsService } from '../../services/template-editor-utils.service';
+import { StorageUtils } from 'src/app/ajs-upgraded-providers';
 
-describe('service: fileMetadataUtilsService:', function() {
-  beforeEach(module('risevision.template-editor.services'));
+describe('FileMetadataUtilsService', () => {
+  let fileMetadataUtilsService: FileMetadataUtilsService;
+  let storageUtils, templateEditorUtils;
 
-  var fileMetadataUtilsService;
-
-  beforeEach(module(function ($provide) {
-    $provide.service('storageUtils',function(){
-      return {
-        getBucketName: sinon.stub().returns('bucket-name')
-      };
+  beforeEach(() => {
+    storageUtils = {
+      getBucketName: sinon.stub().returns('bucket-name')
+    };
+    templateEditorUtils = {
+      addOrReplaceAll: function(list, oldItem, newItem) {
+        var matchCount = 0;    
+        for (var i = 0; i < list.length; i++) {
+          var item = list[i];
+          if (_.isMatch(item, oldItem)) {
+            matchCount++;
+            list.splice(i, 1, newItem);
+          }
+        }    
+        if (matchCount === 0) {
+          list.push(newItem);
+        }
+      }
+    };
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: StorageUtils, useValue: storageUtils},
+        {provide: TemplateEditorUtilsService, useValue: templateEditorUtils}
+      ]
     });
-  }));
-
-  beforeEach(function() {
-    inject(function($injector) {
-      fileMetadataUtilsService = $injector.get('fileMetadataUtilsService');
-    });
+    fileMetadataUtilsService = TestBed.inject(FileMetadataUtilsService);
   });
 
   it('should initialize', function () {
-    expect(fileMetadataUtilsService).to.be.truely;
+    expect(fileMetadataUtilsService).to.exist;
     expect(fileMetadataUtilsService.thumbnailFor).to.be.a('function');
     expect(fileMetadataUtilsService.timeCreatedFor).to.be.a('function');
   });
@@ -66,7 +84,7 @@ describe('service: fileMetadataUtilsService:', function() {
     it('should not fail if time created is not provided in the entry', function() {
       var timeCreated = fileMetadataUtilsService.timeCreatedFor({});
 
-      expect(timeCreated).to.be.falsey;
+      expect(timeCreated).to.not.exist;
     });
 
   });
@@ -412,7 +430,7 @@ describe('service: fileMetadataUtilsService:', function() {
       var metadata =
         fileMetadataUtilsService.getUpdatedFileMetadata(sampleMetadata, updatedImages);
 
-      expect(metadata).to.be.falsey;
+      expect(metadata).to.not.exist;
     });
 
   });
