@@ -114,6 +114,18 @@ export const confirmModalProvider = {
 };
 
 
+// components/gapi
+export abstract class StorageAPILoader extends Function {
+}
+export const storageAPILoaderProvider = {
+  provide: StorageAPILoader,
+  useFactory: function ($injector: any) {
+    return $injector.get('storageAPILoader');
+  },
+  deps: ['$injector']
+};
+
+
 // components/logging
 export abstract class AnalyticsFactory {
   [key: string]: any;
