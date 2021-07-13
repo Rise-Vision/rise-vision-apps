@@ -1,17 +1,47 @@
-import { Directive, Input, Output, EventEmitter, Injector, ElementRef } from '@angular/core';
-import { UpgradeComponent } from '@angular/upgrade/static';
+import { Component } from '@angular/core';
 
-// This Angular directive will act as an interface to the "upgraded" AngularJS component
-@Directive({selector: 'template-attribute-list'})
-export class TemplateAttributeListComponent extends UpgradeComponent {
-  // The names of the input and output properties here must match the names of the
-  // `<` and `&` bindings in the AngularJS component that is being wrapped
-  // @Input() hero!: String;
-  // @Output() onRemove!: EventEmitter<void>;
+import { UserState, BrandingFactory, ScheduleSelectorFactory } from 'src/app/ajs-upgraded-providers';
 
-  constructor(elementRef: ElementRef, injector: Injector) {
-    // We must pass the name of the directive as used by AngularJS to the super
-    super('templateAttributeList', elementRef, injector);
+import { TemplateEditorService } from '../../services/template-editor.service';
+import { ComponentsService } from '../../services/components.service';
+import { BlueprintService } from '../../services/blueprint.service';
+
+@Component({
+  selector: 'template-attribute-list',
+  templateUrl: './template-attribute-list.component.html',
+  styleUrls: ['./template-attribute-list.component.scss']
+})
+export class TemplateAttributeListComponent {
+  public brandingComponent;
+  public schedulesComponent;
+  public colorsComponent;
+  public components;
+
+  constructor(private userState: UserState,
+    private templateEditorFactory: TemplateEditorService,
+    public componentsFactory: ComponentsService,
+    private blueprintFactory: BlueprintService,
+    private brandingFactory: BrandingFactory,
+    private scheduleSelectorFactory: ScheduleSelectorFactory) {
+
+    this.brandingComponent = this.brandingFactory.getBrandingComponent();
+
+    if (this.userState.hasRole('cp')) {
+      this.schedulesComponent = this.scheduleSelectorFactory.getSchedulesComponent(this.templateEditorFactory
+        .presentation);
+    }
+
+    if (this.blueprintFactory.hasBranding()) {
+      this.colorsComponent = {
+        type: 'rise-override-brand-colors'
+      };
+    }
+
+    this.components = this.blueprintFactory.blueprintData.components
+      .filter(c => {
+        return !c.nonEditable;
+      });
+
   }
 
 }
