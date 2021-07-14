@@ -28,6 +28,22 @@ import { ComponentUtilsService } from './template-components/services/component-
 import { FileMetadataUtilsService } from './template-components/services/file-metadata-utils.service';
 import { WeatherComponent } from './template-components/weather/weather.component';
 import { TimeDateComponent } from './template-components/time-date/time-date.component';
+import { StorageSelectorComponent } from './template-components/storage-selector/storage-selector.component';
+import { BrandingComponent } from './template-components/branding/branding.component';
+import { BrandingColorsComponent } from './template-components/branding-colors/branding-colors.component';
+import { SchedulesComponent } from './template-components/schedules/schedules.component';
+import { FinancialComponent } from './template-components/financial/financial.component';
+import { ImageComponent } from './template-components/image/image.component';
+import { SlidesComponent } from './template-components/slides/slides.component';
+import { TextComponent } from './template-components/text/text.component';
+import { VideoComponent } from './template-components/video/video.component';
+import { RssComponent } from './template-components/rss/rss.component';
+import { CounterComponent } from './template-components/counter/counter.component';
+import { ColorsComponent } from './template-components/colors/colors.component';
+import { TwitterComponent } from './template-components/twitter/twitter.component';
+import { PresentationSelectorComponent } from './template-components/presentation-selector/presentation-selector.component';
+import { PlaylistComponent } from './template-components/playlist/playlist.component';
+import { HtmlComponent } from './template-components/html/html.component';
 
 @NgModule({
   imports: [
@@ -48,7 +64,23 @@ import { TimeDateComponent } from './template-components/time-date/time-date.com
     TemplateComponentComponent,
     EncodeLinkPipe,
     WeatherComponent,
-    TimeDateComponent
+    TimeDateComponent,
+    StorageSelectorComponent,
+    BrandingComponent,
+    BrandingColorsComponent,
+    SchedulesComponent,
+    FinancialComponent,
+    ImageComponent,
+    SlidesComponent,
+    TextComponent,
+    VideoComponent,
+    RssComponent,
+    CounterComponent,
+    ColorsComponent,
+    TwitterComponent,
+    PresentationSelectorComponent,
+    PlaylistComponent,
+    HtmlComponent
   ]
 })
 export class TemplateEditorModule {

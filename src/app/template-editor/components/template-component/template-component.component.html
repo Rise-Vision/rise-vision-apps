@@ -1,16 +1,15 @@
-<div class="component-header aligner" ng-class="{ 'visible-bottom-rule': componentsFactory.isHeaderBottomRuleVisible(componentsFactory.selected) }">
-  <a id="back-button" class="madero-link" ng-click="componentsFactory.onBackButton();">
-      <i class="fa fa-lg fa-angle-left arrow-icon pr-3"></i><span translate>template.attribute-editor.back-to-list</span>
+<div class="component-header aligner" [ngClass]="{ 'visible-bottom-rule': componentsFactory.isHeaderBottomRuleVisible(componentsFactory.selected) }">
+  <a id="back-button" class="madero-link" (click)="componentsFactory.onBackButton();">
+      <i class="fa fa-lg fa-angle-left arrow-icon pr-3"></i>Back
   </a>
-  <streamline-icon class="streamline-component-icon" ng-if="!panelIcon" name="{{ componentsFactory.getComponentIcon(componentsFactory.selected) }}" width="24" height="18"></streamline-icon>
-  <streamline-icon class="streamline-component-icon" ng-if="panelIcon" name="{{ panelIcon }}" width="24" height="18"></streamline-icon>
+  <streamline-icon class="streamline-component-icon" name="{{ componentsFactory.getComponentIcon(componentsFactory.selected) }}" width="24" height="18"></streamline-icon>
   <span class="u_text-ellipsis mr-auto">{{ componentsFactory.getComponentTitle(componentsFactory.selected) }}</span>
-  <div class="btn-group" ng-if="componentsFactory.getCurrentPage() && componentsFactory.getCurrentPage().type === 'rise-storage-selector' && storageManagerFactory.fileType === 'image'">
-    <button id="listViewButton" type="button" class="btn w-50" ng-click="storageManagerFactory.isListView = true" ng-class="{'btn-toggle-blue-off' : !storageManagerFactory.isListView, 'btn-toggle-blue-on' : storageManagerFactory.isListView}">
-      <img ng-src="../images/icon-list{{!storageManagerFactory.isListView ? '' : '-inv'}}.svg">
+  <div class="btn-group" *ngIf="componentsFactory.getCurrentPage() && componentsFactory.getCurrentPage().type === 'rise-storage-selector' && storageManagerFactory.fileType === 'image'">
+    <button id="listViewButton" type="button" class="btn w-50" (click)="storageManagerFactory.isListView = true" [ngClass]="{'btn-toggle-blue-off' : !storageManagerFactory.isListView, 'btn-toggle-blue-on' : storageManagerFactory.isListView}">
+      <img src="../images/icon-list{{!storageManagerFactory.isListView ? '' : '-inv'}}.svg">
     </button>
-    <button id="gridViewButton" type="button" class="btn w-50" ng-click="storageManagerFactory.isListView = false" ng-class="{'btn-toggle-blue-off' : storageManagerFactory.isListView, 'btn-toggle-blue-on' : !storageManagerFactory.isListView}">
-      <img ng-src="../images/icon-module{{storageManagerFactory.isListView ? '' : '-inv'}}.svg">
+    <button id="gridViewButton" type="button" class="btn w-50" (click)="storageManagerFactory.isListView = false" [ngClass]="{'btn-toggle-blue-off' : storageManagerFactory.isListView, 'btn-toggle-blue-on' : !storageManagerFactory.isListView}">
+      <img src="../images/icon-module{{storageManagerFactory.isListView ? '' : '-inv'}}.svg">
     </button>
   </div>
 
