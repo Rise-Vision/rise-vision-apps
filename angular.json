@@ -468,7 +468,6 @@
               "src/scripts/template-editor/components/services/svc-base-image-factory.js",
               "src/scripts/template-editor/components/services/svc-file-existence-check.js",
 
-              "src/scripts/template-editor/directives/dtv-attribute-list.js",
               "src/scripts/template-editor/directives/dtv-editor-preview-holder.js",
               "src/scripts/template-editor/directives/dtv-component.js",
               "src/scripts/template-editor/directives/dtv-basic-uploader.js",

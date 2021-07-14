@@ -7,7 +7,7 @@ var TemplateEditorPage = function() {
   var presentationsListLink = element(by.css('[ng-href="/editor?cid="]'));
   var templateEditorContainer = element(by.id('template-editor'));
   var attributeList = element(by.css('.attribute-list'));
-  var componentItems = element.all(by.repeater('comp in components track by $index'));
+  var componentItems = element.all(by.css('.attribute-row.attribute-row-hover'));
   var presentationName = element(by.css('.presentation-name .input-stretchy'));
   var editNameButton = element(by.css('.presentation-name #editButton'));
   var deleteButton = element(by.id('deleteButton'));
