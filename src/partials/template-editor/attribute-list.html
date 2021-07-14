@@ -3,7 +3,7 @@
 
   <div class="attribute-row">
     <div class="col-xs-12 pl-0 attribute-desc">
-      <component-icon icon="{{ componentsFactory.getComponentIcon(brandingComponent) }}" type="{{ componentsFactory.getComponentIconType(brandingComponent) }}"></component-icon>
+      <streamline-icon class="streamline-component-icon" name="{{ componentsFactory.getComponentIcon(brandingComponent) }}" width="24" height="18"></streamline-icon>
       <a id="branding-edit" class="madero-link" ng-click="componentsFactory.editComponent(brandingComponent);">
         Brand Settings
       </a>
@@ -15,7 +15,7 @@
 
 <div class="attribute-row schedules-attribute-row mt-2" require-role="cp">
   <div class="col-xs-12 pl-0 attribute-desc" ng-class="{'danger' : schedulesComponent.showNoSchedulesError && !schedulesComponent.factory.hasSelectedSchedules }">
-    <component-icon icon="schedule" type="streamline"></component-icon>
+    <streamline-icon class="streamline-component-icon" name="schedule" width="24" height="18"></streamline-icon>
     <a class="madero-link" ng-click="componentsFactory.editComponent(schedulesComponent);">
       Schedules
     </a>
@@ -28,7 +28,7 @@
 <div id="branding-colors-override" ng-show="colorsComponent">
   <div class="attribute-row">
     <div class="col-xs-12 pl-0 attribute-desc">
-      <component-icon icon="{{ componentsFactory.getComponentIcon(colorsComponent) }}" type="{{ componentsFactory.getComponentIconType(colorsComponent) }}"></component-icon>
+      <streamline-icon class="streamline-component-icon" name="{{ componentsFactory.getComponentIcon(colorsComponent) }}" width="24" height="18"></streamline-icon>
       <a id="branding-colors-override-edit" class="madero-link" ng-click="componentsFactory.editComponent(colorsComponent);">
         Colors
       </a>
@@ -39,7 +39,7 @@
 <div ng-mouseleave="componentsFactory.highlightComponent(null)">
   <div class="attribute-row attribute-row-hover" ng-repeat="comp in components track by $index">
     <div class="col-xs-12 pl-0 attribute-desc" ng-mouseover="componentsFactory.highlightComponent(comp.id)">
-      <component-icon icon="{{ componentsFactory.getComponentIcon(comp) }}" type="{{ componentsFactory.getComponentIconType(comp) }}"></component-icon>
+      <streamline-icon class="streamline-component-icon" name="{{ componentsFactory.getComponentIcon(comp) }}" width="24" height="18"></streamline-icon>
       <a class="madero-link" ng-click="componentsFactory.editComponent(comp);">
         {{ comp.label }}
       </a>

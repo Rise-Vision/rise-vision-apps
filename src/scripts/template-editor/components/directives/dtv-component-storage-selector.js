@@ -90,7 +90,7 @@ angular.module('risevision.template-editor.directives')
             var folderName = templateEditorUtils.fileNameOf(folderPath);
 
             if (folderName) {
-              componentsFactory.setPanelIcon('folder', 'streamline');
+              componentsFactory.setPanelIcon('folder');
               componentsFactory.setPanelTitle(folderName);
             } else {
               componentsFactory.resetPanelHeader();
