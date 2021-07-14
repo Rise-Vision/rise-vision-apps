@@ -17,39 +17,33 @@ export class ComponentsService {
   static readonly COMPONENTS_MAP = {
     'rise-branding-colors': {
       type: 'rise-branding-colors',
-      iconType: 'streamline',
       icon: 'palette',
       panel: '.branding-colors-container',
       title: 'Color Settings',
     },
     'rise-branding': {
       type: 'rise-branding',
-      iconType: 'streamline',
       icon: 'ratingStar',
       panel: '.branding-component-container',
       title: 'Brand Settings',
     },
     'rise-override-brand-colors': {
       type: 'rise-override-brand-colors',
-      iconType: 'streamline',
       icon: 'palette',
       title: 'Override Brand Colors',
     },
     'rise-data-counter': {
       type: 'rise-data-counter',
-      iconType: 'streamline',
       icon: 'hourglass',
       title: 'Counter'
     },
     'rise-data-financial': {
       type: 'rise-data-financial',
-      iconType: 'streamline',
       icon: 'financial',
       title: 'Financial'
     },
     'rise-html': {
       type: 'rise-html',
-      iconType: 'streamline',
       icon: 'html',
       title: 'HTML Embed',
       visual: true
@@ -57,7 +51,6 @@ export class ComponentsService {
     'rise-image': {
       type: 'rise-image',
       icon: 'image',
-      iconType: 'streamline',
       panel: '.image-component-container',
       title: 'Image',
       playUntilDone: true,
@@ -66,44 +59,39 @@ export class ComponentsService {
     'rise-image-logo': {
       type: 'rise-image-logo',
       icon: 'circleStar',
-      iconType: 'streamline',
       panel: '.image-component-container',
       title: 'Logo Settings'
     },
     'rise-playlist': {
       type: 'rise-playlist',
-      iconType: 'streamline',
       icon: 'playlist',
       panel: '.rise-playlist-container',
       title: 'Playlist'
     },
     'rise-playlist-item': {
       type: 'rise-playlist-item',
-      iconType: 'streamline',
       icon: 'embedded-template',
       panel: '.playlist-item-container',
       title: 'Playlist Item'
     },
     'rise-presentation-selector': {
       type: 'rise-presentation-selector',
-      iconType: 'streamline',
       icon: 'embedded-template',
       panel: '.presentation-selector-container',
       title: 'Select Presentations'
     },
     'rise-data-rss': {
       type: 'rise-data-rss',
-      iconType: 'streamline',
       icon: 'rss',
       title: 'RSS'
     },
     'rise-schedules': {
       type: 'rise-schedules',
+      icon: 'schedule',
       title: 'Schedules'
     },
     'rise-slides': {
       type: 'rise-slides',
-      iconType: 'streamline',
       icon: 'slides',
       title: 'Google Slides',
       visual: true,
@@ -113,14 +101,12 @@ export class ComponentsService {
     },
     'rise-storage-selector': {
       type: 'rise-storage-selector',
-      iconType: 'riseSvg',
       icon: 'riseStorage',
       panel: '.storage-selector-container',
       title: 'Rise Storage',
     },
     'rise-text': {
       type: 'rise-text',
-      iconType: 'streamline',
       icon: 'text',
       title: 'Text',
       visual: true,
@@ -134,19 +120,16 @@ export class ComponentsService {
     },
     'rise-time-date': {
       type: 'rise-time-date',
-      iconType: 'streamline',
       icon: 'time',
       title: 'Time and Date'
     },
     'rise-data-twitter': {
       type: 'rise-data-twitter',
-      iconType: 'streamline',
       icon: 'twitter',
       title: 'Twitter'
     },
     'rise-video': {
       type: 'rise-video',
-      iconType: 'streamline',
       icon: 'video',
       panel: '.video-component-container',
       title: 'Video',
@@ -155,7 +138,6 @@ export class ComponentsService {
     },
     'rise-data-weather': {
       type: 'rise-data-weather',
-      iconType: 'streamline',
       icon: 'sun',
       title: 'Weather'
     }
@@ -177,7 +159,6 @@ export class ComponentsService {
   pages = [];
 
   panelIcon;
-  panelIconType;
   panelTitle;
 
   constructor(private templateEditorUtils: TemplateEditorUtilsService,
@@ -274,12 +255,6 @@ export class ComponentsService {
       return directive ? directive.icon : '';
     };
 
-    getComponentIconType(component?) {
-      var directive = this._getDirective(component);
-
-      return directive ? directive.iconType : '';
-    };
-
     getComponentTitle(component?) {
       var directive = this._getDirective(component);
 
@@ -347,13 +322,12 @@ export class ComponentsService {
     };
 
     resetPanelHeader() {
-      this.setPanelIcon(null, null);
+      this.setPanelIcon(null);
       this.setPanelTitle(null);
     };
 
-    setPanelIcon(panelIcon, panelIconType) {
+    setPanelIcon(panelIcon) {
       this.panelIcon = panelIcon;
-      this.panelIconType = panelIconType;
     };
 
     setPanelTitle(panelTitle) {

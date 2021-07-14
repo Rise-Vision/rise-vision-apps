@@ -1,0 +1,40 @@
+<div id="branding" [shown]="brandingComponent">
+  <label>Settings for all Presentations:</label>
+
+  <div class="attribute-row">
+    <div class="col-xs-12 pl-0 attribute-desc">
+      <streamline-icon class="streamline-component-icon" name="{{ componentsFactory.getComponentIcon(brandingComponent) }}" width="24" height="18"></streamline-icon>
+      <a id="branding-edit" class="madero-link" (click)="componentsFactory.editComponent(brandingComponent);">Brand Settings</a>
+    </div>
+  </div>
+
+  <label class="u_margin-md-top">Settings for this Presentation:</label>
+</div>
+
+<div class="attribute-row schedules-attribute-row mt-2" require-role="cp">
+  <div class="col-xs-12 pl-0 attribute-desc" [ngClass]="{'danger' : schedulesComponent && schedulesComponent.showNoSchedulesError && !schedulesComponent.factory.hasSelectedSchedules }">
+    <streamline-icon class="streamline-component-icon" name="schedule" width="24" height="18"></streamline-icon>
+    <a class="madero-link" (click)="componentsFactory.editComponent(schedulesComponent);">Schedules</a>
+    <div class="error-message mb-1" [shown]="schedulesComponent && schedulesComponent.showNoSchedulesError && !schedulesComponent.factory.hasSelectedSchedules">
+      No schedule selected.
+    </div>
+  </div>
+</div>
+
+<div id="branding-colors-override" [shown]="colorsComponent">
+  <div class="attribute-row">
+    <div class="col-xs-12 pl-0 attribute-desc">
+      <streamline-icon class="streamline-component-icon" name="{{ componentsFactory.getComponentIcon(colorsComponent) }}" width="24" height="18"></streamline-icon>
+      <a id="branding-colors-override-edit" class="madero-link" (click)="componentsFactory.editComponent(colorsComponent);">Colors</a>
+    </div>
+  </div>
+</div>
+
+<div (mouseout)="componentsFactory.highlightComponent(null)">
+  <div class="attribute-row attribute-row-hover" *ngFor="let comp of components track">
+    <div class="col-xs-12 pl-0 attribute-desc" (mouseover)="componentsFactory.highlightComponent(comp.id)">
+      <streamline-icon class="streamline-component-icon" name="{{ componentsFactory.getComponentIcon(comp) }}" width="24" height="18"></streamline-icon>
+      <a class="madero-link" (click)="componentsFactory.editComponent(comp);">{{ comp.label }}</a>
+    </div>
+  </div>
+</div>

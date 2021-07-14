@@ -48,7 +48,7 @@ var TimeDateComponentScenarios = function () {
         timeDateComponentPage.getSpecificTzLabel().click();
 
         helper.wait(timeDateComponentPage.getTimeZone(), 'Time Zone');
-        timeDateComponentPage.selectOption(timeDateComponentPage.getTimeZoneOptions().get(60).getText());
+        timeDateComponentPage.selectOption(timeDateComponentPage.getTimeZoneOptions().get(59).getText());
 
         helper.wait(timeDateComponentPage.getDateFormat(), 'Date format');
         timeDateComponentPage.selectOption(timeDateComponentPage.getDateFormatOptions().get(1).getText());
@@ -64,10 +64,10 @@ var TimeDateComponentScenarios = function () {
 
         helper.wait(timeDateComponentPage.getDateFormat(), 'Date format');
 
-        expect(timeDateComponentPage.getDateFormat().getAttribute('value')).to.eventually.equal('string:MMM DD YYYY');
+        expect(timeDateComponentPage.getDateFormat().getAttribute('value')).to.eventually.equal('MMM DD YYYY');
         expect(timeDateComponentPage.getHours24().isSelected()).to.eventually.be.true;
         expect(timeDateComponentPage.getSpecificTz().isSelected()).to.eventually.be.true;
-        expect(timeDateComponentPage.getTimeZone().getAttribute('value')).to.eventually.equal('string:America/Argentina/Buenos_Aires');
+        expect(timeDateComponentPage.getTimeZone().getAttribute('value')).to.eventually.equal('America/Argentina/Buenos_Aires');
       });
     });
   });

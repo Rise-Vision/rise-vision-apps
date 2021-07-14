@@ -347,7 +347,7 @@ describe('directive: componentStorageSelector', function() {
 
         templateEditorUtils.fileNameOf.should.have.been.calledWith('folder/');
 
-        componentsFactory.setPanelIcon.should.have.been.calledWith('folder', 'streamline');
+        componentsFactory.setPanelIcon.should.have.been.calledWith('folder');
         componentsFactory.setPanelTitle.should.have.been.calledWith('folderName');
 
         componentsFactory.resetPanelHeader.should.not.have.been.called;
