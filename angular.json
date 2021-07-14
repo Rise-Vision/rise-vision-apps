@@ -469,7 +469,6 @@
               "src/scripts/template-editor/components/services/svc-file-existence-check.js",
 
               "src/scripts/template-editor/directives/dtv-editor-preview-holder.js",
-              "src/scripts/template-editor/directives/dtv-component.js",
               "src/scripts/template-editor/directives/dtv-basic-uploader.js",
               "src/scripts/template-editor/directives/dtv-file-entry.js",
               "src/scripts/template-editor/directives/dtv-empty-file-list.js",

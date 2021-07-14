@@ -247,6 +247,17 @@ export const brandingFactoryProvider = {
   deps: ['$injector']
 };
 
+export abstract class StorageManagerFactory {
+  [key: string]: any;
+}
+export const storageManagerFactoryProvider = {
+  provide: StorageManagerFactory,
+  useFactory: function ($injector: any) {
+    return $injector.get('storageManagerFactory');
+  },
+  deps: ['$injector']
+};
+
 
 //schedules/services
 export abstract class CreateFirstScheduleService extends Function {

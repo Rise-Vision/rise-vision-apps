@@ -1,1 +1,37 @@
-<p>template-component works!</p>
+<div class="component-header aligner" ng-class="{ 'visible-bottom-rule': componentsFactory.isHeaderBottomRuleVisible(componentsFactory.selected) }">
+  <a id="back-button" class="madero-link" ng-click="componentsFactory.onBackButton();">
+      <i class="fa fa-lg fa-angle-left arrow-icon pr-3"></i><span translate>template.attribute-editor.back-to-list</span>
+  </a>
+  <streamline-icon class="streamline-component-icon" ng-if="!panelIcon" name="{{ componentsFactory.getComponentIcon(componentsFactory.selected) }}" width="24" height="18"></streamline-icon>
+  <streamline-icon class="streamline-component-icon" ng-if="panelIcon" name="{{ panelIcon }}" width="24" height="18"></streamline-icon>
+  <span class="u_text-ellipsis mr-auto">{{ componentsFactory.getComponentTitle(componentsFactory.selected) }}</span>
+  <div class="btn-group" ng-if="componentsFactory.getCurrentPage() && componentsFactory.getCurrentPage().type === 'rise-storage-selector' && storageManagerFactory.fileType === 'image'">
+    <button id="listViewButton" type="button" class="btn w-50" ng-click="storageManagerFactory.isListView = true" ng-class="{'btn-toggle-blue-off' : !storageManagerFactory.isListView, 'btn-toggle-blue-on' : storageManagerFactory.isListView}">
+      <img ng-src="../images/icon-list{{!storageManagerFactory.isListView ? '' : '-inv'}}.svg">
+    </button>
+    <button id="gridViewButton" type="button" class="btn w-50" ng-click="storageManagerFactory.isListView = false" ng-class="{'btn-toggle-blue-off' : storageManagerFactory.isListView, 'btn-toggle-blue-on' : !storageManagerFactory.isListView}">
+      <img ng-src="../images/icon-module{{storageManagerFactory.isListView ? '' : '-inv'}}.svg">
+    </button>
+  </div>
+
+</div>
+<div class="component-container">
+  <component-storage-selector></component-storage-selector>
+  <template-component-branding></template-component-branding>
+  <template-branding-colors></template-branding-colors>
+  <template-component-schedules></template-component-schedules>
+  <template-component-financial></template-component-financial>
+  <template-component-image></template-component-image>
+  <template-component-slides></template-component-slides>
+  <template-component-text></template-component-text>
+  <template-component-video></template-component-video>
+  <template-component-rss></template-component-rss>
+  <template-component-counter></template-component-counter>
+  <template-component-time-date></template-component-time-date>
+  <template-component-colors></template-component-colors>
+  <template-component-twitter></template-component-twitter>
+  <template-component-weather></template-component-weather>
+  <component-presentation-selector></component-presentation-selector>
+  <template-component-playlist></template-component-playlist>
+  <template-component-html></template-component-html>
+</div>

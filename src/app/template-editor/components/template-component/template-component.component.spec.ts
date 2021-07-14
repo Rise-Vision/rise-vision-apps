@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TemplateComponentComponent } from './template-component.component';
 
-xdescribe('TemplateComponentComponent', () => {
+describe('TemplateComponentComponent', () => {
   let component: TemplateComponentComponent;
   let fixture: ComponentFixture<TemplateComponentComponent>;
 

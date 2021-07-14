@@ -1,17 +1,17 @@
-import { Directive, Input, Output, EventEmitter, Injector, ElementRef } from '@angular/core';
-import { UpgradeComponent } from '@angular/upgrade/static';
+import { Component } from '@angular/core';
 
-// This Angular directive will act as an interface to the "upgraded" AngularJS component
-@Directive({selector: 'template-component'})
-export class TemplateComponentComponent extends UpgradeComponent {
-  // The names of the input and output properties here must match the names of the
-  // `<` and `&` bindings in the AngularJS component that is being wrapped
-  // @Input() hero!: String;
-  // @Output() onRemove!: EventEmitter<void>;
+import { StorageManagerFactory } from 'src/app/ajs-upgraded-providers';
 
-  constructor(elementRef: ElementRef, injector: Injector) {
-    // We must pass the name of the directive as used by AngularJS to the super
-    super('templateComponent', elementRef, injector);
-  }
+import { ComponentsService } from '../../services/components.service';
+
+@Component({
+  selector: 'template-component',
+  templateUrl: './template-component.component.html',
+  styleUrls: ['./template-component.component.scss']
+})
+export class TemplateComponentComponent {
+
+  constructor(public componentsFactory: ComponentsService,
+    public storageManagerFactory: StorageManagerFactory) {}
 
 }
