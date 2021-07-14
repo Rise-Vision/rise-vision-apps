@@ -258,6 +258,17 @@ export const storageUtilsProvider = {
   deps: ['$injector']
 };
 
+export abstract class StorageService {
+  [key: string]: any;
+}
+export const storageServiceProvider = {
+  provide: StorageService,
+  useFactory: function ($injector: any) {
+    return $injector.get('storage');
+  },
+  deps: ['$injector']
+};
+
 
 //schedules/services
 export abstract class CreateFirstScheduleService extends Function {
