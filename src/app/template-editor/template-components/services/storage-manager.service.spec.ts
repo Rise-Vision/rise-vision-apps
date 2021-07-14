@@ -1,30 +1,31 @@
-'use strict';
+import { expect } from 'chai';
+import { TestBed } from '@angular/core/testing';
 
-describe('service: storageManagerFactory:', function() {
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module('risevision.template-editor.directives'));
+import { StorageManagerService } from './storage-manager.service';
+import { StorageService } from 'src/app/ajs-upgraded-providers';
+import { TemplateEditorUtilsService } from '../../services/template-editor-utils.service';
 
-  beforeEach(module(function ($provide) {
-    $provide.service('storage', function() {
-      return {
-        files: {
-          get: sinon.stub().returns(Q.resolve({}))
-        }
-      };
+describe('StorageManagerService', () => {
+  let storageManagerFactory: StorageManagerService;
+  let storage;
+
+  beforeEach(() => {
+    storage = {
+      files: {
+        get: sinon.stub().resolves({})
+      }
+    };
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: StorageService, useValue: storage},
+        {provide: TemplateEditorUtilsService, useValue: new TemplateEditorUtilsService(null) }
+      ]
     });
-  }));
-
-  var storageManagerFactory, storage;
-
-  beforeEach(function() {
-    inject(function($injector) {
-      storageManagerFactory = $injector.get('storageManagerFactory');
-      storage = $injector.get('storage');
-    });
+    storageManagerFactory = TestBed.inject(StorageManagerService);
   });
 
   it('should initialize', function() {
-    expect(storageManagerFactory).to.be.ok;
+    expect(storageManagerFactory).to.exist;
 
     expect(storageManagerFactory.isListView).to.be.true;
     expect(storageManagerFactory.folderItems).to.have.lengthOf(0);
@@ -33,7 +34,7 @@ describe('service: storageManagerFactory:', function() {
   
   describe('loadFiles', function () {
     it('should call api and start spinner', function() {
-      storageManagerFactory.folderItems = 'folderItems';
+      storageManagerFactory.folderItems = ['folderItems'];
 
       storageManagerFactory.loadFiles('folder/');
 
@@ -67,7 +68,7 @@ describe('service: storageManagerFactory:', function() {
         name: 'folder/file2.mp4'
       }];
 
-      storage.files.get.returns(Q.resolve({ files: files }));
+      storage.files.get.returns(Promise.resolve({ files: files }));
 
       storageManagerFactory.loadFiles('folder/')
         .then(function (result) {
@@ -95,7 +96,7 @@ describe('service: storageManagerFactory:', function() {
           name: 'folder/file3.pdf'
         }];
 
-        storage.files.get.returns(Q.resolve({ files: files }));
+        storage.files.get.returns(Promise.resolve({ files: files }));
 
         storageManagerFactory.loadFiles('folder/')
           .then(function () {
@@ -120,7 +121,7 @@ describe('service: storageManagerFactory:', function() {
           name: 'folder/file3.jpg'
         }];
 
-        storage.files.get.returns(Q.resolve({ files: files }));
+        storage.files.get.returns(Promise.resolve({ files: files }));
 
         storageManagerFactory.loadFiles('folder/')
           .then(function () {
@@ -141,7 +142,7 @@ describe('service: storageManagerFactory:', function() {
 
       storageManagerFactory.folderItems = files;
 
-      storage.files.get.returns(Q.reject('Failed to load'));
+      storage.files.get.returns(Promise.reject('Failed to load'));
 
       storageManagerFactory.loadFiles('folder/')
         .then(function () {
@@ -155,5 +156,4 @@ describe('service: storageManagerFactory:', function() {
     });
 
   });
-
 });
