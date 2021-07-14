@@ -34,6 +34,7 @@ import { BrandingService } from './template-components/services/branding.service
 import { StorageManagerService } from './template-components/services/storage-manager.service';
 import { PlaylistComponentService } from './template-components/services/playlist-component.service';
 import { TimeDateComponent } from './template-components/time-date/time-date.component';
+import { WorldTimezonesService } from './template-components/services/world-timezones.service';
 
 @NgModule({
   imports: [

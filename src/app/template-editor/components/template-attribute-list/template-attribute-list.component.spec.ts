@@ -2,13 +2,14 @@ import {expect} from 'chai';
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserState, BrandingFactory, ScheduleSelectorFactory } from 'src/app/ajs-upgraded-providers';
+import { UserState, ScheduleSelectorFactory } from 'src/app/ajs-upgraded-providers';
 
 import { TemplateEditorService } from '../../services/template-editor.service';
 import { ComponentsService } from '../../services/components.service';
 import { BlueprintService } from '../../services/blueprint.service';
 
 import { TemplateAttributeListComponent } from './template-attribute-list.component';
+import { BrandingService } from '../../template-components/services/branding.service';
 
 describe('TemplateAttributeListComponent', () => {
   let component: TemplateAttributeListComponent;
@@ -58,7 +59,7 @@ describe('TemplateAttributeListComponent', () => {
           getComponentIcon: sinon.stub().returns('')
         }},
         {provide: BlueprintService, useValue: blueprintFactory},
-        {provide: BrandingFactory, useValue: brandingFactory},
+        {provide: BrandingService, useValue: brandingFactory},
         {provide: ScheduleSelectorFactory, useValue: scheduleSelectorFactory},
       ],
       declarations: [ TemplateAttributeListComponent ]
