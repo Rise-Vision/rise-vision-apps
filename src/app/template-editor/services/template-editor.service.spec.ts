@@ -3,12 +3,13 @@ import { TestBed } from '@angular/core/testing';
 
 import { TemplateEditorService } from './template-editor.service';
 import { PromiseUtilsService } from 'src/app/shared/services/promise-utils.service';
-import { AjsState, BrandingFactory, CreateFirstScheduleService, PresentationService, PresentationTracker, ProcessErrorCode, ScheduleFactory, ScheduleSelectorFactory, UserState } from 'src/app/ajs-upgraded-providers';
+import { AjsState, CreateFirstScheduleService, PresentationService, PresentationTracker, ProcessErrorCode, ScheduleFactory, ScheduleSelectorFactory, UserState } from 'src/app/ajs-upgraded-providers';
 import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
 import * as Q from 'q';
 import { BlueprintService } from './blueprint.service';
 import { TemplateEditorUtilsService } from './template-editor-utils.service';
 import { assert } from 'sinon';
+import { BrandingService } from '../template-components/services/branding.service';
 
 describe('TemplateEditorService', () => {
   let templateEditorFactory: TemplateEditorService;
@@ -83,7 +84,7 @@ describe('TemplateEditorService', () => {
         {provide: UserState, useValue: userState},
         {provide: CreateFirstScheduleService, useValue: createFirstSchedule},
         {provide: TemplateEditorUtilsService, useValue: templateEditorUtils },
-        {provide: BrandingFactory, useValue: brandingFactory},
+        {provide: BrandingService, useValue: brandingFactory},
         {provide: BlueprintService, useValue: blueprintFactory},
         {provide: ScheduleFactory, useValue: scheduleFactory},
         {provide: PresentationTracker, useValue: presentationTracker},

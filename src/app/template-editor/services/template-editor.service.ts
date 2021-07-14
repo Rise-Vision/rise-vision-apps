@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import * as angular from 'angular';
 import { downgradeInjectable } from '@angular/upgrade/static';
-import { AjsState, BrandingFactory, CreateFirstScheduleService, PresentationService, PresentationTracker, ProcessErrorCode, ScheduleFactory, ScheduleSelectorFactory, UserState } from 'src/app/ajs-upgraded-providers';
+import { AjsState, CreateFirstScheduleService, PresentationService, PresentationTracker, ProcessErrorCode, ScheduleFactory, ScheduleSelectorFactory, UserState } from 'src/app/ajs-upgraded-providers';
 import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
 import { TemplateEditorUtilsService } from './template-editor-utils.service';
 import { BlueprintService } from './blueprint.service';
 import { PromiseUtilsService } from 'src/app/shared/services/promise-utils.service';
+import { BrandingService } from '../template-components/services/branding.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class TemplateEditorService {
     private userState: UserState,
     private createFirstSchedule: CreateFirstScheduleService,
     private templateEditorUtils: TemplateEditorUtilsService,
-    private brandingFactory: BrandingFactory,
+    private brandingFactory: BrandingService,
     private blueprintFactory: BlueprintService,
     private scheduleFactory: ScheduleFactory,
     private presentationTracker: PresentationTracker,

@@ -85,8 +85,8 @@ describe('directive: componentStorageSelector', function() {
   it('should add utils on scope', function() {
     sandbox.stub(templateEditorUtils, 'hasRegularFileItems');
 
-    expect($scope.isFolder).to.equal(templateEditorUtils.isFolder);
-    expect($scope.fileNameOf).to.equal(templateEditorUtils.fileNameOf);
+    expect($scope.isFolder).to.be.a('function');
+    expect($scope.fileNameOf).to.be.a('function');
 
     expect($scope.hasRegularFileItems).to.be.a('function');
 

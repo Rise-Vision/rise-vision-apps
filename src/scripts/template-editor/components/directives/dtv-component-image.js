@@ -256,7 +256,9 @@ angular.module('risevision.template-editor.directives')
 
           $scope.removeImageFromList = function (image) {
             imageFactory.removeImage(image, $scope.selectedImages).then(function (updatedMetadata) {
-              _setSelectedImages(updatedMetadata);
+              $timeout(function() { //force change detection angular=>angularjs (can be removed after component migration)
+                _setSelectedImages(updatedMetadata);
+              });
             });
           };
 

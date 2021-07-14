@@ -72,8 +72,8 @@ angular.module('risevision.template-editor.directives')
             $scope.storageUploadManager.folderPath = '';
           }
 
-          $scope.isFolder = templateEditorUtils.isFolder;
-          $scope.fileNameOf = templateEditorUtils.fileNameOf;
+          $scope.isFolder = templateEditorUtils.isFolder.bind(templateEditorUtils);
+          $scope.fileNameOf = templateEditorUtils.fileNameOf.bind(templateEditorUtils);
           $scope.hasRegularFileItems = function () {
             return templateEditorUtils.hasRegularFileItems($scope.folderItems);
           };

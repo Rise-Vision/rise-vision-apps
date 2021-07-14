@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 
-import { UserState, BrandingFactory, ScheduleSelectorFactory } from 'src/app/ajs-upgraded-providers';
+import { UserState, ScheduleSelectorFactory } from 'src/app/ajs-upgraded-providers';
 
 import { TemplateEditorService } from '../../services/template-editor.service';
 import { ComponentsService } from '../../services/components.service';
 import { BlueprintService } from '../../services/blueprint.service';
+import { BrandingService } from '../../template-components/services/branding.service';
 
 @Component({
   selector: 'template-attribute-list',
@@ -21,7 +22,7 @@ export class TemplateAttributeListComponent {
     private templateEditorFactory: TemplateEditorService,
     public componentsFactory: ComponentsService,
     private blueprintFactory: BlueprintService,
-    private brandingFactory: BrandingFactory,
+    private brandingFactory: BrandingService,
     private scheduleSelectorFactory: ScheduleSelectorFactory) {
 
     this.brandingComponent = this.brandingFactory.getBrandingComponent();

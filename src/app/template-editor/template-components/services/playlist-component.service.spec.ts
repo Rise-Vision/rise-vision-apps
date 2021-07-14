@@ -1,59 +1,56 @@
-'use strict';
+import { expect } from 'chai';
+import { TestBed } from '@angular/core/testing';
 
-describe('service: playlistComponentFactory:', function() {
-  beforeEach(module('risevision.template-editor.services'));
+import { PlaylistComponentService } from './playlist-component.service';
+import { PresentationService, ScrollingListService } from 'src/app/ajs-upgraded-providers';
+import { BlueprintService } from '../../services/blueprint.service';
+import { TemplateEditorService } from '../../services/template-editor.service';
 
-  var sandbox = sinon.sandbox.create(),
-    playlistComponentFactory,
+describe('PlaylistComponentService', () => {
+  let playlistComponentFactory: PlaylistComponentService;
+  let sandbox = sinon.sandbox.create(),
+    templateEditorFactory,
     blueprintFactory,
     presentation,
-    ScrollingListService;
+    scrollingListService;
 
-  beforeEach(module(function ($provide) {
-    $provide.service('$q', function() {return Q;});
 
-    $provide.service('templateEditorFactory', function() {
-      return {
-        presentation: { id: 'TEST-ID' }
-      };
+  beforeEach(() => {
+    templateEditorFactory = {
+      presentation: { id: 'TEST-ID' }
+    };
+    scrollingListService = sandbox.stub().returns({
+      service: 'stub'
     });
+    presentation = {
+      list: sandbox.stub().resolves({
+        items:[
+          {id: 'presentation-id-1', name: 'some name', revisionStatusName: 'revised'},
+          {id: 'presentation-id-2', name: 'some name 2', revisionStatusName: 'published'}
+        ]
+      })
+    };
+    blueprintFactory = {
+      isPlayUntilDone: sandbox.stub().resolves(true)
+    };
 
-    $provide.service('ScrollingListService', function() {
-      return sandbox.stub().returns({
-        service: 'stub'
-      });
+    TestBed.configureTestingModule({
+      providers: [
+        { useValue: scrollingListService, provide: ScrollingListService},
+        { useValue: presentation, provide: PresentationService},
+        { useValue: templateEditorFactory, provide: TemplateEditorService},
+        { useValue: blueprintFactory, provide: BlueprintService}
+      ]
     });
-
-    $provide.service('presentation', function() {
-      return {
-        list: sandbox.stub().resolves({
-          items:[
-            {id: 'presentation-id-1', name: 'some name', revisionStatusName: 'revised'},
-            {id: 'presentation-id-2', name: 'some name 2', revisionStatusName: 'published'}
-          ]
-        })
-      };
-    });
-
-    $provide.service('blueprintFactory', function() {
-      return {
-        isPlayUntilDone: sandbox.stub().resolves(true)
-      };
-    });
-  }));
-
-  beforeEach(function () {
-    inject(function ($injector) {
-      playlistComponentFactory = $injector.get('playlistComponentFactory');
-      blueprintFactory = $injector.get('blueprintFactory');
-      presentation = $injector.get('presentation');
-      ScrollingListService = $injector.get('ScrollingListService');
-    });
+    playlistComponentFactory = TestBed.inject(PlaylistComponentService);
   });
 
-  it('should initialize', function () {
-    expect(playlistComponentFactory).to.be.ok;
+  afterEach(() => {
+    sandbox.restore();
+  })
 
+  it('should be created', () => {
+    expect(playlistComponentFactory).to.exist;
     expect(playlistComponentFactory.search).to.deep.equal({
       sortBy: 'changeDate',
       reverse: true
@@ -78,7 +75,7 @@ describe('service: playlistComponentFactory:', function() {
     it('should initialize list service', function() {
       playlistComponentFactory.load();
 
-      ScrollingListService.should.have.been.calledWith(presentation.list, playlistComponentFactory.search);
+      scrollingListService.should.have.been.calledWith(presentation.list, playlistComponentFactory.search);
 
       expect(playlistComponentFactory.templates).to.deep.equal({
         service: 'stub'
@@ -92,7 +89,7 @@ describe('service: playlistComponentFactory:', function() {
 
       playlistComponentFactory.load();
 
-      ScrollingListService.should.not.have.been.called;
+      scrollingListService.should.not.have.been.called;
       playlistComponentFactory.templates.doSearch.should.have.been.called;
     });
 
@@ -100,7 +97,7 @@ describe('service: playlistComponentFactory:', function() {
 
   describe('loadPresentationNames:', function() {
     it('should load presentations from api', function(done) {
-      var presentations = [
+      var presentations  :any= [
         {
           id: 'presentation-id-1'
         },
@@ -134,7 +131,7 @@ describe('service: playlistComponentFactory:', function() {
     });
 
     it('should indicate any templates that are now "Unknown" from being deleted', function(done) {
-      var presentations = [
+      var presentations :any= [
         {
           id: 'presentation-id-3'
         }
@@ -152,7 +149,7 @@ describe('service: playlistComponentFactory:', function() {
     });
 
     it('should load presentation names once for repeated ids', function(done) {
-      var presentations = [
+      var presentations :any= [
         {
           id: 'presentation-id-1'
         },

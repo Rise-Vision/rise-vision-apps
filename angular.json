@@ -459,14 +459,6 @@
               "src/scripts/editor/directives/dtv-presentation-name.js",
 
               "src/scripts/template-editor/app.js",
-              "src/scripts/template-editor/services/svc-template-editor-utils.js",
-
-              "src/scripts/template-editor/components/services/svc-storage-manager-factory.js",
-              "src/scripts/template-editor/components/services/svc-playlist-component-factory.js",
-              "src/scripts/template-editor/components/services/svc-branding-factory.js",
-              "src/scripts/template-editor/components/services/svc-logo-image-factory.js",
-              "src/scripts/template-editor/components/services/svc-base-image-factory.js",
-              "src/scripts/template-editor/components/services/svc-file-existence-check.js",
 
               "src/scripts/template-editor/directives/dtv-editor-preview-holder.js",
               "src/scripts/template-editor/directives/dtv-component.js",

@@ -57,7 +57,7 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
-          $scope.fileNameOf = templateEditorUtils.fileNameOf;
+          $scope.fileNameOf = templateEditorUtils.fileNameOf.bind(templateEditorUtils);
 
           $scope.uploadSelectedFiles = function (selectedFiles) {
             return $scope.uploader.removeExif(selectedFiles)

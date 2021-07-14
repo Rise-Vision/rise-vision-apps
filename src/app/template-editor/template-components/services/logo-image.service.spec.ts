@@ -1,44 +1,39 @@
-'use strict';
+import { assert, expect } from 'chai';
+import { TestBed } from '@angular/core/testing';
 
-describe('service: logoImageFactory', function() {
+import { LogoImageService } from './logo-image.service';
+import { ModalService } from 'src/app/components/modals/modal.service';
+import { PromiseUtilsService } from 'src/app/shared/services/promise-utils.service';
+import { BrandingService } from './branding.service';
 
-  beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module(mockTranslate()));
+describe('LogoImageService', () => {
+  let logoImageFactory: LogoImageService;
+  let brandingFactory, ngModalService;
+  let sandbox = sinon.sandbox.create();
 
-  beforeEach(module(function($provide) {
-    $provide.service('ngModalService', function() {
-      return {
-        confirmDanger: sandbox.stub().resolves()
-      }
+  beforeEach(() => {
+    ngModalService = {
+      confirmDanger: sandbox.stub().resolves()
+    };
+    brandingFactory = {
+      brandingSettings: {},
+      setUnsavedChanges: sandbox.stub()
+    };
+
+    TestBed.configureTestingModule({
+      providers: [
+        { useValue: brandingFactory, provide: BrandingService },
+        { useValue: ngModalService, provide: ModalService },
+        { useValue: new PromiseUtilsService(), provide: PromiseUtilsService }
+      ]
     });
-
-    $provide.service('brandingFactory', function() {
-      return {
-        brandingSettings: {},
-        setUnsavedChanges: sandbox.stub()
-      };
-    });
-    $provide.service('$q', function() {
-      return Q;
-    });
-  }));
-
-  var logoImageFactory, brandingFactory, ngModalService;
-  var sandbox = sinon.sandbox.create();
-
-  beforeEach(function() {
-    inject(function($injector) {
-      logoImageFactory = $injector.get('logoImageFactory');
-     
-      brandingFactory = $injector.get('brandingFactory');
-      ngModalService = $injector.get('ngModalService');
-    });
+    logoImageFactory = TestBed.inject(LogoImageService);
   });
 
   afterEach(function() {
-   sandbox.restore();
-  })
+  sandbox.restore();
+  });
+
 
   it('should initialize', function () {
     expect(logoImageFactory).to.be.ok;
@@ -104,20 +99,17 @@ describe('service: logoImageFactory', function() {
       brandingFactory.brandingSettings.logoFileMetadata = {};
 
       expect(logoImageFactory.areChecksCompleted()).to.be.true;
-      expect(logoImageFactory.areChecksCompleted([])).to.be.true;
     });
 
     it('should return false if logo metadata is not loaded', function() {
-      expect(logoImageFactory.areChecksCompleted(null)).to.be.false
-      expect(logoImageFactory.areChecksCompleted({})).to.be.false;
-      expect(logoImageFactory.areChecksCompleted({anotherId:true})).to.be.false;
+      expect(logoImageFactory.areChecksCompleted()).to.be.false
     });
   });
 
   describe('removeImage: ', function() {
     it('should remove all images and clear metadata on confirm', function(done) {
       var metadata = [{file:'logo1'},{file:'logo2'}];
-      sandbox.stub(logoImageFactory,'_canRemoveImage').returns(Q.resolve());
+      sandbox.stub(logoImageFactory,'_canRemoveImage').returns(Promise.resolve());
       sandbox.stub(logoImageFactory,'updateMetadata').returns([]);
 
       logoImageFactory.removeImage({file:'logo1'},metadata).then(function(data){
@@ -129,7 +121,7 @@ describe('service: logoImageFactory', function() {
 
     it('should resolve previous metadata on cancel', function(done) {
       var metadata = [{file:'logo1'},{file:'logo2'}];
-      sandbox.stub(logoImageFactory,'_canRemoveImage').returns(Q.reject());
+      sandbox.stub(logoImageFactory,'_canRemoveImage').returns(Promise.reject());
       sandbox.stub(logoImageFactory,'updateMetadata').returns([]);
 
       logoImageFactory.removeImage({file:'logo1'},metadata).then(function(data){
@@ -187,20 +179,17 @@ describe('service: logoImageFactory', function() {
         );
         done();
       }).catch(function(){
-        done('Should not reject');
+        assert.fail('Should not reject');
       });
     });
 
-    it('should show confirmation modal and reject on close', function() {      
+    it('should show confirmation modal and reject on close', function(done) {      
       ngModalService.confirmDanger.rejects();
 
       logoImageFactory._canRemoveImage().then(function(){
-        done('Should not resolve');
+        assert.fail('Should not resolve');
       }).catch(function(){
-        $modal.open.should.have.been.calledWithMatch({
-          controller: "confirmModalController",
-          windowClass: 'madero-style centered-modal'
-        });        
+        ngModalService.confirmDanger.should.have.been.called;        
         done();
       });
     });
@@ -218,5 +207,4 @@ describe('service: logoImageFactory', function() {
       expect(text).to.be.null;
     });
   });
-
 });

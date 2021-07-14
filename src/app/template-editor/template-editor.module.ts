@@ -26,8 +26,15 @@ import { RssFeedValidationService } from './template-components/services/rss-fee
 import { InstrumentSearchService } from './template-components/services/instrument-search.service';
 import { ComponentUtilsService } from './template-components/services/component-utils.service';
 import { FileMetadataUtilsService } from './template-components/services/file-metadata-utils.service';
+import { BaseImageService } from './template-components/services/base-image.service';
+import { LogoImageService } from './template-components/services/logo-image.service';
 import { WeatherComponent } from './template-components/weather/weather.component';
+import { FileExistenceCheckService } from './template-components/services/file-existence-check.service';
+import { BrandingService } from './template-components/services/branding.service';
+import { StorageManagerService } from './template-components/services/storage-manager.service';
+import { PlaylistComponentService } from './template-components/services/playlist-component.service';
 import { TimeDateComponent } from './template-components/time-date/time-date.component';
+import { WorldTimezonesService } from './template-components/services/world-timezones.service';
 
 @NgModule({
   imports: [
@@ -56,5 +63,5 @@ export class TemplateEditorModule {
   //https://github.com/angular/angular/issues/35314#issuecomment-584821399
   static entryComponents = [ CanvaButtonComponent, TemplateEditorComponent, EncodeLinkPipe ]
   static templateComponents = [ WeatherComponent, TimeDateComponent ]
-  static providers = [ AttributeDataService, BlueprintService, ComponentUtilsService, FileMetadataUtilsService, FinancialLicenseService, InstrumentSearchService, RssFeedValidationService, SlidesUrlValidationServiceService, TwitterCredentialsValidationService ]
+  static providers = [ AttributeDataService, BaseImageService, BlueprintService, BrandingService, ComponentUtilsService, FileExistenceCheckService, FileMetadataUtilsService, FinancialLicenseService, InstrumentSearchService, LogoImageService, PlaylistComponentService, RssFeedValidationService, SlidesUrlValidationServiceService, StorageManagerService, TwitterCredentialsValidationService, WorldTimezonesService ]
 }

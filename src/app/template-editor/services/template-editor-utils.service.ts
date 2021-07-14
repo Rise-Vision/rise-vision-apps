@@ -4,6 +4,7 @@ import { ModalService } from 'src/app/components/modals/modal.service';
 
 import * as _ from 'lodash';
 import * as angular from 'angular';
+import { downgradeInjectable } from '@angular/upgrade/static';
 
 @Injectable({
   providedIn: 'root'
@@ -209,3 +210,6 @@ export class TemplateEditorUtilsService {
   }
 
 }
+
+angular.module('risevision.template-editor.services')
+  .factory('templateEditorUtils', downgradeInjectable(TemplateEditorUtilsService));

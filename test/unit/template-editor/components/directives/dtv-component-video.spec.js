@@ -24,6 +24,10 @@ describe('directive: templateComponentVideo', function() {
       return {};
     });
 
+    $provide.service('storageManagerFactory', function() {
+      return {};
+    });
+
     $provide.service('componentsFactory', function() {
       return {
         selected: { id: "TEST-ID" },

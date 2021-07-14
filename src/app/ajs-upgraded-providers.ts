@@ -114,6 +114,30 @@ export const confirmModalProvider = {
 };
 
 
+// components/core-api-client
+export abstract class UpdateCompany extends Function {
+}
+export const updateCompanyProvider = {
+  provide: UpdateCompany,
+  useFactory: function ($injector: any) {
+    return $injector.get('updateCompany');
+  },
+  deps: ['$injector']
+};
+
+
+// components/gapi
+export abstract class StorageAPILoader extends Function {
+}
+export const storageAPILoaderProvider = {
+  provide: StorageAPILoader,
+  useFactory: function ($injector: any) {
+    return $injector.get('storageAPILoader');
+  },
+  deps: ['$injector']
+};
+
+
 // components/logging
 export abstract class AnalyticsFactory {
   [key: string]: any;
@@ -169,6 +193,16 @@ export const processErrorCodeProvider = {
   provide: ProcessErrorCode,
   useFactory: function ($injector: any) {
     return $injector.get('processErrorCode');
+  },
+  deps: ['$injector']
+};
+
+export abstract class ScrollingListService  extends Function{
+}
+export const scrollingListServiceProvider = {
+  provide: ScrollingListService,
+  useFactory: function ($injector: any) {
+    return $injector.get('ScrollingListService');
   },
   deps: ['$injector']
 };
@@ -234,15 +268,13 @@ export const storageUtilsProvider = {
   deps: ['$injector']
 };
 
-
-// template-editor/components/services
-export abstract class BrandingFactory {
+export abstract class StorageService {
   [key: string]: any;
 }
-export const brandingFactoryProvider = {
-  provide: BrandingFactory,
+export const storageServiceProvider = {
+  provide: StorageService,
   useFactory: function ($injector: any) {
-    return $injector.get('brandingFactory');
+    return $injector.get('storage');
   },
   deps: ['$injector']
 };

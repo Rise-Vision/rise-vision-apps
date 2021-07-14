@@ -1,56 +1,52 @@
-'use strict';
+import { expect, assert } from 'chai';
+import { TestBed } from '@angular/core/testing';
+import { BrandingService } from './branding.service';
+import { UserState, UpdateCompany } from 'src/app/ajs-upgraded-providers';
+import { BroadcasterService } from 'src/app/shared/services/broadcaster.service';
+import { BlueprintService } from '../../services/blueprint.service';
+import { FileExistenceCheckService } from './file-existence-check.service';
 
-describe('service: brandingFactory', function() {
+describe('BrandingService', () => {
+  let brandingFactory: BrandingService;
+  var broadcaster, userState, blueprintFactory, updateCompany, fileExistenceCheckService, subscription;
 
-  beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module(mockTranslate()));
 
-  beforeEach(module(function($provide) {
-    $provide.service('$q', function() {return Q;});
+  beforeEach(() => {
+    broadcaster = new BroadcasterService({
+      $broadcast: sinon.stub()
+    })
+    sinon.spy(broadcaster,'emit');
+    sinon.spy(broadcaster,'subscribe');    
 
-    $provide.service('broadcaster', function() {
-      return {
-        emit: sinon.stub()
-      };
-    });
-    $provide.service('blueprintFactory', function() {
-      return {
-        hasBranding: sinon.stub()
-      };
-    });
-    $provide.service('userState', function() {
-      return {
-        getSelectedCompanyId: sinon.stub().returns('companyId'),
-        getCopyOfSelectedCompany: sinon.stub().returns({}),
-        updateCompanySettings: sinon.stub(),
-        _restoreState: function() {}
-      };
-    });
-    $provide.service('updateCompany', function() {
-      return sinon.stub().returns(Q.resolve('updatedCompany'));
-    });
-    $provide.service('fileExistenceCheckService', function() {
-      return {
-        requestMetadataFor: sinon.stub().returns(Q.resolve('metadata'))
-      };
-    });
-  }));
+    blueprintFactory = {
+      hasBranding: sinon.stub()
+    };
+    userState = {
+      getSelectedCompanyId: sinon.stub().returns('companyId'),
+      getCopyOfSelectedCompany: sinon.stub().returns({}),
+      updateCompanySettings: sinon.stub(),
+      _restoreState: function() {}
+    };
+    updateCompany = sinon.stub().returns(Promise.resolve('updatedCompany'));
+    fileExistenceCheckService = {
+      requestMetadataFor: sinon.stub().returns(Promise.resolve('metadata'))
+    };
 
-  var brandingFactory, $rootScope, broadcaster, userState, blueprintFactory, updateCompany, fileExistenceCheckService;
-
-  beforeEach(function() {
-    inject(function($injector) {
-      brandingFactory = $injector.get('brandingFactory');
-      
-      $rootScope = $injector.get('$rootScope');
-      broadcaster = $injector.get('broadcaster');
-      blueprintFactory = $injector.get('blueprintFactory');
-      userState = $injector.get('userState');
-      updateCompany = $injector.get('updateCompany');
-      fileExistenceCheckService = $injector.get('fileExistenceCheckService');
+    TestBed.configureTestingModule({
+      providers: [
+        { useValue: userState, provide: UserState},
+        { useValue: broadcaster, provide: BroadcasterService},
+        { useValue: blueprintFactory, provide: BlueprintService},
+        { useValue: updateCompany, provide: UpdateCompany},
+        { useValue: fileExistenceCheckService, provide: FileExistenceCheckService},
+      ]
     });
+    brandingFactory = TestBed.inject(BrandingService);
+    
+    subscription = broadcaster.subscribe.returnValues[0];
+    sinon.spy(subscription,'unsubscribe');
   });
+
 
   it('should initialize', function () {
     expect(brandingFactory).to.be.ok;
@@ -126,8 +122,7 @@ describe('service: brandingFactory', function() {
         settings: {}
       });
 
-      $rootScope.$emit('risevision.company.selectedCompanyChanged');
-      $rootScope.$digest();
+      broadcaster.emit('risevision.company.selectedCompanyChanged');
 
       expect(brandingFactory.brandingSettings).to.deep.equal({
         baseColor: undefined,
@@ -144,8 +139,7 @@ describe('service: brandingFactory', function() {
         settings: {}
       });
 
-      $rootScope.$emit('risevision.company.selectedCompanyChanged');
-      $rootScope.$digest();
+      broadcaster.emit('risevision.company.selectedCompanyChanged');
 
       expect(brandingFactory.hasUnsavedChanges).to.be.false;
     });
@@ -155,8 +149,7 @@ describe('service: brandingFactory', function() {
         settings: {}
       });
 
-      $rootScope.$emit('risevision.company.selectedCompanyChanged');
-      $rootScope.$digest();
+      broadcaster.emit('risevision.company.selectedCompanyChanged');
 
       userState.getCopyOfSelectedCompany.returns({
         settings: {
@@ -164,8 +157,7 @@ describe('service: brandingFactory', function() {
         }
       });
 
-      $rootScope.$emit('risevision.company.selectedCompanyChanged');
-      $rootScope.$digest();
+      broadcaster.emit('risevision.company.selectedCompanyChanged');
 
       expect(brandingFactory.brandingSettings).to.deep.equal({
         baseColor: undefined,
@@ -296,7 +288,7 @@ describe('service: brandingFactory', function() {
     });
 
     afterEach(function() {
-      brandingFactory.isRevised.restore();
+      (brandingFactory.isRevised as any).restore();
     });
 
     it('should publish if the settings are revised', function(done) {
@@ -308,7 +300,7 @@ describe('service: brandingFactory', function() {
     });
 
     it('should not publish if the settings are not revised', function(done) {
-      brandingFactory.isRevised.returns(false);
+      (brandingFactory.isRevised as any).returns(false);
 
       brandingFactory.publishBranding().then(function() {
         updateCompany.should.not.have.been.called;
@@ -341,10 +333,10 @@ describe('service: brandingFactory', function() {
     });
 
     it('should reject on company update error', function(done) {
-      updateCompany.returns(Q.reject('err'));
+      updateCompany.returns(Promise.reject('err'));
 
       brandingFactory.publishBranding().then(function() {
-        done('no error');
+        assert.fail('no error');
       }).then(null, function(err) {
         expect(err).to.equal('err');
 
@@ -486,4 +478,11 @@ describe('service: brandingFactory', function() {
 
   });
 
+  describe('ngOnDestroy', () => {
+    it('should unregister from broadcaster', () => {      
+      brandingFactory.ngOnDestroy();
+
+      subscription.unsubscribe.should.have.been.called;
+    });
+  });
 });

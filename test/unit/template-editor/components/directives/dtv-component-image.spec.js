@@ -29,6 +29,9 @@ describe('directive: TemplateComponentImage', function() {
     $provide.service('templateEditorFactory', function() {
       return {};
     });
+    $provide.service('storageManagerFactory', function() {
+      return {};
+    });    
     $provide.service('componentsFactory', function() {
       return {
         selected: { id: "TEST-ID" },
@@ -569,6 +572,7 @@ describe('directive: TemplateComponentImage', function() {
 
       baseImageFactory.removeImage.should.have.been.calledWith(image);
       setTimeout(function(){
+        timeout.flush();
         expect($scope.selectedImages).to.deep.equal(expectedImages);
         done();
       },10);

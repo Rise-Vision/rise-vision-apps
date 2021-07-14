@@ -1,48 +1,42 @@
-'use strict';
+import { assert, expect } from 'chai';
+import { TestBed } from '@angular/core/testing';
 
-describe('service: baseImageFactory', function() {
+import { BaseImageService } from './base-image.service';
+import { AttributeDataService } from '../../services/attribute-data.service';
+import { BlueprintService } from '../../services/blueprint.service';
+import { FileMetadataUtilsService } from './file-metadata-utils.service';
 
-  beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module(mockTranslate()));
-
-  beforeEach(module(function($provide) {
-    $provide.service('blueprintFactory', function() {
-      return {
-        getBlueprintData: sandbox.stub().returns('data'),
-        getHelpText: sandbox.stub().returns('help text')
-      };
-    });
-    $provide.service('attributeDataFactory', function() {
-      return {
-        getAttributeData: sandbox.stub().returns('data'),
-        getAvailableAttributeData: sandbox.stub().returns('availabledata'),
-        setAttributeData: sandbox.stub()
-      };
-    });
-    $provide.service('fileMetadataUtilsService', function() {
-      return {
-        metadataWithFileRemoved: sandbox.stub().returns(['metadataWithFileRemoved']),
-        filesAttributeFor: sandbox.stub().returns('files')
-      };
-    });
-    $provide.service('$q', function() {
-      return Q;
-    });
-  }));
-
-  var baseImageFactory, blueprintFactory, attributeDataFactory, fileMetadataUtilsService;
+describe('BaseImageFactoryService', () => {
+  let baseImageFactory: BaseImageService;
+  var blueprintFactory, attributeDataFactory, fileMetadataUtilsService;
   var sandbox = sinon.sandbox.create();
 
-  beforeEach(function() {
-    inject(function($injector) {
-      baseImageFactory = $injector.get('baseImageFactory');
-      baseImageFactory.componentId = 'componentId';
-      
-      blueprintFactory = $injector.get('blueprintFactory');
-      attributeDataFactory = $injector.get('attributeDataFactory');
-      fileMetadataUtilsService = $injector.get('fileMetadataUtilsService');
+  beforeEach(() => {
+    blueprintFactory = {
+      getBlueprintData: sandbox.stub().returns('data'),
+      getHelpText: sandbox.stub().returns('help text')
+    };
+
+    attributeDataFactory = {
+      getAttributeData: sandbox.stub().returns('data'),
+      getAvailableAttributeData: sandbox.stub().returns('availabledata'),
+      setAttributeData: sandbox.stub()
+    };
+  
+    fileMetadataUtilsService = {
+      metadataWithFileRemoved: sandbox.stub().returns(['metadataWithFileRemoved']),
+      filesAttributeFor: sandbox.stub().returns('files')
+    };
+   
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: FileMetadataUtilsService, useValue: fileMetadataUtilsService},
+        { provide: BlueprintService, useValue: blueprintFactory},
+        { provide: AttributeDataService, useValue: attributeDataFactory}
+      ]
     });
+    baseImageFactory = TestBed.inject(BaseImageService);
+    baseImageFactory.componentId = 'componentId';
   });
 
   afterEach(function() {
@@ -50,7 +44,7 @@ describe('service: baseImageFactory', function() {
   })
 
   it('should initialize', function () {
-    expect(baseImageFactory).to.be.ok;
+    expect(baseImageFactory).to.exist;
     expect(baseImageFactory.getImagesAsMetadata).to.be.a('function');
     expect(baseImageFactory.getAvailableAttributeData).to.be.a('function');
     expect(baseImageFactory.setDuration).to.be.a('function');
@@ -141,7 +135,7 @@ describe('service: baseImageFactory', function() {
         fileMetadataUtilsService.metadataWithFileRemoved.should.have.been.calledWith(metadata,file);
         done()
       }).catch(function(){
-        done('should not reject');
+        assert.fail('should not reject');
       });
     });
 
@@ -155,7 +149,7 @@ describe('service: baseImageFactory', function() {
         fileMetadataUtilsService.metadataWithFileRemoved.should.have.been.calledWith(metadata,file);
         done()
       }).catch(function(){
-        done('should not reject');
+        assert.fail('should not reject');
       });
     });
   });
@@ -244,5 +238,4 @@ describe('service: baseImageFactory', function() {
       blueprintFactory.getHelpText.should.have.been.calledWith('componentId');
     });
   });
-
 });
