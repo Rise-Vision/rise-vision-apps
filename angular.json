@@ -460,8 +460,6 @@
 
               "src/scripts/template-editor/app.js",
 
-              "src/scripts/template-editor/components/services/svc-playlist-component-factory.js",
-
               "src/scripts/template-editor/directives/dtv-attribute-editor.js",
               "src/scripts/template-editor/directives/dtv-attribute-list.js",
               "src/scripts/template-editor/directives/dtv-editor-preview-holder.js",

@@ -197,6 +197,16 @@ export const processErrorCodeProvider = {
   deps: ['$injector']
 };
 
+export abstract class ScrollingListService  extends Function{
+}
+export const scrollingListServiceProvider = {
+  provide: ScrollingListService,
+  useFactory: function ($injector: any) {
+    return $injector.get('ScrollingListService');
+  },
+  deps: ['$injector']
+};
+
 
 // components/userstate
 export abstract class UserState {
