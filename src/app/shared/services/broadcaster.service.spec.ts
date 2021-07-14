@@ -48,4 +48,33 @@ describe('BroadcasterService', () => {
     nextSpy.should.have.been.calledWith('message2');
   });
 
+  describe('on:', ()=> {
+    let callback, subscription;
+
+    beforeEach(() => {
+      callback = sinon.stub();
+      subscription = service.on('message',callback);
+    });
+
+    afterEach(()=> {
+      subscription.unsubscribe();
+    })
+
+    it('should execute callback when event is emitted', () => {      
+      callback.should.not.have.been.called;
+
+      service.emit('message');
+
+      callback.should.have.been.called;
+    });
+
+    it('should not execute callback for other events', () => {      
+      callback.should.not.have.been.called;
+
+      service.emit('another_message');
+
+      callback.should.not.have.been.called;
+    });
+  });
+
 });

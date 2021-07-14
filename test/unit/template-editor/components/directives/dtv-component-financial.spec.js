@@ -59,6 +59,10 @@ describe('directive: TemplateComponentFinancial', function() {
       return {};
     });
 
+    $provide.service('templateEditorFactory', function() {
+      return {};
+    });
+
     $provide.service('attributeDataFactory', function() {
       return {
         setAttributeData: sinon.stub()

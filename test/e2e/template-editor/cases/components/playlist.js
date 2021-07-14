@@ -138,7 +138,7 @@ var PlaylistComponentScenarios = function () {
 
       it('should open playlist item properties', function () {
         helper.clickWhenClickable(playlistComponentPage.getEditItemLink(), 'Click Edit');
-
+        browser.sleep(1000);
         expect(playlistComponentPage.getTransitionSelect().isDisplayed()).to.eventually.be.true;
       });
 
